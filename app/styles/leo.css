@@ -14,7 +14,25 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-practice h1:focus { outline: none; }
 .leo-clock { height: 7px; border-radius: 10px; width: min(100%, 600px); background: #aaaed4; overflow: hidden; }
 .leo-clock span { display: block; height: 100%; background: #514d7d; transform-origin: left; }
-.leo-board { position: relative; width: min(100%, 600px); height: clamp(250px, calc(49svh - var(--consent-height, 0px)), 470px); overflow: hidden; border-radius: 30px; isolation: isolate; }
+.leo-board { position: relative; width: min(100%, 600px); height: clamp(250px, calc(43svh - var(--consent-height, 0px)), 450px); overflow: hidden; border-radius: 30px; isolation: isolate; }
+.leo-practice:not([data-phase="ready"]) .leo-board { height: clamp(320px, calc(43svh - var(--consent-height, 0px)), 450px); }
+.leo-countdown { width: min(100%, 600px); display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; }
+.leo-countdown [role="timer"] { font-size: 24px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.leo-swarm { position: absolute; inset: 0; }
+.leo-swarm .leo-room { top: 88px; }
+.leo-swarm-hud { position: absolute; inset: 0 0 auto; height: 88px; padding: 0 18px 12px; background: #c5c6ed; color: #363454; z-index: 4; }
+.leo-swarm-stats, .leo-regulation-label { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; font-weight: 650; }
+.leo-sound { background: #fff9ed; border: 1px solid #8b89ad; color: #363454; border-radius: 99px; padding: 7px 12px; min-height: 40px; font: inherit; cursor: pointer; }
+.leo-regulation-label { margin: 5px 0; }
+.leo-regulation { height: 10px; border-radius: 99px; overflow: hidden; background: #a2a4cc; }
+.leo-regulation > span { display: block; width: 100%; height: 100%; transform-origin: left; background: #4b692b; }
+.leo-swarm[data-mood="unsettled"] .leo-regulation > span { background: #8e601d; }
+.leo-swarm:is([data-mood="overwhelmed"], [data-mood="exhausted"]) .leo-regulation > span { background: #a54237; }
+.leo-wave-note { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: #fff9ed; color: #363454; border-radius: 99px; padding: 6px 12px; font-size: 12px; white-space: nowrap; }
+.leo-room[data-reduced="true"] .leo-wave-note { display: none; }
+.leo-room[data-live="true"][data-reduced="false"] .leo-buzz-lines { animation: leo-buzz .65s ease-in-out infinite alternate; }
+.leo-bedroom[data-emotion="overwhelmed"].is-moving .leo-sleepy-head { animation-duration: 1.2s; }
+@keyframes leo-buzz { from { opacity: .35; transform: scale(.96); } to { opacity: .8; transform: scale(1.02); } }
 .leo-board, .leo-room, .leo-feature-art { background: linear-gradient(#c5c6ed 75.36%, #abaed9 75.36%); }
 .leo-room { position: absolute; inset: 0; container-type: size; overflow: hidden; touch-action: manipulation; }
 .leo-bedroom { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }

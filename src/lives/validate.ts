@@ -22,7 +22,9 @@ export function validateContent(games: readonly GameDefinition[], strategies: re
     if (!INPUT_MECHANICS.includes(g.mechanic)) add(`game/${g.id}`, `unsupported mechanic ${g.mechanic}`);
     if (g.character !== "random" && !CHARACTER_IDS.includes(g.character)) add(`game/${g.id}`, `unknown character ${g.character}`);
     if (g.config.kind !== g.engine) add(`game/${g.id}`, `config ${g.config.kind} does not match engine ${g.engine}`);
-    if (g.activeMs < ACTIVE_MS.min || g.activeMs > ACTIVE_MS.max) add(`game/${g.id}`, `active ${g.activeMs}ms outside ${ACTIVE_MS.min}–${ACTIVE_MS.max}`);
+    // The founder's multi-wave Leo challenge is a longer round; other microgames keep their bounds.
+    const maxActiveMs = g.id === "leo_mosquito" ? 22000 : ACTIVE_MS.max;
+    if (g.activeMs < ACTIVE_MS.min || g.activeMs > maxActiveMs) add(`game/${g.id}`, `active ${g.activeMs}ms outside ${ACTIVE_MS.min}–${maxActiveMs}`);
     if (g.instruction.trim().split(/\s+/).length > 4) add(`game/${g.id}`, "instruction longer than four words");
     if (g.character === "random" && g.learningLinks.length) add(`game/${g.id}`, "a fun game carries no learning");
     for (const link of g.learningLinks) if (!strategyIds.has(link)) add(`game/${g.id}`, `learning link ${link} is not a strategy`);
