@@ -298,8 +298,12 @@ polish the existing shell, question it.
       `adhdguideline.aadpa.com.au`, `nice.org.uk/guidance/ng87`, the RACGP Specific Interests PDF,
       and `tga.gov.au/products/medicines/prescription-medicines` — and every one was refused by
       this build environment's egress policy before a byte came back, so nothing here can say
-      whether they resolve. This needs a person with a browser; it stays open and is not an
-      engineering item until they have looked.
+      whether they resolve. **Opened 2026-09-10 from a machine with egress:** the three links the
+      walkthrough now carries all answer 200 under the titles the copy implies (the AADPA
+      "Australian Evidence-Based Clinical Practice ADHD Guideline", NICE NG87 "Attention deficit
+      hyperactivity disorder: diagnosis and management", the TGA "Prescription medicines" page);
+      the RACGP PDF is no longer linked from the tree. What stays open is the clinical half, a
+      reading of the modules against those documents, which is a clinician's audit, not code.
 - [x] Public pages (story, practices, examples, FAQ) get an SEO and share-surface pass — this is
       where a prospective practice or a person searching at 2am actually lands first. **Walked
       2026-09-05 on the served head of every indexable route.** The SEO half was already sound
