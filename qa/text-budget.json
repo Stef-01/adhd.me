@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T07:06:22.468Z",
-  "base": "http://localhost:3628",
+  "measuredAt": "2026-09-10T07:10:53.930Z",
+  "base": "http://localhost:3630",
   "budget": {
     "aboveFold": 40,
     "card": 8
@@ -355,9 +355,9 @@
       "path": "/match/results",
       "name": "Match results",
       "setup": "intake",
-      "aboveFold": 74,
+      "aboveFold": 66,
       "chrome": 8,
-      "total": 211,
+      "total": 187,
       "over": true,
       "longest": [
         {
@@ -371,9 +371,9 @@
           "tag": "p"
         },
         {
-          "w": 8,
-          "text": "Sees adults, which is who this is for.",
-          "tag": "li"
+          "w": 7,
+          "text": "You both talk about adult ADHD assessment.",
+          "tag": "p"
         }
       ]
     },
@@ -381,19 +381,19 @@
       "path": "/match/prep",
       "name": "Match prep",
       "setup": "intake",
-      "aboveFold": 56,
+      "aboveFold": 52,
       "chrome": 8,
-      "total": 361,
+      "total": 319,
       "over": true,
       "longest": [
         {
-          "w": 10,
-          "text": "What did teachers or parents say? What was school like?",
-          "tag": "span"
-        },
-        {
           "w": 7,
           "text": "Someone who knew you as a child",
+          "tag": "strong"
+        },
+        {
+          "w": 6,
+          "text": "As a teenager and young adult",
           "tag": "strong"
         },
         {
@@ -406,9 +406,9 @@
     {
       "path": "/gp/example-mei-chao",
       "name": "GP profile",
-      "aboveFold": 83,
+      "aboveFold": 70,
       "chrome": 0,
-      "total": 169,
+      "total": 152,
       "over": true,
       "longest": [
         {
@@ -418,13 +418,13 @@
         },
         {
           "w": 5,
-          "text": "6 of 8 places open.",
-          "tag": "li"
+          "text": "ADHD assessment across ages, titration.",
+          "tag": "p"
         },
         {
           "w": 5,
-          "text": "ADHD assessment across ages, titration.",
-          "tag": "p"
+          "text": "More about how they work",
+          "tag": "summary"
         }
       ]
     }

@@ -251,6 +251,25 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
   "felt understood" counts on a public profile under the Ahpra testimonial guidance; whether the
   finder routes to `/match` or the two coexist.
 
+### Phase T — the text budget and the two-pane Learn (founder-directed, 2026-09-10)
+
+- [x] **Games and modules apart.** The Learn tab is two panes with a swipe and a tab pair:
+      Games (the Chaos Run's eight lives, Leo's moment, the twenty bean runs: other people's
+      moments, where a person finds out what is theirs) and Modules (For you from the Lives loop,
+      the reads and quizzes, the sixteen strategy modules on shelves, the Toolkit, a quiet
+      moment, the goals: the moves, two to five minutes each). The `/lives/learn` library folded
+      in; a module opened by URL returns to its own side. `app/learn-panes.tsx`,
+      `e2e/walkthrough.spec.ts`. (2026-09-10)
+- [x] **The walkthrough.** Every explanatory sentence renders only while the switch is on;
+      a first visit is offered it once; the settings sheet holds it after. `<Explain>` in
+      `app/explain.tsx`. (2026-09-10)
+- [x] **The text budget, five rounds.** Words above the fold measured per route against
+      Headspace and Finch; 13 of 17 routes over at baseline, 6 after; the Learn page from 49 to
+      19; the worst screen from 140 to 70. The table and what stays over are in `AESTHETIC.md`.
+      (2026-09-10)
+- [ ] The three match screens and the GP profile at Headspace's home density (40) rather than
+      its list density: a second pass once the wiring unit changes what a card has to say.
+
 ### Phase C — pilot (PRD §87–§88)
 
 - [ ] Closed pilot, 30–50 users, 2–4 weeks: onboarding completion and median time, module
