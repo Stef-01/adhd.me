@@ -26,6 +26,16 @@ function chromiumExecutable(): string | undefined {
 
 const executablePath = chromiumExecutable();
 
+// Cross-engine runs are opt-in: PW_BROWSERS=chromium,webkit,firefox. Chromium alone is the
+// default and what CI runs; the other two engines need `pnpm exec playwright install webkit
+// firefox` once. Any spec that a second engine fails is a finding, not a flake to filter.
+const BROWSERS = (process.env.PW_BROWSERS ?? "chromium").split(",").map((b) => b.trim()).filter(Boolean);
+const projects = [
+  { name: "chromium", use: { browserName: "chromium" as const, launchOptions: executablePath ? { executablePath } : {} } },
+  { name: "webkit", use: { browserName: "webkit" as const } },
+  { name: "firefox", use: { browserName: "firefox" as const } },
+].filter((p) => BROWSERS.includes(p.name));
+
 // The port is overridable so a stale server on the default cannot make the suite unrunnable —
 // which is exactly what happened once, and "the e2e cannot start" reads like a product failure.
 const PORT = process.env.E2E_PORT ?? "3100";
@@ -68,7 +78,6 @@ export default defineConfig({
   workers: 1,
   use: {
     baseURL: BASE_URL,
-    launchOptions: executablePath ? { executablePath } : {},
     // O98: a trace for failures only. Costs nothing on a green run, and turns "the sweep
     // is red on CI" into something a person can actually open and read.
     trace: "retain-on-failure",
@@ -83,6 +92,7 @@ export default defineConfig({
       ],
     },
   },
+  projects,
   webServer: {
     command: `pnpm exec next build && pnpm exec next start -p ${PORT}`,
     url: BASE_URL,
