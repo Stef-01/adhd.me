@@ -85,8 +85,10 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
      inside a pane of glass would be. A box-shadow is not clipped by an element's own overflow, so
      the rim and the contact shadow below are untouched by this. */
   overflow: hidden;
+  /* The light sits where the light is, not where the cursor is — see glass-pointer.tsx's header.
+     --lg-x/--lg-y are the TAP BUBBLE's origin now and nothing else reads them. */
   background:
-    radial-gradient(118% 86% at var(--lg-x) var(--lg-y), rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 58%),
+    radial-gradient(118% 86% at 28% 8%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 58%),
     var(--glass-fill-strong);
   border-color: var(--glass-edge);
   box-shadow:
@@ -168,34 +170,45 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
 }
 [data-liquid] .play-tempt.is-go:active { transform: scale(0.975); }
 
-/* ── The droplets: every coloured game tile, Leo's card and the Play card ──────────────────────
-   A tile keeps its colour and becomes a lens: a Fresnel rim, the red and blue split on its edge, a
-   specular highlight that follows the finger across it (--lg-x, --lg-y, set by the tile's pointer
-   handlers in app/learn-panes.tsx), and a spring on press that overshoots like a drop. */
+/* ── The droplets: every coloured module tile, Leo's card and the Play card ────────────────────
+   EACH MODULE IS A BUBBLE OF ITS OWN COLOUR (founder, 2026-09-11: "make each module colored
+   bubbles, not having just bubble outline"). It was a flat slab of `--cover` with a clear rim
+   drawn round it, which reads as an outline laid on a rectangle rather than as a lit, domed thing
+   with colour inside it. So the dome is built here, in the tile's own hue: a bright crown where
+   the light lands, the colour deepening to a foot, and a rim that carries the hue rather than
+   being a white hairline on top of it.
+
+   THE COMPUTED BACKGROUND IS NOT TOUCHED, and that is load-bearing: `learning.css` says the inks
+   on these cards were measured against the flat fill, so the dome is a pseudo-element and an inset
+   shadow, exactly as the sheen already was. Nothing here changes what a contrast checker reads.
+
+   No highlight follows the pointer — see glass-pointer.tsx's header for why that went. */
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card) {
-  --lg-x: 72%; --lg-y: 18%;
   position: relative; isolation: isolate;
+  border-radius: 32px;
   box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.62),
+    /* The crown: a bubble is brightest just inside its top edge, not on it. */
+    inset 0 2px 0 rgba(255, 255, 255, 0.66),
+    inset 0 10px 22px -12px rgba(255, 255, 255, 0.44),
     inset 2px 0 0 -1px var(--lg-dispersion-warm),
     inset -2px 0 0 -1px var(--lg-dispersion-cool),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+    /* The foot, in the tile's own colour rather than a neutral black, so the dome stays coloured. */
+    inset 0 -14px 24px -16px color-mix(in srgb, var(--cover, #172033) 76%, #000),
+    inset 0 -2px 0 color-mix(in srgb, var(--cover, #172033) 64%, #000),
     0 1px 0 rgba(23, 32, 51, 0.06),
     0 22px 36px -22px color-mix(in srgb, var(--cover, #172033) 88%, #000);
 }
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card)::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
   background:
-    radial-gradient(46% 38% at var(--lg-x) var(--lg-y), rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0) 70%),
-    linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.16) 100%);
-  opacity: 0.86;
-  transition: opacity 220ms var(--ease-ui, ease);
+    /* The crown light, held in one place. Over the art side, which the text column never reaches. */
+    radial-gradient(52% 42% at 78% 4%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 72%),
+    linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 36%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.14) 100%);
+  /* The rim carries the hue: a bubble of this colour, not a white ring round a swatch. */
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, #fff 62%, var(--cover, #fff)),
+    inset 0 0 26px rgba(255, 255, 255, 0.18);
 }
-/* The tiles' Fresnel ring rides on ::before with the glare, because ::after is the tap's bubble. */
-.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card)::before {
-  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.42), inset 0 0 26px rgba(255, 255, 255, 0.2);
-}
-.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)[data-touch]::before { opacity: 1; }
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card) > * { position: relative; z-index: 2; }
 /* The Play card is the one surface with no colour of its own, so it takes a wash of the room. */
 .platform-shell [data-liquid] .learn-play-card {

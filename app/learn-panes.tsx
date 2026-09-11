@@ -204,10 +204,11 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
 /** A drop's spring: quick, and it overshoots a touch before it settles. */
 const DROP = { type: "spring", stiffness: 520, damping: 16, mass: 0.7 } as const;
 
-/* The droplet's light follows the finger across every glass surface, not only these two tiles:
-   one delegated listener does it for all of them now (app/glass/glass-pointer.tsx). The four
-   pointer handlers each tile carried are gone, and with them the chance that one of them was
-   what swallowed a tap. */
+/* No light follows the finger any more (founder, 2026-09-11: "it should just be a bubble not
+   shimmer"). Each tile is a bubble of its own colour that holds its light in one place, built in
+   app/styles/glass.css; app/glass/glass-pointer.tsx keeps only the point a TAP landed on, which is
+   where that tap's bubble opens from. The four pointer handlers each tile used to carry are gone,
+   and with them the chance that one of them was what swallowed a tap. */
 
 function Tile({ module, done, hydrated, index, start, reducedMotion }: { module: LearnModule; done: boolean; hydrated: boolean; index: number; start: (id: string) => void; reducedMotion: boolean }) {
   const colour = coverOf(module);

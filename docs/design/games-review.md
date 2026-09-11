@@ -310,3 +310,52 @@ still 75px on a phone.
 
 `e2e/controls.spec.ts` is the gate, and it asks both geometric questions. Proved non-vacuous by
 putting Leo's mute control back to 36px: it fails with four named lines.
+
+## Stage 9: a bubble, and not a shimmer (2026-09-11)
+
+Founder direction, on seeing the Learn pane: *"make each module colored bubbles, not having just
+bubble outline"*, and *"remove the shimmer that mouse/touch over causes … it should just be a
+bubble not shimmer"*.
+
+### The shimmer went, and stage 6 was wrong about it
+
+Stage 6 added a specular that followed the pointer across every glass surface and argued for it in
+`glass-pointer.tsx`'s header: *"The specular on a glass bubble is the one thing that tells a person
+it is glass: it sits where the light hits and it moves when they do."*
+
+That is true of a bubble in a room and false of a page of them. What tells somebody a surface is
+glass is the rim, the dome and the way it answers a press — all of which are static. A highlight
+that chases the cursor across a grid of tiles reads as restlessness, and this product is for people
+whose attention is the thing under strain. The argument was aesthetic and the cost was attentional,
+which is the wrong trade for this audience.
+
+So: the `pointermove` listener is gone, with it the `data-touch` state and the per-frame
+`requestAnimationFrame` write of two custom properties on whatever the cursor was over. What is
+left is one `pointerdown` listener. `--lg-x`/`--lg-y` still exist and now do exactly one job — say
+where **the bubble a tap makes** opens from, which is the thing the founder asked for earlier the
+same day and which is untouched. The two resting highlights that used to read those properties now
+sit at fixed points.
+
+That is also less work per frame: nothing is written, measured or painted while a pointer moves.
+
+### Each module is a bubble of its own colour
+
+The tiles were a flat fill of `--cover` with a clear rim drawn round it — an outline laid on a
+rectangle. They are domes now, built in the tile's own hue: a bright crown just inside the top edge
+where the light lands, the colour deepening to a foot in its own colour rather than a neutral
+black, a rim that carries the hue instead of being a white hairline on top of it, and 32px of
+radius rather than 20 so the shape reads round.
+
+**The computed background is deliberately untouched**, and that is load-bearing. `learning.css`
+states that the inks on these cards were measured against the flat fill, so the whole dome is
+pseudo-element and inset shadow, exactly as the existing sheen already was. A contrast checker
+reads `rgb(255, 160, 0)` on the amber tile before and after.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| Moving the cursor across a tile | `::before` background byte-identical before and after, no `data-touch`, no `--lg-x` written — measured, not assumed |
+| Computed background of a tile | `rgb(255, 160, 0)`, unchanged, so the ink contrast contract holds |
+| Unit suite | 4,067 passed, 272 files |
+| e2e `app-shell` (incl. the liquid-glass test), `learn-panes`, `controls`, `games-fit` | 23 passed — 328 controls, 0 covered, 0 under 44px |
