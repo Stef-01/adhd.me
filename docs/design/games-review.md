@@ -169,3 +169,84 @@ Two specs fail in this container for reasons this change did not cause, confirme
 on a pristine tree: `keyboard-focus` and `text-budget` both walk every public route with a 240s cap,
 and every route takes about 13 seconds to reach `networkidle` here, so the walk runs out of time
 before it runs out of routes. The budget's own CLI has no such cap and reports 0 over.
+
+## Stage 7: what Leo's round is for, and games that fit (2026-09-11)
+
+Founder direction, two things: "the Leo game should end and then automatically progress to showing
+instead with same graphical format have night time routine to read out on headphones and close
+window and this content routine would prevent mosquitos and help him sleep in peace", and "none of
+games should allow scroll, it should just perfectly fit."
+
+### The round taught the wrong lesson, and then offered a menu
+
+Leo's round asks somebody to catch every mosquito. Then — caught or not — the screen said how it
+went and offered *Play again* and a link to a module. So the only thing the game itself taught was
+that the answer to a sound you cannot stand is to hit it faster, which is the opposite of the
+strategy it is attached to. `lower_sensory_floor` says the move is not to remove the noise, which
+nobody can do, but to change the room it lands in; that was a link at the bottom of a results card.
+
+**Now the round ends into the routine**, in the same bedroom, drawn the same way. Three things,
+one at a time, each a tap that changes the room above it:
+
+| Tap | What happens | What the room does |
+|---|---|---|
+| Close the window | *Nothing else gets in.* | The curtains draw across the window the mosquitoes came through |
+| Headphones on | *Something quiet, read out loud.* | They go on the head that has been flinching all round |
+| Light off | *The room says it is night.* | The lamp goes out and the room dims |
+
+and then Leo is asleep, with **"The mosquito is still out there. Leo is asleep."** on the screen.
+That last line is the lesson stated rather than implied, and it is why the routine is the same
+whether every mosquito was caught or none was: catching them is not what got him to sleep.
+
+Three decisions worth recording:
+
+- **No timer between the round and the routine.** A beat was built first — half a second to let the
+  last mosquito finish falling — and then removed: it made the outcome heading a moving target for
+  every spec that reads it, and a timed pause is a thing to wait through. Instead the round's last
+  frame *stays*, with its count and Leo's face, until the first tap of the routine. The person
+  moves it on, not a clock.
+- **The routine is the practice page's, not the Chaos Run's.** `/lives/play/leo-mosquito` is Leo's
+  moment end to end; the Chaos Run is an arcade of twenty of these and a wind-down in the middle of
+  it would be a stop, not a settling.
+- **Nothing here is a new claim.** Every step is already in `lower_sensory_floor_v1`'s own
+  checklist and wind-down, the hedge lives in the module ("may make individual noises less salient
+  for some people; try it once and keep it only if it helps"), and the link to it is still at the
+  end. `src/lives/leo-routine.ts` holds the three steps as a register so the copy linter sweeps
+  them like every other string a person reads.
+
+### Games that fit
+
+Measured first, on eight game surfaces at six sizes: **25 of 48 ran past the screen.** Two
+different failures, with one cause each:
+
+| Failure | Where | Cause |
+|---|---|---|
+| The document scrolled, by exactly 48px, at every width | `/approach?module=…` — a run inside a learn module | `.me-screen`'s bottom gutter, the space under a tab bar that a run hides anyway. The Chaos Run never had it: `.me-screen:has(.lives-run)` already dropped the padding. A run inside a module carries `.play-run` instead, so the rule did not reach it |
+| Nothing scrolled and the content was **cut** | the memory round at 320×568 (777px of card in a 568px screen), 360×640, and 1280×800 | `.play-card` hides its overflow, so the 209px that did not fit were the *buttons*. A check that asks only whether the page scrolls cannot see this, which is why the gate asks both questions |
+| Leo's own screen, 10px at 320×568 | `/lives/play/leo-mosquito` | `min-height: 100svh` lets the rows below the board push the page taller than the viewport |
+
+The fixes are three rules and one media query, not a tuning pass per game: the shell's padding goes
+on any `.play-run`; `.leo-practice` and `.play-stage` are exactly the viewport rather than at least
+it, with the picture as the row that gives; and below 700px of viewport the whole card tightens at
+once — padding, gaps, title, clue, the scene's floor — because every round is built from the same
+four rows and a game that fits only because somebody tuned its own numbers stops fitting on the
+next one. **The controls are never touched: they are the game.**
+
+`e2e/games-fit.spec.ts` is the gate, and it asserts both halves. Proved non-vacuous by putting one
+rule back: it fails with six named lines, *"A run inside a module, title at 320×568: 48px of
+scroll"* and its siblings.
+
+### Stage 7 verification
+
+| Check | Result |
+|---|---|
+| Scroll and clipping, 8 game surfaces × 6 sizes | 48 of 48 fit — before: 23 of 48. The only page still scrolling is `/lives/learn?module=…`, which is a read, not a game |
+| e2e `leo-mosquito` (9 tests, including axe on the routine and on Leo asleep) | 9 passed |
+| e2e `games-fit`, `learning-play`, `adhd-lives`, `learn-panes`, `app-shell` | 34 passed |
+| Unit `leo-routine` | 7 passed |
+| Text budget | 0 over, median 26; Leo's routine 20 words, Leo asleep 24 |
+
+Two spec changes this caused, both recorded rather than quietly made: `data-caught="12"` and the
+regulation meter are read on the routine's first screen now, because that screen still holds the
+round's last frame — had the swarm unmounted on the final catch, as the first version did, neither
+count would have had a reader and the proof that all twelve were caught would have been lost.

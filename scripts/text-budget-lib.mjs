@@ -56,7 +56,14 @@ export const EXTRA = [
   { path: "/approach?module=everyday", name: "A read module, first card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
   { path: "/lives/play", state: "lives-run", name: "The Chaos Run, first round" },
+  // Leo's routine (app/lives/leo-practice.tsx): the two screens the round now ends into.
+  { path: "/lives/play/leo-mosquito", state: "leo-routine", name: "Leo's routine, first step" },
+  { path: "/lives/play/leo-mosquito", state: "leo-settled", name: "Leo asleep" },
   { path: "/match/results", state: "intake", name: "Match results" },
+  // The two questions (app/first-step.tsx). The walk reaches the first one on its own; the second
+  // and the answer are taps, and a screen the instrument cannot reach is a screen nobody measured.
+  { path: "/first-step", state: "first-step-stage", name: "First step, the second question" },
+  { path: "/first-step", state: "first-step-answer", name: "First step, the answer" },
   { path: "/match/prep", state: "intake", name: "Match prep" },
 ];
 
@@ -136,6 +143,22 @@ export async function reach(page, route, base) {
     if (route.state === "finder-profile") {
       await page.locator(".clinician-row").first().click();
       await page.getByRole("heading", { level: 1 }).waitFor();
+    }
+  }
+  if (route.state === "first-step-stage" || route.state === "first-step-answer") {
+    await page.getByRole("button", { name: "Me", exact: true }).click();
+    // The longest card in the table, so the number this reports is the worst case rather than a
+    // sample of it.
+    if (route.state === "first-step-answer") await page.getByRole("button", { name: "Still finding out" }).click();
+  }
+  if (route.state === "leo-routine" || route.state === "leo-settled") {
+    await page.getByRole("button", { name: "Play Leo\u2019s moment" }).click();
+    // Reduced motion is on in this context, so the round offers a way out rather than a clock.
+    await page.getByRole("button", { name: "Skip this round" }).click();
+    if (route.state === "leo-settled") {
+      for (const step of ["Close the window", "Headphones on", "Light off"]) {
+        await page.getByRole("button", { name: step, exact: true }).click();
+      }
     }
   }
   if (route.state === "lives-run") {

@@ -16,6 +16,19 @@ async function clearUntimedSwarm(page: Page, keyboard = false) {
   }
   await expect(page.getByRole("heading", { name: "Quiet at last." })).toBeVisible();
 }
+/**
+ * The round ends INTO the routine, on the same screen the outcome is announced on, so every spec
+ * that used to read a result screen walks three taps from it. Nothing here is timed.
+ */
+async function walkRoutine(page: Page) {
+  await page.getByRole("button", { name: "Close the window", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Change the room." })).toBeVisible();
+  await page.getByRole("button", { name: "Headphones on", exact: true }).click();
+  await page.getByRole("button", { name: "Light off", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Quiet all night." })).toBeVisible();
+  await expect(page.getByText("The mosquito is still out there. Leo is asleep.")).toBeVisible();
+}
+
 async function timedStart(page: Page) {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   // The clock goes in before the page so every timer the game makes is fake; the hydration wait
@@ -43,11 +56,15 @@ test("the three untimed waves support keyboard, replay, and learning without sco
   await expect(page.locator(".leo-swarm")).toHaveAttribute("data-caught", "12");
   await expect(page.getByRole("heading", { name: "Quiet at last." })).toBeFocused();
   expect(await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"))).toBe(before);
+  // Catching every mosquito is not the end of the game: the routine is, and it arrives on its own.
+  await walkRoutine(page);
   await page.getByRole("button", { name: "Play again" }).click();
   await expect(page.locator(".leo-fly:enabled")).toHaveCount(3);
   await expect(page.getByRole("meter", { name: "Leo’s regulation" })).toHaveAttribute("aria-valuenow", "100");
   await page.getByRole("button", { name: "Skip this round" }).click();
   await expect(page.getByRole("heading", { name: "Still wide awake." })).toBeVisible();
+  // And losing is not the end either. The routine is the same either way, which is the point of it.
+  await walkRoutine(page);
   await page.getByRole("link", { name: /Tiny sounds feel familiar/ }).click();
   await expect(page).toHaveURL(/module=lower_sensory_floor_v1/);
   expect(errors).toEqual([]);
@@ -89,6 +106,7 @@ test("the last catch wins before the deadline, and leaving one alive times out",
   test.skip(test.info().project.name === "webkit", "headless WebKit under a fake clock does not settle the 22-second swarm in the test budget");
   for (const win of [true, false]) {
     if (win) await timedStart(page); else {
+      // The previous pass ended in the routine; Play again lives on its last screen.
       await page.getByRole("button", { name: "Play again" }).click();
     }
     await page.clock.runFor(100); await catchWave(page);
@@ -100,6 +118,7 @@ test("the last catch wins before the deadline, and leaving one alive times out",
     await page.clock.runFor(1000);
     await expect(page.getByRole("heading", { name: win ? "Quiet at last." : "Still wide awake." })).toBeVisible();
     if (!win) await expect(page.getByText(/Time ran out with mosquitoes/)).toBeVisible();
+    if (win) await walkRoutine(page);
   }
 });
 
@@ -157,6 +176,9 @@ test("swarm controls and meters fit four screen widths and remain accessible", a
   await expectNoViolations(page, "Leo swarm active");
   await clearUntimedSwarm(page);
   await expectNoViolations(page, "Leo swarm result");
+  await expectNoViolations(page, "Leo routine");
+  await walkRoutine(page);
+  await expectNoViolations(page, "Leo settled");
   await expect(page.getByRole("button", { name: "Skip this round" })).toHaveCount(0);
   expect(errors).toEqual([]);
 });
