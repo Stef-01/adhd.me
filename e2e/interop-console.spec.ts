@@ -12,6 +12,7 @@ import path from "node:path";
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
+import { stateTints } from "../src/quality/tint";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -57,7 +58,11 @@ test("shows no success styling anywhere on the page", async ({ page }) => {
   // Resolved through a CANVAS, not a regex — Tailwind v4 emits oklch(), and the tree has learned
   // that twice. Every element carrying text or a background is checked, because a green tick could
   // be anywhere and this is the one decision that lives entirely in CSS.
-  const tinted = await page.evaluate(() => {
+  //
+  // The page MEASURES and `src/quality/tint.ts` JUDGES. The judgement used to be written out here,
+  // and again in capacity-console, as "channels 24 apart"; this palette's neutrals are cool enough
+  // to trip that, so every paragraph on the page reported as a green tick. One rule, one place.
+  const measured = await page.evaluate(() => {
     const ctx = document.createElement("canvas").getContext("2d")!;
     const parse = (c: string) => {
       ctx.clearRect(0, 0, 1, 1);
@@ -69,7 +74,7 @@ test("shows no success styling anywhere on the page", async ({ page }) => {
       // `number | undefined`, which the spec run happily executes and the typecheck rejects.
       return [d[0]!, d[1]!, d[2]!, d[3]!] as [number, number, number, number];
     };
-    const out: string[] = [];
+    const out: { where: string; rgb: [number, number, number] }[] = [];
     const main = document.querySelector("main") ?? document.body;
     for (const el of main.querySelectorAll("*")) {
       const style = getComputedStyle(el);
@@ -80,14 +85,12 @@ test("shows no success styling anywhere on the page", async ({ page }) => {
       ] as const) {
         const [r, g, b, a] = parse(value);
         if (a === 0) continue;
-        // A green or amber tint pulls one channel away from the others. Neutral greys do not.
-        if (Math.max(r, g, b) - Math.min(r, g, b) >= 24) {
-          out.push(`${el.tagName.toLowerCase()} ${what} ${value}`);
-        }
+        out.push({ where: `${el.tagName.toLowerCase()} ${what} ${value}`, rgb: [r, g, b] });
       }
     }
     return out;
   });
+  const tinted = stateTints(measured).map((m) => m.where);
   expect(tinted, `coloured elements on a page that must show no state: ${tinted.join("; ")}`).toEqual([]);
 });
 
