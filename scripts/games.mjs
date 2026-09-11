@@ -1,10 +1,10 @@
 // QA captures of every game, for a person to read after each change. Nothing here asserts.
 //   BASE=http://localhost:PORT node scripts/games.mjs            # everything
 //   ONLY=chaos|leo|runs BASE=... node scripts/games.mjs          # one family
-// Chaos Run: walks seeds until each of the games has been caught mid-round (data-beat="active").
+// Chaos Run: each game by name through the lab's one-game run, caught mid-round (data-beat="active").
 // Leo: the ready screen and a round in play. Bean runs: each run's title card and its first round.
 import { chromium } from "@playwright/test";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 
 const BASE = process.env.BASE || "http://localhost:3100";
 const ONLY = process.env.ONLY || "all";
@@ -23,29 +23,22 @@ const page = await context.newPage();
 const shot = async (name) => { await page.screenshot({ path: `${OUT}/${name}.png` }); console.log("ok", name); };
 
 if (ONLY === "all" || ONLY === "chaos") {
-  const seen = new Set();
-  const wanted = Number(process.env.GAMES || 32);
-  // A rare game can take many seeds to come up; the capture stops at its budget rather than stall.
-  const deadline = Date.now() + Number(process.env.CHAOS_MS || 6 * 60_000);
-  for (let seed = 1; seed <= 90 && seen.size < wanted && Date.now() < deadline; seed += 1) {
-    await page.goto(`${BASE}/lives/play?seed=qa-${seed}`, { waitUntil: "networkidle" });
+  // Every game by name through the lab's one-game run (/lives/lab/play?game=), so none is left to chance.
+  const all = [...readFileSync("src/lives/games.ts", "utf8").matchAll(/^  \{ id: "([a-z_]+)"/gm)].map((m) => m[1]);
+  const wanted = process.env.GAMES ? process.env.GAMES.split(",") : all;
+  let caught = 0;
+  for (const id of wanted) {
+    await page.goto(`${BASE}/lives/lab/play?game=${id}&seed=qa`, { waitUntil: "networkidle" });
     const play = page.locator(".lives-play");
-    if (!(await play.count())) continue;
+    if (!(await play.count())) { console.log("no start", id); continue; }
     await play.click();
-    for (let round = 0; round < 14; round += 1) {
-      const card = page.locator('.lives-game[data-beat="active"]');
-      try { await card.waitFor({ timeout: 9000 }); } catch { break; }
-      const id = await card.getAttribute("data-game");
-      if (id && !seen.has(id)) {
-        seen.add(id);
-        await page.waitForTimeout(900);
-        await shot(`chaos-${id}`);
-      }
-      try { await page.locator('.lives-game[data-beat="active"]').waitFor({ state: "detached", timeout: 12000 }); } catch { break; }
-      if (await page.locator(".lives-results").count()) break;
-    }
+    const card = page.locator(`.lives-game[data-beat="active"][data-game="${id}"]`);
+    try { await card.waitFor({ timeout: 12000 }); } catch { console.log("not active", id); continue; }
+    await page.waitForTimeout(900);
+    await shot(`chaos-${id}`);
+    caught += 1;
   }
-  console.log(`chaos games captured: ${seen.size}`);
+  console.log(`chaos games captured: ${caught} of ${wanted.length}`);
 }
 
 if (ONLY === "all" || ONLY === "leo") {

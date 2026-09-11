@@ -215,6 +215,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The recommendation debugger and the director's log (PRD v2 §106–§107): identifiers and scores over fictional inputs, so the engine can show its working. Public because a deterministic engine's auditability is part of the product; it holds nothing about any person.",
   },
   {
+    path: "/lives/lab/play",
+    audience: "patient",
+    why: "The Chaos Run with one game in its pool (PRD v2 §106–§107), named by ?game=, so each game can be played and reviewed alone. The same run as /lives/play over fictional scenes; a lab run writes no score and holds nothing about any person.",
+  },
+  {
     path: "/medication",
     audience: "patient",
     why: "Medication experience (PRD §47): three fields the person describes in their own words to take to whoever manages their medication. The app advises on nothing — no dose, no timing, no verdict — and every prompt on the page answers to the patient rules.",
