@@ -5,7 +5,8 @@
 // case is unit-tested in src/referrals/store.test.ts, because a second practice is not
 // reachable from one browser session and driving it here would be theatre (W83's rule).
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ page, request }) => {

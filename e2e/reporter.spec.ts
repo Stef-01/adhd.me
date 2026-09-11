@@ -7,7 +7,8 @@
 // absence mean something); a real browser's Web Vital beacon arriving as its own kind; and the
 // enforced policy's violation document arriving through `report-uri` (U13: `disposition: "enforce"`).
 
-import { expect, test, type APIRequestContext } from "@playwright/test";
+import { expect, type APIRequestContext } from "@playwright/test";
+import { test } from "./support/test";
 import type { Report } from "../src/ops/reporter";
 
 const PLANT = "my daughter is nine and cannot sit through a lesson";
@@ -98,6 +99,7 @@ test("a real browser's Web Vital beacon arrives as its own kind, with the pathna
 });
 
 test("the enforced policy's violation document reaches the sink through report-uri", async ({ page, request }) => {
+  test.skip(test.info().project.name === "webkit", "WebKit reports an enforced policy's violation with disposition report; the document's shape is Chromium's");
   await page.goto("/faq");
   await expect(page.getByRole("main")).toBeVisible();
   await page.evaluate(() => {

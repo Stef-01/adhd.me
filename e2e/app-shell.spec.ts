@@ -10,7 +10,9 @@
 // claims about a phone and both are invisible in a desktop capture — the exact failure mode that
 // made O225's letterboxing survive a review.
 
-import { expect, test } from "@playwright/test";
+import { openModuleShelves, openShelves } from "./support/learn";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { INDICATIVE_FIGURES } from "../src/compliance/landing-copy";
 import { APP_TABS } from "../src/app-shell/tabs";
 
@@ -232,10 +234,10 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
 test("the profile's filters narrow the finder, are said on the results, and clear from there", async ({ page }) => {
   await page.goto("/profile");
   // Each filter group is a tap; open the three this test uses.
-  for (const name of ["How far you would travel", "Speaks, besides English", "How they work"]) await page.locator("summary", { hasText: name }).click();
+  for (const name of ["Distance", "Languages", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.getByRole("switch", { name: /Woman GP/ }).check();
-  await page.getByRole("switch", { name: /Taking new patients/ }).check();
+  await page.getByRole("switch", { name: /New patients/ }).check();
   await expect(page.getByText("2 on", { exact: true })).toBeVisible();
   // A language chip is a pressed button whose name stays the language — the tick is not in it.
   await page.getByRole("button", { name: "Tamil", exact: true }).click();
@@ -258,7 +260,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
 
   const strip = page.getByRole("group", { name: "Your filters" });
   await expect(strip).toContainText("Woman GP");
-  await expect(strip).toContainText("Taking new patients");
+  await expect(strip).toContainText("New patients");
   // Every row on a narrowed list answers the filters: the roster is narrowed before ranking, so
   // the reasons printed on the rows cannot name a GP the filters excluded.
   const rows = page.locator(".clinician-row");
@@ -273,7 +275,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   // And the device agrees with the screen.
   await page.goto("/profile");
   await expect(page.getByText("None on", { exact: true })).toBeVisible();
-  await page.locator("summary", { hasText: "How far you would travel" }).click();
+  await page.locator("summary", { hasText: "Distance" }).click();
   await expect(page.getByLabel("Suburb or postcode")).toHaveValue("Beecroft");
 });
 
@@ -288,7 +290,7 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
   // The place comes from the profile (or a link), never from a field on results.
   await page.goto("/profile");
   // Each filter group is a tap; open the three this test uses.
-  for (const name of ["How far you would travel", "Speaks, besides English", "How they work"]) await page.locator("summary", { hasText: name }).click();
+  for (const name of ["Distance", "Languages", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.goto("/");
   await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
@@ -337,10 +339,10 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
 
 test("filters nobody answers say so and give both ways out", async ({ page }) => {
   await page.goto("/profile");
-  for (const name of [/Woman GP/, /telehealth/, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
+  for (const name of [/Woman GP/, /telehealth/i, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
     await page.getByRole("switch", { name }).check();
   }
-  await page.locator("summary", { hasText: "Speaks, besides English" }).click();
+  await page.locator("summary", { hasText: "Languages" }).click();
   for (const language of ["Arabic", "Igbo", "Urdu"]) await page.getByRole("button", { name: language, exact: true }).click();
   await page.goto("/");
   await page.getByRole("textbox").fill("someone who can do the whole assessment");
@@ -381,9 +383,8 @@ test("the consent notice, the bar and the finder are one shell at every width", 
 
 test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
   await page.goto("/approach");
-  await page.getByTestId("learn-tab-modules").click();
+  await openModuleShelves(page);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/A little more understanding/);
-  for (const shelf of await page.locator("details.learn-shelf:not([open]) > summary").all()) await shelf.click();
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
   for (let i = 0; i < total; i += 1) {
@@ -401,16 +402,23 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await page.getByRole("button", { name: "Finish", exact: true }).click();
   await expect(page.getByRole("button", { name: "Continue Myth or fact?", exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => localStorage.getItem("adhdme.learn.cursor.v1"))).toBeNull();
+  await openShelves(page);
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
   // Remembered on this device.
   await page.reload();
+  await openModuleShelves(page);
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
 });
 
-test("liquid glass (the studio's WebGL layer) runs under the page where WebGL2 can, and stands aside where it cannot", async ({ page }) => {
+test("liquid glass runs under the games where WebGL2 can, stands aside where it cannot, and never reaches the finder", async ({ page }) => {
   const errors: string[] = [];
   page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") errors.push(m.text()); });
-  await page.goto("/support");
+  // The finder is plain: no games scope, no layer, whatever the engine can do.
+  await page.goto("/");
+  await page.waitForTimeout(600);
+  expect(await page.evaluate(() => ({ scope: document.querySelector("[data-liquid]") !== null, liquid: document.documentElement.classList.contains("has-liquid") }))).toEqual({ scope: false, liquid: false });
+  await page.goto("/approach");
+  await expect(page.locator("[data-liquid] .learn-stack .learn-card").first()).toBeVisible();
   await page.waitForTimeout(600);
   const state = await page.evaluate(() => {
     const c = document.createElement("canvas");

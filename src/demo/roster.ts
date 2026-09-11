@@ -437,8 +437,10 @@ export const clinicians: Clinician[] = [
     reach: "Practice appointments in Double Bay and Hornsby",
     // O82: her portrait, supplied by the founder on her behalf (2026-08-20) — the only route a
     // real person's likeness enters this tree. Until then the monogram was her choice, not a gap.
-    // 2026-09-10 (founder-directed): the file now holds a still from her ADHD.ME interview
-    // footage — a photograph of her, not a generated one — cropped square for the card.
+    // 2026-09-10 (founder-directed, second pass: "find one where she is smiling"): the file holds
+    // a still from her ADHD.ME interview footage (tape 01819989 at 685.2s). Her likeness is the
+    // frame as shot — nothing about her is generated; the microphone pop filter beside her
+    // shoulder was retouched out of the background with an inpainting model. Cropped square.
     image: "/clinicians/anusha-saxena.png",
     acceptingNewPatients: true,
     capacityDeclaredAt: "2026-08-18",

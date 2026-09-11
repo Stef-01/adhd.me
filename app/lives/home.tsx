@@ -39,7 +39,7 @@ export function LivesHome() {
   }, []);
   const flip = (key: string, on: boolean, set: (v: boolean) => void) => { writeFlag(key, !on); set(!on); };
   return (
-    <div className="me-screen learn-screen lives-screen lives-home">
+    <div className="me-screen learn-screen lives-screen lives-home" data-liquid>
       <header className="life-head lives-home-head">
         <span className="life-eyebrow">ADHD Lives</span>
         <div className="lives-cast" aria-hidden="true">{CHARACTERS.map((c) => <LifeBean key={c.id} who={c.id} mood="engaged" size={44} />)}</div>
@@ -58,7 +58,7 @@ export function LivesHome() {
       </ul>
 
       <details className="life-why lives-goals">
-        <summary>What would you most like help with?</summary>
+        <summary>Your goals</summary>
         <div className="lives-chips" role="group" aria-label="Goals">
           {GOALS.map((g) => <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>{g.label}</button>)}
         </div>

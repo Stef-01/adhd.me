@@ -276,9 +276,9 @@ export function LearningCoverArt({ id }: { id: string }) {
 }
 
 const EXAMPLES = [
-  { label: "A reminder", text: "A visible note can hold a next step outside your head.", scene: "A character points to a reminder note placed beside a set of keys.", color: "var(--on-band)" },
-  { label: "One small step", text: "A large task can be broken into a first action that is easier to see.", scene: "A character faces three small steps. An arrow highlights the first step.", color: "var(--hero-blue)" },
-  { label: "Some company", text: "Doing a task alongside another person is sometimes called body doubling.", scene: "Two characters work on their own notes beside one another at a shared table.", color: "var(--line-strong)" },
+  { label: "A reminder", text: "A note outside your head.", scene: "A character points to a reminder note placed beside a set of keys.", color: "var(--on-band)" },
+  { label: "One small step", text: "One first action you can see.", scene: "A character faces three small steps. An arrow highlights the first step.", color: "var(--hero-blue)" },
+  { label: "Some company", text: "Working beside someone: body doubling.", scene: "Two characters work on their own notes beside one another at a shared table.", color: "var(--line-strong)" },
 ] as const;
 
 /** An example explorer, never a personal assessment or a saved response. */

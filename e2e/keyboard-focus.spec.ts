@@ -13,7 +13,8 @@
 // the console-depth item's "keyboard access" and the re-sweep's manual gap; like `a11y.spec.ts`
 // it is a check with no exemption register.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
 import { installFakeSpeech } from "./support/fake-speech";
 import { STAGES, openStage } from "./support/finder-stages";
@@ -37,6 +38,19 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
     await open(page);
     await page.evaluate(() => document.fonts.ready);
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    // Firefox keeps its sequential-focus starting point where the control that opened a screen
+    // used to be, and once Tab leaves the document it does not come back; so on Firefox the
+    // starting point is put back at the top of the body, through a throwaway anchor whose
+    // position survives its removal (the spec's focus fixup), and the ring is walked from there.
+    if (test.info().project.name === "firefox") {
+      await page.evaluate(() => {
+        const anchor = document.createElement("span");
+        anchor.setAttribute("tabindex", "-1");
+        document.body.prepend(anchor);
+        anchor.focus();
+        anchor.remove();
+      });
+    }
 
     await page.evaluate((selector) => {
       document.querySelectorAll(selector).forEach((el, i) => {
@@ -48,9 +62,13 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
 
     let stops = 0;
     let first = "";
-    let passedBody = false;
+    // Firefox parks focus outside the document for a press or two when it leaves a screen that
+    // was replaced under it; three empty presses in a row is the end of the ring, one is not.
+    let emptyPresses = 0;
+    // Safari reaches links with Option+Tab unless a preference is set; plain Tab skips them.
+    const tab = test.info().project.name === "webkit" ? "Alt+Tab" : "Tab";
     for (let i = 0; i < 200; i += 1) {
-      await page.keyboard.press("Tab");
+      await page.keyboard.press(tab);
       const info = await page.evaluate(() => {
         const el = document.activeElement as HTMLElement | null;
         if (!el || el === document.body) return null;
@@ -65,10 +83,11 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
         };
       });
       if (!info) {
-        if (passedBody) break;
-        passedBody = true;
+        emptyPresses += 1;
+        if (emptyPresses >= 3) break;
         continue;
       }
+      emptyPresses = 0;
       if (stops > 0 && info.key === first) break;
       if (stops === 0) first = info.key;
       stops += 1;
@@ -98,6 +117,7 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
 }
 
 test("every public control is reachable by keyboard and shows where it is", async ({ page }) => {
+  test.skip(test.info().project.name === "webkit", "WebKit headless skips links on Tab and Option+Tab alike; the walk cannot reach them there");
   test.setTimeout(240_000);
   await page.setViewportSize(PHONE);
   expect(PUBLIC_ROUTES.length, "the derived public list collapsed").toBeGreaterThan(8);
@@ -122,6 +142,7 @@ test("every console control is reachable by keyboard and shows where it is", asy
 });
 
 test("every finder stage is reachable by keyboard and shows where it is", async ({ page }) => {
+  test.skip(test.info().project.name === "webkit", "WebKit headless skips links on Tab and Option+Tab alike; the walk cannot reach them there");
   test.setTimeout(240_000);
   await installFakeSpeech(page);
   await page.setViewportSize(PHONE);

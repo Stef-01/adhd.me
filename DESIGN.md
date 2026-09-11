@@ -4,22 +4,31 @@ The 2026 redesign follows the six user-supplied references and the requirements 
 
 ## Shared visual language
 
-The user's warm brand board supersedes the original redesign's colour and type choices. The app uses warm paper and stone, ink primary controls, restrained amber active states, and one orange-to-periwinkle signature band. Learning retains its original characters and interactions on neutral covers. Reading uses a constrained text measure even when the workspace uses the whole desktop. The supplied board and current evidence live in `docs/design/warm-brand/`.
+The founder's direction on 2026-09-10 returned the app to the blue scheme of the early-September
+platform build ("a blue version that was present many versions ago was much better"). The app uses
+cool paper and stone, a navy ink for content, primary controls and dark bands, a readable blue for
+active states and links, and one orange-to-periwinkle signature band. Learning keeps its topic
+palettes on neutral covers; each game keeps the palette of its own world
+(`docs/design/games-to-leo-standard.md`). Reading uses a constrained text measure even when the
+workspace uses the whole desktop. The warm brand's board and evidence remain in
+`docs/design/warm-brand/` as the record of the version this replaced.
 
 | Token | Value | Use |
 |---|---|---|
-| Paper | `#FBFAF7` | Page ground |
-| Stone | `#EEECE5` | Inset and raised surfaces |
-| Ink | `#191A17` | Main content, primary controls and dark bands |
-| Muted / faint | `#5A5851` / `#6C6A65` | Supporting copy and small labels |
-| Amber | `#8A5A16` | Restrained active states and focus |
-| Amber on dark | `#E1A459` | Accent against ink |
-| Line / strong line | `#DFDDD6` / `#C4C1B7` | Dividers and visible boundaries |
-| Brand blue | `#647BBF` | Graphics; readable blue uses `#4C5F9C` or darker |
+| Paper | `#F7F8FC` | Page ground |
+| Stone | `#EDF0F6` | Inset and raised surfaces |
+| Ink | `#172033` | Main content, primary controls and dark bands |
+| Muted / faint | `#565F70` / `#626B7B` | Supporting copy and small labels |
+| Blue | `#4C5F9C` | Active states, links and focus; 5.8:1 on paper |
+| Blue deep / mid / tint / soft | `#334679` / `#647BBF` / `#C9D3EF` / `#E9EDF8` | The accent ramp; the console's amber utilities read it |
+| Line / strong line | `#D8DEEA` / `#B9C2D6` | Dividers and visible boundaries |
+| Band | `#D47839` to `#6679B9` | The signature band, defined once in `:root`; `--on-band` `#FFD9B8` |
 
-Inter is self-hosted for UI and body. Newsreader is reserved for patient questions, at approximately weight 430, -.035em tracking and .99 line height; the finder uses a 54px ceiling. No third font family is introduced. Functional headings remain Inter. Controls retain the responsive redesign's geometry and at least 44px targets.
-
-Amber is a detail in the platform shell, under 10% of a surface. The user's later request explicitly makes colourful educational stages and the immersive meditation player exceptions: these use readable topic palettes, while the surrounding library and navigation remain warm and restrained. Brand blue in the illustrations distinguishes characters by shape and scene as well as colour. The two categorical chart colours remain unchanged. Chart greys use the neutral ramp. Dark text uses paper/line; amber on dark uses on-band. The exact band stops are defined once in `:root`.
+Blue is a detail in the platform shell, under 10% of a surface. The colourful educational stages,
+the meditation player and the games are the exceptions: each uses its own readable palette while
+the surrounding library and navigation stay cool and restrained. The two categorical chart colours
+are unchanged. Chart greys use the neutral ramp. Text on dark uses paper; the band's text uses
+on-band.
 
 ## Component ownership
 

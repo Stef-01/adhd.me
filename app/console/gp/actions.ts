@@ -29,7 +29,7 @@ import { serverNow } from "@/lib/server-clock";
 import { isAdhdMeStaff } from "@/tenancy/staff";
 import { practiceRecord } from "@/console/store";
 import type { PracticeId } from "@/domain/types";
-import { claimGP, gpAccessFor, releaseGP, type Viewer } from "@/lib/matching/access";
+import { claimGP, gpAccessFor, recordVerification, releaseGP, type Viewer } from "@/lib/matching/access";
 import { requirePractice } from "../guard";
 
 const PHILOSOPHIES: readonly PrescribingPhilosophy[] = ["stimulant-first", "non-stimulant-first", "case-by-case", "non-prescribing"];
@@ -67,6 +67,21 @@ export async function claimProfile(formData: FormData): Promise<void> {
   if (!result.ok) redirect(`/console/gp?error=${result.reason === "not_found" ? "not_found" : "not_yours"}`);
   saveGP(result.gp);
   redirect(`/console/gp/${encodeURIComponent(gpId)}?saved=claimed`);
+}
+
+/** The verifier's act: staff only, a date, an outcome. The practice cannot check its own GP. */
+export async function verifyCredentials(formData: FormData): Promise<void> {
+  const { email } = await requirePractice();
+  const who = { ...(await viewer()), email };
+  const gpId = formData.get("gpId");
+  const outcome = formData.get("outcome");
+  if (typeof gpId !== "string" || (outcome !== "verified" && outcome !== "rejected")) redirect("/console/gp?error=failed");
+  const gp = gpById(gpId);
+  if (!gp) redirect("/console/gp?error=not_found");
+  const result = recordVerification(gp, who, outcome, serverNow().toISOString());
+  if (!result.ok) back(gp.id, result.reason, "error");
+  saveGP(result.gp);
+  back(gp.id, "verified", "saved");
 }
 
 export async function releaseProfile(formData: FormData): Promise<void> {

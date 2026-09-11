@@ -30,10 +30,14 @@ const executablePath = chromiumExecutable();
 // default and what CI runs; the other two engines need `pnpm exec playwright install webkit
 // firefox` once. Any spec that a second engine fails is a finding, not a flake to filter.
 const BROWSERS = (process.env.PW_BROWSERS ?? "chromium").split(",").map((b) => b.trim()).filter(Boolean);
+// The practice console is staff tooling on a desktop Chromium; the second engines sweep the
+// patient-facing surfaces, which is where Safari on a phone is the browser that matters.
+// The text budget is a measurement calibrated on Chromium; it is a gate, not an engine check.
+const CONSOLE_SPECS = /(text-budget|allocation-console|applications|capability|capacity-console|case-mix|complaints|console|credentials|dashboard|demo|education|interest|interop-console|interview|ops|outcomes|outreach|pathways|referrals|registers|reporting|responses-console|results|roi|setup|two-practice|verticals)\.spec\.ts$/;
 const projects = [
   { name: "chromium", use: { browserName: "chromium" as const, launchOptions: executablePath ? { executablePath } : {} } },
-  { name: "webkit", use: { browserName: "webkit" as const } },
-  { name: "firefox", use: { browserName: "firefox" as const } },
+  { name: "webkit", use: { browserName: "webkit" as const }, testIgnore: CONSOLE_SPECS },
+  { name: "firefox", use: { browserName: "firefox" as const }, testIgnore: CONSOLE_SPECS },
 ].filter((p) => BROWSERS.includes(p.name));
 
 // The port is overridable so a stale server on the default cannot make the suite unrunnable —

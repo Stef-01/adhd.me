@@ -4,7 +4,8 @@
 // "retired" surface that still renders is the disclosure-deletion shape (4b9c9ab/O184) pointed
 // the other way: a decision reversed by nobody in particular.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { JOIN_EMAIL } from "../app/clinicians/join/email";
 
 test.describe("the join page after O188", () => {

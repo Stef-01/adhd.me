@@ -180,12 +180,13 @@ export function ProfileStage({
 
         <section className="profile-about">
           <h2>About</h2>
-          <p>{clinician.summary}</p>
+          <p>{firstSentence(clinician.summary)}</p>
           <details className="profile-more">
             <summary>
-              More about {clinician.name.replace(/^Dr\s+/i, "Dr ")}
+              More
               <CaretRight size={18} weight="regular" aria-hidden="true" />
             </summary>
+            {firstSentence(clinician.summary) !== clinician.summary && <p>{clinician.summary}</p>}
             <p>{clinician.about}</p>
           </details>
         </section>
@@ -274,4 +275,10 @@ export function ProfileStage({
       </div>
     </MotionScreen>
   );
+}
+
+/** The first sentence of a declaration; the rest waits behind the fold. */
+function firstSentence(text: string): string {
+  const match = /^(.+?[.!?])(\s|$)/.exec(text.trim());
+  return match ? match[1]! : text;
 }

@@ -6,7 +6,8 @@
 // fault fixture (`app/api/mock/fault/[kind]/page.tsx`) is behind the mock-route guard, so this
 // spec runs only where the mock routes do.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { BOUNDARY_COPY } from "../src/compliance/boundary-copy";
 
 test("a render error lands on the route boundary, with its sentence and both doors", async ({ page }) => {

@@ -51,11 +51,11 @@ import { AppSettings } from "./app-settings";
 /** The switch rows, in the order a person reads them: who, how, then what the rooms have. */
 const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: string }> = [
   { key: "womanGp", title: "Woman GP", detail: "Only GPs who are women." },
-  { key: "telehealth", title: "First appointment by telehealth", detail: "GPs who see new people by phone or video first." },
+  { key: "telehealth", title: "Telehealth first", detail: "GPs who see new people by phone or video first." },
   { key: "bulkBilling", title: "Bulk billing", detail: "GPs whose practice declares bulk billing." },
   { key: "longerAppointments", title: "Longer appointments", detail: "GPs who declare they do not rush a first visit." },
   { key: "wheelchair", title: "Wheelchair access", detail: "Rooms declared accessible." },
-  { key: "openBooks", title: "Taking new patients", detail: "Leave off to see GPs with a waitlist too." },
+  { key: "openBooks", title: "New patients", detail: "Leave off to see GPs with a waitlist too." },
 ];
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
@@ -167,7 +167,6 @@ export function ProfileView() {
           as "Clear the filters" at the foot of the list; the place is kept, as it always was. */}
       <header className="me-head">
         <div className="me-head-row">
-          <span className="me-eyebrow">Filter providers</span>
           <button type="button" className="me-reset" onClick={clearFilterSet}>Reset all</button>
         </div>
         <div className="me-head-row me-head-title">
@@ -271,7 +270,7 @@ export function ProfileView() {
         </ul>
 
         <details className="me-group me-fold">
-          <summary id="me-languages-title">Speaks, besides English</summary>
+          <summary id="me-languages-title">Languages</summary>
           <ul className="me-chips">
             {MATCHABLE_LANGUAGES.map((language) => {
               const on = filters.languages.includes(language);
@@ -297,7 +296,7 @@ export function ProfileView() {
         </details>
 
         <details className="me-group me-fold me-distance">
-          <summary>How far you would travel</summary>
+          <summary>Distance</summary>
           {/* Pressed buttons rather than radios: every choice is its own tab stop, which is what the
               keyboard sweep holds every public control to, and the pressed state is read as such. */}
           <div className="me-segments" role="group" aria-label="How far you would travel">
@@ -384,7 +383,7 @@ export function ProfileView() {
             recorded and transcribed by AI. A declared practice fact, filtered like the others;
             GPs who have not said are left out of either choice rather than assumed. */}
         <details className="me-group me-fold">
-          <summary>Notes during the consult</summary>
+          <summary>Consult notes</summary>
           <div className="me-segments me-segments-3" role="group" aria-label="Notes during the consult">
             {CONSULT_RECORDING_CHOICES.map((choice: ConsultRecordingChoice) => {
               const on = filters.consultRecording === choice;
@@ -462,7 +461,6 @@ export function ProfileView() {
         )}
       </details>
 
-      <p className="me-privacy">Stays on this device.</p>
       {/* RADIANT: the sticky bar the founder drew above the tab bar — the one act this screen is
           for, with the count the filters leave. It goes to the finder, which resumes the search. */}
       <div className="me-sticky">

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
+import { SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react";
 import { allowedMs, positionAt, SCENE, type Point } from "@/lives";
 import { createLeoSwarm, readLeoSwarm, type SwarmCatches } from "@/lives/leo-swarm";
 import { LeoBuzz } from "./leo-buzz";
@@ -107,9 +108,8 @@ export function LeoMosquito({ game, scene, live, reducedMotion, reducedSensory, 
   };
   return <div className="leo-swarm" data-mood={swarm.mood} data-wave={swarm.wave} data-caught={swarm.caught}>
     <div className="leo-swarm-hud">
-      <div className="leo-swarm-stats"><span role="status">Wave {swarm.wave}/{plan.waves} · {swarm.caught}/{plan.targets.length} caught</span><button type="button" className="leo-sound" aria-pressed={sound} onClick={toggleSound}>{sound ? "Mute buzzing" : "Enable buzzing"}</button></div>
-      <div className="leo-regulation-label"><span>Leo’s regulation</span><span>{reducedMotion ? "No drain" : `${Math.ceil(swarm.regulation)}% · ${swarm.complete ? "Settling" : swarm.mood === "settled" ? "Holding steady" : swarm.mood === "unsettled" ? "On edge" : "Overwhelmed"}`}</span></div>
-      <div className="leo-regulation" role="meter" aria-label="Leo’s regulation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(swarm.regulation)}><span style={{ transform: `scaleX(${swarm.regulation / 100})` }} /></div>
+      <div className="leo-swarm-stats"><span role="status">Wave {swarm.wave} of {plan.waves} · {swarm.caught}/{plan.targets.length}</span><button type="button" className="leo-sound" aria-pressed={sound} aria-label={sound ? "Mute buzzing" : "Enable buzzing"} onClick={toggleSound}>{sound ? <SpeakerHigh size={20} weight="bold" aria-hidden="true" /> : <SpeakerSlash size={20} weight="bold" aria-hidden="true" />}</button></div>
+      <div className="leo-regulation" role="meter" aria-label="Leo’s regulation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(swarm.regulation)} aria-valuetext={reducedMotion ? "No drain" : `${Math.ceil(swarm.regulation)}%, ${swarm.complete ? "settling" : swarm.mood === "settled" ? "holding steady" : swarm.mood === "unsettled" ? "unsettled" : "overwhelmed"}`}><span style={{ transform: `scaleX(${swarm.regulation / 100})` }} /></div>
       {audioUnavailable && <span className="sr-only" role="status">Sound unavailable. The visual game still works.</span>}
     </div>
     <div className="leo-room" role="group" data-live={live} data-reduced={reducedMotion} aria-label="Leo's bedroom" onPointerDown={event => {

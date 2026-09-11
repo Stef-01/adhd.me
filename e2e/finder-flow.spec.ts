@@ -10,7 +10,8 @@
 // the compliance sweeps, and duplicating it here would mean every wording change broke two files.
 // taste-rule: honesty.claim-earned
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { measured } from "./support/measured";
 import { rankClinicians } from "../src/demo/clinicians";
 import { demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/real-roster";

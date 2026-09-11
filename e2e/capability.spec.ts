@@ -3,7 +3,8 @@
 // in src/capability/store.test.ts — a second practice is not reachable from one browser
 // session, so asserting it here would be theatre.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ page, request }) => {

@@ -1,6 +1,7 @@
 // Runs held to PLAY-PLAN.md §8: word budgets, the copy rules, the structure, the mechanics'
 // contracts, and the promise that a run writes what a module wrote.
 
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
@@ -8,6 +9,7 @@ import { INTERACTIVE_MODULES, strategyById } from "./interactive";
 import {expiryIsHit, INSTRUCTION_WORDS, MAX_TAPS, MECHANICS, MIN_MECHANICS, rampedSeconds, RAMP_FLOOR, RESULT_WORDS, runPhaseAt, runStepCount, runText, words, fasterBefore, FASTER_EVERY , CLUE_WORDS, needsClue, relateFormFor, RELATE_BUTTONS, RELATE_PROMPT } from "./play";
 import { RUNS, runFor } from "./runs";
 import { cardCount, MODULES } from "./scenes";
+import { glyphKind } from "../../app/play/glyphs";
 
 describe("the runs", () => {
   it("are the twenty modules, each six to eight rounds, three to five minutes, keeping their module's id", () => {
@@ -146,6 +148,68 @@ describe("the QA gate on variety (PLAY-QA.md)", () => {
       expect(new Set(games.map((r) => r.mechanic)).size, `${run.id} mechanics`).toBeGreaterThanOrEqual(MIN_MECHANICS);
       expect(games.filter((r) => r.mechanic === "tap").length, `${run.id} taps`).toBeLessThanOrEqual(MAX_TAPS);
       expect(games.length, `${run.id} games`).toBeGreaterThanOrEqual(6);
+    }
+  });
+});
+
+// Every game to Leo's standard (docs/design/games-to-leo-standard.md §2 to §4): every game round
+// happens in a drawn place, every place is drawn once with its palette and one reacting prop, and
+// every piece a round throws at you resolves to a drawn glyph.
+describe("the scenes (games-to-leo-standard.md)", () => {
+  const here = (rel: string) => readFileSync(new URL(rel, import.meta.url), "utf8");
+  const interactive = here("./interactive.ts");
+  const props = [...interactive.match(/export type Prop = ([^;]+);/)![1]!.matchAll(/"([a-z]+)"/g)].map((m) => m[1]!);
+  const scene = here("../../app/play/scene.tsx");
+  const css = here("../../app/styles/play.css");
+
+  it("give every game round a place: only the pick-your-bean round stands on nothing", () => {
+    expect(props.length).toBeGreaterThanOrEqual(16);
+    for (const run of eachOf(RUNS, "the runs")) for (const r of run.rounds) {
+      if (r.mechanic === "pick-bean") continue;
+      expect(r.prop, `${run.id}/${r.id} has no place`).toBeTruthy();
+      expect(r.prop, `${run.id}/${r.id} stands on nothing`).not.toBe("none");
+      expect(props, `${run.id}/${r.id} names an undrawn place`).toContain(r.prop);
+    }
+  });
+
+  it("draw every place once, with its seven tints and exactly one reacting prop (PLAY-PLAN §11)", () => {
+    const cases = [...scene.matchAll(/case "([a-z]+)": return <>/g)].map((m) => m[1]!);
+    expect(new Set(cases).size).toBe(cases.length);
+    for (const prop of props) {
+      expect(cases, `no scene for ${prop}`).toContain(prop);
+      expect(scene, `no tints for ${prop}`).toMatch(new RegExp(`^  ${prop}: \{ sky: "#[0-9a-f]{6}", ground: "#[0-9a-f]{6}", deep: "#[0-9a-f]{6}", mid: "#[0-9a-f]{6}", light: "#[0-9a-f]{6}", warm: "#[0-9a-f]{6}", accent: "#[0-9a-f]{6}" \}`, "m"));
+      const start = scene.indexOf(`case "${prop}": return <>`);
+      const end = scene.indexOf("case \"", start + 10);
+      const body = scene.slice(start, end < 0 ? undefined : end);
+      const reacting = (body.match(/play-prop/g) ?? []).length;
+      if (prop === "none") expect(reacting, "the empty stage has nothing to react").toBe(0);
+      else {
+        expect(reacting, `${prop} must have exactly one play-prop`).toBe(1);
+        expect(css, `${prop} has no one-shot prop animation`).toContain(`.play-scene[data-prop="${prop}"] .play-prop { animation-name: play-prop-`);
+        // Four composed objects at least: count the drawn shapes.
+        expect((body.match(/<(rect|circle|path|ellipse|Clock|Window)[ >]/g) ?? []).length, `${prop} is too bare`).toBeGreaterThanOrEqual(8);
+      }
+    }
+    for (const c of cases) expect(props, `scene ${c} names no place`).toContain(c);
+    expect(css).toContain("@media (prefers-reduced-motion: reduce) { .play-scene[data-prop] .play-scene-art .play-prop { animation: none; } }");
+  });
+
+  it("draw every piece: the words on the round's things resolve to the glyph they are", () => {
+    expect(glyphKind("Phone")).toBe("phone");
+    expect(glyphKind("Phone bill")).toBe("sheet");
+    expect(glyphKind("Make a coffee")).toBe("mug");
+    expect(glyphKind("Electricity bill")).toBe("sheet");
+    expect(glyphKind("Keys")).toBe("key");
+    expect(glyphKind("An apple")).toBe("apple");
+    expect(glyphKind("Boiled eggs")).toBe("egg");
+    expect(glyphKind("a thought")).toBe("thought");
+    expect(glyphKind("crowd")).toBe("people");
+    expect(glyphKind("Next video")).toBe("play");
+    expect(glyphKind("Snooze")).toBe("bell");
+    expect(glyphKind("See what it was", "phone")).toBe("phone");
+    for (const run of RUNS) for (const r of run.rounds) {
+      for (const item of r.items ?? []) expect(typeof glyphKind(item, r.prop)).toBe("string");
+      for (const o of r.options ?? []) expect(typeof glyphKind(o.label, r.prop)).toBe("string");
     }
   });
 });

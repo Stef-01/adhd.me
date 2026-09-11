@@ -164,3 +164,5 @@
   .ring-2 { inset: 80px; padding: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .platform-shell *, .platform-shell *::before, .platform-shell *::after { animation-duration: 0s; transition-duration: 0s; scroll-behavior: auto; } }
+/* The games scope is a marker for the glass, not a box: its children keep the pane's own layout. */
+.platform-shell .learn-games-scope { display: contents; }

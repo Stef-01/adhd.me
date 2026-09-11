@@ -16,7 +16,7 @@
 // grabber, same Escape, same focus return.
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { CaretRight, Gear } from "@phosphor-icons/react";
 import { Sheet } from "./sheet";
@@ -38,11 +38,12 @@ export function AppSettings({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [mount, setMount] = useState<HTMLElement | null>(null);
   useEffect(() => { setMount(document.getElementById("platform-settings")); }, []);
-  const trigger = <button className="settings-trigger" type="button" onClick={() => setOpen(true)} aria-label="Settings"><Gear size={21} weight="regular" aria-hidden="true" /></button>;
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const trigger = <button ref={triggerRef} className="settings-trigger" type="button" onClick={() => setOpen(true)} aria-label="Settings"><Gear size={21} weight="regular" aria-hidden="true" /></button>;
   return (
     <>
       {mount ? createPortal(trigger, mount) : trigger}
-      <Sheet open={open} title="Settings" onClose={() => setOpen(false)}>
+      <Sheet open={open} title="Settings" onClose={() => setOpen(false)} openedBy={triggerRef}>
         <div className="settings-list">
           <SettingsLink href="/profile" title="Search filters" detail="Where you are, the kind of support, and the declared facts a provider must have." />
           <SettingsLink href="/story" title="About ADHD.ME" detail="Why the product exists and what the route through assessment costs today." />

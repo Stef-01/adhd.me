@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 
 const MULTI_ASK =
   "I want a woman GP who bulk bills and can do telehealth, and I need a longer first appointment";

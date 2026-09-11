@@ -348,7 +348,7 @@ export function ResultsStage({
           side. Offered here as a sentence and a link, never as a redirect, because the finder
           is the product's front door and this is a second one beside it. */}
       <p className="results-match-door">
-        <Link href="/match">Get matched instead</Link>
+        <Link href="/match">Get matched</Link>
       </p>
       </>
       )}
@@ -480,7 +480,7 @@ export function ResultsStage({
           transition={{ duration: 0.25, delay: 0.3 }}
           whileTap={reducedMotion ? undefined : { scale: 0.985 }}
         >
-          Show the other {matches.length - shown.length}
+          {matches.length - shown.length} more
         </motion.button>
       )}
     </MotionScreen>

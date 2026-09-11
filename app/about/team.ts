@@ -82,8 +82,10 @@ export const TEAM: ReadonlyArray<{
     // O90 (founder-directed 2026-08-20): the fourth member. Role and affiliations from
     // her published record (the O58/O71/O88 sourcing in the roster entry); portrait is the
     // founder-supplied O82 photo, centre-cropped to this row's 3:4 convention.
-    // 2026-09-10 (founder-directed): replaced with a still from her ADHD.ME interview footage —
-    // a real frame of her, chosen for the warmer light and expression, cropped to the same 3:4.
+    // 2026-09-10 (founder-directed, second pass: "find one where she is smiling"): a still from
+    // her ADHD.ME interview footage (tape 01819989 at 685.2s), chosen for the open smile. Her face
+    // and body are the frame as shot; the microphone pop filter beside her shoulder was retouched
+    // out of the background with an inpainting model. Cropped to the same 3:4.
     name: "Dr Anu Saxena",
     // Founder consistency pass (2026-08-20): her degrees named the way Dr Anubhav's are —
     // the MD in the role line, and both universities (medicine at ANU, B.Psych (Hons) at

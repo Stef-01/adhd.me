@@ -6,7 +6,8 @@
 // address bar carries the suburb and never the sentence. The plan's §2.8 Q-A rule — patient text
 // never appears in a URL or a history entry — is asserted here on the real `history.state`.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { installFakeSpeech } from "./support/fake-speech";
 
 const SENTENCE = "my son Oliver cannot sit still in class and the school keeps calling";
@@ -39,7 +40,7 @@ test("Back and Forward walk the stages, and a reload resumes them with the words
   await expect(headline).toContainText(/school/i);
 
   // A real GP's row: an example profile has no booking control by design (O217).
-  const showAll = page.getByRole("button", { name: /Show the other/i });
+  const showAll = page.getByRole("button", { name: /^\d+ more$/ });
   if (await showAll.isVisible()) await showAll.click();
   await page.locator(".clinician-row", { hasText: "Saxena" }).first().click();
   await expect(stage(page)).toHaveAttribute("data-stage", "profile");

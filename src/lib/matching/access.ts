@@ -44,3 +44,16 @@ export function releaseGP(gpId: string, viewer: Viewer, state: MatchingState): C
   if (gpAccessFor(gp, viewer) !== "manage") return { ok: false, reason: "claimed" };
   return { ok: true, gp: { ...gp, practiceId: null } };
 }
+
+/**
+ * The verifier's act (M5): a named person, on a date, says the declared credentials were checked
+ * and accepted or not. Staff only; a practice cannot verify its own GP. The record keeps who and
+ * when, which is what the public profile reads back as "checked on".
+ */
+export type VerificationOutcome = "verified" | "rejected";
+
+export function recordVerification(gp: GP, viewer: Viewer & { email: string }, outcome: VerificationOutcome, on: string): { ok: true; gp: GP } | { ok: false; reason: "not_staff" | "no_evidence" } {
+  if (!viewer.staff) return { ok: false, reason: "not_staff" };
+  if (gp.credentials.evidence.length === 0 && outcome === "verified") return { ok: false, reason: "no_evidence" };
+  return { ok: true, gp: { ...gp, verificationStatus: outcome, verifiedBy: viewer.email, verifiedOn: on.slice(0, 10) } };
+}

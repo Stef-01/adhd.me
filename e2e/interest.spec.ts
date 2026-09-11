@@ -1,7 +1,8 @@
 // W105 verify gate (surface half): a practice user can neither read nor export the community
 // interest register. The gate itself is unit-tested in src/tenancy/staff.test.ts.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signInAndOnboard as signInAsPracticeOwner } from "./support/session";
 
 

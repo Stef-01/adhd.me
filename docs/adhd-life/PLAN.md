@@ -130,7 +130,9 @@ Each item is one PR-sized piece. Nothing below is started.
       university support service — five kinds in `professions.ts` with cues the finder reads, one
       synthetic example of each on the roster, a `regular-eating` expertise tag, and the eating,
       gut, sleep and conflict modules naming them. (2026-09-08)
-- [ ] Accounts and sync — the first thing that needs a backend; ADR 0004 is where to argue it.
+- [ ] Accounts and sync — the first thing that needs a backend. **Argued 2026-09-10 in ADR 0008**
+      (three options, a recommendation: sync without identity behind the matching journal's two
+      variables, a recovery code instead of an email); the decision is the founder's.
 
 ### Phase L — ADHD Lives (PRD v2, `docs/adhd-lives/PRD-v2.md`, ADR 0006)
 
@@ -178,13 +180,26 @@ native later. Mapped from the PRD's phases 0–6:
       sixteen modules full — recognise, understand, try, personalise, one action — with the
       validator and the suite refusing a stub. Every new game is linked from its strategies so
       the score screen can bring it back. (2026-09-09)
-- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound; audio blocks
-      (§72) have no asset yet. Done 2026-09-10: haptics behind a chip (`src/lives/haptics.ts`,
+- [ ] **L6 Balancing and the rest** (§105): balancing against real people; sound; audio
+      recordings (§72) have no asset yet, though the three sessions that want them exist. Done
+      2026-09-10 (later): §16's five sessions complete (the 60-second reset, before a difficult
+      conversation, brain-everywhere grounding join the sleep settle and the transition reset),
+      each with a visual timer, a skip and its transcript as data behind an audio block
+      (`src/lives/transcripts.ts`; the renderer reads the transcript until a recording exists;
+      the validator refuses an audio block without one); §76 evidence references on all nineteen
+      modules, document-level citations only, the validator refusing a module without one; §37's
+      one post-run reflection question. Done 2026-09-10: haptics behind a chip (`src/lives/haptics.ts`,
       off by default), reduced flashing and reduced sensory effects as device flags read by the
       run, more strategy mappings with coverage asserted, props that react in place. Done: a relaxed-timing setting (half as long again on
       every clock, the score unchanged) and larger instructions (§93), two chips under a fold on
       the Lives home, kept on the device and read by the run. (2026-09-09) Done already: character stories (§41), Learn home (§28), the §67 events with §68's
       guardrail as a test, reduced motion and keyboard equals (§93–§94).
+- Known divergence, recorded rather than claimed: PRD §88 says never to drive per-frame position
+  from React state, and `app/lives/run.tsx` ticks `progress` and `elapsed` through `useState` from
+  a `requestAnimationFrame`, which every engine reads as props to place its things. Moving that
+  to refs and CSS custom properties is a refactor across all seven engines in the most-tested
+  interactive part of the app; it stays open until a measured frame-time problem on a real phone
+  justifies the risk (the Leo swarm's 22 seconds are green in e2e today).
 - Founder decisions still open: whether and when a native Expo build starts (ADR 0006 keeps
   the engine portable); the eight lives replacing the five beans in the existing runs.
 
@@ -248,6 +263,10 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
       MRR 0.804, corpus neighbour agreement 64%, its two misses named); **practice scoping**
       (`access.ts`: a practice claims a profile from `/console/gp`, its members and staff manage
       it, every action re-checks, an orphaned claim is no claim; `0007_matching_practice_scope.sql`);
+      **the verifier's act** (`recordVerification`: staff only, needs offered evidence to accept,
+      records who and the date; the public profile reads it back as "checked on"). What stays
+      founder-gated is the document's bytes: the vault's `content` is synthetic by G2/G6 until the
+      founder rules on real documents, so the upload keeps the name and date and not the file;
       and the learning loop read as a report on `/console/gp` (the
       five declared weights, the weights in use, the correlation each rests on, and the record
       count against the floor), which M6 asked for. **Known on the live site (2026-09-10):** the
@@ -267,21 +286,26 @@ month, the first four landed together in this unit; the sprint runs to 2027-03-0
 ### Phase T — the text budget and the two-pane Learn (founder-directed, 2026-09-10)
 
 - [x] **Games and modules apart.** The Learn tab is two panes with a swipe and a tab pair:
-      Games (the Chaos Run's eight lives, Leo's moment, the twenty bean runs: other people's
-      moments, where a person finds out what is theirs) and Modules (For you from the Lives loop,
-      the reads and quizzes, the sixteen strategy modules on shelves, the Toolkit, a quiet
-      moment, the goals: the moves, two to five minutes each). The `/lives/learn` library folded
-      in; a module opened by URL returns to its own side. `app/learn-panes.tsx`,
-      `e2e/walkthrough.spec.ts`. (2026-09-10)
-- [x] **The walkthrough.** Every explanatory sentence renders only while the switch is on;
-      a first visit is offered it once; the settings sheet holds it after. `<Explain>` in
-      `app/explain.tsx`. (2026-09-10)
-- [x] **The text budget, five rounds.** Words above the fold measured per route against
-      Headspace and Finch; 13 of 17 routes over at baseline, 6 after; the Learn page from 49 to
-      19; the worst screen from 140 to 70. The table and what stays over are in `AESTHETIC.md`.
+      Games (the Chaos Run's eight lives, Leo's moment, the twenty bean runs, eight tiles then
+      the rest on a tap) and Modules (For you from the Lives loop, the reads and quizzes, the
+      sixteen strategy modules on shelves, the Toolkit, a quiet moment, the goals). The
+      `/lives/learn` library folded in; a module opened by URL returns to its own side.
+      `app/learn-panes.tsx`, `e2e/learn-panes.spec.ts`. (2026-09-10)
+- [x] **The walkthrough, deleted.** The first attempt hid every explanatory sentence behind a
+      switch and counted the hiding as a cut. The founder called that a failure of empathy, and
+      the switch, `<Explain>`, its register and its rules were deleted the same day.
+      `docs/design/text-budget-postmortem.md`. (2026-09-10)
+- [x] **The text budget, measured on the whole screen.** `scripts/text-budget.mjs` counts every
+      visible word on every route at 390 x 844 against Headspace (38, 26, 60) and Finch (19);
+      ceiling 60, target 40. Median app screen 87 at the honest baseline, 36 after five cutting
+      batches, 17 of 30 app screens at the target and 23 of 30 under the ceiling before batch
+      six; after batches six and seven, 32, with 20 of 31 at the target and 31 of 31 under
+      the ceiling. `AESTHETIC.md` holds the account. (2026-09-10)
+- [x] **The slop pass.** Em-dashes out of every visible string (225 lines), the eyebrows that
+      repeated the tab, the uppercase activity labels, the meditation studio's shouting.
       (2026-09-10)
-- [ ] The three match screens and the GP profile at Headspace's home density (40) rather than
-      its list density: a second pass once the wiring unit changes what a card has to say.
+- [x] The three match screens and the GP profile at Headspace's home density (40): match
+      results 10, prep 17, intake 30, the GP profile 38. (2026-09-10)
 
 ### Phase C — pilot (PRD §87–§88)
 

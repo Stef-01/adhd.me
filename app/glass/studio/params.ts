@@ -26,13 +26,10 @@ export const STUDIO = {
   blobSize: 56,
 } as const;
 
-/** Every glass surface the CSS layer paints (app/styles/glass.css) is a shape the WebGL layer draws. */
+/** The game surfaces the WebGL layer draws, inside a [data-liquid] scope only (app/styles/glass.css). */
 export const GLASS_SELECTOR = [
-  ".app-tabs", ".settings-trigger", ".play-hut", ".play-x", ".play-choice", ".play-tempt", ".play-bean-label", ".play-chip-big",
-  ".filter-chip", ".filter-clear", ".adjust-tab", ".manual-chip", ".layer-pill", ".learn-map-link", ".learn-chip",
-  ".learn-secondary", ".learn-primary", ".learn-back", ".primary-button", ".nearby-zoom-button", ".speech-retry",
-  ".life-card", ".learn-card", ".clinician-row", ".results-empty", ".support-step", ".profession-card", ".strategy-card",
-  ".learn-option", ".me-switches", ".consent-dialog", ".sheet",
-].join(", ");
+  ".learn-stack .learn-card", ".leo-feature", ".learn-play-card", ".lives-play", ".play-tempt:not(.play-tempt-thing)", ".play-choice", ".play-hut",
+  ".play-x", ".lives-choice", ".lives-row", ".learn-show-all",
+].map((s) => `[data-liquid] ${s}`).join(", ");
 
 export const MAX_SHAPES = 24;

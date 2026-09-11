@@ -6,7 +6,8 @@
 // qa/matching-o10/, following the qa/ convention: the picture is the review artefact, so a
 // regression is visible to a reviewer who never reads this file.
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+import { test } from "./support/test";
 import { clinicians } from "../src/demo/clinicians";
 import { clarifiers } from "../src/matching/clarify";
 import { gotoFinderRealRosterOnly } from "./support/real-roster";
@@ -91,7 +92,7 @@ test("a suburb re-ranks with distance said per row, telehealth exempt (O3/O4)", 
   await searchFor(page, "I need an ADHD assessment", "Beecroft");
   await expect(page.locator(".clinician-row").getByText(/km away|in your suburb/).first()).toBeVisible();
   // The telehealth-first clinician carries the telehealth sentence, never a kilometre figure.
-  await expect(page.getByText(/by telehealth, wherever you are/).first()).toBeVisible();
+  await expect(page.getByText(/by telehealth/).first()).toBeVisible();
   await page.screenshot(shot("08-geo-reranks-with-honest-distance"));
 });
 

@@ -3,7 +3,8 @@
 // interrupting a module, the support path reaching matching providers, the care map opening from
 // the Learn page, and the finder broadened beyond GPs.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { CURSOR_KEY } from "../src/learn/cursor";
 import { runStepCount } from "../src/learn/play";
 import { RUNS } from "../src/learn/runs";
@@ -442,7 +443,13 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   // The starting run opens on a desk; the desk's screen wakes. First the still equal.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=starting");
-  await page.getByRole("button", { name: "Tap to play" }).click();
+  // The title card mounts after hydration; wait for the run, then tap if the card is up.
+  const go = page.getByRole("button", { name: "Tap to play" });
+  const play = async () => {
+    await page.locator(".play-card.is-title, .play-scene").first().waitFor();
+    if (await go.count()) await go.click();
+  };
+  await play();
   const scene = page.locator(".play-scene[data-prop]:not([data-prop='none'])").first();
   await expect(scene).toBeVisible();
   const prop = scene.locator(".play-prop").first();
@@ -451,7 +458,7 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   // With motion: one short animation, inside the prop's own box, and the drawing where it was when it is over.
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.reload();
-  await page.getByRole("button", { name: "Tap to play" }).click();
+  await play();
   await expect(scene).toBeVisible();
   const art = scene.locator(".play-scene-art");
   const before = (await art.boundingBox())!;
@@ -461,7 +468,11 @@ test("PLAY-PLAN §11: props react on their own terms, once, in place, and stand 
   expect(style.count).toBe("1");
   await page.waitForTimeout(1000);
   const after = (await art.boundingBox())!;
-  expect(after).toEqual(before);
+  // The drawing's size and its place in the flow are what the prop must not disturb; the page's
+  // own scrollbar arriving shifts x by its width and is not the prop's doing.
+  expect(after.width).toBeCloseTo(before.width, 0);
+  expect(after.height).toBeCloseTo(before.height, 0);
+  expect(after.y).toBeCloseTo(before.y, 0);
   expect(await prop.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
 });
 
@@ -502,6 +513,7 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
 });
 
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
+  test.skip(test.info().project.name !== "chromium", "clipboard permissions are Chromium-only in Playwright");
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.addInitScript(() => { Object.defineProperty(navigator, "share", { value: undefined, configurable: true }); });
   // §14: the share sits on the run's last card. Resume the run there via the device's cursor.
@@ -518,7 +530,7 @@ test("Support-person sharing (PRD §46): a run's link carries the module id and 
 
 test("Medication experience (PRD §47): described in the person's words, kept on the device, never advised on", async ({ page }) => {
   await page.goto("/medication");
-  await expect(page.getByRole("heading", { name: "What it changes, what it leaves, in your words." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Medication, in your words." })).toBeVisible();
   await expect(page.getByRole("button", { name: /Copy as text/ })).toBeDisabled();
   await page.getByRole("textbox", { name: "What it seems to change" }).fill("Starting is easier before lunch");
   await page.waitForTimeout(600);
@@ -532,12 +544,13 @@ test("Medication experience (PRD §47): described in the person's words, kept on
 
 test("Adjustments on paper (PRD §45): the need's track leads, the other is one tap away, and My ADHD links it", async ({ page }) => {
   await page.goto("/adjustments");
-  await expect(page.getByRole("heading", { name: "Most of it exists. Most people are never told." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Most of it already exists." })).toBeVisible();
   // Nothing known: university leads, the track fewer people know exists.
   await expect(page.getByRole("tab", { name: "University and TAFE" })).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("heading", { name: "Study adjustments" })).toBeVisible();
+  await expect(page.getByRole("tabpanel")).toContainText("Extra time, quieter exam room");
   await page.getByRole("tab", { name: "Work" }).click();
-  await expect(page.getByRole("heading", { name: "Workplace adjustments" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Work" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText("Flexible start times");
   await expect(page.locator(".profession-card.is-first")).toContainText("Occupational therapist");
   // A record whose top need is a workplace one leads with work.
   await page.evaluate((k) => {

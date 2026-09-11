@@ -35,7 +35,7 @@ export function Adjustments() {
   return (
     <div className="me-screen learn-screen adjust-screen">
       <header className="life-head">
-        <h1 className="life-title">Most of it exists. Most people are never told.</h1>
+        <h1 className="life-title">Most of it already exists.</h1>
       </header>
 
       <div className="adjust-tracks" role="tablist" aria-label="Where">
@@ -47,17 +47,14 @@ export function Adjustments() {
       </div>
 
       <div id="adjust-panel" role="tabpanel" aria-labelledby={`adjust-tab-${entry.id}`}>
-        <section className="life-card is-lead" aria-labelledby="adjust-title">
-          <h2 id="adjust-title">{entry.title}</h2>
-        </section>
-
         <details className="life-card match-more" open>
-          <summary>Commonly available</summary>
+          <summary>Available</summary>
                     <ul className="life-list">
             {entry.commonlyAvailable.map((line) => <li key={line}><Check size={16} weight="bold" aria-hidden="true" /><span>{line}</span></li>)}
           </ul>
         </details>
 
+        <div className="life-folds">
         <details className="life-card match-more">
           <summary>Who to ask</summary>
           <ul className="life-list">
@@ -84,7 +81,7 @@ export function Adjustments() {
         </details>
 
         <details className="life-card match-more">
-          <summary>Who can help you ask</summary>
+          <summary>Help asking</summary>
           <ul className="profession-list">
             {entry.professions.map((id, i) => {
               const p = profession(id);
@@ -98,6 +95,7 @@ export function Adjustments() {
             })}
           </ul>
         </details>
+        </div>
       </div>
     </div>
   );

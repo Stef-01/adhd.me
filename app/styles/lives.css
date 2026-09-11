@@ -21,7 +21,7 @@
 /* The clock is the bar UNDER the shout (DESIGN-dwtd2.md): in flow, full width, draining left to right. */
 .lives-clock { position: static; height: 12px; width: 100%; max-width: 640px; border-radius: 999px; overflow: hidden; background: color-mix(in srgb, var(--ink) 12%, transparent); }
 .lives-clock span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transform-origin: left center; transition: none; }
-.lives-shout { margin: 0; min-height: 1.1em; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.75rem, 8.5vw, 2.6rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
+.lives-shout { margin: 0; min-height: 1.1em; color: var(--ink); font-family: inherit; font-size: clamp(1.75rem, 8.5vw, 2.6rem); font-weight: 850; letter-spacing: -0.02em; line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
 .lives-scene { position: relative; width: calc(100% + 32px); max-width: none; margin-inline: -16px; flex: 1 1 auto; min-height: 300px; border-radius: 0; background: var(--route-soft); overflow: hidden; }
 @media (min-width: 768px) { .lives-scene { width: 100%; margin-inline: 0; border-radius: 20px 20px 0 0; } }
 .lives-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6%; background: color-mix(in srgb, var(--ink) 8%, transparent); pointer-events: none; }
@@ -44,7 +44,7 @@
 .lives-thing .lives-glyph { width: 52%; height: auto; }
 .lives-thing .lives-thing-label { max-width: 100%; overflow-wrap: normal; }
 /* A word-only thing is a pill sized to its words, never a circle the words wrap inside. */
-.lives-thing:not(:has(.lives-glyph)) { aspect-ratio: auto; width: max-content !important; max-width: 46%; min-height: 56px; padding: 10px 16px; font-size: 0.9375rem; }
+.lives-thing:not(:has(.lives-glyph, .lives-sprite)) { aspect-ratio: auto; width: max-content !important; max-width: 46%; min-height: 56px; padding: 10px 16px; font-size: 0.9375rem; }
 .lives-thing:has(.lives-glyph) .lives-thing-label { font-size: 0.7rem; }
 .lives-thing[data-role="target"], .lives-thing[data-role="goal"] { border-color: color-mix(in srgb, var(--ink) 14%, transparent); }
 .lives-thing[data-role="hazard"] { background: color-mix(in srgb, var(--accent) 22%, var(--paper)); border-color: var(--accent); pointer-events: none; }
@@ -134,8 +134,8 @@
 .lives-bigscore { margin: 0; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(3.5rem, 20vw, 6rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
 .lives-survived, .lives-high { margin: 0; color: var(--muted); font-size: 1rem; font-weight: 600; }
 .lives-again { margin-top: 12px; min-height: 72px; padding: 18px 44px; font-size: 1.375rem; }
-.lives-familiar, .lives-try { max-width: 640px; margin: 0 auto; padding-top: 22px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
-.lives-section-title { margin: 0 0 12px; color: var(--muted); font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.lives-reflection, .lives-familiar, .lives-try { max-width: 640px; margin: 0 auto; padding-top: 22px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.lives-section-title { margin: 0 0 12px; color: var(--ink); font-size: 1.0625rem; font-weight: 650; letter-spacing: -0.01em; }
 .lives-cards { display: grid; gap: 12px; margin: 0 0 22px; padding: 0; list-style: none; }
 .lives-moment { display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; align-items: center; }
 .lives-moment .lives-choices { grid-column: 1 / -1; }
@@ -164,7 +164,7 @@
 .lives-run.is-large .lives-shout { font-size: clamp(2.25rem, 11vw, 3.4rem); }
 .lives-run.is-large .lives-game-title { font-size: 1.125rem; }
 .lives-run.is-large .lives-thing { font-size: 1.0625rem; }
-.lives-run.is-large .lives-thing:not(:has(.lives-glyph)) { font-size: 1.125rem; min-height: 64px; }
+.lives-run.is-large .lives-thing:not(:has(.lives-glyph, .lives-sprite)) { font-size: 1.125rem; min-height: 64px; }
 .lives-run.is-large .lives-choice { font-size: 1.125rem; min-height: 68px; }
 .lives-goals-note { margin: 6px 0 10px; color: var(--muted); font-size: 0.875rem; }
 .lives-chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -202,10 +202,11 @@
 .lives-lab-set legend { padding: 0; margin: 0 0 8px; font-weight: 700; }
 .lives-lab-grid { display: grid; gap: 6px; }
 .lives-lab-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
-.lives-lab-row select, .lives-lab-row input { min-height: 44px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); font: inherit; }
+.lives-lab-row select, .lives-lab-row input { min-height: 44px; min-width: 0; max-width: 100%; flex: 1 1 auto; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); font: inherit; }
+.lives-lab-scroll { width: 100%; overflow-x: auto; }
 .lives-lab-ranking { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
 .lives-lab-ranking ul { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: 0.875rem; }
-.lives-lab-table { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 0.875rem; }
+.lives-lab-table { width: 100%; min-width: 320px; margin-top: 12px; border-collapse: collapse; font-size: 0.875rem; }
 .lives-lab-table th, .lives-lab-table td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .lives-lab-modules { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .lives-lab-modules pre { overflow-x: auto; padding: 12px; border-radius: 12px; background: var(--stone); font-size: 0.75rem; }
@@ -213,3 +214,181 @@
 .lives-strategy.is-dismissed { opacity: 0.6; }
 .lives-saved.is-quiet { color: var(--muted); }
 .lives-game-title { margin: 0 0 -4px; color: var(--muted); font-size: 0.875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ── The worlds (app/lives/scenes.tsx, docs/design/games-to-leo-standard.md §2 and §3) ─────────────
+   Every Chaos Run engine plays in a drawn place, the way Leo plays in his bedroom. The world holds a
+   seven-tint palette (--w1 to --w7); each drawing spends the tints by its own roles, so a palette is
+   read against its drawing, never swapped between worlds. Pieces are drawn sprites inside the same
+   .lives-thing buttons, named by their labels. Loops run only while the world is live and motion is
+   allowed; exits are one-shot. Leo's room keeps its own colours (leo.css). */
+.lives-scene:has(.lives-world) { background: transparent; }
+.lives-scene:has(.lives-world)::after { display: none; }
+.lives-scene:has(.lives-world[data-world="bedroom"]) .lives-scene-bean { display: none; }
+.lives-scene:has(.lives-world) .lives-scene-bean { z-index: 2; }
+.lives-world { position: absolute; inset: 0; overflow: hidden; isolation: isolate; color: #172033; }
+.lives-scene-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 0; }
+.lives-scene-art.is-bedroom .leo-bedroom { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lives-scene-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.lives-night { position: absolute; inset: 0; background: #11173a; pointer-events: none; transition: opacity 300ms ease-out; }
+.lives-world > .lives-field { z-index: 1; }
+.lives-card.is-hit .lives-world::after, .lives-card.is-miss .lives-world::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.lives-card.is-hit .lives-world::after { background: rgb(14 131 69 / 0.14); }
+.lives-card.is-miss .lives-world::after { background: rgb(224 97 111 / 0.14); }
+
+.lives-world[data-world="park"]     { --w1: #cfe6f5; --w2: #8cc07a; --w3: #5f9e58; --w4: #d8c3a0; --w5: #f1e3c4; --w6: #b8865a; --w7: #5b4636; }
+.lives-world[data-world="kitchen"]  { --w1: #f6efe3; --w2: #d3e3d8; --w3: #7fa88f; --w4: #5d8470; --w5: #fbf8f2; --w6: #d98f5c; --w7: #2c3340; }
+.lives-world[data-world="crossing"] { --w1: #cfe3f5; --w2: #4a5566; --w3: #f3f5f8; --w4: #8e9bb0; --w5: #f2b44c; --w6: #3f7fd0; --w7: #273044; }
+.lives-world[data-world="meeting"]  { --w1: #e6ecf4; --w2: #b9c7da; --w3: #5065a6; --w4: #6b7890; --w5: #fbfcfe; --w6: #bfe0ef; --w7: #253047; }
+.lives-world[data-world="phone"]    { --w1: #20283a; --w2: #f4f6fb; --w3: #5b7cd6; --w4: #dfe4ee; --w5: #ffffff; --w6: #9aa8c2; --w7: #1c2436; }
+.lives-world[data-world="hall"]     { --w1: #efe6d8; --w2: #b98f67; --w3: #8a5f43; --w4: #a8795a; --w5: #fbf6ec; --w6: #c9a14a; --w7: #33303a; }
+.lives-world[data-world="bathroom"] { --w1: #dcebf3; --w2: #b7d0de; --w3: #7fb3d6; --w4: #8c9aab; --w5: #ffffff; --w6: #f2a3a3; --w7: #273044; }
+.lives-world[data-world="shop"]     { --w1: #eef3ef; --w2: #cfd8d3; --w3: #9aa8a2; --w4: #5fae8b; --w5: #e8625c; --w6: #f2c14e; --w7: #2f3a45; }
+.lives-world[data-world="desk"]     { --w1: #e7eaf2; --w2: #8c7a6b; --w3: #3a4254; --w4: #6d7485; --w5: #fbfbfd; --w6: #f3c26b; --w7: #1f2635; }
+.lives-world[data-world="living"]   { --w1: #f3ece4; --w2: #d9826a; --w3: #b8624d; --w4: #6e9c6a; --w5: #fbf8f3; --w6: #bcd5e6; --w7: #33303a; }
+.lives-world[data-world="shed"]     { --w1: #3c4458; --w2: #2b3140; --w3: #7b6a58; --w4: #9aa3b5; --w5: #d9dee8; --w6: #f6e7b0; --w7: #1d2230; }
+.lives-world[data-world="corridor"] { --w1: #e8ecf3; --w2: #9aa6bd; --w3: #5f7fbf; --w4: #3a4458; --w5: #ffffff; --w6: #f2c14e; --w7: #222a38; }
+.lives-world[data-world="pond"]     { --w1: #d6ebf2; --w2: #3f8f9a; --w3: #9fd3d8; --w4: #6e9c5a; --w5: #fbfdfd; --w6: #a8794f; --w7: #2a3a3f; }
+
+/* Pieces: the drawing is the button. The label is the accessible name, and a caption where the word is the game. */
+.lives-world .lives-thing { background: transparent; border: 0; padding: 0; box-shadow: none; color: #172033; border-radius: 20px; }
+.lives-world .lives-thing .lives-sprite { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 6px 5px rgb(23 32 51 / 0.24)); transition: transform 160ms var(--ease-ui); }
+.lives-world .lives-thing.has-caption { gap: 4px; }
+.lives-world .lives-thing.has-caption .lives-sprite { width: 76%; }
+.lives-world .lives-thing-label, .lives-world .lives-trace-label { padding: 3px 9px; border-radius: 999px; background: rgb(255 255 255 / 0.94); color: #172033; font-size: 0.75rem; font-weight: 700; line-height: 1.2; white-space: nowrap; box-shadow: 0 2px 6px rgb(23 32 51 / 0.16); }
+.lives-world .lives-thing[data-role="hazard"] .lives-sprite { filter: drop-shadow(0 0 6px rgb(224 97 111 / 0.75)) drop-shadow(0 6px 5px rgb(23 32 51 / 0.24)); }
+.lives-world .lives-thing.is-keep { background: radial-gradient(circle, rgb(255 255 255 / 0.8) 0 58%, transparent 60%); }
+.lives-world .lives-thing:focus-visible { outline: 3px solid #172033; outline-offset: 3px; }
+@media (hover: hover) { .lives-world .lives-thing:not(:disabled):hover .lives-sprite { transform: scale(1.07); } }
+.lives-world .lives-thing:not(:disabled):active .lives-sprite { transform: scale(0.92); }
+.lives-trace-label { position: absolute; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; }
+.lives-trace-label.is-goal { background: #0e8345; color: #fff; }
+
+/* The temptation: a drawn thing and its word, loud on purpose, still one button. */
+.lives-world .lives-thing.is-temptation { background: transparent; border: 0; box-shadow: none; color: #172033; font-size: 1rem; }
+.lives-world .lives-thing.is-temptation .lives-sprite { width: 82%; }
+.lives-temptation-word { padding: 4px 12px; border-radius: 999px; background: #e0616f; color: #fff; font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 4px 0 #a33d4a; }
+
+/* The world's text sits on paper pills so it reads over any drawing. */
+.lives-world :is(.lives-cue, .lives-sort-count, .lives-taunt) { padding: 6px 14px; border-radius: 999px; background: rgb(255 255 255 / 0.92); box-shadow: 0 2px 8px rgb(23 32 51 / 0.14); }
+.lives-world .lives-sort-count { color: #3a4458; }
+.lives-world .lives-field > .lives-skip, .lives-world .lives-skip { background: rgb(255 255 255 / 0.92); color: #172033; text-decoration: none; box-shadow: 0 2px 8px rgb(23 32 51 / 0.14); }
+
+/* Timing and holding: the control sits in the upper band, clear of the character and the room below. */
+.lives-world .lives-field.lives-timing, .lives-world .lives-field.lives-hold { justify-content: flex-start; padding-top: 14px; gap: 10px; }
+.lives-world .lives-hold-button { display: grid; place-items: center; min-width: 0; width: 112px; height: 112px; min-height: 0; padding: 14px; border: 4px solid #172033; border-radius: 50%; background: rgb(255 255 255 / 0.95); box-shadow: 0 8px 0 rgb(23 32 51 / 0.22), 0 14px 26px rgb(23 32 51 / 0.18); font-size: 0.9375rem; }
+.lives-world .lives-hold-button .lives-sprite { width: 58px; height: 58px; filter: none; }
+.lives-world .lives-hold-button.is-holding { transform: translateY(5px) scale(0.97); box-shadow: 0 3px 0 rgb(23 32 51 / 0.22); background: #eef2fb; }
+.lives-world .lives-hold-button.is-cued { border-color: #0e8345; background: #e6f4ec; }
+.lives-world .lives-timing-track { position: relative; width: 100%; height: 44px; margin-bottom: 18px; border-radius: 999px; background: rgb(255 255 255 / 0.7); box-shadow: inset 0 0 0 2px rgb(23 32 51 / 0.12); }
+.lives-world .lives-timing-zone { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: rgb(14 131 69 / 0.32); }
+.lives-world .lives-timing-marker { position: absolute; top: -4px; bottom: -4px; width: 8px; margin-left: -4px; border-radius: 4px; background: #172033; }
+.lives-world .lives-timing-marks { position: absolute; left: 0; right: 0; top: 100%; display: flex; margin: 4px 0 0; padding: 0; list-style: none; font-size: 0.6875rem; font-weight: 700; color: #3a4458; }
+.lives-world .lives-timing-marks li { text-align: center; }
+.lives-world .lives-timing-marks li.is-over { color: #172033; }
+
+/* Sorting: the thing is a card with its drawing; the bins are trays. */
+.lives-world .lives-sort-item { display: flex; align-items: center; gap: 14px; max-width: 92%; padding: 14px 22px 14px 14px; border-radius: 22px; background: #fff; color: #172033; font-size: 1.25rem; font-weight: 750; line-height: 1.2; box-shadow: 0 8px 0 rgb(23 32 51 / 0.16), 0 18px 30px rgb(23 32 51 / 0.16); }
+.lives-world .lives-sort-item .lives-sprite { flex: 0 0 64px; width: 64px; height: 64px; }
+.lives-world .lives-choice.is-bin { flex-direction: column; gap: 4px; min-height: 104px; border: 0; border-radius: 24px; background: rgb(255 255 255 / 0.94); box-shadow: 0 6px 0 rgb(23 32 51 / 0.16); font-size: 1rem; }
+.lives-world .lives-choice.is-bin .lives-sprite { width: 52px; height: 52px; }
+.lives-world .lives-choice { border-color: transparent; background: rgb(255 255 255 / 0.94); box-shadow: 0 4px 0 rgb(23 32 51 / 0.14); }
+.lives-world .lives-choice .lives-sprite { width: 36px; height: 36px; flex: 0 0 auto; }
+
+/* Wiping: frosted panes over the scene, each with the thing it hides. */
+.lives-world .lives-tile { background: color-mix(in srgb, var(--w4, #8e9bb0) 72%, transparent); color: #fff; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35); }
+.lives-world .lives-tile .lives-sprite { width: 60%; height: auto; max-height: 70%; }
+.lives-world .lives-tile.is-gone { background: transparent; box-shadow: none; }
+.lives-world .lives-tile.is-gone .lives-sprite { animation: lives-fx-collect 380ms var(--ease-ui) forwards; }
+
+/* Idle: one motion per kind of thing, only while the round is live and motion is allowed. */
+.lives-world[data-motion="true"][data-live="true"] .lives-thing .lives-sprite[data-idle="bob"] { animation: lives-idle-bob 1.8s ease-in-out infinite; }
+.lives-world[data-motion="true"][data-live="true"] .lives-thing .lives-sprite[data-idle="float"] { animation: lives-idle-float 2.6s ease-in-out infinite; }
+.lives-world[data-motion="true"][data-live="true"] .lives-thing .lives-sprite[data-idle="sway"] { animation: lives-idle-sway 1.3s ease-in-out infinite; }
+.lives-world[data-motion="true"][data-live="true"] .lives-thing .lives-sprite[data-idle="spin"] { animation: lives-idle-spin 2.4s linear infinite; }
+.lives-world[data-motion="true"][data-live="true"] .lives-wing { transform-box: fill-box; transform-origin: 50% 100%; animation: lives-idle-flap 0.16s steps(2, end) infinite; }
+.lives-world[data-motion="true"][data-live="true"] .lives-wing.is-right { animation-direction: reverse; }
+.lives-world .lives-thing:nth-child(3n + 2) .lives-sprite { animation-delay: -0.6s !important; }
+.lives-world .lives-thing:nth-child(3n + 3) .lives-sprite { animation-delay: -1.1s !important; }
+.lives-world[data-motion="true"] .lives-steam { animation: lives-steam 2.2s ease-in-out infinite; }
+.lives-world[data-motion="true"] .lives-cursor { animation: lives-cursor 1s steps(2, end) infinite; }
+.lives-world[data-motion="true"] .lives-ripples { animation: lives-ripples 3.4s ease-in-out infinite; }
+.lives-world[data-motion="true"] .lives-glow { animation: lives-glow 2s ease-in-out infinite; }
+.lives-world[data-motion="true"] .lives-jar.is-rattling { transform-box: fill-box; transform-origin: 50% 100%; animation: lives-rattle 0.09s linear infinite; }
+@keyframes lives-idle-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7%); } }
+@keyframes lives-idle-float { 0%, 100% { transform: translate(0, 0) rotate(0); } 50% { transform: translate(3%, -5%) rotate(3deg); } }
+@keyframes lives-idle-sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes lives-idle-spin { to { transform: rotate(360deg); } }
+@keyframes lives-idle-flap { 0% { transform: rotate(-16deg); } 100% { transform: rotate(18deg); } }
+@keyframes lives-steam { 0% { transform: translateY(0); opacity: 0; } 30% { opacity: 0.9; } 100% { transform: translateY(-14px); opacity: 0; } }
+@keyframes lives-cursor { 0% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes lives-ripples { 0%, 100% { transform: translateX(0); opacity: 0.55; } 50% { transform: translateX(10px); opacity: 1; } }
+@keyframes lives-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 0.9; } }
+@keyframes lives-rattle { 0% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } 100% { transform: rotate(-2deg); } }
+
+/* Exits: what a cleared thing does on its way out. One shot; the piece is gone from the tree under reduced motion. */
+.lives-ghost { position: absolute; z-index: 2; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none; }
+.lives-ghost .lives-sprite { display: block; width: 100%; height: auto; overflow: visible; }
+.lives-ghost[data-fx="squash"] { animation: lives-fx-squash 420ms var(--ease-ui) forwards; transform-origin: 50% 100%; }
+.lives-ghost[data-fx="pop"] { animation: lives-fx-pop 300ms ease-out forwards; }
+.lives-ghost[data-fx="catch"] { animation: lives-fx-catch 520ms var(--ease-ui) forwards; }
+.lives-ghost[data-fx="collect"] { animation: lives-fx-collect 380ms var(--ease-ui) forwards; }
+.lives-ghost[data-fx="flyoff"] { animation: lives-fx-flyoff 520ms ease-in forwards; }
+.lives-ghost[data-fx="putback"] { animation: lives-fx-putback 420ms var(--ease-ui) forwards; }
+.lives-ghost[data-fx="shred"] .lives-sprite { position: absolute; inset: 0; }
+.lives-ghost[data-fx="shred"] .lives-sprite:nth-child(1) { clip-path: inset(0 66% 0 0); animation: lives-fx-shred-left 460ms ease-in forwards; }
+.lives-ghost[data-fx="shred"] .lives-sprite:nth-child(2) { clip-path: inset(0 33% 0 33%); animation: lives-fx-shred-mid 460ms ease-in forwards; }
+.lives-ghost[data-fx="shred"] .lives-sprite:nth-child(3) { clip-path: inset(0 0 0 66%); animation: lives-fx-shred-right 460ms ease-in forwards; }
+@keyframes lives-fx-squash { 0% { transform: translate(-50%, -50%) scale(1); } 35% { transform: translate(-50%, -40%) scale(1.3, 0.5); } 100% { transform: translate(-50%, -30%) scale(1.4, 0.15); opacity: 0; } }
+@keyframes lives-fx-pop { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; } }
+@keyframes lives-fx-catch { 0% { transform: translate(-50%, -50%) rotate(0); } 50% { transform: translate(-50%, -140%) rotate(200deg); } 100% { transform: translate(-50%, -60%) rotate(360deg) scale(0.8); opacity: 0; } }
+@keyframes lives-fx-collect { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -110%) scale(0.5); opacity: 0; } }
+@keyframes lives-fx-flyoff { 0% { transform: translate(-50%, -50%) rotate(0); opacity: 1; } 100% { transform: translate(160%, -260%) rotate(-24deg); opacity: 0; } }
+@keyframes lives-fx-putback { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, 20%) scale(0.6); opacity: 0; } }
+@keyframes lives-fx-shred-left { to { transform: translate(-14px, 30px) rotate(-12deg); opacity: 0; } }
+@keyframes lives-fx-shred-mid { to { transform: translate(0, 38px); opacity: 0; } }
+@keyframes lives-fx-shred-right { to { transform: translate(14px, 30px) rotate(12deg); opacity: 0; } }
+
+.lives-run[data-reduced-flashing] .lives-world .lives-sprite, .lives-run[data-reduced-flashing] .lives-world .lives-wing { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .lives-world .lives-sprite, .lives-world .lives-wing, .lives-world .lives-steam, .lives-world .lives-cursor, .lives-world .lives-ripples, .lives-world .lives-glow, .lives-world .lives-jar, .lives-ghost { animation: none !important; }
+  .lives-world .lives-thing .lives-sprite { transition: none; }
+}
+
+/* ── The seamless round (design critique, 2026-09-10) ────────────────────────────────────────────
+   The round used to be a pale band (close, lives, the shout, the clock) sitting on a scene that began
+   at a hard edge. Now the world is the whole card, as Leo's room is: the chrome floats over the top
+   of it on a soft paper scrim, the pieces keep to the field below the chrome, and the result reads
+   on a pill over the drawing. Leo's own swarm keeps its room and HUD (it has no .lives-world). */
+.lives-run .lives-top { z-index: 6; }
+.lives-card.is-round:has(.lives-world) .lives-scene { position: absolute; inset: 0; width: 100%; max-width: none; margin: 0; border-radius: 0; min-height: 0; z-index: 0; }
+.lives-card.is-round:has(.lives-world)::before { content: ""; position: absolute; inset: 0 0 auto; height: 236px; z-index: 1; pointer-events: none; background: linear-gradient(to bottom, color-mix(in srgb, var(--paper) 94%, transparent) 0%, color-mix(in srgb, var(--paper) 82%, transparent) 52%, color-mix(in srgb, var(--paper) 0%, transparent) 100%); }
+.lives-card.is-round:has(.lives-world) > :is(.lives-game-title, .lives-shout, .lives-clock, .play-tempt) { position: relative; z-index: 2; }
+.lives-card.is-round:has(.lives-world) .lives-clock { height: 8px; background: color-mix(in srgb, var(--ink) 14%, transparent); }
+.lives-card.is-round:has(.lives-world) .lives-world > .lives-field { top: 176px; }
+.lives-scene:has(.lives-world) .lives-result { z-index: 4; }
+.lives-scene:has(.lives-world) :is(.lives-result-line, .lives-delta) { margin: 0; padding: 8px 18px; border-radius: 999px; background: rgb(255 255 255 / 0.94); color: #172033; box-shadow: 0 4px 14px rgb(23 32 51 / 0.18); }
+
+/* Pieces read at a glance: the drawing is a quarter larger than its hit area, which stays the same. */
+.lives-world .lives-thing:not(.has-caption) .lives-sprite { width: 128%; margin: -14%; }
+.lives-world .lives-thing.has-caption .lives-sprite { width: 96%; }
+/* Leo's round in the Chaos Run: the card is his room's lavender, so the chrome and the room are one surface. */
+.lives-card.is-round[data-game="leo_mosquito"] { background: #c5c6ed; }
+.lives-card.is-round[data-game="leo_mosquito"] .lives-clock { height: 8px; background: #aaaed4; }
+.lives-card.is-round[data-game="leo_mosquito"] .lives-clock span { background: #514d7d; }
+
+/* Stage 3: in Leo's bedroom the window is up on the right, so the moment and its button keep left of it. */
+.lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) { align-items: flex-start; padding-inline: 22px; }
+.lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) .lives-hold-button { margin-left: 6px; }
+/* The crossing starts where its character stands. */
+.lives-trace-who { position: absolute; transform: translate(-50%, -70%); z-index: 2; pointer-events: none; filter: drop-shadow(0 4px 4px rgb(23 32 51 / 0.24)); }
+.lives-trace:has(.lives-trace-who) ~ .lives-scene-bean, .lives-scene:has(.lives-trace-who) .lives-scene-bean { display: none; }
+/* The shout already names the hold; the cue pill shows only once there is something new to say. */
+.lives-world .lives-cue:empty { visibility: hidden; }
+.lives-trace-who.is-thing { transform: translate(-50%, -55%); }
+.lives-trace-who.is-thing .lives-sprite { display: block; width: 66px; height: 66px; }
+
+/* Stage 4: Leo's bedroom is lavender to the top of the card in every round played there, not only his swarm. */
+.lives-world[data-world="bedroom"] { background: #c5c6ed; }
+.lives-card.is-round:has(.lives-world[data-world="bedroom"]) { background: #c5c6ed; }
+/* The phone that wants one more scroll glows beside Leo, not over his face. */
+.lives-world[data-world="bedroom"] .lives-thing.is-temptation { translate: -22% -38%; }

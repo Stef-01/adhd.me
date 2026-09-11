@@ -156,7 +156,7 @@ export function WelcomeStage({
       </motion.div>
       <p className="finder-doors">
         <Link href="/support">Start from the problem</Link>
-        <Link href="/match">Get matched instead</Link>
+        <Link href="/match">Get matched</Link>
       </p>
 
     </MotionScreen>

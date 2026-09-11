@@ -35,6 +35,8 @@ export function eligible(state: SessionState, pool: readonly GameDefinition[]): 
   else if (funShare > FUN_SHARE.max && lives.length) picks = lives;
   if (picks.length === 0) picks = pool.filter((g) => g.id !== last && !(lastMechanic && g.mechanic === lastMechanic));
   if (picks.length === 0) picks = pool.filter((g) => g.id !== last);
+  // A pool of one (the lab's one-game run) repeats its game rather than leave nothing to pick.
+  if (picks.length === 0) picks = [...pool];
   return { picks, rejected };
 }
 

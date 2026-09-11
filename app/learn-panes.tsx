@@ -5,7 +5,7 @@
 //
 //   Games are other people's moments. The Chaos Run's eight lives, Leo's mosquito, and the twenty
 //   bean runs all walk a person through a scene of somebody else's ADHD; what they raise is
-//   awareness ("this is me"). Modules are the moves: the sixteen strategy modules the Lives loop
+//   awareness ("this is me"). Modules are the moves: the nineteen strategy modules the Lives loop
 //   recommends from that awareness, and the reads and quizzes about ADHD itself. Two to five
 //   minutes each, structured, and ordered "for you" from what the games surfaced.
 //
@@ -20,7 +20,7 @@
 // swipe, and under reduced motion the swipe is not offered at all.
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, Check, Play } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion, type PanInfo } from "motion/react";
@@ -189,6 +189,26 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
   );
 }
 
+/** A drop's spring: quick, and it overshoots a touch before it settles. */
+const DROP = { type: "spring", stiffness: 520, damping: 16, mass: 0.7 } as const;
+
+/** The droplet's light follows the finger across a game tile (glass.css reads --lg-x and --lg-y). */
+const droplet = {
+  move(e: ReactPointerEvent<HTMLElement>) {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--lg-x", `${Math.round(((e.clientX - r.left) / r.width) * 100)}%`);
+    el.style.setProperty("--lg-y", `${Math.round(((e.clientY - r.top) / r.height) * 100)}%`);
+    el.dataset.touch = "";
+  },
+  leave(e: ReactPointerEvent<HTMLElement>) {
+    const el = e.currentTarget;
+    el.style.removeProperty("--lg-x");
+    el.style.removeProperty("--lg-y");
+    delete el.dataset.touch;
+  },
+};
+
 function Tile({ module, done, hydrated, index, start, reducedMotion }: { module: LearnModule; done: boolean; hydrated: boolean; index: number; start: (id: string) => void; reducedMotion: boolean }) {
   const colour = coverOf(module);
   return (
@@ -201,8 +221,12 @@ function Tile({ module, done, hydrated, index, start, reducedMotion }: { module:
         type="button"
         className={`learn-card is-${colour}${done ? " is-done" : ""}${module.kind === "quiz" ? " is-quiz" : ""}`}
         onClick={() => start(module.id)}
-        whileTap={reducedMotion ? undefined : { scale: 0.985 }}
-        transition={POP}
+        onPointerMove={droplet.move}
+        onPointerDown={droplet.move}
+        onPointerLeave={droplet.leave}
+        onPointerCancel={droplet.leave}
+        whileTap={reducedMotion ? undefined : { scale: 0.955 }}
+        transition={reducedMotion ? POP : DROP}
       >
         <span className="learn-card-text">
           <strong>{module.title}</strong>
@@ -260,7 +284,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
   const runs = showAll ? allRuns : allRuns.filter((m, i) => i < FIRST_TILES || progress.done.includes(m.id));
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
-    <>
+    <div className="learn-games-scope" data-liquid>
       <Completion completed={completedRun} start={start} />
       <div className="learn-pane-top">
       <div className="learn-play-card">
@@ -276,7 +300,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
           The eight lives <ArrowRight size={16} weight="bold" aria-hidden="true" />
         </Link>
       </div>
-      <Link className="leo-feature" href="/lives/play/leo-mosquito">
+      <Link className="leo-feature" href="/lives/play/leo-mosquito" onPointerMove={droplet.move} onPointerDown={droplet.move} onPointerLeave={droplet.leave} onPointerCancel={droplet.leave}>
         <span className="leo-feature-art">
           <LeoBedroom />
         </span>
@@ -299,7 +323,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
           All {allRuns.length} games
         </button>
       )}
-    </>
+    </div>
   );
 }
 
@@ -391,7 +415,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
         </li>
       </ul>
       <details className="life-why lives-goals">
-        <summary>What would you most like help with?</summary>
+        <summary>Your goals</summary>
         <div className="lives-chips" role="group" aria-label="Goals">
           {GOALS.map((g) => (
             <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>

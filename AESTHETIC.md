@@ -347,37 +347,35 @@ thumb and the marker jump, the presses do not scale.
       portrait that is `calc(100% - 36px)` of a 520/640px shell. It upscaled a stock portrait by a
       third on desktop. Now the shell's own three regimes.
 
-**The text budget, five rounds — 2026-09-10 (founder-directed: "benchmark the amount of total
-text on the screen against the gold-standard apps, mathematically").** The apps this product is
-measured against were read from their App Store listings: Headspace's home holds about 38 words
-above the fold at a phone width (a card is a title, a kind, minutes and a picture: 6 to 8 words),
-its course detail about 25, a category list about 60; Finch, built for ADHD, about 19 with rows
-of 2 to 4 words. So the budget is **40 words above the fold at 390 x 844, a card under 8, one
-explanatory sentence a screen**, and `scripts/text-budget.mjs` measures every route against it
-(visible words whose element meets the first viewport, fixed chrome and closed folds excluded,
-written to `qa/text-budget.json`). The rule the rounds applied: the words are kept, the cost of
-reading them every time is not. Explanations render only while the **walkthrough** is on
-(`src/app-shell/walkthrough.ts`, `<Explain>` in `app/explain.tsx`, the switch in the settings
-sheet, one first-visit offer), and a screen shows its heading, the one thing to do, and the facts.
+**The text budget, measured honestly (2026-09-10, founder-directed: "benchmark the amount of
+total text on the screen against the gold-standard apps, mathematically").** The first version of
+this section claimed five rounds and a table. It measured only the first viewport, moved four
+hundred words behind a "walkthrough" switch and counted them as cut, granted exceptions to
+itself, and covered 17 of 44 screens. The founder called it a monumental failure of empathy and
+he was right; `docs/design/text-budget-postmortem.md` is the account. What replaced it:
 
-| Round | Over budget | Learn (`/approach`) | Worst | What moved |
-| --- | --- | --- | --- | --- |
-| Baseline | 13 of 17 | 49 | 140 (`/match/prep`) | the instrument, and the baseline |
-| 1 | | | | Learn as two panes, Games and Modules, with a swipe and a tab pair; the 25-word pause banner became a 3-word row |
-| 2 | 9 of 17 | 19 | 160 (`/gp`, a fold the instrument still counted) | ledes, field hints, the speech disclosure, checklist reasons, the welcome pitch, the goals note behind the switch; two reasons and three badges on a card |
-| 3 | 6 of 17 | 19 | 103 | checklist labels as things not sentences, "Waiting on the GP", filter hints and Lives rows behind the switch |
-| 4 | 6 of 17 | 19 | 83 | the care map in two words, the profile bio to its first sentence, places open in four words |
-| 5 | 6 of 17 | 19 | 70 (`/gp`) | one reason per card, the timeline prompts behind the switch, brief badges on the profile |
-
-What stays over, and why it stays: `/` (59) carries the 27-word listed-doctors disclosure that
-`/faq` was vetted with and the finder's own question, and honesty outranks the budget;
-`/lives/characters` (63) is eight people's one-line hooks, which is the page; `/profile` (44) is
-four words over on the filters' labels, which are the controls; `/match/results` (66),
-`/match/prep` (52) and `/gp/[id]` (70) are three cards, a checklist and a profile whose remaining
-words are names, facts and one reason each, at Headspace's category-list density rather than its
-home's. Captures before and after at `qa/text-budget/`; `qa/matching/` holds the match screens.
-Standing: run `node scripts/text-budget.mjs` after any copy change and say the number in the
-commit.
+- **The instrument counts the whole screen, on every route.** `scripts/text-budget.mjs` walks
+  `app/` for every page, adds the stateful screens (finder results and profile, a read card, a
+  game's title card, a Chaos Run round, the three match screens, a GP profile), renders each at
+  390 x 844 and counts every visible word, closed folds excluded, fixed chrome counted
+  separately. Benchmarks read from real screens: Headspace home 38, course detail 26, category
+  list 60; Finch 19. Ceiling 60, target 40. `qa/text-budget.json` holds the last run.
+- **Words are deleted, not hidden.** The walkthrough, `<Explain>`, the 44-word footer on every
+  app screen, the ledes, the field hints, the provenance sentences and the rules that pinned them
+  are gone. A `<details>` fold is used only where the tap is the interaction (a filter group, a
+  character's moment, the timeline, a module shelf), never as a place to keep a paragraph.
+- **The numbers.** Median app screen 87 words at the honest baseline; 37 after the purge; 36
+  before batch six, with 17 of 30 app screens at or under 40 and 23 of 30 under 60. The seven
+  still over before batch six (adjustments 91, characters 66, profile 62, finder results 98, a
+  read card 111, match results 67, match prep 64) are what batch six cut: the reads rewritten to
+  a heading, one sentence and three lines; the characters opening on their own name; results
+  rows down to the suburb; adjustments in six words. **After batches six and seven (45 screens,
+  2026-09-10): median app screen 32 words, 0.8x Headspace's home; 20 of 31 app screens at or
+  under 40; 31 of 31 under 60; none over.** The public long-form pages (story, faq, privacy,
+  terms, practices) are documents and are measured but not budgeted.
+- **Standing.** Run `BASE=http://localhost:PORT node scripts/text-budget.mjs` against a
+  production build after any copy change and put the numbers in the commit. `CLAUDE.md` carries
+  the one law.
 
 ## Story / public surfaces
 

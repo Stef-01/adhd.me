@@ -1,7 +1,8 @@
 // W22 verify gate: the demo runs clean end-to-end — launch, console, dashboard,
 // patient booking with offer expiry, ops — following docs/DEMO.md's script.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 
 test("the scripted demo walkthrough runs clean end-to-end", async ({ page, context }) => {
   // 1. Launch: seeds every store and signs the presenter in. (Label reads "Reset"

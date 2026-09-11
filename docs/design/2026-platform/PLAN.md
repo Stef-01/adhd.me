@@ -360,17 +360,44 @@ Verification should be proportional: relevant flow checks during each slice, the
 
 ### Acceptance checklist
 
-- [ ] The app opens directly into the working finder and uses the full desktop shell.
+Ticked only where a check in the tree proves it, with the check named. Visual judgements stay open
+until a person looks (2026-09-10).
+
+- [x] The app opens directly into the working finder and uses the full desktop shell.
+      `e2e/app-shell.spec.ts` (O230), `e2e/finder-flow.spec.ts`; `/finder` is a 308 to `/`.
 - [ ] Find, Profile, Learn, and the console visibly share typography, icon discipline, spacing, and controls.
-- [ ] Desktop has a stable masthead; mobile navigation remains reachable and correctly padded.
+      `e2e/typography.spec.ts` sweeps every text element on ten screens for the two declared
+      families and every control for the 44px floor (the earlier note here cited `a11y.spec.ts`,
+      which has no font assertion; corrected 2026-09-10). The visual judgement is still a person's.
+- [x] Desktop has a stable masthead; mobile navigation remains reachable and correctly padded.
+      `e2e/app-shell.spec.ts` (the bar clears the touch floor and the safe area; desktop navigation inside a task).
 - [ ] No heading, paragraph, chip label, availability note, dialog, or focused control is unintentionally clipped or covered.
+      `e2e/keyboard-focus.spec.ts` and `e2e/consent.spec.ts` cover focus and the bar; `e2e/viewports.spec.ts` sweeps
+      clipped text at six widths. "Covered" (one thing over another) is still a person's look.
 - [ ] Content remains readable at the width/zoom matrix above; necessary tables/maps have explicit containment.
+      `e2e/viewports.spec.ts` sweeps every public and app route at 320, 390, 430, 768, 1280 and
+      1440 for sideways scroll and clipped text, and walks the finder at 320; the 400% zoom case
+      is the 320 reflow by the WCAG equivalence and has no separate check.
 - [ ] All seven learning modules have coordinated artwork and a coherent player; at least the Everyday strategies pilot demonstrates reference 5's activity-led quality.
-- [ ] Both quiz flows retain explanations and usable completion; long reading content also passes geometry and interaction checks.
-- [ ] Existing progress survives migration; resume, restart, replay, invalid IDs, and blocked storage work.
-- [ ] Search, voice, filters, map/list, clinician details, compare, and booking handoff preserve their behaviour and truthful data.
+- [x] Both quiz flows retain explanations and usable completion; long reading content also passes geometry and interaction checks.
+      `e2e/app-shell.spec.ts` (O244), `e2e/learning-platform.spec.ts` (the reading step at 390, resume, Back, invalid ids).
+- [x] Existing progress survives migration; resume, restart, replay, invalid IDs, and blocked storage work.
+      `src/learn/progress.test.ts`, `e2e/learning-platform.spec.ts` (storage denied, invalid id, resume without completion).
+- [x] Search, voice, filters, map/list, clinician details, compare, and booking handoff preserve their behaviour and truthful data.
+      `e2e/finder-flow.spec.ts`, `voice.spec.ts`, `place.spec.ts`, `compare.spec.ts`, `booking.spec.ts`, `matching-verification.spec.ts`; full run 2026-09-10: 352 passed.
 - [ ] Loading, empty, disabled, error, first-visit, and returning states look intentional.
+      `e2e/error-boundary.spec.ts`, `consent.spec.ts` and the empty states in `matching.spec.ts` exist; "look intentional" is a person's call.
 - [ ] Required checks pass, new screenshots are opened and inspected, and differences from the approved visual proof are resolved or specifically reported.
+      `pnpm verify` and the full Chromium e2e are green on main (2026-09-10, 364 of 364 with the
+      text-budget, width-matrix and typography gates included). **Cross-engine, measured 2026-09-10
+      on the patient-facing specs:** WebKit 187 green, Firefox 191 green over the consumer suite
+      once the specs waited for hydration per screen; what stays skipped on the second engines is
+      named in each skip with its reason (console sessions need Chromium's localhost cookie model
+      over http; clipboard permissions are Chromium-only; headless WebKit refuses to resume an
+      AudioContext, reports an enforced CSP as report-only, and skips links on Tab). Three WebKit
+      timeouts under memory pressure (the Leo clock test, a psychographic search, the coast map)
+      are being rerun; a red that stands after that is a finding, not a filter. The screenshots
+      have not been opened by a person since the text budget cut the screens.
 
 ## 11. Decision record and remaining choices
 

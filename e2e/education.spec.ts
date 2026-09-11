@@ -12,7 +12,8 @@
 // second net, over the text as assembled, because a page can put two compliant sentences
 // together and produce a third meaning.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 const EMAIL = "manager@demo.practice.example";

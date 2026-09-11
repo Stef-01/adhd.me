@@ -25,15 +25,16 @@ export function LivesCharacters() {
           const answer = profile?.resonanceSignals.find((s) => s.sourceType === "character" && s.sourceId === c.id)?.response;
           return (
             <li key={c.id} className="life-card lives-character" data-character={c.id}>
-              <div className="lives-tool-head">
-                <LifeBean who={c.id} mood={answer === "this_is_me" ? "pleased" : "neutral"} size={72} />
-                <div className="lives-strategy-text">
-                  <strong>{c.name}</strong>
-                  <p className="lives-pattern">{c.pattern}</p>
-                </div>
-              </div>
-              <details className="match-more lives-more">
-                <summary>Their moment</summary>
+              <details className="match-more lives-more lives-character-fold">
+                <summary>
+                  <span className="lives-tool-head">
+                    <LifeBean who={c.id} mood={answer === "this_is_me" ? "pleased" : "neutral"} size={72} />
+                    <span className="lives-strategy-text">
+                      <strong>{c.name}</strong>
+                      <span className="lives-pattern">{c.pattern}</span>
+                    </span>
+                  </span>
+                </summary>
                 <p className="lives-hook">{c.hook}</p>
                 <p className="lives-moment-line">“{c.moment}”</p>
                 <div className="lives-choices is-three" role="group" aria-label={`${c.name}: is this you`}>

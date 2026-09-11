@@ -27,7 +27,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { createPortal } from "react-dom";
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode, type RefObject } from "react";
 import { X } from "@phosphor-icons/react";
 
 /** The heights a sheet rests at, as a share of the viewport. */
@@ -66,12 +66,18 @@ export function Sheet({
   title,
   onClose,
   children,
+  openedBy,
 }: {
   open: boolean;
   /** Names the dialog for a screen reader and heads the sheet for everybody else. */
   title: string;
   onClose: () => void;
   children: ReactNode;
+  /**
+   * The control that opened it, when the caller has one. Safari does not focus a button on
+   * click, so "whatever was active" is the body there and focus would return to nowhere.
+   */
+  openedBy?: RefObject<HTMLElement | null>;
 }) {
   const titleId = useId();
   const panel = useRef<HTMLDivElement>(null);
@@ -83,7 +89,7 @@ export function Sheet({
   // moving focus into a sheet that is still animating up must not scroll the page behind it.
   useEffect(() => {
     if (!open) return;
-    opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    opener.current = openedBy?.current ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     setDetent("half");
     const first = panel.current?.querySelector<HTMLElement>("[data-sheet-initial-focus]") ?? panel.current;
     first?.focus({ preventScroll: true });

@@ -2,7 +2,8 @@
 // remaining offers expire when the session fills. Runs against the mock rail's
 // deterministic synthetic seed (2 open slots, 3 sent invitations).
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signInAndOnboard } from "./support/session";
 
 interface MockState {

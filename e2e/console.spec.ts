@@ -1,7 +1,8 @@
 // W11 verify gate: sign-in → onboarding → dashboard → rules edit, with the
 // auth guard holding on every console page.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {
@@ -83,9 +84,26 @@ test("the home is the spine's index, and More holds every folded screen", async 
   await expect(page).toHaveURL(/\/console\/more$/);
   await expect(page.getByRole("heading", { name: "More tools" })).toBeVisible();
   for (const name of ["Privacy requests", "Usefulness audit", "Matching audit", "Operations queue"]) {
-    await expect(page.getByRole("link", { name, exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: new RegExp(`^${name}`) })).toBeVisible();
   }
   await expect(page.getByTestId("more-folded-first").getByRole("link")).toHaveText(["Privacy requests", "Usefulness audit"]);
-  await page.getByRole("link", { name: "Privacy requests", exact: true }).click();
+  await page.getByRole("link", { name: /^Privacy requests/ }).click();
   await expect(page).toHaveURL(/\/console\/privacy$/);
+});
+
+// The two screens the spine folded first, reached by name so the register's "every section is
+// reached by a spec" holds for all thirty.
+test("privacy requests: the page stands, its retention note and empty export state say what is held", async ({ page }) => {
+  await signInAndOnboard(page, MANAGER_EMAIL);
+  await page.goto("/console/privacy");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Privacy/);
+  await expect(page.getByTestId("retention-note")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Export a patient/ })).toBeVisible();
+});
+
+test("usefulness audit: the page stands and names its basis", async ({ page }) => {
+  await signInAndOnboard(page, MANAGER_EMAIL);
+  await page.goto("/console/usefulness");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Usefulness audit");
+  await expect(page.locator("main")).not.toContainText(/undefined|NaN|\[object/);
 });

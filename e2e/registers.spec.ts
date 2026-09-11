@@ -3,7 +3,8 @@
 // depends on is unit-tested in src/registers/store.test.ts (the console signs in as
 // one practice, so isolation is not observable from the browser).
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signInAndOnboard } from "./support/session";
 
 type Page = import("@playwright/test").Page;

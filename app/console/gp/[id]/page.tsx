@@ -17,7 +17,7 @@ import type { PracticeId } from "@/domain/types";
 import { gpAccessFor } from "@/lib/matching/access";
 import { requirePractice } from "../../guard";
 import { ConsoleShell, Field, inputClass, primaryButtonClass } from "../../ui";
-import { answerMatch, completeMatch, gpFeedback, saveCapacity, savePreferences, saveProfile, uploadEvidence } from "../actions";
+import { answerMatch, completeMatch, gpFeedback, saveCapacity, savePreferences, saveProfile, uploadEvidence, verifyCredentials } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +32,7 @@ const SAVED_COPY: Record<string, string> = {
   completed: "Marked as done. The person can now say how it went, and so can you.",
   feedback: "Recorded against the match.",
   claimed: "Claimed for your practice. Only its members and ADHD.ME staff reach this page now.",
+  verified: "Recorded, with your name and today's date.",
 };
 
 const ERROR_COPY: Record<string, string> = {
@@ -45,6 +46,8 @@ const ERROR_COPY: Record<string, string> = {
   evidence_missing: "Choose a file.",
   evidence_size: "Files are capped at 8 MB.",
   evidence_type: "PDF, PNG or JPEG only.",
+  not_staff: "Only ADHD.ME staff record a check.",
+  no_evidence: "Nothing has been offered to check.",
   not_yours: "That request was not proposed to this profile.",
   already_answered: "That request has already been answered.",
   reason_missing: "Say why you are declining.",
@@ -430,6 +433,14 @@ export default async function GPDashboardPage({ params, searchParams }: { params
               Offer for checking
             </button>
           </form>
+          {isAdhdMeStaff(email) && (
+            <form action={verifyCredentials} className="flex flex-wrap items-center gap-3 rounded-lg border border-stone-200 bg-white p-4" data-testid="verify-form">
+              <input type="hidden" name="gpId" value={gp.id} />
+              <span className="text-sm text-stone-700">The check, as {email}:</span>
+              <button type="submit" name="outcome" value="verified" className={primaryButtonClass}>Accepted</button>
+              <button type="submit" name="outcome" value="rejected" className="min-h-11 rounded-md border border-stone-300 px-4 text-sm">Not accepted</button>
+            </form>
+          )}
         </section>
       </div>
     </ConsoleShell>

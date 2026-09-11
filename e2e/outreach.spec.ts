@@ -5,7 +5,8 @@
 // referral could leak into patient-facing text, and it is the only place a reviewer will
 // actually look.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { signInAndOnboard } from "./support/session";
 
 type Page = import("@playwright/test").Page;

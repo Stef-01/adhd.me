@@ -121,13 +121,12 @@ polish the existing shell, question it.
       role and its 44px floor and loses the underline for a trailing mark; both names balance.
       Every stage of the finder has now been looked at cold at 390. Still open only in the sense
       the item is standing: walk it again after the next round of changes.
-- [x] Console information architecture review (2026-09-10: `docs/console-spine-brief.md` applied;
-      six tabs and More, a home of six live figures, the matching audit split out). The
-      2026-09-05 facts below stand as the record the decision was made on.
-- [ ] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
+- [x] Console information architecture review: 25+ subsections under `app/console/*` is a lot of
       surface for a demo. Decide what's load-bearing for the practice-side story vs. what's
       speculative breadth that dilutes the demo. Consolidate or cut, don't just reskin.
       **The facts, measured 2026-09-05, so the decision is made on them and not on a feeling.**
+      **Decided and applied 2026-09-10:** `docs/console-spine-brief.md`; six tabs and More, a
+      home of six live figures, the matching audit split out, privacy and usefulness folded first.
       Thirty sections. Every one but two is reached by at least one e2e spec — `privacy` and
       `usefulness` have none. None is linked from the demo navigator (it tours the finder and
       the story, not the console), so the console is reached only through its own home. By
@@ -299,8 +298,12 @@ polish the existing shell, question it.
       `adhdguideline.aadpa.com.au`, `nice.org.uk/guidance/ng87`, the RACGP Specific Interests PDF,
       and `tga.gov.au/products/medicines/prescription-medicines` — and every one was refused by
       this build environment's egress policy before a byte came back, so nothing here can say
-      whether they resolve. This needs a person with a browser; it stays open and is not an
-      engineering item until they have looked.
+      whether they resolve. **Opened 2026-09-10 from a machine with egress:** the three links the
+      walkthrough now carries all answer 200 under the titles the copy implies (the AADPA
+      "Australian Evidence-Based Clinical Practice ADHD Guideline", NICE NG87 "Attention deficit
+      hyperactivity disorder: diagnosis and management", the TGA "Prescription medicines" page);
+      the RACGP PDF is no longer linked from the tree. What stays open is the clinical half, a
+      reading of the modules against those documents, which is a clinician's audit, not code.
 - [x] Public pages (story, practices, examples, FAQ) get an SEO and share-surface pass — this is
       where a prospective practice or a person searching at 2am actually lands first. **Walked
       2026-09-05 on the served head of every indexable route.** The SEO half was already sound

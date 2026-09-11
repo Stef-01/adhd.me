@@ -47,7 +47,7 @@
 .match-checklist input[type="checkbox"] { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--accent); }
 .match-checklist strong { display: block; font-size: 0.9375rem; font-weight: 650; }
 .match-checklist p { margin: 4px 0 0; color: var(--muted); font-size: 0.875rem; line-height: 1.45; }
-.match-checklist .is-required strong::after { content: " · needed"; color: var(--accent); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; }
+.match-checklist .is-required strong::after { content: "needed"; display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-deep); font-size: 0.75rem; font-weight: 700; white-space: nowrap; vertical-align: 2px; }
 .match-expect { display: grid; gap: 14px; margin: 0; }
 .match-expect div { padding: 14px 16px; border-radius: 14px; background: var(--stone); }
 .match-expect dt { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); margin: 0 0 4px; }
@@ -91,10 +91,14 @@ details.match-disclosure > p { margin: 4px 0 0; }
 .platform-console .gp-answer select { width: 100%; max-width: 100%; }
 .platform-console .gp-answer .console-field { flex: 1 1 200px; }
 /* Folds everywhere share one shape: a 44px summary, no marker, a plus that turns to a minus. */
+.lives-character-fold > summary { min-height: 0; padding: 0; color: var(--ink); font-size: inherit; font-weight: inherit; }
+.lives-character-fold > summary .lives-tool-head { flex: 1 1 auto; align-items: center; }
+.lives-character-fold > summary .lives-pattern { display: block; margin-top: 2px; color: var(--muted) !important; font-weight: 500; font-size: 0.9375rem; line-height: 1.4; }
+.lives-character-fold > summary::after { margin-left: auto; align-self: center; color: var(--accent); font-size: 1.25rem; padding-left: 12px; }
 .me-fold > summary, .learn-shelf > summary, .lives-more > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; list-style: none; }
 .me-fold > summary::-webkit-details-marker, .learn-shelf > summary::-webkit-details-marker, .lives-more > summary::-webkit-details-marker { display: none; }
-.me-fold > summary::after, .learn-shelf > summary::after { content: "+"; margin-left: auto; font-weight: 800; color: var(--accent); }
-.me-fold[open] > summary::after, .learn-shelf[open] > summary::after { content: "2"; }
+.me-fold > summary::after, .learn-shelf > summary::after { content: "+"; margin-left: auto; font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+.me-fold[open] > summary::after, .learn-shelf[open] > summary::after { content: "\2212"; }
 .platform-shell .learn-shelf > summary.lives-section-title { margin: 0; padding: 6px 0; }
 .platform-shell .learn-shelf[open] > summary.lives-section-title { margin-bottom: 8px; }
 .me-fold > summary { font-size: 0.9375rem; font-weight: 650; }

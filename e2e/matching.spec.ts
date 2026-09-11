@@ -3,7 +3,8 @@
 // as different words; the GP dashboard receives the request, sets capacity, and accepts it; the
 // person then sees the acceptance, prepares, and both sides record how it went.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 const NARRATIVE =
@@ -185,9 +186,11 @@ test("deleting a request removes it from the GP's side too, and the tab forgets 
 });
 
 test("the prep page offers the timeline headings as text, and says where they went", async ({ page, context }) => {
+  test.skip(test.info().project.name !== "chromium", "clipboard permissions are Chromium-only in Playwright");
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await intake(page);
   await page.goto("/match/prep");
+  await page.locator("summary", { hasText: "The symptom timeline" }).click();
   await page.getByTestId("copy-timeline").click();
   await expect(page.locator(".match-copy-note")).toBeVisible();
 });

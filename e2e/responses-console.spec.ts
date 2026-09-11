@@ -8,7 +8,8 @@
 // not print a rate without it, and a footnote satisfies the type while losing the point, so the
 // DOM order is checked rather than the presence.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ request }) => {

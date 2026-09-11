@@ -6,7 +6,8 @@
 // signed off because signing clinical content off is a founder act that has not happened, and
 // those two readings lead a practice to opposite next actions.
 
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
 
 test.beforeEach(async ({ page, request }) => {
