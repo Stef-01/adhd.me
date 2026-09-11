@@ -27,6 +27,16 @@ body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outl
 .platform-brand { display: inline-flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 800; letter-spacing: -.06em; color: var(--ink); text-decoration: none; }
 .platform-brand svg { width: 40px; height: 40px; color: var(--accent); }
 .platform-help { display: inline-flex; gap: 16px; font-size: 14px; font-weight: 600; color: var(--muted); }
+/* Urgent help (2026-09-11): a pill in the accent, not a red banner. It has to be found by somebody
+   who is not looking for it, on every patient screen, without being the loudest thing on any of
+   them — the cohort this serves is 16–25 and a permanent alarm over their app is its own harm. */
+.platform-urgent {
+  display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-deep);
+  font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap;
+}
+@media (hover: hover) { .platform-urgent:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--paper)); } }
 .platform-utilities { display: flex; align-items: center; gap: 24px; }
 .platform-shell .app-tabs {
   position: static; display: block; width: auto; max-width: none; transform: none;
@@ -94,8 +104,9 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
   .platform-brand { font-size: 19px; }
   .platform-brand svg { width: 34px; height: 34px; }
   .platform-help { font-size: 12px; gap: 6px; }
-  .platform-utilities { gap: 12px; }
+  .platform-utilities { gap: 10px; }
   .platform-help span { display: none; }
+  .platform-urgent { min-height: 34px; padding: 0 11px; font-size: 12.5px; }
   .platform-shell { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
   .platform-shell .app-tabs { position: fixed; inset: auto 0 var(--consent-height, 0px); width: 100%; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 1px solid var(--line); }
   .platform-shell .app-tabs-list { gap: 4px; }
@@ -106,4 +117,36 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
   .platform-shell .voice-screen .voice-core { margin-top: 36px; }
   .platform-shell .patient-v2 .clinician-list { grid-template-columns: minmax(0, 1fr); }
   body:has(.platform-shell) .aoc-band { padding-bottom: 100px; }
+}
+
+/* ── Urgent help (/urgent) ─────────────────────────────────────────────────────────────────────
+   Four services, each a row that dials. Nothing to read past the number: a person who needs this
+   screen is not reading. The 44px floor is the tap target, and the number is the target — the
+   whole row is the link, so a shaking thumb cannot miss it. */
+.urgent-screen { display: grid; gap: 18px; align-content: start; max-width: 560px; }
+.urgent-screen h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(30px, 8vw, 44px); font-weight: 460; letter-spacing: -.03em; line-height: 1.08; }
+.urgent-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.urgent-call {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  min-height: 72px; padding: 14px 18px; border: 1.5px solid var(--line-strong); border-radius: 18px;
+  background: var(--paper); color: var(--ink); text-decoration: none;
+}
+.urgent-call:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.urgent-name { display: grid; gap: 2px; }
+.urgent-name strong { font-size: 1.0625rem; font-weight: 750; }
+.urgent-name span { color: var(--muted); font-size: 0.875rem; }
+.urgent-number { display: inline-flex; align-items: center; gap: 8px; color: var(--accent-deep); font-size: 1.0625rem; font-weight: 750; white-space: nowrap; }
+.urgent-list li:first-child .urgent-call { border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: var(--accent-soft); }
+.urgent-note { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+@media (hover: hover) { .urgent-call:hover { border-color: var(--accent); } }
+
+/* At the narrowest width the header could not hold the brand, both utilities and the settings
+   control: measured 2026-09-11, 30px of sideways scroll at 320px, which is the fault
+   `e2e/viewports.spec.ts` exists to catch. Urgent help stays and "Help & answers" goes, because
+   the settings sheet below it already carries Questions (`app/app-settings.tsx`) and the urgent
+   route is the one thing in this header that must not be a tap deeper. */
+@media (max-width: 359px) {
+  .platform-help { display: none; }
+  .platform-header { padding-inline: 14px; gap: 10px; }
+  .platform-brand { font-size: 17px; }
 }

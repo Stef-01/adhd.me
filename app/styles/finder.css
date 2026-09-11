@@ -47,3 +47,32 @@
   .platform-shell .patient-v2 .profile-portrait { width: 112px; height: 126px; }
   .platform-shell .patient-v2 .profile-content .profile-about { margin-top: 20px; }
 }
+
+/* ── The kinds of care this search reaches ─────────────────────────────────────────────────────
+   ADHD care is multidisciplinary; the list was one column of mostly GPs. This band names every
+   kind the search found and narrows to it — the navigation layer the whole wrong-waitlist problem
+   turns on. It scrolls sideways on a phone, wraps on a desktop, and the chosen kind is filled. */
+/* A segmented track, not a second row of pills. The strip above it is preferences (bulk billing,
+   telehealth) and this one is WHICH KIND OF PROFESSIONAL — a different question, and two identical
+   pill rows stacked read as one long list of filters. One ground, the kinds sitting in it, so it
+   reads as a set of alternatives you pick between. */
+.care-kinds {
+  display: flex; gap: 4px; margin: 14px 0 18px; padding: 4px; list-style: none;
+  border-radius: 999px; background: var(--stone); box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ink) 7%, transparent);
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.care-kinds::-webkit-scrollbar { display: none; }
+.care-kinds > li { flex: 1 1 auto; display: flex; }
+.care-kind {
+  display: inline-flex; align-items: center; justify-content: center; width: 100%;
+  min-height: 40px; padding: 0 14px;
+  border: 0; border-radius: 999px; background: transparent; color: var(--muted);
+  font: inherit; font-size: 0.9375rem; font-weight: 650; white-space: nowrap; cursor: pointer;
+  touch-action: manipulation;
+  transition: background var(--dur-tap) var(--ease-ui), color var(--dur-tap) var(--ease-ui), box-shadow var(--dur-tap) var(--ease-ui);
+}
+.care-kind[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 14%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 34%, transparent); }
+.care-kind:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) { .care-kind:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--paper) 62%, transparent); color: var(--ink); } }
+@media (min-width: 900px) { .care-kinds { max-width: 560px; } }
+@media (prefers-reduced-motion: reduce) { .care-kind { transition: none; } }

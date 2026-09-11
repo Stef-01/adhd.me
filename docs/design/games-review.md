@@ -78,3 +78,94 @@ with Safe inside its circle.
 Kept on purpose: the pale glass shape that sometimes crosses a bean-run temptation. Crops with the
 WebGL layer hidden and with the cursor moved away show it is the droplet, the one moving glass
 shape that follows a finger and drifts when idle (founder, 2026-09-08), not a lens on the button.
+
+## Stage 6: the glass, and the taps it swallowed (2026-09-11)
+
+Founder direction: "make the apple glass bubble UI not look so boring and fix clicking button not
+working glitches with the games." Two findings and their measurements, taken against a production
+build at 390 by 844 with a synthetic touch — down, a few pixels of drift, up — rather than
+Playwright's instantaneous `tap()`, because a thumb is neither instantaneous nor still.
+
+### The taps
+
+A drifting thumb was measured on three surfaces before and after. The number that matters is the
+drift at which the intended thing stops happening.
+
+| Surface | Before | After | Why |
+|---|---|---|---|
+| A swipe card (`Swipe`, household) | Cleared at 0 and 8px of drift, nothing at 20px and beyond | Clears at 0, 8, 20, 40 and 70px | Motion's drag starts at 3px and the row then owns the gesture; ending short of the 60px fling did nothing at all. A drag that stops short is now the tap it swallowed, and a tap clears a card anyway |
+| A request slip (`DragCapture`, forgotten-commitments) | Selected at 0 and 8px, nothing at 20px and beyond | Selects at every drift | The same, against the 80px drop onto the note |
+| The wipe grid (`WipeScrub`) | A finger dragged across four tiles took **two** off | Takes every tile it crosses | Two faults at once: the browser captures a touch to the tile it started on, so neighbours never saw the finger; and the set of wiped tiles was read from state, so the second tile of a sweep was written over the first |
+
+The third fault was not local to the grid. Every game that collects things — swat, filter, protect,
+wipe, swipe, capture — built the next set from the set as it stood at the last render, which is
+correct exactly once per render and these rounds are not once per render. Two targets hit in one
+frame counted as one, and a round that had been cleared did not finish. `app/collected.ts` is the
+one answer: a ref is the record, the state beside it only asks React to draw.
+
+Also fixed: a hold whose touch the browser takes back (a system gesture, a call) left the button
+held with nothing on it, so only the clock could end the round — `pointercancel` is a let-go now, in
+the two hold mechanics and the hold engine. And the Learn pane took the swipe gesture from three
+pixels of movement, narrower than a thumb; it waits for 24 now (measured: a 14px wobble leaves the
+pane at 0.00px, a 160px swipe still switches both ways).
+
+**Not a defect, checked and left alone.** Taps on the moving pieces of the Chaos Run land: 5 of 5
+in target_swat and goal_protection with a finger resting 120ms. And a tap lost at 20px of drift is
+the browser's own slop, not this app's — the same drift loses the same tap on the plain Modules
+tab, which has no drag within reach of it.
+
+### The glass
+
+White glass on white paper is not glass. With the WebGL ground absent — no WebGL2, a software
+renderer, reduced transparency, every capture in `qa/` — there was nothing behind a bubble to
+bend, and the CSS layer had only a 0.18-alpha dispersion split to say otherwise.
+
+| Screen | Finding | Change |
+|---|---|---|
+| Games pane | The Play button, the most important control on the page, was a white pill on pale stone | `--play-blue` is declared on `.play-run`; outside a run the whole `background` declaration fell away. The token now falls back to the platform accent |
+| Games pane | "The eight lives" was a white rectangle: it took the glass fill with square corners | A pill |
+| Every glass control | One flat wash and a 1px split nobody could see | A bright rim where the light enters, the warm and cool split down the two sides, a Fresnel ring, a seat at the foot for thickness, and a press that compresses the bubble and slides its highlight instead of dimming it |
+| Every glass control | The specular sat still: only the coloured tiles and Leo's card tracked a finger, each with four pointer handlers of its own | One delegated listener lights whatever is under the finger (`app/glass/glass-pointer.tsx`), off the same list the WebGL layer draws. The per-tile handlers are gone |
+| The games scope | Flat paper behind the bubbles | Three washes from the brand's own warm-to-cool family on the scope itself. A first attempt put them on a fixed negative-z layer, where the shell's opaque ground painted straight over them |
+| The Chaos Run title card | A flat fill with two thirds of the phone empty under it | The same light, on the card, since the card is what covers the scope |
+
+Nothing here animates on its own: the only motion is the finger's. Under `prefers-reduced-motion`
+the delegated listener does not attach and the press does not compress; under
+`prefers-reduced-transparency` the washes and the rims are gone and the controls are paper; where
+the WebGL layer runs it draws the ground and the CSS washes stand down.
+
+### Stage 6b: the bubbles, made playable
+
+Founder, on reading stage 6: "by not look boring I meant make it more interactive, right now it's
+continuous connected bubbles, it should have interaction and be playable with your bubble that the
+tap has." Stage 6 had made the glass read as glass and left it inert. Two findings.
+
+| Finding | Change |
+|---|---|
+| One merge rate did two jobs. The studio's `mergeRate` of 0.05 is about a twentieth of the screen's height — some forty pixels — and it was applied between every pair of surfaces, so any two controls within forty pixels of each other fused. A row of buttons drew as one connected ribbon of glass, which is exactly the phrase the founder used | Two merges (`MERGE` in `studio/params.ts`). Surfaces melt into each other at 0.012, so a row reads as a row of separate bubbles; a droplet melts into whatever it reaches at 0.075, which is the interaction |
+| Nothing a finger did changed anything. One droplet followed the pointer and passed over the glass; a tap did nothing at all | A tap leaves a droplet of its own: it blooms out of the point it landed on, melts into the glass it reaches and lets go (`TAP_DROP`, up to five alive at once so a drumming thumb cannot unbound the shader's loop). The droplet under the finger swells on press and starts from where the finger is, not from where the spring had got to |
+| The WebGL layer needs WebGL2 and a real GPU and stands aside without them — which is most testing machines and some phones, so the "playable" half would have been invisible to the people most likely to see the app | The same tap blooms in CSS (`app/glass/glass-pointer.tsx` marks the surface, `glass.css` opens the bubble out of `--lg-x`/`--lg-y`, clipped to the surface). Measured on the Chaos Run's Play button: `data-tap` set, `--lg-x: 30%` where the finger landed, the bubble mid-flight at 0.50 opacity and 6.96× |
+
+Under reduced motion neither exists: the delegated listener does not attach and the keyframes are
+switched off.
+
+### Stage 6 verification
+
+| Check | Result |
+|---|---|
+| Unit suite | 4,016 passed, 267 files |
+| e2e `learn-panes`, `leo-mosquito`, `learning-play`, `adhd-life` | 40 passed |
+| e2e `adhd-lives`, `app-shell` | 25 passed |
+| Text budget, 32 app screens | 0 over; median 27; a game run's title card 6, the Chaos Run's first round 8 |
+| The three drag-swallowed taps, re-measured at 0, 8, 20, 40 and 70px of thumb drift | swipe card and slip act at every drift (before: nothing past 20px) |
+| The wipe grid, one finger dragged across four tiles | every tile it crosses (before: two) |
+
+One regression this work caused and caught: `useCollected` first exposed `size` as a value read at
+render, so the caller asking "is the round finished?" on the next line still saw the count one
+short and a cleared round never ended. Two `adhd-lives` specs failed on it; `size` is a getter now
+and they pass. The measurement that found it is why the suite is run rather than reasoned about.
+
+Two specs fail in this container for reasons this change did not cause, confirmed by running them
+on a pristine tree: `keyboard-focus` and `text-budget` both walk every public route with a 240s cap,
+and every route takes about 13 seconds to reach `networkidle` here, so the walk runs out of time
+before it runs out of routes. The budget's own CLI has no such cap and reports 0 over.

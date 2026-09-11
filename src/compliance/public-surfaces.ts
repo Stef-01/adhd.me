@@ -155,6 +155,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "A topic survey (PRD §22): eight to twelve questions about one part of a life with ADHD, and the pattern it produces. Answered by the person the patient rules protect; no score, no verdict, every prompt swept.",
   },
   {
+    path: "/urgent",
+    audience: "patient",
+    why: "The urgent routes out of the app — 000, Lifeline, Kids Helpline, Beyond Blue — reachable from the header of every patient screen (Charmaine Bernie, 2026-09-11: always-visible crisis signposting, given comorbidity and the risk in the 16–25 cohort). It collects nothing, reads nothing and judges nobody; it names services that already exist. The most consequential page in the product to get wrong, so every word answers to the patient rules.",
+  },
+  {
     path: "/today",
     audience: "patient",
     why: "The single most useful next action, derived from this device's own record (PRD §6). A recommendation is the most patient-facing sentence the app writes, and the rule that wrote it is printed beside it; both answer to the patient rules.",

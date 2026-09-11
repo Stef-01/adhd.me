@@ -21,7 +21,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Sheet } from "../sheet";
 import { professionOf } from "@/demo/clinicians";
-import { professionLabel } from "@/support/professions";
+import { professionLabel, type Profession } from "@/support/professions";
 
 /** O235: Leaflet reads `window` on import, so the map is a client-only chunk fetched the first time a place resolves. */
 const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap), {
@@ -63,6 +63,8 @@ export function ResultsStage({
   place,
   filters,
   onToggleFilter,
+  careKinds,
+  onPickKind,
   fitFor,
 }: {
   requestHeadline: string;
@@ -94,11 +96,16 @@ export function ResultsStage({
   /** RADIANT: the device's filters, so the quick chips can show which are on and switch them. */
   filters: Filters;
   onToggleFilter: (key: BooleanFilterKey) => void;
+  /** The kinds of care this search reaches, richest first — see `careKinds` in care-finder.tsx. */
+  careKinds: readonly { id: Profession; count: number; plural: string }[];
+  onPickKind: (id: Profession) => void;
   /** PRD §42: the problem-fit sentence for an allied provider, from the personal model, or null. */
   fitFor?: (clinician: Clinician) => string | null;
 }) {
   /** The filters the chips cannot show — a language, a distance, a way of working — as a count on the Filters pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length;
+  /** The kind the band has narrowed to, if any — the heading has to say what the list is. */
+  const pickedKind = careKinds.find((k) => filters.professions.includes(k.id))?.plural ?? null;
   // U9: the one live line this screen owns. The status paragraphs below used to be five separate
   // `role="status"` regions inside a live shell, so a place edit read the fit line, the distance
   // line, the quality verdict and the whole re-ordered list. Now the region says the count and
@@ -238,6 +245,36 @@ export function ResultsStage({
         )}
       </div>
 
+      {/* THE KINDS OF CARE THIS SEARCH REACHES (2026-09-11). ADHD care is multidisciplinary and the
+          list was not: one column, mostly GPs, with the profession printed small on the few rows
+          that were not one. The band names every kind the search actually found, in the order the
+          person's own words point at, and each one narrows the list to it. It only renders when
+          there is more than one kind, because a band offering one choice is not a choice — and a
+          kind is only on it when the search found somebody of that kind, so no chip is a dead end.
+          Word-frugal on purpose: the plural alone, no count and no blurb, because this screen sits
+          at the text budget's ceiling and what a kind is for belongs on the kind's own list.
+          A plain list with a name, NOT role="group": the role overrode the list semantics and left
+          three <li> with no list parent, which axe reads as serious. The filter strip above is the
+          pattern — the group is the wrapper, the list is a list. */}
+      {careKinds.length > 1 && (
+        <ul className="care-kinds" aria-label="Kinds of care">
+          {careKinds.map((kind) => (
+            <li key={kind.id}>
+              <button
+                type="button"
+                className="care-kind"
+                data-kind={kind.id}
+                aria-pressed={filters.professions.includes(kind.id)}
+                onClick={() => onPickKind(kind.id)}
+              >
+                {kind.plural}
+                <span className="sr-only">, {kind.count} found</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
       {/* O234, AR24 kind `no-results`: the roster was ranked and the filters left nobody. The
           sentence names the filters as the cause, because that is the one thing the person can
           change, and both ways out are on the screen. */}
@@ -271,14 +308,16 @@ export function ResultsStage({
         <h2 className="t-text-swap-slot">
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.span
-              key={quality === "informed" ? "matches" : "all"}
+              key={quality === "informed" ? "matches" : pickedKind ?? "all"}
               className="t-text-swap"
               initial={reducedMotion ? false : { opacity: 0, y: 4, filter: "blur(2px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={reducedMotion ? undefined : { opacity: 0, y: -4, filter: "blur(2px)", transition: { duration: 0.15 } }}
               transition={{ duration: 0.15, ease: EASE_OUT }}
             >
-              {quality === "informed" ? "Matches" : <>All listed <em>providers</em></>}
+              {/* 2026-09-11: with a kind picked, "All listed providers" was over a list of two
+                  psychologists — the heading has to name what the list actually is. */}
+              {quality === "informed" ? "Matches" : pickedKind ? <>Listed <em>{pickedKind}</em></> : <>All listed <em>providers</em></>}
             </motion.span>
           </AnimatePresence>
         </h2>

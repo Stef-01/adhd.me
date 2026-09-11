@@ -5,73 +5,207 @@
    Lives home, the Chaos Run, the bean runs, Leo) and nowhere else: the finder, the profile, the
    life pages and the console are plain paper. The WebGL layer (app/glass/liquid-glass.tsx) runs
    only while a [data-liquid] scope is on the page and draws only the game surfaces
-   (GLASS_SELECTOR in app/glass/studio/params.ts). The 2026-09-08 "all UI" version is in history. */
+   (GLASS_SELECTOR in app/glass/studio/params.ts). The 2026-09-08 "all UI" version is in history.
+
+   2026-09-11, founder: "the apple glass bubble UI looks boring". It did, and for one reason —
+   white glass sat on white paper. A lens is only a lens when something behind it is bent, and
+   with the WebGL ground absent (no WebGL2, a software renderer, reduced transparency, every
+   screenshot in qa/) there was nothing behind it but --paper, so every bubble read as a flat pale
+   pill. Three changes, in that order of weight:
+     1. THE GROUND. The games scope lays its own light behind itself — three soft washes from the
+        brand's own warm-to-cool family, fixed to the viewport, under everything. Now a bubble has
+        something to bend. It is still where the WebGL layer runs (html.has-liquid), because the
+        studio's drifting ground is the better one.
+     2. THE EDGE. The dispersion split was two 1px insets at 0.18 alpha: a lens bends red one way
+        and blue the other and neither was visible. It is now a warm rim down one side and a cool
+        rim up the other, a bright Fresnel ring on the inside, and a dark seat at the foot that
+        gives the bubble thickness.
+     3. THE LIGHT MOVES. The specular reads --lg-x/--lg-y, set by the pointer handlers in
+        app/learn-panes.tsx, and every glass control carries it, not just the coloured tiles. On
+        press the bubble compresses and the highlight sweeps rather than fading out.
+   Nothing here animates on its own: the only motion is the finger's (taste: motion carries
+   meaning; no indefinite autoplay). Ink stays ink; every glass surface stays light. */
 :root {
   --glass-fill: color-mix(in srgb, var(--paper) 58%, transparent);
-  --glass-fill-strong: color-mix(in srgb, var(--paper) 78%, transparent);
-  --glass-rim: rgba(255, 255, 255, 0.72);
-  --glass-edge: color-mix(in srgb, var(--ink) 14%, transparent);
-  --glass-shadow: 0 10px 30px color-mix(in srgb, var(--ink) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
+  --glass-fill-strong: color-mix(in srgb, var(--paper) 76%, transparent);
+  --glass-rim: rgba(255, 255, 255, 0.92);
+  --glass-edge: color-mix(in srgb, var(--ink) 12%, transparent);
+  --glass-shadow: 0 1px 0 color-mix(in srgb, #fff 70%, transparent), 0 2px 5px color-mix(in srgb, var(--ink) 9%, transparent), 0 14px 32px -14px color-mix(in srgb, var(--ink) 34%, transparent);
   --glass-blur: 18px;
-  --lg-dispersion-warm: rgba(255, 128, 96, 0.18);
-  --lg-dispersion-cool: rgba(96, 140, 255, 0.2);
-  --lg-fresnel: rgba(255, 255, 255, 0.55);
+  /* The split, from the brand's own warm and cool ends rather than a raw red and blue. */
+  --lg-dispersion-warm: color-mix(in srgb, var(--hero-glow) 78%, transparent);
+  --lg-dispersion-cool: color-mix(in srgb, var(--hero-blue) 72%, transparent);
+  --lg-fresnel: rgba(255, 255, 255, 0.62);
   --lg-glare-angle: 115deg;
   --lg-shape: 1.6;
+  /* Where the light sits before a finger moves it, and how thick the glass is at its edge. */
+  --lg-x: 28%;
+  --lg-y: 8%;
+  --lg-thickness: 1.5px;
 }
 
 /* Plain everywhere else: the chrome keeps a solid ground of its own. */
 .platform-header { background: var(--paper); border-bottom: 1px solid var(--line); }
 .profile-facts { background: transparent; }
 
-/* ── Glass controls in the games section ───────────────────────────────────────────────────────── */
+/* ── The ground the glass bends ───────────────────────────────────────────────────────────────
+   Three washes on the scope itself — warm at the top left, cool at the top right, the accent
+   rising from the foot — so a bubble has something behind it to bend. It is the scope's own
+   background image, not a layer under the page: a negative-z layer paints below the shell's
+   opaque ground and was invisible (2026-09-11, first attempt). Gone the moment the WebGL layer
+   takes over, which draws the better version of this, or transparency is reduced. No motion. */
+[data-liquid] {
+  position: relative;
+  background-image:
+    radial-gradient(58% 38% at 6% 2%, color-mix(in srgb, var(--hero-glow) 40%, transparent), transparent 72%),
+    radial-gradient(62% 42% at 96% 14%, color-mix(in srgb, var(--hero-blue) 34%, transparent), transparent 74%),
+    radial-gradient(86% 46% at 50% 102%, color-mix(in srgb, var(--accent-mid) 28%, transparent), transparent 74%);
+  background-repeat: no-repeat;
+}
+html.has-liquid [data-liquid] { background-image: none; }
+/* A title card is the one game screen that is a flat fill with two thirds of the phone empty
+   under it, and it covers the scope's own ground, so it carries the light itself. The bean-run
+   title cards stand in a drawn place already (.play-place) and are left alone. */
+[data-liquid] .play-card.is-title:not(:has(.play-place)) {
+  background-image:
+    radial-gradient(62% 34% at 4% 0%, color-mix(in srgb, var(--hero-glow) 34%, transparent), transparent 72%),
+    radial-gradient(66% 38% at 98% 12%, color-mix(in srgb, var(--paper) 72%, transparent), transparent 74%),
+    radial-gradient(96% 44% at 50% 100%, color-mix(in srgb, var(--accent-mid) 30%, transparent), transparent 76%);
+  background-repeat: no-repeat;
+}
+html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
+
+/* ── Glass controls in the games section ─────────────────────────────────────────────────────
+   One recipe: a lit fill, a bright rim where the light enters, the warm and cool split down the
+   two sides, a seat at the foot for thickness, and a blurred, saturated backdrop. */
 [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) {
   position: relative;
-  background: var(--glass-fill-strong);
+  isolation: isolate;
+  /* The tap's bubble grows past the edge and is clipped to the surface, the way a drop spreading
+     inside a pane of glass would be. A box-shadow is not clipped by an element's own overflow, so
+     the rim and the contact shadow below are untouched by this. */
+  overflow: hidden;
+  background:
+    radial-gradient(118% 86% at var(--lg-x) var(--lg-y), rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 58%),
+    var(--glass-fill-strong);
   border-color: var(--glass-edge);
-  box-shadow: inset 0 1px 0 var(--glass-rim), inset 1px 1px 0 var(--lg-dispersion-warm), inset -1px -1px 0 var(--lg-dispersion-cool), var(--glass-shadow);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
-  backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  box-shadow:
+    inset 0 var(--lg-thickness) 0 var(--glass-rim),
+    inset var(--lg-thickness) 0 0 -0.5px var(--lg-dispersion-warm),
+    inset calc(-1 * var(--lg-thickness)) 0 0 -0.5px var(--lg-dispersion-cool),
+    inset 0 calc(-1 * var(--lg-thickness)) 0 color-mix(in srgb, var(--ink) 14%, transparent),
+    var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.7) brightness(1.05);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.7) brightness(1.05);
+  transition: transform var(--dur-tap, 150ms) var(--ease-ui, ease), box-shadow var(--dur-tap, 150ms) var(--ease-ui, ease);
 }
+/* The glare band and, inside it, the Fresnel ring: brightest where the light enters, gone by the
+   far edge. Both are one layer so a bubble costs one pseudo-element, not two. */
 [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound)::before {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background: linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 28%, rgba(255, 255, 255, 0) 46%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.18) 100%);
-  transition: opacity var(--dur-tap, 120ms) var(--ease-ui, ease);
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
+  background: linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.14) 26%, rgba(255, 255, 255, 0) 44%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.26) 100%);
+  box-shadow: inset 0 0 0 1px var(--lg-fresnel), inset 0 0 14px rgba(255, 255, 255, 0.34);
+  transition: opacity var(--dur-tap, 150ms) var(--ease-ui, ease), transform var(--dur-tap, 150ms) var(--ease-ui, ease);
 }
-[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound):active::before { opacity: 0.35; }
-[data-liquid] .play-tempt.is-go { position: relative; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 0, 0, 0.12), var(--glass-shadow); }
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) > * { position: relative; z-index: 2; }
+/* Pressed, a drop compresses and its highlight slides across rather than switching off. */
+[data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound):active {
+  transform: scale(0.972);
+  box-shadow:
+    inset 0 var(--lg-thickness) 0 var(--glass-rim),
+    inset var(--lg-thickness) 0 0 -0.5px var(--lg-dispersion-cool),
+    inset calc(-1 * var(--lg-thickness)) 0 0 -0.5px var(--lg-dispersion-warm),
+    inset 0 calc(-1 * var(--lg-thickness)) 0 color-mix(in srgb, var(--ink) 18%, transparent),
+    0 1px 0 color-mix(in srgb, #fff 70%, transparent), 0 1px 3px color-mix(in srgb, var(--ink) 12%, transparent);
+}
+[data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound):active::before { transform: translateX(6%); }
+/* ── The bubble a tap makes ───────────────────────────────────────────────────────────────────
+   A tap opens a droplet out of the point it landed on and lets it go (founder, 2026-09-11: "it
+   should be playable with your bubble that the tap has"). The WebGL layer leaves a real one that
+   melts into the glass, but it needs a GPU; this is the same event on every other device.
+   `app/glass/glass-pointer.tsx` marks the surface for the length of the bloom and puts the point
+   in --lg-x/--lg-y; the bubble is a second layer so it never disturbs the glare above it. */
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .leo-feature, .learn-play-card, .play-tempt.is-go)::after {
+  content: ""; position: absolute; left: var(--lg-x, 50%); top: var(--lg-y, 50%); z-index: 1;
+  width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.35) 55%, rgba(255, 255, 255, 0) 72%);
+  opacity: 0; transform: scale(0.2);
+}
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .leo-feature, .learn-play-card, .play-tempt.is-go)[data-tap]::after {
+  animation: lg-bubble 620ms var(--ease-ui, ease-out) 1;
+}
+@keyframes lg-bubble {
+  0% { opacity: 0.85; transform: scale(0.2); }
+  38% { opacity: 0.5; transform: scale(7); }
+  100% { opacity: 0; transform: scale(13); }
+}
+/* A control's own state outranks the material (2026-09-11). These three rules are declared in
+   play.css at the same specificity as the glass above, and play.css is imported first, so the
+   glass fill was winning and a chosen answer, a pressed "?" and a held bean all looked exactly
+   like an untouched one — a tap that did nothing, as far as the person could see. (The Chaos
+   Run's own `.lives-choice` was never affected: lives.css is imported again after glass.css.) */
+[data-liquid] .play-choice[aria-pressed="true"] { background: var(--play-soft, var(--accent-soft)); border-color: var(--play-blue, var(--accent)); }
+[data-liquid] .play-help[aria-pressed="true"] { background: var(--play-blue, var(--accent)); border-color: var(--play-blue, var(--accent)); color: var(--play-paper, var(--paper)); }
+[data-liquid] .play-bean-hit:is(.is-holding, .is-now) .play-bean-label { background: var(--play-blue, var(--accent)); color: var(--play-paper, var(--paper)); }
 
-/* ── The droplets: every coloured game tile, Leo's card and the Play card ──────────────────────────
+/* The cast link is a pill, not a slab: it took the glass fill with square corners and read as a
+   white box in every capture (qa/games-glass, 2026-09-11). */
+.platform-shell [data-liquid] .learn-play-cast-link { padding: 0 16px; border-radius: 999px; }
+/* The go button keeps its colour and takes the same lens: tinted glass, not a flat fill. */
+[data-liquid] .play-tempt.is-go {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-image: linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.06) 34%, rgba(255, 255, 255, 0) 56%, rgba(0, 0, 0, 0.07) 100%);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.5),
+    inset 1.5px 0 0 -0.5px color-mix(in srgb, var(--hero-glow) 52%, transparent),
+    inset -1.5px 0 0 -0.5px rgba(255, 255, 255, 0.34),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.16),
+    0 2px 4px color-mix(in srgb, var(--ink) 14%, transparent),
+    0 16px 30px -16px color-mix(in srgb, var(--ink) 52%, transparent);
+  transition: transform var(--dur-tap, 150ms) var(--ease-ui, ease);
+}
+[data-liquid] .play-tempt.is-go:active { transform: scale(0.975); }
+
+/* ── The droplets: every coloured game tile, Leo's card and the Play card ──────────────────────
    A tile keeps its colour and becomes a lens: a Fresnel rim, the red and blue split on its edge, a
    specular highlight that follows the finger across it (--lg-x, --lg-y, set by the tile's pointer
    handlers in app/learn-panes.tsx), and a spring on press that overshoots like a drop. */
-.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature) {
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card) {
   --lg-x: 72%; --lg-y: 18%;
   position: relative; isolation: isolate;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 1.5px 1.5px 0 var(--lg-dispersion-warm),
-    inset -1.5px -1.5px 0 var(--lg-dispersion-cool),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.08),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.62),
+    inset 2px 0 0 -1px var(--lg-dispersion-warm),
+    inset -2px 0 0 -1px var(--lg-dispersion-cool),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1),
     0 1px 0 rgba(23, 32, 51, 0.06),
-    0 18px 32px -20px color-mix(in srgb, var(--cover, #172033) 85%, #000);
+    0 22px 36px -22px color-mix(in srgb, var(--cover, #172033) 88%, #000);
 }
-.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::before {
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card)::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
   background:
-    radial-gradient(46% 38% at var(--lg-x) var(--lg-y), rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0) 72%),
-    linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 36%, rgba(255, 255, 255, 0) 74%, rgba(255, 255, 255, 0.12) 100%);
-  opacity: 0.8;
+    radial-gradient(46% 38% at var(--lg-x) var(--lg-y), rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0) 70%),
+    linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.16) 100%);
+  opacity: 0.86;
   transition: opacity 220ms var(--ease-ui, ease);
 }
-.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::after {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
-  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.32), inset 0 0 22px rgba(255, 255, 255, 0.16);
+/* The tiles' Fresnel ring rides on ::before with the glare, because ::after is the tap's bubble. */
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card)::before {
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.42), inset 0 0 26px rgba(255, 255, 255, 0.2);
 }
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)[data-touch]::before { opacity: 1; }
-.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature) > * { position: relative; z-index: 2; }
+.platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card) > * { position: relative; z-index: 2; }
+/* The Play card is the one surface with no colour of its own, so it takes a wash of the room. */
+.platform-shell [data-liquid] .learn-play-card {
+  background:
+    radial-gradient(72% 56% at 18% 0%, color-mix(in srgb, var(--hero-glow) 26%, transparent), transparent 68%),
+    radial-gradient(80% 60% at 92% 100%, color-mix(in srgb, var(--hero-blue) 26%, transparent), transparent 70%),
+    var(--stone);
+}
 @supports (corner-shape: superellipse(2)) {
-  [data-liquid] :is(.learn-card, .leo-feature, .play-choice, .play-hut, .play-x, .lives-choice, .lives-row, .learn-show-all) { corner-shape: superellipse(var(--lg-shape)); }
+  [data-liquid] :is(.learn-card, .leo-feature, .learn-play-card, .play-choice, .play-hut, .play-x, .lives-choice, .lives-row, .learn-show-all) { corner-shape: superellipse(var(--lg-shape)); }
 }
 
 /* ── The WebGL layer (app/glass/liquid-glass.tsx, the studio's own pipeline) ─────────────────────
@@ -84,6 +218,13 @@ html.has-liquid [data-liquid] .learn-stack .learn-card { background: color-mix(i
 html.has-liquid [data-liquid] { --glass-fill: color-mix(in srgb, var(--paper) 34%, transparent); --glass-fill-strong: color-mix(in srgb, var(--paper) 52%, transparent); }
 
 @media (prefers-reduced-transparency: reduce) {
+  [data-liquid] { background-image: none; }
   [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
-  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound)::before, .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::before, .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature)::after { display: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound)::before, .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card)::before, [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .leo-feature, .learn-play-card, .play-tempt.is-go)::after { display: none; }
+  .platform-shell [data-liquid] .learn-play-card { background: var(--stone); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .leo-feature, .learn-play-card, .play-tempt.is-go)::after { display: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .play-tempt.is-go) { transition: none; }
+  [data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .play-tempt.is-go):active { transform: none; }
 }

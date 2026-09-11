@@ -62,6 +62,28 @@ export const EXTRA = [
 
 export const LONG_FORM = new Set(["/story", "/faq", "/privacy", "/privacy/automated-decisions", "/privacy/counsel-review", "/terms", "/practices", "/clinicians", "/clinicians/join", "/examples", "/about", "/approach/map", "/lives/lab", "/demo"]);
 
+/**
+ * RESULT SCREENS CARRY THEIR RESULTS (2026-09-11, founder-decided).
+ *
+ * The 60-word ceiling is Headspace's Sleep list: six cards of a two-word title and one short line.
+ * The finder's results screen is that shape plus one thing Headspace's list does not have — the
+ * navigation between kinds of professional, which is the product's whole argument. Measured on the
+ * day this was raised, its 63 words were 35 of RESULT (five rows of a name, a reason and a place —
+ * the answer the person asked for) and 28 of screen: the search they typed read back, four filter
+ * chips, three kinds of care, the count, and two controls.
+ *
+ * Charmaine Bernie's finding is why the three cost what they cost: people land on the wrong
+ * waitlist for years because nothing showed them which kind of professional they needed. Deleting
+ * the kinds to hold a number derived from a meditation app's list would be holding the letter of
+ * the budget against the thing the budget exists to protect.
+ *
+ * So this ONE screen gets 72, and the raise is bounded and reasoned rather than a waiver: 60 for
+ * the screen, plus the twelve words three kinds of care can cost at their longest ("occupational
+ * therapists" is two). Every other screen, this file and the gate beside it are unchanged, and a
+ * fourth kind or a new paragraph here still fails.
+ */
+export const CEILING = new Map([["Finder results (after a search)", 72]]);
+
 export const NARRATIVE = "I think I have had ADHD my whole life. I want an adult assessment with someone who will not rush me. I have anxiety too, and telehealth would be easier.";
 
 export function words(text) {
@@ -146,7 +168,8 @@ export function summarise(route, rows) {
   const chrome = rows.filter((r) => r.chrome).reduce((n, r) => n + words(r.text), 0);
   const longest = rows.filter((r) => !r.chrome).map((r) => ({ w: words(r.text), text: r.text.slice(0, 80), tag: r.tag })).sort((a, b) => b.w - a.w).slice(0, 3);
   const longForm = LONG_FORM.has(route.path);
-  const verdict = total <= BUDGET.target ? "target" : total <= BUDGET.screen ? "ceiling" : longForm ? "long-form" : "OVER";
+  const ceiling = CEILING.get(route.name ?? "") ?? BUDGET.screen;
+  const verdict = total <= BUDGET.target ? "target" : total <= ceiling ? "ceiling" : longForm ? "long-form" : "OVER";
   return { path: route.path, name: route.name, state: route.state ?? null, total, fold, chrome, ratio: Math.round((total / BUDGET.target) * 10) / 10, verdict, longest };
 }
 

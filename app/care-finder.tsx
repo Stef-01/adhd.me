@@ -19,7 +19,7 @@ import {
   type Clinician,
 } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
-import { professionsMentioned } from "@/support/professions";
+import { profession, professionsMentioned, type Profession } from "@/support/professions";
 import { fitReason, orderByProblemFit } from "@/support/problem-fit";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { readModel } from "@/model/store";
@@ -122,6 +122,43 @@ export function CareFinder() {
    */
   const named = useMemo(() => professionsMentioned(request), [request]);
   const roster = useMemo(() => (named.length === 0 ? filteredRoster : filteredRoster.filter((c) => named.includes(professionOf(c)))), [filteredRoster, named]);
+  /**
+   * THE KINDS OF CARE THIS SEARCH REACHES (Charmaine Bernie, occupational therapist and
+   * service-access researcher, 2026-09-11). She named identification and navigation — "helping
+   * people work out what they actually need and how to access it" — as one of the two core
+   * drivers of the problem, and the cost of getting it wrong as years on the wrong waitlist.
+   * The finder was answering a different question: it returned one undifferentiated list, mostly
+   * GPs, with a profession printed small on the few rows that were not. A person could not see
+   * that a psychologist, an occupational therapist and a coach were all in the answer, so they
+   * could not choose between them, which is the choice the whole problem turns on.
+   *
+   * So the kinds are the band above the list: every profession this search actually reaches, in
+   * the order the person's own words point at, each one a filter. Counted BEFORE the profession
+   * filter is applied — a band that collapsed to the kind you just picked would be a dead end —
+   * and only from providers the rest of the filters kept, so every kind here leads somewhere.
+   * Nothing is invented: the professions are the roster's own, and the order is the person's
+   * words first (`named`), then how many of each the search found.
+   */
+  const kindRoster = useMemo(
+    // Every other filter, and never this one: counted off `filteredRoster` the band collapsed to
+    // the kind you had just picked, which is the dead end the note above says it must not be.
+    () => applyFilters(rosterFor(includeSynthetic), { ...filters, professions: [] }, origin, (c) => (origin ? nearestKm(c, origin) : null)),
+    [includeSynthetic, filters, origin],
+  );
+  const careKinds = useMemo(() => {
+    const counts = new Map<Profession, number>();
+    for (const c of kindRoster) {
+      const p = professionOf(c);
+      counts.set(p, (counts.get(p) ?? 0) + 1);
+    }
+    return [...counts.entries()]
+      .sort((a, b) => (Number(named.includes(b[0])) - Number(named.includes(a[0]))) || b[1] - a[1])
+      .map(([id, count]) => ({ id, count, plural: profession(id).plural }))
+      // Three, then the rest (the tree's own "five, then the rest", tightened because this screen
+      // sits at the text budget's ceiling): the kinds the person's words point at and the ones the
+      // search found most of. Every other kind stays reachable through the Filters pill.
+      .slice(0, 3);
+  }, [kindRoster, named]);
   const { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     // O234: the filters the device holds, and the place it holds when the address bar carries
     // none — a search started from the front door reads back what the profile set. A place on
@@ -565,6 +602,21 @@ export function CareFinder() {
     setShowAll(false);
   }
 
+  /**
+   * A kind of care picked from the band: the same profession filter the support path writes, so
+   * the two doors into the roster set one thing. Picking the kind already on narrows to nothing
+   * new, so it clears instead — the band is how you get back to everybody as well as how you
+   * leave it.
+   */
+  function pickKind(id: Profession) {
+    const held = filters.professions;
+    const next: Filters = { ...filters, professions: held.length === 1 && held[0] === id ? [] : [id] };
+    writeFilters(window.localStorage, next);
+    setFilters(next);
+    setMatchIndex(0);
+    setShowAll(false);
+  }
+
   /** O234: every narrowing filter off, the place kept — it orders, it never excluded anybody. */
   function clearNarrowingFilters() {
     const next: Filters = { ...emptyFilters(), place: filters.place };
@@ -713,6 +765,8 @@ export function CareFinder() {
             place={place}
             filters={filters}
             onToggleFilter={toggleFilter}
+            careKinds={careKinds}
+            onPickKind={pickKind}
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}
             onShowAll={() => setShowAll(true)}
             onChoose={chooseClinician}

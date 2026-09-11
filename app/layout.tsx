@@ -16,6 +16,7 @@ import "./styles/lives.css";
 import { SiteMotion } from "./site-motion";
 import "./styles/leo.css";
 import { LiquidGlass } from "./glass/liquid-glass";
+import { GlassPointer } from "./glass/glass-pointer";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./analytics";
 import { PrivacyConsent } from "./privacy-consent";
@@ -137,6 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-link">Skip to main content</a>
         {/* The studio's WebGL liquid glass under the whole page (app/glass/liquid-glass.tsx). */}
         <LiquidGlass />
+        <GlassPointer />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}

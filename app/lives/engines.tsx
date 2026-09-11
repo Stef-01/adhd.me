@@ -17,6 +17,7 @@ import { escalatedLabel, hitFxOf, markAt, positionAt, releaseVerdict, SCENE, tau
 import { LifeBean } from "./bean";
 import { LeoMosquito } from "./leo-mosquito";
 import { kindFor, SceneArt, Sprite } from "./scenes";
+import { useCollected } from "../collected";
 
 export interface EngineResult { readonly outcome: "success" | "failure"; readonly mistakes: number; readonly line?: string }
 
@@ -97,20 +98,19 @@ export function Engine(props: EngineProps) {
 /** 1. Target swat (§49): tap every moving thing before the clock runs out. Misses escalate the mosquito. */
 function TargetSwat({ game, scene, live, reducedMotion, reducedSensory, progress, elapsedMs, onResult, outcome }: EngineProps) {
   const finish = useOnce(onResult);
-  const [swatted, setSwatted] = useState<Record<string, Point>>({});
+  const swatted = useCollected<Point>();
   const [misses, setMisses] = useState(0);
   const targets = scene.entities.filter((e) => e.role === "target");
   const fx = hitFxOf(game.id);
   const swat = (id: string, at: Point) => {
-    const next = { ...swatted, [id]: at };
-    setSwatted(next);
-    if (Object.keys(next).length === targets.length) finish({ outcome: "success", mistakes: misses });
+    if (!swatted.take(id, at)) return;
+    if (swatted.size === targets.length) finish({ outcome: "success", mistakes: misses });
   };
   return (
     <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={progress} label="The scene" onPointerDown={(e) => { if (live && (e.target as HTMLElement).classList.contains("lives-field")) setMisses((m) => m + 1); }}>
       {targets.map((e, i) => {
         const label = escalatedLabel(game.config, e.label, misses);
-        const hit = swatted[e.id];
+        const hit = swatted.all[e.id];
         if (hit) return reducedMotion ? null : <Ghost key={e.id} at={hit} r={e.r} fx={fx} label={label} />;
         const at = reducedMotion ? e : positionAt(e, elapsedMs / 1000);
         return <Thing key={e.id} e={{ ...e, label }} at={at} index={i} disabled={!live} data-outcome="hit" onClick={() => swat(e.id, at)} aria-label={`${label}: tap it`} />;
@@ -123,17 +123,16 @@ function TargetSwat({ game, scene, live, reducedMotion, reducedSensory, progress
 /** 2. Semantic filter (§50): tap only what belongs. One wrong tap is the miss. */
 function SemanticFilter({ game, scene, live, reducedMotion, reducedSensory, onResult, outcome }: EngineProps) {
   const finish = useOnce(onResult);
-  const [taken, setTaken] = useState<string[]>([]);
+  const taken = useCollected();
   const targets = scene.entities.filter((e) => e.role === "target");
   const pick = (e: Entity) => {
     if (e.role !== "target") { finish({ outcome: "failure", mistakes: 1, line: `That was ${e.label}.` }); return; }
-    const next = [...taken, e.id];
-    setTaken(next);
-    if (next.length === targets.length) finish({ outcome: "success", mistakes: 0 });
+    if (!taken.take(e.id, true)) return;
+    if (taken.size === targets.length) finish({ outcome: "success", mistakes: 0 });
   };
   return (
-    <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={targets.length ? taken.length / targets.length : 0} label="The scene">
-      {scene.entities.map((e, i) => taken.includes(e.id)
+    <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={targets.length ? taken.size / targets.length : 0} label="The scene">
+      {scene.entities.map((e, i) => taken.has(e.id)
         ? (reducedMotion ? null : <Ghost key={e.id} at={e} r={e.r} fx="collect" label={e.label} />)
         : <Thing key={e.id} e={e} index={i} caption disabled={!live} data-outcome={e.role === "target" ? "hit" : "miss"} onClick={() => pick(e)} />)}
     </Stage>
@@ -226,7 +225,7 @@ function ObjectSearch({ game, scene, live, reducedMotion, reducedSensory, onResu
 /** 6. Goal protection (§54): things fly at the one thing you came for. Clear them; never the thing itself. */
 function GoalProtection({ game, scene, live, reducedMotion, reducedSensory, progress, elapsedMs, onResult, outcome }: EngineProps) {
   const finish = useOnce(onResult);
-  const [cleared, setCleared] = useState<Record<string, Point>>({});
+  const cleared = useCollected<Point>();
   const keep = scene.entities.find((e) => e.role === "keep")!;
   const intruders = scene.entities.filter((e) => e.role === "intruder");
   const fx = hitFxOf(game.id);
@@ -241,20 +240,19 @@ function GoalProtection({ game, scene, live, reducedMotion, reducedSensory, prog
   useEffect(() => {
     if (reducedMotion || !live) return;
     for (const { e, at, visible } of positioned) {
-      if (!visible || cleared[e.id]) continue;
+      if (!visible || cleared.has(e.id)) continue;
       if (Math.hypot(at.x - keep.x, at.y - keep.y) < keep.r + e.r * 0.6) { finish({ outcome: "failure", mistakes: 1, line: `The ${e.label} got in.` }); return; }
     }
   });
   const clear = (id: string, at: Point) => {
-    const next = { ...cleared, [id]: at };
-    setCleared(next);
-    if (Object.keys(next).length === intruders.length) finish({ outcome: "success", mistakes: 0 });
+    if (!cleared.take(id, at)) return;
+    if (cleared.size === intruders.length) finish({ outcome: "success", mistakes: 0 });
   };
   return (
     <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={progress} label="The scene">
       <Thing e={keep} className="is-keep" data-outcome="miss" disabled={!live} onClick={() => finish({ outcome: "failure", mistakes: 1, line: `That was the ${keep.label}.` })} aria-label={`${keep.label}: keep it`} />
       {positioned.map(({ e, at, visible }, i) => {
-        const gone = cleared[e.id];
+        const gone = cleared.all[e.id];
         if (gone) return reducedMotion ? null : <Ghost key={e.id} at={gone} r={e.r} fx={fx} label={e.label} />;
         if (!visible) return null;
         return <Thing key={e.id} e={e} at={at} index={i} className="is-intruder" data-outcome="hit" disabled={!live} onClick={() => clear(e.id, at)} aria-label={`${e.label}: clear it`} />;
@@ -300,6 +298,9 @@ function HoldRelease({ game, scene, live, reducedMotion, reducedSensory, progres
         onPointerDown={() => setHolding(true)}
         onPointerUp={release}
         onPointerLeave={release}
+        /* A touch the browser takes back is a let-go: without this the button stayed held with
+           nothing on it, and the moment could only pass. */
+        onPointerCancel={release}
         onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); setHolding(true); } }}
         onKeyUp={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); release(); } }}
       >
@@ -336,25 +337,31 @@ function RapidSorting({ game, scene, live, reducedMotion, reducedSensory, onResu
 /** 9. Wipe/scrub (§22): the layer over the scene comes off a tile at a time. Clear it all. */
 function WipeScrub({ game, scene, live, reducedMotion, reducedSensory, onResult, outcome }: EngineProps) {
   const finish = useOnce(onResult);
-  const [gone, setGone] = useState<string[]>([]);
+  const gone = useCollected();
   const tiles = scene.entities.filter((e) => e.role === "tile");
   const wipe = (id: string) => {
-    if (gone.includes(id)) return;
-    const next = [...gone, id];
-    setGone(next);
-    if (next.length === tiles.length) finish({ outcome: "success", mistakes: 0 });
+    if (!gone.take(id, true)) return;
+    if (gone.size === tiles.length) finish({ outcome: "success", mistakes: 0 });
+  };
+  // A finger dragged across the grid wipes tile after tile. The browser captures a touch to the
+  // tile it started on, so the neighbours never see the finger arrive; the grid lets that capture
+  // go and then asks what is under the finger itself, which is true for a mouse and a stylus too.
+  const scrub = (ev: ReactPointerEvent<HTMLDivElement>) => {
+    if (!live || ev.buttons === 0) return;
+    const under = document.elementFromPoint(ev.clientX, ev.clientY)?.closest<HTMLElement>("[data-tile]");
+    if (under?.dataset.tile) wipe(under.dataset.tile);
   };
   const grid = scene.grid!;
   return (
-    <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={tiles.length ? gone.length / tiles.length : 0} className="lives-wipe" label="The layer">
-      <div className="lives-wipe-grid" style={{ gridTemplateColumns: `repeat(${grid.columns}, 1fr)`, touchAction: "none" }}>
-        {tiles.map((e) => gone.includes(e.id) ? <span key={e.id} className="lives-tile is-gone" aria-hidden="true">{!reducedMotion && <Sprite label={e.label} />}</span> : (
-          <button key={e.id} type="button" className="lives-tile" disabled={!live} data-outcome="hit" aria-label={`${e.label}: wipe`} onClick={() => wipe(e.id)} onPointerEnter={(ev) => { if (live && ev.buttons > 0) wipe(e.id); }} onPointerDown={() => wipe(e.id)}>
+    <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={tiles.length ? gone.size / tiles.length : 0} className="lives-wipe" label="The layer">
+      <div className="lives-wipe-grid" style={{ gridTemplateColumns: `repeat(${grid.columns}, 1fr)`, touchAction: "none" }} onPointerMove={scrub}>
+        {tiles.map((e) => gone.has(e.id) ? <span key={e.id} className="lives-tile is-gone" aria-hidden="true">{!reducedMotion && <Sprite label={e.label} />}</span> : (
+          <button key={e.id} type="button" className="lives-tile" data-tile={e.id} disabled={!live} data-outcome="hit" aria-label={`${e.label}: wipe`} onClick={() => wipe(e.id)} onPointerDown={(ev) => { if (ev.currentTarget.hasPointerCapture(ev.pointerId)) ev.currentTarget.releasePointerCapture(ev.pointerId); wipe(e.id); }}>
             <Sprite label={e.label} />
           </button>
         ))}
       </div>
-      <p className="lives-sort-count">{tiles.length - gone.length} left</p>
+      <p className="lives-sort-count">{tiles.length - gone.size} left</p>
       {reducedMotion && <Skip live={live} onSkip={() => finish({ outcome: "failure", mistakes: 0, line: "Skipped." })} />}
     </Stage>
   );
