@@ -206,7 +206,15 @@ test("E2E 8: a safety response interrupts the module, pauses recommendations, an
 
 test("E2E 6: the support path walks from the problem to professions, and 'See providers' narrows the finder", async ({ page }) => {
   await page.goto("/support");
-  await expect(page.getByRole("heading", { name: /Nothing to walk from yet/ })).toBeVisible();
+  // COLD, this page ANSWERS rather than asks (2026-09-11). It used to say "Nothing to walk from
+  // yet. Answer the ten questions and the path fills in." — a questionnaire, on the one page named
+  // for starting from the problem, to the reader who does not yet know what they need. The kinds
+  // of help are the page now, each opening the finder narrowed to it; the ten questions are still
+  // offered below them and still build the ranked walk this test goes on to check.
+  await expect(page.getByRole("heading", { name: "Which kind of help?" })).toBeVisible();
+  await expect(page.locator(".cold-kind")).toHaveCount(6);
+  await expect(page.locator(".cold-kind").first()).toContainText("GP");
+  await expect(page.getByRole("link", { name: /Ten questions/ })).toBeVisible();
   await page.evaluate((k) => {
     localStorage.setItem(k, JSON.stringify({
       v: 1, onboarding: { improveFirst: "start-earlier", impact: 8, lookingFor: "professional", completedAt: new Date().toISOString() },
