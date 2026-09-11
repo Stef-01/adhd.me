@@ -52,7 +52,7 @@ type Phase = "title" | "intro" | "active" | "resolution" | "faster" | "over";
 
 interface Current { readonly game: GameDefinition; readonly scene: GameScene; readonly seed: number; readonly allowed: number; readonly instance: number }
 
-export function ChaosRun({ seed }: { seed?: string }) {
+export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game run: the pool is that game alone. */ only?: string }) {
   const reducedMotion = Boolean(useReducedMotion());
   const { profile, apply } = useProfile();
   const [session, setSession] = useState<SessionState | null>(null);
@@ -88,7 +88,8 @@ export function ChaosRun({ seed }: { seed?: string }) {
   // what stood before it.
   useEffect(() => { if (profile && phase === "title") highBefore.current = profile.highScore; }, [profile, phase]);
 
-  const pool = GAMES;
+  const pool = useMemo(() => { const one = only ? GAMES.filter((g) => g.id === only) : []; return one.length ? one : GAMES; }, [only]);
+  const labRun = useRef(Boolean(only));
 
   /** Begin the next game: the director picks, the engine lays it out, the intro shows. */
   const nextGame = useCallback((state: SessionState) => {
@@ -128,7 +129,7 @@ export function ChaosRun({ seed }: { seed?: string }) {
     haptic(resolution.over ? "end" : success ? "hit" : "miss", haptics);
     track(success ? "MINIGAME_SUCCESS" : "MINIGAME_FAILURE", { game: current.game.id, difficulty: session.difficulty, outcome: result.outcome });
     if (resolution.faster) track("DIFFICULTY_INCREASED", { to: resolution.state.difficulty });
-    if (resolution.over) { apply((s) => recordHighScore(s, resolution.state.score)); track("SESSION_COMPLETED", { games: resolution.state.completedGames, score: resolution.state.score }); }
+    if (resolution.over) { if (!labRun.current) apply((s) => recordHighScore(s, resolution.state.score)); track("SESSION_COMPLETED", { games: resolution.state.completedGames, score: resolution.state.score }); }
   }, [session, current, phase, reducedMotion, apply, haptics]);
 
   /** After the resolution beat: FASTER, the next game, or the end. */

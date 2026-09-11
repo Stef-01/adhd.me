@@ -296,6 +296,9 @@ describe("session director (§57)", () => {
     const after: SessionState = { ...s, gameIndex: 1, recentGameIds: [tapOnly[0]!.id], recentMechanics: ["tap"], recentCharacters: [tapOnly[0]!.character] };
     expect(eligible(after, tapOnly).picks.map((g) => g.id)).toEqual([tapOnly[1]!.id]);
     expect(nextGame(after, tapOnly, seededRng(1)).id).toBe(tapOnly[1]!.id);
+    const one = [GAMES[0]!];
+    const again: SessionState = { ...s, gameIndex: 1, recentGameIds: [one[0]!.id], recentMechanics: [one[0]!.mechanic], recentCharacters: [one[0]!.character] };
+    expect(nextGame(again, one, seededRng(1)).id).toBe(one[0]!.id);
   });
 });
 
