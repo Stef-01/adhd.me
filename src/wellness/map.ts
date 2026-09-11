@@ -12,7 +12,7 @@
 // number either: it says a WORD. So does this. Every rung below is an act the person took, and the
 // word names the act rather than the person:
 //
-//   Not yet · Named · Explored · In your kit · Working
+//   Unasked · Named · Explored · Kept · Working
 //
 // A dimension advances because you said something that lands there, because you finished a run
 // about it, because you kept a strategy from it, because you said that strategy worked. That is a
@@ -37,10 +37,15 @@ import { NWIA_DIMENSIONS, NWIA_OF, type NwiaDimension } from "./nwia";
 export const RUNGS = ["unmapped", "named", "explored", "kept", "working"] as const;
 export type Rung = (typeof RUNGS)[number];
 
-/** What each rung is called on the map. Two words at most: nine of these share one screen, and
- *  the one law is that a screen holds sixty. */
+/**
+ * What each rung is called on the map. ONE word each, and that is a measurement rather than a
+ * preference: nine of these share a screen whose ceiling is sixty words, and "Not yet" on four
+ * axes was four words this page did not have. "Unasked" is also the truer word — it puts the
+ * absence on the app, which has not asked, rather than on the person, who has not answered, and
+ * it is the word the balance line beside it already uses.
+ */
 export const RUNG_LABEL: Readonly<Record<Rung, string>> = {
-  unmapped: "Not yet",
+  unmapped: "Unasked",
   named: "Named",
   explored: "Explored",
   kept: "Kept",

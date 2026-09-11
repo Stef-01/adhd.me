@@ -31,7 +31,7 @@ test("the map starts empty and honest, and says so without saying it about the p
   // Nine axes, every one of them a word rather than a number.
   const axes = page.locator(".map-axis");
   await expect(axes).toHaveCount(9);
-  for (const text of await axes.allInnerTexts()) expect(text).toContain("Not yet");
+  for (const text of await axes.allInnerTexts()) expect(text).toContain("Unasked");
   await expect(page.locator(".map-open")).toContainText("Nothing yet. Not a gap, unasked.");
   // No number about anybody, anywhere on the page.
   const words = (await page.locator("main").innerText()).replace(/ADHD\.ME/g, "");
@@ -49,7 +49,7 @@ test("the map moves because the person did something, and opens on what they bui
   await expect(axis(page, "Work")).toContainText("Working");
   await expect(axis(page, "Physical")).toContainText("Explored");
   await expect(axis(page, "Spiritual values")).toContainText("Named");
-  await expect(axis(page, "Cultural values")).toContainText("Not yet");
+  await expect(axis(page, "Cultural values")).toContainText("Unasked");
 
   // It opens on the dimension furthest out — the first thing the map says is what you have built.
   await expect(page.locator(".map-open h2")).toHaveText(/Work|Intellectual/);
@@ -81,7 +81,7 @@ test("playing a run advances the axis that run is about, and the run says so", a
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => localStorage.setItem("adhdme.play.tutored", "1"));
   await page.goto("/my-map");
-  await expect(axis(page, "Physical")).toContainText("Not yet");
+  await expect(axis(page, "Physical")).toContainText("Unasked");
 
   await page.goto("/approach?module=sleep");
   await page.getByRole("button", { name: "Tap to play" }).click();
@@ -105,6 +105,6 @@ test("playing a run advances the axis that run is about, and the run says so", a
   await expect(page.locator(".play-map-moved")).toHaveText("Your map: Physical");
   await page.getByRole("link", { name: /Your map: Physical/ }).click();
   await expect(page).toHaveURL(/\/my-map$/);
-  await expect(axis(page, "Physical")).not.toContainText("Not yet");
-  await expect(axis(page, "Cultural values"), "one run moves its own axis and no other").toContainText("Not yet");
+  await expect(axis(page, "Physical")).not.toContainText("Unasked");
+  await expect(axis(page, "Cultural values"), "one run moves its own axis and no other").toContainText("Unasked");
 });

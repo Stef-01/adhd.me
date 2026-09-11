@@ -118,7 +118,7 @@ export function MyMap() {
       {/* The attribution, and nothing else. "Five of nine touched" stood here and was cut: the
           shape says it, and a count of a person is the one thing this page is built not to be. */}
       <p className="map-foot">
-        Dimensions from the <a href={NWIA_URL} rel="noreferrer noopener" target="_blank">{NWIA_NAME}</a>
+        Dimensions: <a href={NWIA_URL} rel="noreferrer noopener" target="_blank">{NWIA_NAME}</a>
       </p>
     </main>
   );

@@ -17,7 +17,8 @@ describe("the ladder", () => {
     expect(RUNGS.length).toBe(5);
     for (const rung of eachOf(RUNGS, "the rungs")) {
       expect(RUNG_LABEL[rung], rung).toBeTruthy();
-      expect(RUNG_LABEL[rung].split(/\s+/).length, rung).toBeLessThanOrEqual(3);
+      // One word each, because nine of them share a screen with a sixty-word ceiling.
+      expect(RUNG_LABEL[rung].split(/\s+/).length, rung).toBe(1);
       expect(RUNG_LABEL[rung], rung).not.toMatch(/\d/);
       expect(RUNG_BECAUSE[rung], rung).not.toMatch(/\d/);
     }

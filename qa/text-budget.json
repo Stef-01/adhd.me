@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-11T15:58:00.367Z",
+  "measuredAt": "2026-09-11T17:25:31.429Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -719,10 +719,10 @@
       "path": "/my-map",
       "name": "/my-map",
       "state": null,
-      "total": 54,
-      "fold": 26,
+      "total": 49,
+      "fold": 20,
       "chrome": 8,
-      "ratio": 1.4,
+      "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1227,20 +1227,20 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Nina starts small",
+          "w": 4,
+          "text": "Jax at the checkout",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "START SMALL!",
+          "w": 3,
+          "text": "ONLY THE LIST!",
           "tag": "p"
         },
         {
@@ -1308,10 +1308,10 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 54,
-      "fold": 37,
+      "total": 53,
+      "fold": 32,
       "chrome": 8,
-      "ratio": 1.4,
+      "ratio": 1.3,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1335,8 +1335,8 @@
       "path": "/my-map",
       "name": "Your map, lived in",
       "state": "map-lived",
-      "total": 57,
-      "fold": 22,
+      "total": 56,
+      "fold": 20,
       "chrome": 8,
       "ratio": 1.4,
       "verdict": "ceiling",

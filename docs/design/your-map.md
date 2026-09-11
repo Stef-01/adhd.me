@@ -22,7 +22,7 @@ either. It says a word. So this does:
 
 | Rung | What put it there |
 |---|---|
-| **Not yet** | Nothing has touched this. *Not a gap, unasked.* |
+| **Unasked** | Nothing has touched this. *Not a gap, unasked.* |
 | **Named** | You said something that lands here — a need, a confirmed insight, or "yes, this happens to me" on a run |
 | **Explored** | You went through a run about it |
 | **Kept** | You are carrying a strategy from it |
@@ -100,11 +100,11 @@ the map. The naming of every touched and untouched dimension is asserted on the 
 
 | Check | Result |
 |---|---|
-| Unit suite | 4,066 passed, 272 files |
+| Unit suite | 4,067 passed, 272 files |
 | `src/wellness/map.test.ts` | 19 — the ladder climbs, every rung is an act, a strategy that did not work is *Kept* and not *Working*, a strength is only claimed once something is finished |
 | e2e `my-map` | 4, including the loop end to end and with nothing seeded: an empty map, the sleep run played through the real UI to its last card, that card reading "Your map: Physical", its link followed, and the Physical axis moved off *Not yet* while Cultural values has not |
 | Axe, WCAG 2.1 AA, on the empty map and a lived-in one | clean |
-| Text budget | `/my-map` 54 words, lived in 57, against the 60 ceiling |
+| Text budget | `/my-map` 49 words, lived in 56, against the 60 ceiling |
 | e2e `controls`, `viewports` | 324 controls, 0 covered, 0 under 44px; no sideways scroll at 320 → 1440 |
 
 ## Three things the gates caught that review did not
@@ -124,6 +124,20 @@ All three were introduced by this change and found by a check rather than by loo
    the page 490px wide inside a 320px screen. `grid-template-columns: minmax(0, 1fr)` is the fix.
    Neither the games-fit gate nor the controls gate could see it — they measure height and targets
    — which is the argument for the suite having layers rather than one check.
+
+## Two words the budget chose, and one of them is better copy
+
+The lived-in map measured **62** the first time the instrument saw it whole, two over the ceiling,
+and the cheapest four words were on four axes all saying "Not yet". Every rung is one word now —
+*Unasked · Named · Explored · Kept · Working* — and **Unasked** is also the truer word: it puts the
+absence on the app, which has not asked, rather than on the person, who has not answered, and it is
+the word the balance line on My ADHD already uses. The footer lost two more ("Dimensions from the"
+→ "Dimensions:") with the attribution itself untouched. 56, with four words of headroom.
+
+Creativity is named on the **Intellectual** axis for the same reason a person would look for it
+there: the axis somebody is most likely to search for should say the word. The Institute's *label*
+is untouched; the meaning line is this app's own voice, which `src/wellness/nwia.ts` says in its
+header, and a test now pins both aspects the direction named by hand.
 
 ## A note on the count that was cut
 

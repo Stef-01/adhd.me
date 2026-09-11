@@ -430,7 +430,7 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
   await balance.getByRole("link", { name: "Your map" }).click();
   await expect(page).toHaveURL(/\/my-map$/);
   await expect(page.getByRole("button", { name: /^Work/ })).toContainText("Named");
-  await expect(page.getByRole("button", { name: /^Physical/ })).toContainText("Not yet");
+  await expect(page.getByRole("button", { name: /^Physical/ })).toContainText("Unasked");
   // The honest half, said per axis rather than in one long sentence: an untouched dimension is
   // not a gap in a person, and the map says so on the one the reader opens.
   await page.getByRole("button", { name: /^Physical/ }).click();
