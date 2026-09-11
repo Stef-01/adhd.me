@@ -42,7 +42,20 @@ jobs:
     # The suite measures ~8 minutes locally plus its own `next build`; the ceiling is
     # generous so a slow runner reports a real result rather than a timeout that reads
     # like a product failure.
-    timeout-minutes: 30
+    #
+    # 2026-09-11: it had stopped being generous, and the failure it was written to prevent is
+    # exactly the one it started causing. On the eight most recent pushes to main the job was
+    # CANCELLED at this ceiling, and the last of them (ddea8c7, this branch's base) shows what
+    # that means: 342 tests passed, none failed, and the wall clock ran out with about three
+    # left — `pnpm e2e` ran 23:30:40 to 00:00:10, the full thirty minutes. Nothing was broken
+    # and no run could say so, on any branch, for a day. The suite simply outgrew the number
+    # while the comment above kept describing the number as roomy.
+    #
+    # 45 puts about fourteen minutes back between the suite and the ceiling. Sharding it across
+    # jobs would buy more, and is the real answer if it outgrows this too — but not for free:
+    # playwright.config.ts pins `workers: 1` because the mock rail, console and audit stores are
+    # process-global singletons, so splitting the suite is a correctness change, not a config one.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
