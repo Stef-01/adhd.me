@@ -45,6 +45,7 @@ const SURFACES: ReadonlyArray<{ name: string; path: string; act?: (page: Page) =
     await p.getByRole("button", { name: "Skip this round" }).click();
   } },
   { name: "The Chaos Run", path: "/lives/play" },
+  { name: "The lab, one game", path: "/lives/lab/play?game=leo_mosquito" },
   { name: "Toolkit", path: "/lives/toolkit" },
   { name: "My ADHD", path: "/my-adhd" },
   { name: "Your map", path: "/my-map" },

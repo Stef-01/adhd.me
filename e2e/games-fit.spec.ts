@@ -36,6 +36,11 @@ const SURFACES: ReadonlyArray<{ name: string; path: string; act?: (page: Page) =
   } },
   { name: "The Chaos Run, title", path: "/lives/play" },
   { name: "The Chaos Run, first round", path: "/lives/play", act: async (p) => { await p.getByRole("button", { name: "Play", exact: true }).click(); await p.locator(".lives-scene").waitFor(); } },
+  // The lab's one-game run (added on main while this gate was being written). A game surface the
+  // gate did not know about is the case this file's own comment warns of: a game that fits only
+  // because somebody tuned its numbers stops fitting on the next one.
+  { name: "The lab, one game", path: "/lives/lab/play?game=leo_mosquito" },
+  { name: "The lab, one game playing", path: "/lives/lab/play?game=leo_mosquito", act: async (p) => { await p.getByRole("button", { name: "Play", exact: true }).click(); await p.locator(".lives-scene").waitFor(); } },
   { name: "A run inside a module, title", path: "/approach?module=starting" },
   { name: "A run inside a module, the memory round", path: "/approach?module=working-memory", act: async (p) => {
     await p.getByRole("button", { name: "Tap to play" }).click();
