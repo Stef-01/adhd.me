@@ -21,6 +21,8 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { expiryIsHit, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run, RELATE_BUTTONS, RELATE_PROMPT, relateFormFor } from "@/learn/play";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
+import { dimensionsOf } from "@/wellness/map";
+import { NWIA_LABELS } from "@/wellness/nwia";
 import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordRelate, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
 import { Mechanic, ownsScene } from "./mechanics";
@@ -74,6 +76,8 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
   const refresh = (r: ModelRecord) => setRecord(r);
   const next = useCallback(() => onStep(step + 1), [onStep, step]);
   const finish = () => { refresh(markModuleComplete(deviceLearningStorage, run.id)); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onFinish(); };
+  /** The axes this run moves, for the line on its last card. */
+  const moved = dimensionsOf(run.id).slice(0, 2);
   /** The reflect beat: save, check for safety, and either stop on the safety screen or move on. */
   const leaveReflection = () => {
     if (reflection.trim()) {
@@ -246,6 +250,13 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
                 )}
                 {run.next.action !== "try" && <button type="button" className="play-choice" onClick={finish}>Finish for now</button>}
               </div>
+              {/* The map moved, said where the moving happened. Two at most: this is a card with a
+                  budget, and the map itself is one tap away for the rest. */}
+              {moved.length > 0 && (
+                <p className="play-map-moved">
+                  <Link href="/my-map">Your map: {moved.map((d) => NWIA_LABELS[d]).join(" · ")}</Link>
+                </p>
+              )}
               <ShareRun runId={run.id} />
             </div>
           )}

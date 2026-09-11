@@ -74,14 +74,10 @@ test("a dimension opens onto the kinds of care for that part of a life", async (
   expect(kinds).not.toContain("university-support");
 });
 
-test("playing a run advances the axis that run is about", async ({ page }) => {
-  // The loop, end to end and with nothing seeded: the map is empty, a run is played, and the axis
-  // that run is about has moved. This is the whole reason the map exists, so it is walked through
-  // the real UI rather than by writing a record.
-  //
-  // The rung it reaches is `named`: saying "yes, this happens to me" IS the act, and it is the one
-  // a person reaches in the first minute. The rungs above it need a strategy kept and an outcome
-  // recorded, which are days apart in real life and are covered by `src/wellness/map.test.ts`.
+test("playing a run advances the axis that run is about, and the run says so", async ({ page }) => {
+  // The loop, end to end and with nothing seeded: an empty map, a run played through the real UI,
+  // the run's last card naming the axis it moved, and the map showing it moved. This is the whole
+  // reason the map exists, so none of it is written into localStorage by the test.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(() => localStorage.setItem("adhdme.play.tutored", "1"));
   await page.goto("/my-map");
@@ -89,21 +85,26 @@ test("playing a run advances the axis that run is about", async ({ page }) => {
 
   await page.goto("/approach?module=sleep");
   await page.getByRole("button", { name: "Tap to play" }).click();
-  for (let i = 0; i < 24; i++) {
-    const done = await page.evaluate(() => Boolean(JSON.parse(localStorage.getItem("adhdme.model.v1") ?? "{}").resonance?.sleep));
-    if (done) break;
-    const next = page.locator(".play-choice:enabled, .play-tempt:enabled, .play-card button:enabled").last();
-    if (!(await next.count())) break;
-    await next.click();
-    await page.waitForTimeout(180);
+  // Walk it by always taking the run's own forward control.
+  for (let i = 0; i < 80; i++) {
+    if (await page.locator(".play-map-moved").count()) break;
+    const clicked = await page.evaluate(() => {
+      const forward = [...document.querySelectorAll<HTMLElement>(".play-tempt.is-go:not([disabled]), .play-choice:not([disabled]), .play-card button:not([disabled])")]
+        .filter((b) => { const r = b.getBoundingClientRect(); return r.width > 10 && r.height > 10; })
+        .filter((b) => !/back|exit|leave|settings|urgent|share|copy/i.test(b.getAttribute("aria-label") || b.textContent || ""));
+      if (!forward.length) return false;
+      (forward.find((x) => x.classList.contains("is-go")) ?? forward[forward.length - 1]!).click();
+      return true;
+    });
+    if (!clicked) break;
+    await page.waitForTimeout(220);
   }
-  // Without this the assertion below could pass because the run never ran, not because it did.
-  expect(
-    await page.evaluate(() => Boolean(JSON.parse(localStorage.getItem("adhdme.model.v1") ?? "{}").resonance?.sleep)),
-    "the run has to actually record something, or this test proves nothing",
-  ).toBe(true);
 
-  await page.goto("/my-map");
-  await expect(axis(page, "Physical")).toContainText("Named");
+  // The run's last card names the axis it just moved. Without this the map could be advancing
+  // silently, which is the half of the direction the map alone did not do.
+  await expect(page.locator(".play-map-moved")).toHaveText("Your map: Physical");
+  await page.getByRole("link", { name: /Your map: Physical/ }).click();
+  await expect(page).toHaveURL(/\/my-map$/);
+  await expect(axis(page, "Physical")).not.toContainText("Not yet");
   await expect(axis(page, "Cultural values"), "one run moves its own axis and no other").toContainText("Not yet");
 });

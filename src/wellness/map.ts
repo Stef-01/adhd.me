@@ -175,6 +175,19 @@ export function personalMap(record: ModelRecord | null, profile: LearningProfile
   });
 }
 
+/**
+ * The dimensions a run lands on — what it moves when it finishes.
+ *
+ * The half of the direction the map alone did not do: the map advances when somebody plays, and
+ * until this the GAME never said so. A run's last card names the axes it just moved and links to
+ * them, so the loop is visible from inside the thing that drives it.
+ */
+export function dimensionsOf(moduleId: string): readonly NwiaDimension[] {
+  const module = INTERACTIVE_MODULES.find((m) => m.id === moduleId);
+  if (!module) return [];
+  return NWIA_DIMENSIONS.filter((d) => module.targets.some((t) => (NWIA_OF[t] ?? []).includes(d)));
+}
+
 /** The dimension to open the map on: the one furthest out, and the first of the nine on a tie. */
 export function strongest(points: readonly MapPoint[]): MapPoint {
   return [...points].sort((a, b) => RUNG_ORDER[b.rung] - RUNG_ORDER[a.rung])[0]!;

@@ -50,6 +50,18 @@ than as a second model:
 - the **kinds of care** an axis opens are the `professions` those same modules already name. A
   dimension cannot point at a kind of care that nothing teaching it points at.
 
+## The half the map alone did not do: the game says it moved
+
+The map advances when somebody plays, and until this the *game* never said so — which leaves the
+most motivating part of the direction ("as you do games it shows … and advance on the IVS map")
+invisible from inside the thing that drives it. A run's last card now names the axes it just moved
+and links to them: **"Your map: Physical"** at the end of the sleep run, at most two axes because
+that card has a budget and the map is one tap away for the rest.
+
+`dimensionsOf(moduleId)` is the one function behind it, and a test holds it to the same table the
+map reads, in both directions — a run may only ever move an axis it is listed under. Two readings
+of one table drifting apart is the failure `src/wellness/map.ts` exists to prevent.
+
 ## The matching wire-up: the holistic answer for one part of a life
 
 Opening a dimension and pressing *Who helps here* narrows the finder to **all** of that dimension's
@@ -88,9 +100,9 @@ the map. The naming of every touched and untouched dimension is asserted on the 
 
 | Check | Result |
 |---|---|
-| Unit suite | 4,063 passed, 272 files |
-| `src/wellness/map.test.ts` | 16 — the ladder climbs, every rung is an act, a strategy that did not work is *Kept* and not *Working*, a strength is only claimed once something is finished |
-| e2e `my-map` | 4, including the loop end to end: an empty map, a run played through the real UI, and the axis that run is about has moved — with a guard that fails if the run never recorded anything |
+| Unit suite | 4,066 passed, 272 files |
+| `src/wellness/map.test.ts` | 19 — the ladder climbs, every rung is an act, a strategy that did not work is *Kept* and not *Working*, a strength is only claimed once something is finished |
+| e2e `my-map` | 4, including the loop end to end and with nothing seeded: an empty map, the sleep run played through the real UI to its last card, that card reading "Your map: Physical", its link followed, and the Physical axis moved off *Not yet* while Cultural values has not |
 | Axe, WCAG 2.1 AA, on the empty map and a lived-in one | clean |
 | Text budget | `/my-map` 54 words, lived in 57, against the 60 ceiling |
 | e2e `controls`, `viewports` | 324 controls, 0 covered, 0 under 44px; no sideways scroll at 320 → 1440 |

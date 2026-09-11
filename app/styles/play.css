@@ -390,3 +390,8 @@ body:has(.play-run) { overflow-x: clip; }
   .play-card .play-clue { font-size: 0.875rem; }
   .play-recall .sim-list.play-table-list li { padding: 9px 11px; font-size: 0.9375rem; }
 }
+
+/* The line on a run's last card that names the axes it just moved (app/play/run-player.tsx).
+   A link in a sentence is a 20px target; this one is its own row, so it gets the tree's 44. */
+.play-map-moved { margin: 2px 0 0; font-size: 0.875rem; color: var(--play-ink); }
+.play-map-moved a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--play-blue, var(--accent-deep)); font-weight: 700; text-underline-offset: 3px; }

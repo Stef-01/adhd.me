@@ -7,7 +7,7 @@ import { PROFESSIONS } from "@/support/professions";
 import { emptyModel, type ModelRecord } from "@/model/store";
 import { emptyProfile } from "@/lives/profile";
 import { NWIA_DIMENSIONS } from "./nwia";
-import { NOT_TAUGHT, RUNGS, RUNG_BECAUSE, RUNG_LABEL, RUNG_REACH, kindsOn, modulesOn, personalMap, strongest } from "./map";
+import { NOT_TAUGHT, RUNGS, RUNG_BECAUSE, RUNG_LABEL, RUNG_REACH, dimensionsOf, kindsOn, modulesOn, personalMap, strongest } from "./map";
 
 const record = (over: Partial<ModelRecord> = {}): ModelRecord => ({ ...emptyModel(), ...over });
 const point = (r: ModelRecord, d: string) => personalMap(r, null).find((p) => p.dimension === d)!;
@@ -122,6 +122,27 @@ describe("personalMap", () => {
 
   it("does not fall over on a record whose fields are missing", () => {
     expect(() => personalMap({} as ModelRecord, {} as never)).not.toThrow();
+  });
+});
+
+describe("dimensionsOf", () => {
+  it("names the axes a run moves, so the run's last card can say where it moved them", () => {
+    // The sleep run is about the body; the money run is about the part of a life a bill lands in.
+    expect(dimensionsOf("sleep")).toContain("physical");
+    expect(dimensionsOf("sleep")).not.toContain("social");
+    expect(dimensionsOf("money")).toContain("finances");
+    expect(dimensionsOf("conflict")).toContain("social");
+  });
+
+  it("agrees with the map: a run only ever moves an axis it is listed under", () => {
+    // Two readings of the same table drifting apart is the failure this file exists to prevent.
+    for (const d of eachOf(NWIA_DIMENSIONS, "the wellness dimensions")) {
+      for (const m of modulesOn(d)) expect(dimensionsOf(m.id), `${m.id} on ${d}`).toContain(d);
+    }
+  });
+
+  it("says nothing about a module id it has never heard of", () => {
+    expect(dimensionsOf("not-a-module")).toEqual([]);
   });
 });
 
