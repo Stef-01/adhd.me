@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-11T13:09:58.351Z",
+  "measuredAt": "2026-09-11T15:58:00.367Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -503,8 +503,8 @@
       "path": "/lives/toolkit",
       "name": "/lives/toolkit",
       "state": null,
-      "total": 15,
-      "fold": 15,
+      "total": 17,
+      "fold": 17,
       "chrome": 8,
       "ratio": 0.4,
       "verdict": "target",
@@ -712,6 +712,33 @@
           "w": 4,
           "text": "My ADHD right now.",
           "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/my-map",
+      "name": "/my-map",
+      "state": null,
+      "total": 54,
+      "fold": 26,
+      "chrome": 8,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 11,
+          "text": "Sleep, movement, food and energy — the body the brain runs on.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Nothing yet. Not a gap, unasked.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "National Wellness Institute of Australia",
+          "tag": "a"
         }
       ]
     },
@@ -1200,20 +1227,20 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 9,
-      "fold": 9,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Jax at the checkout",
+          "w": 3,
+          "text": "Nina starts small",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "ONLY THE LIST!",
+          "w": 2,
+          "text": "START SMALL!",
           "tag": "p"
         },
         {
@@ -1281,10 +1308,10 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 53,
-      "fold": 32,
+      "total": 54,
+      "fold": 37,
       "chrome": 8,
-      "ratio": 1.3,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1300,6 +1327,33 @@
         {
           "w": 5,
           "text": "In common: adult ADHD assessment.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/my-map",
+      "name": "Your map, lived in",
+      "state": "map-lived",
+      "total": 57,
+      "fold": 22,
+      "chrome": 8,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 9,
+          "text": "Work and study: how tasks arrive, start and finish.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "You said a strategy here worked.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Once started, work often goes well",
           "tag": "p"
         }
       ]

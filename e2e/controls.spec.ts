@@ -47,6 +47,7 @@ const SURFACES: ReadonlyArray<{ name: string; path: string; act?: (page: Page) =
   { name: "The Chaos Run", path: "/lives/play" },
   { name: "Toolkit", path: "/lives/toolkit" },
   { name: "My ADHD", path: "/my-adhd" },
+  { name: "Your map", path: "/my-map" },
   { name: "Profile", path: "/profile" },
   { name: "Urgent help", path: "/urgent" },
 ];

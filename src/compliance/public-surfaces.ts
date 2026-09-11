@@ -145,6 +145,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "The triage layer's two questions (Charmaine Bernie, 2026-09-11: people land on the wrong waitlist for years because nothing separated the pathways first). Two taps and a kind of professional to go through, with the thing to ask them for. It routes and it never diagnoses, so every string on it answers to the patient rules — the table's own test sweeps them before they reach the screen.",
   },
   {
+    path: "/my-map",
+    audience: "patient",
+    why: "Your map (2026-09-11): the nine wellness dimensions as one shape, in the judge-screen form of a Pokémon IV chart. The most dangerous surface in the product to word carelessly, because a radar of a person is one adjective away from a score of one — so every rung is an ACT the person took and is named as one, and src/wellness/map.ts holds the reason in its header. It reads only this device and claims nothing about anybody.",
+  },
+  {
     path: "/profile",
     audience: "patient",
     why: "O233's Profile tab. It renders only what this device's own session already holds — the words the person described and the suburb they gave — so it publishes nothing and personalises nothing, but it is a patient-facing app surface and every sentence on it answers to the patient rules.",

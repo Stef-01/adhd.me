@@ -62,6 +62,9 @@ export const EXTRA = [
   { path: "/match/results", state: "intake", name: "Match results" },
   // The two questions (app/first-step.tsx). The walk reaches the first one on its own; the second
   // and the answer are taps, and a screen the instrument cannot reach is a screen nobody measured.
+  // Your map, in the state that matters: one a person has actually lived in, where every axis
+  // carries a word. The empty route is walked too and is the cheaper of the two.
+  { path: "/my-map", state: "map-lived", name: "Your map, lived in" },
   { path: "/first-step", state: "first-step-stage", name: "First step, the second question" },
   { path: "/first-step", state: "first-step-answer", name: "First step, the answer" },
   { path: "/match/prep", state: "intake", name: "Match prep" },
@@ -144,6 +147,22 @@ export async function reach(page, route, base) {
       await page.locator(".clinician-row").first().click();
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
+  }
+  if (route.state === "map-lived") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify({
+      v: 1,
+      onboarding: { improveFirst: "start-earlier", impact: 8, lookingFor: "professional", completedAt: new Date().toISOString() },
+      resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() }, sleep: { frequency: "often", cost: 7, priority: "yes", at: new Date().toISOString() } },
+      answers: { "starting.hardest-to-start": ["vague"] }, insights: {},
+      experiments: [
+        { strategyId: "first-physical-action", moduleId: "starting", acceptedAt: "2026-09-01T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-02T00:00:00Z" },
+        { strategyId: "wind-down", moduleId: "sleep", acceptedAt: "2026-09-03T00:00:00Z", outcome: "a-little", outcomeAt: "2026-09-04T00:00:00Z" },
+      ],
+      reflections: [], relates: {}, interpretations: [], safety: [], completed: ["starting", "sleep", "noise"],
+      survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+      manual: {}, medication: {}, checkpoints: [],
+    }));
+    await page.reload({ waitUntil: "networkidle" });
   }
   if (route.state === "first-step-stage" || route.state === "first-step-answer") {
     await page.getByRole("button", { name: "Me", exact: true }).click();

@@ -422,10 +422,19 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
     answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
   })), MODEL_KEY);
   await page.reload();
+  // The balance line used to name all nine dimensions twice, about thirty words to say what a
+  // shape says at a glance. The shape is /my-map; this is the count, the honest half ("unasked")
+  // and the door, and the naming of every touched and untouched dimension is asserted there.
   const balance = page.getByTestId("nwia-balance");
-  await expect(balance).toContainText(/touches work, spiritual values, intellectual/);
-  await expect(balance).toContainText(/Nothing yet on physical, social, emotional/);
-  await expect(balance).toContainText(/unasked/);
+  await expect(balance).toContainText(/3 of nine touched, the rest unasked/);
+  await balance.getByRole("link", { name: "Your map" }).click();
+  await expect(page).toHaveURL(/\/my-map$/);
+  await expect(page.getByRole("button", { name: /^Work/ })).toContainText("Named");
+  await expect(page.getByRole("button", { name: /^Physical/ })).toContainText("Not yet");
+  // The honest half, said per axis rather than in one long sentence: an untouched dimension is
+  // not a gap in a person, and the map says so on the one the reader opens.
+  await page.getByRole("button", { name: /^Physical/ }).click();
+  await expect(page.locator(".map-open")).toContainText("Nothing yet. Not a gap, unasked.");
 });
 
 test("§14 Calm: the shelf is a line, a button and the tiles; a finished run is a tick on its tile, never a count", async ({ page }) => {
