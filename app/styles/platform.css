@@ -140,13 +140,18 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
 .urgent-note { margin: 0; color: var(--muted); font-size: 0.9375rem; }
 @media (hover: hover) { .urgent-call:hover { border-color: var(--accent); } }
 
-/* At the narrowest width the header could not hold the brand, both utilities and the settings
-   control: measured 2026-09-11, 30px of sideways scroll at 320px, which is the fault
-   `e2e/viewports.spec.ts` exists to catch. Urgent help stays and "Help & answers" goes, because
-   the settings sheet below it already carries Questions (`app/app-settings.tsx`) and the urgent
-   route is the one thing in this header that must not be a tap deeper. */
-@media (max-width: 359px) {
+/* ON A PHONE THE HEADER HOLDS THE BRAND, URGENT HELP AND THE SETTINGS CONTROL, AND THAT IS ALL.
+   Measured 2026-09-11 at 320, 360, 390 and 430: with the gear rendered there is room for one more
+   utility, not two. At 320 the fourth made the header 30px wider than the screen — the fault
+   `e2e/viewports.spec.ts` exists to catch — and at 360 and 390 "Help & answers" wrapped onto two
+   lines inside a 75px header. Urgent help stays; "Help & answers" goes, because the gear
+   immediately beside it opens a sheet whose first entry is Questions, the same `/faq`
+   (`app/app-settings.tsx`), so the route survives one tap deeper, and the urgent route is the one
+   thing in this header that must not be. */
+@media (max-width: 479px) {
   .platform-help { display: none; }
+}
+@media (max-width: 359px) {
   .platform-header { padding-inline: 14px; gap: 10px; }
   .platform-brand { font-size: 17px; }
 }

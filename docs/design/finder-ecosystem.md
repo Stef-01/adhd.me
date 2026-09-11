@@ -71,6 +71,34 @@ The founder's call was to raise this one screen's ceiling to 72 rather than dele
 see `CEILING` in `scripts/text-budget-lib.mjs`, which records the reasoning and keeps every other
 screen at 60.
 
+### 3. The page that says "start from the problem" asked for a questionnaire first
+
+The finder's welcome screen offers **"Start from the problem"**, which is this product's whole
+thesis and her first driver in four words. It led to `/support`, which renders a ranked walk —
+the problem, what may help, what to try, when another person helps, which professions and why,
+each with `typicallyFor` and `whenToExplore` and a link into the finder narrowed to it. Good, and
+gated: it renders only once the personal model has derived a need, which means only after the ten
+onboarding questions.
+
+Everybody else — every first-time reader, which is everybody at the moment that link is most
+useful — saw: *"Nothing to walk from yet. Answer the ten questions and the path fills in."* A
+questionnaire, in answer to "I do not know what I need". That is her identification problem served
+back to the person who has it.
+
+**Now:** with nothing known, the page is the kinds of help themselves. Six rows, each a name and
+what it is for in three or four words, each opening the finder narrowed to that kind; the
+remaining five are one tap away. The ten questions are still offered and still produce the better,
+ranked version — they are an offer now rather than a toll.
+
+It claims no order, because it has not earned one (the taste sheet's honesty gate): the ranked
+version says "In order of fit for this problem", this one says what each kind is for and nothing
+about which is yours. The short lines live in the register beside the long ones
+(`inAWord` in `src/support/professions.ts`), each the compressed first clause of the
+`typicallyFor` above it rather than a new claim, and swept by the same patient-copy lint.
+
+Measured: `/support` went from 25 words of a dead end to 39 words of an answer — under the
+40-word target, not merely the ceiling.
+
 ## Not done, and why
 
 These are hers, they are real, and they are not in this change. Each is a piece of work rather than
@@ -85,9 +113,10 @@ a gap somebody forgot.
   refuses `waitTime` as "a performance claim about a practice, derived from data whose completeness
   the product cannot vouch for". Her point is about communicating a wait honestly, which is
   compatible with that refusal, but publishing a number the tree cannot stand behind is not.
-- **A triage layer at intake** that routes to the right list the first time. The band above is the
-  navigation half of this; the triage half — asking the few questions that separate pathways before
-  any list is shown — is a flow, not a component.
+- **A triage layer at intake** that routes to the right list the first time. Three of its four
+  parts are now here — the kinds a search reaches, what each kind is for, and a cold page that
+  answers rather than asks — but the fourth, asking the two or three questions that actually
+  separate pathways before any list is shown, is a flow, not a component.
 - **Narrowing the whole product's language to 16–25.** Her strongest recommendation, and the one
   with the widest blast radius: every screen's copy, the onboarding, the games' framing. Worth doing
   deliberately rather than as a side effect of a design pass.
@@ -103,7 +132,9 @@ a gap somebody forgot.
 | e2e `finder-flow` (16 tests, the flow this change touches) | 16 passed |
 | Axe, WCAG 2.1 AA, on the surfaces this change added: `/urgent` at 390 and 1280, the results band at 390, the band with a kind picked | clean — after one finding it caught and this change fixed: `role="group"` on the band's `<ul>` overrode the list semantics and left three `<li>` with no list parent |
 | Sideways scroll at 320, 360, 390, 430, 768 and 1024, on `/`, `/today` and `/urgent` | none — after one finding it caught: the urgent pill made the header 30px too wide at 320px, so below 360px the header keeps Urgent help and drops "Help & answers", which the settings sheet already carries |
-| Text budget, 32 app screens | 0 over; median 27; `/urgent` 37 words; the finder's results 63 against its raised ceiling of 72 |
+| Text budget, 32 app screens | 0 over; median 30; `/support` 39 and `/urgent` 37, both under the 40-word target; the finder's results 63 against its raised ceiling of 72 |
+| e2e `finder-flow`, `app-shell` after the cold support path | 36 passed |
+| The header at 320, 360, 390, 430, 480, 768, 1024 and 1280 | no sideways scroll, urgent help present at every width, "Help & answers" from 480 up — it wrapped onto two lines inside a 75px header at 360 and 390, and the gear beside it opens the same `/faq` |
 
 Captures for this change are in `qa/` per the review procedure; the games' own captures stay
 uncommitted (`qa/games/` is ignored).
