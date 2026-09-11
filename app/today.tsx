@@ -6,11 +6,13 @@
 // replaces all of it with the safety screen.
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LearningScene } from "./learning-scene";
 import { ArrowRight } from "@phosphor-icons/react";
 import { isComplete } from "@/model/onboarding";
 import { recommend } from "@/model/recommend";
-import { acknowledgeSafety, activeSafety, recordOutcome, type ExperimentOutcome } from "@/model/store";
+import { acknowledgeSafety, activeSafety, recordCheckpoint, recordOutcome, type ExperimentOutcome } from "@/model/store";
+import { CHECKPOINT_LABEL, dueCheckpoint, type CheckpointAnswer, type CheckpointMonths } from "@/model/checkpoint";
 import { track } from "@/model/events";
 import { LifeHeader, WhyThis } from "./life-shell";
 import { SafetyScreen } from "./safety-screen";
@@ -23,10 +25,23 @@ const OUTCOMES: ReadonlyArray<{ id: ExperimentOutcome; label: string }> = [
   { id: "didnt-try", label: "Didn’t try" },
 ];
 
+/** What a person can say at a checkpoint, and where each answer goes. */
+const CHECKPOINT_ANSWERS: ReadonlyArray<{ id: CheckpointAnswer; label: string }> = [
+  { id: "still-looking", label: "Still looking" },
+  { id: "found-care", label: "Found someone" },
+  { id: "not-now", label: "Not now" },
+];
+
 export function Today() {
+  const router = useRouter();
   const { record, refresh, storage } = useModel();
   const safety = record ? activeSafety(record) : null;
   const rec = record ? recommend(record) : null;
+  // The waiting checkpoint (src/model/checkpoint.ts) takes the card when one is due. It REPLACES
+  // the recommendation rather than sitting above it: this page is one card and one control by
+  // design, and at six months of silence the honest most-useful-thing is to ask where somebody
+  // got to, not to offer them a module.
+  const due: CheckpointMonths | null = record ? dueCheckpoint(record) : null;
 
   return (
     <main id="main-content" className="me-screen life-screen app-page-with-tabs">
@@ -53,7 +68,33 @@ export function Today() {
         </section>
       )}
 
-      {record && !safety && isComplete(record.onboarding) && rec && (
+      {record && !safety && isComplete(record.onboarding) && due && (
+        <section className="life-card is-lead" aria-labelledby="today-checkpoint" data-checkpoint={due}>
+          <h2 id="today-checkpoint">{CHECKPOINT_LABEL[due]} since you started.</h2>
+          <div className="resonance-row" role="group" aria-label="Where did you get to">
+            {CHECKPOINT_ANSWERS.map((a) => (
+              <button
+                key={a.id}
+                type="button"
+                className="learn-chip"
+                onClick={() => {
+                  refresh(recordCheckpoint(storage, due, a.id));
+                  track("CHECKPOINT_ANSWERED", { months: due, answer: a.id });
+                  // "Still looking" is an answer AND a request: the useful thing for somebody who
+                  // says it is the search, not a confirmation they have to tap past. A separate
+                  // "Search again" link sat here first and read as a fourth answer to the
+                  // question, which is worse than one control doing the obvious thing.
+                  if (a.id === "still-looking") router.push("/");
+                }}
+              >
+                {a.label}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {record && !safety && isComplete(record.onboarding) && !due && rec && (
         <section className="life-card is-lead" aria-labelledby="today-action" data-action={rec.action}>
           <h2 id="today-action">{rec.heading}</h2>
           <p>{rec.body}</p>

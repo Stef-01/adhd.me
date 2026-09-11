@@ -99,16 +99,48 @@ about which is yours. The short lines live in the register beside the long ones
 Measured: `/support` went from 25 words of a dead end to 39 words of an answer — under the
 40-word target, not merely the ceiling.
 
+### 4. Six months of silence looked exactly like day one
+
+Her second driver is what happens *while* people wait, and her sharpest point is about the
+communication rather than the wait: "breached promises erode trust quickly — if a quoted wait time
+passes with no contact, people become angry", and simple, honest, consistent communication builds
+trust cheaply. Her recommended cadence for confirming somebody still needs a service, and has not
+already found care elsewhere, is roughly **six months, twelve months and two years**.
+
+Opening this app after six months showed exactly what day one showed. Nothing acknowledged that
+half a year had gone by — which is the silence she described, rendered.
+
+**Now:** a checkpoint takes the Today card when one is due. It says how long it has been and asks
+where they got to: *Still looking* (which records the answer and takes them to the finder, because
+that is the useful thing for somebody who says it), *Found someone*, or *Not now*. The clock starts
+at onboarding, the first moment the device holds anything about this person.
+
+Three behaviours worth naming, each with a test in `src/model/checkpoint.test.ts`:
+
+- somebody returning after **thirty months** is asked the two-year question **once**, not walked
+  through a queue of three;
+- **"Found someone" ends the checkpoints for good** — the review exists partly to learn that
+  somebody already found care, and asking again after they say so is the opposite of listening;
+- **"Not now" skips only its own checkpoint**; the next one still comes.
+
+**Half of her recommendation, and the header of `src/model/checkpoint.ts` says which half.** The
+proactive contact — arriving at the promised time whether or not a service can be offered — needs a
+channel this product does not have, and that is below. This is the half that can be done honestly
+without one: stop pretending no time has passed. It makes no promise about a wait, because the app
+holds no waitlist and no place for anybody; it asks.
+
+Measured: `/today` with a checkpoint due is 14 words.
+
 ## Not done, and why
 
 These are hers, they are real, and they are not in this change. Each is a piece of work rather than
 a gap somebody forgot.
 
-- **A communications / check-in engine** (her cadence: 6 months, 12 months, 2 years; a proactive
-  contact at the promised time whether or not a service can be offered yet; "breached promises
-  erode trust quickly"). This product holds no account and sends no message to a patient — there is
-  no identity, no address and no server-side record of a person — so the engine is not a screen but
-  a decision about what the product is. It is the single largest item on her list.
+- **The reaching-out half of the check-in engine.** The cadence and the question are now in the
+  product (above), but they only arrive when somebody opens the app. A contact that arrives at the
+  promised time *whether or not they open it* needs an identity, an address and a server-side record
+  of a person, none of which this product has — so that half is a decision about what the product is
+  rather than a screen, and it stays the largest item on her list.
 - **Wait-time transparency on a provider.** Deliberate, and not an oversight: `src/directory/profile.ts`
   refuses `waitTime` as "a performance claim about a practice, derived from data whose completeness
   the product cannot vouch for". Her point is about communicating a wait honestly, which is
