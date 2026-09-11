@@ -140,6 +140,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "Questions a person searching for ADHD care arrives with, answered as administrative fact. The single likeliest page to be quoted back to somebody, so its copy is held to every patient rule including the ones about claims and conditions.",
   },
   {
+    path: "/first-step",
+    audience: "patient",
+    why: "The triage layer's two questions (Charmaine Bernie, 2026-09-11: people land on the wrong waitlist for years because nothing separated the pathways first). Two taps and a kind of professional to go through, with the thing to ask them for. It routes and it never diagnoses, so every string on it answers to the patient rules — the table's own test sweeps them before they reach the screen.",
+  },
+  {
     path: "/profile",
     audience: "patient",
     why: "O233's Profile tab. It renders only what this device's own session already holds — the words the person described and the suburb they gave — so it publishes nothing and personalises nothing, but it is a patient-facing app surface and every sentence on it answers to the patient rules.",

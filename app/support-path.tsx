@@ -178,8 +178,12 @@ function ColdKinds({ seeProviders }: { seeProviders: (p: Profession) => void }) 
           All {PROFESSION_ENTRIES.length} kinds
         </button>
       )}
+      {/* Two questions, not ten. This line used to offer the onboarding, which is the toll the
+          audit caught this page charging in the first place (docs/design/finder-ecosystem.md §3);
+          /first-step answers the same "not sure" in two taps, and the ten questions are still
+          offered on Today, in the tab bar and in the settings sheet. */}
       <p className="cold-start">
-        <Link href="/start">Not sure? Ten questions</Link>
+        <Link href="/first-step">Not sure? Two questions</Link>
       </p>
     </section>
   );

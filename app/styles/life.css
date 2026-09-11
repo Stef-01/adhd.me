@@ -319,4 +319,20 @@
 @media (hover: hover) { .cold-kind:hover { border-color: var(--accent); background: var(--accent-soft); } }
 .cold-all { width: 100%; justify-content: center; }
 .cold-start { margin: 4px 0 0; }
+
+/* ── The two questions, before any list (app/first-step.tsx) ──────────────────────────────────
+   The answers borrow `.cold-kind` deliberately: a row on this screen and a row on the cold
+   `/support` do the same job — one thing to read, the whole row is the target — and two shapes
+   for one job is how a product stops looking like itself. These are buttons rather than links,
+   so the three declarations a `<button>` does not inherit are here and nowhere else. */
+.first-step-answers button.cold-kind { width: 100%; font: inherit; text-align: left; cursor: pointer; }
+.first-step-answer { display: grid; gap: 10px; }
+.first-step-answer p { margin: 0; font-size: 1.0625rem; }
+.first-step-note { color: var(--muted); font-size: 0.9375rem; }
+.first-step-answer .learn-secondary { justify-self: start; }
+.first-step-back {
+  border: 0; padding: 0; background: none; font: inherit; color: var(--muted);
+  font-size: 0.9375rem; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;
+}
+.first-step-back:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .cold-start a { color: var(--muted); font-size: 0.9375rem; text-underline-offset: 4px; }

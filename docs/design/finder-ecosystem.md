@@ -131,6 +131,49 @@ holds no waitlist and no place for anybody; it asks.
 
 Measured: `/today` with a checkpoint due is 14 words.
 
+### 5. Nothing separated the pathways before the list
+
+This is the fourth part of her triage layer, and the audit above recorded it as the one still
+missing: "asking the two or three questions that actually separate pathways before any list is
+shown, is a flow, not a component". Three parts were here — the kinds a search reaches, what each
+kind is for, and a cold page that answers rather than asks — and all three help somebody who is
+already looking at a list. Her evidence is about the people who never should have been looking at
+that list: children left on an autism assessment waitlist for two years when it was never the right
+pathway, and her own test of "which GP can diagnose ADHD" that found very little useful.
+
+**Now:** `/first-step`, reachable from the finder's welcome — the screen before any list — and from
+the cold `/support`. Two taps:
+
+- **Who is this for?** Me, or a child or teenager. The coarsest fork there is, and the one her
+  misrouting evidence is literally about.
+- **Where are you up to?** Still finding out, on medication and sorting the dose, or the day-to-day
+  is hard.
+
+Six answers, each a kind of professional and the thing to ask them for. Four of the six go through
+a GP, and that is the Australian shape rather than a flat table: the GP is the gateway to an adult
+assessment in NSW and Queensland and to a paediatric referral everywhere, so the useful thing a
+triage can tell most people is WHAT TO ASK FOR when they get there — *"ask for a paediatrician who
+assesses ADHD, by name"*, with *"the autism assessment list is a different list"* under it. The two
+that do not go through a GP are her second driver: a psychologist, an OT or a coach, without a
+referral, because none of it waits on an assessment.
+
+**Two questions, not three, and never ten.** `src/matching/clarify.ts` already states the rule this
+obeys — a question earns its place only if the answer changes the answer — and a test asserts both
+questions move somebody somewhere, so neither can decay into decoration. §3 above is why the
+ceiling is two taps: the version of this page that asks first is the identification problem served
+back to the person who has it, and a third question that changes only the wording on the card would
+be a toll on exactly the reader who came here because they did not know where to start. For the
+same reason the cold `/support`'s "not sure" line now offers the two questions rather than the ten
+— the onboarding is still offered on Today, in the tab bar and in the settings sheet.
+
+**It routes, it does not diagnose.** Every row names a kind of professional and a thing to ask for;
+nothing decides whether anybody has ADHD. The patient copy linter proved that was not merely an
+intention — it rejected three strings on the first run ("prescribes", "diagnosis" twice), and the
+table is swept by it in `src/support/pathway.test.ts` before a word reaches the screen.
+
+Measured: 9 words on the first question, 18 on the second, 28 on the answer. Nothing is remembered:
+the two answers write one filter into the finder and are gone.
+
 ## Not done, and why
 
 These are hers, they are real, and they are not in this change. Each is a piece of work rather than
@@ -145,10 +188,6 @@ a gap somebody forgot.
   refuses `waitTime` as "a performance claim about a practice, derived from data whose completeness
   the product cannot vouch for". Her point is about communicating a wait honestly, which is
   compatible with that refusal, but publishing a number the tree cannot stand behind is not.
-- **A triage layer at intake** that routes to the right list the first time. Three of its four
-  parts are now here — the kinds a search reaches, what each kind is for, and a cold page that
-  answers rather than asks — but the fourth, asking the two or three questions that actually
-  separate pathways before any list is shown, is a flow, not a component.
 - **Narrowing the whole product's language to 16–25.** Her strongest recommendation, and the one
   with the widest blast radius: every screen's copy, the onboarding, the games' framing. Worth doing
   deliberately rather than as a side effect of a design pass.
