@@ -331,8 +331,9 @@
 .first-step-note { color: var(--muted); font-size: 0.9375rem; }
 .first-step-answer .learn-secondary { justify-self: start; }
 .first-step-back {
-  border: 0; padding: 0; background: none; font: inherit; color: var(--muted);
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px;
+  border: 0; background: none; font: inherit; color: var(--muted);
   font-size: 0.9375rem; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;
 }
 .first-step-back:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.cold-start a { color: var(--muted); font-size: 0.9375rem; text-underline-offset: 4px; }
+.cold-start a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 0.9375rem; text-underline-offset: 4px; }

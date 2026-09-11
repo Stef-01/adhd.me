@@ -250,3 +250,63 @@ Two spec changes this caused, both recorded rather than quietly made: `data-caug
 regulation meter are read on the routine's first screen now, because that screen still holds the
 round's last frame — had the swarm unmounted on the final catch, as the first version did, neither
 count would have had a reader and the proof that all twelve were caught would have been lost.
+
+## Stage 8: the other two reasons a button misses (2026-09-11)
+
+Founder direction: "make sure buttons work all the time consistently." Stage 6 fixed *handlers* —
+drags that swallowed the tap they should have been, a `pointercancel` nobody let go of, a chosen
+answer that looked unchosen. That is one of three reasons a button does not work. The other two are
+geometric, they are not specific to the games, and nothing in the tree was measuring them:
+
+1. **Something is painted over it.** The tap lands on whatever `elementFromPoint` returns.
+2. **It is too small.** A 19px line of text is a 19px target.
+
+### What the measurement found, and what it got wrong twice
+
+285 controls, 15 screens, two widths.
+
+**Covered: none.** The first pass reported two — `/support`'s "Not sure? Two questions" and the
+Learn page's thesis link, both "covered by the tab bar". Both were wrong: the controls were simply
+**below the fold**, and the instrument had not scrolled to them. Scrolled to, both clear the bar by
+the 76px the shell already reserves. *(This is the second time in this session a probe that skipped
+a scroll manufactured a defect; the first was a games tile at y=898 in an 844-tall viewport.)*
+
+**Too small: nine controls**, and the first size pass was wrong about three of them too. Measuring
+`getBoundingClientRect()` called the filters screen's *Reset all* (68×32) and its close control
+(32×32) failures — but both extend their hit area with `::after { inset: -6px … }`, a rule this
+tree already uses deliberately. So the measurement became **the effective target**: walk outward
+from the centre asking `elementFromPoint` where each point lands, which is the question a thumb
+asks. Reset all and the close control passed on the second pass without a line of CSS changing.
+
+The nine that were genuinely small, with the effective height each could be hit over:
+
+| Control | Was | Now |
+|---|---|---|
+| "Help & answers ↗", the header, every screen | 22px | 44 |
+| "Not sure? Two questions", cold `/support` | 20px | 44 |
+| "All strategies" and "Play", the toolkit's footer line | 20px | 44, via `::after` — they sit inside one sentence with a "·" between them, so the target grows and the line does not |
+| Leo's mute control | 36px | 44 |
+| The Urgent help pill, every patient screen | 34px phone / 36px desktop | 44 |
+| "Back", `/first-step` | 24px | 44 |
+| "Try an example search", the finder welcome | 42px | 44 |
+
+24px is WCAG 2.2 SC 2.5.8's legal floor and four of these were under it. 44 is this tree's own
+rule, stated in `app/app-tabs.tsx`: *"well over the 44–48px floor and far over WCAG 2.2's 24px
+legal minimum, which is a floor and not a design target."* The rule was written down and then not
+applied outside the bar that stated it.
+
+The Urgent help pill growing from 34 to 44 is the one with a cost, and it was measured: no sideways
+scroll and no wrapped header at 320, 360, 390, 430, 480, 768, 1024, 1280 or 1440, with the header
+still 75px on a phone.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| Reachability and effective target, 285 controls × 15 screens × 2 widths | 0 covered, 0 under 44px — before: 0 covered, 43 under |
+| A realistic thumb (press, 6 frames of drift, a 120ms rest, release) on 9 new or changed controls at 0, 8, 20, 40 and 70px of drift | 45 of 45 acted |
+| The header at 320 → 1440 | no sideways scroll, no wrap, pill 44px at every width |
+| e2e `controls`, `games-fit`, `leo-mosquito`, `app-shell`, `viewports` | see the commit |
+
+`e2e/controls.spec.ts` is the gate, and it asks both geometric questions. Proved non-vacuous by
+putting Leo's mute control back to 36px: it fails with four named lines.

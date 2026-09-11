@@ -145,7 +145,12 @@
 .lives-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
 .lives-saved { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; color: var(--route-strong, #0e8345); font-size: 0.9rem; font-weight: 700; }
 .lives-foot { margin: 8px 0 0; text-align: center; color: var(--muted); font-size: 0.9375rem; }
-.lives-foot a { color: var(--accent-deep); font-weight: 700; }
+.lives-foot a { position: relative; color: var(--accent-deep); font-weight: 700; }
+/* A 20px line of text is a 20px target, under WCAG 2.2's 24px floor and well under this tree's
+   own 44. These two sit inside one sentence with a "·" between them, so the target grows without
+   the line growing — the same `::after` the filters screen's Reset all uses. The 6px of side
+   reach is narrower than the separator, so the two never overlap each other. */
+.lives-foot a::after { content: ""; position: absolute; inset: -12px -6px; }
 
 /* ── Screens: home, learn, toolkit, characters, lab ────────────────────────────────────────── */
 .lives-screen { padding-bottom: 96px; }
