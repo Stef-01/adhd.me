@@ -73,16 +73,46 @@ export function LeoBedroom({ asleep = false, moving = false, regulation = 100, w
 }
 
 function Mosquito({ annoyed, hit }: { annoyed: boolean; hit: boolean }) {
-  return <svg viewBox="0 0 100 100" aria-hidden="true" className="leo-mosquito-art">
+  return <svg viewBox="0 0 100 100" aria-hidden="true" className="leo-mosquito-art" style={{ overflow: "visible" }}>
+    <defs>
+      <mask id="mosquito-body-mask">
+        <rect x="0" y="0" width="100" height="100" fill="white" />
+        <ellipse cx="49" cy="61" rx="14" ry="28" fill="black" transform="translate(-2, -3) scale(1.02)" />
+      </mask>
+      <mask id="mosquito-head-mask">
+        <rect x="0" y="0" width="100" height="100" fill="white" />
+        <circle cx="49" cy="35" r="14" fill="black" transform="translate(-2, -2) scale(1.02)" />
+      </mask>
+    </defs>
+
     {!hit && <g className="leo-buzz-lines" fill="none" stroke="#67547b" strokeWidth="2.5" strokeLinecap="round"><path d="M9 37q-9 13 0 26m82-26q9 13 0 26" /><path d="M3 29q-14 22 0 43m94-43q14 22 0 43" opacity=".45" /></g>}
-    <g className="leo-wing leo-wing-left"><ellipse cx="31" cy="33" rx="15" ry="23" transform="rotate(-35 31 33)" fill="#fffaf0" stroke="#3a355f" strokeWidth="3" /></g>
-    <g className="leo-wing leo-wing-right"><ellipse cx="68" cy="33" rx="15" ry="23" transform="rotate(35 68 33)" fill="#fffaf0" stroke="#3a355f" strokeWidth="3" /></g>
-    <path d="m34 63-16 10m20 2-10 15m33-27 19 10M59 76l11 14M44 33l-6-16m17 16 7-17" stroke="#3a355f" strokeWidth="4" strokeLinecap="round" />
-    <ellipse cx="49" cy="61" rx="19" ry="26" fill={hit ? "#efd791" : "#f7c75d"} stroke="#3a355f" strokeWidth="3" />
-    <path d="M31 60h37m-33 11h29" stroke="#3a355f" strokeWidth="7" />
-    <ellipse cx="49" cy="40" rx="21" ry="18" fill="#f1b582" stroke="#3a355f" strokeWidth="3" />
-    {hit ? <path d="m37 35 7 7m0-7-7 7m18-7 7 7m0-7-7 7" stroke="#3a355f" strokeWidth="3" strokeLinecap="round" /> : <><circle cx="40" cy="38" r="3" fill="#3a355f" /><circle cx="58" cy="38" r="3" fill="#3a355f" /><path d={annoyed ? "M35 30l10 3m9 0 10-3" : "M43 48q7 5 13-1"} stroke="#3a355f" strokeWidth="3" strokeLinecap="round" fill="none" /></>}
-    <path d="M68 43h17" stroke="#3a355f" strokeWidth="3" strokeLinecap="round" />
+    
+    {/* Wings */}
+    <g className="leo-wing leo-wing-left">
+      <ellipse cx="35" cy="40" rx="10" ry="26" transform="rotate(-45 35 40)" fill="#f0f6fc" />
+      <ellipse cx="36" cy="41" rx="8" ry="24" transform="rotate(-45 36 41)" fill="#ffffff" />
+    </g>
+    <g className="leo-wing leo-wing-right">
+      <ellipse cx="63" cy="40" rx="10" ry="26" transform="rotate(45 63 40)" fill="#f0f6fc" />
+      <ellipse cx="62" cy="41" rx="8" ry="24" transform="rotate(45 62 41)" fill="#ffffff" />
+    </g>
+
+    {/* Long Spindly Legs */}
+    <path d="M49 61l-24 16m24-16l24 16M49 50l-26 5m26-5l26 5M49 40l-22-10m22 10l22-10" stroke="#3a355f" strokeWidth="3" strokeLinecap="round" fill="none" />
+    
+    {/* Proboscis (Needle) */}
+    <path d={hit ? "M49 21l-4-10m4 10l4-10" : "M49 21v-16"} stroke="#3a355f" strokeWidth="3" strokeLinecap="round" />
+    
+    {/* Slender Abdomen */}
+    <ellipse cx="49" cy="61" rx="14" ry="28" fill={hit ? "#b0b4be" : "#7d8494"} />
+    <ellipse cx="49" cy="61" rx="14" ry="28" fill="#000" fillOpacity="0.25" mask="url(#mosquito-body-mask)" />
+    
+    {/* Head/Thorax */}
+    <circle cx="49" cy="35" r="14" fill="#6679b9" />
+    <circle cx="49" cy="35" r="14" fill="#000" fillOpacity="0.25" mask="url(#mosquito-head-mask)" />
+    
+    {/* Eyes */}
+    {hit ? <path d="m42 30 5 5m0-5-5 5m14-5 5 5m0-5-5 5" stroke="#3a355f" strokeWidth="2.5" strokeLinecap="round" /> : <><circle cx="44" cy="33" r="3.5" fill="#3a355f" /><circle cx="54" cy="33" r="3.5" fill="#3a355f" /><path d={annoyed ? "M40 26l8 3m6 0 8-3" : "M44 42q5 4 10 0"} stroke="#3a355f" strokeWidth="2.5" strokeLinecap="round" fill="none" /></>}
   </svg>;
 }
 
