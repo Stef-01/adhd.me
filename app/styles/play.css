@@ -177,8 +177,12 @@ body:has(.play-run) { overflow-x: clip; }
 .play-object .play-glyph { width: 40px; height: 40px; padding: 8px; border-radius: 12px; background: var(--play-soft); color: var(--play-blue); }
 .play-object[aria-pressed="true"] { box-shadow: 0 7px 0 color-mix(in srgb, var(--play-blue) 30%, transparent); }
 .play-object[aria-pressed="true"] .play-glyph { background: var(--play-blue); color: var(--play-paper); }
-.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--play-blue); color: var(--play-paper); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
-.play-tempt.is-go { background: var(--play-blue); color: var(--play-paper); }
+/* The run palette is declared on .play-run, and this button is also the Play card's button on the
+   Learn page, outside any run: there --play-blue did not resolve, the whole declaration fell away
+   and the most important button on the page rendered as a white pill on pale stone (2026-09-11).
+   The fallback is the platform accent, which is what the run's blue is a shade of. */
+.play-tempt { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 28px; border: 0; border-radius: 999px; background: var(--play-blue, var(--accent)); color: var(--play-paper, var(--paper)); font: inherit; font-size: 1.0625rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+.play-tempt.is-go { background: var(--play-blue, var(--accent)); color: var(--play-paper, var(--paper)); }
 .play-tempt:disabled { opacity: 0.5; cursor: default; }
 .play-dont { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .play-hold { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
@@ -349,3 +353,45 @@ body:has(.play-run) { overflow-x: clip; }
 .play-card.is-title:has(.play-place) > :not(.play-place) { z-index: 2; }
 /* Stage 4: the note's outlines are strokes. The class fills beat the fill="none" attribute and painted the note a solid slab. */
 .play-note-art [fill="none"] { fill: none; }
+
+/* ── A game fills the screen and never scrolls (founder, 2026-09-11) ──────────────────────────
+   Measured before this: `/approach?module=…` ran 48px past the viewport at EVERY width, and the
+   48 was the app shell's bottom padding — the gutter under a tab bar that a run hides anyway.
+   The Chaos Run at `/lives/play` never had it, because `.me-screen:has(.lives-run)` already
+   dropped the padding for the same reason; a run inside a learn module is the same screen and
+   carries `.play-run` instead. One rule, both entrances.
+
+   The stage is then EXACTLY the viewport rather than at least it, and the card inside may not
+   grow past the stage that holds it: a round whose buttons are below the fold is a round with no
+   buttons, and clipping them is the failure this is meant to stop, so the card scrolls nothing
+   and shrinks instead. */
+.platform-shell .me-screen:has(.play-run) { padding: 0; max-width: none; }
+.play-run { height: 100svh; overflow: hidden; }
+.play-stage { height: 100svh; min-height: 0; }
+.play-card { height: 100%; min-height: 0; }
+
+/* WHAT GIVES, AND IN WHICH ORDER. The card has four rows — the instruction, the clue, the picture
+   and the controls — and on a short screen they do not all fit: measured at 320x568 the memory
+   round wanted 777px of a 568px screen, and because the card hides its overflow the 209px that did
+   not fit were the CONTROLS, silently clipped. That is worse than scrolling, which is why this is
+   a fit and not a scrollbar.
+
+   The picture is the row that gives. It was `flex: 1 0 auto` with a hard 236px floor, so it could
+   only grow; it can now shrink to a band. Below 700px of viewport the whole card tightens with it
+   — one query rather than a rule per game, because every round is built from these same four rows
+   and a game that fits only because somebody tuned its own numbers will stop fitting on the next
+   one. The controls are never touched: they are the game. */
+.play-card > .play-scene { flex-shrink: 1; min-height: clamp(96px, 24svh, 236px); }
+@media (min-width: 768px) { .play-card > .play-scene { min-height: clamp(120px, 26svh, 320px); } }
+@media (max-height: 700px) {
+  .play-card { padding: 60px 14px 18px; gap: 8px; }
+  .play-card > .play-scene { min-height: clamp(72px, 15svh, 160px); }
+  .play-card .play-title { font-size: clamp(1.1875rem, 5.4vw, 1.5rem); }
+  .play-card .play-clue { font-size: 0.875rem; }
+  .play-recall .sim-list.play-table-list li { padding: 9px 11px; font-size: 0.9375rem; }
+}
+
+/* The line on a run's last card that names the axes it just moved (app/play/run-player.tsx).
+   A link in a sentence is a 20px target; this one is its own row, so it gets the tree's 44. */
+.play-map-moved { margin: 2px 0 0; font-size: 0.875rem; color: var(--play-ink); }
+.play-map-moved a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--play-blue, var(--accent-deep)); font-weight: 700; text-underline-offset: 3px; }

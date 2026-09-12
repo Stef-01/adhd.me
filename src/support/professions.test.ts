@@ -7,8 +7,12 @@ describe("professions", () => {
   it("cover the PRD's six P0 and five P1 kinds, each with copy that passes the patient rules", () => {
     expect(PROFESSIONS.length).toBe(11);
     for (const p of eachOf(PROFESSION_ENTRIES, "the professions")) {
-      expect(lintLandingCopy(`${p.label}. ${p.typicallyFor} ${p.whenToExplore}`), p.id).toEqual([]);
+      // `inAWord` is swept with the rest: it is the line a person who has told the app nothing
+      // reads on /support, which makes it the most patient-facing copy in this file.
+      expect(lintLandingCopy(`${p.label}. ${p.typicallyFor} ${p.whenToExplore} ${p.inAWord}`), p.id).toEqual([]);
       expect(p.cues.length).toBeGreaterThan(0);
+      // Three or four words, or it is not the short form the cold list needs.
+      expect(p.inAWord.split(/\s+/).length, `${p.id} inAWord`).toBeLessThanOrEqual(5);
     }
     for (const tag of eachOf(EXPERTISE_TAGS, "the expertise tags")) expect(lintLandingCopy(EXPERTISE_LABELS[tag]), tag).toEqual([]);
   });

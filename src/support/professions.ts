@@ -38,6 +38,14 @@ export interface ProfessionEntry {
   readonly aName: string;
   /** What this kind of professional is typically useful for — PRD §38/§78, in plain words. */
   readonly typicallyFor: string;
+  /**
+   * The same thing in three or four words (2026-09-11). A person who has told the app nothing yet
+   * is reading a LIST of these, not a card, and eleven cards of `typicallyFor` is four hundred
+   * words on one screen. Every one of these is the first clause of the line above it, compressed —
+   * never a new claim about a profession, which is the whole reason this file is the one place
+   * the vocabulary lives.
+   */
+  readonly inAWord: string;
   /** When self-guided support is no longer enough, the sign this profession is the one to explore. */
   readonly whenToExplore: string;
   /** Words in a sentence that name this profession. Lower-case, matched on word boundaries. */
@@ -48,6 +56,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "gp",
     label: "GP",
+    inAWord: "Assessment, medication, referrals",
     plural: "GPs",
     aName: "a GP",
     typicallyFor: "Assessment, medication and its review, the physical checks around it, and referrals onward. In NSW and Queensland a GP can carry the whole pathway.",
@@ -57,6 +66,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "psychologist",
     label: "Psychologist",
+    inAWord: "The emotional part",
     plural: "psychologists",
     aName: "a psychologist",
     typicallyFor: "Emotional regulation, anxiety and low mood alongside ADHD, perfectionism, and structured psychological work on patterns that keep repeating.",
@@ -66,6 +76,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "counsellor",
     label: "Counsellor",
+    inAWord: "Talking it through",
     plural: "counsellors",
     aName: "a counsellor",
     typicallyFor: "Talking things through: relationships, conflict, a change in life stage, the load of a late recognition.",
@@ -75,6 +86,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "occupational-therapist",
     label: "Occupational therapist",
+    inAWord: "The doing part",
     plural: "occupational therapists",
     aName: "an occupational therapist",
     typicallyFor: "Practical executive-function systems in real settings, starting work, organising a household, workplace and study adjustments.",
@@ -84,6 +96,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "exercise-physiologist",
     label: "Exercise physiologist",
+    inAWord: "Movement that sticks",
     plural: "exercise physiologists",
     aName: "an exercise physiologist",
     typicallyFor: "Building movement into a week in a way that sticks, and using it deliberately for attention, sleep and mood.",
@@ -93,6 +106,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "adhd-coach",
     label: "ADHD coach",
+    inAWord: "Accountability, week by week",
     plural: "ADHD coaches",
     aName: "an ADHD coach",
     typicallyFor: "Accountability and structure over weeks: goals, first actions, check-ins, and the habits around them.",
@@ -102,6 +116,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "psychiatrist",
     label: "Psychiatrist",
+    inAWord: "The complicated picture",
     plural: "psychiatrists",
     aName: "a psychiatrist",
     typicallyFor: "The complicated picture: other conditions sitting beside ADHD, medication that has not settled after a fair trial, or a history a GP wants a second opinion on.",
@@ -111,6 +126,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "dietitian",
     label: "Dietitian",
+    inAWord: "Eating that keeps going",
     plural: "dietitians",
     aName: "a dietitian",
     typicallyFor: "Regular eating when hunger arrives late, appetite on medication days, and food that works without cooking or planning.",
@@ -120,6 +136,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "relationship-counsellor",
     label: "Relationship counsellor",
+    inAWord: "Two people in the room",
     plural: "relationship counsellors",
     aName: "a relationship counsellor",
     typicallyFor: "Two people in the room: the household load, the sting of reminders, and what ADHD does to a partnership when only one of you has it.",
@@ -129,6 +146,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "sleep-clinician",
     label: "Sleep clinician",
+    inAWord: "Nights that will not start",
     plural: "sleep clinicians",
     aName: "a sleep clinician",
     typicallyFor: "A body clock that runs late, nights that will not start, and the checks for sleep conditions that can sit beside ADHD.",
@@ -138,6 +156,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
   {
     id: "university-support",
     label: "University support service",
+    inAWord: "Adjustments on paper",
     plural: "university support services",
     aName: "a university support service",
     typicallyFor: "Study adjustments on paper, extensions, exam arrangements, note-taking, through the accessibility or disability service every university runs.",

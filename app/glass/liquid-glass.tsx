@@ -9,13 +9,21 @@
 // (app/styles/glass.css) stays: it is what blurs DOM content under the chrome, and it is the
 // whole effect where WebGL2 is missing or transparency is reduced.
 //
+// 2026-09-11, founder: "right now it's continuous connected bubbles, it should have interaction and
+// be playable with your bubble that the tap has." Two changes, in `studio/params.ts` and the SDF:
+// surfaces now barely melt into each other, so a row of controls is a row of bubbles rather than one
+// connected ribbon, while a droplet melts generously into whatever it reaches — and a tap leaves a
+// droplet of its own, which blooms out of the point it was touched, joins the glass it lands on and
+// lets go. The droplet under the finger swells on press. Where this layer cannot run, the same tap
+// blooms in CSS instead (app/glass/glass-pointer.tsx), so the bubble a tap makes exists everywhere.
+//
 // Nothing here reads content. It reads rectangles. Text stays DOM, ink stays ink.
 
 import { useEffect, useRef } from "react";
 import { MultiPassRenderer } from "./studio/gl-utils";
 import { computeGaussianKernelByRadius } from "./studio/kernel";
 import { FRAGMENT_BG, FRAGMENT_HBLUR, FRAGMENT_MAIN, FRAGMENT_VBLUR, VERTEX } from "./studio/shaders";
-import { GLASS_SELECTOR, MAX_SHAPES, STUDIO } from "./studio/params";
+import { GLASS_SELECTOR, MAX_SHAPES, MERGE, STUDIO, TAP_DROP } from "./studio/params";
 
 const DPR_CAP = 1.5;
 const REFRESH_MS = 250;
@@ -156,10 +164,31 @@ export function LiquidGlass() {
     const pointer = { x: canvas.width / 2, y: canvas.height / 2, at: -1 };
     const spring = { x: pointer.x, y: pointer.y, vx: 0, vy: 0 };
     let blobAlpha = 0;
+    /** Pressed, the finger's droplet swells and settles back: the glass gives under a thumb. */
+    let press = 0;
+    /**
+     * What a tap leaves behind (founder, 2026-09-11): a droplet that blooms out of the point that
+     * was touched, melts into whatever glass it reaches, and goes. Tapping is the whole game here,
+     * so the droplets are what a person plays with; at most TAP_DROP.max are alive at once and the
+     * oldest is dropped, which bounds the shader's loop whatever a drumming thumb does.
+     */
+    const taps: { x: number; y: number; at: number }[] = [];
+    const leaveDrop = (clientX: number, clientY: number) => {
+      taps.push({ x: clientX * dpr, y: (height - clientY) * dpr, at: performance.now() });
+      if (taps.length > TAP_DROP.max) taps.shift();
+      press = 1;
+    };
     const onPointerMove = (e: PointerEvent) => {
       pointer.x = e.clientX * dpr;
       pointer.y = (height - e.clientY) * dpr;
       pointer.at = performance.now();
+    };
+    const onPointerDown = (e: PointerEvent) => {
+      onPointerMove(e);
+      // The droplet is drawn where the finger is, so it has to start from where the finger is —
+      // not from where the spring had got to.
+      spring.x = pointer.x; spring.y = pointer.y;
+      leaveDrop(e.clientX, e.clientY);
     };
     const onTouch = (e: TouchEvent) => {
       const t = e.touches[0];
@@ -167,9 +196,11 @@ export function LiquidGlass() {
       pointer.x = t.clientX * dpr;
       pointer.y = (height - t.clientY) * dpr;
       pointer.at = performance.now();
+      if (e.type === "touchstart") leaveDrop(t.clientX, t.clientY);
     };
     if (!reducedMotion) {
       window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("pointerdown", onPointerDown, { passive: true });
       window.addEventListener("touchstart", onTouch, { passive: true });
       window.addEventListener("touchmove", onTouch, { passive: true });
     }
@@ -217,9 +248,25 @@ export function LiquidGlass() {
       if (!following && !reducedMotion) { const [wx, wy] = wander((now - t0) / 1000); pointer.x = wx; pointer.y = wy; }
       const wantBlob = !reducedMotion;
       blobAlpha += ((wantBlob ? 1 : 0) - blobAlpha) * Math.min(1, dt * 8);
-      const blob = STUDIO.blobSize * blobAlpha;
+      press = Math.max(0, press - dt * 3.2);
+      const blob = STUDIO.blobSize * blobAlpha * (1 + press * 0.5);
       const stretchX = blob + (speedX * blob * STUDIO.springSizeFactor) / 100;
       const stretchY = blob + (speedY * blob * STUDIO.springSizeFactor) / 100;
+      // The droplets, slot 0 the finger's. A tap's opens out and then closes, so it reads as
+      // something that happened rather than something that is there.
+      const drops: number[] = [];
+      if (blob > 0.5) drops.push(spring.x, spring.y, stretchX, stretchY);
+      for (let i = taps.length - 1; i >= 0; i -= 1) {
+        const age = (now - taps[i]!.at) / TAP_DROP.ms;
+        if (age >= 1) { taps.splice(i, 1); continue; }
+        // Out fast, back slowly: the open is the tap, the close is it letting go.
+        const open = age < 0.35 ? age / 0.35 : 1 - (age - 0.35) / 0.65;
+        const eased = open * open * (3 - 2 * open);
+        const size = TAP_DROP.from + (TAP_DROP.to - TAP_DROP.from) * eased;
+        drops.push(taps[i]!.x, taps[i]!.y, size, size);
+      }
+      const dropCount = drops.length / 4;
+      while (drops.length < 6 * 4) drops.push(0, 0, 0, 0);
 
       const count = measure(now);
       const glareAngle = ((STUDIO.glareAngle + (hoverDevice ? ((spring.x / canvas.width) - 0.5) * 30 : 0)) * Math.PI) / 180;
@@ -236,6 +283,10 @@ export function LiquidGlass() {
         u_shapeWidth: stretchX,
         u_shapeHeight: stretchY,
         u_blobSize: blob > 0.5 ? blob : 0,
+        u_drops: drops,
+        u_dropCount: dropCount,
+        u_shapeMerge: MERGE.SHAPE,
+        u_dropMerge: MERGE.DROP,
         u_mergeRate: STUDIO.mergeRate,
         u_shapes: Array.from(shapes),
         u_shapeCorner: Array.from(corners),
@@ -275,6 +326,7 @@ export function LiquidGlass() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("touchstart", onTouch);
       window.removeEventListener("touchmove", onTouch);
       document.documentElement.classList.remove("has-liquid");

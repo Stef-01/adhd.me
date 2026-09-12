@@ -135,3 +135,32 @@ export function safetyRule(id: SafetyRuleId): SafetyRule {
   if (!rule) throw new Error(`safety: unknown rule ${id}`);
   return rule;
 }
+
+/**
+ * The urgent routes out of this app, reachable at any moment without having written anything
+ * (Charmaine Bernie, occupational therapist and service-access researcher, 2026-09-11: the
+ * existing health system already has good crisis pathways, separate from any neurodiversity
+ * waitlist, so the app's job is to point at them rather than build a parallel one — and given
+ * comorbidity and the suicide risk in the 16–25 cohort this product serves, she called
+ * always-visible signposting non-negotiable).
+ *
+ * The rules above quote these same services inside a message about something a person wrote.
+ * This is the list for the person who has written nothing and needs it now. Jurisdiction: AU.
+ * Numbers are the national services and are not a clinical judgement about anybody.
+ */
+export interface UrgentService {
+  readonly name: string;
+  /** What `tel:` dials. Digits only, as the scheme wants them. */
+  readonly tel: string;
+  /** The number as a person reads it aloud. */
+  readonly said: string;
+  /** Who it is for, or when — three words at most. */
+  readonly when: string;
+}
+
+export const URGENT_SERVICES: readonly UrgentService[] = [
+  { name: "Emergency", tel: "000", said: "000", when: "In danger now" },
+  { name: "Lifeline", tel: "131114", said: "13 11 14", when: "Any hour" },
+  { name: "Kids Helpline", tel: "1800551800", said: "1800 55 1800", when: "Up to 25" },
+  { name: "Beyond Blue", tel: "1300224636", said: "1300 22 4636", when: "Any hour" },
+];

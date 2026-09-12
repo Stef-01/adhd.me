@@ -49,7 +49,12 @@ export const NWIA_MEANINGS: Readonly<Record<NwiaDimension, string>> = {
   emotional: "How feelings arrive and settle, and what you do in the middle.",
   work: "Work and study: how tasks arrive, start and finish.",
   spiritual: "What matters to you, and whether the days line up with it.",
-  intellectual: "Curiosity, learning and the interest that switches attention on.",
+  // Creativity is named here on purpose (founder, 2026-09-11, as an aspect the map should show).
+  // It belongs to this dimension in the Institute's own reading — intellectual wellness is
+  // curiosity, learning AND creative pursuit — and it is the strength most often named about ADHD,
+  // so the axis a person is most likely to look for should say the word. The LABEL is the
+  // Institute's and is untouched; this line is the app's own voice, which the file header says.
+  intellectual: "Curiosity, creativity and the interest that switches attention on.",
   cultural: "Family, background and community — what is expected, and by whom.",
   environment: "The structure, noise and space around you.",
   finances: "Money and admin: the bills, the impulse buys, the forms.",

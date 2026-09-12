@@ -13,6 +13,7 @@ import type { Layer, Subdomain } from "./layers";
 import { isProfession } from "@/support/professions";
 import type { OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
+import type { Checkpoint, CheckpointAnswer, CheckpointMonths } from "./checkpoint";
 
 export const MODEL_VERSION = 1;
 export const MODEL_KEY = `adhdme.model.v${MODEL_VERSION}`;
@@ -90,6 +91,8 @@ export interface ModelRecord {
   manual: ManualRecord;
   /** Medication experience (PRD §47): what it seems to change, what it leaves untouched, anything unwanted — described, never advised on. */
   medication: MedicationNote;
+  /** The waiting checkpoints answered so far (src/model/checkpoint.ts): six months, a year, two years. */
+  checkpoints: Checkpoint[];
 }
 
 export type MedicationField = "changes" | "untouched" | "unwanted";
@@ -133,6 +136,7 @@ export function emptyModel(): ModelRecord {
     surveys: {},
     manual: emptyManual(),
     medication: emptyMedicationNote(),
+    checkpoints: [],
   };
 }
 
@@ -169,6 +173,9 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       surveys: isObject(r.surveys) ? (r.surveys as ModelRecord["surveys"]) : {},
       manual: isObject(r.manual) ? { ...emptyManual(), ...(r.manual as Partial<ManualRecord>) } : emptyManual(),
       medication: isObject(r.medication) ? { ...emptyMedicationNote(), ...(r.medication as Partial<MedicationNote>) } : emptyMedicationNote(),
+      // A record written before checkpoints existed simply has none answered, which is the truth
+      // about it — so this needs no version bump and no migration.
+      checkpoints: Array.isArray(r.checkpoints) ? r.checkpoints.filter((x) => isObject(x) && typeof x.months === "number").map((e) => e as unknown as Checkpoint) : [],
     };
   } catch {
     return emptyModel();
@@ -342,4 +349,17 @@ export function hasSignals(record: ModelRecord): boolean {
 /** PRD §37's last step: the profession the support path chose, held with the finder's filters. Validated on read. */
 export function professionChoice(value: unknown): string | null {
   return isProfession(value) ? value : null;
+}
+
+/**
+ * A waiting checkpoint answered (src/model/checkpoint.ts). One row per checkpoint, never replaced:
+ * the point of asking at six months and again at a year is that the answers can differ, and a
+ * record that kept only the latest could not show that somebody was still looking for eighteen
+ * months. `found-care` is what ends the asking; `dueCheckpoint` is where that is decided.
+ */
+export function recordCheckpoint(storage: ModelStorage, months: CheckpointMonths, answer: CheckpointAnswer): ModelRecord {
+  return updateModel(storage, (r) => ({
+    ...r,
+    checkpoints: [...r.checkpoints.filter((c) => c.months !== months), { months, answer, at: now() }],
+  }));
 }

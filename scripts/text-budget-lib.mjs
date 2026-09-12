@@ -56,11 +56,43 @@ export const EXTRA = [
   { path: "/approach?module=everyday", name: "A read module, first card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
   { path: "/lives/play", state: "lives-run", name: "The Chaos Run, first round" },
+  // Leo's routine (app/lives/leo-practice.tsx): the two screens the round now ends into.
+  { path: "/lives/play/leo-mosquito", state: "leo-routine", name: "Leo's routine, first step" },
+  { path: "/lives/play/leo-mosquito", state: "leo-settled", name: "Leo asleep" },
   { path: "/match/results", state: "intake", name: "Match results" },
+  // The two questions (app/first-step.tsx). The walk reaches the first one on its own; the second
+  // and the answer are taps, and a screen the instrument cannot reach is a screen nobody measured.
+  // Your map, in the state that matters: one a person has actually lived in, where every axis
+  // carries a word. The empty route is walked too and is the cheaper of the two.
+  { path: "/my-map", state: "map-lived", name: "Your map, lived in" },
+  { path: "/first-step", state: "first-step-stage", name: "First step, the second question" },
+  { path: "/first-step", state: "first-step-answer", name: "First step, the answer" },
   { path: "/match/prep", state: "intake", name: "Match prep" },
 ];
 
 export const LONG_FORM = new Set(["/story", "/faq", "/privacy", "/privacy/automated-decisions", "/privacy/counsel-review", "/terms", "/practices", "/clinicians", "/clinicians/join", "/examples", "/about", "/approach/map", "/lives/lab", "/demo"]);
+
+/**
+ * RESULT SCREENS CARRY THEIR RESULTS (2026-09-11, founder-decided).
+ *
+ * The 60-word ceiling is Headspace's Sleep list: six cards of a two-word title and one short line.
+ * The finder's results screen is that shape plus one thing Headspace's list does not have — the
+ * navigation between kinds of professional, which is the product's whole argument. Measured on the
+ * day this was raised, its 63 words were 35 of RESULT (five rows of a name, a reason and a place —
+ * the answer the person asked for) and 28 of screen: the search they typed read back, four filter
+ * chips, three kinds of care, the count, and two controls.
+ *
+ * Charmaine Bernie's finding is why the three cost what they cost: people land on the wrong
+ * waitlist for years because nothing showed them which kind of professional they needed. Deleting
+ * the kinds to hold a number derived from a meditation app's list would be holding the letter of
+ * the budget against the thing the budget exists to protect.
+ *
+ * So this ONE screen gets 72, and the raise is bounded and reasoned rather than a waiver: 60 for
+ * the screen, plus the twelve words three kinds of care can cost at their longest ("occupational
+ * therapists" is two). Every other screen, this file and the gate beside it are unchanged, and a
+ * fourth kind or a new paragraph here still fails.
+ */
+export const CEILING = new Map([["Finder results (after a search)", 72]]);
 
 export const NARRATIVE = "I think I have had ADHD my whole life. I want an adult assessment with someone who will not rush me. I have anxiety too, and telehealth would be easier.";
 
@@ -116,6 +148,38 @@ export async function reach(page, route, base) {
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
   }
+  if (route.state === "map-lived") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify({
+      v: 1,
+      onboarding: { improveFirst: "start-earlier", impact: 8, lookingFor: "professional", completedAt: new Date().toISOString() },
+      resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() }, sleep: { frequency: "often", cost: 7, priority: "yes", at: new Date().toISOString() } },
+      answers: { "starting.hardest-to-start": ["vague"] }, insights: {},
+      experiments: [
+        { strategyId: "first-physical-action", moduleId: "starting", acceptedAt: "2026-09-01T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-02T00:00:00Z" },
+        { strategyId: "wind-down", moduleId: "sleep", acceptedAt: "2026-09-03T00:00:00Z", outcome: "a-little", outcomeAt: "2026-09-04T00:00:00Z" },
+      ],
+      reflections: [], relates: {}, interpretations: [], safety: [], completed: ["starting", "sleep", "noise"],
+      survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
+      manual: {}, medication: {}, checkpoints: [],
+    }));
+    await page.reload({ waitUntil: "networkidle" });
+  }
+  if (route.state === "first-step-stage" || route.state === "first-step-answer") {
+    await page.getByRole("button", { name: "Me", exact: true }).click();
+    // The longest card in the table, so the number this reports is the worst case rather than a
+    // sample of it.
+    if (route.state === "first-step-answer") await page.getByRole("button", { name: "Still finding out" }).click();
+  }
+  if (route.state === "leo-routine" || route.state === "leo-settled") {
+    await page.getByRole("button", { name: "Play Leo\u2019s moment" }).click();
+    // Reduced motion is on in this context, so the round offers a way out rather than a clock.
+    await page.getByRole("button", { name: "Skip this round" }).click();
+    if (route.state === "leo-settled") {
+      for (const step of ["Close the window", "Headphones on", "Light off"]) {
+        await page.getByRole("button", { name: step, exact: true }).click();
+      }
+    }
+  }
   if (route.state === "lives-run") {
     await page.getByRole("button", { name: "Play" }).click();
     await page.waitForTimeout(1200);
@@ -146,7 +210,8 @@ export function summarise(route, rows) {
   const chrome = rows.filter((r) => r.chrome).reduce((n, r) => n + words(r.text), 0);
   const longest = rows.filter((r) => !r.chrome).map((r) => ({ w: words(r.text), text: r.text.slice(0, 80), tag: r.tag })).sort((a, b) => b.w - a.w).slice(0, 3);
   const longForm = LONG_FORM.has(route.path);
-  const verdict = total <= BUDGET.target ? "target" : total <= BUDGET.screen ? "ceiling" : longForm ? "long-form" : "OVER";
+  const ceiling = CEILING.get(route.name ?? "") ?? BUDGET.screen;
+  const verdict = total <= BUDGET.target ? "target" : total <= ceiling ? "ceiling" : longForm ? "long-form" : "OVER";
   return { path: route.path, name: route.name, state: route.state ?? null, total, fold, chrome, ratio: Math.round((total / BUDGET.target) * 10) / 10, verdict, longest };
 }
 

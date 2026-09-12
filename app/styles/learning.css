@@ -56,7 +56,7 @@
 .platform-shell .learn-card.is-night   { --cover: var(--learn-night);   --cover-ink: var(--learn-night-ink);   --cover-sub: var(--learn-night-sub); }
 .platform-shell .learn-stack .learn-card {
   position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  width: 100%; min-height: 184px; height: 100%; padding: 28px; border: 0; border-radius: 20px;
+  width: 100%; min-height: 184px; height: 100%; padding: 28px; border: 0; border-radius: 32px;
   background: var(--cover); color: var(--cover-ink); font: inherit; text-align: left; cursor: pointer; overflow: hidden;
   /* The colour is asked to behave like a surface, not a swatch: a hairline of itself, and its own
      hue thrown below the card rather than the neutral grey every other card on the platform casts. */

@@ -140,6 +140,16 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     why: "Questions a person searching for ADHD care arrives with, answered as administrative fact. The single likeliest page to be quoted back to somebody, so its copy is held to every patient rule including the ones about claims and conditions.",
   },
   {
+    path: "/first-step",
+    audience: "patient",
+    why: "The triage layer's two questions (Charmaine Bernie, 2026-09-11: people land on the wrong waitlist for years because nothing separated the pathways first). Two taps and a kind of professional to go through, with the thing to ask them for. It routes and it never diagnoses, so every string on it answers to the patient rules — the table's own test sweeps them before they reach the screen.",
+  },
+  {
+    path: "/my-map",
+    audience: "patient",
+    why: "Your map (2026-09-11): the nine wellness dimensions as one shape, in the judge-screen form of a Pokémon IV chart. The most dangerous surface in the product to word carelessly, because a radar of a person is one adjective away from a score of one — so every rung is an ACT the person took and is named as one, and src/wellness/map.ts holds the reason in its header. It reads only this device and claims nothing about anybody.",
+  },
+  {
     path: "/profile",
     audience: "patient",
     why: "O233's Profile tab. It renders only what this device's own session already holds — the words the person described and the suburb they gave — so it publishes nothing and personalises nothing, but it is a patient-facing app surface and every sentence on it answers to the patient rules.",
@@ -153,6 +163,11 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
     path: "/survey",
     audience: "patient",
     why: "A topic survey (PRD §22): eight to twelve questions about one part of a life with ADHD, and the pattern it produces. Answered by the person the patient rules protect; no score, no verdict, every prompt swept.",
+  },
+  {
+    path: "/urgent",
+    audience: "patient",
+    why: "The urgent routes out of the app — 000, Lifeline, Kids Helpline, Beyond Blue — reachable from the header of every patient screen (Charmaine Bernie, 2026-09-11: always-visible crisis signposting, given comorbidity and the risk in the 16–25 cohort). It collects nothing, reads nothing and judges nobody; it names services that already exist. The most consequential page in the product to get wrong, so every word answers to the patient rules.",
   },
   {
     path: "/today",

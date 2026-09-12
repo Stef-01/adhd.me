@@ -7,7 +7,6 @@
 // they choose — nothing is shared by the app.
 
 import Link from "next/link";
-import { LearningScene } from "./learning-scene";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Check, Copy } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
@@ -51,20 +50,10 @@ export function SupportPath() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs">
       <LifeHeader />
       <header className="life-head">
-        <h1>{need ? "From the problem to the person." : "Start from the problem, not the profession."}</h1>
+        <h1>{need ? "From the problem to the person." : "Which kind of help?"}</h1>
       </header>
 
-      {record && !need && (
-        <section className="life-empty" aria-labelledby="support-empty">
-          <h2 id="support-empty">Nothing to walk from yet.</h2>
-          <p>Answer the ten questions and the path fills in.</p>
-          <div className="life-figure" aria-hidden="true"><LearningScene topic="finding" /></div>
-          <div className="life-actions" style={{ justifyContent: "center" }}>
-            <Link className="learn-primary" href="/start">Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
-            <Link className="learn-secondary" href="/">Search the finder</Link>
-          </div>
-        </section>
-      )}
+      {record && !need && <ColdKinds seeProviders={seeProviders} />}
 
       {record && need && (
         <ol className="support-steps">
@@ -139,6 +128,64 @@ export function SupportPath() {
         </ol>
       )}
     </main>
+  );
+}
+
+/** The first few, then the rest (the taste sheet's law): eleven kinds is a list, six is a choice. */
+const COLD_FIRST = 6;
+
+/**
+ * WHAT A PERSON WHO HAS TOLD US NOTHING SEES (Charmaine Bernie, occupational therapist and
+ * service-access researcher, 2026-09-11).
+ *
+ * This page is the one that says "start from the problem, not the profession", and the finder's
+ * welcome links to it with exactly those words. Until now, a first-time reader who followed that
+ * link was told "Nothing to walk from yet. Answer the ten questions and the path fills in." — a
+ * questionnaire, in answer to "I do not know what I need". That is the identification problem she
+ * named, served back to the person who has it: she tested searching for which professional could
+ * help and found very little useful, and people spend years on the wrong waitlist because of it.
+ *
+ * So the cold page is the kinds of help themselves, each saying what it is for in three or four
+ * words, each one opening the finder narrowed to it. The ten questions are still here and still
+ * better — they produce the ranked version below, in order of fit for the person's own problem —
+ * but they are now an offer rather than a toll.
+ *
+ * IT CLAIMS NO ORDER, because it has not earned one (the taste sheet's honesty gate). The ranked
+ * version says "In order of fit for this problem"; this one says what each is for and nothing
+ * about which is yours. The order is the register's own, declared in `src/support/professions.ts`.
+ */
+function ColdKinds({ seeProviders }: { seeProviders: (p: Profession) => void }) {
+  const [all, setAll] = useState(false);
+  const shown = all ? PROFESSION_ENTRIES : PROFESSION_ENTRIES.slice(0, COLD_FIRST);
+  return (
+    <section className="support-cold" aria-labelledby="support-cold-title">
+      <h2 id="support-cold-title" className="sr-only">The kinds of help</h2>
+      <ul className="cold-kinds">
+        {shown.map((p) => (
+          <li key={p.id}>
+            <Link className="cold-kind" href="/" onClick={() => seeProviders(p.id)}>
+              <span>
+                <strong>{p.label}</strong>
+                <span>{p.inAWord}</span>
+              </span>
+              <ArrowRight size={16} weight="bold" aria-hidden="true" />
+            </Link>
+          </li>
+        ))}
+      </ul>
+      {!all && (
+        <button type="button" className="learn-secondary cold-all" onClick={() => setAll(true)}>
+          All {PROFESSION_ENTRIES.length} kinds
+        </button>
+      )}
+      {/* Two questions, not ten. This line used to offer the onboarding, which is the toll the
+          audit caught this page charging in the first place (docs/design/finder-ecosystem.md §3);
+          /first-step answers the same "not sure" in two taps, and the ten questions are still
+          offered on Today, in the tab bar and in the settings sheet. */}
+      <p className="cold-start">
+        <Link href="/first-step">Not sure? Two questions</Link>
+      </p>
+    </section>
   );
 }
 

@@ -54,7 +54,7 @@ export interface AppTab {
 export const APP_TABS: readonly AppTab[] = [
   {
     href: "/",
-    also: ["/profile", "/support"],
+    also: ["/profile", "/support", "/first-step"],
     label: "Support",
     icon: "Lifebuoy",
     purpose: "Describe the support you are looking for, in words or out loud, or start from the problem and be walked to the kind of person who helps with it.",
@@ -77,7 +77,7 @@ export const APP_TABS: readonly AppTab[] = [
     href: "/my-adhd",
     label: "My ADHD",
     icon: "Compass",
-    also: ["/manual", "/medication", "/adjustments"],
+    also: ["/manual", "/medication", "/adjustments", "/my-map"],
     purpose: "Your own picture — the biggest friction, what seems to contribute across brain, body, environment and people, and what has helped.",
   },
 ];
