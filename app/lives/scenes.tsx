@@ -197,14 +197,32 @@ const ART: Record<string, (s: SceneState) => ReactElement> = {
     <rect width="390" height="560" fill="var(--w1)" />
     <rect y="190" width="390" height="190" fill="var(--w2)" />
     <path d="M0 238h390M0 286h390M0 334h390M78 190v190M156 190v190M234 190v190M312 190v190" stroke="var(--w5)" strokeWidth="3" />
-    <rect x="30" y="40" width="120" height="120" rx="10" fill="var(--w5)" /><rect x="40" y="50" width="100" height="100" rx="6" fill="#cfe0f5" /><path d="M90 50v100M40 100h100" stroke="var(--w5)" strokeWidth="6" />
+    
+    <rect x="34" y="44" width="120" height="120" rx="10" fill="#000" opacity=".05" />
+    <rect x="30" y="40" width="120" height="120" rx="10" fill="var(--w5)" />
+    
+    <rect x="40" y="50" width="100" height="100" rx="6" fill="#cfe0f5" /><path d="M90 50v100M40 100h100" stroke="var(--w5)" strokeWidth="6" />
     {game === "toast" && <g transform={`translate(0 ${-56 * stake})`}><path d="M150 330a14 14 0 0 1 14-14h62a14 14 0 0 1 14 14v40h-90z" fill={TOAST[Math.min(3, Math.floor(stake * 4))]} stroke="var(--w7)" /></g>}
-    <rect y="380" width="390" height="24" fill="var(--w5)" /><rect y="404" width="390" height="156" fill="var(--w3)" />
-    <path d="M130 404v156M260 404v156" stroke="var(--w4)" strokeWidth="4" /><rect x="52" y="470" width="26" height="6" rx="3" fill="var(--w6)" /><rect x="182" y="470" width="26" height="6" rx="3" fill="var(--w6)" /><rect x="312" y="470" width="26" height="6" rx="3" fill="var(--w6)" />
+    
+    <rect y="384" width="390" height="24" fill="#000" opacity=".05" />
+    <rect y="380" width="390" height="24" fill="var(--w5)" />
+    
+    <rect y="404" width="390" height="156" fill="var(--w3)" />
+    <path d="M130 404v156M260 404v156" stroke="var(--w4)" strokeWidth="4" />
+    
+    <rect x="56" y="474" width="26" height="6" rx="3" fill="#000" opacity=".05" />
+    <rect x="52" y="470" width="26" height="6" rx="3" fill="var(--w6)" />
+    
+    <rect x="186" y="474" width="26" height="6" rx="3" fill="#000" opacity=".05" />
+    <rect x="182" y="470" width="26" height="6" rx="3" fill="var(--w6)" />
+    
+    <rect x="316" y="474" width="26" height="6" rx="3" fill="#000" opacity=".05" />
+    <rect x="312" y="470" width="26" height="6" rx="3" fill="var(--w6)" />
+    
     {game === "pancake" && <><rect x="120" y="366" width="150" height="20" rx="6" fill="var(--w7)" /><ellipse cx="195" cy="372" rx="58" ry="14" fill="var(--w7)" /><ellipse cx="195" cy="368" rx="46" ry="9" fill="#4b5160" /><path d="M253 370h50" stroke="var(--w7)" strokeWidth="10" strokeLinecap="round" /><g className="lives-steam" opacity={stake * 0.7}><path d="M170 340q-10-20 0-40M195 335q-10-24 0-48M220 340q-10-20 0-40" stroke="var(--w4)" strokeWidth="6" strokeLinecap="round" fill="none" /></g></>}
-    {game === "toast" && <><rect x="130" y="300" width="130" height="86" rx="14" fill="var(--w6)" /><rect x="146" y="306" width="98" height="10" rx="4" fill="var(--w7)" /><rect x="262" y={330 + 20 * stake} width="10" height="26" rx="3" fill="var(--w7)" /></>}
-    {game === "rogue_blender" && <><rect x="150" y="330" width="90" height="56" rx="10" fill="var(--w7)" /><g className={`lives-jar${held ? " is-rattling" : ""}`}><path d="M158 200h74l-6 130h-62z" fill="var(--w5)" stroke="var(--w4)" /><path d="M164 300h62" stroke="#e0616f" strokeWidth="14" opacity=".5" /><rect x="152" y="186" width="86" height="18" rx="6" fill="var(--w6)" /></g></>}
-    {game === "sneeze" && <><path d="M270 320h60v66h-60z" fill="var(--w5)" stroke="var(--w4)" /><rect x="278" y="340" width="44" height="12" fill="var(--w6)" /><g transform={`translate(195 300) scale(${0.4 + stake})`} opacity=".85"><path d="M-40 20a16 16 0 0 1 4-32 22 22 0 0 1 42-6 16 16 0 0 1 4 38z" fill="var(--w5)" stroke="var(--w4)" /></g></>}
+    {game === "toast" && <><rect x="134" y="304" width="130" height="86" rx="14" fill="#000" opacity=".05" /><rect x="130" y="300" width="130" height="86" rx="14" fill="var(--w6)" /><rect x="146" y="306" width="98" height="10" rx="4" fill="var(--w7)" /><rect x="262" y={330 + 20 * stake} width="10" height="26" rx="3" fill="var(--w7)" /></>}
+    {game === "rogue_blender" && <><rect x="154" y="334" width="90" height="56" rx="10" fill="#000" opacity=".05" /><rect x="150" y="330" width="90" height="56" rx="10" fill="var(--w7)" /><g className={`lives-jar${held ? " is-rattling" : ""}`}><path d="M158 200h74l-6 130h-62z" fill="var(--w5)" stroke="var(--w4)" /><path d="M164 300h62" stroke="#e0616f" strokeWidth="14" opacity=".5" /><rect x="152" y="186" width="86" height="18" rx="6" fill="var(--w6)" /></g></>}
+    {game === "sneeze" && <><path d="M274 324h60v66h-60z" fill="#000" opacity=".05" /><path d="M270 320h60v66h-60z" fill="var(--w5)" stroke="var(--w4)" /><rect x="278" y="340" width="44" height="12" fill="var(--w6)" /><g transform={`translate(195 300) scale(${0.4 + stake})`} opacity=".85"><path d="M-40 20a16 16 0 0 1 4-32 22 22 0 0 1 42-6 16 16 0 0 1 4 38z" fill="var(--w5)" stroke="var(--w4)" /></g></>}
   </>,
   crossing: ({ stake }) => <>
     <rect width="390" height="560" fill="var(--w1)" />
@@ -306,24 +324,49 @@ const ART: Record<string, (s: SceneState) => ReactElement> = {
   bathroom: ({ stake }) => <>
     <rect width="390" height="560" fill="var(--w1)" />
     <path d="M0 60h390M0 120h390M0 180h390M0 240h390M0 300h390M0 360h390M60 0v400M120 0v400M180 0v400M240 0v400M300 0v400M360 0v400" stroke="var(--w2)" strokeWidth="4" />
-    <path d="M300 30v30h-40" stroke="var(--w4)" strokeWidth="10" fill="none" strokeLinecap="round" /><path d="M230 60h60l8 20h-76z" fill="var(--w4)" />
+    <path d="M300 30v30h-40" stroke="var(--w4)" strokeWidth="10" fill="none" strokeLinecap="round" />
+    
+    <path d="M234 64h60l8 20h-76z" fill="#000" opacity=".05" />
+    <path d="M230 60h60l8 20h-76z" fill="var(--w4)" />
+    
     {[240, 256, 272, 288].map((x) => <path key={x} d={`M${x} 88v300`} stroke="var(--w3)" strokeWidth="4" strokeDasharray="14 10" opacity=".8" />)}
     <g opacity={0.15 + stake * 0.8}><ellipse cx="120" cy="200" rx="70" ry="40" fill="var(--w5)" /><ellipse cx="200" cy="140" rx="60" ry="34" fill="var(--w5)" /><ellipse cx="90" cy="300" rx="80" ry="44" fill="var(--w5)" /></g>
-    <circle cx="90" cy="80" r="34" fill="var(--w5)" stroke="var(--w4)" /><path d="M90 80V58" stroke="var(--w7)" strokeWidth="4" strokeLinecap="round" transform={`rotate(${stake * 330} 90 80)`} />
-    <rect y="400" width="390" height="160" fill="var(--w2)" /><path d="M20 400h350a20 20 0 0 1 20 20v60H0v-60a20 20 0 0 1 20-20z" fill="var(--w5)" /><rect y="480" width="390" height="80" fill="var(--w3)" />
-    <rect x="20" y="330" width="90" height="6" rx="3" fill="var(--w4)" /><path d="M30 336h50v50q-12 8-25 0t-25 0z" fill="var(--w6)" />
+    
+    <circle cx="94" cy="84" r="34" fill="#000" opacity=".05" />
+    <circle cx="90" cy="80" r="34" fill="var(--w5)" /><path d="M90 80V58" stroke="var(--w7)" strokeWidth="4" strokeLinecap="round" transform={`rotate(${stake * 330} 90 80)`} />
+    
+    <rect y="400" width="390" height="160" fill="var(--w2)" />
+    <path d="M24 404h350a20 20 0 0 1 20 20v60H4v-60a20 20 0 0 1 20-20z" fill="#000" opacity=".05" />
+    <path d="M20 400h350a20 20 0 0 1 20 20v60H0v-60a20 20 0 0 1 20-20z" fill="var(--w5)" /><rect y="480" width="390" height="80" fill="var(--w3)" />
+    
+    <rect x="24" y="334" width="90" height="6" rx="3" fill="#000" opacity=".05" />
+    <rect x="20" y="330" width="90" height="6" rx="3" fill="var(--w4)" />
+    <path d="M34 340h50v50q-12 8-25 0t-25 0z" fill="#000" opacity=".05" />
+    <path d="M30 336h50v50q-12 8-25 0t-25 0z" fill="var(--w6)" />
   </>,
   shop: ({ game, stake }) => <>
     <rect width="390" height="560" fill="var(--w1)" />
-    {[80, 170, 260].map((y, row) => <g key={y}><rect x="120" y={y + 40} width="270" height="10" fill="var(--w3)" />{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={130 + i * 44} y={y} width="32" height="40" rx="4" fill={["var(--w4)", "var(--w5)", "var(--w6)", "var(--w7)"][(i + row) % 4]} />)}<rect x={140 + row * 60} y={y + 30} width="24" height="10" rx="2" fill="var(--w6)" /></g>)}
+    {[80, 170, 260].map((y, row) => <g key={y}><rect x="120" y={y + 40} width="270" height="10" fill="var(--w3)" />{[0, 1, 2, 3, 4, 5].map((i) => <g key={i}><rect x={134 + i * 44} y={y + 4} width="32" height="40" rx="4" fill="#000" opacity=".05" /><rect x={130 + i * 44} y={y} width="32" height="40" rx="4" fill={["var(--w4)", "var(--w5)", "var(--w6)", "var(--w7)"][(i + row) % 4]} /></g>)}<rect x={140 + row * 60} y={y + 30} width="24" height="10" rx="2" fill="var(--w6)" /></g>)}
+    
+    <rect x="24" y="64" width="90" height="300" rx="8" fill="#000" opacity=".05" />
     <rect x="20" y="60" width="90" height="300" rx="8" fill="var(--w4)" /><rect x="28" y="68" width="74" height="284" rx="4" fill="#dbe9f6" /><rect x="96" y="180" width="6" height="40" rx="3" fill="var(--w5)" />{[90, 160, 230].map((y) => <rect key={y} x="40" y={y} width="20" height="40" rx="3" fill="var(--w5)" />)}
+    
     <rect y="380" width="390" height="180" fill="var(--w2)" />
-    {game === "jax_checkout" ? <><rect y="400" width="390" height="46" rx="6" fill="var(--w7)" /><rect y="446" width="390" height="30" fill="var(--w4)" /><rect x="290" y="330" width="80" height="70" rx="6" fill="var(--w4)" /><rect x="300" y="300" width="60" height="34" rx="4" fill="var(--w5)" /><rect x="320" y={300 - stake * 120} width="30" height={stake * 120 + 10} fill="var(--w5)" stroke="var(--w4)" /></>
+    {game === "jax_checkout" ? <><rect y="400" width="390" height="46" rx="6" fill="var(--w7)" /><rect y="446" width="390" height="30" fill="var(--w4)" />
+      <rect x="294" y="334" width="80" height="70" rx="6" fill="#000" opacity=".05" />
+      <rect x="290" y="330" width="80" height="70" rx="6" fill="var(--w4)" />
+      
+      <rect x="304" y="304" width="60" height="34" rx="4" fill="#000" opacity=".05" />
+      <rect x="300" y="300" width="60" height="34" rx="4" fill="var(--w5)" />
+      
+      <rect x="320" y={300 - stake * 120} width="30" height={stake * 120 + 10} fill="var(--w5)" stroke="var(--w4)" />
+    </>
       : <><path d="M110 420h170l-16 70H126z" fill="none" stroke="var(--w7)" strokeWidth="8" strokeLinejoin="round" /><path d="M110 420l-16-40H70" stroke="var(--w7)" strokeWidth="8" fill="none" strokeLinecap="round" /><path d="M120 440h150M116 462h158" stroke="var(--w7)" strokeWidth="4" /><circle cx="140" cy="510" r="10" fill="var(--w7)" /><circle cx="250" cy="510" r="10" fill="var(--w7)" /></>}
   </>,
   desk: ({ game, stake }) => game === "nina_first_line" ? <>
     <rect width="390" height="560" fill="var(--w1)" />
     <rect y="520" width="390" height="40" fill="var(--w2)" />
+    <rect x="28" y="24" width="342" height="510" rx="6" fill="#000" opacity=".05" />
     <rect x="24" y="20" width="342" height="510" rx="6" fill="var(--w5)" stroke="var(--w4)" />
     {Array.from({ length: 11 }, (_, i) => <path key={i} d={`M44 ${90 + i * 40}h302`} stroke="var(--w4)" strokeWidth="2" opacity=".5" />)}
     <path d="M64 30v490" stroke="#e0616f" strokeWidth="2" opacity=".6" />
@@ -332,21 +375,51 @@ const ART: Record<string, (s: SceneState) => ReactElement> = {
   </> : <>
     <rect width="390" height="560" fill="var(--w1)" />
     <ellipse cx="330" cy="330" rx="90" ry="70" fill="var(--w6)" opacity=".28" />
-    <rect y="380" width="390" height="30" rx="6" fill="var(--w2)" /><rect x="30" y="410" width="16" height="150" fill="var(--w4)" /><rect x="344" y="410" width="16" height="150" fill="var(--w4)" />
+    <rect y="380" width="390" height="30" rx="6" fill="var(--w2)" />
+    
+    <rect x="34" y="414" width="16" height="150" fill="#000" opacity=".05" />
+    <rect x="30" y="410" width="16" height="150" fill="var(--w4)" />
+    
+    <rect x="348" y="414" width="16" height="150" fill="#000" opacity=".05" />
+    <rect x="344" y="410" width="16" height="150" fill="var(--w4)" />
+    
+    <rect x="104" y="124" width="190" height="140" rx="8" fill="#000" opacity=".05" />
     <rect x="100" y="120" width="190" height="140" rx="8" fill="var(--w3)" /><rect x="110" y="130" width="170" height="120" rx="4" fill="var(--w5)" /><rect x="180" y="260" width="30" height="40" fill="var(--w4)" /><rect x="140" y="300" width="110" height="10" rx="4" fill="var(--w4)" />
     <path d={`M126 150h${Math.max(1, stake * 130)}`} stroke="var(--w7)" strokeWidth="6" strokeLinecap="round" /><rect x={128 + stake * 130} y="143" width="3" height="14" fill="var(--w7)" className="lives-cursor" />
+    
+    <rect x="114" y="344" width="170" height="30" rx="6" fill="#000" opacity=".05" />
     <rect x="110" y="340" width="170" height="30" rx="6" fill="var(--w4)" />
+    
+    <rect x="44" y="344" width="34" height="40" rx="6" fill="#000" opacity=".05" />
     <rect x="40" y="340" width="34" height="40" rx="6" fill="var(--w5)" /><path d="M74 350a12 12 0 0 1 0 24" stroke="var(--w5)" strokeWidth="6" fill="none" /><path className="lives-steam" d="M50 330q-6-10 0-20M62 330q-6-10 0-20" stroke="var(--w4)" strokeWidth="3" fill="none" strokeLinecap="round" />
+    
+    <path d="M330 380v-110" stroke="#000" opacity=".05" transform="translate(4, 4)" strokeWidth="8" />
     <path d="M330 380v-110" stroke="var(--w4)" strokeWidth="8" /><path d="M290 270h80l-14-40h-52z" fill="var(--w6)" stroke="var(--w7)" />
   </>,
   living: ({ stake }) => <>
     <rect width="390" height="560" fill="var(--w1)" />
-    <rect y="400" width="390" height="160" fill="var(--w5)" /><rect x="30" y="430" width="330" height="110" rx="10" fill="var(--w2)" /><rect x="50" y="450" width="290" height="70" rx="6" fill="none" stroke="var(--w5)" strokeWidth="4" />
+    
+    <rect y="400" width="390" height="160" fill="var(--w5)" />
+    <rect x="34" y="434" width="330" height="110" rx="10" fill="#000" opacity=".05" />
+    <rect x="30" y="430" width="330" height="110" rx="10" fill="var(--w2)" /><rect x="50" y="450" width="290" height="70" rx="6" fill="none" stroke="var(--w5)" strokeWidth="4" />
+    
+    <rect x="44" y="54" width="90" height="70" rx="4" fill="#000" opacity=".05" />
     <rect x="40" y="50" width="90" height="70" rx="4" fill="var(--w3)" /><rect x="48" y="58" width="74" height="54" fill="var(--w6)" />
-    <rect x="34" y="230" width="152" height="50" rx="10" fill="var(--w3)" /><rect x="20" y="250" width="180" height="90" rx="14" fill="var(--w3)" /><rect x="34" y="280" width="152" height="60" rx="10" fill="var(--w2)" />
+    
+    <rect x="38" y="234" width="152" height="50" rx="10" fill="#000" opacity=".05" />
+    <rect x="34" y="230" width="152" height="50" rx="10" fill="var(--w3)" />
+    
+    <rect x="24" y="254" width="180" height="90" rx="14" fill="#000" opacity=".05" />
+    <rect x="20" y="250" width="180" height="90" rx="14" fill="var(--w3)" /><rect x="34" y="280" width="152" height="60" rx="10" fill="var(--w2)" />
+    
+    <rect x="232" y="334" width="44" height="60" rx="6" fill="#000" opacity=".05" />
     <rect x="228" y="330" width="44" height="60" rx="6" fill="var(--w2)" /><path d="M250 330V260M250 300q-30-6-30-40 30 2 30 40zM250 290q30-10 30-44-30 4-30 44z" fill="var(--w4)" />
+    
+    <rect x="294" y="64" width="86" height="330" rx="8" fill="#000" opacity=".05" />
     <rect x="290" y="60" width="86" height="330" rx="8" fill="var(--w5)" stroke="var(--w3)" /><rect x="290" y="180" width="86" height="6" fill="var(--w3)" /><rect x="298" y="120" width="6" height="40" rx="3" fill="var(--w7)" />
     <rect x="308" y="80" width="52" height="70" fill="#fbfbfd" stroke="var(--w7)" />{[0, 1, 2, 3].map((i) => <path key={i} d={`M318 ${94 + i * 14}h32`} stroke="var(--w4)" strokeWidth="3" opacity={stake * 4 > i ? 1 : 0.3} />)}
+    
+    <rect x="94" y="364" width="200" height="14" rx="4" fill="#000" opacity=".05" />
     <rect x="90" y="360" width="200" height="14" rx="4" fill="var(--w3)" /><rect x="104" y="374" width="12" height="60" fill="var(--w3)" /><rect x="264" y="374" width="12" height="60" fill="var(--w3)" />
   </>,
   shed: ({ stake }) => <>
