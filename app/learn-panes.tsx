@@ -20,10 +20,10 @@
 // swipe, and under reduced motion the swipe is not offered at all.
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, Check, Play } from "@phosphor-icons/react";
-import { AnimatePresence, motion, useReducedMotion, type PanInfo } from "motion/react";
+import { AnimatePresence, motion, useDragControls, useReducedMotion, type PanInfo } from "motion/react";
 import { CHARACTERS, recentlyCompleted, recommendStrategies, selectGoals, STRATEGIES, strategy, type LearningDomain, type StrategyDefinition } from "@/lives";
 import { MODULES, type LearnModule } from "@/learn/scenes";
 import type { Progress } from "@/learn/progress";
@@ -41,6 +41,15 @@ export const PANE_KEY = "adhdme.learn.pane.v1";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
+
+/**
+ * How far a thumb may wander before the pane calls it a swipe rather than a tap. Motion's own
+ * threshold is three pixels, which is narrower than a thumb: resting on a tile and pressing was
+ * enough to start the pane moving under it. Measured 2026-09-11, a fourteen-pixel wobble now
+ * leaves the pane at 0.00px and a real swipe still switches in both directions. The tabs remain
+ * the tap equivalent of the swipe either way.
+ */
+const TAP_SLOP = 24;
 
 /** The strategy shelves, by life area (the /lives/learn shelves, unchanged). */
 const STRATEGY_SHELVES: ReadonlyArray<{ title: string; domains: readonly LearningDomain[] }> = [
@@ -109,6 +118,7 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
   const reducedMotion = useReducedMotion();
   const [pane, setPane] = useState<Pane>("games");
   const [direction, setDirection] = useState<1 | -1>(1);
+  const swipe = useDragControls();
 
   useEffect(() => {
     const asked = params.get("pane");
@@ -123,9 +133,9 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
   }
 
   function onDragEnd(_event: unknown, info: PanInfo) {
-    const swipe = info.offset.x + info.velocity.x * 0.2;
-    if (swipe < -60) go("modules");
-    else if (swipe > 60) go("games");
+    const travel = info.offset.x + info.velocity.x * 0.2;
+    if (travel < -60) go("modules");
+    else if (travel > 60) go("games");
   }
 
   const variants = {
@@ -165,6 +175,9 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
             exit="exit"
             transition={{ ...SPRING, opacity: { duration: 0.18 } }}
             drag={reducedMotion ? false : "x"}
+            dragControls={swipe}
+            dragListener={false}
+            onPointerDown={reducedMotion ? undefined : (e) => swipe.start(e, { distanceThreshold: TAP_SLOP })}
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.12}
             dragSnapToOrigin
@@ -191,22 +204,11 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
 /** A drop's spring: quick, and it overshoots a touch before it settles. */
 const DROP = { type: "spring", stiffness: 520, damping: 16, mass: 0.7 } as const;
 
-/** The droplet's light follows the finger across a game tile (glass.css reads --lg-x and --lg-y). */
-const droplet = {
-  move(e: ReactPointerEvent<HTMLElement>) {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--lg-x", `${Math.round(((e.clientX - r.left) / r.width) * 100)}%`);
-    el.style.setProperty("--lg-y", `${Math.round(((e.clientY - r.top) / r.height) * 100)}%`);
-    el.dataset.touch = "";
-  },
-  leave(e: ReactPointerEvent<HTMLElement>) {
-    const el = e.currentTarget;
-    el.style.removeProperty("--lg-x");
-    el.style.removeProperty("--lg-y");
-    delete el.dataset.touch;
-  },
-};
+/* No light follows the finger any more (founder, 2026-09-11: "it should just be a bubble not
+   shimmer"). Each tile is a bubble of its own colour that holds its light in one place, built in
+   app/styles/glass.css; app/glass/glass-pointer.tsx keeps only the point a TAP landed on, which is
+   where that tap's bubble opens from. The four pointer handlers each tile used to carry are gone,
+   and with them the chance that one of them was what swallowed a tap. */
 
 function Tile({ module, done, hydrated, index, start, reducedMotion }: { module: LearnModule; done: boolean; hydrated: boolean; index: number; start: (id: string) => void; reducedMotion: boolean }) {
   const colour = coverOf(module);
@@ -220,10 +222,6 @@ function Tile({ module, done, hydrated, index, start, reducedMotion }: { module:
         type="button"
         className={`learn-card is-${colour}${done ? " is-done" : ""}${module.kind === "quiz" ? " is-quiz" : ""}`}
         onClick={() => start(module.id)}
-        onPointerMove={droplet.move}
-        onPointerDown={droplet.move}
-        onPointerLeave={droplet.leave}
-        onPointerCancel={droplet.leave}
         whileTap={reducedMotion ? undefined : { scale: 0.955 }}
         transition={reducedMotion ? POP : DROP}
       >
@@ -299,7 +297,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
           The eight lives <ArrowRight size={16} weight="bold" aria-hidden="true" />
         </Link>
       </div>
-      <Link className="leo-feature" href="/lives/play/leo-mosquito" onPointerMove={droplet.move} onPointerDown={droplet.move} onPointerLeave={droplet.leave} onPointerCancel={droplet.leave}>
+      <Link className="leo-feature" href="/lives/play/leo-mosquito">
         <span className="leo-feature-art">
           <LeoBedroom />
         </span>

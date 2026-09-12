@@ -3,13 +3,18 @@
 // chrome counted separately). A screen that grows past the ceiling fails here by name, with its
 // three longest lines, rather than shipping green. Long-form public documents are measured and
 // reported, not budgeted.
+//
+// One screen has a raised ceiling, reasoned and bounded in `CEILING` in the library beside this
+// file — the finder's results, which carries its results as well as its screen. The gate reads
+// that map rather than the flat number so a raise is a decision recorded in one place, and so a
+// screen without an entry still fails at 60.
 
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 // The library is plain ESM the CLI shares; the types are loose on purpose.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { BUDGET, LONG_FORM, contextFor, measure, reach, routes, summarise } from "../scripts/text-budget-lib.mjs";
+import { BUDGET, CEILING, LONG_FORM, contextFor, measure, reach, routes, summarise } from "../scripts/text-budget-lib.mjs";
 
 type Route = { path: string; name: string; state?: string };
 type Result = { path: string; name: string; total: number; verdict: string; longest: { w: number; tag: string; text: string }[] };
@@ -41,7 +46,8 @@ test("every app screen holds under the 60-word ceiling", async ({ browser, baseU
   expect(unreachable, "a screen the instrument could not reach is a screen nobody measured").toEqual([]);
   const app = results.filter((r) => !(LONG_FORM as Set<string>).has(r.path));
   expect(app.length, "the route register collapsed").toBeGreaterThan(25);
-  const over = app.filter((r) => r.total > BUDGET.screen).map((r) => `${r.name}: ${r.total} words :: ${r.longest.map((l) => `${l.w}w <${l.tag}> "${l.text}"`).join(" | ")}`);
+  const ceilingFor = (name: string) => (CEILING as Map<string, number>).get(name) ?? BUDGET.screen;
+  const over = app.filter((r) => r.total > ceilingFor(r.name)).map((r) => `${r.name}: ${r.total} words over ${ceilingFor(r.name)} :: ${r.longest.map((l) => `${l.w}w <${l.tag}> "${l.text}"`).join(" | ")}`);
   expect(over, `over the ${BUDGET.screen}-word ceiling`).toEqual([]);
   // Reported, so the run's log carries the number the commit should quote.
   const totals = app.map((r) => r.total).sort((a, b) => a - b);

@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-10T23:26:13.476Z",
-  "base": "http://localhost:3685",
+  "measuredAt": "2026-09-11T17:25:31.429Z",
+  "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -17,8 +17,8 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 18,
-      "fold": 18,
+      "total": 20,
+      "fold": 20,
       "chrome": 8,
       "ratio": 0.5,
       "verdict": "target",
@@ -311,6 +311,33 @@
       ]
     },
     {
+      "path": "/first-step",
+      "name": "/first-step",
+      "state": null,
+      "total": 9,
+      "fold": 9,
+      "chrome": 8,
+      "ratio": 0.2,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Who is this for?",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "A child or teenager",
+          "tag": "strong"
+        },
+        {
+          "w": 1,
+          "text": "Me",
+          "tag": "strong"
+        }
+      ]
+    },
+    {
       "path": "/lives",
       "name": "/lives",
       "state": null,
@@ -476,8 +503,8 @@
       "path": "/lives/toolkit",
       "name": "/lives/toolkit",
       "state": null,
-      "total": 15,
-      "fold": 15,
+      "total": 17,
+      "fold": 17,
       "chrome": 8,
       "ratio": 0.4,
       "verdict": "target",
@@ -689,6 +716,33 @@
       ]
     },
     {
+      "path": "/my-map",
+      "name": "/my-map",
+      "state": null,
+      "total": 49,
+      "fold": 20,
+      "chrome": 8,
+      "ratio": 1.2,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 11,
+          "text": "Sleep, movement, food and energy — the body the brain runs on.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Nothing yet. Not a gap, unasked.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "National Wellness Institute of Australia",
+          "tag": "a"
+        }
+      ]
+    },
+    {
       "path": "/practices",
       "name": "/practices",
       "state": null,
@@ -881,26 +935,26 @@
       "path": "/support",
       "name": "/support",
       "state": null,
-      "total": 25,
-      "fold": 25,
+      "total": 39,
+      "fold": 39,
       "chrome": 8,
-      "ratio": 0.6,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
         {
-          "w": 9,
-          "text": "Answer the ten questions and the path fills in.",
-          "tag": "p"
-        },
-        {
-          "w": 7,
-          "text": "Start from the problem, not the profession.",
+          "w": 4,
+          "text": "Which kind of help?",
           "tag": "h1"
         },
         {
-          "w": 5,
-          "text": "Nothing to walk from yet.",
-          "tag": "h2"
+          "w": 4,
+          "text": "Accountability, week by week",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Not sure? Two questions",
+          "tag": "a"
         }
       ]
     },
@@ -1013,6 +1067,33 @@
       ]
     },
     {
+      "path": "/urgent",
+      "name": "/urgent",
+      "state": null,
+      "total": 37,
+      "fold": 37,
+      "chrome": 8,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Free, any hour, from any phone.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Talk to a person now.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "In danger now",
+          "tag": "span"
+        }
+      ]
+    },
+    {
       "path": "/gp/example-mei-chao",
       "name": "GP profile",
       "state": null,
@@ -1043,10 +1124,10 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 60,
-      "fold": 46,
+      "total": 63,
+      "fold": 48,
       "chrome": 8,
-      "ratio": 1.5,
+      "ratio": 1.6,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1146,26 +1227,80 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 4,
-      "fold": 4,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
+        {
+          "w": 4,
+          "text": "Jax at the checkout",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "ONLY THE LIST!",
+          "tag": "p"
+        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo's routine, first step",
+      "state": "leo-routine",
+      "total": 20,
+      "fold": 20,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
         {
-          "w": 1,
-          "text": "Wasps",
+          "w": 5,
+          "text": "The mosquito has other plans.",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "SWAT!",
+          "w": 3,
+          "text": "Leo & the mosquito",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Still wide awake.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo asleep",
+      "state": "leo-settled",
+      "total": 24,
+      "fold": 24,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "The mosquito is still out there. Leo is asleep.",
           "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Tiny sounds feel familiar? Explore one idea",
+          "tag": "a"
+        },
+        {
+          "w": 3,
+          "text": "Leo & the mosquito",
+          "tag": "span"
         }
       ]
     },
@@ -1193,6 +1328,87 @@
           "w": 5,
           "text": "In common: adult ADHD assessment.",
           "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/my-map",
+      "name": "Your map, lived in",
+      "state": "map-lived",
+      "total": 56,
+      "fold": 20,
+      "chrome": 8,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 9,
+          "text": "Work and study: how tasks arrive, start and finish.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "You said a strategy here worked.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Once started, work often goes well",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/first-step",
+      "name": "First step, the second question",
+      "state": "first-step-stage",
+      "total": 18,
+      "fold": 18,
+      "chrome": 8,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Where are you up to?",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "On medication, sorting the dose",
+          "tag": "strong"
+        },
+        {
+          "w": 4,
+          "text": "The day-to-day is hard",
+          "tag": "strong"
+        }
+      ]
+    },
+    {
+      "path": "/first-step",
+      "name": "First step, the answer",
+      "state": "first-step-answer",
+      "total": 28,
+      "fold": 28,
+      "chrome": 8,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 11,
+          "text": "In NSW and Queensland a GP can do the whole assessment.",
+          "tag": "p"
+        },
+        {
+          "w": 10,
+          "text": "Book a long appointment and ask for an ADHD assessment.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Start with a GP.",
+          "tag": "h1"
         }
       ]
     },

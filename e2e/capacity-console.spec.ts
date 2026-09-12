@@ -12,6 +12,7 @@ import path from "node:path";
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
+import { isStateTint } from "../src/quality/tint";
 
 test.beforeEach(async ({ request }) => {
   await request.post("/api/mock/console");
@@ -70,7 +71,9 @@ test("does not style the drift verdict as a grade", async ({ page }) => {
       ctx.fillStyle = c;
       ctx.fillRect(0, 0, 1, 1);
       const d = ctx.getImageData(0, 0, 1, 1).data;
-      return [d[0]!, d[1]!, d[2]!];
+      // Tuple, not number[] — the lesson interop-console already carries: the inferred array type
+      // makes every channel `number | undefined`, which runs fine and fails the typecheck.
+      return [d[0]!, d[1]!, d[2]!] as [number, number, number];
     };
     const style = getComputedStyle(el);
     return {
@@ -103,15 +106,16 @@ test("does not style the drift verdict as a grade", async ({ page }) => {
   );
   expect(openingTag.replace("data-verdict={view.drift.compared ? view.drift.verdict : \"withheld\"}", ""),
     "the drift block styles itself from the verdict").not.toContain("verdict");
-  // No red, no green, no amber: the channels must not be pulled apart on any of the three surfaces
-  // a verdict could be graded through.
+  // No red, no green, no amber on any of the three surfaces a verdict could be graded through.
+  // `isStateTint` is the rule and `src/quality/tint.ts` is the one place it lives — it used to be
+  // written out here as a bare channel spread, and again in interop-console, and this palette's
+  // neutrals are cool enough to trip that: the drift block's own body colour is 26 apart.
   for (const [name, rgb] of [
     ["text", colours!.text],
     ["background", colours!.background],
     ["border", colours!.border],
   ] as const) {
-    const spread = Math.max(...rgb) - Math.min(...rgb);
-    expect(spread, `the drift ${name} is tinted (${colours!.raw})`).toBeLessThan(24);
+    expect(isStateTint(rgb), `the drift ${name} is tinted (${colours!.raw})`).toBe(false);
   }
 });
 

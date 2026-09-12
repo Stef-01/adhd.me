@@ -27,6 +27,13 @@ export const EVENTS = [
   "EXPERIMENT_ACCEPTED",
   "EXPERIMENT_COMPLETED",
   "EXPERIMENT_OUTCOME_RECORDED",
+  // The waiting checkpoint (src/model/checkpoint.ts): which one, and which of its three answers.
+  // The months and the answer are both closed values; nothing about the person travels with it.
+  "CHECKPOINT_ANSWERED",
+  // The triage layer's two questions (src/support/pathway.ts): who the care is for, and where
+  // somebody is up to. Both are closed vocabularies, so the event carries two identifiers and
+  // nothing that could describe a person.
+  "PATHWAY_ANSWERED",
   "SUPPORT_RECOMMENDATION_SHOWN",
   "PROVIDER_CARD_VIEWED",
   "PROVIDER_PROFILE_VIEWED",

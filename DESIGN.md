@@ -44,7 +44,7 @@ on-band.
 - `app/meditation-studio.tsx`, `src/learn/meditation.ts`: personal monotonic timers and server-synchronised shared sessions. No fabricated attendance or human host.
 - `app/learning-scene.tsx`: original vector cast, seven topic-specific scenes, quiz reactions and educational example interactions.
 - `app/play/`, `src/learn/runs.ts`: the twenty immersive game modules integrated from current main; their scenes, clocks, clues and personal-model callbacks remain independent of the reading activities.
-- `app/styles/glass.css`: integrated surface rims, glare, shadows and supported filters, using the shared warm palette.
+- `app/styles/glass.css`: liquid glass, inside a `[data-liquid]` games scope only — the ground the bubbles bend, the rim, the warm/cool dispersion split, the Fresnel ring and the press that compresses them, using the shared warm palette. `app/glass/glass-pointer.tsx` moves the specular under the finger for all of them at once; `app/glass/liquid-glass.tsx` draws the WebGL ground where the machine can, and the CSS washes stand down when it does.
 - `src/learn/cursor.ts`: validated device-local reading position, separate from v1 completion records.
 
 Library buttons use `.learn-card`; lesson and quiz pages use `.learn-lesson`. Never share those two layout classes again. New navigation rules must stay in the platform stylesheet; obsolete navigation selectors were removed from `globals.css`.

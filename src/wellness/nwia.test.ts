@@ -13,6 +13,13 @@ describe("the NWIA model, as the app reads it", () => {
     expect(lintLandingCopy(NWIA_PARADIGM)).toEqual([]);
   });
 
+  it("names the two aspects the map was asked to show, in words a person would search for", () => {
+    // "emotional regulation, creativity, and other key aspects" — the direction's own words. A
+    // dimension a person cannot recognise by its meaning line is a dimension they will not open.
+    expect(NWIA_MEANINGS.emotional.toLowerCase()).toContain("feelings");
+    expect(NWIA_MEANINGS.intellectual.toLowerCase()).toContain("creativity");
+  });
+
   it("maps every one of the app's subdomains to one or two dimensions, and every dimension is reached", () => {
     const reached = new Set<string>();
     for (const s of SUBDOMAINS) {

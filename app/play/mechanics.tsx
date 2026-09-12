@@ -21,6 +21,7 @@ import { CHARACTER_BIOS, type Mood, type Prop } from "@/learn/interactive";
 import { Scene } from "./scene";
 import { Bean } from "./beans";
 import { Glyph, LayerGlyph } from "./glyphs";
+import { useCollected } from "../collected";
 
 export interface MechanicProps {
   round: Round;
@@ -127,6 +128,7 @@ function Hold({ round, live, reducedMotion, progress, mood, onResult }: Mechanic
   const [done, setDone] = useState(false);
   const started = useRef(false);
   const finish = (hit: boolean) => { if (done) return; setDone(true); onResult(hit); };
+  const release = () => { if (holding && !reducedMotion) finish(false); setHolding(false); };
   useEffect(() => { if (!reducedMotion && live && progress >= 1 && started.current) finish(holding); /* eslint-disable-line react-hooks/exhaustive-deps */ }, [progress, live]);
   const moving = !reducedMotion && live && !done;
   const filled = started.current ? progress : 0;
@@ -137,8 +139,11 @@ function Hold({ round, live, reducedMotion, progress, mood, onResult }: Mechanic
       disabled={!live || done}
       aria-pressed={holding}
       onPointerDown={() => { started.current = true; setHolding(true); }}
-      onPointerUp={() => { if (holding && !reducedMotion) finish(false); setHolding(false); }}
-      onPointerLeave={() => { if (holding && !reducedMotion) finish(false); setHolding(false); }}
+      onPointerUp={release}
+      onPointerLeave={release}
+      /* A touch the browser takes back (a system gesture, a call) is a let-go. Without this the
+         button stayed "Holding…" with nothing under it and only the clock could end the round. */
+      onPointerCancel={release}
       onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); started.current = true; setHolding(true); } }}
       onKeyUp={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (holding && !reducedMotion) finish(false); setHolding(false); } }}
     >
@@ -173,23 +178,25 @@ const FLING = { out: (dir: number) => ({ x: 640 * dir, rotate: 18 * dir, opacity
  * the card is simply gone.
  */
 function Swipe({ round, live, reducedMotion, onResult }: MechanicProps) {
-  const [gone, setGone] = useState<string[]>([]);
+  // Two cards can go between renders, so what is cleared is a ref as well as state (app/collected.ts).
+  const gone = useCollected();
   const [dir, setDir] = useState<1 | -1>(1);
   const items = round.items ?? [];
   const remove = (item: string, way: 1 | -1) => {
-    if (gone.includes(item)) return;
+    if (!gone.take(item, true)) return;
     setDir(way);
-    const next = [...gone, item];
-    setGone(next);
-    if (next.length === items.length) onResult(true, next);
+    if (gone.size === items.length) onResult(true, Object.keys(gone.all));
   };
   return (
     <ul className="play-swipe" aria-label="Distractions">
       <AnimatePresence initial={false} custom={dir}>
-        {items.map((item, i) => gone.includes(item) ? null : (
+        {items.map((item, i) => gone.has(item) ? null : (
           <motion.li key={item} className="play-swipe-slot" style={{ zIndex: items.length - i }} layout={!reducedMotion} custom={dir} variants={reducedMotion ? undefined : FLING} exit={reducedMotion ? undefined : "out"}
             initial={reducedMotion ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ ...SETTLE, delay: reducedMotion ? 0 : i * 0.08 }}
-            drag={reducedMotion ? false : "x"} dragConstraints={{ left: 0, right: 0 }} dragElastic={0.9} onDragEnd={(_, info) => { if (Math.abs(info.offset.x) > 60) remove(item, info.offset.x > 0 ? 1 : -1); }}>
+            drag={reducedMotion ? false : "x"} dragConstraints={{ left: 0, right: 0 }} dragElastic={0.9}
+            /* Past the threshold it flings the way it went; anything shorter is the tap the drag
+               swallowed (2026-09-11), and a tap clears the card too, so it clears it. */
+            onDragEnd={(_, info) => remove(item, Math.abs(info.offset.x) > 60 && info.offset.x < 0 ? -1 : 1)}>
             <motion.button type="button" className="play-chip-big play-swipe-card" disabled={!live} onClick={() => remove(item, 1)} whileTap={{ scale: 0.97 }} transition={POP}>
               <Glyph text={item} prop={round.prop} size={24} />
               <X size={16} weight="bold" aria-hidden="true" /> {item}
@@ -219,21 +226,22 @@ function NoteArt({ prop }: { prop?: Prop }) {
  */
 function DragCapture({ round, live, reducedMotion, onResult }: MechanicProps) {
   const [selected, setSelected] = useState<string | null>(null);
-  const [captured, setCaptured] = useState<string[]>([]);
+  const captured = useCollected();
   const items = round.items ?? [];
   const capture = (item: string) => {
-    const next = [...captured, item];
-    setCaptured(next);
+    if (!captured.take(item, true)) return;
     setSelected(null);
-    if (next.length === items.length) onResult(true, next);
+    if (captured.size === items.length) onResult(true, Object.keys(captured.all));
   };
   return (
     <div className="play-capture" data-prop={round.prop ?? "none"}>
       <div className="play-choices play-slips" role="group" aria-label="Requests">
         <AnimatePresence initial={false}>
-          {items.map((item, i) => captured.includes(item) ? null : (
+          {items.map((item, i) => captured.has(item) ? null : (
             <motion.button key={item} type="button" className="play-choice play-slip" aria-pressed={selected === item} disabled={!live} onClick={() => setSelected(item)}
-              drag dragSnapToOrigin onDragEnd={(_, info) => { if (info.offset.y > 80) capture(item); }}
+              /* Down to the note captures it; a drag that stops short is the tap the drag
+                 swallowed (2026-09-11), and a tap is what picks a slip up. */
+              drag dragSnapToOrigin onDragEnd={(_, info) => (info.offset.y > 80 ? capture(item) : setSelected(item))}
               initial={reducedMotion ? false : { opacity: 0, y: -10, rotate: -2 }} animate={{ opacity: 1, y: selected === item ? -4 : 0, rotate: selected === item ? -1.5 : 0 }} exit={reducedMotion ? undefined : { y: 90, scale: 0.5, opacity: 0, transition: { duration: 0.28 } }} transition={{ ...SETTLE, delay: reducedMotion ? 0 : i * 0.08 }} whileTap={{ scale: 0.96 }}>
               <Glyph text={item} prop={round.prop} size={24} />
               {item}
@@ -245,7 +253,7 @@ function DragCapture({ round, live, reducedMotion, onResult }: MechanicProps) {
         <NoteArt prop={round.prop} />
         <span className="play-note-body">
           <span className="play-note-title">The note</span>
-          <ul>{captured.map((c) => <li key={c} className="play-pinned"><Check size={12} weight="bold" aria-hidden="true" /> {c}</li>)}</ul>
+          <ul>{Object.keys(captured.all).map((c) => <li key={c} className="play-pinned"><Check size={12} weight="bold" aria-hidden="true" /> {c}</li>)}</ul>
           {selected && <span className="play-note-hint">Tap to put “{selected}” here</span>}
         </span>
       </button>
@@ -475,6 +483,8 @@ function Pause({ round, live, reducedMotion, mood, onResult }: MechanicProps) {
       onPointerDown={() => setHolding(true)}
       onPointerUp={release}
       onPointerLeave={() => { if (holding) release(); }}
+      /* A cancelled touch is a let-go; without it the breath kept counting as held. */
+      onPointerCancel={() => { if (holding) release(); }}
       onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); setHolding(true); } }}
       onKeyUp={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); release(); } }}
     >

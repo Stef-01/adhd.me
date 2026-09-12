@@ -8,20 +8,36 @@ import { createLeoSwarm, readLeoSwarm, type SwarmCatches } from "@/lives/leo-swa
 import { LeoBuzz } from "./leo-buzz";
 import type { EngineProps } from "./engines";
 
-/** Original scene artwork; the reference Unity clip informs the four-pose timing only. */
-export function LeoBedroom({ asleep = false, moving = false, regulation = 100 }: { asleep?: boolean; moving?: boolean; regulation?: number }) {
+/**
+ * Original scene artwork; the reference Unity clip informs the four-pose timing only.
+ *
+ * The three routine states (2026-09-11) are drawn here rather than in a second scene, because the
+ * routine is the same room a minute later and a person has to see that: the curtains close over
+ * the window they watched mosquitoes come through, the headphones go on the head they watched
+ * flinch, the lamp they have been looking at all round goes out. A separate illustration would
+ * have been a diagram of a bedroom; this is Leo's.
+ */
+export function LeoBedroom({ asleep = false, moving = false, regulation = 100, windowShut = false, headphones = false, lightOff = false }: { asleep?: boolean; moving?: boolean; regulation?: number; windowShut?: boolean; headphones?: boolean; lightOff?: boolean }) {
   const upset = !asleep && regulation <= 70;
   const overwhelmed = !asleep && regulation <= 40;
   return <svg className={`leo-bedroom${moving ? " is-moving" : ""}`} data-emotion={overwhelmed ? "overwhelmed" : upset ? "unsettled" : "settled"} viewBox="0 0 390 560" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
     <path fill="#c5c6ed" d="M0 0h390v560H0z" />
     <path fill="#abaed9" d="M0 422h390v138H0z" />
     <rect x="247" y="35" width="106" height="151" rx="48" fill="#6d71ac" />
-    <rect x="255" y="43" width="90" height="135" rx="42" fill="#363c73" />
-    <path d="M316 62a24 24 0 1 0 12 37 24 24 0 0 1-12-37" fill="#fff2b7" />
-    <path d="M271 101h6m-3-3v6m52 37h6m-3-3v6" stroke="#d9daf4" strokeWidth="3" strokeLinecap="round" />
-    <path d="M251 121h98M301 41v140" stroke="#6d71ac" strokeWidth="7" />
+    {windowShut ? <>
+      <rect x="255" y="43" width="90" height="135" rx="42" fill="#e8d3b6" />
+      <path d="M268 47v127m13-129v131m39-131v131m13-127v127" stroke="#d3b894" strokeWidth="3" strokeLinecap="round" />
+      <path d="M300 43v135" stroke="#c8a97f" strokeWidth="4" />
+    </> : <>
+      <rect x="255" y="43" width="90" height="135" rx="42" fill="#363c73" />
+      <path d="M316 62a24 24 0 1 0 12 37 24 24 0 0 1-12-37" fill="#fff2b7" />
+      <path d="M271 101h6m-3-3v6m52 37h6m-3-3v6" stroke="#d9daf4" strokeWidth="3" strokeLinecap="round" />
+      <path d="M251 121h98M301 41v140" stroke="#6d71ac" strokeWidth="7" />
+    </>}
     <path d="M26 402h67v14H26zm6 12h8v73h-8zm47 0h8v73h-8z" fill="#776089" />
-    <path d="M51 352h12v48H51z" fill="#957194" /><path d="M36 315h43l13 42H24z" fill="#f2be85" />
+    <path d="M51 352h12v48H51z" fill="#957194" />
+    {!lightOff && <ellipse cx="58" cy="372" rx="62" ry="46" fill="#fff2b7" opacity=".38" />}
+    <path d="M36 315h43l13 42H24z" fill={lightOff ? "#9c8598" : "#f2be85"} />
     <ellipse cx="215" cy="508" rx="125" ry="16" fill="#8d8fbc" />
     <path d="M111 361q0-19 19-19h194q21 0 21 19v141H111z" fill="#815e83" />
     <rect x="120" y="351" width="214" height="119" rx="24" fill="#f8eddb" />
@@ -31,11 +47,17 @@ export function LeoBedroom({ asleep = false, moving = false, regulation = 100 }:
       {asleep ? <path d="M178 353q7 7 14 0m24 0q7 7 14 0" fill="none" stroke="#465a08" strokeWidth="4" strokeLinecap="round" /> : overwhelmed ? <path d="m177 350 14 7-14 6m54-13-14 7 14 6" fill="none" stroke="#603b2d" strokeWidth="4" strokeLinecap="round" /> : <><path d={upset ? "M175 339l18 9m22 0 18-9" : "M175 343l18 3m22-1 18-5"} stroke="#465a08" strokeWidth="4" strokeLinecap="round" /><ellipse cx="186" cy="357" rx="4" ry="6" fill="#465a08" /><ellipse cx="224" cy="357" rx="4" ry="6" fill="#465a08" /></>}
       <path d={asleep ? "M198 374q9 7 17 0" : upset ? "M195 381q11-13 22 0" : "M199 378h14"} stroke="#465a08" strokeWidth="4" strokeLinecap="round" fill="none" />
       {overwhelmed && <><path d="M161 366q-15-3-8-23m95 23q15-3 8-23" fill="none" stroke="#e9a471" strokeWidth="13" strokeLinecap="round" /><path d="m141 332-7-10m136 10 7-10m-79-15 5-11 6 11" fill="none" stroke="#94614a" strokeWidth="3" strokeLinecap="round" /></>}
+      {headphones && <g className="leo-cans">
+        <path d="M158 352a47 47 0 0 1 94 0" fill="none" stroke="#3a355f" strokeWidth="7" strokeLinecap="round" />
+        <rect x="149" y="339" width="19" height="32" rx="9" fill="#3a355f" />
+        <rect x="242" y="339" width="19" height="32" rx="9" fill="#3a355f" />
+      </g>}
     </g></g>
     <path d="M122 393q92-19 211 7v92H122z" fill="#f1b56c" />
     <path d="M122 414q107-14 211 8v22q-112-23-211-8z" fill="#f8d699" />
     <path d="M129 492v20m197-20v20" stroke="#815e83" strokeWidth="12" strokeLinecap="round" />
-    {asleep && <g fill="#465a08" fontFamily="sans-serif" fontWeight="700"><text x="155" y="290" fontSize="20">z</text><text x="133" y="267" fontSize="27">z</text></g>}
+    {lightOff && <rect width="390" height="560" fill="#2b2a52" opacity=".34" />}
+    {asleep && <g fill={lightOff ? "#e8e9fb" : "#465a08"} fontFamily="sans-serif" fontWeight="700"><text x="155" y="290" fontSize="20">z</text><text x="133" y="267" fontSize="27">z</text></g>}
   </svg>;
 }
 

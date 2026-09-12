@@ -52,6 +52,6 @@ const measured = results.filter((r) => !r.error);
 const over = measured.filter((r) => r.verdict === "OVER");
 const app = measured.filter((r) => !LONG_FORM.has(r.path));
 console.log(`\n${measured.length} screens measured. Benchmarks: Headspace home ${BENCHMARK.headspaceHome}, detail ${BENCHMARK.headspaceDetail}, list ${BENCHMARK.headspaceList}; Finch ${BENCHMARK.finchHome}.`);
-console.log(`App screens at or under the 40-word target: ${app.filter((r) => r.total <= BUDGET.target).length} of ${app.length}. Under the 60-word ceiling: ${app.filter((r) => r.total <= BUDGET.screen).length} of ${app.length}. Over: ${over.length}.`);
+console.log(`App screens at or under the 40-word target: ${app.filter((r) => r.total <= BUDGET.target).length} of ${app.length}. Within their ceiling: ${app.filter((r) => r.verdict !== "OVER").length} of ${app.length}. Over: ${over.length}.`);
 console.log(`Median app screen: ${app.map((r) => r.total).sort((a, b) => a - b)[Math.floor(app.length / 2)]} words, ${Math.round((app.map((r) => r.total).sort((a, b) => a - b)[Math.floor(app.length / 2)] / BENCHMARK.headspaceHome) * 10) / 10}x Headspace's home.`);
 for (const r of over) console.log(`  ${r.name}: ${r.total} :: ${r.longest.map((l) => `${l.w}w <${l.tag}> "${l.text}"`).join(" | ")}`);

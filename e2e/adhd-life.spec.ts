@@ -206,7 +206,17 @@ test("E2E 8: a safety response interrupts the module, pauses recommendations, an
 
 test("E2E 6: the support path walks from the problem to professions, and 'See providers' narrows the finder", async ({ page }) => {
   await page.goto("/support");
-  await expect(page.getByRole("heading", { name: /Nothing to walk from yet/ })).toBeVisible();
+  // COLD, this page ANSWERS rather than asks (2026-09-11). It used to say "Nothing to walk from
+  // yet. Answer the ten questions and the path fills in." — a questionnaire, on the one page named
+  // for starting from the problem, to the reader who does not yet know what they need. The kinds
+  // of help are the page now, each opening the finder narrowed to it; the ten questions are still
+  // offered below them and still build the ranked walk this test goes on to check.
+  await expect(page.getByRole("heading", { name: "Which kind of help?" })).toBeVisible();
+  await expect(page.locator(".cold-kind")).toHaveCount(6);
+  await expect(page.locator(".cold-kind").first()).toContainText("GP");
+  // The "not sure" line offers TWO questions, not ten: /first-step answers the same thing in two
+  // taps, and the onboarding it used to point at is the toll this page was caught charging.
+  await expect(page.getByRole("link", { name: /Two questions/ })).toBeVisible();
   await page.evaluate((k) => {
     localStorage.setItem(k, JSON.stringify({
       v: 1, onboarding: { improveFirst: "start-earlier", impact: 8, lookingFor: "professional", completedAt: new Date().toISOString() },
@@ -235,6 +245,39 @@ test("E2E 6: the support path walks from the problem to professions, and 'See pr
   await rows.first().click();
   await expect(page.getByText("Best for")).toBeVisible();
   await expect(page.getByText(/Why this provider is listed/).or(page.locator(".fit-evidence"))).toHaveCount(1);
+});
+
+test("Triage: two questions separate the pathways before any list, and the answer opens the finder narrowed", async ({ page }) => {
+  // Charmaine Bernie, 2026-09-11: people land on the wrong waitlist for years because nothing
+  // separated the pathways first — children on an autism assessment list for two years when it was
+  // never the right list. This is the flow that asks instead, and the assertions are about the two
+  // things that make it worth asking: the answers ROUTE somewhere different, and it costs two taps.
+  await page.goto("/");
+  await page.getByRole("link", { name: "Two questions" }).click();
+  await expect(page).toHaveURL(/\/first-step$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Who is this for?");
+
+  // The child assessment route: the misrouting she measured, named on the card that would cause it.
+  await page.getByRole("button", { name: "A child or teenager" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Where are you up to?");
+  await page.getByRole("button", { name: "Still finding out" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("A GP referral, to a paediatrician.");
+  await expect(page.locator(".first-step-answer")).toContainText("The autism assessment list is a different list.");
+
+  // Back undoes a tap rather than the whole flow, and the other stage is a different answer.
+  await page.getByRole("button", { name: "Back" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Where are you up to?");
+  await page.getByRole("button", { name: "The day-to-day is hard" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("School and home, not a clinic.");
+
+  // And the answer is a door, not a verdict: it opens the finder already narrowed to that kind.
+  await page.getByRole("link", { name: /See occupational therapists/ }).click();
+  await expect(page).toHaveURL(/\/$/);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("adhdme.filters.v1") ?? "{}").professions)).toEqual(["occupational-therapist"]);
+  await page.getByRole("textbox").fill("help with the day-to-day");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+  for (const text of await page.locator(".clinician-row").allInnerTexts()) expect(text).toContain("Occupational therapist");
 });
 
 test("the finder reads a named profession out of the sentence, and every kind is still there without one", async ({ page }) => {
@@ -379,10 +422,19 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
     answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
   })), MODEL_KEY);
   await page.reload();
+  // The balance line used to name all nine dimensions twice, about thirty words to say what a
+  // shape says at a glance. The shape is /my-map; this is the count, the honest half ("unasked")
+  // and the door, and the naming of every touched and untouched dimension is asserted there.
   const balance = page.getByTestId("nwia-balance");
-  await expect(balance).toContainText(/touches work, spiritual values, intellectual/);
-  await expect(balance).toContainText(/Nothing yet on physical, social, emotional/);
-  await expect(balance).toContainText(/unasked/);
+  await expect(balance).toContainText(/3 of nine touched, the rest unasked/);
+  await balance.getByRole("link", { name: "Your map" }).click();
+  await expect(page).toHaveURL(/\/my-map$/);
+  await expect(page.getByRole("button", { name: /^Work/ })).toContainText("Named");
+  await expect(page.getByRole("button", { name: /^Physical/ })).toContainText("Unasked");
+  // The honest half, said per axis rather than in one long sentence: an untouched dimension is
+  // not a gap in a person, and the map says so on the one the reader opens.
+  await page.getByRole("button", { name: /^Physical/ }).click();
+  await expect(page.locator(".map-open")).toContainText("Nothing yet. Not a gap, unasked.");
 });
 
 test("§14 Calm: the shelf is a line, a button and the tiles; a finished run is a tick on its tile, never a count", async ({ page }) => {

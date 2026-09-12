@@ -96,7 +96,9 @@ export function Toolkit() {
         </section>
       )}
 
-      <p className="lives-foot"><Link href="/lives/learn"><Check size={14} weight="bold" aria-hidden="true" /> All strategies</Link> · <Link href="/lives/play">Play</Link></p>
+      {/* The map is where a kept strategy shows up as a shape, so it belongs on the screen that
+          holds them. */}
+      <p className="lives-foot"><Link href="/lives/learn"><Check size={14} weight="bold" aria-hidden="true" /> All strategies</Link> · <Link href="/lives/play">Play</Link> · <Link href="/my-map">Your map</Link></p>
     </div>
   );
 }

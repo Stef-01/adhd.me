@@ -144,8 +144,14 @@
 .lives-minutes, .lives-status { display: inline-block; margin-top: 2px; color: var(--accent-deep); font-size: 0.8125rem; font-weight: 700; }
 .lives-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
 .lives-saved { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; color: var(--route-strong, #0e8345); font-size: 0.9rem; font-weight: 700; }
-.lives-foot { margin: 8px 0 0; text-align: center; color: var(--muted); font-size: 0.9375rem; }
-.lives-foot a { color: var(--accent-deep); font-weight: 700; }
+/* A 20px line of text is a 20px target, under WCAG 2.2's 24px floor and well under this tree's own
+   44. The first fix grew each link's hit area with an `::after` — the same rule the filters
+   screen's Reset all uses — and `e2e/controls.spec.ts` failed on the very next change: a third link
+   made the line WRAP, and a box extended twelve pixels up and down covers the link on the row
+   above. The extension is gone and the row is a flex line instead, so every link is a real 44px
+   target whether the sentence fits on one line or three. */
+.lives-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 10px; margin: 8px 0 0; color: var(--muted); font-size: 0.9375rem; }
+.lives-foot a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; color: var(--accent-deep); font-weight: 700; }
 
 /* ── Screens: home, learn, toolkit, characters, lab ────────────────────────────────────────── */
 .lives-screen { padding-bottom: 96px; }
