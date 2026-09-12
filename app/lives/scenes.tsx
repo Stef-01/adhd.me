@@ -142,9 +142,18 @@ const IDLE: Record<string, "flap" | "bob" | "spin" | "sway"> = {
   bus: "sway", cyclist: "sway", dog: "sway", advert: "sway", roadworks: "sway", printer: "sway", colleague: "sway", kayak: "sway", drone: "sway", lamp: "sway", cactus: "sway", waffle: "sway",
 };
 
+const KIND_CACHE = new Map<string, string | null>();
+
 export function kindFor(label: string): string | null {
   const key = label.toLowerCase();
-  for (const [word, kind] of KEYS) if (key.includes(word)) return kind;
+  if (KIND_CACHE.has(key)) return KIND_CACHE.get(key)!;
+  for (const [word, kind] of KEYS) {
+    if (key.includes(word)) {
+      KIND_CACHE.set(key, kind);
+      return kind;
+    }
+  }
+  KIND_CACHE.set(key, null);
   return null;
 }
 
@@ -155,20 +164,8 @@ export function Sprite({ label, kind, fallback = "note", className }: { label?: 
   const k = kind ?? (label ? kindFor(label) : null) ?? fallback;
   return (
     <svg viewBox="0 0 64 64" className={`lives-sprite${className ? ` ${className}` : ""}`} data-kind={k} data-idle={IDLE[k] ?? "float"} aria-hidden="true" style={{ overflow: "visible" }}>
-      <defs>
-        <filter id={`dwtd-flat-shadow-${k}`}>
-          <feOffset dx="-2" dy="-3" in="SourceAlpha" result="offset" />
-          <feComposite in="SourceAlpha" in2="offset" operator="out" result="crescent" />
-          <feFlood flood-color="#000" flood-opacity="0.15" result="color" />
-          <feComposite in="color" in2="crescent" operator="in" result="shadow" />
-          <feMerge>
-            <feMergeNode in="SourceGraphic" />
-            <feMergeNode in="shadow" />
-          </feMerge>
-        </filter>
-      </defs>
-      {/* We apply the filter to a group so it affects the combined outer silhouette of the entire piece, creating a single unified bottom-right cell-shadow. */}
-      <g filter={`url(#dwtd-flat-shadow-${k})`}>
+      {/* We apply the global DWTD shadow filter to a group so it affects the combined outer silhouette of the entire piece. */}
+      <g filter="url(#dwtd-flat-shadow)">
         {PIECES[k] ?? PIECES.note}
       </g>
     </svg>

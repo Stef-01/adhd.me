@@ -12,7 +12,7 @@
 // piece is a drawn `Sprite` inside the same `.lives-thing` button, named by its label; a cleared
 // piece leaves as a `Ghost` on a one-shot effect. Motion loops only when the run allows them.
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { escalatedLabel, hitFxOf, markAt, positionAt, releaseVerdict, SCENE, tauntAt, timingHit, traceIsSafe, worldOf, type Entity, type GameDefinition, type GameScene, type HitFx, type Point } from "@/lives";
 import { LifeBean } from "./bean";
 import { LeoMosquito } from "./leo-mosquito";
@@ -100,7 +100,7 @@ function TargetSwat({ game, scene, live, reducedMotion, reducedSensory, progress
   const finish = useOnce(onResult);
   const swatted = useCollected<Point>();
   const [misses, setMisses] = useState(0);
-  const targets = scene.entities.filter((e) => e.role === "target");
+  const targets = useMemo(() => scene.entities.filter((e) => e.role === "target"), [scene.entities]);
   const fx = hitFxOf(game.id);
   const swat = (id: string, at: Point) => {
     if (!swatted.take(id, at)) return;
@@ -124,7 +124,7 @@ function TargetSwat({ game, scene, live, reducedMotion, reducedSensory, progress
 function SemanticFilter({ game, scene, live, reducedMotion, reducedSensory, onResult, outcome }: EngineProps) {
   const finish = useOnce(onResult);
   const taken = useCollected();
-  const targets = scene.entities.filter((e) => e.role === "target");
+  const targets = useMemo(() => scene.entities.filter((e) => e.role === "target"), [scene.entities]);
   const pick = (e: Entity) => {
     if (e.role !== "target") { finish({ outcome: "failure", mistakes: 1, line: `That was ${e.label}.` }); return; }
     if (!taken.take(e.id, true)) return;
@@ -226,8 +226,10 @@ function ObjectSearch({ game, scene, live, reducedMotion, reducedSensory, onResu
 function GoalProtection({ game, scene, live, reducedMotion, reducedSensory, progress, elapsedMs, onResult, outcome }: EngineProps) {
   const finish = useOnce(onResult);
   const cleared = useCollected<Point>();
-  const keep = scene.entities.find((e) => e.role === "keep")!;
-  const intruders = scene.entities.filter((e) => e.role === "intruder");
+  const { keep, intruders } = useMemo(() => ({
+    keep: scene.entities.find((e) => e.role === "keep")!,
+    intruders: scene.entities.filter((e) => e.role === "intruder"),
+  }), [scene]);
   const fx = hitFxOf(game.id);
   const seconds = elapsedMs / 1000;
   const allowed = progress > 0 ? elapsedMs / progress : 0;

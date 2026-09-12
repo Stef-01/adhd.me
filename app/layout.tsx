@@ -141,6 +141,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* The studio's WebGL liquid glass under the whole page (app/glass/liquid-glass.tsx). */}
         <LiquidGlass />
         <GlassPointer />
+        {/* Flat cast-shadow filter used by the Lives scenes (app/lives/scenes.tsx). */}
+        <svg aria-hidden="true" style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}>
+          <defs>
+            <filter id="dwtd-flat-shadow">
+              <feOffset dx="-2" dy="-3" in="SourceAlpha" result="offset" />
+              <feComposite in="SourceAlpha" in2="offset" operator="out" result="crescent" />
+              <feFlood floodColor="#000" floodOpacity="0.15" result="color" />
+              <feComposite in="color" in2="crescent" operator="in" result="shadow" />
+              <feMerge>
+                <feMergeNode in="SourceGraphic" />
+                <feMergeNode in="shadow" />
+              </feMerge>
+            </filter>
+          </defs>
+        </svg>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}

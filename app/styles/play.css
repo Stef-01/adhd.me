@@ -161,7 +161,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--play-ink) 8%, transparent); }
 .play-controls { width: 100%; }
 .bean { display: block; }
-.play-hero-bean { filter: drop-shadow(0 8px 0 color-mix(in srgb, var(--play-ink) 8%, transparent)); }
+.play-hero-bean { }
 
 /* ── The drawn pieces below the scene: objects, slips, cards, stations, trays. ───────────────────── */
 .play-glyph { display: inline-block; flex: 0 0 auto; vertical-align: middle; }

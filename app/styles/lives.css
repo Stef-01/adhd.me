@@ -257,11 +257,10 @@
 
 /* Pieces: the drawing is the button. The label is the accessible name, and a caption where the word is the game. */
 .lives-world .lives-thing { background: transparent; border: 0; padding: 0; box-shadow: none; color: #172033; border-radius: 20px; }
-.lives-world .lives-thing .lives-sprite { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 6px 5px rgb(23 32 51 / 0.24)); transition: transform 160ms var(--ease-ui); }
+.lives-world .lives-thing .lives-sprite { display: block; width: 100%; height: auto; overflow: visible; transition: transform 160ms var(--ease-ui); }
 .lives-world .lives-thing.has-caption { gap: 4px; }
 .lives-world .lives-thing.has-caption .lives-sprite { width: 76%; }
 .lives-world .lives-thing-label, .lives-world .lives-trace-label { padding: 3px 9px; border-radius: 999px; background: rgb(255 255 255 / 0.94); color: #172033; font-size: 0.75rem; font-weight: 700; line-height: 1.2; white-space: nowrap; box-shadow: 0 2px 6px rgb(23 32 51 / 0.16); }
-.lives-world .lives-thing[data-role="hazard"] .lives-sprite { filter: drop-shadow(0 0 6px rgb(224 97 111 / 0.75)) drop-shadow(0 6px 5px rgb(23 32 51 / 0.24)); }
 .lives-world .lives-thing.is-keep { background: radial-gradient(circle, rgb(255 255 255 / 0.8) 0 58%, transparent 60%); }
 .lives-world .lives-thing:focus-visible { outline: 3px solid #172033; outline-offset: 3px; }
 @media (hover: hover) { .lives-world .lives-thing:not(:disabled):hover .lives-sprite { transform: scale(1.07); } }
@@ -386,7 +385,7 @@
 .lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) { align-items: flex-start; padding-inline: 22px; }
 .lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) .lives-hold-button { margin-left: 6px; }
 /* The crossing starts where its character stands. */
-.lives-trace-who { position: absolute; transform: translate(-50%, -70%); z-index: 2; pointer-events: none; filter: drop-shadow(0 4px 4px rgb(23 32 51 / 0.24)); }
+.lives-trace-who { position: absolute; transform: translate(-50%, -70%); z-index: 2; pointer-events: none; }
 .lives-trace:has(.lives-trace-who) ~ .lives-scene-bean, .lives-scene:has(.lives-trace-who) .lives-scene-bean { display: none; }
 /* The shout already names the hold; the cue pill shows only once there is something new to say. */
 .lives-world .lives-cue:empty { visibility: hidden; }
