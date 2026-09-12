@@ -32,6 +32,7 @@ import { deviceLearningStorage } from "@/learn/cursor";
 import { LearningCoverArt, LearningScene } from "./learning-scene";
 import { LifeBean } from "./lives/bean";
 import { LeoBedroom } from "./lives/leo-mosquito";
+import { TheoHallway } from "./lives/theo-art";
 import { useProfile } from "./lives/profile-hook";
 import { Bean } from "./play/beans";
 
@@ -309,6 +310,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
         </span>
       </Link>
       </div>
+      <Link className="leo-feature theo-feature" href="/lives/play/theo-out-the-door"><span className="leo-feature-art"><TheoHallway /></span><span><strong>Just get out the door.</strong><span>Theo’s morning <ArrowRight size={18} /></span></span></Link>
       <ol className="learn-stack" data-testid="learn-games">
         {runs.map((module, index) => (
           <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />

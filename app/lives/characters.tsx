@@ -46,6 +46,7 @@ export function LivesCharacters() {
                 </ul>
               </details>
               {c.id === "leo" && <Link className="lives-row" href="/lives/play/leo-mosquito">Play Leo’s moment →</Link>}
+              {c.id === "theo" && <Link className="lives-row" href="/lives/play/theo-out-the-door">Play Theo’s morning →</Link>}
               
             </li>
           );

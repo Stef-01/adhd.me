@@ -15,6 +15,7 @@ import "./styles/match.css";
 import "./styles/lives.css";
 import { SiteMotion } from "./site-motion";
 import "./styles/leo.css";
+import "./styles/theo.css";
 import { LiquidGlass } from "./glass/liquid-glass";
 import { GlassPointer } from "./glass/glass-pointer";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
