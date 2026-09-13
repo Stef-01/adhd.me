@@ -166,7 +166,7 @@ function StartHere({ answers, onStart }: { answers: OnboardingAnswers; onStart: 
           <p>{module.subtitle} · {module.minutes} min</p>
           <div className="life-actions">
             <button type="button" className="learn-primary" onClick={() => onStart(module.id)}>Start <ArrowRight size={17} weight="bold" aria-hidden="true" /></button>
-            <Link className="learn-secondary" href="/today">Not now</Link>
+            <Link className="learn-secondary" href="/my-adhd">Not now</Link>
           </div>
         </div>
       )}

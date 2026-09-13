@@ -101,7 +101,7 @@ test("O233: the bar holds destinations, and what is consulted once lives in sett
   await page.getByRole("button", { name: "Settings" }).click();
   const settings = page.getByRole("dialog", { name: "Settings" });
   await expect(settings).toBeVisible();
-  for (const name of [/Search filters/, /About ADHD\.ME/, /^Questions/, /Worked examples/, /^Privacy/]) {
+  for (const name of [/Search filters/, /About ADHD\.ME/, /^Help & answers/, /Worked examples/, /^Privacy/]) {
     await expect(settings.getByRole("link", { name })).toBeVisible();
   }
   // The finder's own switch rides in the same sheet, so there is one settings surface.
@@ -439,4 +439,26 @@ test("liquid glass runs under the games where WebGL2 can, stands aside where it 
   // Nothing the layer does may cover the page: the first heading is still hit-testable.
   const hit = await page.evaluate(() => { const h = document.querySelector("h1")!; const r = h.getBoundingClientRect(); return document.elementFromPoint(r.left + 4, r.top + 4)?.closest("h1") === h; });
   expect(hit).toBe(true);
+});
+
+
+test("daily actions live in My ADHD and help is reached through Settings", async ({ page }) => {
+  await page.goto("/today");
+  await expect(page).toHaveURL(/\/my-adhd$/);
+  await expect(page.getByRole("main")).toHaveCount(1);
+  const nav = page.getByRole("navigation", { name: "Sections" });
+  await expect(nav.getByRole("link")).toHaveText(["Support", "Learn", "My ADHD"]);
+  await expect(nav.getByRole("link", { name: "My ADHD", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("region", { name: "One useful thing" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Start", exact: true })).toHaveCount(1);
+  await expect(page.locator(".platform-header").getByRole("link", { name: /Help & answers/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  const sheet = page.getByRole("dialog", { name: "Settings" });
+  await expect(sheet.getByRole("link", { name: /Help & answers/ })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(sheet).toBeHidden();
+  await expect(page.getByRole("button", { name: "Settings", exact: true })).toBeFocused();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await sheet.getByRole("link", { name: /Help & answers/ }).click();
+  await expect(page).toHaveURL(/\/faq$/);
 });

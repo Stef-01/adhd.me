@@ -20,7 +20,6 @@ export function PlatformHeader() {
     <AppTabs />
     <div className="platform-utilities">
       <Link className="platform-urgent" href="/urgent">Urgent help</Link>
-      <Link className="platform-help" href="/faq">Help &amp; answers <span aria-hidden="true">↗</span></Link>
       <div id="platform-settings" />
     </div>
   </header>;

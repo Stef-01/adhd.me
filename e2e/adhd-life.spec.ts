@@ -154,11 +154,12 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await expect(page.getByText("Still testing")).toBeVisible();
   await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
 
-  // Today follows up the experiment before anything new, and the outcome lands in the history.
+  // The daily action updates the history on the same My ADHD screen.
   await page.evaluate((k) => { const r = JSON.parse(localStorage.getItem(k) ?? "{}"); r.onboarding = { ...(r.onboarding ?? {}), completedAt: new Date().toISOString() }; localStorage.setItem(k, JSON.stringify(r)); }, MODEL_KEY);
   await page.goto("/today");
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toBeVisible();
   await page.getByRole("button", { name: "A lot" }).click();
+  await expect(page.getByText("Things that help me")).toBeVisible();
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toHaveCount(0);
   await page.getByText("Why am I seeing this?").click();
   await expect(page.locator(".life-why code")).toContainText("rule ");

@@ -1,39 +1,3 @@
-// O230 (founder-directed): the app's tab register — the four places the product has, named once.
-//
-// THE SHAPE IS RESEARCHED, NOT INVENTED. The three public health apps with published structure
-// agree on it: the NHS App's design system builds the whole product on three "hub" tabs (Home,
-// Messages, Profile) it deliberately protects from redesign because the information architecture
-// hangs off them; Apple Health ships three (Summary, Sharing, Browse); Zocdoc ships five and —
-// the finding that decided this unit — opens cold on SEARCH, not on a hero. None of them opens on
-// a marketing page, and none of them puts the thing the app is for behind a link. Hence: the
-// finder is tab one and tab one is `/`, and the story that used to hold `/` is a tab like any
-// other. The practitioner consensus in the same corpus is 4–5 tabs with an icon AND a text label
-// (icon-only is read as a literacy and trust failure in health contexts), so every entry here
-// carries both and the label is never hidden at any width.
-//
-// O233 (founder-directed) CORRECTED WHAT GOES IN IT, and the correction is the lesson. O230 built
-// the bar from the researched COUNT and then filled it with the four pages this tree happened to
-// have: Examples, Questions and About. Those are things the product knows, not places a person
-// goes. A bar is for destinations somebody RETURNS to — the task, their own state, the thing worth
-// reading — and everything consulted once belongs behind a settings control, which is what
-// `app/app-settings.tsx` now is. Three destinations, inside the researched 3–5 range, chosen this
-// time by what a person comes back for.
-//
-// WHY A REGISTER RATHER THAN JSX. Three things have to agree — the bar, the routes that exist, and
-// what a crawler is told about each of them — and they drifted the last three times this tree let
-// a list live inside a component (O168's route arrays, U7's robots lists, O189's spine). The test
-// beside this file holds every tab to a real page route, and holds the count to the researched
-// range in both directions, so a fifth tab is a decision somebody makes on purpose and a sixth is
-// a failure.
-
-// 2026-09-08 (founder-directed, the ADHD Life PRD §6): the bar is the PRD's four destinations.
-// `Support` is the finder at `/` — the marketplace, and still tab one, still the product; `Today`
-// is the one most useful next action; `Learn` keeps its route; `My ADHD` is the personal life
-// map. The filters screen (`/profile`) leaves the bar: the PRD puts profile and settings behind
-// the top-right control, and the filters are reached from the results screen, the settings sheet
-// and the finder's own welcome. The Support tab claims it as current (`also`), so a person editing
-// filters is still, visibly, inside the finder.
-
 export interface AppTab {
   /** The route this tab is. Must be a real page route in `app/`. */
   readonly href: string;
@@ -60,13 +24,6 @@ export const APP_TABS: readonly AppTab[] = [
     purpose: "Describe the support you are looking for, in words or out loud, or start from the problem and be walked to the kind of person who helps with it.",
   },
   {
-    href: "/today",
-    also: ["/start"],
-    label: "Today",
-    icon: "Sun",
-    purpose: "The single most useful next thing for you today — a module, something to try, or a question about how the last thing went.",
-  },
-  {
     href: "/approach",
     also: ["/lives"],
     label: "Learn",
@@ -77,7 +34,7 @@ export const APP_TABS: readonly AppTab[] = [
     href: "/my-adhd",
     label: "My ADHD",
     icon: "Compass",
-    also: ["/manual", "/medication", "/adjustments", "/my-map"],
+    also: ["/today", "/start", "/manual", "/medication", "/adjustments", "/my-map"],
     purpose: "Your own picture — the biggest friction, what seems to contribute across brain, body, environment and people, and what has helped.",
   },
 ];

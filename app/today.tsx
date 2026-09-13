@@ -14,9 +14,9 @@ import { recommend } from "@/model/recommend";
 import { acknowledgeSafety, activeSafety, recordCheckpoint, recordOutcome, type ExperimentOutcome } from "@/model/store";
 import { CHECKPOINT_LABEL, dueCheckpoint, type CheckpointAnswer, type CheckpointMonths } from "@/model/checkpoint";
 import { track } from "@/model/events";
-import { LifeHeader, WhyThis } from "./life-shell";
+import { WhyThis } from "./life-shell";
 import { SafetyScreen } from "./safety-screen";
-import { useModel } from "./use-model";
+import type { useModel } from "./use-model";
 
 const OUTCOMES: ReadonlyArray<{ id: ExperimentOutcome; label: string }> = [
   { id: "a-lot", label: "A lot" },
@@ -32,9 +32,9 @@ const CHECKPOINT_ANSWERS: ReadonlyArray<{ id: CheckpointAnswer; label: string }>
   { id: "not-now", label: "Not now" },
 ];
 
-export function Today() {
+export function TodayContent({ model }: { model: ReturnType<typeof useModel> }) {
   const router = useRouter();
-  const { record, refresh, storage } = useModel();
+  const { record, refresh, storage } = model;
   const safety = record ? activeSafety(record) : null;
   const rec = record ? recommend(record) : null;
   // The waiting checkpoint (src/model/checkpoint.ts) takes the card when one is due. It REPLACES
@@ -44,13 +44,7 @@ export function Today() {
   const due: CheckpointMonths | null = record ? dueCheckpoint(record) : null;
 
   return (
-    <main id="main-content" className="me-screen life-screen app-page-with-tabs">
-      <LifeHeader />
-      {/* §14 Calm (founder, 2026-09-08): one card, one button, no labels. The heading is the page. */}
-      <header className="life-head">
-        <h1>One useful thing.</h1>
-      </header>
-
+    <section aria-label="One useful thing" className="my-daily-action">
       {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
       {record && safety && (
@@ -116,6 +110,6 @@ export function Today() {
         </section>
       )}
 
-    </main>
+    </section>
   );
 }

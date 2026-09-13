@@ -23,8 +23,8 @@ describe("O230 the app's tabs", () => {
     expect(APP_TABS[0]?.label).toBe("Support");
   });
 
-  it("is the PRD's four destinations, in its order after the product", () => {
-    expect(APP_TABS.map((t) => t.label)).toEqual(["Support", "Today", "Learn", "My ADHD"]);
+  it("keeps three destinations with daily actions inside My ADHD", () => {
+    expect(APP_TABS.map((t) => t.label)).toEqual(["Support", "Learn", "My ADHD"]);
   });
 
   it("names a real page route, once each, and never a console or dynamic one", () => {
@@ -62,14 +62,14 @@ describe("O230 which tab a path belongs to", () => {
     expect(activeTab("/")?.href).toBe("/");
     expect(activeTab("/approach")?.href).toBe("/approach");
     expect(activeTab("/approach/map")?.href).toBe("/approach");
-    expect(activeTab("/today")?.href).toBe("/today");
+    expect(activeTab("/today")?.href).toBe("/my-adhd");
     expect(activeTab("/my-adhd")?.href).toBe("/my-adhd");
   });
 
-  it("a deeper screen of a place is that place: the filters and the support path are the finder's, onboarding is Today's", () => {
+  it("a deeper screen of a place is that place: the filters and the support path are the finder's, onboarding belongs to My ADHD", () => {
     expect(activeTab("/profile")?.label).toBe("Support");
     expect(activeTab("/support")?.label).toBe("Support");
-    expect(activeTab("/start")?.label).toBe("Today");
+    expect(activeTab("/start")?.label).toBe("My ADHD");
   });
 
   it("claims nothing outside the bar — a route with no tab highlights none", () => {

@@ -47,7 +47,7 @@ export function AppSettings({ children }: { children?: React.ReactNode }) {
         <div className="settings-list">
           <SettingsLink href="/profile" title="Search filters" detail="Where you are, the kind of support, and the declared facts a provider must have." />
           <SettingsLink href="/story" title="About ADHD.ME" detail="Why the product exists and what the route through assessment costs today." />
-          <SettingsLink href="/faq" title="Questions" detail="What this is, what it costs, where it operates, and how the order is decided." />
+          <SettingsLink href="/faq" title="Help & answers" detail="Using ADHD.ME, costs, and common questions." />
           <SettingsLink href="/examples" title="Worked examples" detail="The same matching run over written requests, with the reasons printed." />
           <SettingsLink href="/privacy" title="Privacy" detail="What this device holds, what leaves it, and how to take it back." />
           {/* The finder passes its own testing options in, so one sheet holds everything a person

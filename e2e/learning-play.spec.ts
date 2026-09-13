@@ -2,13 +2,13 @@ import { expect } from "@playwright/test";
 import { hydratedUnderFakeClock, test } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 
-test("all four navigation labels and header controls fit phone, tablet and desktop widths", async ({ page }) => {
+test("all three navigation labels and header controls fit phone, tablet and desktop widths", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach");
   for (const width of [320, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     const nav = page.getByRole("navigation", { name: "Sections" });
-    await expect(nav.getByRole("link")).toHaveCount(4);
+    await expect(nav.getByRole("link")).toHaveCount(3);
     for (const locator of [page.locator(".platform-brand"), page.locator(".platform-utilities"), ...await nav.getByRole("link").all()]) {
       const box = await locator.boundingBox();
       expect(box).not.toBeNull();

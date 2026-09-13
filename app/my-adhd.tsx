@@ -6,30 +6,29 @@
 // No graphs, no score; every line traces to something the person said.
 
 import Link from "next/link";
-import { LearningScene } from "./learning-scene";
 import { useState } from "react";
-import { ArrowRight, Check, Sparkle, Trash } from "@phosphor-icons/react";
+import { Check, Sparkle, Trash } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
 import { LAYER_LABELS, SUBDOMAINS } from "@/model/layers";
 import { deriveNeeds } from "@/model/needs";
-import { isComplete } from "@/model/onboarding";
-import { recommend, summarise } from "@/model/recommend";
+import { summarise } from "@/model/recommend";
 import { clearModel, hasSignals, recordInsight, type InsightVerdict } from "@/model/store";
 import { clearProgress } from "@/learn/progress";
 import { clearCursor } from "@/learn/cursor";
-import { LifeHeader, WhyThis } from "./life-shell";
+import { LifeHeader } from "./life-shell";
 import { useModel } from "./use-model";
+import { TodayContent } from "./today";
 import { SurveyOffer } from "./survey-offer";
 import { nwiaBalance } from "@/wellness/nwia";
 
 const VERDICT_LABEL: Record<InsightVerdict, string> = { yes: "That’s me", partly: "Partly", no: "Not really" };
 
 export function MyAdhd() {
-  const { record, refresh, storage } = useModel();
+  const model = useModel();
+  const { record, refresh, storage } = model;
   const [confirmDelete, setConfirmDelete] = useState(false);
   const summary = record ? summarise(record) : null;
   const needs = record ? deriveNeeds(record) : [];
-  const rec = record ? recommend(record) : null;
   const insights = record ? INTERACTIVE_MODULES.flatMap((m) => m.steps.filter((s) => s.kind === "insight").map((s) => (s.kind === "insight" ? { ...s, module: m } : null))).filter((x): x is NonNullable<typeof x> => Boolean(x) && Boolean(record.insights[x!.id])) : [];
   const experiments = record?.experiments ?? [];
   const byOutcome = (o: string) => experiments.filter((e) => (e.outcome ?? "pending") === o);
@@ -41,16 +40,7 @@ export function MyAdhd() {
         <h1>My ADHD right now.</h1>
       </header>
 
-      {record && !hasSignals(record) && (
-        <section className="life-empty" aria-labelledby="my-empty">
-          <h2 id="my-empty">Nothing here yet, and that is honest.</h2>
-          <p>Answer a module, or the ten questions.</p>
-          <div className="life-figure" aria-hidden="true"><LearningScene topic="adhd" /></div>
-          <div className="life-actions" style={{ justifyContent: "center" }}>
-            <Link className="learn-primary" href={isComplete(record.onboarding) ? "/approach" : "/start"}>{isComplete(record.onboarding) ? "Explore a module" : "Start"} <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>
-          </div>
-        </section>
-      )}
+      <TodayContent model={model} />
 
       {record && summary?.need && (
         <>
@@ -133,16 +123,6 @@ export function MyAdhd() {
           </section>
 
           <SurveyOffer record={record} />
-
-          {rec && (
-            <section className="life-card" aria-labelledby="my-next">
-              <span className="life-eyebrow">Next</span>
-              <h2 id="my-next">{rec.heading}</h2>
-              <p>{rec.body}</p>
-              <div className="life-actions"><Link className="learn-primary" href="/today">Go to Today <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link></div>
-              <WhyThis why={rec.why} rule={rec.explain.ruleTriggered} inputs={rec.explain.inputsUsed} version={rec.explain.ruleVersion} />
-            </section>
-          )}
 
           {needs.length > 1 && (
             <section className="life-card" aria-labelledby="my-others">
