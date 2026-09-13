@@ -18,6 +18,8 @@ import { type Clarifier } from "@/matching/clarify";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import Link from "next/link";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { NumberTicker } from "@/components/ui/number-ticker";
 import dynamic from "next/dynamic";
 import { Sheet } from "../sheet";
 import { professionOf } from "@/demo/clinicians";
@@ -98,7 +100,7 @@ export function ResultsStage({
   onToggleFilter: (key: BooleanFilterKey) => void;
   /** The kinds of care this search reaches, richest first — see `careKinds` in care-finder.tsx. */
   careKinds: readonly { id: Profession; count: number; plural: string }[];
-  onPickKind: (id: Profession) => void;
+  onPickKind: (id: Profession | null) => void;
   /** PRD §42: the problem-fit sentence for an allied provider, from the personal model, or null. */
   fitFor?: (clinician: Clinician) => string | null;
 }) {
@@ -256,9 +258,10 @@ export function ResultsStage({
           A plain list with a name, NOT role="group": the role overrode the list semantics and left
           three <li> with no list parent, which axe reads as serious. The filter strip above is the
           pattern — the group is the wrapper, the list is a list. */}
+      <div className="finder-professions">
       {careKinds.length > 1 && (
         <ul className="care-kinds" aria-label="Kinds of care">
-          {careKinds.map((kind) => (
+          {careKinds.slice(0, 3).map((kind) => (
             <li key={kind.id}>
               <button
                 type="button"
@@ -275,6 +278,11 @@ export function ResultsStage({
         </ul>
       )}
 
+      {careKinds.length > 1 && <NativeSelect className="finder-profession" aria-label="Provider profession" value={filters.professions.length === 1 ? filters.professions[0] : ""} onChange={event => onPickKind((event.target.value || null) as Profession | null)}>
+        <NativeSelectOption value="">All professions</NativeSelectOption>
+        {careKinds.map(kind => <NativeSelectOption key={kind.id} value={kind.id}>{kind.plural}</NativeSelectOption>)}
+      </NativeSelect>}
+      </div>
       {/* O234, AR24 kind `no-results`: the roster was ranked and the filters left nobody. The
           sentence names the filters as the cause, because that is the one thing the person can
           change, and both ways out are on the screen. */}
@@ -322,6 +330,7 @@ export function ResultsStage({
           </AnimatePresence>
         </h2>
         <span className="results-list-tools">
+          <Link className="finder-match-link" href="/match">Get matched</Link>
           {/* RADIANT: the mark beside the count, only when the order was earned — a badge that
               means "ordered on what you asked for" and is absent when nothing was. */}
           {quality === "informed" && (
@@ -334,7 +343,7 @@ export function ResultsStage({
             <span className="results-count">
               {/* Number pop-in: keyed on the value, so the digits re-enter only when the count
                   actually changes, a filter narrowing the list, a "show more" widening it. */}
-              <span key={shown.length} className="t-digit">{shown.length}</span> of {matches.length}
+              <span><span className="sr-only">{shown.length}</span><NumberTicker value={shown.length} aria-hidden="true" className="finder-count-number" /></span> of {matches.length}
             </span>
           )}
           {/* O244: the star. One tap opens the questions that would narrow the list; the sheet is
@@ -357,7 +366,7 @@ export function ResultsStage({
               type="button"
               className={mapShown ? "map-toggle is-open" : "map-toggle"}
               aria-pressed={mapShown}
-              aria-controls="nearby-map-panel"
+              aria-controls={mapShown ? "nearby-map-panel" : undefined}
               onClick={() => setMapOpen((open) => !open)}
             >
               <MapTrifold size={16} weight={mapShown ? "fill" : "bold"} aria-hidden="true" />
@@ -386,13 +395,11 @@ export function ResultsStage({
           the reader; a match proposes three, each with a reason, and each GP answers from their
           side. Offered here as a sentence and a link, never as a redirect, because the finder
           is the product's front door and this is a second one beside it. */}
-      <p className="results-match-door">
-        <Link href="/match">Get matched</Link>
-      </p>
+
       </>
       )}
 
-      {/* O235: the nearby map — only once the place resolves, and only when asked for. */}
+      <div className={mapShown ? "results-browser has-map" : "results-browser"}>
       <AnimatePresence initial={false}>
         {mapShown && (
           <motion.div
@@ -474,8 +481,7 @@ export function ResultsStage({
               >
                 <ClinicianPortrait clinician={item} variant="thumb" eager={index < 5} />
               </motion.span>
-              <span>
-                <strong>{item.name}</strong>
+              <span className="row-copy"><strong>{item.name}</strong>
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
                 <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{fitFor?.(item) ?? (reasons.slice(0, 1).join(", ") || item.focus)}</small>
@@ -509,6 +515,7 @@ export function ResultsStage({
         </AnimatePresence>
       </div>
 
+      </div>
       {matches.length > shown.length && (
         <motion.button
           className="show-all"

@@ -161,7 +161,7 @@ test("the finder offers the match as a second door, on the welcome aside and und
   await page.getByRole("button", { name: "Try an example search" }).click();
   await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible();
-  await expect(page.locator(".results-match-door").getByRole("link")).toHaveAttribute("href", "/match");
+  await expect(page.getByRole("link", { name: "Get matched", exact: true })).toHaveAttribute("href", "/match");
 });
 
 test("deleting a request removes it from the GP's side too, and the tab forgets it", async ({ page, browser }) => {

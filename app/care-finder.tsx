@@ -121,7 +121,7 @@ export function CareFinder() {
    * roster, so no sentence describes a list the ranking did not run over.
    */
   const named = useMemo(() => professionsMentioned(request), [request]);
-  const roster = useMemo(() => (named.length === 0 ? filteredRoster : filteredRoster.filter((c) => named.includes(professionOf(c)))), [filteredRoster, named]);
+  const roster = useMemo(() => (filters.professions.length > 0 || named.length === 0 ? filteredRoster : filteredRoster.filter((c) => named.includes(professionOf(c)))), [filteredRoster, named, filters.professions]);
   /**
    * THE KINDS OF CARE THIS SEARCH REACHES (Charmaine Bernie, occupational therapist and
    * service-access researcher, 2026-09-11). She named identification and navigation — "helping
@@ -153,11 +153,7 @@ export function CareFinder() {
     }
     return [...counts.entries()]
       .sort((a, b) => (Number(named.includes(b[0])) - Number(named.includes(a[0]))) || b[1] - a[1])
-      .map(([id, count]) => ({ id, count, plural: profession(id).plural }))
-      // Three, then the rest (the tree's own "five, then the rest", tightened because this screen
-      // sits at the text budget's ceiling): the kinds the person's words point at and the ones the
-      // search found most of. Every other kind stays reachable through the Filters pill.
-      .slice(0, 3);
+      .map(([id, count]) => ({ id, count, plural: profession(id).plural }));
   }, [kindRoster, named]);
   const { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     // O234: the filters the device holds, and the place it holds when the address bar carries
@@ -608,9 +604,9 @@ export function CareFinder() {
    * new, so it clears instead — the band is how you get back to everybody as well as how you
    * leave it.
    */
-  function pickKind(id: Profession) {
+  function pickKind(id: Profession | null) {
     const held = filters.professions;
-    const next: Filters = { ...filters, professions: held.length === 1 && held[0] === id ? [] : [id] };
+    const next: Filters = { ...filters, professions: id === null || (held.length === 1 && held[0] === id) ? [] : [id] };
     writeFilters(window.localStorage, next);
     setFilters(next);
     setMatchIndex(0);
