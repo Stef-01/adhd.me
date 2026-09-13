@@ -410,7 +410,8 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
 });
 
-test("liquid glass runs under the games where WebGL2 can, stands aside where it cannot, and never reaches the finder", async ({ page }) => {
+test("library glass stays contained while playable games retain the WebGL layer", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   const errors: string[] = [];
   page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") errors.push(m.text()); });
   // The finder is plain: no games scope, no layer, whatever the engine can do.
@@ -434,7 +435,16 @@ test("liquid glass runs under the games where WebGL2 can, stands aside where it 
   });
   // The layer is decoration: hidden from assistive tech, and present exactly when the engine can draw it.
   expect(state.canvas).toBe("true");
-  expect(state.liquid).toBe(state.able);
+  expect(state.liquid).toBe(false);
+  const card = page.locator("[data-liquid] .learn-card").first();
+  const box = (await card.boundingBox())!;
+  await card.dispatchEvent("pointerdown", { pointerId: 1, clientX: box.x + 24, clientY: box.y + 24, button: 0 });
+  await expect(card).toHaveAttribute("data-tap", "");
+  expect(await card.evaluate(el => ({ clipped: getComputedStyle(el).overflow, bubble: getComputedStyle(el, "::after").animationName }))).toEqual({ clipped: "hidden", bubble: "lg-bubble" });
+
+  await page.goto("/lives/play/leo-mosquito");
+  await page.waitForTimeout(600);
+  expect(await page.evaluate(() => document.documentElement.classList.contains("has-liquid"))).toBe(state.able);
   expect(errors.filter((e) => /liquid-glass/.test(e))).toEqual([]);
   // Nothing the layer does may cover the page: the first heading is still hit-testable.
   const hit = await page.evaluate(() => { const h = document.querySelector("h1")!; const r = h.getBoundingClientRect(); return document.elementFromPoint(r.left + 4, r.top + 4)?.closest("h1") === h; });

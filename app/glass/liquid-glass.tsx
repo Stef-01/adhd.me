@@ -218,7 +218,9 @@ export function LiquidGlass() {
       if (document.hidden) return;
       if (now - lastScope > REFRESH_MS) {
         lastScope = now;
-        const next = document.querySelector("[data-liquid]") !== null;
+        // Library cards own their contained sheen and tap bubble; the full-screen
+        // shader would draw a second rim and a pointer droplet outside their edges.
+        const next = document.querySelector("[data-liquid]:not(.learn-games-scope)") !== null;
         if (next !== scoped) {
           scoped = next;
           document.documentElement.classList.toggle("has-liquid", scoped);

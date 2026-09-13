@@ -170,44 +170,20 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
 }
 [data-liquid] .play-tempt.is-go:active { transform: scale(0.975); }
 
-/* ── The droplets: every coloured module tile, Leo's card and the Play card ────────────────────
-   EACH MODULE IS A BUBBLE OF ITS OWN COLOUR (founder, 2026-09-11: "make each module colored
-   bubbles, not having just bubble outline"). It was a flat slab of `--cover` with a clear rim
-   drawn round it, which reads as an outline laid on a rectangle rather than as a lit, domed thing
-   with colour inside it. So the dome is built here, in the tile's own hue: a bright crown where
-   the light lands, the colour deepening to a foot, and a rim that carries the hue rather than
-   being a white hairline on top of it.
-
-   THE COMPUTED BACKGROUND IS NOT TOUCHED, and that is load-bearing: `learning.css` says the inks
-   on these cards were measured against the flat fill, so the dome is a pseudo-element and an inset
-   shadow, exactly as the sheen already was. Nothing here changes what a contrast checker reads.
-
-   No highlight follows the pointer — see glass-pointer.tsx's header for why that went. */
+/* Library glass stays within each card: one soft light, no bevel or outer rim. */
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card) {
-  position: relative; isolation: isolate;
+  position: relative; isolation: isolate; overflow: hidden;
   border-radius: 32px;
-  box-shadow:
-    /* The crown: a bubble is brightest just inside its top edge, not on it. */
-    inset 0 2px 0 rgba(255, 255, 255, 0.66),
-    inset 0 10px 22px -12px rgba(255, 255, 255, 0.44),
-    inset 2px 0 0 -1px var(--lg-dispersion-warm),
-    inset -2px 0 0 -1px var(--lg-dispersion-cool),
-    /* The foot, in the tile's own colour rather than a neutral black, so the dome stays coloured. */
-    inset 0 -14px 24px -16px color-mix(in srgb, var(--cover, #172033) 76%, #000),
-    inset 0 -2px 0 color-mix(in srgb, var(--cover, #172033) 64%, #000),
-    0 1px 0 rgba(23, 32, 51, 0.06),
-    0 22px 36px -22px color-mix(in srgb, var(--cover, #172033) 88%, #000);
+  box-shadow: 0 3px 12px -7px rgb(23 32 51 / 0.12);
 }
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card)::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
-  background:
-    /* The crown light, held in one place. Over the art side, which the text column never reaches. */
-    radial-gradient(52% 42% at 78% 4%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 72%),
-    linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 36%, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.14) 100%);
-  /* The rim carries the hue: a bubble of this colour, not a white ring round a swatch. */
-  box-shadow:
-    inset 0 0 0 1.5px color-mix(in srgb, #fff 62%, var(--cover, #fff)),
-    inset 0 0 26px rgba(255, 255, 255, 0.18);
+  background: radial-gradient(80% 90% at 80% 0%, rgb(255 255 255 / 0.24), transparent 72%);
+  box-shadow: none;
+}
+.platform-shell .learn-games-scope :is(.learn-show-all, .learn-play-cast-link) {
+  border-color: transparent;
+  box-shadow: 0 2px 8px -5px rgb(23 32 51 / 0.12);
 }
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card) > * { position: relative; z-index: 2; }
 /* The Play card is the one surface with no colour of its own, so it takes a wash of the room. */
