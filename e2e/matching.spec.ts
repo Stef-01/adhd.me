@@ -155,13 +155,14 @@ test("declining needs a reason, and the person sees the reason on their side", a
   await gpContext.close();
 });
 
-test("the finder offers the match as a second door, on the welcome aside and under the results", async ({ page }) => {
+test("the finder keeps search as its single entry point", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: /Get matched/ })).toHaveAttribute("href", "/match");
+  await expect(page.locator(".app-tabs .t-badge")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /Get matched|Two questions|Start from the problem/ })).toHaveCount(0);
   await page.getByRole("button", { name: "Try an example search" }).click();
   await page.getByRole("button", { name: "Search with this" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Get matched", exact: true })).toHaveAttribute("href", "/match");
+  await expect(page.getByRole("link", { name: "Get matched", exact: true })).toHaveCount(0);
 });
 
 test("deleting a request removes it from the GP's side too, and the tab forgets it", async ({ page, browser }) => {

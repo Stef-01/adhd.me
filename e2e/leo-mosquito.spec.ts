@@ -18,12 +18,16 @@ async function clearUntimedSwarm(page: Page, keyboard = false) {
 }
 /**
  * The round ends INTO the routine, on the same screen the outcome is announced on, so every spec
- * that used to read a result screen walks three taps from it. Nothing here is timed.
+ * that used to read a result screen walks the routine from it. Nothing here is timed.
  */
 async function walkRoutine(page: Page) {
   await page.getByRole("button", { name: "Close the window", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Change the room." })).toBeVisible();
+  await page.getByRole("button", { name: "Phone off", exact: true }).click();
+  await expect(page.locator(".leo-phone")).toHaveAttribute("data-off", "true");
   await page.getByRole("button", { name: "Headphones on", exact: true }).click();
+  await page.getByRole("button", { name: "Read a little", exact: true }).click();
+  await expect(page.locator(".leo-book")).toHaveAttribute("data-open", "true");
   await page.getByRole("button", { name: "Light off", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Quiet all night." })).toBeVisible();
   await expect(page.getByText("The mosquito is still out there. Leo is asleep.")).toBeVisible();

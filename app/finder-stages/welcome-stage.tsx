@@ -4,7 +4,6 @@
 // orchestrator; this renders them.
 
 import { ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
-import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { AppSettings } from "../app-settings";
@@ -154,15 +153,7 @@ export function WelcomeStage({
         {/* O233: the testing options moved into the settings sheet (see the header above), so
             the app has one place a person changes anything. */}
       </motion.div>
-      {/* The doors, cheapest first. "Two questions" is the triage layer's fourth part (Charmaine
-          Bernie, 2026-09-11: people land on the wrong waitlist for years because nothing separated
-          the pathways before the list) — and this screen, the one before any list, is where it
-          has to be offered. */}
-      <p className="finder-doors">
-        <Link href="/first-step">Two questions</Link>
-        <Link href="/support">Start from the problem</Link>
-        <Link href="/match">Get matched</Link>
-      </p>
+
 
     </MotionScreen>
   );

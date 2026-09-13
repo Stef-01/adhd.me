@@ -11,13 +11,13 @@ import type { EngineProps } from "./engines";
 /**
  * Original scene artwork; the reference Unity clip informs the four-pose timing only.
  *
- * The three routine states (2026-09-11) are drawn here rather than in a second scene, because the
+ * The routine states (2026-09-11) are drawn here rather than in a second scene, because the
  * routine is the same room a minute later and a person has to see that: the curtains close over
  * the window they watched mosquitoes come through, the headphones go on the head they watched
  * flinch, the lamp they have been looking at all round goes out. A separate illustration would
  * have been a diagram of a bedroom; this is Leo's.
  */
-export function LeoBedroom({ asleep = false, moving = false, regulation = 100, windowShut = false, headphones = false, lightOff = false }: { asleep?: boolean; moving?: boolean; regulation?: number; windowShut?: boolean; headphones?: boolean; lightOff?: boolean }) {
+export function LeoBedroom({ asleep = false, moving = false, regulation = 100, windowShut = false, headphones = false, phoneOff = false, reading = false, lightOff = false }: { asleep?: boolean; moving?: boolean; regulation?: number; windowShut?: boolean; headphones?: boolean; phoneOff?: boolean; reading?: boolean; lightOff?: boolean }) {
   const upset = !asleep && regulation <= 70;
   const overwhelmed = !asleep && regulation <= 40;
   return <svg className={`leo-bedroom${moving ? " is-moving" : ""}`} data-emotion={overwhelmed ? "overwhelmed" : upset ? "unsettled" : "settled"} viewBox="0 0 390 560" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
@@ -56,6 +56,17 @@ export function LeoBedroom({ asleep = false, moving = false, regulation = 100, w
     <path d="M122 393q92-19 211 7v92H122z" fill="#f1b56c" />
     <path d="M122 414q107-14 211 8v22q-112-23-211-8z" fill="#f8d699" />
     <path d="M129 492v20m197-20v20" stroke="#815e83" strokeWidth="12" strokeLinecap="round" />
+    <g className="leo-phone" data-off={phoneOff} transform="translate(72 372) rotate(10)">
+      <rect width="19" height="31" rx="4" fill="#3a355f" />
+      <rect x="3" y="4" width="13" height="22" rx="2" fill={phoneOff ? "#3a355f" : "#e8e9fb"} />
+      {!phoneOff && <circle cx="10" cy="13" r="3" fill="#f1b56c" />}
+    </g>
+    {reading && <g className="leo-book" data-open={!asleep}>
+      {asleep ? <><rect x="275" y="448" width="44" height="12" rx="3" fill="#6d71ac" /><path d="M280 454h35" stroke="#fffaf0" strokeWidth="4" /></> : <>
+        <path d="M158 412q25-10 48 0 24-10 48 0v43q-23-9-48 0-24-9-48 0z" fill="#fffaf0" stroke="#6d71ac" strokeWidth="3" />
+        <path d="M206 413v40m-37-26h26m-26 10h26m22-10h25m-25 10h25" stroke="#abaed9" strokeWidth="3" />
+      </>}
+    </g>}
     {lightOff && <rect width="390" height="560" fill="#2b2a52" opacity=".34" />}
     {asleep && <g fill={lightOff ? "#e8e9fb" : "#465a08"} fontFamily="sans-serif" fontWeight="700"><text x="155" y="290" fontSize="20">z</text><text x="133" y="267" fontSize="27">z</text></g>}
   </svg>;

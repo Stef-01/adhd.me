@@ -115,7 +115,7 @@ export function LeoPractice() {
           swarm stops its own audio the moment it is handed an outcome, and disposes the graph when
           that first tap unmounts it. */}
       {phase === "ready" ? <LeoBedroom />
-        : settled || step > 0 ? <LeoBedroom asleep={settled} windowShut={room.window} headphones={room.headphones} lightOff={room.light} />
+        : settled || step > 0 ? <LeoBedroom asleep={settled} windowShut={room.window} headphones={room.headphones} phoneOff={room.phone} reading={room.book} lightOff={room.light} />
         : <LeoMosquito key={attempt} game={GAME} scene={scene} live={phase === "playing"} reducedMotion={still} elapsedMs={elapsed} progress={Math.min(1, elapsed / duration)} onResult={finish} outcome={phase === "routine" ? (won ? "success" : "failure") : undefined} initialAudio={roundAudio.current} onSoundChange={setBuzzOn} />}
       {phase === "paused" && <div className="leo-pause"><button onClick={() => changePhase("playing")}><Play size={22} weight="fill" /> Resume</button></div>}
     </div>
@@ -126,7 +126,7 @@ export function LeoPractice() {
       </>}
       {phase === "paused" && <p>The clock and mosquitoes are paused.</p>}
       {/* The routine: one step on the screen at a time, each tap a thing that happens to the room
-          above. Nothing is skippable and nothing is scored — it is three taps, not a quiz. */}
+          above. Nothing is skippable and nothing is scored — each tap changes the room. */}
       {phase === "routine" && <>
         <p role="status">{said}</p>
         <button className="leo-primary leo-routine-step" onClick={() => {
@@ -137,6 +137,7 @@ export function LeoPractice() {
       </>}
       {settled && <>
         <p role="status">{LEO_SETTLED}</p>
+        <p>Same order tomorrow. One less thing to remember.</p>
         <div className="leo-result-actions"><button className="leo-primary" onClick={start}><ArrowCounterClockwise size={20} /> Play again</button></div>
         <Link className="leo-learn-link" href="/lives/learn?module=lower_sensory_floor_v1">Tiny sounds feel familiar? Explore one idea <ArrowRight size={18} /></Link>
       </>}

@@ -6,8 +6,8 @@ import { lintLandingCopy } from "@/compliance/landing";
 import { LEO_ROUTINE, LEO_SETTLED, leoRoom } from "./leo-routine";
 
 describe("Leo's night-time routine", () => {
-  it("is three steps, each named and explained in a handful of words", () => {
-    expect(LEO_ROUTINE.length).toBe(3);
+  it("is five steps, each named and explained in a handful of words", () => {
+    expect(LEO_ROUTINE.length).toBe(5);
     for (const step of eachOf(LEO_ROUTINE, "the routine steps")) {
       expect(step.label.split(/\s+/).length, step.id).toBeLessThanOrEqual(4);
       expect(step.line.split(/\s+/).length, step.id).toBeLessThanOrEqual(6);
@@ -37,14 +37,14 @@ describe("Leo's night-time routine", () => {
 
 describe("leoRoom", () => {
   it("turns each thing on in turn and never ahead of its step", () => {
-    expect(leoRoom(0)).toEqual({ window: false, headphones: false, light: false });
-    expect(leoRoom(1)).toEqual({ window: true, headphones: false, light: false });
-    expect(leoRoom(2)).toEqual({ window: true, headphones: true, light: false });
-    expect(leoRoom(3)).toEqual({ window: true, headphones: true, light: true });
+    expect(leoRoom(0)).toEqual({ window: false, phone: false, headphones: false, book: false, light: false });
+    expect(leoRoom(2)).toEqual({ window: true, phone: true, headphones: false, book: false, light: false });
+    expect(leoRoom(4)).toEqual({ window: true, phone: true, headphones: true, book: true, light: false });
+    expect(leoRoom(5)).toEqual({ window: true, phone: true, headphones: true, book: true, light: true });
   });
 
   it("does not fall over on a count outside the routine", () => {
-    expect(leoRoom(-4)).toEqual({ window: false, headphones: false, light: false });
-    expect(leoRoom(99)).toEqual({ window: true, headphones: true, light: true });
+    expect(leoRoom(-4)).toEqual({ window: false, phone: false, headphones: false, book: false, light: false });
+    expect(leoRoom(99)).toEqual({ window: true, phone: true, headphones: true, book: true, light: true });
   });
 });

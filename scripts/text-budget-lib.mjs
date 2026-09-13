@@ -175,7 +175,7 @@ export async function reach(page, route, base) {
     // Reduced motion is on in this context, so the round offers a way out rather than a clock.
     await page.getByRole("button", { name: "Skip this round" }).click();
     if (route.state === "leo-settled") {
-      for (const step of ["Close the window", "Headphones on", "Light off"]) {
+      for (const step of ["Close the window", "Phone off", "Headphones on", "Read a little", "Light off"]) {
         await page.getByRole("button", { name: step, exact: true }).click();
       }
     }

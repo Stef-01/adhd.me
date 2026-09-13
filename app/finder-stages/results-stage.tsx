@@ -330,7 +330,6 @@ export function ResultsStage({
           </AnimatePresence>
         </h2>
         <span className="results-list-tools">
-          <Link className="finder-match-link" href="/match">Get matched</Link>
           {/* RADIANT: the mark beside the count, only when the order was earned — a badge that
               means "ordered on what you asked for" and is absent when nothing was. */}
           {quality === "informed" && (

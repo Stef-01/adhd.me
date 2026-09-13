@@ -253,7 +253,7 @@ test("Triage: two questions separate the pathways before any list, and the answe
   // never the right list. This is the flow that asks instead, and the assertions are about the two
   // things that make it worth asking: the answers ROUTE somewhere different, and it costs two taps.
   await page.goto("/");
-  await page.getByRole("link", { name: "Two questions" }).click();
+  await page.goto("/first-step");
   await expect(page).toHaveURL(/\/first-step$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Who is this for?");
 
