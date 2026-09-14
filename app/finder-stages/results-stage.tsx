@@ -3,6 +3,7 @@
 // O95: the results screen, verbatim from care-finder.tsx — including the collapsed-screens
 // history note, because it explains why this one screen carries so much.
 
+import { CARE_NEEDS, IDENTITY_LABELS, publicIdentity } from "@/support/care-preferences";
 import { CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
 import { activeFilterCount, BOOLEAN_FILTER_KEYS, BOOLEAN_FILTER_LABELS, type BooleanFilterKey, type Filters } from "@/finder/filters";
 import { AnimatePresence, motion } from "motion/react";
@@ -259,12 +260,14 @@ export function ResultsStage({
           </NativeSelect>
         </div>
       )}
+      {((filters.careNeeds?.length ?? 0) > 0 || (filters.clinicianIdentity && filters.clinicianIdentity !== "any") || filters.country) && <details className="finder-care-summary"><summary>Care in this search ({(filters.careNeeds?.length ?? 0) + Number(!!filters.clinicianIdentity && filters.clinicianIdentity !== "any") + Number(!!filters.country)})</summary><ul>{filterLabels.filter(label => [...Object.values(CARE_NEEDS), ...Object.values(IDENTITY_LABELS)].some(value => value === label) || label.startsWith("Country:")).map(label => <li key={label}>{label}</li>)}</ul><button type="button" className="filter-clear" onClick={onRefine}>Change search</button> · <Link href="/profile">Saved preferences</Link></details>}
       {/* O234, AR24 kind `no-results`: the roster was ranked and the filters left nobody. The
           sentence names the filters as the cause, because that is the one thing the person can
           change, and both ways out are on the screen. */}
       {empty && (
         <div className="results-empty">
           <p className="results-empty-lead">No listed provider answers every filter you set.</p>
+          {(filters.clinicianIdentity !== "any" && filters.clinicianIdentity || filters.country) && <a href="https://www.naccho.org.au/location/" target="_blank" rel="noopener noreferrer">Find a community-controlled health service ↗</a>}
           <p className="results-empty-detail">
             {filterLabels.length > 0
               ? "Loosening one filter usually brings the list back."
@@ -457,6 +460,7 @@ export function ResultsStage({
                 <ClinicianPortrait clinician={item} variant="thumb" eager={index < 5} />
               </motion.span>
               <span className="row-copy"><strong>{item.name}</strong>
+                {publicIdentity(item) && <small className="row-cultural-identity">{publicIdentity(item)!.identities.map(id => IDENTITY_LABELS[id]).join(" · ")}{publicIdentity(item)!.country && <> · {publicIdentity(item)!.country}</>}</small>}
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}
                 <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{fitFor?.(item) ?? (reasons.slice(0, 1).join(", ") || item.focus)}</small>
@@ -476,7 +480,7 @@ export function ResultsStage({
                     either, the row says why somebody unactionable is still here (O4).
                     The "they fit what you asked" sentence only renders when a fit was
                     actually computed; otherwise the neutral fact stands alone. */}
-                {!item.acceptingNewPatients && closedBooksNote(item, request) && (
+                {!item.synthetic && !item.acceptingNewPatients && closedBooksNote(item, request) && (
                   <small className="row-availability">{closedBooksNote(item, request)}</small>
                 )}
               </span>

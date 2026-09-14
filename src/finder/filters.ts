@@ -1,3 +1,4 @@
+import { CARE_NEEDS, IDENTITY_LABELS, isCareNeed, isIdentityPreference, matchesCare, type CarePreferences, type CareProvider } from "@/support/care-preferences";
 // O234 (founder-directed): the person's own filters — held on the device, applied before ranking.
 //
 // WHAT A FILTER IS HERE, AND WHAT IT IS NOT. The finder orders the roster around a sentence, and
@@ -35,7 +36,7 @@ export const FILTERS_KEY = `adhdme.filters.v${FILTERS_VERSION}`;
 export const DISTANCE_CHOICES = [5, 10, 20] as const;
 export type DistanceKm = (typeof DISTANCE_CHOICES)[number] | null;
 
-export interface Filters {
+export interface Filters extends CarePreferences {
   v: typeof FILTERS_VERSION;
   /** Suburb or postcode the person said they are in. Not a device location — typed, like the finder's field. */
   place: string;
@@ -77,7 +78,7 @@ export const APPROACH_LABELS: Readonly<Record<Approach, string>> = {
 export type ConsultRecordingChoice = (typeof CONSULT_RECORDING_CHOICES)[number];
 
 /** The structural slice of a clinician a filter reads — the same shape `holdsPreference` takes, plus the roster facts. */
-export interface Filterable {
+export interface Filterable extends CareProvider {
   gender: string;
   profession?: Profession;
   telehealthFirstAppointment?: boolean;
@@ -105,6 +106,9 @@ export function emptyFilters(): Filters {
     consultRecording: "any",
     approach: [],
     professions: [],
+    careNeeds: [],
+    clinicianIdentity: "any",
+    country: "",
   };
 }
 
@@ -161,6 +165,9 @@ export function readFilters(storage: Pick<Storage, "getItem">): Filters {
       consultRecording: r.consultRecording as ConsultRecordingChoice,
       approach: [...(r.approach as Approach[])],
       professions,
+      careNeeds: Array.isArray(r.careNeeds) ? r.careNeeds.filter(isCareNeed) : [],
+      clinicianIdentity: isIdentityPreference(r.clinicianIdentity) ? r.clinicianIdentity : "any",
+      country: typeof r.country === "string" ? r.country.trim().slice(0, 120) : "",
     };
   } catch {
     return emptyFilters();
@@ -193,6 +200,9 @@ export function activeFilterCount(filters: Filters): number {
   if (filters.consultRecording !== "any") n += 1;
   n += filters.approach.length;
   if (filters.professions.length > 0) n += 1;
+  n += (filters.careNeeds ?? []).length;
+  if (filters.clinicianIdentity && filters.clinicianIdentity !== "any") n += 1;
+  if (filters.country?.trim()) n += 1;
   return n;
 }
 
@@ -206,6 +216,9 @@ export function describeFilters(filters: Filters): string[] {
   if (filters.consultRecording === "no-ai") out.push("No AI recording");
   for (const a of filters.approach) out.push(APPROACH_LABELS[a]);
   if (filters.professions.length > 0) out.push(filters.professions.map((p) => profession(p).plural).join(" or ").replace(/^\w/, (c) => c.toUpperCase()));
+  for (const need of filters.careNeeds ?? []) out.push(CARE_NEEDS[need]);
+  if (filters.clinicianIdentity && filters.clinicianIdentity !== "any") out.push(IDENTITY_LABELS[filters.clinicianIdentity]);
+  if (filters.country?.trim()) out.push(`Country: ${filters.country.trim()}`);
   return out;
 }
 
@@ -231,6 +244,7 @@ export function applyFilters<T extends Filterable>(
   nearestKm: (clinician: T) => number | null,
 ): T[] {
   return roster.filter((clinician) => {
+    if (!matchesCare(clinician, filters)) return false;
     if (filters.womanGp && !holdsPreference(clinician, "woman-gp")) return false;
     if (filters.telehealth && !holdsPreference(clinician, "telehealth-first")) return false;
     if (filters.bulkBilling && !holdsPreference(clinician, "bulk-billing")) return false;

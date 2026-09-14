@@ -21,6 +21,7 @@
 // it — which is what an empty state is for.
 
 import Link from "next/link";
+import { CarePreferenceFields } from "./care-preference-fields";
 import { useEffect, useState } from "react";
 import { ArrowRight, MapPin, Quotes, Trash, X } from "@phosphor-icons/react";
 import { nearestKm } from "@/demo/clinicians";
@@ -351,6 +352,8 @@ export function ProfileView() {
           <p className="me-group-note">Leave all off to see everyone.</p>
         </details>
 
+        <CarePreferenceFields value={filters} onChange={update} />
+
         {/* O248 (founder-directed): how the GP works — whole-person, functional-health, wearables —
             as the GP declares it. Each chip requires the declaration; GPs who have not said are
             left out of a chosen chip rather than assumed. Nothing here is a claim about outcomes. */}
@@ -376,7 +379,7 @@ export function ProfileView() {
               );
             })}
           </ul>
-          <p className="me-group-note">As the GP declares it.</p>
+          <p className="me-group-note">As the provider declares it.</p>
         </details>
 
         {/* O236 (founder-directed): a fact modern patients ask about first — whether the consult is

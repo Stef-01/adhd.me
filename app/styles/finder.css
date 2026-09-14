@@ -108,3 +108,15 @@
 @media (max-width: 699px) { .platform-shell .finder-profession { flex: 1 1 100%; width: 100%; } }
 .platform-shell .results-summary-text { font-family: "Inter Variable", Inter, sans-serif; }
 .platform-shell .patient-v2 .results-browser .clinician-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
+
+.platform-shell .care-preference-fields { display: grid; gap: 12px; padding-top: 16px; }
+.platform-shell .care-preference-fields label { font-size: 14px; font-weight: 600; }
+.platform-shell .care-preference-fields label span { color: var(--muted); font-weight: 400; }
+.platform-shell .care-preference-fields [data-slot="native-select-wrapper"] { width: 100%; }
+.platform-shell .care-preference-fields :is(select,input) { width: 100%; min-width: 0; height: 48px; padding: 10px 36px 10px 12px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--paper); color: var(--ink); font: inherit; font-size: 16px; }
+.platform-shell .care-preference-fields :is(select,input):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.platform-shell .care-preference-fields a { font-size: 14px; line-height: 1.5; text-underline-offset: 3px; }
+.platform-shell .finder-care-summary { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.platform-shell .finder-care-summary summary { cursor: pointer; min-height: 28px; }
+.platform-shell .row-cultural-identity, .platform-shell .profile-cultural-identity { color: var(--accent-deep); font-size: 14px; line-height: 1.5; }
+.platform-shell .profile-care-declaration { margin-block: 12px; font-size: 14px; line-height: 1.6; }

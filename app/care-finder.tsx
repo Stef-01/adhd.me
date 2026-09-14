@@ -1,5 +1,6 @@
 "use client";
 
+import { carePreferencesFromRequest, combineCarePreferences } from "@/support/care-preferences";
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
 import { StageDirection } from "./finder-stages/shared";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
@@ -99,6 +100,8 @@ export function CareFinder() {
    * same narrowed roster, so no sentence on the screen describes a list the ranking did not run over.
    */
   const [filters, setFilters] = useState<Filters>(emptyFilters);
+  const [clearedCareRequest, setClearedCareRequest] = useState<string | null>(null);
+  const effectiveFilters = useMemo(() => ({ ...filters, ...combineCarePreferences(filters, clearedCareRequest === request ? {} : carePreferencesFromRequest(request)) }), [filters, request, clearedCareRequest]);
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
@@ -109,8 +112,8 @@ export function CareFinder() {
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
   const filteredRoster = useMemo(
-    () => applyFilters(rosterFor(includeSynthetic), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)),
-    [includeSynthetic, filters, origin],
+    () => applyFilters(rosterFor(includeSynthetic), effectiveFilters, origin, (c) => (origin ? nearestKm(c, origin) : null)),
+    [includeSynthetic, effectiveFilters, origin],
   );
   /**
    * 2026-09-08 (PRD §38): a sentence that NAMES a kind of professional — "a psychologist near
@@ -176,7 +179,7 @@ export function CareFinder() {
     setDraft(record.draft);
     const resumedOrigin = resolvePlace(arrivedPlace);
     const resumedNamed = professionsMentioned(words);
-    const resumedRoster = applyFilters(rosterFor(includeSynthetic), held, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null))
+    const resumedRoster = applyFilters(rosterFor(includeSynthetic), { ...held, ...combineCarePreferences(held, carePreferencesFromRequest(words)) }, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null))
       .filter((c) => resumedNamed.length === 0 || resumedNamed.includes(professionOf(c)));
     const found = rankCliniciansNear(words, resumedOrigin, resumedRoster).findIndex((item) => item.id === record.matchId);
     setMatchIndex(Math.max(0, found));
@@ -615,6 +618,7 @@ export function CareFinder() {
 
   /** O234: every narrowing filter off, the place kept — it orders, it never excluded anybody. */
   function clearNarrowingFilters() {
+    setClearedCareRequest(request);
     const next: Filters = { ...emptyFilters(), place: filters.place };
     writeFilters(window.localStorage, next);
     setFilters(next);
@@ -756,10 +760,10 @@ export function CareFinder() {
               dispatchBanner({ type: "cleared" });
               goTo("type");
             }}
-            filterLabels={activeFilterCount(filters) > 0 ? describeFilters(filters) : []}
+            filterLabels={activeFilterCount(effectiveFilters) > 0 ? describeFilters(effectiveFilters) : []}
             onClearFilters={clearNarrowingFilters}
             place={place}
-            filters={filters}
+            filters={effectiveFilters}
             onToggleFilter={toggleFilter}
             careKinds={careKinds}
             onPickKind={pickKind}

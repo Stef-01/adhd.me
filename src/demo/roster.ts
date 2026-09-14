@@ -54,6 +54,7 @@ export const APPROACHES = ["holistic", "functional", "wearables"] as const;
 export type Approach = (typeof APPROACHES)[number];
 
 export type Clinician = {
+  careProfile?: import("@/support/care-preferences").CareDeclaration;
   id: string;
   name: string;
   /**

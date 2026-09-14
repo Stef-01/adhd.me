@@ -42,6 +42,7 @@
 // anybody.
 
 import type { Clinician } from "./roster";
+import { expandedCareExamples } from "./expanded-care-roster";
 import { portraitFor } from "./portrait-credits";
 import { clinicians } from "./roster";
 
@@ -710,7 +711,7 @@ export const ALLIED_CLINICIANS: readonly Clinician[] = [
     appointmentLength: "Fifty-minute sessions",
   }),
   example({
-    id: "example-daniel-okafor",
+    id: "example-daniel-okafor-psychology",
     name: "Daniel Okafor",
     shortName: "Daniel",
     gender: "man",
@@ -1090,7 +1091,9 @@ export const ALLIED_CLINICIANS: readonly Clinician[] = [
  * then the personas. Source order is NOT display order — `rankClinicians` sorts it — this is
  * just the honest construction: nothing here removes or reorders a real entry.
  */
-export const demoRoster: readonly Clinician[] = [...clinicians, ...SYNTHETIC_CLINICIANS, ...ALLIED_CLINICIANS];
+export const BASE_EXAMPLE_CLINICIANS: readonly Clinician[] = [...SYNTHETIC_CLINICIANS, ...ALLIED_CLINICIANS];
+export const EXPANDED_CARE_CLINICIANS = expandedCareExamples(BASE_EXAMPLE_CLINICIANS);
+export const demoRoster: readonly Clinician[] = [...clinicians, ...BASE_EXAMPLE_CLINICIANS, ...EXPANDED_CARE_CLINICIANS];
 
 /** O222: the one choice expression for "which roster is in use" — both the render path and the
  * toggle handler read this, so a future change to what the tickbox composes cannot land in one
