@@ -29,7 +29,7 @@ export interface CareDeclaration {
     publish: boolean;
   };
 }
-export interface CareProvider { careProfile?: CareDeclaration; synthetic?: boolean; careAreas?: readonly string[]; expertise?: readonly string[]; approach?: readonly string[] }
+export interface CareProvider { careProfile?: CareDeclaration; synthetic?: boolean; careAreas?: readonly string[]; careAreasSometimes?: readonly string[]; expertise?: readonly string[]; approach?: readonly string[] }
 export const isCareNeed = (value: unknown): value is CareNeed => typeof value === "string" && Object.hasOwn(CARE_NEEDS, value);
 export const isIdentityPreference = (value: unknown): value is ClinicianIdentityPreference => typeof value === "string" && Object.hasOwn(IDENTITY_LABELS, value);
 export function publicCareProfile(provider: CareProvider): CareDeclaration | undefined {
@@ -44,7 +44,7 @@ export function declaresCareNeed(provider: CareProvider, need: CareNeed): boolea
     || (need === "whole-person" && provider.approach?.includes("holistic") === true)
     || (need === "university-adjustments" && provider.expertise?.includes("university-adhd") === true)
     || (need === "workplace-adjustments" && provider.expertise?.includes("workplace-adjustments") === true)
-    || (!!LEGACY_AREAS[need] && provider.careAreas?.includes(LEGACY_AREAS[need]!) === true);
+    || (!!LEGACY_AREAS[need] && [...(provider.careAreas ?? []), ...(provider.careAreasSometimes ?? [])].includes(LEGACY_AREAS[need]!));
 }
 export function matchesCare(provider: CareProvider, preferences: CarePreferences): boolean {
   if ((preferences.careNeeds ?? []).some(need => !declaresCareNeed(provider, need))) return false;

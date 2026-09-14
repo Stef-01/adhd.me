@@ -38,14 +38,25 @@ function SettingsLink({ href, title, detail }: { href: string; title: string; de
 export function AppSettings({ children, fallback = false }: { children?: React.ReactNode; fallback?: boolean }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [overridden, setOverridden] = useState(false);
   const [mount, setMount] = useState<HTMLElement | null>(null);
   useEffect(() => { if (!fallback) setMount(document.getElementById("platform-settings")); }, [fallback]);
   useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (!fallback) return;
+    const host = document.getElementById("platform-settings");
+    if (!host) return;
+    const sync = () => setOverridden(!!host.querySelector(".settings-trigger:not([data-settings-fallback])"));
+    const observer = new MutationObserver(sync);
+    observer.observe(host, { childList: true });
+    sync();
+    return () => observer.disconnect();
+  }, [fallback]);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const trigger = <button ref={triggerRef} className="settings-trigger" data-settings-fallback={fallback || undefined} type="button" onClick={() => setOpen(true)} aria-label="Settings"><Gear size={21} weight="regular" aria-hidden="true" /></button>;
   return (
     <>
-      {mount ? createPortal(trigger, mount) : trigger}
+      {fallback && overridden ? null : mount ? createPortal(trigger, mount) : trigger}
       <Sheet open={open} title="Settings" onClose={() => setOpen(false)} openedBy={triggerRef}>
         <div className="settings-list">
           <SettingsLink href="/profile" title="Search filters" detail="Where you are, the kind of support, and the declared facts a provider must have." />

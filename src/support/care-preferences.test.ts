@@ -4,6 +4,10 @@ import { BASE_EXAMPLE_CLINICIANS, EXPANDED_CARE_CLINICIANS, rosterFor } from "@/
 import { applyFilters, emptyFilters, readFilters, FILTERS_KEY } from "@/finder/filters";
 const declared: CareProvider = { careProfile: { needs: ["spiritual-wellbeing", "university-adjustments"], source: "https://example.org/clinician-declaration", declaredAt: "2026-09-14", identity: { identities: ["aboriginal"], country: "Wiradjuri", publish: true } } };
 describe("declared care matching", () => {
+  it("keeps declared occasional care eligible without promoting its ranking grade", () => {
+    expect(matchesCare({ careAreasSometimes: ["anxiety"] }, { careNeeds: ["anxiety"] })).toBe(true);
+    expect(matchesCare({ careAreasSometimes: ["anxiety"] }, { careNeeds: ["autism"] })).toBe(false);
+  });
   it("requires identity and spiritual-care experience independently", () => {
     const preferences = carePreferencesFromRequest("I want an Aboriginal clinician who understands spiritual health and ADHD");
     expect(preferences).toEqual({ clinicianIdentity: "aboriginal", careNeeds: ["spiritual-wellbeing"] });

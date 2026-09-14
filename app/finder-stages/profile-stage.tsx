@@ -139,7 +139,7 @@ export function ProfileStage({
             {problemFit && <p className="profile-best-for profile-fit"><span>Why you’re seeing them</span> {problemFit}</p>}
             <p className="profile-location">{locationLabel(clinician)}</p>
             {publicIdentity(clinician) && <p className="profile-cultural-identity">{publicIdentity(clinician)!.identities.map(id => IDENTITY_LABELS[id]).join(" · ")}{publicIdentity(clinician)!.country && <> · Country / Nation: {publicIdentity(clinician)!.country}</>}</p>}
-            {publicCareProfile(clinician) && <details className="profile-more profile-care-declaration"><summary>Care they offer</summary><ul>{publicCareProfile(clinician)!.needs.map(need => <li key={need}>{CARE_NEEDS[need]}</li>)}</ul>{clinician.synthetic ? <p>Fictional example; not bookable.</p> : <a href={publicCareProfile(clinician)!.source} target="_blank" rel="noopener noreferrer">Clinician declaration ↗</a>}</details>}
+            {publicCareProfile(clinician) && <details className="profile-more profile-care-declaration"><summary>Care they offer <CaretRight size={16} aria-hidden="true" /></summary><ul>{publicCareProfile(clinician)!.needs.map(need => <li key={need}>{CARE_NEEDS[need]}</li>)}</ul>{clinician.synthetic ? <p>Fictional example; not bookable.</p> : <a href={publicCareProfile(clinician)!.source} target="_blank" rel="noopener noreferrer">Clinician declaration ↗</a>}</details>}
 
             {/* O184: the material-interest disclosure, back on the listing it concerns.
                 SITED IN THE IDENTITY BLOCK, because that is where a reader is deciding who this

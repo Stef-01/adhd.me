@@ -120,3 +120,23 @@
 .platform-shell .finder-care-summary summary { cursor: pointer; min-height: 28px; }
 .platform-shell .row-cultural-identity, .platform-shell .profile-cultural-identity { color: var(--accent-deep); font-size: 14px; line-height: 1.5; }
 .platform-shell .profile-care-declaration { margin-block: 12px; font-size: 14px; line-height: 1.6; }
+
+/* Keep profile identity anchored while optional care details expand. */
+.platform-shell .patient-v2 .profile-content .profile-intro { align-items: start; }
+.platform-shell .patient-v2 .profile-content .profile-identity h1 { line-height: 1.15; text-wrap: balance; }
+.platform-shell .patient-v2 .profile-content .profile-cultural-identity { margin-top: 10px; }
+.platform-shell .care-preference-fields { gap: 22px; }
+.platform-shell .care-preference-field { display: grid; gap: 8px; min-width: 0; }
+.platform-shell .care-preference-fields .me-chips { margin: 0; gap: 8px; }
+.platform-shell .care-preference-fields .me-chip { max-width: 100%; min-height: 44px; white-space: normal; text-align: left; line-height: 1.45; }
+.platform-shell .care-preference-fields .me-group-note { margin: 0; }
+.platform-shell .care-preference-fields :is(input,select) { transition: border-color 160ms ease; }
+.platform-shell .finder-care-summary { padding-block: 8px; }
+.platform-shell .finder-care-summary summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; list-style: none; font-weight: 550; }
+.platform-shell .finder-care-summary summary::-webkit-details-marker { display: none; }
+.platform-shell .finder-care-summary summary::after { content: ""; width: 7px; height: 7px; flex: 0 0 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); transition: transform 160ms ease; margin-right: 4px; }
+.platform-shell .finder-care-summary[open] summary::after { transform: rotate(225deg); }
+.platform-shell :is(.finder-care-summary,.profile-care-declaration) ul { display: grid; gap: 8px; list-style: none; padding: 4px 0 12px; margin: 0; }
+.platform-shell .finder-care-summary summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+@media (hover: hover) { .platform-shell .care-preference-fields :is(input,select):hover { border-color: var(--accent); } }
+@media (prefers-reduced-motion: reduce) { .platform-shell .care-preference-fields :is(input,select), .platform-shell .finder-care-summary summary::after { transition: none; } }
