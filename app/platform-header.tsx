@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppTabs } from "./app-tabs";
+import { AppSettings } from "./app-settings";
 
 /**
  * The same navigation stays mounted across the three patient destinations.
@@ -20,7 +21,7 @@ export function PlatformHeader() {
     <AppTabs />
     <div className="platform-utilities">
       <Link className="platform-urgent" href="/urgent">Urgent help</Link>
-      <div id="platform-settings" />
+      <div id="platform-settings"><AppSettings fallback /></div>
     </div>
   </header>;
 }

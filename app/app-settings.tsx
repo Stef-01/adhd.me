@@ -16,6 +16,7 @@
 // grabber, same Escape, same focus return.
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { CaretRight, Gear } from "@phosphor-icons/react";
@@ -34,12 +35,14 @@ function SettingsLink({ href, title, detail }: { href: string; title: string; de
   );
 }
 
-export function AppSettings({ children }: { children?: React.ReactNode }) {
+export function AppSettings({ children, fallback = false }: { children?: React.ReactNode; fallback?: boolean }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mount, setMount] = useState<HTMLElement | null>(null);
-  useEffect(() => { setMount(document.getElementById("platform-settings")); }, []);
+  useEffect(() => { if (!fallback) setMount(document.getElementById("platform-settings")); }, [fallback]);
+  useEffect(() => { setOpen(false); }, [pathname]);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const trigger = <button ref={triggerRef} className="settings-trigger" type="button" onClick={() => setOpen(true)} aria-label="Settings"><Gear size={21} weight="regular" aria-hidden="true" /></button>;
+  const trigger = <button ref={triggerRef} className="settings-trigger" data-settings-fallback={fallback || undefined} type="button" onClick={() => setOpen(true)} aria-label="Settings"><Gear size={21} weight="regular" aria-hidden="true" /></button>;
   return (
     <>
       {mount ? createPortal(trigger, mount) : trigger}

@@ -48,35 +48,6 @@
   .platform-shell .patient-v2 .profile-content .profile-about { margin-top: 20px; }
 }
 
-/* ── The kinds of care this search reaches ─────────────────────────────────────────────────────
-   ADHD care is multidisciplinary; the list was one column of mostly GPs. This band names every
-   kind the search found and narrows to it — the navigation layer the whole wrong-waitlist problem
-   turns on. It scrolls sideways on a phone, wraps on a desktop, and the chosen kind is filled. */
-/* A segmented track, not a second row of pills. The strip above it is preferences (bulk billing,
-   telehealth) and this one is WHICH KIND OF PROFESSIONAL — a different question, and two identical
-   pill rows stacked read as one long list of filters. One ground, the kinds sitting in it, so it
-   reads as a set of alternatives you pick between. */
-.care-kinds {
-  display: flex; gap: 4px; margin: 14px 0 18px; padding: 4px; list-style: none;
-  border-radius: 999px; background: var(--stone); box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ink) 7%, transparent);
-  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
-}
-.care-kinds::-webkit-scrollbar { display: none; }
-.care-kinds > li { flex: 1 1 auto; display: flex; }
-.care-kind {
-  display: inline-flex; align-items: center; justify-content: center; width: 100%;
-  min-height: 40px; padding: 0 14px;
-  border: 0; border-radius: 999px; background: transparent; color: var(--muted);
-  font: inherit; font-size: 0.9375rem; font-weight: 650; white-space: nowrap; cursor: pointer;
-  touch-action: manipulation;
-  transition: background var(--dur-tap) var(--ease-ui), color var(--dur-tap) var(--ease-ui), box-shadow var(--dur-tap) var(--ease-ui);
-}
-.care-kind[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 14%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 34%, transparent); }
-.care-kind:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-@media (hover: hover) { .care-kind:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--paper) 62%, transparent); color: var(--ink); } }
-@media (min-width: 900px) { .care-kinds { max-width: 560px; } }
-@media (prefers-reduced-motion: reduce) { .care-kind { transition: none; } }
-
 /* Finder: one search header, profession navigation, and a quiet provider directory. */
 .platform-shell .patient-v2 .results-screen { max-width: 1248px; padding-top: 12px; }
 .platform-shell .results-screen .minimal-header { min-height: 44px; padding: 0 0 12px; border: 0; }
@@ -84,15 +55,12 @@
 .platform-shell .results-summary { max-width: 880px; border-radius: 12px; box-shadow: none; background: var(--surface-raised); }
 .platform-shell .results-summary-words { min-height: 60px; padding: 14px 20px; border: 0; border-radius: 12px; }
 .platform-shell .results-summary-text { font-size: 16px; line-height: 1.5; }
-.platform-shell .results-head h1 { max-width: 32ch; margin: 24px 0 4px; font-size: clamp(24px, 3vw, 34px); line-height: 1.2; }
-.platform-shell .results-screen .filter-strip { margin: 18px 0 0; padding: 4px 0 16px; gap: 12px; }
+.platform-shell .results-head h1 { max-width: 32ch; margin: 24px 0 4px; font-size: clamp(24px, 3vw, 34px); line-height: 1.25; letter-spacing: -.025em; text-wrap: balance; }
+.platform-shell .results-screen .filter-strip { margin: 18px 0 0; padding: 4px 0 16px; gap: 8px; flex-wrap: wrap; overflow: visible; }
+.platform-shell .results-screen .filter-chips { min-width: 0; flex-wrap: wrap; gap: 8px; }
 .platform-shell .results-screen .filter-chip { min-height: 44px; padding: 10px 16px; font-size: 13px; box-shadow: none; background: transparent; border-color: var(--line-strong); }
 .platform-shell .results-screen .filter-chip::after { inset: 0; }
 .platform-shell .results-screen .filter-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-deep); }
-.platform-shell .results-screen .care-kinds { max-width: none; margin: 4px 0 0; padding: 0; gap: 24px; border-radius: 0; border-bottom: 1px solid var(--line); background: transparent; box-shadow: none; }
-.platform-shell .results-screen .care-kinds > li { flex: 0 0 auto; }
-.platform-shell .results-screen .care-kind { min-height: 54px; padding: 12px 2px; border-radius: 0; border-bottom: 3px solid transparent; font-size: 14px; background: transparent; box-shadow: none; }
-.platform-shell .results-screen .care-kind[aria-pressed="true"] { color: var(--accent-deep); border-bottom-color: var(--accent); }
 .platform-shell .results-screen .results-list-head { padding: 28px 0 20px; gap: 16px; align-items: center; flex-wrap: wrap; }
 .platform-shell .results-screen .results-list-head h2 { font-family: inherit; font-size: 24px; font-weight: 700; margin: 0; }
 .platform-shell .results-screen .results-list-head h2 em { font-style: normal; color: inherit; font-weight: inherit; }
@@ -122,7 +90,6 @@
   .platform-shell .patient-v2 .results-screen { padding-top: 4px; }
   .platform-shell .results-summary-words { min-height: 54px; padding: 12px; }
   .platform-shell .results-screen .filter-strip { margin-top: 12px; padding-bottom: 12px; }
-  .platform-shell .results-screen .care-kinds { gap: 20px; }
   .platform-shell .results-screen .results-list-head { padding: 20px 0 12px; gap: 4px 12px; }
   .platform-shell .results-screen .results-list-head h2 { font-size: 21px; }
   .platform-shell .results-list-tools { gap: 10px; }
@@ -131,12 +98,13 @@
   .platform-shell .patient-v2 .results-browser .clinician-row strong { font-size: 18px; }
   .platform-shell .patient-v2 .results-browser .row-focus { font-size: 13px; }
 }
-.platform-shell .finder-professions { display: flex; align-items: center; flex-wrap: wrap; column-gap: 32px; border-bottom: 1px solid var(--line); }
-.platform-shell .finder-professions .care-kinds { flex: 1; min-width: 240px; border-bottom: 0; }
-.platform-shell .finder-profession { position: relative; flex: 0 1 240px; margin: 8px 0; }
-.platform-shell .finder-profession select { width: 100%; min-height: 44px; border: 1px solid var(--line-strong); border-radius: 8px; padding: 10px 32px 10px 12px; color: var(--ink); background: var(--paper); line-height: 1.4; font-weight: 500; font-family: inherit; font-size: 13px; }
+.platform-shell .finder-professions { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 16px 0; border-block: 1px solid var(--line); }
+.platform-shell .finder-profession-label { color: var(--muted); font-size: 14px; font-weight: 550; }
+.platform-shell .finder-profession { position: relative; width: min(100%, 320px); }
+.platform-shell .finder-profession select { width: 100%; height: 48px; border: 1px solid var(--line-strong); border-radius: 12px; padding: 10px 40px 10px 14px; color: var(--ink); background: var(--paper); line-height: 1.5; font-weight: 550; font-family: inherit; font-size: 16px; text-overflow: ellipsis; }
 .platform-shell .finder-profession select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.platform-shell .finder-profession [data-slot="native-select-icon"] { right: 14px; width: 16px; height: 16px; color: var(--muted); }
 .platform-shell .finder-count-number { color: inherit; letter-spacing: inherit; }
-@media (max-width: 699px) { .platform-shell .finder-profession { flex: 1 1 100%; } }
+@media (max-width: 699px) { .platform-shell .finder-profession { flex: 1 1 100%; width: 100%; } }
 .platform-shell .results-summary-text { font-family: "Inter Variable", Inter, sans-serif; }
 .platform-shell .patient-v2 .results-browser .clinician-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }

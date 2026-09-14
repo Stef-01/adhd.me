@@ -10,7 +10,16 @@ for (const width of [320, 390, 768, 1440]) {
     await page.getByRole('textbox').fill('I want a GP for ADHD assessment and help with daily routines');
     await page.keyboard.press('Enter');
     await expect(page.locator('.clinician-list')).toBeVisible();
-    const profession = page.getByLabel('Provider profession');
+    const profession = page.getByLabel('Provider type');
+    await expect(page.getByText('Provider type', { exact: true })).toBeVisible();
+    await expect(page.locator('.care-kinds')).toHaveCount(0);
+    expect((await profession.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await expect(page.getByRole('button', { name: 'Settings', exact: true })).toHaveCount(1);
+    for (const chip of await page.locator('.filter-strip .filter-chip').all()) {
+      const box = (await chip.boundingBox())!;
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(width);
+    }
     await profession.selectOption('occupational-therapist');
     await expect(page.locator('.clinician-row').first()).toContainText('Occupational therapist');
     await profession.selectOption('psychologist');

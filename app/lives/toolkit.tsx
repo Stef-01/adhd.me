@@ -6,7 +6,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { ArrowRight, Check, Play, Trash } from "@phosphor-icons/react";
+import { ArrowRight, Play, Trash } from "@phosphor-icons/react";
 import { markStrategy, removeFromToolkit, strategy, type PersonalStrategy } from "@/lives";
 import { track } from "@/model/events";
 import { LifeBean } from "./bean";
@@ -31,7 +31,6 @@ export function Toolkit() {
   return (
     <div className="me-screen learn-screen lives-screen">
       <header className="life-head">
-        <span className="life-eyebrow">ADHD Lives</span>
         <h1 className="life-title">My Toolkit</h1>
         {tools.length === 0 && queue.length === 0 && <p className="life-lede">Nothing yet. Play a run; save a strategy.</p>}
       </header>
@@ -98,7 +97,7 @@ export function Toolkit() {
 
       {/* The map is where a kept strategy shows up as a shape, so it belongs on the screen that
           holds them. */}
-      <p className="lives-foot"><Link href="/lives/learn"><Check size={14} weight="bold" aria-hidden="true" /> All strategies</Link> · <Link href="/lives/play">Play</Link> · <Link href="/my-map">Your map</Link></p>
+      <nav className="toolkit-navigation" aria-label="Toolkit actions"><Link className="learn-primary" href="/lives/learn">All strategies <ArrowRight size={16} aria-hidden="true" /></Link><Link className="learn-secondary" href="/lives/play">Play</Link><Link className="learn-secondary" href="/my-map">Your map</Link></nav>
     </div>
   );
 }

@@ -384,3 +384,8 @@
    breaking the line it sits in. */
 .map-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0 5px; margin: 0 auto; color: var(--muted); font-size: 0.8125rem; }
 .map-foot a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-underline-offset: 3px; }
+
+/* Writing surfaces need one field boundary, not a card around another box. */
+.platform-shell .manual-section { padding: 0; margin-bottom: 28px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.platform-shell .manual-section h2 { font-size: 1rem; line-height: 1.4; margin-bottom: 10px; }
+.platform-shell .manual-text { min-height: 128px; border-color: var(--line-strong); padding: 14px 16px; font-size: 1rem; line-height: 1.6; }

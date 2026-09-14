@@ -107,7 +107,7 @@ export function ResultsStage({
   /** The filters the chips cannot show — a language, a distance, a way of working — as a count on the Filters pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length;
   /** The kind the band has narrowed to, if any — the heading has to say what the list is. */
-  const pickedKind = careKinds.find((k) => filters.professions.includes(k.id))?.plural ?? null;
+  const pickedKind = filters.professions.length === 1 ? careKinds.find((k) => k.id === filters.professions[0])?.plural ?? null : null;
   // U9: the one live line this screen owns. The status paragraphs below used to be five separate
   // `role="status"` regions inside a live shell, so a place edit read the fit line, the distance
   // line, the quality verdict and the whole re-ordered list. Now the region says the count and
@@ -247,42 +247,18 @@ export function ResultsStage({
         )}
       </div>
 
-      {/* THE KINDS OF CARE THIS SEARCH REACHES (2026-09-11). ADHD care is multidisciplinary and the
-          list was not: one column, mostly GPs, with the profession printed small on the few rows
-          that were not one. The band names every kind the search actually found, in the order the
-          person's own words point at, and each one narrows the list to it. It only renders when
-          there is more than one kind, because a band offering one choice is not a choice — and a
-          kind is only on it when the search found somebody of that kind, so no chip is a dead end.
-          Word-frugal on purpose: the plural alone, no count and no blurb, because this screen sits
-          at the text budget's ceiling and what a kind is for belongs on the kind's own list.
-          A plain list with a name, NOT role="group": the role overrode the list semantics and left
-          three <li> with no list parent, which axe reads as serious. The filter strip above is the
-          pattern — the group is the wrapper, the list is a list. */}
-      <div className="finder-professions">
       {careKinds.length > 1 && (
-        <ul className="care-kinds" aria-label="Kinds of care">
-          {careKinds.slice(0, 3).map((kind) => (
-            <li key={kind.id}>
-              <button
-                type="button"
-                className="care-kind"
-                data-kind={kind.id}
-                aria-pressed={filters.professions.includes(kind.id)}
-                onClick={() => onPickKind(kind.id)}
-              >
-                {kind.plural}
-                <span className="sr-only">, {kind.count} found</span>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="finder-professions">
+          <label className="finder-profession-label" htmlFor="provider-profession">Provider type</label>
+          <NativeSelect id="provider-profession" className="finder-profession" aria-label="Provider type"
+            value={filters.professions.length > 1 ? "multiple" : filters.professions[0] ?? ""}
+            onChange={event => onPickKind((event.target.value || null) as Profession | null)}>
+            <NativeSelectOption value="">All provider types</NativeSelectOption>
+            {filters.professions.length > 1 && <NativeSelectOption value="multiple" disabled>{filters.professions.length} provider types selected</NativeSelectOption>}
+            {careKinds.map(kind => <NativeSelectOption key={kind.id} value={kind.id}>{kind.plural.charAt(0).toUpperCase() + kind.plural.slice(1)}</NativeSelectOption>)}
+          </NativeSelect>
+        </div>
       )}
-
-      {careKinds.length > 1 && <NativeSelect className="finder-profession" aria-label="Provider profession" value={filters.professions.length === 1 ? filters.professions[0] : ""} onChange={event => onPickKind((event.target.value || null) as Profession | null)}>
-        <NativeSelectOption value="">All professions</NativeSelectOption>
-        {careKinds.map(kind => <NativeSelectOption key={kind.id} value={kind.id}>{kind.plural}</NativeSelectOption>)}
-      </NativeSelect>}
-      </div>
       {/* O234, AR24 kind `no-results`: the roster was ranked and the filters left nobody. The
           sentence names the filters as the cause, because that is the one thing the person can
           change, and both ways out are on the screen. */}

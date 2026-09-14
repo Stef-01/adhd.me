@@ -472,3 +472,18 @@ test("daily actions live in My ADHD and help is reached through Settings", async
   await sheet.getByRole("link", { name: /Help & answers/ }).click();
   await expect(page).toHaveURL(/\/faq$/);
 });
+
+
+test("Settings remains reachable on secondary pages without duplicate controls", async ({ page }) => {
+  for (const route of ["/lives/toolkit", "/manual", "/medication", "/approach/meditate", "/my-adhd"]) {
+    await page.goto(route);
+    const trigger = page.getByRole("button", { name: "Settings", exact: true });
+    await expect(trigger).toHaveCount(1);
+    await trigger.click();
+    const sheet = page.getByRole("dialog", { name: "Settings" });
+    await expect(sheet.getByRole("link", { name: /Help & answers/ })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(sheet).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+});

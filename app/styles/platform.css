@@ -155,3 +155,10 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
   .platform-header { padding-inline: 14px; gap: 10px; }
   .platform-brand { font-size: 17px; }
 }
+
+/* Keep one visible settings control as screen-specific options mount. */
+#platform-settings { display: flex; align-items: center; }
+#platform-settings:has(> .settings-trigger:not([data-settings-fallback])) > [data-settings-fallback] { display: none; }
+.platform-shell .settings-row { padding-block: 16px; }
+.platform-shell .settings-row > span { min-width: 0; gap: 5px; }
+.platform-shell .settings-row small { max-width: 48ch; line-height: 1.55; }

@@ -398,3 +398,5 @@
 .lives-card.is-round:has(.lives-world[data-world="bedroom"]) { background: #c5c6ed; }
 /* The phone that wants one more scroll glows beside Leo, not over his face. */
 .lives-world[data-world="bedroom"] .lives-thing.is-temptation { translate: -22% -38%; }
+
+.toolkit-navigation { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-block: 24px; }

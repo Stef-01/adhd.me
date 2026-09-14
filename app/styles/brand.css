@@ -51,3 +51,8 @@ body .aoc-band::before, .site-footer::before { display: none; }
 @media (max-width: 767px) { .platform-brand::after { left: 46px; } }
 /* Fixed navigation must keep its contrast as colourful content scrolls underneath it. */
 @media (max-width: 767px) { .platform-shell .app-tabs { background: var(--paper); } }
+
+.platform-shell :is(.life-head h1, .learn-thesis) { letter-spacing: -.035em; line-height: 1.18; text-wrap: balance; }
+.platform-shell :is(input, textarea) { caret-color: var(--accent); }
+.platform-shell :is(input, textarea)::placeholder { color: var(--muted); opacity: 1; }
+::selection { background: var(--accent-tint); color: var(--ink); }

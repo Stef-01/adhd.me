@@ -49,3 +49,5 @@ body:has(.platform-public-nav) main h1 { font-family: inherit; font-weight: 750;
   /* Closed until the client has decided the width, so a phone never flashes the rows. */
   .platform-console .console-phone-fold:not([data-decided]) > :not(summary) { display: none; }
 }
+
+.platform-console.console-app-auth .console-main > div { box-shadow: none; border-color: var(--line); background: var(--paper); }
