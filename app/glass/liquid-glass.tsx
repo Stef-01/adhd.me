@@ -96,6 +96,7 @@ export function LiquidGlass() {
     // Games only (app/styles/glass.css): the layer switches itself on while a [data-liquid] scope is
     // on the page and off, canvas hidden, everywhere else. The finder never gets it.
     let scoped = false;
+    let library = false;
     let lastScope = -Infinity;
     canvas.style.visibility = "hidden";
 
@@ -218,9 +219,8 @@ export function LiquidGlass() {
       if (document.hidden) return;
       if (now - lastScope > REFRESH_MS) {
         lastScope = now;
-        // Library cards own their contained sheen and tap bubble; the full-screen
-        // shader would draw a second rim and a pointer droplet outside their edges.
-        const next = document.querySelector("[data-liquid]:not(.learn-games-scope)") !== null;
+        const next = document.querySelector("[data-liquid]") !== null;
+        library = document.querySelector(".learn-games-scope") !== null;
         if (next !== scoped) {
           scoped = next;
           document.documentElement.classList.toggle("has-liquid", scoped);
@@ -299,7 +299,7 @@ export function LiquidGlass() {
         bgPass: {
           u_paper: paper, u_tintA: tintA, u_tintB: tintB, u_tintC: tintC,
           u_shadowExpand: STUDIO.shadowExpand,
-          u_shadowFactor: STUDIO.shadowFactor / 100,
+          u_shadowFactor: (library ? 2 : STUDIO.shadowFactor) / 100,
           u_shadowPosition: [-STUDIO.shadowPosition.x, -STUDIO.shadowPosition.y],
         },
         mainPass: {
@@ -310,12 +310,12 @@ export function LiquidGlass() {
           u_refDispersion: STUDIO.refDispersion,
           u_refFresnelRange: STUDIO.refFresnelRange,
           u_refFresnelHardness: STUDIO.refFresnelHardness / 100,
-          u_refFresnelFactor: STUDIO.refFresnelFactor / 100,
+          u_refFresnelFactor: (library ? 12 : STUDIO.refFresnelFactor) / 100,
           u_glareRange: STUDIO.glareRange,
           u_glareHardness: STUDIO.glareHardness / 100,
           u_glareConvergence: STUDIO.glareConvergence / 100,
           u_glareOppositeFactor: STUDIO.glareOppositeFactor / 100,
-          u_glareFactor: STUDIO.glareFactor / 100,
+          u_glareFactor: (library ? 45 : STUDIO.glareFactor) / 100,
           u_blurEdge: STUDIO.blurEdge ? 1 : 0,
           STEP: 9,
         },

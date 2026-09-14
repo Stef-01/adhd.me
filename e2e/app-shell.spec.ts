@@ -410,7 +410,7 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
 });
 
-test("library glass stays contained while playable games retain the WebGL layer", async ({ page }) => {
+test("library and playable games retain live glass with a tap-bubble fallback", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   const errors: string[] = [];
   page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") errors.push(m.text()); });
@@ -435,7 +435,7 @@ test("library glass stays contained while playable games retain the WebGL layer"
   });
   // The layer is decoration: hidden from assistive tech, and present exactly when the engine can draw it.
   expect(state.canvas).toBe("true");
-  expect(state.liquid).toBe(false);
+  expect(state.liquid).toBe(state.able);
   const card = page.locator("[data-liquid] .learn-card").first();
   const box = (await card.boundingBox())!;
   await card.dispatchEvent("pointerdown", { pointerId: 1, clientX: box.x + 24, clientY: box.y + 24, button: 0 });
