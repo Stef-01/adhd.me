@@ -400,3 +400,44 @@
 .lives-world[data-world="bedroom"] .lives-thing.is-temptation { translate: -22% -38%; }
 
 .toolkit-navigation { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-block: 24px; }
+
+.character-journey { background: var(--journey-paper); color: var(--journey-ink); min-height: 100svh; padding: 16px clamp(16px, 4vw, 56px) 32px; }
+.journey-toolbar { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; text-align: center; max-width: 1000px; margin: auto; font-weight: 650; }
+.journey-toolbar :is(a,button) { display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; color: inherit; border-radius: 50%; }
+.journey-layout { max-width: 920px; margin: 20px auto 0; display: grid; grid-template-columns: minmax(200px, 1fr) minmax(300px, 390px); column-gap: clamp(24px, 5vw, 80px); align-items: center; }
+.journey-heading h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; margin: 12px 0 24px; outline: none; }
+.journey-chapter { font-size: 14px; font-weight: 650; }
+.journey-clock { display: flex; gap: 14px; align-items: center; font-variant-numeric: tabular-nums; }
+.journey-clock > div { height: 5px; flex: 1; border-radius: 10px; overflow: hidden; background: rgb(255 255 255 / .5); }
+.journey-clock i { display: block; width: 100%; height: 100%; background: var(--journey-ink); transform-origin: left; }
+.journey-companion { margin-top: 40px; }
+.character-journey .journey-stage { width: 100%; height: auto; aspect-ratio: 390 / 560; max-height: none; position: relative; border-radius: 28px; overflow: hidden; margin: 0; isolation: isolate; }
+.journey-actions { grid-column: 1; grid-row: 2; align-self: start; margin-top: 20px; }
+.journey-stage { grid-column: 2; grid-row: 1 / span 2; }
+.journey-actions p { font-size: 16px; line-height: 1.5; margin: 0 0 16px; }
+.journey-action-row, .journey-options { display: flex; flex-direction: column; gap: 10px; }
+.journey-primary, .journey-secondary, .journey-option { min-height: 48px; display: inline-flex; justify-content: center; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 22px; font: inherit; font-weight: 650; text-decoration: none; cursor: pointer; border: 0; }
+.journey-primary { background: var(--journey-ink); color: #fff; }
+.journey-secondary { background: transparent; color: var(--journey-ink); }
+.journey-option { background: rgb(255 255 255 / .75); color: var(--journey-ink); text-align: left; justify-content: space-between; }
+.character-journey :is(button,a):focus-visible { outline: 3px solid var(--journey-ink); outline-offset: 4px; }
+.journey-overlay { position: absolute; inset: 0; background: rgb(238 241 246 / .82); display: grid; place-items: center; z-index: 5; }
+.journey-practice-object { position: absolute; inset: 25% 15%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+.journey-practice-object > .lives-sprite { width: 100px; height: 100px; background: #fff; border-radius: 24px; padding: 12px; }
+.journey-complete { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; margin-bottom: 12px; }
+@media (max-width: 700px) {
+  .character-journey { padding: 8px 12px 24px; }
+  .journey-layout { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; max-width: 390px; }
+  .journey-heading { width: 100%; }
+  .journey-heading h1 { font-size: 28px; margin: 6px 0 12px; }
+  .journey-companion { display: none; }
+  .character-journey .journey-stage { aspect-ratio: 390 / 490; border-radius: 20px; }
+  .journey-actions { width: 100%; margin-top: 0; }
+  .journey-options { gap: 8px; }
+  .journey-actions p { margin-bottom: 10px; }
+}
+
+.character-journey .lives-trace .lives-choices { width: auto; }
+.character-journey .lives-world[data-motion="false"] .lives-field.lives-trace { bottom: 144px; }
+.character-journey .lives-world[data-motion="false"] .lives-trace .lives-choices { bottom: -132px; }
+.character-journey .lives-world[data-live="false"] * { animation-play-state: paused !important; }

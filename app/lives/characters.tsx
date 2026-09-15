@@ -6,6 +6,7 @@
 
 import Link from "next/link";
 import { CHARACTERS, recordResonance, strategy, type ResonanceSignal } from "@/lives";
+import { JOURNEYS } from "@/lives/journeys";
 import { track } from "@/model/events";
 import { LifeBean } from "./bean";
 import { useProfile } from "./profile-hook";
@@ -45,6 +46,7 @@ export function LivesCharacters() {
                   {c.trying.map((id) => { const s = strategy(id); return <li key={id}><Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(s.moduleId)}`}><span className="lives-row-text"><strong>{s.title}</strong><span>{s.estimatedMinutes} min</span></span></Link></li>; })}
                 </ul>
               </details>
+              {JOURNEYS.filter(j => j.who === c.id).map(j => <Link key={j.slug} className="lives-row" href={`/lives/play/${j.slug}`}>Play {c.name}’s moment →</Link>)}
               {c.id === "leo" && <Link className="lives-row" href="/lives/play/leo-mosquito">Play Leo’s moment →</Link>}
               {c.id === "theo" && <Link className="lives-row" href="/lives/play/theo-out-the-door">Play Theo’s morning →</Link>}
               

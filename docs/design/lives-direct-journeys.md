@@ -8,7 +8,7 @@ Each of the eight lives needs a standalone, replayable journey. Leo and Theo hav
 |---|---|---|---|
 | Leo | Growing mosquito waves | Change the bedroom and wind down | Existing; direct entry verified |
 | Theo | Pack essentials, resist detours, exit | A launch pad | Existing; direct entry verified |
-| Maya | Find a route, reduce competing sensory layers | Change one controllable input | Pending |
+| Maya | Find a route, reduce competing sensory layers | Change one controllable input | Complete: keyboard, pointer trace, both wipes, recovery, 320/390/1440 and axe |
 | Arjun | Select the agenda, park thoughts, hold the thread | Capture a thought for later | Pending |
 | Zoe | Resist send, hold a keyword, clear drafts | Pause before replying | Pending |
 | Mia | Find the object, retain the list, find the cue | Put a reminder where it is needed | Pending |
