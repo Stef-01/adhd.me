@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "./support/test";
+import { expect, test } from "./support/test";
+import type { Page } from "@playwright/test";
 import { expectNoViolations } from "./support/a11y";
 const URL = "/lives/play/theo-out-the-door";
 async function start(page: Page) {
