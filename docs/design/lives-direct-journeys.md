@@ -12,7 +12,7 @@ Each of the eight lives needs a standalone, replayable journey. Leo and Theo hav
 | Arjun | Select the agenda, park thoughts, hold the thread | Capture a thought for later | Complete: all three rounds, timed hold, keyboard, recovery, responsive and axe |
 | Zoe | Resist send, hold a keyword, clear drafts | Pause before replying | Complete: restraint, keyword hold, draft clearing, keyboard/timed, recovery and axe |
 | Mia | Find the object, retain the list, find the cue | Put a reminder where it is needed | Complete: three rounds, timed/keyboard, recovery, responsive and axe |
-| Jax | Protect the shopping goal, choose the list | Park an impulse for later | Pending |
+| Jax | Protect the shopping goal, choose the list | Park an impulse for later | Complete: goal protection, checkout, timed/keyboard, recovery, responsive and axe |
 | Nina | Choose a small start, draw the first line | Begin with an imperfect first step | Pending |
 
 Finish and QA one journey before adding the next. For each: direct entry, all rounds, loss/retry, practical ending, pause/resume, keyboard/reduced motion, mobile/desktop geometry, accessibility, and visible-word count. Keep each world's colour, drawn scenery and character reactions. Preserve library liquid glass.

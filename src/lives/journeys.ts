@@ -65,4 +65,16 @@ export const JOURNEYS: readonly LifeJourney[] = [
     ],
     ending: "Write it down. Put the cue where the action happens.", strategy: "external_cue",
   },
+  {
+    slug: "jax-just-the-list", who: "jax", title: "Just the list.", colour: "#d7ecdf", ink: "#294c3d",
+    rounds: [
+      { game: "jax_just_milk", title: "Keep the milk. Clear the extras." },
+      { game: "jax_checkout", title: "Milk. Bread. Eggs." },
+    ],
+    practice: [
+      { title: "Still thinking about the kayak?", choices: ["Add it to the trolley", "Save the idea for later"], correct: 1, effect: "The idea is saved. The trolley stays clear.", sprite: "kayak" },
+      { title: "Before the next shop.", choices: ["Bring a short list", "Rely on the sale signs"], correct: 0, effect: "One list to return to.", sprite: "list" },
+    ],
+    ending: "Keep the list visible. Give new wants time before buying.", strategy: "park_the_idea",
+  },
 ];
