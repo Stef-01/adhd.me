@@ -11,7 +11,7 @@ Each of the eight lives needs a standalone, replayable journey. Leo and Theo hav
 | Maya | Find a route, reduce competing sensory layers | Change one controllable input | Complete: keyboard, pointer trace, both wipes, recovery, 320/390/1440 and axe |
 | Arjun | Select the agenda, park thoughts, hold the thread | Capture a thought for later | Complete: all three rounds, timed hold, keyboard, recovery, responsive and axe |
 | Zoe | Resist send, hold a keyword, clear drafts | Pause before replying | Complete: restraint, keyword hold, draft clearing, keyboard/timed, recovery and axe |
-| Mia | Find the object, retain the list, find the cue | Put a reminder where it is needed | Pending |
+| Mia | Find the object, retain the list, find the cue | Put a reminder where it is needed | Complete: three rounds, timed/keyboard, recovery, responsive and axe |
 | Jax | Protect the shopping goal, choose the list | Park an impulse for later | Pending |
 | Nina | Choose a small start, draw the first line | Begin with an imperfect first step | Pending |
 

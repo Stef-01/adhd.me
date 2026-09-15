@@ -52,4 +52,17 @@ export const JOURNEYS: readonly LifeJourney[] = [
     ],
     ending: "Pause. Read it again. Choose what you want to say.", strategy: "pause_before_send",
   },
+  {
+    slug: "mia-remember-why", who: "mia", title: "What did I come for?", colour: "#e8ddf3", ink: "#513963",
+    rounds: [
+      { game: "mia_why_here", title: "Find the charger." },
+      { game: "mia_list", title: "Milk. Parcel. Stamps." },
+      { game: "mia_the_list", title: "Find the list." },
+    ],
+    practice: [
+      { title: "Give the thought a home.", choices: ["Keep repeating it", "Write one visible note"], correct: 1, effect: "The note holds it for you.", sprite: "list" },
+      { title: "Put it where you need it.", choices: ["Beside the thing you will use", "Inside a forgotten drawer"], correct: 0, effect: "A reminder at the right moment.", sprite: "keys" },
+    ],
+    ending: "Write it down. Put the cue where the action happens.", strategy: "external_cue",
+  },
 ];
