@@ -39,4 +39,17 @@ export const JOURNEYS: readonly LifeJourney[] = [
     ],
     ending: "Capture the thought. Return to one meeting anchor.", strategy: "parking_lot_note",
   },
+  {
+    slug: "zoe-before-you-send", who: "zoe", title: "Before you press send.", colour: "#f8ddeb", ink: "#682642",
+    rounds: [
+      { game: "zoe_dont_send", title: "Leave send alone." },
+      { game: "zoe_keyword", title: "Hold your keyword." },
+      { game: "zoe_drafts", title: "Clear the extra drafts." },
+    ],
+    practice: [
+      { title: "Give the reply some space.", choices: ["Save it as a draft", "Send every thought"], correct: 0, effect: "The message can wait while the feeling settles.", sprite: "draft" },
+      { title: "Come back to one point.", choices: ["Add fourteen more messages", "Keep one clear sentence"], correct: 1, effect: "One thought, with room for a reply.", sprite: "speech" },
+    ],
+    ending: "Pause. Read it again. Choose what you want to say.", strategy: "pause_before_send",
+  },
 ];

@@ -443,3 +443,5 @@
 .character-journey .lives-world[data-live="false"] * { animation-play-state: paused !important; }
 
 .journey-scene-character { position: absolute; bottom: 0; right: 18px; z-index: 2; pointer-events: none; }
+
+.character-journey .lives-temptation-word { background: var(--journey-ink); color: #fff; box-shadow: none; }
