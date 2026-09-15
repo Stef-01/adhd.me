@@ -23,7 +23,7 @@ const LEVEL = 1;
   * Leo to sleep is the same either way, and a game that only rewards catching every mosquito
   * teaches the opposite of the strategy it is attached to.
   */
-type Phase = "ready" | "playing" | "paused" | "routine" | "settled";
+type Phase = "playing" | "paused" | "routine" | "settled";
 
 /** Independently replayable. Practice does not write a learning profile or arcade score. */
 export function LeoPractice() {
@@ -32,10 +32,10 @@ export function LeoPractice() {
   const reduced = motionReady && Boolean(prefersReduced);
   // Countdown copy must match the server until hydration has completed.
   useEffect(() => { setMotionReady(true); }, []);
-  const [buzzOn, setBuzzOn] = useState(true);
+  const [buzzOn, setBuzzOn] = useState(false);
   const roundAudio = useRef<LeoBuzz | null>(null);
   const [attempt, setAttempt] = useState(0);
-  const [phase, setPhase] = useState<Phase>("ready");
+  const [phase, setPhase] = useState<Phase>("playing");
   const [elapsed, setElapsed] = useState(0);
   /** How the round went, said once at the top of the routine and then let go of. */
   const [roundLine, setRoundLine] = useState("");
@@ -44,7 +44,7 @@ export function LeoPractice() {
   /** How the round ended. It is the heading on the routine's first step, and nothing after that. */
   const [won, setWon] = useState(false);
   const elapsedRef = useRef(0);
-  const phaseRef = useRef<Phase>("ready");
+  const phaseRef = useRef<Phase>("playing");
   const title = useRef<HTMLHeadingElement>(null);
   const scene = useMemo(() => layoutGame(GAME, LEVEL, 1701 + attempt), [attempt]);
   const duration = allowedMs(GAME, LEVEL);
@@ -61,7 +61,7 @@ export function LeoPractice() {
 
   useEffect(() => { title.current?.focus({ preventScroll: true }); }, [phase]);
   useEffect(() => {
-    if (phase !== "playing") return;
+    if (!motionReady || phase !== "playing") return;
     let raf = 0;
     let previous = performance.now();
     const tick = (now: number) => {
@@ -77,7 +77,7 @@ export function LeoPractice() {
     if (document.hidden) changePhase("paused");
     else if (!still) raf = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(raf); document.removeEventListener("visibilitychange", hide); };
-  }, [phase, still, duration, changePhase]);
+  }, [phase, still, duration, changePhase, motionReady]);
 
   const start = () => {
     roundAudio.current = buzzOn ? new LeoBuzz() : null;
@@ -98,14 +98,14 @@ export function LeoPractice() {
       <span>Leo & the mosquito</span>
       {phase === "playing" || phase === "paused" ? <button onClick={() => changePhase(phase === "paused" ? "playing" : "paused")} aria-label={phase === "paused" ? "Resume game" : "Pause game"}>{phase === "paused" ? <Play size={22} weight="fill" /> : <Pause size={22} />}</button> : <button onClick={() => setBuzzOn(on => !on)} aria-label="Buzz sounds" aria-pressed={buzzOn}>{buzzOn ? <SpeakerHigh size={22} /> : <SpeakerSlash size={22} />}</button>}
     </div>
-    <h1 id="leo-title" ref={title} tabIndex={-1}>{phase === "ready" ? "One tiny sound." : phase === "paused" ? "Take your time." : settled ? "Quiet all night."
+    <h1 id="leo-title" ref={title} tabIndex={-1}>{phase === "paused" ? "Take your time." : settled ? "Quiet all night."
       /* The routine opens on the round's own answer and then names what is being done, so the
          outcome is said exactly once and the screen never stops to be waited through. */
       : phase === "routine" ? (step === 0 ? (won ? "Quiet at last." : "Still wide awake.") : "Change the room.") : "GET IT!"}</h1>
     {/* The clock belongs to the round. Nothing in the routine is timed — it is the opposite of the
         round in exactly that way — so the bar and the timer leave rather than sit there at zero. */}
     {!after && <div className="leo-countdown">
-      <div className="leo-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "ready" || still ? 1 : Math.max(0, 1 - elapsed / duration)})` }} /></div>
+      <div className="leo-clock" aria-hidden="true"><span style={{ transform: `scaleX(${still ? 1 : Math.max(0, 1 - elapsed / duration)})` }} /></div>
       <span role="timer" aria-label="Time remaining">{still ? "No timer" : `${Math.max(0, Math.ceil((duration - elapsed) / 1000))}s`}</span>
     </div>}
     <div className="leo-board">
@@ -114,16 +114,11 @@ export function LeoPractice() {
           a timer. From there the plain scene takes over and picks up each thing as it is done. The
           swarm stops its own audio the moment it is handed an outcome, and disposes the graph when
           that first tap unmounts it. */}
-      {phase === "ready" ? <LeoBedroom />
-        : settled || step > 0 ? <LeoBedroom asleep={settled} windowShut={room.window} headphones={room.headphones} phoneOff={room.phone} reading={room.book} lightOff={room.light} />
+      {settled || step > 0 ? <LeoBedroom asleep={settled} windowShut={room.window} headphones={room.headphones} phoneOff={room.phone} reading={room.book} lightOff={room.light} />
         : <LeoMosquito key={attempt} game={GAME} scene={scene} live={phase === "playing"} reducedMotion={still} elapsedMs={elapsed} progress={Math.min(1, elapsed / duration)} onResult={finish} outcome={phase === "routine" ? (won ? "success" : "failure") : undefined} initialAudio={roundAudio.current} onSoundChange={setBuzzOn} />}
       {phase === "paused" && <div className="leo-pause"><button onClick={() => changePhase("playing")}><Play size={22} weight="fill" /> Resume</button></div>}
     </div>
     <div className="leo-bottom">
-      {phase === "ready" && <>
-        <p>{still ? "Catch every mosquito, one wave at a time." : "Three waves, each bigger. Catch them before Leo can’t settle."}</p>
-        <button className="leo-primary" onClick={start}><Play size={20} weight="fill" /> Play Leo’s moment</button>
-      </>}
       {phase === "paused" && <p>The clock and mosquitoes are paused.</p>}
       {/* The routine: one step on the screen at a time, each tap a thing that happens to the room
           above. Nothing is skippable and nothing is scored — each tap changes the room. */}

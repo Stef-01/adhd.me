@@ -39,9 +39,9 @@ const SURFACES: ReadonlyArray<{ name: string; path: string; act?: (page: Page) =
   { name: "Learn", path: "/approach" },
   { name: "Lives", path: "/lives" },
   { name: "Leo, ready", path: "/lives/play/leo-mosquito" },
-  { name: "Leo, playing", path: "/lives/play/leo-mosquito", act: async (p) => { await p.getByRole("button", { name: "Play Leo’s moment" }).click(); } },
+  { name: "Leo, playing", path: "/lives/play/leo-mosquito", act: async (p) => {  } },
   { name: "Leo, the routine", path: "/lives/play/leo-mosquito", act: async (p) => {
-    await p.getByRole("button", { name: "Play Leo’s moment" }).click();
+
     await p.getByRole("button", { name: "Skip this round" }).click();
   } },
   { name: "The Chaos Run", path: "/lives/play" },

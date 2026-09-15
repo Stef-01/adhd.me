@@ -1,31 +1,31 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 const URL = "/lives/play/theo-out-the-door";
-async function start(page: Page, level = "1") {
-  await page.goto(URL); await page.getByLabel("Challenge", { exact: true }).selectOption(level);
-  await page.getByRole("button", { name: "Play Theo’s morning" }).click();
+async function start(page: Page) {
+  await page.goto(URL);
+
 }
 async function pack(page: Page, items = ["Keys", "Phone", "Shoes"]) {
   for (const item of items) await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).click();
 }
 
-test("Theo's hardest morning supports keyboard, door gate, replay and learning without profile writes", async ({ page }) => {
+test("Theo's direct-entry morning supports keyboard, door gate, replay and learning without profile writes", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" }); const errors: string[] = []; page.on("pageerror", e => errors.push(e.message));
   await page.goto("/approach?pane=games"); await page.getByRole("link", { name: /Just get out the door/ }).click();
-  await expect(page.getByRole("heading", { name: "Just get out the door." })).toBeFocused();
-  await page.getByLabel("Challenge", { exact: true }).selectOption("8");
+  await expect(page.getByRole("heading", { name: "Essentials. Then exit." })).toBeFocused();
+
   const before = await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"));
-  await page.getByRole("button", { name: "Play Theo’s morning" }).click();
+
   await expect(page.getByRole("timer")).toHaveText("No timer");
   await page.getByRole("button", { name: "Open the door" }).click(); await expect(page.getByRole("status")).toContainText("still missing");
-  for (const item of ["Keys", "Phone", "Shoes", "Wallet", "Travel pass"]) { await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).focus(); await page.keyboard.press("Enter"); }
-  await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", "5");
+  for (const item of ["Keys", "Phone", "Shoes"]) { await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).focus(); await page.keyboard.press("Enter"); }
+  await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", "3");
   await expect(page.getByRole("heading", { name: "Essentials. Then exit." })).toBeVisible();
   await page.getByRole("button", { name: "Open the door" }).click();
   await expect(page.getByRole("heading", { name: "And you’re off!" })).toBeFocused();
   expect(await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"))).toBe(before);
   await page.getByRole("button", { name: "Play again" }).click(); await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", "0");
-  await pack(page, ["Keys", "Phone", "Shoes", "Wallet", "Travel pass"]); await page.getByRole("button", { name: "Open the door" }).click();
+  await pack(page, ["Keys", "Phone", "Shoes"]); await page.getByRole("button", { name: "Open the door" }).click();
   await page.getByRole("link", { name: /Give your essentials a home/ }).click(); await expect(page).toHaveURL(/module=launch_pad_v1/); expect(errors).toEqual([]);
 });
 
@@ -40,7 +40,7 @@ test("two detours are recoverable, three end the round, and replay resets them",
 });
 
 test("drag packs only on the pad; an invalid drop snaps back without picking", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto(URL); await page.getByLabel("No timer", { exact: true }).check(); await page.getByRole("button", { name: "Play Theo’s morning" }).click();
+  await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto(URL);
   const key = page.getByRole("button", { name: "Pick up Keys", exact: true });
   const from = await key.boundingBox(), pad = await page.getByRole("group", { name: "Launch pad", exact: true }).boundingBox();
   await page.mouse.move(from!.x + from!.width / 2, from!.y + 30); await page.mouse.down(); await page.mouse.move(from!.x + 30, from!.y - 50, { steps: 8 }); await page.mouse.up();
@@ -67,16 +67,16 @@ test("small phone through desktop keeps controls visible and accessible", async 
   await page.emulateMedia({ reducedMotion: "reduce" }); const errors: string[] = []; page.on("pageerror", e => errors.push(e.message));
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 844 }); await page.goto(URL);
-    await expect(page.getByLabel("No timer", { exact: true })).toBeChecked();
-    await expect(page.getByRole("button", { name: "Play Theo’s morning" })).toBeInViewport();
-    await page.getByLabel("Challenge", { exact: true }).selectOption("8"); await page.getByRole("button", { name: "Play Theo’s morning" }).click();
+    await expect(page.getByRole("timer")).toHaveText("No timer");
+    await expect(page.getByLabel("Challenge", { exact: true })).toHaveCount(0);
+
     await expect(page.getByRole("button", { name: "Open the door" })).toBeInViewport();
     const door = await page.getByRole("button", { name: "Open the door" }).boundingBox();
     expect(door!.y + door!.height).toBeLessThanOrEqual(844);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     for (const button of await page.locator(".theo-object").all()) { const box = await button.boundingBox(); expect(box!.width).toBeGreaterThanOrEqual(48); expect(box!.height).toBeGreaterThanOrEqual(48); }
   }
-  await expectNoViolations(page, "Theo active"); await pack(page, ["Keys", "Phone", "Shoes", "Wallet", "Travel pass"]); await page.getByRole("button", { name: "Open the door" }).click(); await expectNoViolations(page, "Theo success"); expect(errors).toEqual([]);
+  await expectNoViolations(page, "Theo active"); await pack(page, ["Keys", "Phone", "Shoes"]); await page.getByRole("button", { name: "Open the door" }).click(); await expectNoViolations(page, "Theo success"); expect(errors).toEqual([]);
 });
 
 test("phone touch can finish an untimed morning", async ({ browser }) => {
@@ -89,7 +89,7 @@ test("phone touch can finish an untimed morning", async ({ browser }) => {
 test("an interrupted touch drag does not pack an item; releasing on the pad does", async ({ browser, browserName }) => {
   test.skip(browserName !== "chromium", "Native touch cancellation is injected through Chromium's input protocol.");
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
-  const page = await context.newPage(); await page.goto(URL); await page.getByLabel("No timer", { exact: true }).check(); await page.getByRole("button", { name: "Play Theo’s morning" }).tap();
+  const page = await context.newPage(); await page.goto(URL);
   const cdp = await context.newCDPSession(page);
   const target = page.getByRole("button", { name: "Pick up Keys", exact: true });
   const pad = await page.getByRole("group", { name: "Launch pad", exact: true }).boundingBox();

@@ -10,14 +10,14 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, Play, X } from "@phosphor-icons/react";
+import { ArrowRight, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { allowedMs, beginGame, CHARACTERS, fasterWord, GAMES, haptic, hashSeed, layoutGame, recordHighScore, resolveGame, startSession, type CharacterId, type GameDefinition, type GameResult, type GameScene, type SessionState } from "@/lives";
+import { allowedMs, beginGame, fasterWord, GAMES, haptic, hashSeed, layoutGame, recordHighScore, resolveGame, startSession, type CharacterId, type GameDefinition, type GameResult, type GameScene, type SessionState } from "@/lives";
 import { track } from "@/model/events";
 import { LifeBean, type LifeMood } from "./bean";
 import { Engine, EXPIRY_IS_SUCCESS, type EngineResult } from "./engines";
 import { Results } from "./results";
-import { LIVES_HAPTICS_KEY, LIVES_LARGE_KEY, LIVES_REDUCED_FLASHING_KEY, LIVES_REDUCED_SENSORY_KEY, LIVES_RELAXED_KEY, LIVES_TUTORED_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
+import { LIVES_HAPTICS_KEY, LIVES_LARGE_KEY, LIVES_REDUCED_FLASHING_KEY, LIVES_REDUCED_SENSORY_KEY, LIVES_RELAXED_KEY, readFlag, useProfile } from "./profile-hook";
 
 const FADE = { duration: 0.18, ease: "easeOut" } as const;
 /** §44: INTRO 350–800 ms; RESOLUTION 500–1500 ms; TRANSITION 150–350 ms. §59: FASTER 700 ms. */
@@ -27,12 +27,6 @@ const RESOLVE_MS = { success: 700, failure: 1300 } as const;
 const FASTER_MS = 700;
 /** §89: input from the last game cannot land on this one — the new game arms after a beat. */
 const ARM_MS = 150;
-
-const TUTORIAL: ReadonlyArray<{ line: string; mood: LifeMood }> = [
-  { line: "The line at the top says what to do. The bar under it is the clock.", mood: "engaged" },
-  { line: "Three lives. A miss costs one, and the run goes on.", mood: "thinking" },
-  { line: "After the run, some moments may look familiar. That part is yours to skip.", mood: "pleased" },
-];
 
 /** §61: failure is a comedic outcome, then the next game. One line per engine, in the character's life. */
 const LINES: Record<GameDefinition["engine"], { win: string; lose: string }> = {
@@ -78,7 +72,7 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
   const [reducedSensory, setReducedSensory] = useState(false);
   const [haptics, setHaptics] = useState(false);
   useEffect(() => {
-    setTutorial(readFlag(LIVES_TUTORED_KEY) ? -1 : 0);
+    setTutorial(-1);
     setRelaxed(readFlag(LIVES_RELAXED_KEY)); setLarge(readFlag(LIVES_LARGE_KEY));
     setReducedFlashing(readFlag(LIVES_REDUCED_FLASHING_KEY)); setReducedSensory(readFlag(LIVES_REDUCED_SENSORY_KEY)); setHaptics(readFlag(LIVES_HAPTICS_KEY));
   }, []);
@@ -113,6 +107,10 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
     track("SESSION_STARTED", { seeded: Boolean(seed) });
     nextGame(state);
   };
+
+  useEffect(() => {
+    if (tutorial === -1 && phase === "title") start();
+  }, [tutorial, phase]);
 
   /** A result: the engine resolves it, the beat shows it, then FASTER or the next game or the end. */
   const settle = useCallback((result: EngineResult | { outcome: "timeout" }) => {
@@ -181,7 +179,6 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
 
   const who: CharacterId | null = current && current.game.character !== "random" ? current.game.character : null;
   const mood: LifeMood = phase === "resolution" ? (last?.outcome === "success" ? "pleased" : "embarrassed") : phase === "active" ? "engaged" : "neutral";
-  const endTutorial = () => { writeFlag(LIVES_TUTORED_KEY, true); setTutorial(-1); };
 
   if (phase === "over" && session) {
     return <Results session={session} highBefore={highBefore.current} onAgain={() => { setPhase("title"); setSession(null); setCurrent(null); }} />;
@@ -196,22 +193,6 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
       </div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={phase === "title" ? `title-${tutorial}` : `${current?.instance ?? 0}-${phase === "faster" ? "faster" : "game"}`} className="play-stage lives-stage" initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }} transition={FADE}>
-          {phase === "title" && tutorial !== null && tutorial >= 0 && (
-            <div className="play-card is-title lives-card" role="group" aria-label="How to play">
-              <LifeBean who={CHARACTERS[tutorial % CHARACTERS.length]!.id} mood={TUTORIAL[tutorial]!.mood} size={160} className="play-hero-bean" />
-              <h2 className="play-title">{TUTORIAL[tutorial]!.line}</h2>
-              <button type="button" className="play-tempt is-go" onClick={() => (tutorial + 1 < TUTORIAL.length ? setTutorial(tutorial + 1) : endTutorial())} autoFocus>{tutorial + 1 < TUTORIAL.length ? "Next" : "Got it"} <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
-            </div>
-          )}
-          {phase === "title" && (tutorial === null || tutorial < 0) && (
-            <div className="play-card is-title lives-card">
-              <div className="lives-cast" aria-hidden="true">{CHARACTERS.slice(0, 4).map((c) => <LifeBean key={c.id} who={c.id} mood="engaged" size={72} />)}</div>
-              <h2 className="play-title">Eight lives. Three of yours.</h2>
-              <p className="play-line">Everything was under control thirty seconds ago.</p>
-              <button type="button" className="play-tempt is-go lives-play" onClick={start} autoFocus><Play size={18} weight="fill" aria-hidden="true" /> Play</button>
-            </div>
-          )}
-
           {phase === "faster" && (
             <div className={`play-card lives-card lives-faster${flash}`} role="status">
               <p className="lives-faster-word">{faster}</p>

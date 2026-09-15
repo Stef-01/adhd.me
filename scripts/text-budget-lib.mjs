@@ -171,7 +171,6 @@ export async function reach(page, route, base) {
     if (route.state === "first-step-answer") await page.getByRole("button", { name: "Still finding out" }).click();
   }
   if (route.state === "leo-routine" || route.state === "leo-settled") {
-    await page.getByRole("button", { name: "Play Leo\u2019s moment" }).click();
     // Reduced motion is on in this context, so the round offers a way out rather than a clock.
     await page.getByRole("button", { name: "Skip this round" }).click();
     if (route.state === "leo-settled") {
@@ -181,7 +180,6 @@ export async function reach(page, route, base) {
     }
   }
   if (route.state === "lives-run") {
-    await page.getByRole("button", { name: "Play" }).click();
     await page.waitForTimeout(1200);
   }
   await page.waitForTimeout(600);

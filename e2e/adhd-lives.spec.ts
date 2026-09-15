@@ -38,7 +38,7 @@ test("E2E Lives 1: play to the score, recognise a moment, save the strategy, fin
   await expect(page.getByRole("heading", { name: "Eight lives. Three of yours." })).toBeVisible();
   await page.getByRole("link", { name: "Play" }).click();
   await expect(page).toHaveURL(/\/lives\/play$/);
-  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
   // Three misses: three lives, three games, the score.
   await drive(page, "miss", async () => (await page.locator(".lives-results").count()) > 0);
   await expect(page.getByRole("button", { name: "Again" })).toBeVisible();
@@ -102,11 +102,11 @@ test("E2E Lives 1: play to the score, recognise a moment, save the strategy, fin
 
 test("E2E Lives 2: a seeded run replays the same first game; FASTER after four successes (§59, §90)", async ({ page }) => {
   await page.goto("/lives/play?seed=slice");
-  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
   await page.getByRole("button", { name: "Go", exact: true }).click();
   const first = await page.locator(".lives-game").getAttribute("data-game");
   await page.goto("/lives/play?seed=slice");
-  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
   await page.getByRole("button", { name: "Go", exact: true }).click();
   expect(await page.locator(".lives-game").getAttribute("data-game")).toBe(first);
   // Win four in a row: the score climbs and FASTER! shows, then the run goes on.
@@ -141,7 +141,7 @@ test("E2E Lives 4: relaxed timing and larger instructions are kept on the device
   await page.locator(".lives-settings summary").click();
   await expect(page.getByRole("button", { name: "Larger instructions" })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("link", { name: "Play" }).click();
-  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
   await expect(page.locator(".lives-run.is-large[data-relaxed='true']")).toBeVisible();
   // Nothing about the settings in the URL.
   expect(page.url()).not.toMatch(/relaxed|large/);
@@ -156,7 +156,7 @@ test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kep
   const buzzes = () => page.evaluate(() => (window as unknown as { __buzz: unknown[] }).__buzz.length);
   // Off by default: a whole miss with no buzz and no attributes on the run.
   await page.goto("/lives/play?seed=quiet");
-  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
   await expect(page.locator(".lives-run:not([data-haptics]):not([data-reduced-flashing]):not([data-reduced-sensory])")).toBeVisible();
   await drive(page, "miss", async () => (await page.locator(".lives-result[data-hit='false']").count()) > 0);
   expect(await buzzes()).toBe(0);
@@ -175,7 +175,7 @@ test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kep
   for (const name of ["Reduced flashing", "Reduced sensory effects", "Haptics"]) await expect(page.getByRole("button", { name, exact: true })).toHaveAttribute("aria-pressed", "true");
   // The run reads them once and says so.
   await page.goto("/lives/play?seed=quiet");
-  await page.getByRole("button", { name: "Play" }).click();
+  await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
   await expect(page.locator(".lives-run[data-reduced-flashing='true'][data-reduced-sensory='true'][data-haptics='true']")).toBeVisible();
   // Reduced sensory: never more than four things competing on a field, and no taunt strip.
   await page.getByRole("button", { name: "Go", exact: true }).click();
