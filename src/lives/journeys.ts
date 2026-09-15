@@ -77,4 +77,16 @@ export const JOURNEYS: readonly LifeJourney[] = [
     ],
     ending: "Keep the list visible. Give new wants time before buying.", strategy: "park_the_idea",
   },
+  {
+    slug: "nina-the-first-line", who: "nina", title: "The first imperfect line.", colour: "#f7e6b0", ink: "#544320",
+    rounds: [
+      { game: "nina_start_small", title: "Choose the smallest start." },
+      { game: "nina_first_line", title: "Write one imperfect line." },
+    ],
+    practice: [
+      { title: "The whole task feels enormous.", choices: ["Find the perfect plan", "Name one small action"], correct: 1, effect: "A starting point, not the whole project.", sprite: "note" },
+      { title: "Make it easier to return.", choices: ["Leave the next step visible", "Start everything again"], correct: 0, effect: "Tomorrow has a place to begin.", sprite: "list" },
+    ],
+    ending: "An imperfect first line is a start. Leave one next step.", strategy: "sixty_second_start",
+  },
 ];

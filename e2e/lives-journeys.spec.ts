@@ -28,6 +28,10 @@ for (const journey of JOURNEYS) {
       await expect(root).toHaveAttribute("data-round", String(round));
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(journey.rounds[round]!.title);
       await capture(`round-${round + 1}`);
+      if (journey.rounds[round]!.game === "nina_first_line") {
+        await expect(page.getByRole("button", { name: "Keep this draft" })).toBeDisabled();
+        await page.getByRole("textbox", { name: "First line" }).fill("This is a rough first line.");
+      }
       for (let tries = 0; tries < 50 && await root.getAttribute("data-phase") === "playing"; tries++) {
         const target = root.locator('[data-outcome="hit"]:enabled').first();
         await target.focus(); await page.keyboard.press("Enter");
@@ -94,7 +98,12 @@ for (const journey of JOURNEYS) {
       const definition = game(journey.rounds[round]!.game);
       const scene = layoutGame(definition, round + 1, 4103 + round * 120);
       const duration = allowedMs(definition, round + 1, true);
-      if (definition.engine === "trace_path") {
+      if (definition.id === "nina_first_line") {
+        await page.clock.runFor(30000);
+        await expect(root).toHaveAttribute("data-phase", "playing");
+        await page.getByRole("textbox", { name: "First line" }).fill("One small start.");
+        await page.getByRole("button", { name: "Keep this draft" }).click();
+      } else if (definition.engine === "trace_path") {
         const box = (await page.locator(".lives-trace-surface").boundingBox())!;
         const points = scene.routes!.find(r => r.safe)!.points.map(p => ({ x: box.x + p.x / SCENE.width * box.width, y: box.y + p.y / SCENE.height * box.height }));
         await page.mouse.move(points[0]!.x, points[0]!.y); await page.mouse.down();

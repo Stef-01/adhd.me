@@ -445,3 +445,10 @@
 .journey-scene-character { position: absolute; bottom: 0; right: 18px; z-index: 2; pointer-events: none; }
 
 .character-journey .lives-temptation-word { background: var(--journey-ink); color: #fff; box-shadow: none; }
+
+.nina-paper { position: absolute; inset: 10% 6% 16%; display: flex; flex-direction: column; gap: 16px; padding: 22px; background: #fff9e9; border-radius: 8px 8px 22px 8px; box-shadow: 0 8px 20px rgb(50 38 15 / .1); color: #544320; }
+.nina-paper label { font-size: 14px; font-weight: 650; }
+.nina-paper textarea { width: 100%; min-height: 100px; flex: 1; border: 0; border-radius: 4px; padding: 8px 0; resize: none; background: transparent; color: #332d22; font: 20px/1.6 Georgia, serif; }
+.nina-paper textarea::placeholder { color: #74664d; }
+.nina-paper textarea:focus-visible { outline: 2px solid #80652a; outline-offset: 6px; }
+.nina-paper button:disabled { opacity: .5; cursor: default; }

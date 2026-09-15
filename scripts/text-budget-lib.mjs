@@ -49,6 +49,7 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
+  { path: "/lives/play/nina-the-first-line", name: "Nina: the first line" },
   { path: "/lives/play/jax-just-the-list", name: "Jax: just the list" },
   { path: "/lives/play/mia-remember-why", name: "Mia: remember why" },
   { path: "/lives/play/zoe-before-you-send", name: "Zoe: before send" },
