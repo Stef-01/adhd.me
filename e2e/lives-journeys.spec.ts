@@ -62,6 +62,12 @@ for (const journey of JOURNEYS) {
       const root = page.locator(".character-journey");
       await expect(root).toHaveAttribute("data-phase", "playing", { timeout: 15000 });
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+      if (journey.who === "jax") {
+        const boxes = await root.locator(".is-intruder").evaluateAll(es => es.map(e => e.getBoundingClientRect().toJSON()));
+        for (let a = 0; a < boxes.length; a++) for (let b = a + 1; b < boxes.length; b++) {
+          expect(boxes[a]!.right <= boxes[b]!.left || boxes[b]!.right <= boxes[a]!.left || boxes[a]!.bottom <= boxes[b]!.top || boxes[b]!.bottom <= boxes[a]!.top, "shopping targets must not overlap").toBe(true);
+        }
+      }
       await expectNoViolations(page, `${journey.who} active ${width}`);
       await page.screenshot({ path: `qa/_runs/${journey.who}-${width}.png`, fullPage: true });
       await page.getByRole("button", { name: "Pause game", exact: true }).click();

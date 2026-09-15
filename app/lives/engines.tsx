@@ -231,8 +231,8 @@ function GoalProtection({ game, scene, live, reducedMotion, reducedSensory, prog
   const fx = hitFxOf(game.id);
   const seconds = elapsedMs / 1000;
   const allowed = progress > 0 ? elapsedMs / progress : 0;
-  const positioned = intruders.map((e) => {
-    if (reducedMotion) return { e, at: e, visible: true };
+  const positioned = intruders.map((e, index) => {
+    if (reducedMotion) return { e, at: { x: 75 + (index % 3) * 120, y: 95 + Math.floor(index / 3) * 150 }, visible: true };
     const enterAt = ((e.at ?? 0) * allowed) / 1000;
     const t = Math.max(0, seconds - enterAt);
     return { e, at: { x: e.x + e.vx * t, y: e.y + e.vy * t }, visible: seconds >= enterAt };
