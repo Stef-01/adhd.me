@@ -49,6 +49,7 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
+  { path: "/lives/play/arjun-hold-the-thread", name: "Arjun: the meeting" },
   { path: "/lives/play/maya-one-thing-at-a-time", name: "Maya: the crossing" },
   { path: "/gp/example-mei-chao", name: "GP profile" },
   { path: "/go/anubhav-saxena", skip: "a redirect" },

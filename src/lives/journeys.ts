@@ -26,4 +26,17 @@ export const JOURNEYS: readonly LifeJourney[] = [
     ],
     ending: "Change the surroundings. Then take one next step.", strategy: "lower_sensory_floor",
   },
+  {
+    slug: "arjun-hold-the-thread", who: "arjun", title: "Back to the meeting.", colour: "#dce3f5", ink: "#253047",
+    rounds: [
+      { game: "arjun_lock_in", title: "Keep what belongs." },
+      { game: "arjun_parking", title: "Now, or later?" },
+      { game: "arjun_hold_thread", title: "Hold until the question." },
+    ],
+    practice: [
+      { title: "That thought can wait.", choices: ["Follow every tangent", "Write a later note"], correct: 1, effect: "Captured. You do not have to rehearse it.", sprite: "list" },
+      { title: "Find your way back.", choices: ["Return to the agenda", "Open another tab"], correct: 0, effect: "One anchor to come back to.", sprite: "agenda" },
+    ],
+    ending: "Capture the thought. Return to one meeting anchor.", strategy: "parking_lot_note",
+  },
 ];

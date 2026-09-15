@@ -63,7 +63,7 @@ export function CharacterJourney({ journey }: { journey: LifeJourney }) {
   const practical = phase === "practice" || phase === "complete";
   const task = journey.practice[step];
   const resource = strategy(journey.strategy);
-  return <section className="character-journey lives-run" data-phase={phase} data-character={journey.who} data-round={round} style={{ "--journey-paper": journey.colour, "--journey-ink": journey.ink } as CSSProperties} aria-labelledby="journey-title">
+  return <section className="character-journey lives-run" data-phase={phase} data-ready={mounted} data-character={journey.who} data-round={round} style={{ "--journey-paper": journey.colour, "--journey-ink": journey.ink } as CSSProperties} aria-labelledby="journey-title">
     <nav className="journey-toolbar" aria-label="Game navigation">
       <Link href="/lives/characters" aria-label="Back to the eight lives"><ArrowLeft size={22} /></Link>
       <span>{journey.who.charAt(0).toUpperCase() + journey.who.slice(1)}</span>
@@ -78,6 +78,7 @@ export function CharacterJourney({ journey }: { journey: LifeJourney }) {
       </header>
       <div className="journey-stage lives-scene" data-game={definition.id}>
         {practical ? <div className="lives-world journey-practice-world" data-world={worldOf(definition.id)}><SceneArt game={definition.id} stake={phase === "complete" ? 0 : .3} outcome="success" /><div className="journey-practice-object"><Sprite label={task?.sprite ?? journey.practice[journey.practice.length - 1]!.sprite} /><LifeBean who={journey.who} mood={phase === "complete" ? "pleased" : "thinking"} size={140} /></div></div> : mounted ? <Engine key={`${round}-${attempt}`} game={definition} scene={scene} live={mounted && phase === "playing"} reducedMotion={reduced} progress={Math.min(1, elapsed / duration)} elapsedMs={elapsed} onResult={finish} outcome={outcome?.outcome} /> : null}
+        {!practical && definition.engine !== "trace_path" && <span className="journey-scene-character" aria-hidden="true"><LifeBean who={journey.who} mood={outcome?.outcome === "success" ? "pleased" : outcome ? "thinking" : "engaged"} size={56} /></span>}
         {phase === "paused" && <div className="journey-overlay"><button className="journey-primary" onClick={() => change("playing")}><Play size={20} /> Resume</button></div>}
       </div>
       <div className="journey-actions">

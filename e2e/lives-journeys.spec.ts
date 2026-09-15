@@ -1,4 +1,5 @@
 import { expect, test } from "./support/test";
+import { allowedMs } from "../src/lives/session";
 import { game } from "../src/lives/games";
 import { layoutGame, SCENE } from "../src/lives/layout";
 import { JOURNEYS } from "../src/lives/journeys";
@@ -8,6 +9,7 @@ for (const journey of JOURNEYS) {
   test(`${journey.who}: direct entry, every round, practical ending and replay`, async ({ page }) => {
     test.setTimeout(60000);
     await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.setViewportSize({ width: 390, height: 900 });
     const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
     await page.goto("/lives/characters");
     await page.getByRole("link", { name: `Play ${journey.who.charAt(0).toUpperCase() + journey.who.slice(1)}’s moment →`, exact: true }).click();
@@ -15,10 +17,17 @@ for (const journey of JOURNEYS) {
     await expect(root).toHaveAttribute("data-phase", "playing", { timeout: 15000 });
     await expect(page.getByRole("combobox")).toHaveCount(0);
     await expect(page.getByRole("slider")).toHaveCount(0);
+    const counts: number[] = [];
+    const capture = async (name: string) => {
+      const count = (await root.innerText()).trim().split(/\s+/).length;
+      counts.push(count); expect(count, `${journey.who} ${name} words`).toBeLessThanOrEqual(60);
+      await page.screenshot({ path: `qa/_runs/${journey.who}-${name}.png`, fullPage: true });
+    };
     const before = await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"));
     for (let round = 0; round < journey.rounds.length; round++) {
       await expect(root).toHaveAttribute("data-round", String(round));
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(journey.rounds[round]!.title);
+      await capture(`round-${round + 1}`);
       for (let tries = 0; tries < 50 && await root.getAttribute("data-phase") === "playing"; tries++) {
         const target = root.locator('[data-outcome="hit"]:enabled').first();
         await target.focus(); await page.keyboard.press("Enter");
@@ -29,9 +38,12 @@ for (const journey of JOURNEYS) {
     }
     for (const step of journey.practice) {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(step.title);
+      await capture(`practice-${journey.practice.indexOf(step) + 1}`);
       await page.getByRole("button", { name: step.choices[step.correct]!, exact: true }).click();
     }
     await expect(root).toHaveAttribute("data-phase", "complete");
+    await capture("complete");
+    console.log(`${journey.who}: ${counts.join(", ")} visible words; max ${Math.max(...counts)}`);
     await expectNoViolations(page, `${journey.who} completion`);
     await expect(page.getByRole("link", { name: "Try this in my day" })).toHaveAttribute("href", /module=/);
     expect(await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"))).toBe(before);
@@ -64,6 +76,45 @@ for (const journey of JOURNEYS) {
       }
     }
   });
+  test(`${journey.who}: timed mechanics finish through real controls`, async ({ page }) => {
+    test.setTimeout(60000);
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.clock.install();
+    await page.goto(`/lives/play/${journey.slug}`, { waitUntil: "load" });
+    await expect(page.locator(".character-journey")).toHaveAttribute("data-ready", "true", { timeout: 20000 });
+    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
+    const root = page.locator(".character-journey");
+    for (let round = 0; round < journey.rounds.length; round++) {
+      const definition = game(journey.rounds[round]!.game);
+      const scene = layoutGame(definition, round + 1, 4103 + round * 120);
+      const duration = allowedMs(definition, round + 1, true);
+      if (definition.engine === "trace_path") {
+        const box = (await page.locator(".lives-trace-surface").boundingBox())!;
+        const points = scene.routes!.find(r => r.safe)!.points.map(p => ({ x: box.x + p.x / SCENE.width * box.width, y: box.y + p.y / SCENE.height * box.height }));
+        await page.mouse.move(points[0]!.x, points[0]!.y); await page.mouse.down();
+        for (const point of points.slice(1)) await page.mouse.move(point.x, point.y, { steps: 4 });
+        await page.mouse.up();
+      } else if (definition.engine === "inhibition") {
+        await page.clock.runFor(duration + 100);
+      } else if (definition.engine === "hold_release") {
+        const hold = page.locator(".lives-hold-button");
+        await hold.focus(); await page.keyboard.down("Space");
+        await page.clock.runFor(duration * (scene.hold!.cueAt + .03));
+        await page.keyboard.up("Space");
+      } else {
+        for (let action = 0; action < 80 && await root.getAttribute("data-phase") === "playing"; action++) {
+          const hit = root.locator('[data-outcome="hit"]:enabled').first();
+          if (await hit.count()) await hit.click();
+          else await page.clock.runFor(250);
+        }
+      }
+      await expect(root).toHaveAttribute("data-phase", "result");
+      await expect(root.getByRole("status")).toHaveText("Got it.");
+      await page.getByRole("button", { name: round + 1 < journey.rounds.length ? "Next moment" : "Try a different approach", exact: true }).click();
+    }
+    await expect(root).toHaveAttribute("data-phase", "practice");
+  });
+
 }
 
 test("Maya can physically trace the clear route and wipe both sensory layers", async ({ page }) => {

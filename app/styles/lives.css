@@ -441,3 +441,5 @@
 .character-journey .lives-world[data-motion="false"] .lives-field.lives-trace { bottom: 144px; }
 .character-journey .lives-world[data-motion="false"] .lives-trace .lives-choices { bottom: -132px; }
 .character-journey .lives-world[data-live="false"] * { animation-play-state: paused !important; }
+
+.journey-scene-character { position: absolute; bottom: 0; right: 18px; z-index: 2; pointer-events: none; }
