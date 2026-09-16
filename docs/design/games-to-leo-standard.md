@@ -1,5 +1,6 @@
 # Every game to Leo's standard
 
+> Gameplay depth and strategy transfer are now planned in [Lives gameplay upgrade plan](./lives-gameplay-upgrade-plan.md). This document records the earlier visual/functional milestone, not completion of that deeper experience.
 Founder direction, 2026-09-10: "enhance all of the games so they are much more varied and playable
 and have actual created components and aesthetic elements, like the Leo game, that is a gold
 standard". This is the deconstruction of why Leo works, the bar every other game has to clear, the

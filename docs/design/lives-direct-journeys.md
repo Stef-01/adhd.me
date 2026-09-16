@@ -1,5 +1,6 @@
 # Lives: direct-play character journeys
 
+> Gameplay depth and strategy transfer are now planned in [Lives gameplay upgrade plan](./lives-gameplay-upgrade-plan.md). This document records the earlier visual/functional milestone, not completion of that deeper experience.
 User requirement: one click opens the game. No difficulty selector, launch form, or second Play button. Pause and replay remain available inside play. Respect reduced motion automatically.
 
 Each of the eight lives needs a standalone, replayable journey. Leo and Theo have bespoke games. Complete the remaining six using their existing drawn worlds and distinct mechanics, with a practical interactive ending. Practice results must never diagnose or modify the learner profile.
