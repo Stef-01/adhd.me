@@ -102,9 +102,10 @@ test("clearing a wave stops its noise cost but does not win before future waves 
   await expect(page.locator(".leo-fly:enabled")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "GET IT!" })).toBeVisible();
   const health = await page.getByRole("meter").getAttribute("aria-valuenow");
-  await page.clock.runFor(2000);
+  const remaining = await page.locator(".leo-clock span").evaluate(el => Number((el as HTMLElement).style.transform.match(/scaleX\(([^)]+)/)?.[1] ?? 1));
+  await page.clock.runFor(Math.max(1, Math.floor(3500 - (1 - remaining) * 22000)));
   await expect(page.getByRole("meter")).toHaveAttribute("aria-valuenow", health!);
-  await page.clock.runFor(1000);
+  await page.clock.runFor(600);
   await expect(page.locator(".leo-fly:enabled")).toHaveCount(4);
 });
 
@@ -198,7 +199,7 @@ test("Leo's swarm clears in the Chaos Run and keeps navigation visible", async (
     await page.setViewportSize({ width, height: 844 }); await page.goto("/lives/play?seed=leo-qa-2");
 
     await expect(page.locator(".lives-scene")).toHaveAttribute("data-game", "leo_mosquito");
-    await page.getByRole("button", { name: "Go", exact: true }).click();
+    await expect(page.locator(".lives-run")).toHaveAttribute("data-phase", "active");
     for (let i = 0; i < 20 && !(await page.locator(".lives-result").count()); i++) await page.locator(".leo-fly:enabled").first().click();
     await expect(page.locator(".lives-result")).toContainText("Quiet at last.");
     await expect(page.getByRole("link", { name: "Leave the run" })).toBeInViewport();

@@ -138,9 +138,9 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
     nextGame(session);
   }, [session, faster, phase, nextGame]);
 
-  // The beats on timers, motion only. Under reduced motion each beat ends on a button.
+  // Enter play automatically; reduced motion keeps subsequent result advances under player control.
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion && phase !== "intro") return;
     let t = 0;
     if (phase === "intro") t = window.setTimeout(() => { if (reminding) { setReminding(false); t = window.setTimeout(() => setPhase("active"), INTRO_MS); } else setPhase("active"); }, reminding ? REMIND_MS : INTRO_MS);
     if (phase === "resolution") t = window.setTimeout(advance, last?.outcome === "success" ? RESOLVE_MS.success : RESOLVE_MS.failure);
@@ -218,7 +218,6 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
                   </motion.div>
                 )}
               </div>
-              {reducedMotion && phase === "intro" && <button type="button" className="play-tempt is-go" onClick={() => { setReminding(false); setPhase("active"); }} autoFocus>Go <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>}
               {reducedMotion && phase === "resolution" && <button type="button" className="play-tempt is-go" onClick={advance} autoFocus>{session.over ? "See the score" : "Next"} <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>}
             </div>
           )}

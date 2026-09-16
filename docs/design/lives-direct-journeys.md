@@ -16,3 +16,9 @@ Each of the eight lives needs a standalone, replayable journey. Leo and Theo hav
 | Nina | Choose a small start, write an actual first line | Begin with an imperfect first step | Complete: small start, untimed draft, keyboard/timed, recovery, responsive and axe |
 
 Finish and QA one journey before adding the next. For each: direct entry, all rounds, loss/retry, practical ending, pause/resume, keyboard/reduced motion, mobile/desktop geometry, accessibility, and visible-word count. Keep each world's colour, drawn scenery and character reactions. Preserve library liquid glass.
+
+Final integration: the character card itself opens its journey; optional character details remain under About. The arcade also enters its first round automatically under reduced motion. Desktop arcade target fields are bounded so captioned targets cannot grow beyond the scene.
+
+Verification covers all rounds and practical endings with axe, keyboard and timed pointer interactions, pause/hidden-tab recovery, retries, replay, and profile-write isolation. Individual journey screens measured 12–28 visible words. The Lives unit suite passes 76 tests across nine files. The Learn liquid-glass layer was checked with a real GPU while moving and pressing the pointer.
+
+Final text-budget sweep: 61 screens measured, all 47 app screens within their ceilings; median 26 words. The character selector is 53 words (previously 73).

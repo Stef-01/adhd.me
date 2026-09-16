@@ -103,11 +103,11 @@ test("E2E Lives 1: play to the score, recognise a moment, save the strategy, fin
 test("E2E Lives 2: a seeded run replays the same first game; FASTER after four successes (§59, §90)", async ({ page }) => {
   await page.goto("/lives/play?seed=slice");
   await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
-  await page.getByRole("button", { name: "Go", exact: true }).click();
+  await expect(page.locator(".lives-run")).toHaveAttribute("data-phase", "active");
   const first = await page.locator(".lives-game").getAttribute("data-game");
   await page.goto("/lives/play?seed=slice");
   await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
-  await page.getByRole("button", { name: "Go", exact: true }).click();
+  await expect(page.locator(".lives-run")).toHaveAttribute("data-phase", "active");
   expect(await page.locator(".lives-game").getAttribute("data-game")).toBe(first);
   // Win four in a row: the score climbs and FASTER! shows, then the run goes on.
   await drive(page, "hit", async () => (await page.locator(".lives-faster").count()) > 0);
@@ -178,7 +178,7 @@ test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kep
   await expect(page.locator(".lives-run")).not.toHaveAttribute("data-phase", "title");
   await expect(page.locator(".lives-run[data-reduced-flashing='true'][data-reduced-sensory='true'][data-haptics='true']")).toBeVisible();
   // Reduced sensory: never more than four things competing on a field, and no taunt strip.
-  await page.getByRole("button", { name: "Go", exact: true }).click();
+  await expect(page.locator(".lives-run")).toHaveAttribute("data-phase", "active");
   await expect(page.locator(".lives-game[data-beat='active']")).toBeVisible();
   expect(await page.locator(".lives-field .lives-thing").count()).toBeLessThanOrEqual(4);
   await expect(page.locator(".lives-taunt")).toHaveCount(0);

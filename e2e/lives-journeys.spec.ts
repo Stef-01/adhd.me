@@ -28,6 +28,7 @@ for (const journey of JOURNEYS) {
       await expect(root).toHaveAttribute("data-round", String(round));
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(journey.rounds[round]!.title);
       await capture(`round-${round + 1}`);
+      await expectNoViolations(page, `${journey.who} round ${round + 1}`);
       if (journey.rounds[round]!.game === "nina_first_line") {
         await expect(page.getByRole("button", { name: "Keep this draft" })).toBeDisabled();
         await page.getByRole("textbox", { name: "First line" }).fill("This is a rough first line.");
@@ -43,6 +44,7 @@ for (const journey of JOURNEYS) {
     for (const step of journey.practice) {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(step.title);
       await capture(`practice-${journey.practice.indexOf(step) + 1}`);
+      await expectNoViolations(page, `${journey.who} practice ${journey.practice.indexOf(step) + 1}`);
       await page.getByRole("button", { name: step.choices[step.correct]!, exact: true }).click();
     }
     await expect(root).toHaveAttribute("data-phase", "complete");
@@ -150,4 +152,27 @@ test("Maya can physically trace the clear route and wipe both sensory layers", a
     while (await tiles.count()) await tiles.first().click();
     await expect(page.getByRole("status")).toHaveText("Got it.");
   }
+});
+
+test("a timed journey pauses when hidden, resumes and resets after a deadline", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.clock.install();
+  await page.goto("/lives/play/mia-remember-why", { waitUntil: "load" });
+  const root = page.locator(".character-journey");
+  await expect(root).toHaveAttribute("data-ready", "true");
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
+  await page.getByRole("button", { name: "Pause game" }).click();
+  const remaining = await page.getByRole("timer").textContent();
+  await page.clock.runFor(30000);
+  await expect(page.getByRole("timer")).toHaveText(remaining!);
+  await page.getByRole("button", { name: "Resume", exact: true }).click();
+  await page.evaluate(() => { Object.defineProperty(document, "hidden", { configurable: true, value: true }); document.dispatchEvent(new Event("visibilitychange")); });
+  await expect(root).toHaveAttribute("data-phase", "paused");
+  await page.evaluate(() => { Object.defineProperty(document, "hidden", { configurable: true, value: false }); });
+  await page.getByRole("button", { name: "Resume", exact: true }).click();
+  await page.clock.runFor(12000);
+  await expect(root).toHaveAttribute("data-phase", "result");
+  await page.getByRole("button", { name: "Try again", exact: true }).click();
+  await expect(root).toHaveAttribute("data-phase", "playing");
+  await expect(page.getByRole("timer")).not.toHaveText("0s");
 });
