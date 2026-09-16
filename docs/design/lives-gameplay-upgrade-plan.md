@@ -1,6 +1,6 @@
 # Lives gameplay and subtle strategy learning: staged upgrade plan
 
-Status: proposed implementation specification; not implemented by this document.
+Status: programme in progress. The first Leo L1/L2 candidate is implemented at `/lives/lab/leo-room`; L3 and the remaining rebuilds are pending. See [implementation and QA record](./leo-room-implementation-qa.md).
 Audit baseline: main `0d9743a`, reviewed 2026-09-15.
 
 Revision after founder critique: [Game craft correction and Leo rebuild](./game-craft-and-leo-rebuild.md) defines the higher acceptance bar and takes precedence. Leo is now the first complete rebuild, followed by Zoe. The current games are functional foundations, not accepted finished experiences.

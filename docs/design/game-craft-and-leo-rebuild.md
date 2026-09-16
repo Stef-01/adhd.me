@@ -1,6 +1,6 @@
 # Game craft correction and Leo rebuild
 
-Status: design revision, not an implemented upgrade. This document takes precedence where the earlier gameplay roadmap preserves Leo's core loop or starts with Zoe.
+Status: first complete Leo L1/L2 candidate implemented on an isolated review route; L3 acceptance remains pending. See [implementation and QA record](./leo-room-implementation-qa.md). This document takes precedence where the earlier gameplay roadmap preserves Leo's core loop or starts with Zoe.
 
 Founder feedback: the shipped games are too basic and do not meet the expected quality of a polished contemporary app. Do not interpret a request for more depth as a request for more particles, more quiz screens, more targets, or more shared-template content.
 
@@ -139,7 +139,7 @@ Simulation actions are semantic (`SECURE_WINDOW`, `CATCH`, `PARK_PHONE`, `OPEN_B
 
 Keep the clock/scheduler pure and injected. Integrate at a fixed step; cap catch-up and object count. Use a spatial mapping layer so input positions are independent of responsive CSS. Time-critical render positions use motion values/transforms, while low-frequency game facts use React state. All completion paths idempotent. Offscreen/hidden/unmounted scenes cannot continue draining regulation or emitting audio.
 
-Prototype behind a development-only route or disabled implementation flag. Committing and pushing work does not mean exposing an unpolished replacement to patients. Keep the current public game until the complete replacement clears the gate. No half-finished experimental controls appear on the production library.
+Keep the prototype on an isolated review route, or behind a disabled implementation flag. The first candidate uses the unlinked, noindex `/lives/lab/leo-room` route so the founder can review the deployed build directly. Committing and pushing work does not mean exposing an unpolished replacement to patients. Keep the current public game until the complete replacement clears the gate. No half-finished experimental controls appear on the production library.
 
 ### Three staged deliverables
 

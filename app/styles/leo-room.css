@@ -1,0 +1,219 @@
+.bedroom-game {
+  --room-ink: #353451; --room-muted: #565674; --room-focus: #414981;
+  color: var(--room-ink); background: #e8e9f4; isolation: isolate;
+  display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto;
+  height: 100svh; min-height: 500px; width: 100%; overflow: clip;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); box-sizing: border-box;
+}
+.bedroom-game * { box-sizing: border-box; }
+.bedroom-game button, .bedroom-game a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.bedroom-toolbar { height: 64px; padding: 8px 28px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.bedroom-toolbar > span { font-size: 10px; font-weight: 700; letter-spacing: .17em; color: #5e5e7d; }
+.bedroom-toolbar > div { display: flex; justify-content: end; gap: 4px; }
+.bedroom-icon { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; background: transparent; border: 0; border-radius: 50%; color: var(--room-ink); cursor: pointer; }
+.bedroom-icon:hover { background: #dcdff0; }
+.bedroom-icon[aria-pressed="true"] { background: #d2d5ec; }
+.bedroom-game :is(button, a):focus-visible { outline: 3px solid var(--room-focus); outline-offset: 4px; }
+.bedroom-caption { padding: 0 24px 16px; text-align: center; z-index: 2; }
+.bedroom-game .bedroom-caption h1 { font-size: clamp(25px, 3.3vw, 43px); letter-spacing: -.045em; line-height: 1.12; font-weight: 650; margin: 0; }
+.bedroom-game .bedroom-caption h1:focus { outline: none; }
+.bedroom-game .bedroom-caption p { margin: 9px 0 17px; font-size: 14px; color: var(--room-muted); }
+.bedroom-hud { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.bedroom-regulation { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 550; }
+.bedroom-regulation [role="meter"] { width: 116px; height: 6px; overflow: hidden; border-radius: 10px; background: #cecfe1; }
+.bedroom-regulation [role="meter"] > span { display: block; background: #666ba0; width: 100%; height: 100%; transform-origin: left; transition: transform .14s linear; border-radius: inherit; }
+.bedroom-count, .bedroom-clock { font-size: 11px; font-variant-numeric: tabular-nums; color: #555574; min-width: 38px; }
+.bedroom-count { border-left: 1px solid #c5c6da; padding-left: 20px; }
+.bedroom-clock { display: inline-flex; align-items: center; justify-content: center; }
+.bedroom-scene { position: relative; min-height: 0; width: 100%; max-width: 1560px; margin-inline: auto; overflow: hidden; container-type: size; }
+.bedroom-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bedroom-bed { position: absolute; width: min(41%, 480px); left: 46%; bottom: 11%; transform: translateX(-50%); pointer-events: none; }
+.room-bed-art { display: block; width: 100%; }
+.bedroom-prop { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: end; gap: 0; border: 0; background: none; padding: 0; border-radius: 22px; cursor: pointer; z-index: 3; color: var(--room-ink); }
+.bedroom-prop > svg, .bedroom-prop > div { width: 100%; display: block; }
+.bedroom-prop svg { display: block; width: 100%; overflow: visible; }
+.bedroom-prop-label { display: block; flex-shrink: 0; background: #eeedf6; color: #43435f; padding: 7px 10px; border-radius: 30px; white-space: nowrap; font-size: 11px; line-height: 1.2; font-weight: 550; transition: background .15s; }
+.bedroom-prop:hover:not(:disabled) .bedroom-prop-label { background: #fffaf2; }
+.bedroom-prop:disabled { cursor: default; opacity: 1; }
+.bedroom-prop:disabled .bedroom-prop-label { background: transparent; color: #4f4b68; }
+.bedroom-window { width: min(16%, 155px); right: 12%; top: 3%; }
+.bedroom-lamp { width: min(12%, 130px); left: 19%; bottom: 14%; }
+.bedroom-phone { width: min(8%, 82px); right: 16%; bottom: 13%; }
+.bedroom-headphones { width: min(8%, 85px); left: 30%; bottom: 3%; }
+.bedroom-book { width: min(16%, 156px); left: 50%; bottom: 1.5%; }
+.bedroom-night-shade { position: absolute; inset: 0; z-index: 2; background: #302e62; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
+.bedroom-scene[data-light="dim"] .bedroom-night-shade { opacity: .09; }
+.bedroom-scene[data-light="off"] .bedroom-night-shade { opacity: .28; }
+.bedroom-scene[data-light="off"] .bedroom-prop:disabled .bedroom-prop-label { color: #302e4b; }
+.bedroom-insect-anchor { position: absolute; z-index: 5; width: 0; height: 0; }
+.bedroom-insect { display: block; width: 66px; height: 66px; padding: 1px; margin: -33px 0 0 -33px; border: 0; border-radius: 50%; background: transparent; cursor: crosshair; }
+.bedroom-insect > svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 4px 2px #53516e25); }
+.bedroom-insect:focus-visible { background: #f6f1e4b3; }
+.bedroom-night-label { position: absolute; top: 22px; left: 28px; font-size: 10px; letter-spacing: .16em; font-weight: 650; color: #4c4c70; }
+.bedroom-footer { min-height: 62px; padding: 16px 24px; display: flex; align-items: center; justify-content: center; gap: 26px; background: #e8e9f4; z-index: 6; }
+.bedroom-footer p { margin: 0; font-size: 12px; color: #545471; text-align: center; max-width: 380px; line-height: 1.45; }
+.bedroom-next { border: 0; border-radius: 40px; background: #4f568e; color: #fff; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 16px; font-size: 13px; font-weight: 600; padding: 12px 22px; cursor: pointer; white-space: nowrap; }
+.bedroom-next:hover { background: #434979; }
+.bedroom-finish { display: flex; align-items: center; gap: 22px; }
+.bedroom-finish :is(a,button) { border: 0; color: #464d83; background: none; font-size: 12px; font-weight: 650; min-height: 44px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.bedroom-pause { position: fixed; margin: auto; inset: 0; border: 0; padding: 46px 30px 25px; width: min(390px, calc(100vw - 32px)); border-radius: 28px; background: #f2f2f8; color: var(--room-ink); box-shadow: 0 24px 90px #2523482b; }
+.bedroom-pause::backdrop { background: #2e2a4c63; backdrop-filter: blur(7px); }
+.bedroom-pause-close { position: absolute; top: 8px; right: 8px; }
+.bedroom-pause-eyebrow { font-size: 10px; letter-spacing: .14em; font-weight: 650; color: #676984; }
+.bedroom-game .bedroom-pause h2 { font-size: 29px; line-height: 1.1; letter-spacing: -.035em; margin: 15px 0 26px; font-weight: 650; }
+.bedroom-pause .bedroom-next { width: 100%; }
+.bedroom-pace { display: flex; align-items: center; justify-content: space-between; width: 100%; background: transparent; color: #454664; border: 0; min-height: 62px; padding: 10px 0; margin-top: 10px; font-size: 13px; cursor: pointer; }
+.bedroom-switch { width: 35px; height: 22px; border-radius: 30px; background: #b9bacb; padding: 3px; }
+.bedroom-switch > span { display: block; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .18s; }
+.bedroom-switch[data-on="true"] { background: #636b9d; }
+.bedroom-switch[data-on="true"] > span { transform: translateX(13px); }
+.bedroom-pause-quiet { width: 100%; min-height: 44px; padding: 10px 0; background: transparent; border: 0; border-top: 1px solid #dadae8; color: #555875; font-size: 12px; cursor: pointer; }
+.room-window-sash { transform-origin: 26px 120px; transform: perspective(200px) rotateY(-35deg); transition: transform .55s cubic-bezier(.22,1,.36,1); }
+.room-window-sash[data-closed="true"] { transform: perspective(200px) rotateY(0); }
+.room-phone-device { transform-origin: 44px 93px; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.room-phone-device[data-parked="true"] { transform: translateY(8px) rotate(-8deg); }
+.room-insect-wings { transform-origin: 38px 35px; animation: bedroom-wings .13s ease-in-out infinite alternate; }
+.room-insect-wings[data-perched="true"] { animation: none; }
+.room-leo-head { transform-origin: 216px 170px; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.room-bed-art[data-mood="overwhelmed"] .room-leo-head { transform: rotate(-7deg) translateY(4px); }
+.room-bed-art[data-mood="reading"] .room-leo-head { transform: rotate(4deg) translateY(3px); }
+.room-bed-art[data-mood="resting"] .room-leo-head { transform: rotate(-5deg) translateY(8px); }
+@keyframes bedroom-wings { to { transform: scaleX(.8) scaleY(.9); } }
+@media (min-width: 1000px) and (max-height: 790px) {
+  .bedroom-bed { width: min(34%, 380px); bottom: 7%; }
+  .bedroom-window { width: min(14%, 132px); }
+  .bedroom-lamp { width: 95px; }
+  .bedroom-phone { width: 65px; }
+  .bedroom-book { width: 125px; }
+  .bedroom-headphones { width: 67px; }
+}
+@media (max-width: 700px) {
+  .bedroom-toolbar { height: 58px; padding: 5px 12px; }
+  .bedroom-caption { padding: 3px 16px 15px; }
+  .bedroom-game .bedroom-caption h1 { font-size: 29px; }
+  .bedroom-game .bedroom-caption p { font-size: 12px; margin: 8px 0 17px; }
+  .bedroom-hud { gap: 13px; }
+  .bedroom-regulation { gap: 7px; font-size: 10px; }
+  .bedroom-regulation [role="meter"] { width: 70px; }
+  .bedroom-count { padding-left: 13px; font-size: 10px; }
+  .bedroom-clock { font-size: 10px; }
+  .bedroom-side-art { display: none; }
+  .bedroom-bed { width: 78%; max-width: 380px; left: 47%; bottom: 15%; }
+  .bedroom-window { width: 26%; max-width: 136px; top: 4%; right: 3%; }
+  .bedroom-lamp { width: 23%; max-width: 108px; left: 3%; bottom: 21%; }
+  .bedroom-phone { width: 17%; max-width: 82px; right: 3%; bottom: 18%; }
+  .bedroom-headphones { width: 20%; max-width: 79px; left: 23%; bottom: 3%; }
+  .bedroom-book { width: 31%; max-width: 135px; left: 53%; bottom: 2%; }
+  .bedroom-prop-label { font-size: 10px; padding: 6px 8px; }
+  .bedroom-insect { width: 54px; height: 54px; margin: -27px 0 0 -27px; }
+  .bedroom-insect-flight { scale: .95; }
+  .bedroom-footer { flex-direction: column; gap: 10px; padding: 13px 18px; min-height: 64px; }
+  .bedroom-footer p { font-size: 11px; max-width: 300px; }
+  .bedroom-finish { gap: 18px; }
+  .bedroom-finish :is(a,button) { font-size: 11px; }
+  .bedroom-night-label { top: 14px; left: 14px; font-size: 8px; max-width: 90px; line-height: 1.5; }
+}
+@media (max-height: 650px) {
+  .bedroom-toolbar { height: 48px; }
+  .bedroom-game .bedroom-caption h1 { font-size: 24px; }
+  .bedroom-game .bedroom-caption p { margin: 6px 0 10px; }
+  .bedroom-caption { padding-bottom: 12px; }
+  .bedroom-footer { min-height: 49px; padding-block: 9px; }
+  .bedroom-bed { width: min(65%, 255px); bottom: 14%; }
+  .bedroom-window { width: 85px; }
+  .bedroom-phone { width: 48px; bottom: 21%; }
+  .bedroom-lamp { width: 65px; bottom: 22%; }
+  .bedroom-book { width: 90px; }
+  .bedroom-headphones { width: 58px; }
+  .bedroom-prop-label { font-size: 9px; padding: 5px 6px; }
+}
+.bedroom-game[data-still="true"] *, .bedroom-game[data-paused="true"] * { animation-play-state: paused !important; }
+.bedroom-game[data-still="true"] * { transition-duration: 0s !important; }
+@media (prefers-reduced-motion: reduce) { .bedroom-game *, .bedroom-game *::before, .bedroom-game *::after { animation: none !important; transition: none !important; } }
+
+/* Only the object being used moves; the rest of the room stays spatially stable. */
+.bedroom-scene[data-book="open"] .bedroom-book { left: 41%; bottom: 22%; }
+.bedroom-insect:disabled { pointer-events: none; }
+.bedroom-scene[data-notifications="1"] .bedroom-phone svg,
+.bedroom-scene[data-notifications="2"] .bedroom-phone svg,
+.bedroom-scene[data-notifications="3"] .bedroom-phone svg { animation: bedroom-ping .45s ease-in-out 2; transform-origin: center 85%; }
+@keyframes bedroom-ping { 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+@media (max-width: 700px) {
+  .bedroom-phone { right: 5%; }
+  .bedroom-scene[data-book="open"] .bedroom-book { left: 32%; bottom: 29%; }
+}
+@media (max-height: 650px) and (min-width: 701px) {
+  .bedroom-scene[data-book="open"] .bedroom-book { left: 42%; bottom: 25%; }
+}
+.bedroom-footer { height: 82px; }
+.bedroom-insect-anchor[data-arriving="true"] .bedroom-insect-flight { animation: bedroom-arrival .5s cubic-bezier(.2,.65,.25,1); }
+@keyframes bedroom-arrival { from { translate: var(--arrival-x) var(--arrival-y); opacity: .3; } to { translate: 0 0; opacity: 1; } }
+@media (max-width: 700px) { .bedroom-footer { height: 110px; } }
+@media (prefers-reduced-motion: reduce) { .bedroom-game * { animation: none !important; } }
+@media (max-height: 500px) and (min-width: 701px) {
+  .bedroom-game { min-height: 320px; grid-template-columns: minmax(205px, 29%) 1fr; grid-template-rows: 48px minmax(0, 1fr) auto; }
+  .bedroom-toolbar { grid-column: 1 / -1; }
+  .bedroom-caption { grid-column: 1; grid-row: 2; align-self: center; padding: 12px 14px; }
+  .bedroom-game .bedroom-caption h1 { font-size: 26px; }
+  .bedroom-game .bedroom-caption p { font-size: 12px; line-height: 1.5; margin: 10px 0 16px; }
+  .bedroom-hud { gap: 8px; flex-wrap: wrap; }
+  .bedroom-regulation { width: 100%; justify-content: center; margin-bottom: 5px; }
+  .bedroom-count { border: 0; padding-left: 0; }
+  .bedroom-scene { grid-column: 2; grid-row: 2 / 4; height: 100%; }
+  .bedroom-footer { grid-column: 1; grid-row: 3; flex-direction: column; gap: 8px; height: auto; padding: 12px; }
+  .bedroom-footer p { font-size: 11px; }
+  .bedroom-finish { gap: 5px; flex-direction: column; }
+  .bedroom-finish :is(a,button) { font-size: 11px; }
+  .bedroom-next { font-size: 11px; padding-inline: 15px; }
+  .bedroom-side-art { display: none; }
+  .bedroom-lamp { left: 10%; }
+  .bedroom-phone { right: 9%; }
+  .bedroom-insect { width: 54px; height: 54px; margin: -27px 0 0 -27px; }
+}
+.bedroom-game[data-paused="true"] :is(.bedroom-toolbar, .bedroom-caption, .bedroom-footer, .bedroom-prop-label, .bedroom-night-label) { visibility: hidden; }
+/* The upper wall is the flight area; controls occupy the floor and right wall. */
+.bedroom-headphones { left: 32%; }
+@media (max-width: 700px) {
+  .bedroom-insect-flight { --flight-x-scale: .45; --flight-y-scale: .25; scale: 1; }
+  .bedroom-insect { width: 48px; height: 48px; margin: -24px 0 0 -24px; }
+  .bedroom-headphones { left: 23%; }
+  .bedroom-book { left: 46%; }
+  .bedroom-scene[data-book="open"] .bedroom-book { bottom: 26%; }
+}
+@media (max-width: 700px) { .bedroom-scene[data-book="open"] .bedroom-book { bottom: 28%; } }
+.bedroom-game[data-still="true"] * { animation: none !important; }
+.bedroom-insect-flight { --flight-x-scale: 3; --flight-y-scale: .8; }
+@media (max-height: 790px) and (min-width: 701px) {
+  .bedroom-insect-flight { --flight-x-scale: 2; --flight-y-scale: .35; }
+  .bedroom-insect { width: 54px; height: 54px; margin: -27px 0 0 -27px; }
+}
+@media (max-height: 500px) and (min-width: 701px) { .bedroom-insect-flight { --flight-x-scale: 1; --flight-y-scale: .25; } }
+@media (max-width: 700px) { .bedroom-insect-flight { --flight-x-scale: .45; --flight-y-scale: .25; } }
+/* A rotated small phone still uses a complete room, with the objective beside it. */
+@media (orientation: landscape) and (max-width: 700px) and (max-height: 500px) {
+  .bedroom-game { min-height: 320px; grid-template-columns: minmax(170px, 29%) 1fr; grid-template-rows: 48px minmax(0, 1fr) auto; }
+  .bedroom-toolbar { grid-column: 1 / -1; }
+  .bedroom-caption { grid-column: 1; grid-row: 2; align-self: center; padding: 8px 12px; }
+  .bedroom-game .bedroom-caption h1 { font-size: 21px; }
+  .bedroom-game .bedroom-caption p { font-size: 11px; line-height: 1.4; margin: 9px 0 13px; }
+  .bedroom-hud { gap: 8px; flex-wrap: wrap; }
+  .bedroom-regulation { width: 100%; justify-content: center; margin-bottom: 4px; }
+  .bedroom-regulation [role="meter"] { width: 48px; }
+  .bedroom-count { border: 0; padding-left: 0; }
+  .bedroom-scene { grid-column: 2; grid-row: 2 / 4; height: 100%; }
+  .bedroom-footer { grid-column: 1; grid-row: 3; height: auto; padding: 8px 10px; gap: 6px; }
+  .bedroom-footer p { font-size: 10px; }
+  .bedroom-next { font-size: 10px; padding: 10px 13px; gap: 8px; }
+  .bedroom-finish { flex-direction: column; gap: 0; }
+  .bedroom-finish :is(a,button) { font-size: 10px; }
+  .bedroom-bed { width: min(65%, 220px); bottom: 14%; }
+  .bedroom-lamp { width: 50px; left: 4%; bottom: 18%; }
+  .bedroom-phone { width: 48px; right: 5%; bottom: 17%; }
+  .bedroom-scene[data-book="open"] .bedroom-book { left: 47%; bottom: 20%; }
+  .bedroom-insect-flight { --flight-x-scale: .45; --flight-y-scale: .08; }
+}
+.bedroom-hud { line-height: 1.25; }
+@media (orientation: landscape) and (max-width: 700px) and (max-height: 500px) {
+  .bedroom-game:is([data-mode="rest"],[data-mode="complete"]) .bedroom-caption p { display: none; }
+  .bedroom-game:is([data-mode="rest"],[data-mode="complete"]) .bedroom-caption h1 { margin-bottom: 15px; }
+}

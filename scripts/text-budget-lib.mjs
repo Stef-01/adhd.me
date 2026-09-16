@@ -49,6 +49,12 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
+  { path: "/lives/lab/leo-room", state: "bedroom-pause", name: "Leo room preview, pause" },
+  { path: "/lives/lab/leo-room", state: "bedroom-wind-down", name: "Leo room preview, reading" },
+  { path: "/lives/lab/leo-room", state: "bedroom-rest", name: "Leo room preview, rest" },
+  { path: "/lives/lab/leo-room", state: "bedroom-revisit", name: "Leo room preview, next evening" },
+  { path: "/lives/lab/leo-room", state: "bedroom-complete", name: "Leo room preview, complete" },
+
   { path: "/lives/play/nina-the-first-line", name: "Nina: the first line" },
   { path: "/lives/play/jax-just-the-list", name: "Jax: just the list" },
   { path: "/lives/play/mia-remember-why", name: "Mia: remember why" },
@@ -185,6 +191,33 @@ export async function reach(page, route, base) {
       }
     }
   }
+  if (route.state?.startsWith("bedroom-")) {
+    await page.locator('[data-ready="true"]').waitFor();
+    if (route.state === "bedroom-pause") await page.getByRole("button", { name: "Pause game" }).click();
+    else {
+      await page.getByRole("button", { name: "Close the window", exact: true }).click();
+      await page.getByRole("button", { name: "Put phone away", exact: true }).click();
+      for (let i = 0; i < 12 && await page.locator(".bedroom-insect:enabled").count(); i++) await page.locator(".bedroom-insect:enabled").first().click();
+      await page.getByRole("button", { name: "Read a little", exact: true }).click();
+      if (route.state !== "bedroom-wind-down") {
+        await page.getByRole("button", { name: "Turn the page", exact: true }).click();
+        await page.getByRole("button", { name: "Turn the page", exact: true }).click();
+        await page.getByRole("button", { name: "Dim the light", exact: true }).click();
+        await page.getByRole("button", { name: "Light off", exact: true }).click();
+      }
+      if (route.state === "bedroom-revisit" || route.state === "bedroom-complete") {
+        await page.getByRole("button", { name: "Tomorrow evening" }).click();
+        if (route.state === "bedroom-complete") {
+          await page.locator(".bedroom-insect:enabled").click();
+          await page.getByRole("button", { name: "Find your place" }).click();
+          await page.getByRole("button", { name: "Turn the page", exact: true }).click();
+          await page.getByRole("button", { name: "Dim the light", exact: true }).click();
+          await page.getByRole("button", { name: "Light off", exact: true }).click();
+        }
+      }
+    }
+  }
+
   if (route.state === "lives-run") {
     await page.waitForTimeout(1200);
   }
@@ -218,4 +251,3 @@ export function summarise(route, rows) {
   const verdict = total <= BUDGET.target ? "target" : total <= ceiling ? "ceiling" : longForm ? "long-form" : "OVER";
   return { path: route.path, name: route.name, state: route.state ?? null, total, fold, chrome, ratio: Math.round((total / BUDGET.target) * 10) / 10, verdict, longest };
 }
-
