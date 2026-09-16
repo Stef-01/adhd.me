@@ -3,9 +3,11 @@
 Status: proposed implementation specification; not implemented by this document.
 Audit baseline: main `0d9743a`, reviewed 2026-09-15.
 
+Revision after founder critique: [Game craft correction and Leo rebuild](./game-craft-and-leo-rebuild.md) defines the higher acceptance bar and takes precedence. Leo is now the first complete rebuild, followed by Zoe. The current games are functional foundations, not accepted finished experiences.
+
 ## 1. Decision and scope
 
-Upgrade all eight standalone Lives into coherent, stateful, character-led games. Each contains an engaging challenge, a recoverable emotional turning point, an enacted strategy, and a second opportunity to experience that strategy working. Leo is the reference for causal continuity, not a template to copy eight times.
+Upgrade all eight standalone Lives into coherent, stateful, character-led games. Each contains an engaging challenge, a recoverable emotional turning point, an enacted strategy, and a second opportunity to experience that strategy working. Leo provides useful causal continuity, but its current target-clicking loop is also below the gameplay quality bar and must be redesigned.
 
 Preserve direct entry: select a character and the scene is playable. No difficulty form, launch wizard, tutorial carousel or second Play button. Preserve the site palette, domain colours inside games, minimal HUD and actual Learn liquid glass. Build, QA, commit, merge and push one coherent game at a time. Route availability and working buttons are necessary but not evidence of engaging gameplay.
 
@@ -34,7 +36,7 @@ Method: code/content inspection of `src/lives/journeys.ts`, `app/lives/journey.t
 
 | Game | Strength today | Gameplay depth | Emotional causality | Enacted teaching | Priority deficiency |
 |---|---|---|---|---|---|
-| Leo | Waves, movement, cumulative noise, distress, same-room bedtime routine | Strong | Strong | Strong relative to others | Fixed ending sequence implies one prescribed routine; no next-night proof or equally valid alternatives |
+| Leo | Waves, movement, cumulative noise, distress, same-room bedtime routine | Partial | Partial/strong | Partial | Catching faster is the sole active tactic; source controls arrive too late; fixed ending and no next-night proof |
 | Theo | Bespoke packing, detours, door gate, touch drag | Partial/strong | Weak | Partial | Ends at result and link; never builds/reuses tomorrow's setup or communicates changed arrival |
 | Maya | Physical tracing and wiping | Partial | Weak | Weak | Repeated wipes; eliminating everything substitutes for managing inputs and expressing needs |
 | Arjun | Filter/sort/hold variety | Partial | Weak | Weak | Disconnected tasks; holding stands in for listening; no conversational repair or shared outcome |
@@ -197,15 +199,11 @@ Use authored dialogue nodes, deterministic branch conditions, short utterances a
 
 **Acceptance:** whitespace not progress, template/typing equivalence, IME and mobile keyboard, no submit during composition, interrupted session retains draft, restart clears it.
 
-### 5.8 Leo — Preserve the benchmark, improve agency
+### 5.8 Leo — Reclaim the room: first full rebuild
 
-Keep the tested three-wave swarm, motion, optional per-mosquito buzz, cumulative disruption and bedroom continuity. Do not rewrite a working swarm to demonstrate the new architecture.
+The current loop is not protected from redesign. Retain tested swarm/audio utilities where useful, but make source control, immediate relief and winding down interact during play. Window/phone/bedside props are usable from entry; behaviours are readable; closing a source genuinely prevents its events without erasing existing nuisances. Mistakes lead to recovery in the same room. Quiet and optional comfort choices remain valid. A next-evening encounter reuses the player's arrangement.
 
-Replace the prescribed ending sequence with a small routine graph: close window; put phone away or choose an appropriate notification boundary; choose quiet or optional sound/headphones; choose a calming activity such as reading; adjust light. Some actions commute; real prerequisites remain. Show a settled scene without promising immediate sleep.
-
-Add a short next-night proof: a mosquito stays outside the closed window and the phone cue is handled using the arrangement. Permit moving directly into the routine when the challenge is distressing. No compulsory headphones, brown noise or universal bedtime.
-
-Implementation: retain `leo-swarm.ts`; version room state; replace numeric-only routine stepping with an authored action graph; audio remains gesture-gated and disposed on pause/exit. Acceptance: window prevents entry, quiet/audio alternatives equivalent, no background buzz leak, both outcomes reach recovery.
+[The detailed Leo design](./game-craft-and-leo-rebuild.md) specifies the decision loop, storyboard, behaviour variants, routine, visual assets, state model, prototype scope, tuning and release gates. Do not implement this as more targets followed by five buttons. Complete the playable systems prototype before final art; complete the entire slice before claiming this quality level for any other game.
 
 ## 6. Technical architecture and migration
 
@@ -221,7 +219,7 @@ Implementation: retain `leo-swarm.ts`; version room state; replace numeric-only 
 - `app/lives/story/{character}-scene.tsx`: bespoke compositions and interactions.
 - Shared `dialogue.tsx`, `cue-board.tsx`, `strategy-prop.tsx` only where behaviour actually matches.
 
-Keep `Engine`, `SceneArt`, `LifeBean`, `LeoMosquito` and `TheoGame` behind adapters. Migrate one route at a time. Build only the shared pieces required by Zoe first; do not create a speculative general-purpose game engine.
+Keep `Engine`, `SceneArt`, `LifeBean`, `LeoMosquito` and `TheoGame` behind adapters. Migrate one route at a time. Build only the pieces required by Leo first; extract genuinely shared behaviour when Zoe needs it. Do not create a speculative general-purpose game engine.
 
 ### Contract sketch
 
@@ -349,22 +347,23 @@ Do not delete these in bulk or duplicate new stories. After each story ships, co
 
 ## 9. Phased delivery
 
-Estimates are focused engineering/art/content effort, not calendar promises. Re-estimate after Zoe; clinician/patient availability is additional. Initial envelope approximately 35–65 working days. Work sequentially per user requirement, not multiple partially completed games in parallel.
+Estimates are focused effort rather than promises. The earlier 35–65-day total is withdrawn: it assumed too much reuse and insufficient gameplay/art iteration. Initial Leo envelope is 8–15 focused days, re-estimated after the systems prototype; external participant availability is additional. Re-estimate other games after Leo and Zoe establish actual production cost. Work sequentially, as requested.
 
-| Phase | Work | Estimate | Exit gate |
-|---|---|---|---|
-| 0 | Freeze baseline; inventory; representative recordings; correct overclaims/unsafe framing; learning-objective map | 2–3 days | Baselines and reviewed objectives, no misleading absolutes in touched content |
-| 1 | Only state/clock/action primitives Zoe needs; grey-box first encounter/repair | 3–5 days | Deterministic state, pause safe, keyboard path, one strategy changes world |
-| 2 | Complete Zoe, branches, enacted ending, revisit and all inputs | 4–6 days | Full story and co-design gate; no moral quiz; QA/commit/merge/push |
-| 3 | Mia transitions, commitments and cue system | 3–5 days | Placement changes revisit; impact and ownership; individual release |
-| 4 | Arjun dialogue, agenda and parking | 3–5 days | Reciprocal communication and retrieval; individual release |
-| 5 | Maya channels, environment and needs signal | 3–5 days | Multiple valid recovery paths; safe framing; individual release |
-| 6 | Theo setup, arrival update and tomorrow | 2–4 days | Existing packing regressions green; setup affects next morning |
-| 7 | Jax resources, substitutions, wishes and shared plan | 3–5 days | Solvable choices with more than one valid basket |
-| 8 | Nina draft engine, clarification and re-entry cue | 2–4 days | Typing/template equivalence; privacy and keyboard geometry |
-| 9 | Leo routine alternatives and next-night proof | 2–3 days | Swarm regressions green; quiet option; visible prevention |
-| 10 | Finish compact arcade adapters/interludes and incremental legacy consolidation | 5–10 days | All 32/20 IDs accounted for; no stale duplicate teaching |
-| 11 | Cross-game polish, performance, accessibility, formative learning tests, staged rollout | 3–5 days | Release criteria passed; rollback exercised and evidence recorded |
+| Stage | Work | Exit gate |
+|---|---|---|
+| 0 | Baseline recordings, content corrections, objectives, updated craft requirements | Reviewed map and concrete current defects |
+| L1 | Leo room-control systems prototype and authored encounters | Meaningful choices, persistent causes, recovery, input equivalence |
+| L2 | Leo full encounter, bespoke art/poses, enacted routine, next evening | Complete playable slice; no fixed button-list ending |
+| L3 | Leo tuning, co-design, accessibility, profiling and release | Observed playability and engineering gates; not just green tests |
+| Z | Zoe's distinct conversation/draft/repair system | Relational game with persistent consequences, not moral quiz |
+| M | Mia rooms, commitments and cues | Placement helps a later interruption; reciprocal ownership |
+| A | Arjun dialogue, agenda and thought parking | Real clarification, turn repair and retrieval |
+| MY | Maya inputs, environment and needs signal | Multiple valid recovery paths and safe framing |
+| T | Theo planning, updated arrival and tomorrow | Existing packing deepened by setup and next-morning use |
+| J | Jax resources, alternatives, wishes and shared plan | More than one valid purchase pattern and meaningful tradeoffs |
+| N | Nina composition, clarification and re-entry | Useful first move and interruption recovery without prose grading |
+| C | Compact arcade variants and legacy consolidation, incrementally per story | All 32/20 IDs accounted for; no stale teaching |
+| R | Cross-game verification and evidence review | Complete quality gates and exercised rollback |
 
 Per-game sequence: storyboard/state graph -> playable grey-box -> prove strategy causality -> art/feedback -> all input modes -> branch QA -> patient/clinical review where required -> final polish -> commit/merge/push. Do not polish art around a loop that still amounts to answer selection.
 
@@ -412,6 +411,6 @@ Changed therapeutic copy needs ADHD-informed clinician and patient co-design rev
 
 ## 12. First implementation ticket
 
-**ZOE-01: conversation plus causal draft tray.** Keep the route. Implement an ambiguous plan-change message, two accumulating thoughts, draft tray and clarification action. A parked draft remains visible and removes one competing demand. A rushed reply can land poorly; repair remains available. Add a second message that reuses the tray. No final quiz.
+**LEO-L1: playable room-control prototype.** Keep the public route unchanged while developing behind a disabled implementation flag. Implement catching, visible source prevention, persistent object state and two authored encounter families. Window and phone controls are available from entry; early prevention is valid. Deadline moves into recovery without resetting the room. Provide keyboard, touch and still equivalents.
 
-First tested commit: pure reducer, pointer/keyboard interaction and rough scene. Subsequent tested commits: repair, art, accessible feedback, reviewed copy and rehearsal. Do not begin Mia until Zoe's complete story, ending and transfer check pass the game gate.
+Test before/after causality and play the competing tactics. Do not add final art or more insect types to compensate for a dull loop. L2 adds the complete scene, enacted ending and next-evening proof; L3 tunes and validates the finished slice. Zoe follows Leo, then the other games one at a time. The detailed acceptance criteria and non-shortcut delivery rules live in [Game craft correction and Leo rebuild](./game-craft-and-leo-rebuild.md).
