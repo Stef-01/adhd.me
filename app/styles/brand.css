@@ -14,7 +14,12 @@ body { font-family: var(--font-ui); }
   border-bottom: 1px solid var(--brand-edge);
 }
 .platform-console .console-header { position: relative; border-top: 4px solid var(--brand); }
-.platform-brand { position: relative; letter-spacing: -.045em; color: var(--on-brand); }
+.platform-brand { position: relative; gap: 5px; align-items: baseline; letter-spacing: -.045em; color: var(--on-brand); }
+.platform-brand::after, .platform-public-nav .site-nav-wordmark::after {
+  content: ""; display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--signal);
+}
+.platform-public-nav .site-nav-wordmark { gap: 5px; align-items: baseline; }
 .platform-brand svg { color: var(--ink); }
 .platform-help { color: var(--on-brand); }
 /* On the yellow field the urgent pill is paper with ink: found at a glance, never an alarm. */
@@ -23,13 +28,13 @@ body { font-family: var(--font-ui); }
   background: var(--paper);
   color: var(--ink);
 }
-@media (hover: hover) { .platform-urgent:hover { border-color: var(--ink); background: #ffffff; } }
+@media (hover: hover) { .platform-urgent:hover { border-color: var(--ink); } }
 .platform-shell .settings-trigger { border-color: color-mix(in srgb, var(--ink) 16%, transparent); color: var(--ink); }
 /* Desktop tabs sit in the header as the reference's nav: a translucent lighter-yellow container,
    ink links, and the current one an ink pill. On a phone the bar is paper and the current tab
    is a yellow pill (learning-play.css draws the travelling marker). */
 @media (min-width: 768px) {
-  .platform-shell .app-tabs-list { padding: 5px; border: 1px solid rgb(0 0 0 / .05); border-radius: 999px; background: color-mix(in srgb, var(--brand-pill) 70%, transparent); }
+  .platform-shell .app-tabs-list { padding: 5px; border: 1px solid color-mix(in srgb, var(--ink) 5%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--brand-pill) 70%, transparent); box-shadow: 0 1px 4px color-mix(in srgb, var(--ink) 4%, transparent); }
   .platform-shell .app-tab { min-height: 44px; padding-block: 10px; color: var(--ink); }
   .platform-shell .app-tab.is-current { color: var(--paper); }
 }
@@ -79,3 +84,35 @@ body .aoc-band::before, .site-footer::before { display: none; }
 ::selection { background: var(--brand); color: var(--ink); }
 /* Focus on the ink footer and band reads in the brand's yellow, as the reference does on dark. */
 :is(.site-footer, .aoc-band) :is(a, button):focus-visible { outline-color: var(--brand); }
+
+/* ── Micro-refinements, ported from revamped-adhd.me's research passes ──────────────────────────
+   The one primary on a screen is an ink pill with the brand's yellow glyph and a soft shadow, and
+   it lifts under a pointer; the microphone is that pill. Focus is an ink ring on light surfaces and
+   the yellow one on ink. Headings balance, paragraphs avoid orphans, quotation marks hang. */
+.platform-shell :is(.learn-primary, .me-sticky a), .platform-public-nav .site-nav-link, body:has(.platform-shell) .consent-agree {
+  box-shadow: 0 4px 16px -2px color-mix(in srgb, var(--ink) 18%, transparent);
+  transition: background-color var(--dur-tap) var(--ease-ui), transform var(--dur-move) var(--ease-ui), box-shadow var(--dur-move) var(--ease-ui);
+}
+.platform-shell :is(.learn-primary, .me-sticky a) svg, .platform-public-nav .site-nav-link svg { color: var(--brand); }
+.platform-shell .patient-v2 .voice-actions .dual-input-action { background: var(--ink); color: var(--brand); box-shadow: 0 4px 16px -2px color-mix(in srgb, var(--ink) 22%, transparent); }
+.platform-shell .patient-v2 .voice-screen .mic-button { background: var(--ink); color: var(--paper); box-shadow: 0 10px 24px color-mix(in srgb, var(--ink) 18%, transparent); }
+.platform-shell .patient-v2 .voice-screen .mic-button svg { color: var(--brand); }
+.platform-shell .app-tab-marker { box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 8%, transparent); }
+@media (hover: hover) {
+  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover, body:has(.platform-shell) .consent-agree:hover,
+  .platform-shell .patient-v2 .voice-actions .dual-input-action:hover, .platform-shell .patient-v2 .voice-screen .mic-button:hover {
+    background: color-mix(in srgb, var(--ink) 86%, var(--paper)); border-color: transparent;
+  }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover {
+    transform: translateY(-1px); box-shadow: 0 6px 18px -2px color-mix(in srgb, var(--ink) 24%, transparent);
+  }
+}
+.platform-shell :is(button, a, input, textarea, select, summary):focus-visible,
+body:has(.platform-shell) :is(.consent-read, .consent-agree):focus-visible,
+.platform-public-nav :is(a, button):focus-visible,
+.platform-console :is(a, button, input, select):focus-visible { outline-color: var(--ink); }
+.platform-shell :is(h1, h2, h3) { text-wrap: balance; }
+.platform-shell main p { text-wrap: pretty; }
+.platform-shell :is(p, li, blockquote) { hanging-punctuation: first; }

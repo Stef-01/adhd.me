@@ -29,7 +29,10 @@ remain in `docs/design/2026-platform/` and `docs/design/warm-brand/` as the reco
 | Signal | `#FF4D2E` | The one warm-red dot in the mark |
 
 Yellow is the ground of the header and nothing else on a screen, so the field reads as identity
-rather than decoration. The colourful educational stages, the meditation player and the games are
+rather than decoration. The mark carries the reference's warm-red point after the name. The one
+primary on a screen is an ink pill with a yellow glyph and a soft shadow that lifts under a pointer;
+the microphone is that pill. Focus is an ink ring on light surfaces and a yellow one on ink.
+Captures from the production build are in `docs/design/yellow-scheme/`. The colourful educational stages, the meditation player and the games are
 the exceptions: each uses its own readable palette while the surrounding library and navigation
 stay quiet. The two categorical chart colours are unchanged. Chart greys use the neutral ramp.
 Text on dark uses paper; the band's text uses ink.
