@@ -6,6 +6,7 @@ body:has(.platform-public-nav) main h1 { font-family: inherit; font-weight: 750;
 .platform-console .console-header-inner, .platform-console .console-main { width: 100%; max-width: 1560px; margin-inline: auto; padding-inline: clamp(20px, 4vw, 56px); }
 .platform-console .console-brand-row { min-height: 76px; }
 .platform-console .console-brand { color: var(--ink); }
+.platform-console .console-brand .demo-nav-trigger { color: var(--ink); }
 .platform-console .console-main { padding-block: 40px 64px; }
 .platform-console.console-app-auth .console-main { max-width: 560px; margin-inline: auto; padding-block: 48px 64px; }
 .platform-console .console-main h1 { font-size: clamp(26px, 2.5vw, 36px); font-weight: 750; letter-spacing: -.035em; line-height: 1.2; }
@@ -19,11 +20,13 @@ body:has(.platform-public-nav) main h1 { font-family: inherit; font-weight: 750;
 .platform-console th { background: var(--stone); color: var(--muted); font-weight: 700; }
 .platform-console :is(th,td) { padding: 14px 16px; border-bottom: 1px solid var(--line); }
 .platform-console :is(a,button,input,select):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.platform-public-nav.site-nav { background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: none; }
+.platform-public-nav.site-nav { background: var(--brand); border-bottom: 1px solid var(--brand-edge); box-shadow: none; }
 .platform-public-nav .site-nav-inner { min-height: 80px; max-width: 1440px; padding-inline: 32px; }
 .platform-public-nav .site-nav-wordmark { font-family: inherit; color: var(--ink); font-size: 22px; font-weight: 800; letter-spacing: -.055em; }
 .platform-public-nav .site-nav-link { min-height: 44px; border-radius: 10px; background: var(--accent); color: var(--paper); border-color: var(--accent); }
-.platform-public-nav .site-nav-links { color: var(--muted); font-size: 14px; }
+.platform-public-nav .site-nav-links { color: var(--ink); font-size: 14px; }
+.platform-public-nav .site-nav-links a { color: var(--ink); }
+.platform-public-nav :is(.site-nav-link, .site-nav-wordmark, .site-nav-links a):focus-visible { outline-color: var(--ink); }
 @media (max-width: 767px) {
   .platform-console .console-brand-row { gap: 16px; padding-block: 16px; }
   .platform-console .console-main { padding-top: 28px; }

@@ -22,8 +22,8 @@ import { useModel } from "./use-model";
 import { NWIA_LABELS, NWIA_MEANINGS, NWIA_NAME, NWIA_PARADIGM, NWIA_URL, nwiaFor } from "@/wellness/nwia";
 
 const COLOURS: Record<Layer, { fill: string; ink: string }> = {
-  brain: { fill: "#dfe5f7", ink: "#334679" },
-  body: { fill: "#fbe4d3", ink: "#a14f19" },
+  brain: { fill: "#dcedfa", ink: "#24487a" },
+  body: { fill: "#fff8e6", ink: "#785a00" },
   environment: { fill: "#dcefe4", ink: "#0e6b3a" },
   people: { fill: "#ebe0f7", ink: "#5b3a8a" },
 };

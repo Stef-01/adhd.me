@@ -10,11 +10,15 @@
 // Spread alone cannot separate the two. The DIRECTION can. A tick is green, a badge is amber, a
 // warning is red — every one of them pulls RED or GREEN to the top. A cool grey pulls BLUE.
 //
-//   --ink    #172033    23, 32, 51    spread 28    blue     the body colour
-//   --muted  #565f70    86, 95, 112   spread 26    blue     the secondary colour
-//   --faint  #626b7b    98, 107, 123  spread 25    blue     the meta colour
+//   --ink    #172033    23, 32, 51    spread 28    blue     the body colour, then
+//   --muted  #565f70    86, 95, 112   spread 26    blue     the secondary colour, then
+//   --faint  #626b7b    98, 107, 123  spread 25    blue     the meta colour, then
 //   a tick   #16a34a    22, 163, 74   spread 141   green    what these specs exist to catch
 //   a badge  #d97706   217, 119, 6    spread 211   red      likewise
+//
+// The yellow scheme (2026-09-17) cut its neutrals warm but UNDER the threshold — --ink #1a1c1c is
+// 2 apart, --muted #55534d 8, --faint #5f5e59 6 — because a warm grey wide enough to pull red on
+// top would read here as a badge. The direction clause stays as the margin it always was.
 //
 // So the threshold keeps every tooth it had and loses its false positives: a colour this far apart
 // that is ALSO blue-dominant is not a state, it is a grey. Nothing here weakens what is caught — a
