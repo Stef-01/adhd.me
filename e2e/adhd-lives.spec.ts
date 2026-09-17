@@ -34,6 +34,11 @@ async function drive(page: Page, outcome: "hit" | "miss", until: () => Promise<b
 }
 
 test("E2E Lives 1: play to the score, recognise a moment, save the strategy, finish its module, find it Trying (§98)", async ({ page }) => {
+  // Three games, the score, the reflection, the Toolkit and a whole module is the longest journey
+  // in the suite; it ran out of the default 30 seconds on a loaded runner (CI on main, after
+  // passing on the same commit's pull request run). The window is the journey's, like the a11y
+  // sweeps' and the learning walkthrough's.
+  test.setTimeout(120_000);
   await page.goto("/lives");
   await expect(page.getByRole("heading", { name: "Eight lives. Three of yours." })).toBeVisible();
   await page.getByRole("link", { name: "Play" }).click();
@@ -79,8 +84,10 @@ test("E2E Lives 1: play to the score, recognise a moment, save the strategy, fin
     const next = page.getByRole("button", { name: /^(Next|Skip|Done)$/ });
     const yours = page.getByRole("group", { name: "Your version" }).getByRole("button").first();
     const choice = page.getByRole("group", { name: /^(Choices|Responses)$/ }).getByRole("button").first();
-    if (await thought.isVisible().catch(() => false)) { await thought.click(); continue; }
-    if (await current.isVisible().catch(() => false)) { await current.click(); continue; }
+    // Each of these is a block's own control and can leave the tree between the look and the tap
+    // (the block advanced on its own). A tap that misses is not a failure: the loop looks again.
+    if (await thought.isVisible().catch(() => false)) { await thought.click({ timeout: 3000 }).catch(() => {}); continue; }
+    if (await current.isVisible().catch(() => false)) { await current.click({ timeout: 3000 }).catch(() => {}); continue; }
     if (await next.isVisible().catch(() => false)) {
       const heading = page.locator("#lives-module-title");
       const previousStep = await heading.textContent();
@@ -89,8 +96,8 @@ test("E2E Lives 1: play to the score, recognise a moment, save the strategy, fin
       await expect(heading).not.toHaveText(previousStep!);
       continue;
     }
-    if (await yours.isVisible().catch(() => false)) { await yours.click(); continue; }
-    if (await choice.isVisible().catch(() => false)) { await choice.click(); continue; }
+    if (await yours.isVisible().catch(() => false)) { await yours.click({ timeout: 3000 }).catch(() => {}); continue; }
+    if (await choice.isVisible().catch(() => false)) { await choice.click({ timeout: 3000 }).catch(() => {}); continue; }
     await page.waitForTimeout(60);
   }
   await expect(page.getByRole("heading", { name: "Added to your Toolkit" })).toBeVisible();

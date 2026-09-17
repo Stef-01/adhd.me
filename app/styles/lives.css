@@ -454,7 +454,9 @@
 .nina-paper button:disabled { opacity: .5; cursor: default; }
 
 .lives-cast-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
-.lives-character-play { display: flex; align-items: center; gap: 14px; min-height: 112px; padding: 8px 4px; color: var(--ink); text-decoration: none; border-radius: 18px; }
+/* Sized to its content: at 112px the row left a band of empty card between the name and the About
+   fold, so the eight cards read as half-filled. */
+.lives-character-play { display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 4px; color: var(--ink); text-decoration: none; border-radius: 18px; }
 .lives-character-play > span { flex: 1; min-width: 0; }
 .lives-character-play strong { display: block; font-size: 20px; line-height: 1.2; margin-bottom: 6px; }
 .lives-character-play > span > span { display: block; font-size: 15px; line-height: 1.4; color: var(--muted); }
