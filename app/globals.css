@@ -8148,6 +8148,8 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 /* ── The profile's sections and controls ───────────────────────────────────────────────── */
 
 .me-section { margin: 0 0 30px; }
+.me-folds { display: contents; }
+@media (min-width: 900px) { .me-folds { display: block; } }
 
 .me-section h2 {
   margin: 0 0 10px;
@@ -10144,7 +10146,12 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
   }
   .me-section[aria-labelledby="me-filters-title"] > .me-section-head,
   .me-section[aria-labelledby="me-filters-title"] > .me-section-lead { grid-column: 1 / -1; }
-  .me-section[aria-labelledby="me-filters-title"] > .me-switches { grid-column: 1; grid-row: 3 / span 4; }
+  /* Two columns that each stack from the top: the switches on the left, the folds on the right in
+     the order they read. Before, each fold took its own grid row beside the spanning switch card,
+     so the card's height was shared out as empty space between the folds and the Languages fold
+     landed above the switches. */
+  .me-section[aria-labelledby="me-filters-title"] > .me-switches { grid-column: 1; grid-row: 2; align-self: start; }
+  .me-section[aria-labelledby="me-filters-title"] > .me-folds { grid-column: 2; grid-row: 2; align-self: start; }
   .me-section[aria-labelledby="me-filters-title"] > .me-forget { grid-column: 1 / -1; justify-self: start; }
   .me-sticky { bottom: 0; border-top: 0; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; padding-inline: 0; }
   .me-show { width: 320px; margin-left: auto; }
@@ -10498,7 +10505,8 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
         taller right column, and a grid item stretches to its row by default — so the card grew
         155px of empty paper below its last switch and read as a panel missing its content. It is
         a list, and a list ends where it ends. */
-  .me-section[aria-labelledby="me-filters-title"] > .me-switches { align-self: start; }
+  .me-section[aria-labelledby="me-filters-title"] > .me-switches,
+  .me-section[aria-labelledby="me-filters-title"] > .me-folds { align-self: start; }
 
   /* 4. THE LEAD, SIZED TO ITS SPAN. A row that now runs the full width of the window kept the
         64px portrait it had in a half-width column, so the card the screen is making its one
