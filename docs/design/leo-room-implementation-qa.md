@@ -69,3 +69,11 @@ Local run artifacts are in `qa/_runs/`: production build log, unit log, text mea
 The candidate needs patient co-design observation, unaided strategy-comprehension review, actual mobile-device sound/performance review, and gameplay tuning. In particular, whether the two flight behaviors and three authored starting conditions create enough interesting replay has not been established by automated tests. The fast source-first path is intentionally valid, but its satisfaction and the pacing of the short reading ending need people to judge them.
 
 L3 remains pending. Do not replace the library entry or use Leo as an accepted quality reference for Zoe until the craft review accepts the whole experience. Do not mark all Lives games complete from this implementation.
+
+## Reported Try action: 2026-09-17
+
+Status: not reproduced. The reported wording was “Try something”; no control with that exact label exists on the Leo preview. Its ending link is “Bring it into your day”.
+
+The live preview was played through both evenings and into Lower the Sensory Floor, through the action plan, then into the Toolkit. This passed with reduced motion and with normal-motion touch input in Chromium and WebKit, with no page errors. The score-screen “Try now” link and the finder example-search flow also responded during the preceding investigation.
+
+The committed regression now exercises Leo's entire handoff with normal motion and touch input, chooses a plan, opens its Toolkit entry and reloads to verify persistence. It passes in Chromium, WebKit and Firefox. Earlier Leo tests stopped at game completion and did not cover this downstream action. No functional application fix is claimed: the remaining diagnostic input is the exact nonresponsive control or the state in which it stops responding.

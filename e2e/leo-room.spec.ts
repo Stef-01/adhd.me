@@ -297,3 +297,63 @@ test("the busiest room keeps six targets and all props separately reachable", as
     }
   }
 });
+
+test("Leo's ending opens a usable strategy and saves the chosen plan to the Toolkit", async ({ browser }) => {
+  const context = await browser.newContext({
+    baseURL: test.info().project.use.baseURL,
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    reducedMotion: "no-preference",
+  });
+  try {
+    const page = await context.newPage();
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    await page.addInitScript(() => localStorage.setItem("adhdme-privacy-ack", "1"));
+    await page.goto(URL);
+    await expect(game(page)).toHaveAttribute("data-ready", "true");
+    await page.getByRole("button", { name: "Close the window", exact: true }).tap();
+    await page.getByRole("button", { name: "Put phone away", exact: true }).tap();
+    const book = page.locator(".bedroom-book");
+    async function settle(expected: "rest" | "complete") {
+      for (let n = 0; n < 20 && await page.locator(".bedroom-insect:enabled").count(); n++) {
+        await page.locator(".bedroom-insect:enabled").first().tap();
+      }
+      await expect(page.locator(".bedroom-insect:enabled")).toHaveCount(0);
+      for (let n = 0; n < 4 && await book.isEnabled(); n++) await book.tap();
+      await page.getByRole("button", { name: "Dim the light", exact: true }).tap();
+      await page.getByRole("button", { name: "Light off", exact: true }).tap();
+      await expect(game(page)).toHaveAttribute("data-mode", expected);
+    }
+    await settle("rest");
+    await page.getByRole("button", { name: "Tomorrow evening", exact: true }).tap();
+    await expect(game(page)).toHaveAttribute("data-mode", "revisit");
+    await settle("complete");
+    await page.getByRole("link", { name: "Bring it into your day" }).tap();
+    await expect(page.locator(".lives-module")).toHaveAttribute("data-module", "lower_sensory_floor_v1");
+    const title = page.locator("#lives-module-title");
+    await expect(title).toHaveText("Lower the Sensory Floor");
+    async function next() {
+      const previous = await title.textContent();
+      await page.getByRole("button", { name: "Next", exact: true }).tap();
+      await expect(title).not.toHaveText(previous!);
+    }
+    await next();
+    await next();
+    await page.getByRole("checkbox", { name: "Notification sounds off", exact: true }).check();
+    await next();
+    await page.getByRole("button", { name: "Skip", exact: true }).tap();
+    await page.getByRole("group", { name: "Your version" }).getByRole("button", { name: "Do not disturb from 10pm", exact: true }).tap();
+    await expect(page.getByRole("heading", { name: "Added to your Toolkit", exact: true })).toBeVisible();
+    await page.getByRole("link", { name: "Open the Toolkit" }).tap();
+    const saved = page.locator('.lives-tool[data-strategy="lower_sensory_floor"][data-status="trying"]');
+    await expect(saved).toBeVisible();
+    await expect(saved).toContainText("Do not disturb from 10pm");
+    await page.reload();
+    await expect(saved).toBeVisible();
+    await expect(saved).toContainText("Do not disturb from 10pm");
+    expect(errors).toEqual([]);
+  } finally {
+    await context.close();
+  }
+});
