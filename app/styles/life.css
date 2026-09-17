@@ -55,7 +55,7 @@
 @media (hover: hover) { .perspective-card:not([aria-pressed="true"]):not(:disabled):hover { border-color: var(--accent-tint); } }
 .perspective-card.sim-task { align-items: flex-start; text-align: left; }
 .perspective-card.sim-task span { color: var(--muted); font-size: 0.8125rem; font-weight: 500; }
-.perspective-thought { margin: 14px 0 0; padding: 16px 18px; border-left: 4px solid var(--accent); border-radius: 0 14px 14px 0; background: var(--stone); }
+.perspective-thought { margin: 14px 0 0; padding: 16px 18px; border: 1px solid var(--accent-tint); border-radius: 14px; background: var(--accent-soft); }
 .perspective-thought strong { display: block; margin-bottom: 4px; font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
 .perspective-thought p { margin: 0; font-size: 1rem; line-height: 1.55; font-style: italic; }
 

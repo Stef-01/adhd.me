@@ -1,4 +1,5 @@
 import { type Page } from "@playwright/test";
+import { pauseNow } from "./support/fake-clock";
 import { test, expect, hydratedUnderFakeClock } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 
@@ -16,7 +17,7 @@ async function timed(page: Page) {
   await page.goto(URL, { waitUntil: "load" });
   await hydratedUnderFakeClock(page);
   await expect(game(page)).toHaveAttribute("data-ready", "true");
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
+  await pauseNow(page);
 }
 async function clear(page: Page, keyboard = false) {
   for (let n = 0; n < 20 && await page.locator(".bedroom-insect:enabled").count(); n++) {

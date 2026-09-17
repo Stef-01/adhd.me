@@ -197,7 +197,7 @@
 .lives-check input { width: 22px; height: 22px; accent-color: var(--accent); }
 .lives-custom { display: flex; gap: 8px; width: 100%; }
 .lives-custom input { flex: 1; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; }
-.lives-feedback { padding: 14px 18px; border-left: 4px solid var(--accent); border-radius: 0 14px 14px 0; background: var(--stone); text-align: left; }
+.lives-feedback { padding: 14px 18px; border: 1px solid var(--accent-tint); border-radius: 14px; background: var(--accent-soft); text-align: left; }
 .lives-meeting { display: grid; gap: 12px; width: 100%; padding: 16px; border-radius: 16px; background: var(--stone); text-align: left; }
 .lives-meeting-line { margin: 0; color: var(--muted); font-style: italic; }
 .lives-thought { min-height: 56px; padding: 12px 18px; border: 2px dashed var(--accent); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-weight: 800; letter-spacing: 0.04em; cursor: pointer; }

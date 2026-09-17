@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { pauseNow } from "./support/fake-clock";
 import { hydratedUnderFakeClock, test } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 const URL = "/lives/play/leo-mosquito";
@@ -40,7 +41,7 @@ async function timedStart(page: Page) {
   await page.clock.install();
   await page.goto(URL, { waitUntil: "load" });
   await hydratedUnderFakeClock(page);
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
+  await pauseNow(page, 1000);
 
 }
 

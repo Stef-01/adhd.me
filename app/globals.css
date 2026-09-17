@@ -3067,8 +3067,9 @@ summary:focus-visible {
 .community-form-error {
   margin: 0 0 18px;
   padding: 11px 12px;
-  border-left: 3px solid var(--accent);
-  color: var(--accent);
+  border: 1px solid var(--accent-tint);
+  border-radius: 10px;
+  color: var(--accent-deep);
   background: var(--accent-soft);
   font-size: 0.75rem;
 }
@@ -3292,9 +3293,9 @@ summary:focus-visible {
 
 .community-interest-form input[type="text"],
 .community-interest-form input[type="email"] {
-  border: 1px solid #aaa9a1;
+  border: 1px solid var(--line-strong);
   border-radius: 0;
-  background: var(--community-white);
+  background: var(--paper);
 }
 
 .community-interest-options label > span {
@@ -5018,10 +5019,10 @@ a focus ring that is not the browser default removed {
    a colour alone is not a record. */
 .be { margin-top: 14px; display: grid; gap: 26px; }
 .be-list { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-.be-row { padding: 14px 16px; border: 1px solid var(--line); border-left-width: 3px; border-radius: 4px; background: var(--stone); }
-.be-row.be-accepted { border-left-color: var(--accent); background: var(--accent-soft); }
-.be-row.be-rejected { border-left-color: var(--line); opacity: 0.62; }
-.be-row.be-proposed { border-left-color: var(--faint); }
+.be-row { padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--stone); }
+.be-row.be-accepted { border-color: var(--accent-tint); background: var(--accent-soft); }
+.be-row.be-rejected { opacity: 0.62; }
+.be-row.be-proposed { border-color: var(--line-strong); }
 .be-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
   padding: 0; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; min-height: 44px; }
 .be-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -5130,7 +5131,7 @@ a focus ring that is not the browser default removed {
 .iv-transcript textarea { line-height: 1.6; resize: vertical; }
 
 .iv-proposals { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 720px; }
-.iv-proposal { padding: 14px 16px; border: 1px solid var(--line); border-left-width: 3px; border-radius: 4px;
+.iv-proposal { padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px;
   background: var(--stone); }
 .iv-proposal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 /* The cross-check note is quiet on purpose: it informs which question to ask first, and a
@@ -6654,7 +6655,7 @@ select { caret-color: var(--route-strong); }
   color: var(--on-accent);
   background: var(--accent);
 }
-.notfound-secondary { border-color: var(--route-line); border-radius: 12px; color: var(--route-strong); }
+.notfound-secondary { border-color: var(--line-strong); border-radius: 12px; color: var(--ink); }
 
 .consent-bar {
   right: max(18px, var(--safe-right));
@@ -6695,16 +6696,6 @@ select { caret-color: var(--route-strong); }
   color: var(--on-ground);
   background-color: var(--route-strong);
   background-image: none;
-}
-.site-footer::before,
-.story-footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 3px;
-  background: linear-gradient(to right, var(--accent) 0 18%, var(--hero-blue) 18% 100%);
 }
 .site-footer { padding: 64px max(24px, var(--safe-right)) 72px max(24px, var(--safe-left)); }
 .site-footer-inner {
