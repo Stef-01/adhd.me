@@ -22,6 +22,35 @@ const SCENARIOS: Scenario[] = [
   { profession: "occupational-therapist", needs: ["spiritual-wellbeing", "social-emotional-wellbeing", "connection-country", "family-community", "university-adjustments", "daily-routines"], title: "Cultural connection and study participation", cultural: true },
 ];
 
+/**
+ * Names for the invented profiles. "Example Psychologist 047" was a placeholder standing where a
+ * person's name goes, on the one screen the finder exists to show; a list of them read as a
+ * broken directory. These are ordinary Australian names, drawn deterministically so every build
+ * lists the same people, and every profile still says it is an example on the row, on the
+ * profile and in its practice name. No real person is named: the pairs are generated, and the
+ * two real clinicians' surname is excluded.
+ */
+const GIVEN = [
+  "Amelia", "Noah", "Priya", "Lachlan", "Grace", "Kai", "Mei", "Harper", "Aiden", "Zara",
+  "Oscar", "Chloe", "Tane", "Isla", "Jasper", "Aroha", "Ethan", "Layla", "Hugo", "Nadia",
+  "Riley", "Sienna", "Arjun", "Evie", "Cooper", "Leilani", "Samir", "Ruby", "Felix", "Amara",
+  "Theo", "Willow", "Rohan", "Matilda", "Kobe", "Ines", "Angus", "Hana", "Marcus", "Aliyah",
+];
+const FAMILY = [
+  "Nguyen", "Walker", "Papadopoulos", "Singh", "Andersen", "Malouf", "Kaur", "Brennan", "Okoro", "Tanaka",
+  "Whitlam", "Rahman", "Costa", "Mitchell", "Jovanovic", "Dawson", "Abebe", "Fraser", "Reyes", "Hartigan",
+  "Lim", "Byrne", "Moana", "Petrova", "Halloran", "Ng", "Sullivan", "Farah", "Kelly", "Ibrahim",
+  "Marsh", "Chen", "Doyle", "Yilmaz", "Barlow", "Tui", "Hassan", "Pearce", "Vella", "Larkin",
+];
+const TITLED: ReadonlySet<Profession> = new Set(["gp", "psychiatrist"]);
+
+function exampleName(index: number, kind: Profession): { name: string; shortName: string } {
+  const given = GIVEN[(index * 7) % GIVEN.length]!;
+  const family = FAMILY[(index * 11 + Math.floor(index / GIVEN.length)) % FAMILY.length]!;
+  const name = `${TITLED.has(kind) ? "Dr " : ""}${given} ${family}`;
+  return { name, shortName: TITLED.has(kind) ? `Dr ${family}` : given };
+}
+
 /** Fourfold example coverage. No new real people, bookings, portraits or availability are invented. */
 export function expandedCareExamples(base: readonly Clinician[]): Clinician[] {
   return Array.from({ length: base.length * 3 }, (_, index) => {
@@ -29,9 +58,10 @@ export function expandedCareExamples(base: readonly Clinician[]): Clinician[] {
     const template = base.find(p => (p.profession ?? "gp") === scenario.profession)!;
     const number = String(index + 1).padStart(3, "0");
     const identity = index % 3 === 0 ? ["aboriginal", "torres-strait-islander"] as const : index % 3 === 1 ? ["aboriginal"] as const : ["torres-strait-islander"] as const;
+    const { name, shortName } = exampleName(index, scenario.profession);
     return {
-      ...template, id: `example-care-${number}`, name: `Example ${profession(scenario.profession).label} ${number}`,
-      shortName: `Example ${number}`, title: profession(scenario.profession).label, profession: scenario.profession,
+      ...template, id: `example-care-${number}`, name,
+      shortName, title: profession(scenario.profession).label, profession: scenario.profession,
       practice: "Holistic Care Example Service", image: null, realPerson: undefined, synthetic: true,
       booking: { via: "synthetic-none", note: "Fictional example; there is no appointment to book. Return to the list or find a community-controlled service." },
       acceptingNewPatients: false, capacityDeclaredAt: undefined, disclosedInterest: undefined, disclosedInterestLabel: undefined,

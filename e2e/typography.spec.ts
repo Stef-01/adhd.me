@@ -1,14 +1,14 @@
 // The platform plan's shared-typography line, measured rather than asserted from a design note:
 // every rendered text element on Find, Profile, Learn, My ADHD, Today, the match screens, the
 // Lives home and the console sign-in resolves to one of the two declared families (DESIGN.md:
-// Inter for UI and body, Newsreader for patient questions) or a monospace stack for figures and
+// Plus Jakarta Sans for UI and body, Newsreader for patient questions) or a monospace stack for figures and
 // code, and every real control clears the 44px floor.
 
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
 
 const ROUTES = ["/", "/approach", "/profile", "/my-adhd", "/today", "/lives", "/match", "/support", "/faq", "/console/signin"] as const;
-const ALLOWED = /^(inter|newsreader|ui-monospace|sfmono|menlo|consolas|monaco|liberation mono|courier|monospace|geist mono|jetbrains mono)/i;
+const ALLOWED = /^(plus jakarta sans|inter|newsreader|ui-monospace|sfmono|menlo|consolas|monaco|liberation mono|courier|monospace|geist mono|jetbrains mono)/i;
 
 test("every text element on the app's screens uses a declared family", async ({ page }) => {
   test.setTimeout(120_000);

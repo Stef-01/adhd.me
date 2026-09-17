@@ -2,6 +2,7 @@
 // so a page added tomorrow cannot ship with a different idea of what this site contains.
 import Link from "next/link";
 import { TEAM_PAGE_PUBLIC } from "./about/team";
+import { BrandMark } from "./brand-wordmark";
 
 const DOORS: ReadonlyArray<{ label: string; href: string }> = [
   { label: "Find support", href: "/finder" },
@@ -38,7 +39,7 @@ export function SiteFooter() {
           this inner wrapper keeps the links on the same 640px measure they always sat on. */}
       <div className="site-footer-inner">
         <div className="site-footer-brand">
-          <Link href="/" className="site-footer-wordmark" translate="no">ADHD.ME</Link>
+          <Link href="/" className="site-footer-wordmark" aria-label="ADHD.ME home" translate="no"><BrandMark /></Link>
           <p>A support finder built around the words you use.</p>
         </div>
         <nav aria-label="Site">

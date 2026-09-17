@@ -5,11 +5,12 @@
 
 import Link from "next/link";
 import { AppSettings } from "./app-settings";
+import { BrandMark } from "./brand-wordmark";
 
 export function LifeHeader() {
   return (
     <div className="minimal-header has-settings me-chrome">
-      <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no">ADHD.ME</Link>
+      <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no"><BrandMark /></Link>
       <AppSettings />
     </div>
   );

@@ -13,6 +13,7 @@ import { Waveform } from "@phosphor-icons/react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { createContext, type ComponentProps, type ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { type Clinician } from "@/demo/clinicians";
+import { BrandMark } from "../brand-wordmark";
 
 /**
  * Seven screens, down from eleven.
@@ -266,8 +267,7 @@ export function Wordmark() {
      sees a product whose name is not the address they typed. */
   return (
     <Link href="/" className="wordmark finder-wordmark" aria-label="ADHD.ME, back to main home" translate="no">
-      ADHD.ME
-      <span className="wordmark-dot" aria-hidden="true" />
+      <BrandMark />
     </Link>
   );
 }

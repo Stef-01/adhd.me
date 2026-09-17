@@ -44,7 +44,7 @@
    closer to it than it is for a serif, and ~48KB on the finder's critical path
    to redraw three small labels is the wrong trade.
    =========================================================================== */
-@import "@fontsource-variable/inter";
+@import "@fontsource-variable/plus-jakarta-sans";
 @import "@fontsource-variable/newsreader";
 @import "@fontsource-variable/newsreader/wght-italic.css";
 
@@ -371,7 +371,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -2334,9 +2334,9 @@ summary:focus-visible {
 }
 
 .cv2-condition-list label.is-checked .cv2-checkbox {
-  border-color: var(--cv2-accent);
-  background: var(--cv2-accent);
-  color: var(--on-accent);
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .cv2-condition-list strong,
@@ -3569,7 +3569,7 @@ summary:focus-visible {
   min-height: 100dvh;
   color: var(--s-ink);
   background: var(--s-paper);
-  font-family: "Inter Variable", Inter, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -5926,7 +5926,7 @@ select { caret-color: var(--route-strong); }
 .site-nav-wordmark,
 .story-wordmark {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 1.25rem;
   font-weight: 760;
   letter-spacing: -0.045em;
@@ -6032,7 +6032,7 @@ select { caret-color: var(--route-strong); }
   isolation: isolate;
   min-height: min(850px, calc(100dvh - 72px));
   color: var(--on-ground);
-  background: var(--route-strong);
+  background: var(--ink);
 }
 
 .story-hero::before {
@@ -6066,7 +6066,7 @@ select { caret-color: var(--route-strong); }
   max-width: 13.5ch;
   margin: 0;
   color: var(--on-ground);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(3.4rem, 6.5vw, 5.65rem);
   font-weight: 610;
   line-height: 0.96;
@@ -6098,7 +6098,7 @@ select { caret-color: var(--route-strong); }
 .story-hero-explainer {
   max-width: 58ch;
   margin: 14px 0 0;
-  color: color-mix(in srgb, var(--on-ground) 78%, var(--route));
+  color: color-mix(in srgb, var(--on-ground) 78%, var(--ink));
   font-size: 0.9375rem;
   line-height: 1.65;
   text-wrap: pretty;
@@ -6106,13 +6106,14 @@ select { caret-color: var(--route-strong); }
 
 .story-hero-actions { margin-top: 32px; }
 
+/* The yellow pill on the dark hero: the reference's "Find your clinician" on its photo. */
 .story-primary-link {
   min-height: 52px;
-  padding: 0 23px;
+  padding: 0 24px;
   border: 0;
-  border-radius: 12px;
-  color: var(--on-accent);
-  background: var(--accent);
+  border-radius: 999px;
+  color: var(--ink);
+  background: var(--brand);
   box-shadow: 0 14px 30px color-mix(in srgb, var(--hero-dusk) 28%, transparent);
   font-size: 0.9375rem;
   font-weight: 700;
@@ -6120,8 +6121,8 @@ select { caret-color: var(--route-strong); }
 
 @media (hover: hover) {
   .story-primary-link:hover {
-    color: var(--on-accent);
-    background: var(--hero-orange-deep);
+    color: var(--ink);
+    background: var(--brand-pill);
     transform: translateY(-2px);
   }
 }
@@ -6152,7 +6153,7 @@ select { caret-color: var(--route-strong); }
   display: grid;
   justify-items: start;
   gap: 11px;
-  color: color-mix(in srgb, var(--on-ground) 78%, var(--route));
+  color: color-mix(in srgb, var(--on-ground) 78%, var(--ink));
   font-size: 0.75rem;
   font-weight: 620;
   line-height: 1.35;
@@ -6168,14 +6169,14 @@ select { caret-color: var(--route-strong); }
   border: 2px solid color-mix(in srgb, var(--on-ground) 82%, transparent);
   border-radius: 50%;
   color: var(--on-ground);
-  background: var(--route-strong);
+  background: var(--ink);
   font-size: 0.6875rem;
   font-variant-numeric: tabular-nums;
 }
 
 .story-intent-route li:first-child .story-route-stop {
   border-color: var(--on-ground);
-  color: var(--route-strong);
+  color: var(--ink);
   background: var(--on-ground);
 }
 
@@ -6202,8 +6203,8 @@ select { caret-color: var(--route-strong); }
 .story-portrait .coverage-map svg { width: min(100%, 360px); max-width: none; margin-inline: auto; }
 .story-portrait .coverage-map figcaption { gap: 8px; text-align: left; justify-items: start; }
 .story-portrait .coverage-land {
-  fill: color-mix(in srgb, var(--on-ground) 12%, var(--route));
-  stroke: color-mix(in srgb, var(--on-ground) 64%, var(--route));
+  fill: color-mix(in srgb, var(--brand) 26%, transparent);
+  stroke: var(--brand);
   opacity: 1;
 }
 .story-portrait .coverage-dot { fill: var(--hero-orange); }
@@ -6211,7 +6212,7 @@ select { caret-color: var(--route-strong); }
 .story-portrait .coverage-pin-label,
 .story-portrait .coverage-count { color: var(--on-ground); fill: var(--on-ground); }
 .story-portrait .coverage-names {
-  color: color-mix(in srgb, var(--on-ground) 70%, var(--route));
+  color: color-mix(in srgb, var(--on-ground) 70%, var(--ink));
   font-size: 0.8125rem;
 }
 
@@ -6227,7 +6228,7 @@ select { caret-color: var(--route-strong); }
   margin: 0;
   max-width: 15ch;
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 4.8rem);
   font-weight: 590;
   line-height: 0.98;
@@ -6248,7 +6249,7 @@ select { caret-color: var(--route-strong); }
 
 .story-chapter-country {
   color: var(--ink);
-  background: var(--route-soft);
+  background: var(--accent-soft);
 }
 .story-chapter-country .story-heading { color: var(--ink); }
 .story-chapter-country .story-prose p { color: var(--muted); }
@@ -6262,11 +6263,11 @@ select { caret-color: var(--route-strong); }
 .story-stats {
   padding: clamp(10px, 2vw, 24px) 0 0;
 }
-.story-stats div { padding: 24px 0; border-top-color: var(--route-line); }
-.story-stats div:last-child { border-bottom-color: var(--route-line); }
+.story-stats div { padding: 24px 0; border-top-color: var(--line-strong); }
+.story-stats div:last-child { border-bottom-color: var(--line-strong); }
 .story-stats dt {
-  color: var(--route-strong);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 690;
   letter-spacing: -0.035em;
@@ -6279,13 +6280,13 @@ select { caret-color: var(--route-strong); }
 .story-throughline {
   overflow: hidden;
   padding-block: clamp(84px, 10vw, 132px);
-  background: var(--route-strong);
+  background: var(--brand);
 }
 .story-throughline-line {
   max-width: 18ch;
   margin: 0;
-  color: var(--on-ground);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 5.1rem);
   font-weight: 560;
   letter-spacing: -0.04em;
@@ -6293,7 +6294,7 @@ select { caret-color: var(--route-strong); }
   text-wrap: balance;
 }
 .story-throughline-line em {
-  color: var(--on-band);
+  color: var(--ink);
   font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-style: italic;
   font-weight: 430;
@@ -6305,21 +6306,21 @@ select { caret-color: var(--route-strong); }
   grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1fr);
   gap: 42px;
   padding: 28px 0 28px 56px;
-  border-top-color: var(--route-line);
+  border-top-color: var(--line-strong);
 }
 .story-pillars li::before {
   content: counter(list-item, decimal-leading-zero);
   position: absolute;
   top: 31px;
   left: 0;
-  color: var(--route-strong);
+  color: var(--ink);
   font-size: 0.75rem;
   font-weight: 760;
   font-variant-numeric: tabular-nums;
 }
 .story-pillars h3 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.2rem, 2vw, 1.55rem);
   font-weight: 650;
   letter-spacing: -0.025em;
@@ -6328,55 +6329,55 @@ select { caret-color: var(--route-strong); }
 
 .story-register {
   padding-block: clamp(88px, 10vw, 132px);
-  background: var(--route-soft);
+  background: var(--accent-soft);
 }
 .story-register-grid { gap: clamp(54px, 9vw, 120px); }
 .story-register input,
 .story-register select,
 .story-register textarea {
-  border-color: var(--route-line);
+  border-color: var(--line-strong);
   border-radius: 12px;
   background: var(--surface-raised);
 }
 
 .story-join {
-  background: var(--route-strong);
+  background: var(--accent-soft);
 }
-.story-join .story-heading { color: var(--on-ground); }
-.story-join-copy { color: color-mix(in srgb, var(--on-ground) 74%, var(--route)); }
+.story-join .story-heading { color: var(--ink); }
+.story-join-copy { color: var(--muted); }
 .story-join-link {
-  border-color: var(--on-ground);
-  color: var(--route-strong);
-  background: var(--on-ground);
+  border-color: var(--ink);
+  color: var(--paper);
+  background: var(--ink);
 }
 
 @media (hover: hover) {
   .story-join-link:hover {
-    color: var(--route-strong);
-    background: var(--route-soft);
+    color: var(--paper);
+    background: color-mix(in srgb, var(--ink) 86%, var(--paper));
   }
 }
 
 .story-join-link:focus-visible {
-  color: var(--route-strong);
-  background: var(--route-soft);
+  color: var(--ink);
+  background: var(--accent-soft);
 }
 
 .story-approach {
-  border-top-color: var(--route-line);
+  border-top-color: var(--line-strong);
   background: var(--paper);
 }
 .story-approach-link {
-  border-color: var(--route-line);
+  border-color: var(--line-strong);
   border-radius: 12px;
-  color: var(--route-strong);
-  background: var(--route-soft);
+  color: var(--ink);
+  background: var(--accent-soft);
 }
 
 /* Finder: the same route language inside a fixed app shell ---------------- */
 .care-app.patient-v2 {
   --stage-progress: 12%;
-  background: var(--route-strong);
+  background: var(--ink);
 }
 .care-app.patient-v2[data-stage="scenarios"] { --stage-progress: 23%; }
 .care-app.patient-v2[data-stage="listening"] { --stage-progress: 34%; }
@@ -6411,8 +6412,8 @@ select { caret-color: var(--route-strong); }
     to right,
     var(--accent) 0,
     var(--accent) var(--stage-progress),
-    var(--route-line) var(--stage-progress),
-    var(--route-line) 100%
+    var(--line-strong) var(--stage-progress),
+    var(--line-strong) 100%
   );
 }
 
@@ -6438,13 +6439,13 @@ select { caret-color: var(--route-strong); }
   letter-spacing: -0.04em;
 }
 .patient-v2 .voice-screen .voice-prompt h1 em {
-  color: var(--route-strong);
+  color: var(--ink);
   font-weight: 440;
 }
 
 .patient-v2 .voice-actions .dual-input {
   min-height: 66px;
-  border: 1px solid var(--route-line);
+  border: 1px solid var(--line-strong);
   border-radius: 16px;
   background: var(--surface-raised);
   box-shadow: 0 12px 34px color-mix(in srgb, var(--hero-dusk) 9%, transparent);
@@ -6456,7 +6457,7 @@ select { caret-color: var(--route-strong); }
 .patient-v2 .voice-actions .dual-input:focus-within {
   border-color: var(--route);
   box-shadow:
-    0 0 0 4px var(--route-soft),
+    0 0 0 4px var(--accent-soft),
     0 16px 40px color-mix(in srgb, var(--hero-dusk) 12%, transparent);
 }
 .patient-v2 .voice-actions .dual-input-field { color: var(--ink); }
@@ -6468,14 +6469,14 @@ select { caret-color: var(--route-strong); }
   box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 24%, transparent);
 }
 .patient-v2 .scenario-toggle,
-.patient-v2 .text-action { color: var(--route-strong); }
+.patient-v2 .text-action { color: var(--ink); }
 
 .patient-v2 .finder-context p { color: var(--muted); }
 
 .patient-v2 .scenario-quote {
-  border-color: var(--route-line);
+  border-color: var(--line-strong);
   border-radius: 14px;
-  background: var(--route-soft);
+  background: var(--accent-soft);
   /* O233: the tinted panel used to run to the bottom of the stage, because the stage's own
      bottom padding (the room the tab bar takes) fell INSIDE it — two lines of small print in a
      block half a screen tall. It sizes to its sentence now and the stage keeps its clearance. */
@@ -6492,7 +6493,7 @@ select { caret-color: var(--route-strong); }
    `.patient-v2`'s own size steps) applies as it does to the type screen. */
 .patient-v2 .profile-content h1 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-weight: 590;
   letter-spacing: -0.035em;
 }
@@ -6512,14 +6513,14 @@ select { caret-color: var(--route-strong); }
   text-wrap: balance;
 }
 .patient-v2 .type-content textarea {
-  border-color: var(--route-line);
+  border-color: var(--line-strong);
   border-radius: 14px;
   color: var(--ink);
   background: var(--surface-raised);
 }
 .patient-v2 .type-content textarea:focus-visible {
   border-color: var(--route);
-  outline: 3px solid var(--route-soft);
+  outline: 3px solid var(--accent-soft);
 }
 
 .patient-v2 .primary-button,
@@ -6539,9 +6540,9 @@ select { caret-color: var(--route-strong); }
   }
 }
 
-.patient-v2 .clinician-list { border-top-color: var(--route-line); }
+.patient-v2 .clinician-list { border-top-color: var(--line-strong); }
 .patient-v2 .clinician-row {
-  border-bottom-color: var(--route-line);
+  border-bottom-color: var(--line-strong);
   background: transparent;
   transition:
     background-color var(--dur-move) var(--ease-ui),
@@ -6549,7 +6550,7 @@ select { caret-color: var(--route-strong); }
 }
 @media (hover: hover) {
   .patient-v2 .clinician-row:hover {
-    background: var(--route-soft);
+    background: var(--accent-soft);
     transform: translateX(4px);
   }
   /* U9: the hovered tint costs the quietest line its margin — --faint on --route-soft is
@@ -6562,11 +6563,11 @@ select { caret-color: var(--route-strong); }
 .patient-v2 .clinician-row img,
 .patient-v2 .profile-portrait,
 .patient-v2 .profile-portrait img { border-radius: 14px; }
-.patient-v2 .availability { color: var(--route-strong); }
+.patient-v2 .availability { color: var(--ink); }
 
 .patient-v2 .profile-content section,
 .patient-v2 .profile-facts li,
-.patient-v2 .profile-footer { border-color: var(--route-line); }
+.patient-v2 .profile-footer { border-color: var(--line-strong); }
 .patient-v2 .profile-footer {
   background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(18px);
@@ -6577,31 +6578,31 @@ select { caret-color: var(--route-strong); }
   --cv2-ink: var(--ink);
   --cv2-muted: var(--muted);
   --cv2-on-dark-muted: color-mix(in srgb, var(--on-ground) 76%, var(--route));
-  --cv2-soft: var(--route-soft);
+  --cv2-soft: var(--accent-soft);
   --cv2-accent: var(--accent);
-  --cv2-ground: var(--route-strong);
-  --cv2-line: var(--route-line);
-  background: var(--route-soft);
+  --cv2-ground: var(--ink);
+  --cv2-line: var(--line-strong);
+  background: var(--accent-soft);
 }
 .cv2-shell {
-  border-color: var(--route-line);
+  border-color: var(--line-strong);
   background: var(--paper);
   box-shadow: var(--shadow-ambient);
 }
 .cv2-header {
-  border-bottom-color: var(--route-line);
+  border-bottom-color: var(--line-strong);
   background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(16px);
 }
 .cv2-progress > span,
 .cv2-progress > div { color: var(--muted); }
-.cv2-progress button::after { border-color: var(--route-line); background: var(--paper); }
+.cv2-progress button::after { border-color: var(--line-strong); background: var(--paper); }
 .cv2-progress button.is-complete::after,
-.cv2-progress button.is-current::after { border-color: var(--route-strong); background: var(--route-strong); }
+.cv2-progress button.is-current::after { border-color: var(--ink); background: var(--ink); }
 .cv2-intro h1,
 .cv2-learning-body h2 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-weight: 610;
   letter-spacing: -0.035em;
 }
@@ -6619,15 +6620,15 @@ select { caret-color: var(--route-strong); }
 .cv2-case-list,
 .cv2-resource-progress,
 .cv2-practice-hero {
-  border-color: var(--route-line);
+  border-color: var(--line-strong);
   border-radius: 14px;
   background: var(--surface-raised);
 }
-.cv2-condition-list label { border-color: var(--route-line); border-radius: 12px; }
+.cv2-condition-list label { border-color: var(--line-strong); border-radius: 12px; }
 .cv2-condition-list label:focus-within,
 .cv2-condition-list label.is-checked {
-  border-color: var(--route);
-  background: var(--route-soft);
+  border-color: var(--accent-mid);
+  background: var(--accent-soft);
 }
 .cv2-action > button,
 .cv2-learning-card > button,
@@ -6636,7 +6637,7 @@ select { caret-color: var(--route-strong); }
   background: var(--accent);
 }
 .cv2-case-hero,
-.cv2-learning-card { border-radius: 14px; background: var(--route-strong); }
+.cv2-learning-card { border-radius: 14px; background: var(--ink); }
 
 /* Utility states and global overlays ------------------------------------- */
 .notfound-screen {
@@ -6648,7 +6649,7 @@ select { caret-color: var(--route-strong); }
 .notfound-code { color: var(--accent); font-variant-numeric: tabular-nums; }
 .notfound-screen h1 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.7rem, 7vw, 5.5rem);
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -6685,7 +6686,7 @@ select { caret-color: var(--route-strong); }
 }
 .consent-read { border-color: color-mix(in srgb, var(--on-ground) 36%, transparent); border-radius: 10px; }
 .consent-dialog {
-  border: 1px solid var(--route-line);
+  border: 1px solid var(--line-strong);
   border-radius: 16px;
   color: var(--ink);
   background: var(--paper);
@@ -6697,7 +6698,7 @@ select { caret-color: var(--route-strong); }
 .story-footer {
   position: relative;
   color: var(--on-ground);
-  background-color: var(--route-strong);
+  background-color: var(--ink);
   background-image: none;
 }
 .site-footer { padding: 64px max(24px, var(--safe-right)) 72px max(24px, var(--safe-left)); }
@@ -6713,14 +6714,14 @@ select { caret-color: var(--route-strong); }
 .site-footer-brand p {
   max-width: 28ch;
   margin: 0;
-  color: color-mix(in srgb, var(--on-ground) 68%, var(--route));
+  color: color-mix(in srgb, var(--on-ground) 68%, var(--ink));
   font-size: 0.875rem;
   line-height: 1.55;
 }
 .site-footer-wordmark,
 .story-footer-wordmark {
   color: var(--on-ground);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 1.3rem;
   font-weight: 760;
   letter-spacing: -0.045em;
@@ -6728,7 +6729,7 @@ select { caret-color: var(--route-strong); }
 .site-footer nav { justify-self: end; }
 .site-footer ul { justify-content: flex-end; gap: 10px 24px; }
 .site-footer a,
-.story-footer-links a { color: color-mix(in srgb, var(--on-ground) 78%, var(--route)); }
+.story-footer-links a { color: color-mix(in srgb, var(--on-ground) 78%, var(--ink)); }
 @media (hover: hover) {
   .site-footer a:hover,
   .story-footer-links a:hover { color: var(--on-ground); }
@@ -7267,7 +7268,7 @@ select { caret-color: var(--route-strong); }
 
 .console-main h1 {
   color: var(--ink);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.35rem);
   font-weight: 620;
   letter-spacing: -0.04em;
@@ -7891,7 +7892,7 @@ select { caret-color: var(--route-strong); }
   height: 300px;
   width: 100%;
   background: var(--stone);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   isolation: isolate;
 }
 
@@ -8000,7 +8001,7 @@ select { caret-color: var(--route-strong); }
   border-top-left-radius: 8px;
   background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
   color: var(--muted);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
 }
 
@@ -8934,7 +8935,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .listen-eyebrow {
   margin: 0 0 10px;
   color: var(--route-strong);
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -10004,16 +10005,19 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
    Chroma against the first cut of this palette: oat 4% → 36%, slate 15% → 80%, lilac 34% → 54%.
    The pale three were what made a colourful stack read grey. */
 .me-screen.learn-screen {
-  --learn-amber:   #ffa000;  --learn-amber-ink:   #2b1600;  --learn-amber-sub:   #4d2900;  --learn-amber-deep:   #8a5100;
-  --learn-saffron: #ffd21f;  --learn-saffron-ink: #2e2400;  --learn-saffron-sub: #544000;  --learn-saffron-deep: #7d5c00;
-  --learn-coral:   #fb5a1f;  --learn-coral-ink:   #2e0c00;  --learn-coral-sub:   #401200;  --learn-coral-deep:   #b83a10;
-  --learn-oat:     #ffc9a3;  --learn-oat-ink:     #3b1c05;  --learn-oat-sub:     #63300f;  --learn-oat-deep:     #8a4a1c;
-  --learn-lilac:   #a970f5;  --learn-lilac-ink:   #25054c;  --learn-lilac-sub:   #330a66;  --learn-lilac-deep:   #6d28c4;
-  --learn-forest:  #00794a;  --learn-forest-ink:  #ffffff;  --learn-forest-sub:  #e9fff5;  --learn-forest-deep:  #0a7048;
-  --learn-slate:   #15596b;  --learn-slate-ink:   #ffffff;  --learn-slate-sub:   #e3f6fc;  --learn-slate-deep:   #0f5566;
+  /* Yellow scheme: the covers are the reference's pastel cards, each hue kept as a tint under
+     ink, so the library stays quiet beside the yellow header and the colour lives inside the
+     module. The deep values are unchanged: they paint the stages, not the covers. */
+  --learn-amber:   #ffe2a6;  --learn-amber-ink:   #2b1600;  --learn-amber-sub:   #4d2900;  --learn-amber-deep:   #8a5100;
+  --learn-saffron: #fff0a8;  --learn-saffron-ink: #2e2400;  --learn-saffron-sub: #544000;  --learn-saffron-deep: #7d5c00;
+  --learn-coral:   #ffd3c2;  --learn-coral-ink:   #2e0c00;  --learn-coral-sub:   #401200;  --learn-coral-deep:   #b83a10;
+  --learn-oat:     #f7e1cc;  --learn-oat-ink:     #3b1c05;  --learn-oat-sub:     #63300f;  --learn-oat-deep:     #8a4a1c;
+  --learn-lilac:   #e7ddfa;  --learn-lilac-ink:   #25054c;  --learn-lilac-sub:   #330a66;  --learn-lilac-deep:   #6d28c4;
+  --learn-forest:  #d5e9dd;  --learn-forest-ink:  #0b3a25;  --learn-forest-sub:  #1f5a3f;  --learn-forest-deep:  #0a7048;
+  --learn-slate:   #d6e6ec;  --learn-slate-ink:   #0f3a48;  --learn-slate-sub:   #235566;  --learn-slate-deep:   #0f5566;
   /* Night is the mockup's eighth. It sat unused while there were seven modules; there are
      twenty-seven now, so the ramp needs its second dark card. */
-  --learn-night:   #2f2a7a;  --learn-night-ink:   #ffffff;  --learn-night-sub:   #e7e5fb;  --learn-night-deep:   #2f2a7a;
+  --learn-night:   #dedcf3;  --learn-night-ink:   #22205a;  --learn-night-sub:   #3d3a86;  --learn-night-deep:   #2f2a7a;
 }
 .learn-tagline { margin: 0 0 12px; color: var(--muted); font-size: 0.8125rem; font-weight: 500; line-height: 1.45; }
 .learn-chips {
@@ -10090,7 +10094,7 @@ main:not(.console-main) h1 {
   text-wrap: balance;
 }
 main:not(.console-main) h2 {
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.15;
@@ -10098,7 +10102,7 @@ main:not(.console-main) h2 {
 }
 main:not(.console-main) h3,
 main:not(.console-main) h4 {
-  font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -10108,7 +10112,7 @@ main:not(.console-main) li,
 main:not(.console-main) dd { line-height: 1.55; }
 /* The learn tab's line under its header is the page's h1 for the outline's sake; it reads as a
    line, in the sans, as drawn. The results list heading keeps its own weight. */
-main h1.learn-thesis { font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 500; letter-spacing: 0; line-height: 1.45; text-wrap: pretty; }
+main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; font-weight: 500; letter-spacing: 0; line-height: 1.45; text-wrap: pretty; }
 .results-list-head h2 { letter-spacing: -0.02em; }
 
 /* The desktop: the shell is a desk-width app, not a phone in the middle of a screen. */

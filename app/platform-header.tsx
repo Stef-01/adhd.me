@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AppTabs } from "./app-tabs";
 import { AppSettings } from "./app-settings";
+import { BrandMark } from "./brand-wordmark";
 
 /**
  * The same navigation stays mounted across the three patient destinations.
@@ -16,7 +17,7 @@ import { AppSettings } from "./app-settings";
 export function PlatformHeader() {
   return <header className="platform-header">
     <Link className="platform-brand" href="/" aria-label="ADHD.ME, home" translate="no">
-      <span>ADHD.ME</span>
+      <BrandMark />
     </Link>
     <AppTabs />
     <div className="platform-utilities">

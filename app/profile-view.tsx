@@ -48,6 +48,7 @@ import { resolvePlace, suggestPlaces } from "@/geo/suburbs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { PROFESSION_ENTRIES, type Profession } from "@/support/professions";
 import { AppSettings } from "./app-settings";
+import { BrandMark } from "./brand-wordmark";
 
 /** The switch rows, in the order a person reads them: who, how, then what the rooms have. */
 const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: string }> = [
@@ -160,7 +161,7 @@ export function ProfileView() {
           is a screen a person can be lost on. The settings control sits here for the same reason
           it sits on the finder: one place, every surface. */}
       <div className="minimal-header has-settings me-chrome">
-        <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no">ADHD.ME</Link>
+        <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no"><BrandMark /></Link>
         <AppSettings />
       </div>
       {/* RADIANT: the founder's filter screen — the eyebrow and Reset all on one row, the title

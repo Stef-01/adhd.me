@@ -11,7 +11,7 @@ import { AGE_GROUP_LABELS, COMORBIDITY_LABELS, MANNER_LABELS, PACE_LABELS, PHILO
 import type { Comorbidity } from "@/lib/matching/types";
 import { gpPublicView } from "@/lib/matching/views";
 import { ROBOTS_META } from "@/security/robots";
-import { Badges, Portrait } from "../../match/gp-bits";
+import { Badges, Portrait } from "../../../match/gp-bits";
 
 export const dynamic = "force-dynamic";
 
@@ -33,8 +33,10 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
   const view = gpPublicView(gp);
   const manner = view.communicationStyle.map((m) => MANNER_LABELS[m as keyof typeof MANNER_LABELS] ?? m);
 
+  // Inside the app group: the shell, the yellow header and the tabs come from the group's layout,
+  // so a GP's page is one screen of the same app rather than a bare document with no way home.
   return (
-    <div className="platform-shell">
+    <>
       <main id="main-content" className="me-screen life-screen match-screen">
         <header className="match-profile-head">
           <Portrait gp={view} />
@@ -166,6 +168,6 @@ export default async function GPProfilePage({ params }: { params: Promise<{ id: 
           <Link href="/">Search the finder</Link>
         </div>
       </main>
-    </div>
+    </>
   );
 }
