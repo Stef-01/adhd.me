@@ -217,3 +217,6 @@
   .bedroom-game:is([data-mode="rest"],[data-mode="complete"]) .bedroom-caption p { display: none; }
   .bedroom-game:is([data-mode="rest"],[data-mode="complete"]) .bedroom-caption h1 { margin-bottom: 15px; }
 }
+/* At 320 the phone's label ("Put phone away", 93px) is wider than the prop and sat 4px past the
+   screen's right edge; the prop steps in so its label stays on screen. */
+@media (max-width: 359px) { .bedroom-phone { right: 30px; } }
