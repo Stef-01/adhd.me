@@ -9,6 +9,8 @@
 // tree's own record, because no browser error intake exists and U4 chose not to invent one.
 import { useEffect } from "react";
 import { BOUNDARY_COPY } from "@/compliance/boundary-copy";
+import { PublicHeader } from "./public-header";
+import { SiteFooter } from "./site-footer";
 
 const COPY = BOUNDARY_COPY.route;
 
@@ -17,14 +19,22 @@ export default function RouteError({ error, reset }: { error: Error & { digest?:
     console.error(error);
   }, [error]);
 
+  // The same header and footer as the 404, so a page that failed still says whose page it was
+  // and where the exits are.
   return (
-    <main id="main-content" className="notfound-screen">
-      <h1>{COPY.heading}</h1>
-      <p className="notfound-copy">{COPY.body}</p>
-      <div className="notfound-doors">
-        <button type="button" className="notfound-primary" onClick={reset}>{COPY.retry}</button>
-        <a className="notfound-secondary" href="/">{COPY.home}</a>
-      </div>
-    </main>
+    <>
+    <PublicHeader />
+    <div className="prose-screen">
+      <main id="main-content" className="notfound-screen">
+        <h1>{COPY.heading}</h1>
+        <p className="notfound-copy">{COPY.body}</p>
+        <div className="notfound-doors">
+          <button type="button" className="notfound-primary" onClick={reset}>{COPY.retry}</button>
+          <a className="notfound-secondary" href="/">{COPY.home}</a>
+        </div>
+      </main>
+      <SiteFooter />
+    </div>
+    </>
   );
 }

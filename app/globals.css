@@ -6647,6 +6647,10 @@ select { caret-color: var(--route-strong); }
   padding: 72px 32px 120px;
 }
 .notfound-code { color: var(--accent); font-variant-numeric: tabular-nums; }
+/* Under the public header and above the footer, the screen is the column's flexible middle rather
+   than a viewport of its own: the copy still sits at the eye's height, and the footer still
+   reaches the bottom of a short page. */
+.prose-screen > .notfound-screen { flex: 1; min-height: 0; padding: 72px 24px 120px; }
 .notfound-screen h1 {
   color: var(--ink);
   font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
