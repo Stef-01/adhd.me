@@ -56,12 +56,34 @@
 .platform-shell .results-summary-words { min-height: 60px; padding: 14px 20px; border: 0; border-radius: 12px; }
 .platform-shell .results-summary-text { font-size: 16px; line-height: 1.5; }
 .platform-shell .results-head h1 { max-width: 32ch; margin: 24px 0 4px; font-size: clamp(24px, 3vw, 34px); line-height: 1.25; letter-spacing: -.025em; text-wrap: balance; }
-.platform-shell .results-screen .filter-strip { margin: 18px 0 0; padding: 4px 0 16px; gap: 8px; flex-wrap: wrap; overflow: visible; }
-.platform-shell .results-screen .filter-chips { min-width: 0; flex-wrap: wrap; gap: 8px; }
-.platform-shell .results-screen .filter-chip { min-height: 44px; padding: 10px 16px; font-size: 13px; box-shadow: none; background: transparent; border-color: var(--line-strong); }
+/* The strip: the kind of support first, then every yes/no filter, the Filters door, and Clear at
+   the end. One row that wraps on a desk and scrolls sideways on a phone, so three rows of chips
+   never push the first result under the fold. A pressed filter is the ink pill (DESIGN.md), and
+   the kind pill fills the same way once a kind is picked, because it is a filter that is on. */
+.platform-shell .results-screen .filter-strip { display: flex; align-items: center; gap: 8px; margin: 16px 0 0; padding: 0 0 14px; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; overflow: visible; }
+.platform-shell .results-screen .filter-chips { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; gap: 8px; }
+.platform-shell .results-screen .filter-chips > li { flex: none; display: flex; }
+.platform-shell .results-screen .filter-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 10px 16px; font-size: 13px; font-weight: 600; box-shadow: none; background: transparent; border-color: var(--line-strong); color: var(--ink); white-space: nowrap; }
 .platform-shell .results-screen .filter-chip::after { inset: 0; }
-.platform-shell .results-screen .filter-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-deep); }
-.platform-shell .results-screen .results-list-head { padding: 28px 0 20px; gap: 16px; align-items: center; flex-wrap: wrap; }
+.platform-shell .results-screen .filter-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); box-shadow: none; }
+.platform-shell .results-screen .filter-chip-count { background: var(--accent-tint); color: var(--ink); }
+.platform-shell .results-screen .filter-clear { flex: none; margin-left: auto; min-height: 44px; padding: 0 12px; color: var(--ink); font-size: 13px; font-weight: 600; }
+.platform-shell .finder-profession { position: relative; width: auto; }
+.platform-shell .finder-profession select { height: 44px; max-width: min(56vw, 260px); padding: 0 34px 0 16px; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--ink); font: inherit; font-size: 13px; font-weight: 600; line-height: 1; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; transition: border-color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui); }
+.platform-shell .finder-profession select[data-on="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.platform-shell .finder-profession [data-slot="native-select-icon"] { right: 12px; width: 14px; height: 14px; color: var(--muted); }
+.platform-shell .finder-profession select[data-on="true"] + [data-slot="native-select-icon"] { color: var(--paper); }
+.platform-shell .finder-profession select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) { .platform-shell .finder-profession select:not([data-on="true"]):hover { border-color: var(--accent-mid); } }
+/* The empty list: a callout, one hairline and the paper, flush with the strip it answers. The ways
+   out are chips because they are filters: tapping one drops that filter and nothing else. */
+.platform-shell .results-empty { margin: 20px 0 0; padding: 22px 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-raised); }
+.platform-shell .results-empty-lead { margin-bottom: 8px; font-size: 17px; }
+.platform-shell .results-empty-ways { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; padding: 0; list-style: none; }
+.platform-shell .results-empty-ways .filter-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 10px 14px; font-size: 13px; font-weight: 600; box-shadow: none; border-color: var(--line-strong); background: transparent; color: var(--ink); }
+.platform-shell .results-empty-ways .filter-chip-count { background: var(--accent-tint); color: var(--ink); }
+.platform-shell .results-empty-detail { margin-bottom: 16px; }
+.platform-shell .results-screen .results-list-head { padding: 24px 0 18px; gap: 16px; align-items: center; flex-wrap: wrap; }
 .platform-shell .results-screen .results-list-head h2 { font-family: inherit; font-size: 24px; font-weight: 700; margin: 0; }
 .platform-shell .results-screen .results-list-head h2 em { font-style: normal; color: inherit; font-weight: inherit; }
 .platform-shell .results-list-tools { gap: 14px; flex-wrap: wrap; }
@@ -89,7 +111,12 @@
 @media (max-width: 699px) {
   .platform-shell .patient-v2 .results-screen { padding-top: 4px; }
   .platform-shell .results-summary-words { min-height: 54px; padding: 12px; }
-  .platform-shell .results-screen .filter-strip { margin-top: 12px; padding-bottom: 12px; }
+  /* The strip bleeds to the screen's edges and the chips scroll under them: a chip cut at the
+     edge is the affordance. Clear stays put at the row's end. */
+  .platform-shell .results-screen .filter-strip { margin: 12px calc(-1 * var(--shell-gutter)) 0; padding-bottom: 12px; }
+  .platform-shell .results-screen .filter-chips { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-padding-inline: var(--shell-gutter); scrollbar-width: none; padding: 2px var(--shell-gutter); }
+  .platform-shell .results-screen .filter-chips::-webkit-scrollbar { display: none; }
+  .platform-shell .results-screen .filter-clear { margin-right: var(--shell-gutter); }
   .platform-shell .results-screen .results-list-head { padding: 20px 0 12px; gap: 4px 12px; }
   .platform-shell .results-screen .results-list-head h2 { font-size: 21px; }
   .platform-shell .results-list-tools { gap: 10px; }
@@ -98,14 +125,7 @@
   .platform-shell .patient-v2 .results-browser .clinician-row strong { font-size: 18px; }
   .platform-shell .patient-v2 .results-browser .row-focus { font-size: 13px; }
 }
-.platform-shell .finder-professions { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 16px 0; border-block: 1px solid var(--line); }
-.platform-shell .finder-profession-label { color: var(--muted); font-size: 14px; font-weight: 550; }
-.platform-shell .finder-profession { position: relative; width: min(100%, 320px); }
-.platform-shell .finder-profession select { width: 100%; height: 48px; border: 1px solid var(--line-strong); border-radius: 12px; padding: 10px 40px 10px 14px; color: var(--ink); background: var(--paper); line-height: 1.5; font-weight: 550; font-family: inherit; font-size: 16px; text-overflow: ellipsis; }
-.platform-shell .finder-profession select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.platform-shell .finder-profession [data-slot="native-select-icon"] { right: 14px; width: 16px; height: 16px; color: var(--muted); }
 .platform-shell .finder-count-number { color: inherit; letter-spacing: inherit; }
-@media (max-width: 699px) { .platform-shell .finder-profession { flex: 1 1 100%; width: 100%; } }
 .platform-shell .results-summary-text { font-family: "Inter Variable", Inter, sans-serif; }
 .platform-shell .patient-v2 .results-browser .clinician-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
 

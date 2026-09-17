@@ -16,6 +16,7 @@ import {
   type MatchQuality,
 } from "@/demo/clinicians";
 import { type Clarifier } from "@/matching/clarify";
+import { type WayOut } from "@/finder/pipeline";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import Link from "next/link";
@@ -69,6 +70,9 @@ export function ResultsStage({
   careKinds,
   onPickKind,
   fitFor,
+  waysOut,
+  onRelax,
+  emptyKind,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -104,9 +108,14 @@ export function ResultsStage({
   onPickKind: (id: Profession | null) => void;
   /** PRD §42: the problem-fit sentence for an allied provider, from the personal model, or null. */
   fitFor?: (clinician: Clinician) => string | null;
+  /** The ways out of an empty list: one held filter dropped, and how many that brings back. Most first. */
+  waysOut: readonly WayOut[];
+  onRelax: (next: Filters) => void;
+  /** With no filter on, the kind the sentence named and the listing lacks ("dietitians"), or null. */
+  emptyKind: string | null;
 }) {
-  /** The filters the chips cannot show — a language, a distance, a way of working — as a count on the Filters pill. */
-  const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length;
+  /** The filters the strip cannot show — a language, a distance, a way of working — as a count on the Filters pill. The kind has its own pill. */
+  const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length - (filters.professions.length > 0 ? 1 : 0);
   /** The kind the band has narrowed to, if any — the heading has to say what the list is. */
   const pickedKind = filters.professions.length === 1 ? careKinds.find((k) => k.id === filters.professions[0])?.plural ?? null : null;
   // U9: the one live line this screen owns. The status paragraphs below used to be five separate
@@ -228,6 +237,21 @@ export function ResultsStage({
           here and can be cleared here, exactly as the grey strip promised. */}
       <div className="filter-strip" role="group" aria-label="Your filters">
         <ul className="filter-chips">
+          {/* The kind of support first: it is the biggest lever on the list, and the only pill that
+              is a choice rather than a switch. Its own text is its label; the select is named for
+              a reader. Filled like a pressed chip when a kind is picked, because it is a filter on. */}
+          {careKinds.length > 1 && (
+            <li>
+              <NativeSelect id="provider-profession" className="finder-profession" aria-label="Provider type"
+                data-on={filters.professions.length > 0 ? "true" : undefined}
+                value={filters.professions.length > 1 ? "multiple" : filters.professions[0] ?? ""}
+                onChange={event => onPickKind((event.target.value || null) as Profession | null)}>
+                <NativeSelectOption value="">All provider types</NativeSelectOption>
+                {filters.professions.length > 1 && <NativeSelectOption value="multiple" disabled>{filters.professions.length} provider types selected</NativeSelectOption>}
+                {careKinds.map(kind => <NativeSelectOption key={kind.id} value={kind.id}>{kind.plural.charAt(0).toUpperCase() + kind.plural.slice(1)}</NativeSelectOption>)}
+              </NativeSelect>
+            </li>
+          )}
           {BOOLEAN_FILTER_KEYS.map((key) => (
             <li key={key}>
               <button type="button" className="filter-chip" aria-pressed={filters[key]} onClick={() => onToggleFilter(key)}>
@@ -248,34 +272,44 @@ export function ResultsStage({
         )}
       </div>
 
-      {careKinds.length > 1 && (
-        <div className="finder-professions">
-          <label className="finder-profession-label" htmlFor="provider-profession">Provider type</label>
-          <NativeSelect id="provider-profession" className="finder-profession" aria-label="Provider type"
-            value={filters.professions.length > 1 ? "multiple" : filters.professions[0] ?? ""}
-            onChange={event => onPickKind((event.target.value || null) as Profession | null)}>
-            <NativeSelectOption value="">All provider types</NativeSelectOption>
-            {filters.professions.length > 1 && <NativeSelectOption value="multiple" disabled>{filters.professions.length} provider types selected</NativeSelectOption>}
-            {careKinds.map(kind => <NativeSelectOption key={kind.id} value={kind.id}>{kind.plural.charAt(0).toUpperCase() + kind.plural.slice(1)}</NativeSelectOption>)}
-          </NativeSelect>
-        </div>
-      )}
       {((filters.careNeeds?.length ?? 0) > 0 || (filters.clinicianIdentity && filters.clinicianIdentity !== "any") || filters.country) && <details className="finder-care-summary"><summary>Care in this search ({(filters.careNeeds?.length ?? 0) + Number(!!filters.clinicianIdentity && filters.clinicianIdentity !== "any") + Number(!!filters.country)})</summary><ul>{filterLabels.filter(label => [...Object.values(CARE_NEEDS), ...Object.values(IDENTITY_LABELS)].some(value => value === label) || label.startsWith("Country:")).map(label => <li key={label}>{label}</li>)}</ul><button type="button" className="filter-clear" onClick={onRefine}>Change search</button> · <Link href="/profile">Saved preferences</Link></details>}
       {/* O234, AR24 kind `no-results`: the roster was ranked and the filters left nobody. The
           sentence names the filters as the cause, because that is the one thing the person can
           change, and both ways out are on the screen. */}
+      {/* The lead names what emptied the list — the filters, or the kind the sentence asked for
+          and the listing lacks — and the ways out are specific: each is one held filter dropped,
+          with the count that tap brings back, so nobody has to guess which filter did it. */}
       {empty && (
         <div className="results-empty">
-          <p className="results-empty-lead">No listed provider answers every filter you set.</p>
-          {(filters.clinicianIdentity !== "any" && filters.clinicianIdentity || filters.country) && <a href="https://www.naccho.org.au/location/" target="_blank" rel="noopener noreferrer">Find a community-controlled health service ↗</a>}
-          <p className="results-empty-detail">
-            {filterLabels.length > 0
-              ? "Loosening one filter usually brings the list back."
-              : "Try a different suburb, or change the filters on your profile."}
+          <p className="results-empty-lead">
+            {filterLabels.length > 0 ? "No listed provider answers every filter you set." : emptyKind ? `No listed ${emptyKind} yet.` : "Nothing listed yet."}
           </p>
+          {(filters.clinicianIdentity !== "any" && filters.clinicianIdentity || filters.country) && <a href="https://www.naccho.org.au/location/" target="_blank" rel="noopener noreferrer">Find a community-controlled health service ↗</a>}
+          {waysOut.length > 0 ? (
+            <ul className="results-empty-ways" aria-label="Ways out">
+              {waysOut.slice(0, 3).map((way) => (
+                <li key={way.label}>
+                  <button type="button" className="filter-chip" onClick={() => onRelax(way.filters)}>
+                    Without {way.label}
+                    <span className="filter-chip-count">{way.count}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="results-empty-detail">
+              {filterLabels.length > 0 ? "Clearing the filters brings the list back." : emptyKind ? "Another kind of support may be listed." : "Try a different suburb."}
+            </p>
+          )}
           <div className="results-empty-actions">
-            <button className="me-primary" type="button" onClick={onClearFilters}>Clear the filters</button>
-            <Link className="results-empty-edit" href="/profile">Change them</Link>
+            {filterLabels.length > 0 ? (
+              <>
+                <button className="me-primary" type="button" onClick={onClearFilters}>Clear the filters</button>
+                <Link className="results-empty-edit" href="/profile">Change them</Link>
+              </>
+            ) : (
+              <button className="me-primary" type="button" onClick={onRefine}>Change what you said</button>
+            )}
           </div>
         </div>
       )}
@@ -401,13 +435,17 @@ export function ResultsStage({
       <div className="clinician-list" ref={list}>
         {/* O52: the re-sort, made visible. A clarifier answer re-ranks this list, and the
             order changing is the product's whole argument, so rows GLIDE to their new
-            positions (`layout="position"`) instead of teleporting, and a row pushed out
-            of the visible fold leaves visibly rather than vanishing. The surrounding
+            positions (`layout="position"`) instead of teleporting. The surrounding
             MotionConfig reducedMotion="user" is what makes the static equal automatic:
             under prefers-reduced-motion the reorder is instant, which is the same truth
-            without the movement. */}
-        <AnimatePresence initial={false}>
-          {shown.map((item, index) => {
+            without the movement.
+            A row that leaves the list leaves at once. It used to fade out inside an
+            AnimatePresence, and under load the exit of the first row could hang with its
+            opacity at 1 — switching the kind from occupational therapists to exercise
+            physiologists left an occupational therapist standing at the top of the list of
+            exercise physiologists, reproduced one run in three. A wrong row on screen for
+            good is worse than a missing 160ms fade, so the rows carry no exit. */}
+        {shown.map((item, index) => {
           // `shown` is always a prefix slice of `matches`, so the indices align.
           const itemMatch = personalized[index]!;
           const away = distanceTo(item, origin);
@@ -423,11 +461,9 @@ export function ResultsStage({
               // transitions.dev texts reveal: each row rises AND resolves — a 2px blur clears on
               // the same beat as the opacity — so the list condenses into place line by line
               // instead of fading in as a block. The stagger it already had is the recipe's, and
-              // the 0.2s cap keeps the total under the ~300ms the motion scale allows; the exit is
-              // a single quiet fade with no blur, so a row leaving never reverse-reveals.
+              // the 0.2s cap keeps the total under the ~300ms the motion scale allows.
               initial={reducedMotion ? false : { opacity: 0, y: 10, filter: "blur(2px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.16 } }}
               transition={{ ...STAGE_SPRING, delay: Math.min(index * 0.04, 0.2), opacity: { duration: 0.22 }, filter: { duration: 0.22 }, layout: { ...STAGE_SPRING, delay: 0 } }}
               // The lift is HERE and not in `globals.css`, and it has to be: when this row's
               // entrance settles, motion leaves `transform: none` as an INLINE style, and an
@@ -491,7 +527,6 @@ export function ResultsStage({
             </motion.button>
           );
           })}
-        </AnimatePresence>
       </div>
 
       </div>

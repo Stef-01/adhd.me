@@ -50,7 +50,7 @@ describe("O118 lowering a label into a sentence", () => {
     const labels = [
       ...CARE_AREA_LABELS.map((entry) => entry.label),
       ...EI_QUALITY_KEYS.map((key) => EI_QUALITIES[key].label),
-      "A woman GP", "By phone or telehealth", "Bulk billing", "A longer first appointment",
+      "A woman clinician", "By phone or telehealth", "Bulk billing", "A longer first appointment",
     ];
     for (const label of labels) {
       const said = labelInSentence(care(label));

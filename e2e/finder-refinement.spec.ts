@@ -11,11 +11,16 @@ for (const width of [320, 390, 768, 1440]) {
     await page.keyboard.press('Enter');
     await expect(page.locator('.clinician-list')).toBeVisible();
     const profession = page.getByLabel('Provider type');
-    await expect(page.getByText('Provider type', { exact: true })).toBeVisible();
+    await expect(profession).toBeVisible();
     await expect(page.locator('.care-kinds')).toHaveCount(0);
-    expect((await profession.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    // Rounded: mid-entrance the screen is a hair under scale 1, and 43.99998 is a 44px control.
+    expect(Math.round((await profession.boundingBox())!.height)).toBeGreaterThanOrEqual(44);
     await expect(page.getByRole('button', { name: 'Settings', exact: true })).toHaveCount(1);
+    // The strip scrolls sideways on a phone, so a chip is held to fitting the screen once it is
+    // brought into view — never to being clipped, which is the one thing a scroller must not do.
     for (const chip of await page.locator('.filter-strip .filter-chip').all()) {
+      // Unconditional: "if needed" counts a chip cut at the edge as already in view.
+      await chip.evaluate((el) => el.scrollIntoView({ inline: 'nearest', block: 'nearest' }));
       const box = (await chip.boundingBox())!;
       expect(box.x).toBeGreaterThanOrEqual(0);
       expect(box.x + box.width).toBeLessThanOrEqual(width);

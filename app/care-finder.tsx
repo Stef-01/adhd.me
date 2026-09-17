@@ -16,7 +16,6 @@ import {
   rankCliniciansNear,
   topTieNote,
   missedAsks,
-  nearestKm,
   type Clinician,
 } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
@@ -25,7 +24,7 @@ import { fitReason, orderByProblemFit } from "@/support/problem-fit";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { readModel } from "@/model/store";
 import { topNeed, type Need } from "@/model/needs";
-import { professionOf } from "@/demo/clinicians";
+import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
@@ -41,7 +40,6 @@ import {
 import { NO_BANNER, speechBanner } from "@/finder/speech-banner";
 import {
   activeFilterCount,
-  applyFilters,
   describeFilters,
   emptyFilters,
   readFilters,
@@ -101,7 +99,11 @@ export function CareFinder() {
    */
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [clearedCareRequest, setClearedCareRequest] = useState<string | null>(null);
-  const effectiveFilters = useMemo(() => ({ ...filters, ...combineCarePreferences(filters, clearedCareRequest === request ? {} : carePreferencesFromRequest(request)) }), [filters, request, clearedCareRequest]);
+  /** The care asks the sentence itself carries ("autism", "an Aboriginal clinician"), unless Clear dropped them. */
+  const requestCare = useMemo(() => (clearedCareRequest === request ? {} : carePreferencesFromRequest(request)), [request, clearedCareRequest]);
+  /** The held set plus the sentence's own care asks: the set every roster below runs over. */
+  const withRequestCare = useCallback((held: Filters): Filters => ({ ...held, ...combineCarePreferences(held, requestCare) }), [requestCare]);
+  const effectiveFilters = useMemo(() => withRequestCare(filters), [filters, withRequestCare]);
   const [matchIndex, setMatchIndex] = useState(0);
   const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
@@ -111,20 +113,13 @@ export function CareFinder() {
   // thing an address carries) and is read at arrival, before the first paint.
   const [place, setPlace] = useState("");
   const origin: SuburbPoint | null = useMemo(() => resolvePlace(place), [place]);
-  const filteredRoster = useMemo(
-    () => applyFilters(rosterFor(includeSynthetic), effectiveFilters, origin, (c) => (origin ? nearestKm(c, origin) : null)),
-    [includeSynthetic, effectiveFilters, origin],
-  );
   /**
-   * 2026-09-08 (PRD §38): a sentence that NAMES a kind of professional — "a psychologist near
-   * Beecroft", "an OT for starting work" — narrows the roster to that kind before ranking, the way
-   * a filter does. Read from the words alone (`professionsMentioned`), never inferred from what
-   * the person needs; the support path's profession filter (`filters.professions`) is the other
-   * door and rides with the rest of the filters above. Every derived read below threads THIS
-   * roster, so no sentence describes a list the ranking did not run over.
+   * The roster this search runs over: every filter, then the kind the sentence names (PRD §38,
+   * "a psychologist near Beecroft"). One pure reading in `src/finder/pipeline.ts`, shared with
+   * the tests that hold every chip to the engine. Every derived read below threads THIS roster,
+   * so no sentence describes a list the ranking did not run over.
    */
-  const named = useMemo(() => professionsMentioned(request), [request]);
-  const roster = useMemo(() => (filters.professions.length > 0 || named.length === 0 ? filteredRoster : filteredRoster.filter((c) => named.includes(professionOf(c)))), [filteredRoster, named, filters.professions]);
+  const roster = useMemo(() => searchRoster(rosterFor(includeSynthetic), effectiveFilters, request, origin), [includeSynthetic, effectiveFilters, request, origin]);
   /**
    * THE KINDS OF CARE THIS SEARCH REACHES (Charmaine Bernie, occupational therapist and
    * service-access researcher, 2026-09-11). She named identification and navigation — "helping
@@ -138,26 +133,13 @@ export function CareFinder() {
    * So the kinds are the band above the list: every profession this search actually reaches, in
    * the order the person's own words point at, each one a filter. Counted BEFORE the profession
    * filter is applied — a band that collapsed to the kind you just picked would be a dead end —
-   * and only from providers the rest of the filters kept, so every kind here leads somewhere.
-   * Nothing is invented: the professions are the roster's own, and the order is the person's
-   * words first (`named`), then how many of each the search found.
+   * and off the SAME filters the list runs over (the held set plus the sentence's own care asks:
+   * counted off the held set alone, "autism" offered "GPs · 20" and picking it emptied the
+   * screen), so every kind here leads to exactly the list it counts. Nothing is invented: the
+   * professions are the roster's own, and the order is the person's words first, then how many
+   * of each the search found. `careKindsFor` in `src/finder/pipeline.ts` is the reading.
    */
-  const kindRoster = useMemo(
-    // Every other filter, and never this one: counted off `filteredRoster` the band collapsed to
-    // the kind you had just picked, which is the dead end the note above says it must not be.
-    () => applyFilters(rosterFor(includeSynthetic), { ...filters, professions: [] }, origin, (c) => (origin ? nearestKm(c, origin) : null)),
-    [includeSynthetic, filters, origin],
-  );
-  const careKinds = useMemo(() => {
-    const counts = new Map<Profession, number>();
-    for (const c of kindRoster) {
-      const p = professionOf(c);
-      counts.set(p, (counts.get(p) ?? 0) + 1);
-    }
-    return [...counts.entries()]
-      .sort((a, b) => (Number(named.includes(b[0])) - Number(named.includes(a[0]))) || b[1] - a[1])
-      .map(([id, count]) => ({ id, count, plural: profession(id).plural }));
-  }, [kindRoster, named]);
+  const careKinds = useMemo(() => careKindsFor(rosterFor(includeSynthetic), effectiveFilters, request, origin), [includeSynthetic, effectiveFilters, request, origin]);
   const { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     // O234: the filters the device holds, and the place it holds when the address bar carries
     // none — a search started from the front door reads back what the profile set. A place on
@@ -178,9 +160,7 @@ export function CareFinder() {
     setRequest(words);
     setDraft(record.draft);
     const resumedOrigin = resolvePlace(arrivedPlace);
-    const resumedNamed = professionsMentioned(words);
-    const resumedRoster = applyFilters(rosterFor(includeSynthetic), { ...held, ...combineCarePreferences(held, carePreferencesFromRequest(words)) }, resumedOrigin, (c) => (resumedOrigin ? nearestKm(c, resumedOrigin) : null))
-      .filter((c) => resumedNamed.length === 0 || resumedNamed.includes(professionOf(c)));
+    const resumedRoster = searchRoster(rosterFor(includeSynthetic), { ...held, ...combineCarePreferences(held, carePreferencesFromRequest(words)) }, words, resumedOrigin);
     const found = rankCliniciansNear(words, resumedOrigin, resumedRoster).findIndex((item) => item.id === record.matchId);
     setMatchIndex(Math.max(0, found));
   });
@@ -201,6 +181,21 @@ export function CareFinder() {
   useEffect(() => { setNeed(topNeed(readModel(deviceLearningStorage))); }, []);
   const matches = useMemo(() => orderByProblemFit(rankCliniciansNear(request, origin, roster), need), [request, origin, roster, need]);
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
+  /**
+   * The ways out of an empty list: each held filter that, dropped on its own, brings somebody
+   * back, with the count the tap produces. Only the held set is offered one by one; the
+   * sentence's own care asks go with "Clear the filters", as they always did.
+   */
+  const ways = useMemo<WayOut[]>(
+    () => (matches.length > 0 ? [] : waysOutOf(rosterFor(includeSynthetic), filters, request, origin, withRequestCare)),
+    [matches.length, includeSynthetic, filters, request, origin, withRequestCare],
+  );
+  /** With nothing on, the kind the sentence named is what emptied the list, and the screen says which. */
+  const emptyKind = useMemo(() => {
+    if (matches.length > 0 || activeFilterCount(effectiveFilters) > 0) return null;
+    const named = professionsMentioned(request);
+    return named.length > 0 ? named.map((p) => profession(p).plural).join(" or ") : null;
+  }, [matches.length, effectiveFilters, request]);
   // Round 2: sixteen near-identical rows is the "long list" anti-pattern. Five is enough to choose
   // from, and the rest are one tap away for somebody who wants to read all of them.
   const [showAll, setShowAll] = useState(false);
@@ -616,6 +611,14 @@ export function CareFinder() {
     setShowAll(false);
   }
 
+  /** One held filter dropped from the empty screen's way out, written to the device like a chip. */
+  function relaxFilters(next: Filters) {
+    writeFilters(window.localStorage, next);
+    setFilters(next);
+    setMatchIndex(0);
+    setShowAll(false);
+  }
+
   /** O234: every narrowing filter off, the place kept — it orders, it never excluded anybody. */
   function clearNarrowingFilters() {
     setClearedCareRequest(request);
@@ -762,6 +765,9 @@ export function CareFinder() {
             }}
             filterLabels={activeFilterCount(effectiveFilters) > 0 ? describeFilters(effectiveFilters) : []}
             onClearFilters={clearNarrowingFilters}
+            waysOut={ways}
+            onRelax={relaxFilters}
+            emptyKind={emptyKind}
             place={place}
             filters={effectiveFilters}
             onToggleFilter={toggleFilter}

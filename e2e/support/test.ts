@@ -1,4 +1,4 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base, type Page, type Response } from "@playwright/test";
 
 /**
  * The suite's `test`: every `page.goto` also waits for React to attach (`app/hydrated.tsx` stamps
@@ -13,10 +13,19 @@ import { test as base, type Page } from "@playwright/test";
  * settled at two, every other route at one; then the network goes quiet.
  */
 const APP_GROUP = /^\/(profile|approach|lives|match|my-adhd|today|support|survey|start|manual|medication|adjustments)?(\/|\?|$)/;
-async function settled(page: Page): Promise<void> {
+async function settled(page: Page, response: Response | null): Promise<void> {
+  // No response (`about:blank`, a same-page hash) or a raw one (an API route, a file) carries no
+  // stamp: fall through at once rather than wait for one.
+  if (!response || !(response.headers()["content-type"] ?? "").includes("text/html")) return;
   const path = new URL(page.url()).pathname + new URL(page.url()).search;
   const wanted = APP_GROUP.test(path) ? 2 : 1;
-  await page.waitForFunction((n) => Number(document.documentElement.getAttribute("data-hydrated") ?? "0") >= n, wanted, { timeout: 10_000 }).catch(() => undefined);
+  // The root layout's stamp is the one every page carries, and it is waited for patiently: under
+  // load (three workers on a server that has just started) it took longer than the ten seconds
+  // this used to allow, the wait fell through silently, and a spec pressed "Find support" on a
+  // welcome screen React had not reached yet — the click did nothing and the results never came.
+  // The group's own stamp follows in the same chunk load and keeps the short cap.
+  await page.waitForFunction(() => Number(document.documentElement.getAttribute("data-hydrated") ?? "0") >= 1, undefined, { timeout: 30_000 }).catch(() => undefined);
+  if (wanted > 1) await page.waitForFunction((n) => Number(document.documentElement.getAttribute("data-hydrated") ?? "0") >= n, wanted, { timeout: 10_000 }).catch(() => undefined);
   // The finder's stages arrive as their own chunks after the shell; wait for the network to go
   // quiet as well, or a stage's input is filled before its code is there to read it.
   await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
@@ -34,7 +43,7 @@ export const test = base.extend<{ page: Page }>({
       const response = await goto(url, options);
       // A spec that names its own `waitUntil` (the fake-clock specs do) keeps Playwright's plain goto.
       if (options?.waitUntil) return response;
-      await settled(page);
+      await settled(page, response);
       return response;
     };
     // A reload is a goto in every way that matters here.
@@ -42,7 +51,7 @@ export const test = base.extend<{ page: Page }>({
     page.reload = async (options) => {
       const response = await reload(options);
       if (options?.waitUntil) return response;
-      await settled(page);
+      await settled(page, response);
       return response;
     };
     await use(page);

@@ -27,7 +27,11 @@ const PHONE = { width: 390, height: 844 };
 
 type Surface = { readonly name: string; readonly open: (page: Page) => Promise<void> };
 const byUrl = (routes: readonly string[]): Surface[] =>
-  routes.map((route) => ({ name: route, open: (page) => page.goto(route, { waitUntil: "networkidle" }).then(() => undefined) }));
+  // The fixture's goto: it waits for the document to be stamped hydrated (twice on an app-group
+  // route such as /lives/play, whose controls arrive after the shell) and then for the network to
+  // go quiet. A bare `waitUntil: "networkidle"` skipped the stamp, so under load the walk tabbed a
+  // page whose six controls had not attached yet and counted two stops.
+  routes.map((route) => ({ name: route, open: (page) => page.goto(route).then(() => undefined) }));
 
 async function walk(page: Page, surfaces: readonly Surface[]) {
   const ringless: string[] = [];

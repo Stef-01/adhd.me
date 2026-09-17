@@ -194,7 +194,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     focus: "Structured assessment, titration, substance history taken seriously",
     matchLine: "Says he works from a documented baseline, reviews titration on a schedule, and takes a substance history as a safety question.",
     fitSignals: ["ADHD assessment", "Titration", "Substance history", "Telehealth"],
-    practicalSignals: ["Mixed billing", "Telehealth follow-ups"],
+    practicalSignals: ["Bulk billed with a concession card", "Telehealth follow-ups"],
     summary:
       "Owen says he works from a documented baseline, reviews titration on a schedule, and takes a substance history as a safety question rather than a judgement. First appointments can be by telehealth.",
     about:
@@ -480,7 +480,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     focus: "ADHD assessment alongside anxiety, titration",
     matchLine: "Says he often works out anxiety from ADHD when they present through each other, with titration reviewed on a schedule.",
     fitSignals: ["ADHD assessment", "Anxiety", "Titration", "Vietnamese"],
-    practicalSignals: ["Mixed billing", "Structured review schedule"],
+    practicalSignals: ["Bulk billed with a concession card", "Structured review schedule"],
     summary:
       "Minh says he often works out anxiety from ADHD when they present through each other, and reviews titration on a schedule rather than when something goes wrong. He consults in English and Vietnamese.",
     about:
@@ -621,7 +621,7 @@ export const SYNTHETIC_CLINICIANS: readonly Clinician[] = [
     focus: "ADHD assessment, titration, anxiety",
     matchLine: "Says she keeps first appointments unhurried, reviews titration on a schedule, and often sees anxiety alongside.",
     fitSignals: ["ADHD assessment", "Titration", "Anxiety", "Urdu & Hindi"],
-    practicalSignals: ["Mixed billing"],
+    practicalSignals: ["Bulk billed with a concession card"],
     summary:
       "Sana says she keeps first appointments unhurried, reviews titration on a schedule, and often sees anxiety arrive with the ADHD question. She consults in English, Urdu and Hindi, and values culturally sensitive care.",
     about:

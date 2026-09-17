@@ -109,7 +109,7 @@ export function MatchIntake() {
             value={narrative}
             onChange={(e) => setNarrative(e.target.value)}
             maxLength={NARRATIVE_MAX}
-            placeholder="e.g. I think I have had ADHD my whole life. I want an adult assessment with someone who will not rush me. I have anxiety too, and telehealth would be easier."
+            placeholder="An adult assessment with someone who will not rush me, by telehealth if it can be."
             required
           />
           <small>No names or Medicare numbers.</small>
@@ -128,7 +128,7 @@ export function MatchIntake() {
 
         <label className="match-field">
           <span>Suburb</span>
-          <input id="match-suburb" type="text" list="match-suburbs" value={suburb} onChange={(e) => setSuburb(e.target.value)} placeholder="e.g. Epping" required />
+          <input id="match-suburb" type="text" list="match-suburbs" value={suburb} onChange={(e) => setSuburb(e.target.value)} placeholder="Hornsby or 2077" required />
           <datalist id="match-suburbs">
             {coveredSuburbs().map((s) => (
               <option key={s} value={s} />

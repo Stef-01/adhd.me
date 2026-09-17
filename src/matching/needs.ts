@@ -471,7 +471,9 @@ const LEXICON: readonly Entry[] = [
   ),
 
   // ── Access ────────────────────────────────────────────────────────────────────────────────
-  pref("woman-gp", "A woman GP", 30, [
+  // "A woman clinician", not "A woman GP": the roster holds psychologists, OTs and coaches now, and
+  // the label is printed beside every kind the preference reaches.
+  pref("woman-gp", "A woman clinician", 30, [
     /* O128 (tranche seven): "female practitioner" — the corpus asked for it in a sentence the
        existing "female gp" and "female doctor" could not read. The tranche's job is to supply
        the phrasings the author of a cue list did not think of, and this is one. */

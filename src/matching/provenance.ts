@@ -46,7 +46,7 @@ export type ToldLine = {
 };
 
 const PREFERENCE_LABELS: Readonly<Record<Preference, string>> = {
-  "woman-gp": "A woman GP",
+  "woman-gp": "A woman clinician",
   "telehealth-first": "By phone or telehealth",
   "bulk-billing": "Bulk billing",
   "longer-appointment": "A longer first appointment",
