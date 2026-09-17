@@ -15,20 +15,26 @@ const HEADINGS: Record<BedroomState["mode"], string> = {
 };
 
 function Mosquito({ insect, clock, still, catchIt }: { insect: RoomInsect; clock: MotionValue<number>; still: boolean; catchIt: (keyboard: boolean) => void }) {
-  const [focused, setFocused] = useState(false);
+  const [heldPosition, setHeldPosition] = useState<{ x: number; y: number } | null>(null);
   const present = useIsPresent();
   const [perched, setPerched] = useState(false);
   useMotionValueEvent(clock, "change", t => setPerched(insectOffset(insect, t).perched));
-  const x = useTransform(clock, t => `calc(${still || focused ? 0 : insectOffset(insect, t).x}px * var(--flight-x-scale, 1))`);
-  const y = useTransform(clock, t => `calc(${still || focused ? 0 : insectOffset(insect, t).y}px * var(--flight-y-scale, 1))`);
+  const x = useTransform(clock, t => `calc(${still ? 0 : heldPosition?.x ?? insectOffset(insect, t).x}px * var(--flight-x-scale, 1))`);
+  const y = useTransform(clock, t => `calc(${still ? 0 : heldPosition?.y ?? insectOffset(insect, t).y}px * var(--flight-y-scale, 1))`);
+  // Hold the visible position: snapping to the perch on focus can move the button
+  // away from a mouse between press and release, so the browser never delivers its click.
+  const holdPosition = () => setHeldPosition(previous => previous ?? (still ? { x: 0, y: 0 } : insectOffset(insect, clock.get())));
   const perch = PERCHES[insect.slot]!;
   return <motion.div className="bedroom-insect-anchor" data-arriving={insect.arrivedAt > 0} style={{ left: `${perch.x}%`, top: `${perch.y}%`, "--arrival-x": `${80 - perch.x}cqw`, "--arrival-y": `${22 - perch.y}cqh` } as CSSProperties}
     initial={still ? false : { opacity: 0, scale: .6 }} animate={{ opacity: 1, scale: 1 }}
     exit={still ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, scale: .45, transition: { duration: .16 } }}>
     <motion.div className="bedroom-insect-flight" style={{ x, y }}>
       <button className="bedroom-insect" disabled={!present} aria-label={`Catch mosquito ${insect.id + 1}`} onClick={event => catchIt(event.detail === 0)}
-        onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
-        <RoomMosquito kind={insect.kind} perched={still || focused || perched} />
+        onFocus={holdPosition} onBlur={() => setHeldPosition(null)}
+        onPointerDown={event => { if (event.button === 0) holdPosition(); }}
+        onPointerCancel={() => setHeldPosition(null)}
+        onPointerLeave={event => { if (document.activeElement !== event.currentTarget) setHeldPosition(null); }}>
+        <RoomMosquito kind={insect.kind} perched={still || heldPosition !== null || perched} />
       </button>
     </motion.div>
   </motion.div>;

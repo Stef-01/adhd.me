@@ -77,3 +77,15 @@ Status: not reproduced. The reported wording was “Try something”; no control
 The live preview was played through both evenings and into Lower the Sensory Floor, through the action plan, then into the Toolkit. This passed with reduced motion and with normal-motion touch input in Chromium and WebKit, with no page errors. The score-screen “Try now” link and the finder example-search flow also responded during the preceding investigation.
 
 The committed regression now exercises Leo's entire handoff with normal motion and touch input, chooses a plan, opens its Toolkit entry and reloads to verify persistence. It passes in Chromium, WebKit and Firefox. Earlier Leo tests stopped at game completion and did not cover this downstream action. No functional application fix is claimed: the remaining diagnostic input is the exact nonresponsive control or the state in which it stops responding.
+
+## Confirmed moving-target missed click: 2026-09-17
+
+A subsequent investigation reproduced a real control failure on the Leo preview: press a mosquito while it is flying away from its resting point, hold for 120 ms, then release. Native focus reset its transform to the resting point before pointer release. In the failing reproduction the target shifted approximately 38 px and remained uncaught. Fast automated clicks and still-mode play had missed this sequence.
+
+The fix captures the visible flight offset when a target receives focus or a primary pointer press. It holds that position through activation, retains native click/keyboard behavior, and releases the hold on blur, cancellation or an unfocused pointer leaving. It does not award a catch on pointer-down, so dragging away can still cancel the action.
+
+The committed press regression was observed failing against the prior production build. The same reproduction now catches the target with less than one pixel of movement during the press. A separate regression checks keyboard stability, resumed flight after blur and Space activation. A manual browser check confirms dragging out preserves the uncaught target and flight resumes when focus leaves.
+
+This is a confirmed mosquito-control fix. It has not established that the originally reported “Try something” wording referred to this control; the ending-to-strategy flow remains covered separately.
+
+Release verification: production build and TypeScript passed; all 91 Lives unit tests passed; all 15 selected interaction checks passed across Chromium, WebKit and Firefox. The original missed-click reproduction passed against the rebuilt app. All 67 measured screens stayed within their text ceilings; Leo remains at 27-33 words, with 16 in pause.

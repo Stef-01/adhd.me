@@ -357,3 +357,53 @@ test("Leo's ending opens a usable strategy and saves the chosen plan to the Tool
     await context.close();
   }
 });
+
+test("pressing a flying mosquito holds its position until the click lands", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await timed(page);
+  const target = page.getByRole("button", { name: "Catch mosquito 1", exact: true });
+  const anchor = page.locator(".bedroom-insect-anchor").first();
+  let before = (await target.boundingBox())!;
+  let offset = 0;
+  // Press while it is away from its resting point, not during the forgiving perch phase.
+  for (let frame = 0; frame < 40; frame++) {
+    await page.clock.runFor(100);
+    before = (await target.boundingBox())!;
+    const origin = (await anchor.boundingBox())!;
+    offset = Math.abs(before.x + before.width / 2 - origin.x);
+    if (offset > before.width / 2 + 3) break;
+  }
+  expect(offset).toBeGreaterThan(before.width / 2 + 3);
+  await page.mouse.move(before.x + before.width / 2, before.y + before.height / 2);
+  await page.mouse.down();
+  await page.clock.runFor(120);
+  const held = (await target.boundingBox())!;
+  await page.mouse.up();
+  await page.clock.runFor(200);
+  await expect(target).toHaveCount(0);
+  expect(Math.abs(held.x - before.x)).toBeLessThan(2);
+  expect(Math.abs(held.y - before.y)).toBeLessThan(2);
+  await expect(page.locator(".bedroom-insect:enabled")).toHaveCount(2);
+});
+
+test("keyboard focus holds a flying target and releases it on blur", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await timed(page);
+  await page.clock.runFor(2700);
+  const target = page.getByRole("button", { name: "Catch mosquito 1", exact: true });
+  const before = (await target.boundingBox())!;
+  await target.focus();
+  await page.clock.runFor(700);
+  const held = (await target.boundingBox())!;
+  expect(Math.abs(held.x - before.x)).toBeLessThan(2);
+  expect(Math.abs(held.y - before.y)).toBeLessThan(2);
+  await page.getByRole("button", { name: "Close the window", exact: true }).focus();
+  await page.clock.runFor(900);
+  const moving = (await target.boundingBox())!;
+  expect(Math.hypot(moving.x - held.x, moving.y - held.y)).toBeGreaterThan(3);
+  await target.focus();
+  await page.keyboard.press("Space");
+  await page.clock.runFor(200);
+  await expect(target).toHaveCount(0);
+  await expect(page.locator(".bedroom-insect:enabled")).toHaveCount(2);
+});
