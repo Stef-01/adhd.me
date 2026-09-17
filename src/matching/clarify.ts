@@ -172,7 +172,7 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
  */
 export const PREF_PROMPTS: Record<string, { prompt: string; answer: string }> = {
   "pref:woman-gp": {
-    prompt: "Would you rather see a woman GP?",
+    prompt: "Would you rather see a woman clinician?",
     answer: "I would prefer a woman doctor",
   },
   "pref:telehealth-first": {
@@ -331,7 +331,7 @@ export function facetLabel(key: string): string {
 
 /** Console-facing names for the preference facets, matching the lexicon's own labels. */
 const PREF_LABELS: Record<string, string> = {
-  "pref:woman-gp": "A woman GP",
+  "pref:woman-gp": "A woman clinician",
   "pref:telehealth-first": "By phone or telehealth",
   "pref:bulk-billing": "Bulk billing",
 };

@@ -51,9 +51,9 @@ import { AppSettings } from "./app-settings";
 
 /** The switch rows, in the order a person reads them: who, how, then what the rooms have. */
 const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: string }> = [
-  { key: "womanGp", title: "Woman GP", detail: "Only GPs who are women." },
+  { key: "womanGp", title: "Woman clinician", detail: "Only clinicians who are women." },
   { key: "telehealth", title: "Telehealth first", detail: "GPs who see new people by phone or video first." },
-  { key: "bulkBilling", title: "Bulk billing", detail: "GPs whose practice declares bulk billing." },
+  { key: "bulkBilling", title: "Bulk billing", detail: "Practices that declare bulk billing." },
   { key: "longerAppointments", title: "Longer appointments", detail: "GPs who declare they do not rush a first visit." },
   { key: "wheelchair", title: "Wheelchair access", detail: "Rooms declared accessible." },
   { key: "openBooks", title: "New patients", detail: "Leave off to see GPs with a waitlist too." },
@@ -194,7 +194,7 @@ export function ProfileView() {
             onFocus={() => setPlaceOpen(true)}
             onBlur={() => window.setTimeout(() => setPlaceOpen(false), 120)}
             onKeyDown={onPlaceKey}
-            placeholder="Southport or 4215"
+            placeholder="Hornsby or 2077"
             autoComplete="off"
             role="combobox"
             aria-autocomplete="list"

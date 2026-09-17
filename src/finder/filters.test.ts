@@ -125,7 +125,7 @@ describe("counting and naming", () => {
     };
     const labels = describeFilters(all);
     expect(labels).toHaveLength(activeFilterCount(all));
-    expect(labels[0]).toBe("Woman GP");
+    expect(labels[0]).toBe("Woman clinician");
     expect(labels.at(-1)).toBe("Within 20 km");
     expect(labels).toContain("Speaks Mandarin");
     const kinds = describeFilters({ ...emptyFilters(), professions: ["psychologist", "adhd-coach"] });

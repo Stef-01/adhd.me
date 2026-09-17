@@ -111,7 +111,7 @@ export function WelcomeStage({
                 if (draft.trim()) onSearch(draft);
               }
             }}
-            placeholder="e.g. a psychologist near Beecroft who does telehealth"
+            placeholder="A GP near Hornsby for an adult ADHD assessment, by telehealth"
           />
           <Pressable
             className={draft.trim() ? "dual-input-action is-send" : "dual-input-action is-talk"}

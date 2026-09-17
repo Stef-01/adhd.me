@@ -35,7 +35,10 @@ the microphone is that pill. Nothing is filled with the deep gold; as a fill it 
 an ink ring on light surfaces and a yellow one on ink. Two selected states, by role: navigation and
 pressed filters are the ink pill; a chosen segment inside content (a module step, an adjustments
 tab, a map chip, the library's Games and Modules) is the yellow wash under a gold hairline. A callout
-is one hairline and a wash, never a coloured side tab.
+is one hairline and a wash, never a coloured side tab. The finder's filters are one row of pills
+under the search, the kind of support first; the row wraps on a desk and scrolls sideways on a
+phone. A monogram is the callout wash with deep-gold initials, never a second hue. An empty list
+names what emptied it and offers each filter that would bring it back, with the count.
 Captures from the production build are in `docs/design/yellow-scheme/`. The colourful educational stages, the meditation player and the games are
 the exceptions: each uses its own readable palette while the surrounding library and navigation
 stay quiet. The two categorical chart colours are unchanged. Chart greys use the neutral ramp.

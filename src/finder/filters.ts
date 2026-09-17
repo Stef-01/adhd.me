@@ -117,7 +117,7 @@ export type BooleanFilterKey = (typeof BOOLEAN_FILTER_KEYS)[number];
 
 /** The words each yes/no filter is shown as — on the profile, on the results chips, in the strip's labels. */
 export const BOOLEAN_FILTER_LABELS: Readonly<Record<BooleanFilterKey, string>> = {
-  womanGp: "Woman GP",
+  womanGp: "Woman clinician",
   telehealth: "Telehealth",
   bulkBilling: "Bulk billing",
   longerAppointments: "Longer appointments",
@@ -206,20 +206,38 @@ export function activeFilterCount(filters: Filters): number {
   return n;
 }
 
+/** One filter that is on, and the set with exactly that filter off — the way out of a list it emptied. */
+export interface Relaxation {
+  label: string;
+  filters: Filters;
+}
+
+/**
+ * Every filter that is on, in a fixed order, each paired with the set that drops only it. This is
+ * the one reading of "what is narrowing the list": `describeFilters` is its labels, and the empty
+ * screen's ways out are its sets, so the chips and the ways out can never name different filters.
+ */
+export function relaxations(filters: Filters): Relaxation[] {
+  const out: Relaxation[] = [];
+  for (const key of BOOLEAN_FILTER_KEYS) if (filters[key]) out.push({ label: BOOLEAN_FILTER_LABELS[key], filters: { ...filters, [key]: false } });
+  for (const language of filters.languages) out.push({ label: `Speaks ${language}`, filters: { ...filters, languages: filters.languages.filter((l) => l !== language) } });
+  if (filters.withinKm !== null) out.push({ label: `Within ${filters.withinKm} km`, filters: { ...filters, withinKm: null } });
+  if (filters.consultRecording === "ai-scribe") out.push({ label: "Uses an AI scribe", filters: { ...filters, consultRecording: "any" } });
+  if (filters.consultRecording === "no-ai") out.push({ label: "No AI recording", filters: { ...filters, consultRecording: "any" } });
+  for (const a of filters.approach) out.push({ label: APPROACH_LABELS[a], filters: { ...filters, approach: filters.approach.filter((x) => x !== a) } });
+  if (filters.professions.length > 0) {
+    const label = filters.professions.map((p) => profession(p).plural).join(" or ").replace(/^\w/, (c) => c.toUpperCase());
+    out.push({ label, filters: { ...filters, professions: [] } });
+  }
+  for (const need of filters.careNeeds ?? []) out.push({ label: CARE_NEEDS[need], filters: { ...filters, careNeeds: (filters.careNeeds ?? []).filter((n) => n !== need) } });
+  if (filters.clinicianIdentity && filters.clinicianIdentity !== "any") out.push({ label: IDENTITY_LABELS[filters.clinicianIdentity], filters: { ...filters, clinicianIdentity: "any" } });
+  if (filters.country?.trim()) out.push({ label: `Country: ${filters.country.trim()}`, filters: { ...filters, country: "" } });
+  return out;
+}
+
 /** The labels of the filters that are on, in a fixed order, for the results screen's chips. */
 export function describeFilters(filters: Filters): string[] {
-  const out: string[] = [];
-  for (const key of BOOLEAN_FILTER_KEYS) if (filters[key]) out.push(BOOLEAN_FILTER_LABELS[key]);
-  for (const language of filters.languages) out.push(`Speaks ${language}`);
-  if (filters.withinKm !== null) out.push(`Within ${filters.withinKm} km`);
-  if (filters.consultRecording === "ai-scribe") out.push("Uses an AI scribe");
-  if (filters.consultRecording === "no-ai") out.push("No AI recording");
-  for (const a of filters.approach) out.push(APPROACH_LABELS[a]);
-  if (filters.professions.length > 0) out.push(filters.professions.map((p) => profession(p).plural).join(" or ").replace(/^\w/, (c) => c.toUpperCase()));
-  for (const need of filters.careNeeds ?? []) out.push(CARE_NEEDS[need]);
-  if (filters.clinicianIdentity && filters.clinicianIdentity !== "any") out.push(IDENTITY_LABELS[filters.clinicianIdentity]);
-  if (filters.country?.trim()) out.push(`Country: ${filters.country.trim()}`);
-  return out;
+  return relaxations(filters).map((r) => r.label);
 }
 
 /**

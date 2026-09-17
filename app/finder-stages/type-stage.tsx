@@ -71,7 +71,7 @@ export function TypeStage({
           id="doctor-request"
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
-          placeholder="e.g. a psychologist near Beecroft who does telehealth"
+          placeholder="A GP near Hornsby for an adult ADHD assessment, by telehealth"
         />
       </div>
 

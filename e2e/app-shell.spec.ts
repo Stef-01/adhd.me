@@ -236,7 +236,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   // Each filter group is a tap; open the three this test uses.
   for (const name of ["Distance", "Languages", "How they work"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
-  await page.getByRole("switch", { name: /Woman GP/ }).check();
+  await page.getByRole("switch", { name: /Woman clinician/ }).check();
   await page.getByRole("switch", { name: /New patients/ }).check();
   await expect(page.getByText("2 on", { exact: true })).toBeVisible();
   // A language chip is a pressed button whose name stays the language — the tick is not in it.
@@ -259,7 +259,7 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   await expect(page.getByRole("button", { name: "Map", exact: true })).toBeVisible();
 
   const strip = page.getByRole("group", { name: "Your filters" });
-  await expect(strip).toContainText("Woman GP");
+  await expect(strip).toContainText("Woman clinician");
   await expect(strip).toContainText("New patients");
   // Every row on a narrowed list answers the filters: the roster is narrowed before ranking, so
   // the reasons printed on the rows cannot name a GP the filters excluded.
@@ -339,7 +339,7 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
 
 test("filters nobody answers say so and give both ways out", async ({ page }) => {
   await page.goto("/profile");
-  for (const name of [/Woman GP/, /telehealth/i, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
+  for (const name of [/Woman clinician/, /telehealth/i, /Bulk billing/, /Longer appointments/, /Wheelchair access/]) {
     await page.getByRole("switch", { name }).check();
   }
   await page.locator("summary", { hasText: "Languages" }).click();
