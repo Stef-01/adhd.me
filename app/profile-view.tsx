@@ -271,6 +271,10 @@ export function ProfileView() {
           ))}
         </ul>
 
+        {/* The folds as one column on a desk (globals.css, the filters grid): stacked from the top in
+            the order they read, beside the switches, instead of each fold sitting in its own grid
+            row sized by the switch card. On a phone the wrapper is `display: contents`. */}
+        <div className="me-folds">
         <details className="me-group me-fold">
           <summary id="me-languages-title">Languages</summary>
           <ul className="me-chips">
@@ -408,6 +412,7 @@ export function ProfileView() {
           </div>
           <p className="me-group-note">An AI scribe with consent, or none.</p>
         </details>
+        </div>
 
         {onCount > 0 && (
           <button className="me-forget" type="button" onClick={clearFilterSet}>

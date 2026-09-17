@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, CaretDown, Check } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
+import { BrandMark } from "./brand-wordmark";
 
 const demoStops = [
   {
@@ -74,7 +75,8 @@ export function DemoNavigator() {
         aria-controls="adhd-me-demo-navigation"
         onClick={() => setOpen((current) => !current)}
       >
-        <span translate="no">ADHD.ME</span>
+        <BrandMark />
+        <span className="sr-only" translate="no">ADHD.ME</span>
         <CaretDown size={13} weight="bold" aria-hidden="true" />
       </button>
 
