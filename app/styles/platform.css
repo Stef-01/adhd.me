@@ -71,7 +71,10 @@ body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outl
 .platform-shell .voice-prompt h1 { font-family: inherit; font-size: clamp(30px, 3.3vw, 44px); font-weight: 750; letter-spacing: -.045em; line-height: 1.16; }
 .platform-shell h1 em { font-family: inherit; font-style: normal; color: var(--accent); }
 .platform-shell .voice-screen .voice-core { margin: 64px auto 28px; width: 100%; }
-.platform-shell .voice-prompt h1 { max-width: 620px; margin-inline: auto; text-align: center; }
+/* Left, at every width: the question, the box and the example link keep one left edge on a phone
+   as they do on a desk (app-shell.spec holds them to it). Centred over a left-aligned box, the
+   second line of the question drifted right of everything under it. */
+.platform-shell .voice-prompt h1 { max-width: 18ch; margin: 0; text-align: left; }
 .platform-shell .voice-actions { width: 100%; max-width: 760px; margin-inline: auto; padding-bottom: 0; }
 .platform-shell .dual-input { border: 1px solid var(--line-strong); border-radius: 20px; background: var(--paper); box-shadow: 0 8px 32px color-mix(in srgb, var(--ink) 3%, transparent); }
 .platform-shell .dual-input textarea { font-size: 17px; line-height: 1.6; min-height: 150px; background: transparent; color: var(--ink); }
@@ -107,8 +110,15 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
   .platform-utilities { gap: 10px; }
   .platform-help span { display: none; }
   .platform-urgent { min-height: 44px; padding: 0 11px; font-size: 12.5px; }
-  .platform-shell { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  /* One number for the bar's height (8 + the 60px tab + 8 + the hairline), read by everything that has to
+     clear it: the shell's own bottom padding and the filters screen's sticky action. */
+  .platform-shell { --app-tabs-h: 77px; padding-bottom: calc(var(--app-tabs-h) + env(safe-area-inset-bottom)); }
   .platform-shell .app-tabs { position: fixed; inset: auto 0 var(--consent-height, 0px); width: 100%; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 1px solid var(--line); }
+  /* A pushed screen hides the bar, the way a native push does: the profile pins its own booking
+     bar to the bottom edge, and two bars stacked there fought over it — the booking bar covered
+     the tabs and the current tab's pill showed at its side. Back is the way out, as it was. */
+  .platform-shell:has(.profile-screen) { padding-bottom: 0; }
+  .platform-shell:has(.profile-screen) .app-tabs { display: none; }
   .platform-shell .app-tabs-list { gap: 4px; }
   .platform-shell .app-tabs-item { min-width: 0; }
   .platform-shell .app-tab { flex-direction: column; gap: 4px; padding: 8px 6px; min-height: 58px; }
