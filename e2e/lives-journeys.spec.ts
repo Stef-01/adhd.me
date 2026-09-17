@@ -1,4 +1,5 @@
 import { expect, test } from "./support/test";
+import { pauseNow } from "./support/fake-clock";
 import { allowedMs } from "../src/lives/session";
 import { game } from "../src/lives/games";
 import { layoutGame, SCENE } from "../src/lives/layout";
@@ -12,9 +13,16 @@ for (const journey of JOURNEYS) {
     await page.setViewportSize({ width: 390, height: 900 });
     const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
     await page.goto("/lives/characters");
+    // The fixture's hydration wait is capped and swallowed. On a loaded runner the cast screen can
+    // take longer than that cap to become live, and a click that lands first is not the Link's
+    // soft navigation: it failed here on a different character each run, with the journey's root
+    // never found. Wait for the screen itself, then for the journey's URL, and give the arrival
+    // Playwright's own navigation window rather than a shorter one of this spec's.
+    await page.waitForFunction(() => Number(document.documentElement.getAttribute("data-hydrated") ?? "0") >= 2, undefined, { timeout: 30000 });
     await page.getByRole("link", { name: `Play ${journey.who.charAt(0).toUpperCase() + journey.who.slice(1)}’s moment →`, exact: true }).click();
+    await page.waitForURL(`**/lives/play/${journey.slug}`, { timeout: 30000 });
     const root = page.locator(".character-journey");
-    await expect(root).toHaveAttribute("data-phase", "playing", { timeout: 15000 });
+    await expect(root).toHaveAttribute("data-phase", "playing", { timeout: 30000 });
     await expect(page.getByRole("combobox")).toHaveCount(0);
     await expect(page.getByRole("slider")).toHaveCount(0);
     const counts: number[] = [];
@@ -94,7 +102,7 @@ for (const journey of JOURNEYS) {
     await page.clock.install();
     await page.goto(`/lives/play/${journey.slug}`, { waitUntil: "load" });
     await expect(page.locator(".character-journey")).toHaveAttribute("data-ready", "true", { timeout: 20000 });
-    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
+    await pauseNow(page);
     const root = page.locator(".character-journey");
     for (let round = 0; round < journey.rounds.length; round++) {
       const definition = game(journey.rounds[round]!.game);

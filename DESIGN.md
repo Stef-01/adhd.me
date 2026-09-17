@@ -32,7 +32,10 @@ Yellow is the ground of the header and nothing else on a screen, so the field re
 rather than decoration. The mark carries the reference's warm-red point after the name. The one
 primary on a screen is an ink pill with a yellow glyph and a soft shadow that lifts under a pointer;
 the microphone is that pill. Nothing is filled with the deep gold; as a fill it reads olive. Focus is
-an ink ring on light surfaces and a yellow one on ink.
+an ink ring on light surfaces and a yellow one on ink. Two selected states, by role: navigation and
+pressed filters are the ink pill; a chosen segment inside content (a module step, an adjustments
+tab, a map chip, the library's Games and Modules) is the yellow wash under a gold hairline. A callout
+is one hairline and a wash, never a coloured side tab.
 Captures from the production build are in `docs/design/yellow-scheme/`. The colourful educational stages, the meditation player and the games are
 the exceptions: each uses its own readable palette while the surrounding library and navigation
 stay quiet. The two categorical chart colours are unchanged. Chart greys use the neutral ramp.

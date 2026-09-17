@@ -20,3 +20,25 @@ export async function installFakeClock(page: Page) {
     (Element.prototype as { animate?: unknown }).animate = undefined;
   });
 }
+
+/**
+ * Pauses the fake clock at the page's present. `pauseAt` refuses a time the fake clock has already
+ * passed, and the clock keeps flowing between the page reading `Date.now()` and the pause landing,
+ * so a fixed margin is a race a loaded runner loses ("Cannot fast-forward to the past": two of
+ * eighteen local runs at three workers, and the same shape on CI). The margin starts where the
+ * spec wants it and widens only when the machine needs it, so the pause lands as close to now as
+ * the runner allows instead of as far ahead as the slowest runner would need.
+ */
+export async function pauseNow(page: Page, margin = 100): Promise<void> {
+  let last: unknown;
+  for (let step = margin; step <= margin * 64; step *= 2) {
+    try {
+      await page.clock.pauseAt(await page.evaluate(() => Date.now()) + step);
+      return;
+    } catch (error) {
+      if (!/past/i.test(String(error))) throw error;
+      last = error;
+    }
+  }
+  throw last;
+}

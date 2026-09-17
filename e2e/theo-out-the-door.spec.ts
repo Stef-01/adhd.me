@@ -1,4 +1,5 @@
 import { expect, test } from "./support/test";
+import { pauseNow } from "./support/fake-clock";
 import type { Page } from "@playwright/test";
 import { expectNoViolations } from "./support/a11y";
 const URL = "/lives/play/theo-out-the-door";
@@ -53,7 +54,7 @@ test("drag packs only on the pad; an invalid drop snaps back without picking", a
 
 test("clock pauses and hidden tabs pause; the deadline ends only an unfinished round", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" }); await page.clock.install(); await start(page);
-  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000)); await page.getByRole("button", { name: "Pause game" }).click();
+  await pauseNow(page, 1000); await page.getByRole("button", { name: "Pause game" }).click();
   const time = await page.getByRole("timer").textContent(); await page.clock.fastForward(40000); await expect(page.getByRole("timer")).toHaveText(time!);
   await expect(page.getByRole("button", { name: "Pick up Keys", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Resume", exact: true }).click();

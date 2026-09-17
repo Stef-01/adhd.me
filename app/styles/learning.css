@@ -25,7 +25,7 @@
 .platform-shell .learn-progress { color: var(--muted); margin: 0 0 20px; font-size: 13px; }
 .platform-shell .learn-pane-tabs { display: flex; gap: 8px; margin: 4px 0 18px; max-width: 420px; }
 .platform-shell .learn-pane-tab { flex: 1; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: 0.9375rem; font-weight: 650; cursor: pointer; }
-.platform-shell .learn-pane-tab.is-active { border-color: var(--accent); background: var(--stone); color: var(--ink); }
+.platform-shell .learn-pane-tab.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
 .platform-shell .learn-pane-tab:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .platform-shell .learn-pane { touch-action: pan-y; display: flow-root; min-width: 0; }
 .platform-shell .learn-play-card { display: grid; justify-items: center; gap: 12px; margin: 0 0 20px; padding: 24px 20px 20px; border-radius: 24px; background: var(--stone); }

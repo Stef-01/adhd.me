@@ -88,7 +88,7 @@ export function FirstStep() {
         <section className="first-step-answer">
           <p>{path.firstStep}</p>
           {path.note && <p className="first-step-note">{path.note}</p>}
-          <Link className="learn-secondary" href="/" onClick={seeProviders}>
+          <Link className="learn-primary" href="/" onClick={seeProviders}>
             See {profession(path.through).plural} <ArrowRight size={16} weight="bold" aria-hidden="true" />
           </Link>
         </section>

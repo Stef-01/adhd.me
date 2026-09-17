@@ -144,3 +144,6 @@ body:has(.platform-shell) :is(.consent-read, .consent-agree):focus-visible,
 /* On a phone the console's tabs scroll sideways instead of shrinking into each other. */
 @media (max-width: 767px) { .console-nav-link { flex: none; } }
 .console-navigation { border-top-color: var(--line); }
+/* The matching console family set its section headings in the serif while its page title is the
+   sans; one page, one display face. The quoted request keeps its serif: it is a quotation. */
+.platform-console .mc-section h2 { font-family: var(--font-ui); font-weight: 700; letter-spacing: -.02em; }

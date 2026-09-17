@@ -42,8 +42,8 @@ export function TopicSurveyScreen() {
       <main id="main-content" className="me-screen life-screen app-page-with-tabs">
         <LifeHeader />
         <header className="life-head"><h1>Choose a survey.</h1><p>Two to four minutes. Optional.</p></header>
-        <ul className="life-list">
-          {TOPIC_SURVEYS.map((s) => <li key={s.id}><Link href={`/survey?id=${s.id}`}>{s.title} · {s.minutes} min</Link></li>)}
+        <ul className="cold-kinds">
+          {TOPIC_SURVEYS.map((s) => <li key={s.id}><Link className="cold-kind" href={`/survey?id=${s.id}`}><span><strong>{s.title}</strong><span>{s.minutes} min</span></span><ArrowRight size={18} weight="bold" aria-hidden="true" /></Link></li>)}
         </ul>
       </main>
     );
