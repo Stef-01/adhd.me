@@ -41,6 +41,18 @@ async function walk(page: Page, surfaces: readonly Surface[]) {
   for (const { name, open } of surfaces) {
     await open(page);
     await page.evaluate(() => document.fonts.ready);
+    // The controls the walk will count must be the controls it tabs. A surface whose interactive
+    // part mounts after the shell's hydration stamp (the lab's run, behind a Suspense boundary that
+    // reads the URL on the client) had its controls marked and tabbed before they existed, and
+    // counted after: "2 tab stops for 5 controls" on a loaded machine, never on a quick one. The
+    // walk waits for the control set to hold still before it marks anything.
+    await page.waitForFunction((selector) => {
+      const w = window as unknown as { __kbCount?: number; __kbSince?: number };
+      const n = document.querySelectorAll(selector).length;
+      const now = performance.now();
+      if (w.__kbCount !== n) { w.__kbCount = n; w.__kbSince = now; return false; }
+      return now - (w.__kbSince ?? now) >= 400;
+    }, CONTROLS, { timeout: 10000, polling: 100 }).catch(() => {});
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
     // Firefox keeps its sequential-focus starting point where the control that opened a screen
     // used to be, and once Tab leaves the document it does not come back; so on Firefox the

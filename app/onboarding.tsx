@@ -137,7 +137,7 @@ export function Onboarding() {
                   <ArrowLeft size={17} weight="bold" aria-hidden="true" /> Back
                 </button>
                 <button type="button" className="learn-primary" disabled={!canForward} onClick={forward}>
-                  {answered ? (index === 9 ? "Finish" : "Next") : "Skip"} <ArrowRight size={17} weight="bold" aria-hidden="true" />
+                  {answered ? (index === 9 ? "Finish" : "Next") : question?.skippable ? "Skip" : "Next"} <ArrowRight size={17} weight="bold" aria-hidden="true" />
                 </button>
               </div>
             </>
