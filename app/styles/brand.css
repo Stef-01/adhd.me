@@ -42,7 +42,9 @@ body { font-family: var(--font-ui); }
 }
 .platform-shell .voice-prompt h1 em { font-family: inherit; font-style: italic; color: var(--accent); }
 @media (max-width: 767px) { .platform-shell .app-tab.is-current { color: var(--ink); } }
-.platform-shell :is(.learn-primary,.me-sticky a), .platform-console :is(.console-button,.console-primary-button), .platform-public-nav .site-nav-link, body:has(.platform-shell) .consent-agree {
+/* The story page's header pill joins the ink idiom: it was the one primary still on the navy
+   `--route-strong` after the landing moved to the yellow scheme. */
+.platform-shell :is(.learn-primary,.me-sticky a), .platform-console :is(.console-button,.console-primary-button), .platform-public-nav .site-nav-link, .story-demo-link, body:has(.platform-shell) .consent-agree {
   background: var(--ink); color: var(--paper); border-color: var(--ink);
 }
 .platform-shell .learn-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
@@ -85,7 +87,7 @@ body .aoc-band::before, .site-footer::before { display: none; }
    The one primary on a screen is an ink pill with the brand's yellow glyph and a soft shadow, and
    it lifts under a pointer; the microphone is that pill. Focus is an ink ring on light surfaces and
    the yellow one on ink. Headings balance, paragraphs avoid orphans, quotation marks hang. */
-.platform-shell :is(.learn-primary, .me-sticky a), .platform-public-nav .site-nav-link, body:has(.platform-shell) .consent-agree {
+.platform-shell :is(.learn-primary, .me-sticky a), .platform-public-nav .site-nav-link, .story-demo-link, body:has(.platform-shell) .consent-agree {
   box-shadow: 0 4px 16px -2px color-mix(in srgb, var(--ink) 18%, transparent);
   transition: background-color var(--dur-tap) var(--ease-ui), transform var(--dur-move) var(--ease-ui), box-shadow var(--dur-move) var(--ease-ui);
 }
@@ -95,13 +97,13 @@ body .aoc-band::before, .site-footer::before { display: none; }
 .platform-shell .patient-v2 .voice-screen .mic-button svg { color: var(--brand); }
 .platform-shell .app-tab-marker { box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 8%, transparent); }
 @media (hover: hover) {
-  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover, body:has(.platform-shell) .consent-agree:hover,
+  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover, .story-demo-link:hover, body:has(.platform-shell) .consent-agree:hover,
   .platform-shell .patient-v2 .voice-actions .dual-input-action:hover, .platform-shell .patient-v2 .voice-screen .mic-button:hover {
     background: color-mix(in srgb, var(--ink) 86%, var(--paper)); border-color: transparent;
   }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover {
+  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover, .story-demo-link:hover {
     transform: translateY(-1px); box-shadow: 0 6px 18px -2px color-mix(in srgb, var(--ink) 24%, transparent);
   }
 }
