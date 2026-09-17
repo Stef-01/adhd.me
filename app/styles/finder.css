@@ -13,6 +13,9 @@
    action a gutter to the left of everything above it. */
 .platform-shell .me-sticky { width: auto; margin: 24px 0 0; padding-inline: 0; }
 .platform-shell .me-sticky a { border-radius: 12px; box-shadow: none; }
+/* The profile's header bar is in flow here, not pinned, so its glass blur has nothing to blur; the
+   compositing layer it forced still painted as a faint band under the bar on a desk. */
+.platform-shell .patient-v2 .profile-header { position: relative; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
 /* On a phone the screen's one act stays in reach above the tab bar while the folds scroll, in the
    bar's own bleed so the translucent strip reaches both edges. (`--app-tabs-h` is the bar's height,
    set beside the bar in platform.css.) */
@@ -54,6 +57,7 @@
   .platform-shell .patient-v2 .clinician-row :is(.row-portrait-anchor,img,.clinician-monogram-thumb) { width: 56px; height: 56px; flex-basis: 56px; }
   .platform-shell .patient-v2 .clinician-row strong { font-size: 17px; }
   .platform-shell .patient-v2 .profile-header { min-height: 48px; padding-block: 4px; }
+
   .platform-shell .patient-v2 .profile-content { padding: 12px 0 30px; }
   .platform-shell .patient-v2 .profile-content .profile-identity h1 { font-family: inherit; font-size: 28px; line-height: 1.2; }
   .platform-shell .patient-v2 .profile-content .profile-intro { grid-template-columns: 112px minmax(0, 1fr); margin-top: 0; gap: 14px; }

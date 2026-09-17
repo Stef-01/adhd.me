@@ -31,10 +31,19 @@ const COLOURS: Record<Layer, { fill: string; ink: string }> = {
 /** Where each layer's wedge sits, in degrees from the top, clockwise. */
 const WEDGE: Record<Layer, [number, number]> = { brain: [-90, 0], body: [0, 90], environment: [90, 180], people: [180, 270] };
 
-const CX = 220;
-const CY = 220;
-const R_OUT = 200;
-const R_IN = 62;
+const CX = 250;
+const CY = 250;
+const R_OUT = 244;
+const R_IN = 64;
+/* A node is a disc that holds its longest label ("Medication", "Clinicians") at the label size, so
+   no word spills past its ring into the next. Three rings, with the discs sized so two neighbours on
+   adjacent rings clear each other at the closest angle a seven-node wedge produces. */
+const R_NODE = 26;
+/* Outer, inner, middle: consecutive nodes step across all three, so the two nearest in angle are
+   never the closest pair of rings. The insets keep each ring off the wedge edges, where the next
+   wedge's nodes sit. Searched, not guessed: this set holds every pair of discs at least 6px apart. */
+const RINGS = [200, 100, 154] as const;
+const INSETS = [3, 4, 3] as const;
 
 function polar(deg: number, r: number): [number, number] {
   const rad = (deg * Math.PI) / 180;
@@ -50,17 +59,17 @@ function wedgePath(layer: Layer): string {
   return `M${x1} ${y1}A${R_OUT} ${R_OUT} 0 0 1 ${x2} ${y2}L${x3} ${y3}A${R_IN} ${R_IN} 0 0 0 ${x4} ${y4}Z`;
 }
 
-/** Node positions: each layer's subdomains spread across its wedge on two rings, so labels never collide. */
+/** Node positions: each layer's subdomains spread across its wedge, consecutive nodes stepping
+    outer, inner, middle ring, so the two nearest in angle are never on neighbouring rings' closest pair. */
 function nodePositions(): Map<Subdomain, { x: number; y: number; layer: Layer }> {
   const out = new Map<Subdomain, { x: number; y: number; layer: Layer }>();
   for (const layer of LAYERS) {
     const subs = subdomainsOf(layer);
     const [a, b] = WEDGE[layer];
     subs.forEach((s, i) => {
-      // Two rings, and the inner one kept off the wedge edges so neighbours across a boundary never touch.
-      const ring = i % 2 === 0 ? 166 : 116;
+      const ring = RINGS[i % 3] ?? RINGS[0];
+      const inset = INSETS[i % 3] ?? INSETS[0];
       const t = (i + 0.5) / subs.length;
-      const inset = i % 2 === 0 ? 0 : 6;
       const deg = a + inset + (b - a - 2 * inset) * t;
       const [x, y] = polar(deg, ring);
       out.set(s.id, { x, y, layer });
@@ -84,17 +93,17 @@ export function CareMap() {
 
   return (
     <div className="care-map">
-      <svg className="care-map-svg" viewBox="0 0 440 440" role="group" aria-label="The care map: brain, body, environment and people, with a node for each part of life ADHD touches">
+      <svg className="care-map-svg" viewBox="0 0 500 500" role="group" aria-label="The care map: brain, body, environment and people, with a node for each part of life ADHD touches">
         {LAYERS.map((layer) => {
           const [a, b] = WEDGE[layer];
           // The label sits on the wedge's outer arc, following it, so a long word never runs off the disc.
-          const [x1, y1] = polar(a + 4, R_OUT - 12);
-          const [x2, y2] = polar(b - 4, R_OUT - 12);
+          const [x1, y1] = polar(a + 4, R_OUT - 11);
+          const [x2, y2] = polar(b - 4, R_OUT - 11);
           const arcId = `care-map-arc-${layer}`;
           return (
             <g key={layer}>
               <path d={wedgePath(layer)} fill={COLOURS[layer].fill} stroke="#fff" strokeWidth="4" />
-              <defs><path id={arcId} d={`M${x1} ${y1}A${R_OUT - 12} ${R_OUT - 12} 0 0 1 ${x2} ${y2}`} /></defs>
+              <defs><path id={arcId} d={`M${x1} ${y1}A${R_OUT - 11} ${R_OUT - 11} 0 0 1 ${x2} ${y2}`} /></defs>
               <text fontSize="11" fontWeight="800" letterSpacing="1.5" fill={COLOURS[layer].ink}>
                 <textPath href={`#${arcId}`} startOffset="50%" textAnchor="middle">{LAYER_LABELS[layer].toUpperCase()}</textPath>
               </text>
@@ -118,8 +127,8 @@ export function CareMap() {
               onClick={() => { setSelected(s.id); track("CARE_MAP_OPENED", { node: s.id }); }}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(s.id); } }}
             >
-              <circle cx={p.x} cy={p.y} r={has ? 21 : 19} fill="#fff" stroke={COLOURS[p.layer].ink} strokeWidth={has ? 3 : 1.5} />
-              <text x={p.x} y={p.y + 3.5} textAnchor="middle" fontSize="9.5" fontWeight="700" fill={COLOURS[p.layer].ink}>{s.label.length > 9 ? s.label.split(" ")[0] : s.label}</text>
+              <circle cx={p.x} cy={p.y} r={has ? R_NODE + 2 : R_NODE} fill="#fff" stroke={COLOURS[p.layer].ink} strokeWidth={has ? 3 : 1.5} />
+              <text x={p.x} y={p.y + 3.25} textAnchor="middle" fontSize="8.75" fontWeight="700" fill={COLOURS[p.layer].ink}>{s.label.length > 10 ? s.label.split(" ")[0] : s.label}</text>
             </g>
           );
         })}

@@ -58,7 +58,7 @@
   position: relative;
   background-image:
     radial-gradient(58% 38% at 6% 2%, color-mix(in srgb, var(--hero-glow) 40%, transparent), transparent 72%),
-    radial-gradient(62% 42% at 96% 14%, color-mix(in srgb, var(--hero-blue) 34%, transparent), transparent 74%),
+    radial-gradient(62% 42% at 96% 14%, color-mix(in srgb, var(--accent-tint) 60%, transparent), transparent 74%),
     radial-gradient(86% 46% at 50% 102%, color-mix(in srgb, var(--accent-mid) 28%, transparent), transparent 74%);
   background-repeat: no-repeat;
 }
@@ -186,11 +186,12 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
   box-shadow: 0 2px 8px -5px rgb(23 32 51 / 0.12);
 }
 .platform-shell [data-liquid] :is(.learn-stack .learn-card, .leo-feature, .learn-play-card) > * { position: relative; z-index: 2; }
-/* The Play card is the one surface with no colour of its own, so it takes a wash of the room. */
+/* The Play card is the one surface with no colour of its own, so it takes a wash of the room: the
+   brand's warm ends at both corners, since a cool corner was the one blue left on the Learn tab. */
 .platform-shell [data-liquid] .learn-play-card {
   background:
     radial-gradient(72% 56% at 18% 0%, color-mix(in srgb, var(--hero-glow) 26%, transparent), transparent 68%),
-    radial-gradient(80% 60% at 92% 100%, color-mix(in srgb, var(--hero-blue) 26%, transparent), transparent 70%),
+    radial-gradient(80% 60% at 92% 100%, color-mix(in srgb, var(--accent-tint) 55%, transparent), transparent 70%),
     var(--stone);
 }
 @supports (corner-shape: superellipse(2)) {

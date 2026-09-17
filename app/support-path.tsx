@@ -8,7 +8,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, Copy } from "@phosphor-icons/react";
+import { ArrowRight, CaretRight, Check, Copy } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
 import { LAYER_LABELS } from "@/model/layers";
 import { deriveNeeds, type Need } from "@/model/needs";
@@ -183,7 +183,7 @@ function ColdKinds({ seeProviders }: { seeProviders: (p: Profession) => void }) 
           /first-step answers the same "not sure" in two taps, and the ten questions are still
           offered on Today, in the tab bar and in the settings sheet. */}
       <p className="cold-start">
-        <Link href="/first-step">Not sure? Two questions</Link>
+        <Link href="/first-step">Not sure? Two questions<CaretRight size={14} weight="bold" aria-hidden="true" /></Link>
       </p>
     </section>
   );

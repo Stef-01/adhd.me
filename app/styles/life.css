@@ -101,8 +101,13 @@
 .life-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 .life-actions .learn-primary, .life-actions .learn-secondary { text-decoration: none; }
 .life-why { margin-top: 14px; }
-.life-why summary { min-height: 44px; display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.8125rem; font-weight: 620; cursor: pointer; list-style: none; }
+/* One disclosure idiom across the app screens: the GP page's "More about how they work +", the
+   characters' "About +" and these share the accent, the weight and the +/− at the end, so a fold
+   reads as a fold everywhere rather than as a stray label. */
+.life-why summary { min-height: 44px; display: flex; align-items: center; gap: 8px; color: var(--accent-deep); font-size: 0.875rem; font-weight: 700; cursor: pointer; list-style: none; }
 .life-why summary::-webkit-details-marker { display: none; }
+.life-why summary::after { content: "+"; font-weight: 800; }
+.life-why[open] summary::after { content: "\2212"; }
 .life-why summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
 .life-why p { margin: 4px 0 0; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
 .life-why code { font-size: 0.75rem; color: var(--faint); }
@@ -291,6 +296,15 @@
 /* An empty state carries a drawing instead of a paragraph: presence without words. */
 .life-figure { margin: 8px auto 4px; max-width: 320px; }
 .life-figure .learning-scene { width: 100%; height: auto; max-height: 200px; }
+/* On a desk the lead card is two columns: the words and the one act on the left, the scene on the
+   right, instead of a scene centred under a left-aligned heading across a thousand pixels. */
+@media (min-width: 900px) {
+  .life-card.is-lead:has(> .life-figure) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 36%); grid-template-rows: auto auto 1fr; column-gap: 40px; align-items: start; padding: 28px 32px; }
+  .life-card.is-lead:has(> .life-figure) > h2, .life-card.is-lead:has(> .life-figure) > p { grid-column: 1; }
+  .life-card.is-lead:has(> .life-figure) > .life-figure { grid-column: 2; grid-row: 1 / span 3; align-self: center; margin: 0; max-width: none; }
+  .life-card.is-lead:has(> .life-figure) > .life-figure .learning-scene { max-height: 172px; }
+  .life-card.is-lead:has(> .life-figure) > .life-actions { grid-column: 1; align-self: end; }
+}
 /* The life pages' title, in the display scale the redesign gave Inter (Newsreader is for questions). */
 .life-title { margin: 0 0 16px; font-size: clamp(28px, 6vw, 34px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
 /* Closed folds as one list of rows, not a stack of empty cards. */
@@ -336,7 +350,10 @@
   font-size: 0.9375rem; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;
 }
 .first-step-back:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.cold-start a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 0.9375rem; text-underline-offset: 4px; }
+/* The same text-link idiom as the welcome's "Try an example search": accent, bold, a caret. A muted
+   underlined line under a list of cards read as a footnote, not as the door it is. */
+.cold-start a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--accent-deep); font-size: 0.875rem; font-weight: 700; text-decoration: none; }
+.cold-start a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 /* ── Your map (app/my-map.tsx) ────────────────────────────────────────────────────────────────
    The judge-screen shape: a frame, four rings for the four rungs a dimension can climb, faint

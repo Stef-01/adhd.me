@@ -79,7 +79,10 @@
 .match-more > summary::after { content: "+"; margin-left: 8px; font-weight: 800; }
 .match-more[open] > summary::after { content: "\2212"; }
 .match-more[open] > summary { margin-bottom: 6px; }
-details.match-disclosure > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--muted); font-size: 0.8125rem; font-weight: 650; list-style: none; }
+/* The same fold idiom as `.match-more` above: accent, bold, +/− at the end. */
+details.match-disclosure > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 8px; color: var(--accent-deep); font-size: 0.875rem; font-weight: 700; list-style: none; }
+details.match-disclosure > summary::after { content: "+"; font-weight: 800; }
+details.match-disclosure[open] > summary::after { content: "\2212"; }
 details.match-disclosure > summary::-webkit-details-marker { display: none; }
 details.match-disclosure > p { margin: 4px 0 0; }
 /* The GP dashboard's field grid: a select with a long option must shrink to the column, not widen the page. */
