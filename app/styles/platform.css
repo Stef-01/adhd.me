@@ -61,7 +61,9 @@ body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outl
 }
 .platform-shell .patient-v2 .screen { width: 100%; min-width: 0; min-height: auto; padding: 0 0 40px; }
 .platform-shell .patient-v2 .screen:not(.results-screen) { padding-inline: 0; max-width: 880px; margin-inline: auto; }
-.platform-shell .minimal-header { min-height: 64px; padding: 12px 0; border: 0; background: transparent; }
+/* In flow here, not pinned: the glass blur it carries in the phone shell has nothing to blur and
+   painted a faint band under the bar on a desk (the example searches and the booking stage). */
+.platform-shell .minimal-header { min-height: 64px; padding: 12px 0; border: 0; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
 .platform-shell .minimal-header::after { display: none; }
 .platform-shell .minimal-header.has-settings { display: none; }
 .platform-shell .me-screen { padding-top: 40px; }
@@ -91,6 +93,12 @@ body:has(.platform-shell) .aoc-band { padding: 24px max(24px, calc((100vw - 1280
 body:has(.platform-shell) .aoc-band svg { display: none; }
 body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-height: 1.6; color: var(--muted); }
 .platform-shell :is(button, a, input, textarea):focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+/* The settings sheet on a desk: a phone's bottom sheet stretched to the window's full width put
+   its rows on a 1400px line. It is a panel now, sized to a reading measure and lifted off the
+   bottom edge, with every corner rounded; on a phone it stays the sheet it was. */
+@media (min-width: 768px) {
+  body:has(.platform-shell) .sheet { width: min(600px, calc(100% - 48px)); bottom: 24px; border-radius: 22px; }
+}
 @media (min-width: 768px) and (max-width: 1199px) {
   .platform-header { gap: 16px; padding-inline: 24px; }
   .platform-utilities { gap: 12px; }

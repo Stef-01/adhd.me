@@ -119,16 +119,16 @@ body:has(.platform-shell) :is(.consent-read, .consent-agree):focus-visible,
    The finder's booking button, the GP walkthrough's pathway button, the games' Play, the 404 and
    worked-examples door, the profile's "show" pill, pressed filter chips and the base consent
    button all take the ink pill; the story hero, on its navy, takes the yellow with ink type. */
-.patient-v2 .profile-footer .primary-button, .cv2-action > button, .cv2-action > .cv2-start-cta, .notfound-primary, .me-show, .consent-agree, .platform-shell .lives-play {
+.patient-v2 .profile-footer .primary-button, .patient-v2 .bottom-action .primary-button, .cv2-action > button, .cv2-action > .cv2-start-cta, .notfound-primary, .me-show, .consent-agree, .platform-shell .lives-play {
   background: var(--ink); border-color: var(--ink); color: var(--paper);
   box-shadow: 0 4px 16px -2px color-mix(in srgb, var(--ink) 18%, transparent);
 }
-.patient-v2 .profile-footer .primary-button svg, .cv2-action > button svg, .cv2-action > .cv2-start-cta svg, .notfound-primary svg, .me-show svg, .platform-shell .lives-play svg { color: var(--brand); }
+.patient-v2 .profile-footer .primary-button svg, .patient-v2 .bottom-action .primary-button svg, .cv2-action > button svg, .cv2-action > .cv2-start-cta svg, .notfound-primary svg, .me-show svg, .platform-shell .lives-play svg { color: var(--brand); }
 .filter-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); box-shadow: none; }
 .story-primary-link { background: var(--brand); color: var(--ink); }
 .story-primary-link svg { color: var(--ink); }
 @media (hover: hover) {
-  .patient-v2 .profile-footer .primary-button:hover, .cv2-action > button:hover, .cv2-action > .cv2-start-cta:hover, .notfound-primary:hover, .me-show:hover, .consent-agree:hover, .platform-shell .lives-play:hover {
+  .patient-v2 .profile-footer .primary-button:hover, .patient-v2 .bottom-action .primary-button:hover, .cv2-action > button:hover, .cv2-action > .cv2-start-cta:hover, .notfound-primary:hover, .me-show:hover, .consent-agree:hover, .platform-shell .lives-play:hover {
     background: color-mix(in srgb, var(--ink) 86%, var(--paper)); border-color: transparent; color: var(--paper);
   }
   .story-primary-link:hover { background: var(--brand-deep); color: var(--ink); }
