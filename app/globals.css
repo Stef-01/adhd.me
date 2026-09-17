@@ -101,27 +101,22 @@
 :root {
   color-scheme: light;
 
-  /* RADIANT (2026-09-06, founder-directed): the warm palette from the founder's mockups. Every
-     value was measured against --paper before it landed: ink 16.3:1, muted 8.9:1 (8.4 on stone),
-     faint 5.2:1 (the mockups' #8c7168 meta grey read 4.3:1 and was lifted one step; 4.9 on
-     stone), accent 4.8:1 as text and 5.1:1 under white text. The brighter terracotta the mockups
-     fill buttons with, #d95c2b, is 3.8:1 under white — decorative only here: the dot, the
-     progress fill, borders, icons and the italic word, never small text on or in it. */
-  --ink: #172033;
-  /* O157: #6e706a → #696b65. Contrast was never checked in this tree until now, and these two
-     tokens were not wrong on the two backgrounds anybody had looked at — muted measured 5.01 on
-     white and 4.80 on --paper. On --stone, the console's card and tag background, it measured
-     4.24 against a 4.5 floor, which put 18 of the console's 30 failures on this one line. Five
-     steps darker is the smallest change that clears AA on all THREE backgrounds at once
-     (paper 5.17, stone 4.56, white 5.40) — computed rather than eyeballed. */
-  --muted: #565f70;
-  /* Has to clear AA at 11px, the smallest size this token is used at. 5.1:1 on --paper. */
-  /* O157: 4.48 on --stone, one hundredth under the floor and still under. One step darker
-     (paper 5.15, stone 4.55, white 5.37). */
-  --faint: #626b7b;
-  --paper: #f7f8fc;
-  --stone: #edf0f6;
-  --line: #d8deea;
+  /* THE YELLOW SCHEME (2026-09-17, founder-directed): the colour scheme of Stef-01/revamped-adhd.me,
+     the static marketing site. Cream paper, warm near-neutral greys, charcoal ink, a saturated
+     yellow field for the header and the mark, deep gold where the brand has to be TEXT, and ink
+     for every primary control. The blue scheme of 2026-09-10 is the version this replaced.
+     Every text token was measured against --paper before it landed: ink 16.4:1, muted 7.3:1
+     (6.9 on stone), faint 6.2:1 (5.9 on stone; it sets 11px labels), accent 6.2:1 as text and
+     6.4:1 under white. The greys keep their channel spread under 24 on purpose: src/quality/tint.ts
+     reads a wider warm grey as a badge, and that rule guards two console specs. */
+  --ink: #1a1c1c;
+  /** Secondary text. paper 7.3, stone 6.9, white 7.6. */
+  --muted: #55534d;
+  /** Smallest labels. Has to clear AA at 11px: paper 6.2, stone 5.9, white 6.6. */
+  --faint: #5f5e59;
+  --paper: #fafaf7;
+  --stone: #f6f4ee;
+  --line: #e8e6df;
 
   /* AR27: the dashboard chart's palette, tokenised with values preserved — the pair was
      validated by the dataviz method when the chart was built (CVD ΔE 24.7, ≥3:1 on white;
@@ -135,12 +130,24 @@
   --chart-end-label: var(--muted);
   --chart-point-ring: #ffffff;
 
-  --accent: #4c5f9c;
+  --accent: #785a00;
   --on-accent: #ffffff;
-  --accent-deep: #334679;
-  --accent-soft: #e9edf8;
-  --accent-mid: #647bbf;
-  --accent-tint: #c9d3ef;
+  --accent-deep: #5b4300;
+  --accent-soft: #fff8e6;
+  --accent-mid: #e5b026;
+  --accent-tint: #fde7a5;
+
+  /* THE BRAND FIELD (2026-09-17, founder-directed: the colour scheme of Stef-01/revamped-adhd.me).
+     Saturated yellow is the ground the wordmark and the header sit on, with ink type; it is a
+     SURFACE, never text — 1.6:1 on paper. Text in the brand's colour uses --accent, the deep gold.
+     --brand-edge is the header's hairline, --brand-pill the translucent nav container. --signal is
+     the one warm-red dot beside the wordmark in that repo's mark. */
+  --brand: #f1bc31;
+  --brand-deep: #e5b026;
+  --brand-edge: #e5b029;
+  --brand-pill: #f7cf63;
+  --on-brand: var(--ink);
+  --signal: #ff4d2e;
 
   /* The primary button: dark pill, light label. */
   /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than
@@ -199,29 +206,27 @@
   --ground: var(--ink);
   --on-ground: var(--paper);
   /* Accent on the one dark band (/practices hero), where the light amber reads instead. */
-  --on-band: #ffd9b8;
+  --on-band: #f1bc31;
 
-  /* THE BRAND SCHEME (ported from the network deployment, Stef-01/ADHD O271/O282/O296/O300,
-     founder-directed reskin 2026-09-01): warm golden orange to soft periwinkle blue. The network
-     tree carries this on its header, hero, footer and Acknowledgement band; the two deployments
-     are one product on two domains, so the finder carries the same scheme from the same tokens.
-     Values are copied VERBATIM — a re-derivation here would be the drift the split's own banner
-     warns about ("a change to shared code that matters to both has to be made in both"). */
-  --hero-glow: #f5b273;
-  --hero-orange: #d47839;
-  --hero-orange-deep: #a14f19;
-  --hero-blue: #6679b9;
-  --hero-blue-deep: #5065a6;
-  --hero-blue-night: #334679;
-  --hero-dusk: #172033;
+  /* THE HERO FAMILY, RE-CUT ON THE YELLOW SCHEME. The names date from the orange-to-periwinkle band
+     and are kept because the glass, the learning scenes and the games read them: the warm end is
+     the brand yellow and its lighter and hover steps, the cool end is revamped-adhd.me's sky blue,
+     its deeper stop and its slate, and dusk is the ink. */
+  --hero-glow: #f7cf63;
+  --hero-orange: #f1bc31;
+  --hero-orange-deep: #e5b026;
+  --hero-blue: #3b8fd3;
+  --hero-blue-deep: #2470b4;
+  --hero-blue-night: #24487a;
+  --hero-dusk: #1a1c1c;
 
-  /* The redesign's functional roles. Blue carries route and state; orange marks the next
-     consequential action. Both come from the existing cross-deployment brand family, but they
-     no longer blend into an ornamental header gradient. */
-  --route: var(--hero-blue-night);
-  --route-strong: var(--hero-dusk);
-  --route-soft: color-mix(in srgb, var(--hero-blue) 14%, var(--paper));
-  --route-line: color-mix(in srgb, var(--hero-blue) 34%, var(--paper));
+  /* The functional roles. Blue still carries route and state — revamped-adhd.me sets its text links
+     in this blue and its panels in these sky tints — and the deep gold accent marks the next
+     consequential action. 5.5:1 as a link on paper. */
+  --route: #1d64c2;
+  --route-strong: var(--hero-blue-night);
+  --route-soft: #dcedfa;
+  --route-line: #b9d6ee;
   --surface: var(--paper);
   --surface-raised: var(--stone);
   --shadow-ambient: 0 18px 52px color-mix(in srgb, var(--hero-dusk) 12%, transparent);
@@ -230,9 +235,9 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
 
-  /* Tailwind v4 utilities used by the older console and legal surfaces now resolve through the
-     same cool porcelain scale as the bespoke components. This lets the redesign reach every
-     route without replacing the project's styling stack. */
+  /* Tailwind v4 utilities used by the older console and legal surfaces resolve through the same
+     warm neutral scale as the bespoke components, so the scheme reaches every route without
+     replacing the project's styling stack. */
   --color-stone-50: var(--paper);
   --color-stone-100: var(--stone);
   --color-stone-200: var(--line);
@@ -243,36 +248,30 @@
   --color-stone-700: color-mix(in srgb, var(--ink) 78%, var(--muted));
   --color-stone-800: color-mix(in srgb, var(--ink) 90%, var(--muted));
   --color-stone-900: var(--ink);
-  /* 2026-09-10, the blue scheme: the console's amber utilities (its active states and notes) read the
-     accent ramp, so one token change recolours every surface; there is no second warm scale. */
+  /* The console's amber utilities (its active states and notes) read the accent ramp, so one token
+     change recolours every surface; there is no second warm scale. */
   --color-amber-50: var(--accent-soft);
   --color-amber-100: color-mix(in srgb, var(--accent-tint) 55%, var(--paper));
   --color-amber-200: var(--accent-tint);
   --color-amber-500: var(--accent-mid);
   --color-amber-700: var(--accent);
   --color-amber-900: var(--accent-deep);
-  /* THE BRAND GRADIENT, DEFINED ONCE (network O296). Every surface that carries it — the header,
-     the footer, the Acknowledgement band — references this, so they cannot drift apart by being
-     written out per surface. Purely left-to-right on purpose: the footer and the Acknowledgement
-     are STACKED elements, and any layer whose geometry depends on element height renders
-     differently in each and shows a join. */
-  /* ACROSS: the header and any mid-page band. */
+  /* THE BAND, DEFINED ONCE. It is the flat yellow field now — the reference paints its header and
+     its mark in one solid colour — and it stays an image token because the console header's rule
+     and every older band consumer take a background-image. Same field on every surface. */
   --band-gradient:
-    linear-gradient(100deg, var(--hero-orange-deep) 0%, var(--hero-orange) 26%, var(--hero-orange) 38%, var(--hero-blue) 60%, var(--hero-blue) 100%);
-  /* THE LEGIBILITY SCRIM FOR THE ACROSS BAND (network O300). Sits over the ramp and evens out its
-     luminance where it peaks, so white type on the band clears the WCAG floor without the brand
-     colours being restated as something duller. Alphas are per stop and derived in the network
-     tree against its rendered-pixel sweep; same 100deg as the band, painted on the same box, so
-     the two stay aligned at every width. */
+    linear-gradient(100deg, var(--brand) 0%, var(--brand) 100%);
+  /* The scrim the gradient band needed is empty: ink type on a flat yellow measures 9.8:1 unaided.
+     Kept as a token so .site-nav's two-layer background needs no restating. */
   --band-scrim:
-    linear-gradient(100deg, rgba(16, 12, 9, .04) 0%, rgba(16, 12, 9, .14) 34%, rgba(16, 12, 9, .24) 52%, rgba(16, 12, 9, .02) 86%, rgba(16, 12, 9, 0) 100%);
-  /* DOWN: the closing band. Two stacked elements, so the stops meet exactly at the boundary —
-     the footer hands --hero-blue-night to the acknowledgement, which carries it into the dusk. */
+    linear-gradient(100deg, transparent 0%, transparent 100%);
+  /* DOWN: the closing band. brand.css paints the footer and the Acknowledgement in ink under a
+     yellow rule; these stay for the surfaces that still read them. */
   --band-fall-upper:
     var(--band-gradient);
   --band-fall-lower:
     var(--band-gradient);
-  --line-strong: #b9c2d6;
+  --line-strong: #d9d5c9;
 }
 
 
@@ -3560,9 +3559,9 @@ summary:focus-visible {
   --s-line: var(--line);
   /* The one dark beat is now the same navigation ink used throughout the app. */
   --s-dark: var(--ink);
-  --community-ink: #172033;
-  --community-muted: #565f70;
-  --community-accent: #a14f19;
+  --community-ink: #1a1c1c;
+  --community-muted: #55534d;
+  --community-accent: #785a00;
   min-height: 100dvh;
   color: var(--s-ink);
   background: var(--s-paper);
@@ -7244,16 +7243,15 @@ select { caret-color: var(--route-strong); }
    the token, so without this line every unstyled paragraph (and every currentColor border) on a
    console screen would still carry the site's blue-cast ink. */
 .console-app {
-  /* RADIANT: the console's greys are NEUTRAL, set here rather than mixed from the app's tokens.
-     They used to be the app's ink and muted warmed 8–10% toward the accent, which read as grey
-     while the ink was navy and the accent was dim; with the warm palette and a saturated
-     terracotta the same mix came out orange, and two console specs that measure neutrality by
-     channel spread (a verdict must not be graded by colour) went red. Stone greys, on the warm
-     paper: ink 16.6:1, muted 7.0:1, faint 4.9:1 on the stone tint, 5.4:1 on paper. */
-  --console-ink: #172033;
-  --console-muted: #565f70;
-  --console-faint: #626b7b;
-  --console-line: #d8deea;
+  /* The console's greys are the yellow scheme's greys, restated here rather than mixed: the
+     site's neutrals already sit under the state sweeps' channel spread of 24 (ink 2, muted 8,
+     faint 6), so a heading, a caption or a card border reads as no colour at all and the only
+     colour left on a console screen is a state the copy names. Paper: ink 16.4:1, muted 7.3:1,
+     faint 6.2:1 (5.9 on stone). */
+  --console-ink: #1a1c1c;
+  --console-muted: #55534d;
+  --console-faint: #5f5e59;
+  --console-line: #e8e6df;
 }
 .console-main {
   color: var(--console-ink);

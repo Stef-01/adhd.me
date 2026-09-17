@@ -114,8 +114,8 @@
 .life-empty p { margin: 0 0 16px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
 .layer-pill { display: inline-flex; align-items: center; gap: 6px; margin: 0 8px 8px 0; padding: 6px 12px; border-radius: 999px; font-size: 0.8125rem; font-weight: 620; background: var(--stone); color: var(--ink); }
 .layer-pill::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--layer-colour, var(--route)); }
-.layer-pill[data-layer="brain"] { --layer-colour: #6679b9; }
-.layer-pill[data-layer="body"] { --layer-colour: #d47839; }
+.layer-pill[data-layer="brain"] { --layer-colour: #3b8fd3; }
+.layer-pill[data-layer="body"] { --layer-colour: #f1bc31; }
 .layer-pill[data-layer="environment"] { --layer-colour: #0e8345; }
 .layer-pill[data-layer="people"] { --layer-colour: #b18fd8; }
 .insight-card { display: grid; gap: 6px; padding: 16px 18px; border-radius: 16px; background: var(--route-soft); }

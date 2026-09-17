@@ -39,11 +39,11 @@ import { SHARED_OPEN_GRAPH } from "@/seo/pages";
  * that is a visible seam at the top of every screen, and it is invisible in every desktop capture,
  * which is why a checklist found it and looking did not.
  *
- * The value is `--paper` from `globals.css`, and a test asserts the two still agree by resolving
- * both through a canvas: a palette change that left this stale would put the seam back silently.
+ * The value is `--brand` from `globals.css` now: every page opens on the yellow header, so the
+ * address bar continues that field rather than the paper below it (revamped-adhd.me's own choice).
  */
 export const viewport: Viewport = {
-  themeColor: "#fbfaf7",
+  themeColor: "#f1bc31",
   // O225 (STANDALONE-APP-PLAN.md Phase 1b): without `cover`, the installed app letterboxes below
   // the notch and the status-bar strip renders as a paper seam above the brand band. With it, the
   // band paints to the device edge and the chrome pads itself back out with safe-area insets —
@@ -102,7 +102,7 @@ const DESIGN_DIRECTION = {
   thesis:
     "A bright, responsive platform for finding care and understanding ADHD, with clear labelled navigation and approachable illustrated learning.",
   world:
-    "Warm paper and stone, restrained amber, an orange-to-periwinkle name band, Newsreader questions and Inter UI, with original illustrated learning.",
+    "Cream paper and stone, a saturated yellow header with ink type, deep-gold accents, Newsreader questions and Inter UI, with original illustrated learning.",
   story:
     "A visitor understands the GP finder, sees how their words affect the order, and can move from search to a booking handoff without losing context.",
   firstViewport:

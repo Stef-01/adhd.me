@@ -4,8 +4,8 @@
 // raw-hex census's 12 → 6 reduction.
 import { ImageResponse } from "next/og";
 
-/** Navigation ink surrounds a periwinkle field; the initial, line and two route stops remain
- * optically identical at every metadata size. */
+/** Ink surrounds the brand's yellow field; the ink initial, its rule and the warm-red dot from
+ * revamped-adhd.me's mark stay optically identical at every metadata size. */
 export function brandMark(edge: number) {
   const px = (ratio: number) => Math.round(edge * ratio);
   return new ImageResponse(
@@ -17,7 +17,7 @@ export function brandMark(edge: number) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#191a17",
+          background: "#1a1c1c",
         }}
       >
         <div
@@ -30,8 +30,8 @@ export function brandMark(edge: number) {
             height: "82%",
             padding: `${px(0.082)}px ${px(0.094)}px`,
             borderRadius: px(0.219),
-            background: "#4c5f9c",
-            color: "#ffffff",
+            background: "#f1bc31",
+            color: "#1a1c1c",
             fontFamily: "Georgia, serif",
             fontSize: px(0.484),
             fontWeight: 500,
@@ -47,7 +47,7 @@ export function brandMark(edge: number) {
               bottom: px(0.16),
               height: px(0.023),
               borderRadius: px(0.023),
-              background: "var(--paper)",
+              background: "#1a1c1c",
             }}
           />
           <div
@@ -58,7 +58,7 @@ export function brandMark(edge: number) {
               width: px(0.078),
               height: px(0.078),
               borderRadius: px(0.078),
-              background: "#d9904c",
+              background: "#ff4d2e",
             }}
           />
           <div
@@ -69,7 +69,7 @@ export function brandMark(edge: number) {
               width: px(0.078),
               height: px(0.078),
               borderRadius: px(0.078),
-              background: "var(--paper)",
+              background: "#1a1c1c",
             }}
           />
         </div>

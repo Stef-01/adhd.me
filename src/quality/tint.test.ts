@@ -17,15 +17,17 @@ import { isStateTint, TINT_SPREAD, type Rgb } from "./tint";
 
 /** The palette's own neutrals, from `:root` in app/globals.css, with their channel spreads. */
 const INK: ReadonlyArray<readonly [string, Rgb]> = [
-  ["--ink #172033", [23, 32, 51]],
-  ["--muted #565f70", [86, 95, 112]],
-  ["--faint #626b7b", [98, 107, 123]],
-  ["--line #d8deea", [216, 222, 234]],
-  ["--line-strong #b9c2d6", [185, 194, 214]],
-  ["--paper #f7f8fc", [247, 248, 252]],
-  ["--stone #edf0f6", [237, 240, 246]],
-  // The value CI reported 107 times: a color-mix of ink into muted, resolved by the browser.
-  ["a color-mix of ink and muted", [75, 84, 101]],
+  ["--ink #1a1c1c", [26, 28, 28]],
+  ["--muted #55534d", [85, 83, 77]],
+  ["--faint #5f5e59", [95, 94, 89]],
+  ["--line #e8e6df", [232, 230, 223]],
+  ["--line-strong #d9d5c9", [217, 213, 201]],
+  ["--paper #fafaf7", [250, 250, 247]],
+  ["--stone #f6f4ee", [246, 244, 238]],
+  // The value CI once reported 107 times: a color-mix of ink into muted, resolved by the browser.
+  ["a color-mix of ink and muted", [39, 40, 39]],
+  // The blue scheme this rule was cut for, kept so the direction clause stays exercised.
+  ["the former --ink #172033", [23, 32, 51]],
 ];
 
 /** What the console must never show, and what a threshold-only rule would let through. */
