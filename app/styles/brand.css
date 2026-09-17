@@ -2,7 +2,7 @@
    every page with ink type, primaries are ink pills, the accent in text is the deep gold, and the
    footer is ink under a yellow rule. :root in globals.css owns the values; this file places them. */
 :root {
-  --font-ui: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-ui: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Newsreader Variable", Newsreader, Georgia, serif;
 }
 body { font-family: var(--font-ui); }
@@ -14,11 +14,7 @@ body { font-family: var(--font-ui); }
   border-bottom: 1px solid var(--brand-edge);
 }
 .platform-console .console-header { position: relative; border-top: 4px solid var(--brand); }
-.platform-brand { position: relative; gap: 5px; align-items: baseline; letter-spacing: -.045em; color: var(--on-brand); }
-.platform-brand::after, .platform-public-nav .site-nav-wordmark::after {
-  content: ""; display: inline-block; width: 7px; height: 7px;
-  border-radius: 50%; background: var(--signal);
-}
+.platform-brand { position: relative; gap: 0; align-items: center; letter-spacing: 0; color: var(--on-brand); }
 .platform-public-nav .site-nav-wordmark { gap: 5px; align-items: baseline; }
 .platform-brand svg { color: var(--ink); }
 .platform-help { color: var(--on-brand); }
@@ -147,3 +143,19 @@ body:has(.platform-shell) :is(.consent-read, .consent-agree):focus-visible,
 /* The matching console family set its section headings in the serif while its page title is the
    sans; one page, one display face. The quoted request keeps its serif: it is a quotation. */
 .platform-console .mc-section h2 { font-family: var(--font-ui); font-weight: 700; letter-spacing: -.02em; }
+
+/* ── The mark ──────────────────────────────────────────────────────────────────────────────────
+   As the reference draws it: ADHD small and letter-spaced over "me", the warm-red point after it.
+   One component (app/brand-mark.tsx) inside every wordmark link, so the header, the finder, the
+   public nav, the landing and both footers carry the same mark; it inherits the link's colour, so
+   it is ink on the yellow band and paper on the ink footer. */
+.brand-mark { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; color: inherit; font-family: var(--font-ui); }
+.brand-mark-top { display: block; padding-left: 0.62em; font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.62em; text-transform: uppercase; }
+.brand-mark-me { display: inline-flex; align-items: baseline; margin-top: -0.08em; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.03em; }
+.brand-mark-dot { display: inline-block; width: 0.36em; height: 0.36em; margin-left: 0.09em; border-radius: 50%; background: var(--signal); box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 18%, transparent); }
+.site-footer-wordmark .brand-mark-me, .story-footer-wordmark .brand-mark-me { font-size: 1.5rem; }
+.site-footer-wordmark .brand-mark-top, .story-footer-wordmark .brand-mark-top { font-size: 0.625rem; }
+@media (max-width: 767px) {
+  .brand-mark-me { font-size: 1.5rem; }
+  .brand-mark-top { font-size: 0.625rem; }
+}

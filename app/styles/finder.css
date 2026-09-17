@@ -25,13 +25,18 @@
 .platform-shell .patient-v2 .clinician-row .row-availability { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; white-space: normal; color: var(--accent-deep); font-size: 13px; }
 .platform-shell .patient-v2 .clinician-row .row-focus { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; white-space: normal; color: var(--muted); font-size: 14px; }
 .platform-shell .clinician-card :is(.match-reason,.match-caution,.clinician-availability) { -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; }
+/* The welcome on a desk: one centred column, the question over the box, both sized to a reading
+   measure. The two-column grid this replaced kept a right column for a panel that no longer
+   renders, so the question sat in the left half of an empty room. */
 @media (min-width: 1050px) {
-  .platform-shell .patient-v2 .screen.voice-screen { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(340px, .85fr); column-gap: 64px; align-content: center; align-items: start; max-width: 1280px; min-height: calc(100svh - 80px); padding-block: 64px; }
-  .platform-shell .voice-screen .voice-core { grid-column: 1; grid-row: 1; margin: 36px 0 28px; }
-  .platform-shell .voice-screen .voice-prompt h1 { text-align: left; max-width: 16ch; margin: 0; }
+  .platform-shell .patient-v2 .screen.voice-screen { display: grid; grid-template-columns: minmax(0, 760px); justify-content: center; align-content: center; max-width: 1280px; min-height: calc(100svh - 80px); padding-block: 48px 96px; }
+  .platform-shell .voice-screen .voice-core { grid-column: 1; grid-row: 1; margin: 0 0 32px; }
+  /* Left-aligned inside the centred column, as the reference sets its hero copy: the question,
+     the box and the example link keep one left edge (app-shell.spec holds them to it). */
+  .platform-shell .voice-screen .voice-prompt h1 { text-align: left; max-width: 18ch; margin: 0; }
   .platform-shell .voice-screen .voice-actions { grid-column: 1; grid-row: 2; max-width: none; margin: 0; }
   .platform-shell .voice-screen .finder-context { grid-column: 1; grid-row: 3; margin: 24px 0 0; text-align: left; }
-  .platform-shell .finder-getting-started { grid-column: 2; grid-row: 1 / span 3; }
+  .platform-shell .finder-getting-started { grid-column: 1; grid-row: 4; }
 }
 @media (max-width: 1049px) {
   .platform-shell .finder-getting-started { margin: 40px 0 0; padding: 24px; }
@@ -96,6 +101,8 @@
 .platform-shell .patient-v2 .results-browser .clinician-row :is(.row-portrait-anchor,img,.clinician-monogram-thumb) { width: 80px; height: 80px; flex-basis: 80px; border-radius: 50%; }
 .platform-shell .patient-v2 .results-browser .clinician-row strong { font-family: inherit; font-size: 21px; font-weight: 650; letter-spacing: -.025em; line-height: 1.3; }
 .platform-shell .patient-v2 .results-browser .row-copy { min-width: 0; display: grid; gap: 7px; }
+/* An invented profile says so beside its name, on the row, before any other fact about it. */
+.platform-shell .patient-v2 .row-example { display: inline-block; vertical-align: 0.2em; margin-left: 8px; padding: 2px 8px; border: 1px solid var(--accent-tint); border-radius: 999px; background: var(--accent-soft); color: var(--accent-deep); font-size: 11px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.4; }
 .platform-shell .patient-v2 .results-browser .row-focus { font-size: 14px; line-height: 1.5; margin: 0; }
 .platform-shell .patient-v2 .results-browser .row-location { margin: 0; font-size: 13px; line-height: 1.5; }
 .platform-shell .patient-v2 .results-browser .row-availability { max-width: 64ch; line-height: 1.5; }
@@ -126,7 +133,7 @@
   .platform-shell .patient-v2 .results-browser .row-focus { font-size: 13px; }
 }
 .platform-shell .finder-count-number { color: inherit; letter-spacing: inherit; }
-.platform-shell .results-summary-text { font-family: "Inter Variable", Inter, sans-serif; }
+.platform-shell .results-summary-text { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", sans-serif; }
 .platform-shell .patient-v2 .results-browser .clinician-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
 
 .platform-shell .care-preference-fields { display: grid; gap: 12px; padding-top: 16px; }

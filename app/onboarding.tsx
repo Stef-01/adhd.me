@@ -18,6 +18,7 @@ import { interactiveModule } from "@/learn/interactive";
 import { track } from "@/model/events";
 import { CharacterMark } from "./characters";
 import { useModel } from "./use-model";
+import { BrandMark } from "./brand-wordmark";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 
@@ -63,7 +64,7 @@ export function Onboarding() {
   return (
     <main id="main-content" className="me-screen life-screen onboarding-screen app-page-with-tabs">
       <div className="minimal-header me-chrome">
-        <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no">ADHD.ME</Link>
+        <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no"><BrandMark /></Link>
       </div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div

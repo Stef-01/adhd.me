@@ -29,7 +29,13 @@ remain in `docs/design/2026-platform/` and `docs/design/warm-brand/` as the reco
 | Signal | `#FF4D2E` | The one warm-red dot in the mark |
 
 Yellow is the ground of the header and nothing else on a screen, so the field reads as identity
-rather than decoration. The mark carries the reference's warm-red point after the name. The one
+rather than decoration; the one exception is the landing's throughline band, a marketing beat on a
+marketing page. The mark is the reference's: ADHD small and letter-spaced over "me", the warm-red
+point after it, one component (`app/brand-wordmark.tsx`) inside every wordmark link whose
+accessible name stays ADHD.ME. Type is the reference's too: Plus Jakarta Sans for the interface and
+Newsreader for display and editorial serif. The landing has no navy: its dark beats are the ink of
+the footer, its chapters the paper, the stone and the yellow wash. The Learn library's covers are
+pastel tints under ink, the reference's card family; the colour lives inside a module. The one
 primary on a screen is an ink pill with a yellow glyph and a soft shadow that lifts under a pointer;
 the microphone is that pill. Nothing is filled with the deep gold; as a fill it reads olive. Focus is
 an ink ring on light surfaces and a yellow one on ink. Two selected states, by role: navigation and

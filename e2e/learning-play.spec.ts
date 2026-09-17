@@ -22,7 +22,7 @@ test("all three navigation labels and header controls fit phone, tablet and desk
 
 test("the brand is text-only and learning activities respond without completing the module", async ({ page }) => {
   await page.goto("/approach?module=adhd");
-  await expect(page.locator(".platform-brand")).toHaveText("ADHD.ME");
+  await expect(page.locator(".platform-brand")).toHaveAttribute("aria-label", /ADHD\.ME/);
   await expect(page.locator(".platform-brand svg")).toHaveCount(0);
   const activity = page.getByRole("complementary", { name: "Explore three ideas" });
   for (const label of ["Attention", "Working memory", "Getting started"]) await activity.getByRole("button", { name: new RegExp(label) }).click();

@@ -34,7 +34,7 @@ test("the map starts empty and honest, and says so without saying it about the p
   for (const text of await axes.allInnerTexts()) expect(text).toContain("Unasked");
   await expect(page.locator(".map-open")).toContainText("Nothing yet. Not a gap, unasked.");
   // No number about anybody, anywhere on the page.
-  const words = (await page.locator("main").innerText()).replace(/ADHD\.ME/g, "");
+  const words = (await page.locator("main").innerText()).replace(/ADHD\.ME|ADHD\s*me/g, "");
   expect(words, "a count of a person is the one thing this page is built not to be").not.toMatch(/\d/);
   await expectNoViolations(page, "Your map, empty");
 });

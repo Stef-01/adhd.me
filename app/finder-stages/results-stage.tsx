@@ -495,7 +495,7 @@ export function ResultsStage({
               >
                 <ClinicianPortrait clinician={item} variant="thumb" eager={index < 5} />
               </motion.span>
-              <span className="row-copy"><strong>{item.name}</strong>
+              <span className="row-copy"><strong>{item.name}{item.synthetic && <span className="row-example">Example</span>}</strong>
                 {publicIdentity(item) && <small className="row-cultural-identity">{publicIdentity(item)!.identities.map(id => IDENTITY_LABELS[id]).join(" · ")}{publicIdentity(item)!.country && <> · {publicIdentity(item)!.country}</>}</small>}
                 {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
                     the label is the disclosure mechanism, not the name or the copy. */}

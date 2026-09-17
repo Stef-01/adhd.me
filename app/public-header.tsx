@@ -8,6 +8,7 @@
 // and how do I leave" is the same everywhere (Vercel web-interface-guidelines: real <a>/<Link>
 // for navigation, visible hover state, no dead zones).
 import Link from "next/link";
+import { BrandMark } from "./brand-wordmark";
 
 export function PublicHeader({
   rightHref = "/finder",
@@ -19,7 +20,7 @@ export function PublicHeader({
   return (
     <header className="site-nav platform-public-nav">
       <div className="site-nav-inner">
-        <Link href="/" className="site-nav-wordmark" aria-label="ADHD.ME home" translate="no">ADHD.ME</Link>
+        <Link href="/" className="site-nav-wordmark" aria-label="ADHD.ME home" translate="no"><BrandMark /></Link>
         <nav className="site-nav-links" aria-label="Primary navigation">
           <Link href="/examples">Worked examples</Link>
           <Link href="/faq">Questions</Link>
