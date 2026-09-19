@@ -48,6 +48,21 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
       Phase B (the PRD's P1 list) in the plan's order.
 
+## My ADHD Map — 2026-09-19
+
+The founder's brief (a skills-by-life-area map that fills in as a person learns and answers short
+questionnaires; provider matching and a one-tap GP summary that emerge from it; the My ADHD tab
+re-cut into a hub and click-throughs) is planned in **[docs/adhd-life/MAP-PLAN.md](docs/adhd-life/MAP-PLAN.md)**:
+what the tree already holds (most of the model), the one new reading (`src/model/matrix.ts`), the
+routes, the copy budget per screen, six phases, and the five decisions the founder still owns.
+
+- [ ] Phase 1: the matrix reading and the GP summary, pure and tested.
+- [ ] Phase 2: the hub, the five area pages, Today as a screen, history and delete moved off the hub.
+- [ ] Phase 3: the survey result as the map moment.
+- [ ] Phase 4: Take this to my GP.
+- [ ] Phase 5: support from the map: who could help, chips on the card, strengths in the fit.
+- [ ] Phase 6: go deeper surveys.
+
 ## Bidirectional matching — 2026-09-09
 
 The founder's matching-model brief (rich GP bios, GP-declared preferences and capacity, a
