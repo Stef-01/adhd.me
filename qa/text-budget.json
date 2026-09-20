@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-20T21:08:40.590Z",
+  "measuredAt": "2026-09-20T21:14:28.969Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 6,
-      "fold": 6,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "I held off",
-          "tag": "button"
+          "text": "FIND THE LIST!",
+          "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 2,
+          "text": "a leaflet",
           "tag": "span"
         },
         {
-          "w": 1,
-          "text": "DON’T!",
-          "tag": "p"
+          "w": 2,
+          "text": "the list",
+          "tag": "span"
         }
       ]
     },
@@ -498,26 +498,21 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 2,
+      "fold": 2,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
-        {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "CLEAR ONE!",
-          "tag": "p"
-        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "PIGEONS!",
+          "tag": "p"
         }
       ]
     },
@@ -552,26 +547,26 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "/lives/play/theo-out-the-door",
       "state": null,
-      "total": 36,
-      "fold": 36,
+      "total": 39,
+      "fold": 39,
       "chrome": 4,
-      "ratio": 0.9,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Drag or tap to pack.",
+          "w": 7,
+          "text": "Phone flat. Ari’s waiting at the station.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Essentials. Then exit.",
+          "w": 5,
+          "text": "One train. One busy brain.",
           "tag": "h1"
         },
         {
-          "w": 3,
-          "text": "Pack for today",
-          "tag": "strong"
+          "w": 4,
+          "text": "A morning with Theo",
+          "tag": "span"
         }
       ]
     },
@@ -1192,6 +1187,168 @@
       ]
     },
     {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "Theo, competing demands",
+      "state": "theo-busy",
+      "total": 40,
+      "fold": 40,
+      "chrome": 4,
+      "ratio": 1,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "One train. One busy brain.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "A morning with Theo",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Park for later",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "Theo, pause",
+      "state": "theo-pause",
+      "total": 27,
+      "fold": 27,
+      "chrome": 4,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "One train. One busy brain.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "A morning with Theo",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "The world can wait.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "Theo, departure",
+      "state": "theo-departure",
+      "total": 24,
+      "fold": 24,
+      "chrome": 4,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Ari: ‘There you are. Let’s go.’",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "A morning with Theo",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Made it out.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "Theo, evening arrangement",
+      "state": "theo-evening",
+      "total": 29,
+      "fold": 29,
+      "chrome": 4,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Make room for tomorrow.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Filled, ready for tomorrow.",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "That evening",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "Theo, rainy revisit",
+      "state": "theo-revisit",
+      "total": 37,
+      "fold": 37,
+      "chrome": 4,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Same house. Your setup. And… rain.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "You’ve been here before.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "The next morning",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "Theo, complete",
+      "state": "theo-complete",
+      "total": 29,
+      "fold": 29,
+      "chrome": 4,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Ari: ‘There you are. Let’s go.’",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "A little less to carry.",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "Make your own launch pad",
+          "tag": "a"
+        }
+      ]
+    },
+    {
       "path": "/lives/lab/leo-room",
       "name": "Leo room preview, pause",
       "state": "bedroom-pause",
@@ -1622,25 +1779,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 9,
-      "fold": 9,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "DELETE DRAFTS!",
+          "w": 3,
+          "text": "FIND THE LIST!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 3,
+          "text": "the other list",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "a napkin",
           "tag": "span"
         }
       ]
