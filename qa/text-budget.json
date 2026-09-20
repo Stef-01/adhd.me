@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-20T21:14:28.969Z",
+  "measuredAt": "2026-09-20T21:43:40.449Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 10,
-      "fold": 10,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "FIND THE LIST!",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "SWAT!",
           "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "a leaflet",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "the list",
-          "tag": "span"
         }
       ]
     },
@@ -498,21 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 2,
-      "fold": 2,
+      "total": 12,
+      "fold": 12,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
+        {
+          "w": 3,
+          "text": "DUCK OR GOOSE!",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "hissing at you",
+          "tag": "p"
+        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "PIGEONS!",
-          "tag": "p"
         }
       ]
     },
@@ -1779,26 +1784,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 11,
-      "fold": 11,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "FIND THE LIST!",
+          "text": "HOLD THE LID!",
           "tag": "p"
         },
         {
           "w": 3,
-          "text": "the other list",
-          "tag": "span"
+          "text": "Say it now",
+          "tag": "button"
         },
         {
           "w": 2,
-          "text": "a napkin",
-          "tag": "span"
+          "text": ". Then, at",
+          "tag": "p"
         }
       ]
     },
@@ -2103,10 +2108,10 @@
       "path": "/my-adhd/history",
       "name": "History, lived in",
       "state": "model-lived",
-      "total": 53,
-      "fold": 53,
+      "total": 58,
+      "fold": 58,
       "chrome": 6,
-      "ratio": 1.3,
+      "ratio": 1.5,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2120,8 +2125,8 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Ask what done looks like",
+          "w": 6,
+          "text": "One wake time for a week",
           "tag": "li"
         }
       ]

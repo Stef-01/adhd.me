@@ -192,7 +192,11 @@ export const LIVED_RECORD = {
   experiments: [
     { strategyId: "first-physical-action", moduleId: "starting", acceptedAt: "2026-09-01T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-02T00:00:00Z" },
     { strategyId: "define-done", moduleId: "ambiguity", acceptedAt: "2026-09-04T00:00:00Z", outcome: "a-little", outcomeAt: "2026-09-06T00:00:00Z" },
-    { strategyId: "wind-down", moduleId: "sleep", acceptedAt: "2026-09-05T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-07T00:00:00Z" },
+    // "wind-down" was not a strategy. The sleep module's one strategy is `fixed-wake`, so the
+    // history screen fell through to printing the raw id at a person — and because this record is
+    // the seed the budget AND e2e/my-adhd.spec.ts both run on, every measurement of that screen
+    // was of a screen no user can reach. `src/model/seed.test.ts` now pins every id here.
+    { strategyId: "fixed-wake", moduleId: "sleep", acceptedAt: "2026-09-05T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-07T00:00:00Z" },
     { strategyId: "one-capture-place", moduleId: "working-memory", acceptedAt: "2026-09-07T00:00:00Z" },
   ],
   reflections: [],

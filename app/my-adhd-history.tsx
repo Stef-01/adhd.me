@@ -28,7 +28,14 @@ const VERDICTS: ReadonlyArray<{ id: InsightVerdict; label: string }> = [
   { id: "no", label: "Not really" },
 ];
 
-function strategyTitle(id: string): string {
+/* Every id the app can write comes from a strategy step of an interactive module — `runs.ts`
+   resolves through `strategyOf`, which throws at module load rather than inventing an id, and the
+   survey result offers a strategy from the same modules. So an id that does not resolve means a
+   record written by an older release naming a strategy that has since been renamed or retired,
+   which `readModel` accepts without validating. It used to return the id, which put a slug like
+   "wind-down" on screen under "Helped a lot". A name the app has lost tells a person nothing and a
+   slug tells them it is broken, so the entry is dropped instead. */
+function strategyTitle(id: string): string | null {
   for (const m of INTERACTIVE_MODULES) {
     for (const s of m.steps) {
       if (s.kind !== "strategy") continue;
@@ -36,7 +43,7 @@ function strategyTitle(id: string): string {
       if (found) return found.title;
     }
   }
-  return id;
+  return null;
 }
 
 const INSIGHTS = INTERACTIVE_MODULES.flatMap((m) =>
@@ -65,14 +72,19 @@ export function MyAdhdHistory() {
       )}
 
       {OUTCOMES.map(({ id, title }) => {
-        const list = experiments.filter((e) => (e.outcome ?? "pending") === id);
+        /* Named first, so an outcome whose only entries the app can no longer name does not render
+           an empty heading over an empty list. */
+        const list = experiments
+          .filter((e) => (e.outcome ?? "pending") === id)
+          .map((e) => ({ id: e.strategyId, name: strategyTitle(e.strategyId) }))
+          .filter((e): e is { id: string; name: string } => e.name !== null);
         if (list.length === 0) return null;
         return (
           <section key={id} className="map-history" aria-labelledby={`history-${id}`}>
             <h2 id={`history-${id}`}>{title}</h2>
             <ul>
               {list.map((e) => (
-                <li key={e.strategyId}>{strategyTitle(e.strategyId)}</li>
+                <li key={e.id}>{e.name}</li>
               ))}
             </ul>
           </section>
