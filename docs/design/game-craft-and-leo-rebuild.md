@@ -1,5 +1,7 @@
 # Game craft correction and Leo rebuild
 
+**2026-09-18 sequencing update:** The user explicitly prioritised Theo after finding the old object-packing round too easy. His public route now receives the house/route/dependency rebuild in [Theo implementation](./theo-morning-rebuild.md). This supersedes the earlier Zoe-next order; it does not imply Leo's pending patient review or the other characters are finished.
+
 Status: first complete Leo L1/L2 candidate implemented on an isolated review route; L3 acceptance remains pending. See [implementation and QA record](./leo-room-implementation-qa.md). This document takes precedence where the earlier gameplay roadmap preserves Leo's core loop or starts with Zoe.
 
 Founder feedback: the shipped games are too basic and do not meet the expected quality of a polished contemporary app. Do not interpret a request for more depth as a request for more particles, more quiz screens, more targets, or more shared-template content.

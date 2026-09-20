@@ -1,112 +1,147 @@
-import { expect, test } from "./support/test";
+import { test, expect, hydratedUnderFakeClock } from "./support/test";
 import { pauseNow } from "./support/fake-clock";
 import type { Page } from "@playwright/test";
 import { expectNoViolations } from "./support/a11y";
 const URL = "/lives/play/theo-out-the-door";
-async function start(page: Page) {
-  await page.goto(URL);
-
+const firstRoute = ["phone", "bottle", "keys", "bag", "phone", "bag", "shoes"];
+async function begin(page: Page, timed = false) {
+  await page.emulateMedia({ reducedMotion: timed ? "no-preference" : "reduce" });
+  if (timed) {
+    await page.clock.install(); await page.goto(URL, { waitUntil: "load" }); await hydratedUnderFakeClock(page);
+    await expect(page.locator(".tm-game")).toHaveAttribute("data-ready", "true");
+    await pauseNow(page);
+  } else await page.goto(URL);
+  await expect(page.getByRole("heading", { name: "One train. One busy brain." })).toBeVisible();
 }
-async function pack(page: Page, items = ["Keys", "Phone", "Shoes"]) {
-  for (const item of items) await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).click();
+async function task(page: Page, command: string, timed = false) {
+  if (command === "door") await page.getByRole("button", { name: "Leave", exact: true }).click();
+  else await page.locator(`[data-command="${command}"]`).click();
+  if (timed) for (let i = 0; i < 70 && await page.locator(".tm-game").getAttribute("data-intent"); i++) await page.clock.runFor(500);
+}
+async function firstMorning(page: Page, timed = false) { for (const command of firstRoute) await task(page, command, timed); await task(page, "door", timed); }
+async function arrange(page: Page) {
+  await page.getByRole("button", { name: "Later that evening" }).click();
+  for (const name of ["Keys", "Phone", "Water"]) await page.getByRole("button", { name: `Place ${name} in Hall`, exact: true }).click();
+}
+async function secondMorning(page: Page) {
+  await page.getByRole("button", { name: "Tomorrow", exact: true }).click();
+  for (const command of ["keys", "phone", "bag", "bottle", "bag", "shoes", "umbrella", "door"]) await task(page, command);
 }
 
-test("Theo's direct-entry morning supports keyboard, door gate, replay and learning without profile writes", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" }); const errors: string[] = []; page.on("pageerror", e => errors.push(e.message));
-  await page.goto("/approach?pane=games"); await page.getByRole("link", { name: /Just get out the door/ }).click();
-  await expect(page.getByRole("heading", { name: "Essentials. Then exit." })).toBeFocused();
-
-  const before = await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"));
-
-  await expect(page.getByRole("timer")).toHaveText("No timer");
-  await page.getByRole("button", { name: "Open the door" }).click(); await expect(page.getByRole("status")).toContainText("still missing");
-  for (const item of ["Keys", "Phone", "Shoes"]) { await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).focus(); await page.keyboard.press("Enter"); }
-  await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", "3");
-  await expect(page.getByRole("heading", { name: "Essentials. Then exit." })).toBeVisible();
-  await page.getByRole("button", { name: "Open the door" }).click();
-  await expect(page.getByRole("heading", { name: "And you’re off!" })).toBeFocused();
-  expect(await page.evaluate(() => localStorage.getItem("adhdme.lives.v1"))).toBe(before);
-  await page.getByRole("button", { name: "Play again" }).click(); await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", "0");
-  await pack(page, ["Keys", "Phone", "Shoes"]); await page.getByRole("button", { name: "Open the door" }).click();
-  await page.getByRole("link", { name: /Give your essentials a home/ }).click(); await expect(page).toHaveURL(/module=launch_pad_v1/); expect(errors).toEqual([]);
+test("the public card enters the new house directly; keyboard actions have physical dependencies", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto("/approach?pane=games");
+  await page.getByRole("link", { name: /Just get out the door/ }).click(); await expect(page).toHaveURL(new RegExp(URL));
+  await expect(page.getByRole("heading", { name: "One train. One busy brain." })).toBeVisible();
+  await expect(page.getByRole("slider")).toHaveCount(0); await expect(page.getByRole("combobox")).toHaveCount(0);
+  await page.getByRole("button", { name: "Leave", exact: true }).click(); await expect(page.getByRole("status")).toHaveText("Three essentials in the bag first.");
+  const phone = page.getByRole("button", { name: "Charge phone" }); await phone.focus(); await page.keyboard.press("Enter");
+  await expect(page.getByRole("status")).toContainText("Charging"); await expect(page.locator(".tm-game")).toHaveAttribute("data-node", "bedroom");
+  for (const c of ["bottle", "keys"]) await task(page, c);
+  await task(page, "phone"); await expect(page.getByRole("status")).toContainText("Hands full");
+  await expect(page.locator(".tm-game")).toHaveAttribute("data-hands", "keys,bottle");
+  await task(page, "bag"); await expect(page.locator(".tm-game")).toHaveAttribute("data-packed", "2");
 });
 
-test("two detours are recoverable, three end the round, and replay resets them", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" }); await start(page);
-  for (const item of ["Book", "Plant"]) await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).click();
-  await expect(page.getByLabel("2 of 3 detours")).toBeVisible();
-  await pack(page); await page.getByRole("button", { name: "Open the door" }).click(); await expect(page.getByRole("heading", { name: "And you’re off!" })).toBeVisible();
-  await page.getByRole("button", { name: "Play again" }).click();
-  for (const item of ["Book", "Plant", "Laundry"]) await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Still in the hallway." })).toBeVisible(); await expect(page.locator(".theo-result")).toContainText("Three detours later");
+test("a complete morning, physical evening arrangement and rainy revisit carry state and reduce trips", async ({ page }) => {
+  await begin(page); const storage = await page.evaluate(() => JSON.stringify(localStorage));
+  await firstMorning(page); await expect(page.locator(".tm-game")).toHaveAttribute("data-phase", "departure");
+  const trips = Number(await page.locator(".tm-game").getAttribute("data-trips"));
+  await arrange(page); await page.getByRole("button", { name: "Leave twelve seconds earlier" }).click(); await page.getByRole("button", { name: "Later note" }).click();
+  await page.getByRole("button", { name: "Tomorrow", exact: true }).click();
+  await expect(page.getByRole("timer")).toHaveText("82s");
+  await expect(page.locator(".tm-items-hall [data-command]")).toHaveCount(3);
+  await expect(page.getByRole("button", { name: "Take phone", exact: true })).toBeVisible();
+  for (const c of ["keys", "phone", "bag", "bottle", "bag", "shoes"]) await task(page, c);
+  await task(page, "door"); await expect(page.getByRole("status")).toContainText("umbrella");
+  await task(page, "umbrella"); await task(page, "door");
+  await expect(page.getByRole("heading", { name: "A little less to carry." })).toBeVisible();
+  expect(Number(await page.locator(".tm-game").getAttribute("data-trips"))).toBeLessThan(trips);
+  expect(await page.evaluate(() => JSON.stringify(localStorage))).toBe(storage);
+  await expect(page.getByRole("link", { name: "Make your own launch pad" })).toHaveAttribute("href", "/lives/learn?module=launch_pad_v1");
+  await page.getByRole("button", { name: "Another morning" }).click();
+  await expect(page.locator(".tm-items-living [data-command=phone]")).toBeVisible();
+  await expect(page.locator(".tm-game")).toHaveAttribute("data-packed", "0");
 });
 
-test("drag packs only on the pad; an invalid drop snaps back without picking", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" }); await page.goto(URL);
-  const key = page.getByRole("button", { name: "Pick up Keys", exact: true });
-  const from = await key.boundingBox(), pad = await page.getByRole("group", { name: "Launch pad", exact: true }).boundingBox();
-  await page.mouse.move(from!.x + from!.width / 2, from!.y + 30); await page.mouse.down(); await page.mouse.move(from!.x + 30, from!.y - 50, { steps: 8 }); await page.mouse.up();
-  await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", "0");
-  await key.dragTo(page.getByRole("group", { name: "Launch pad", exact: true }), { targetPosition: { x: pad!.width / 2, y: pad!.height / 2 } });
-  await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", "1");
-  await pack(page, ["Phone", "Shoes"]); await page.getByRole("button", { name: "Open the door" }).click(); await expect(page.getByRole("heading", { name: "And you’re off!" })).toBeVisible();
+test("ordinary timing has real travel, interruptible routes, and a feasible train deadline", async ({ page }) => {
+  test.setTimeout(120_000); // WebKit executes the full simulated minute; keep every timer tick.
+  await begin(page, true);
+  await page.getByRole("button", { name: "Charge phone" }).click();
+  await page.clock.runFor(1000);
+  await expect(page.locator(".tm-game")).toHaveAttribute("data-node", "hall");
+  const before = await page.locator(".tm-character").getAttribute("style");
+  await page.getByRole("button", { name: "Take keys" }).click();
+  const after = await page.locator(".tm-character").getAttribute("style");
+  const coordinates = (value: string | null) => (value?.match(/-?[\d.]+/g) ?? []).map(Number);
+  const a = coordinates(before), b = coordinates(after);
+  // A queued 100 ms render may land between the two browser reads; a whole-room jump may not.
+  expect(Math.hypot(b[0]! - a[0]!, b[1]! - a[1]!)).toBeLessThan(2);
+  await expect(page.locator(".tm-game")).toHaveAttribute("data-node", "hall");
+  await page.getByRole("button", { name: "Charge phone" }).click();
+  for (let i = 0; i < 15 && await page.locator(".tm-game").getAttribute("data-intent"); i++) await page.clock.runFor(500);
+  for (const c of firstRoute.slice(1)) await task(page, c, true);
+  await task(page, "door", true);
+  await expect(page.getByRole("heading", { name: "Made it out." })).toBeVisible();
 });
 
-test("clock pauses and hidden tabs pause; the deadline ends only an unfinished round", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" }); await page.clock.install(); await start(page);
-  await pauseNow(page, 1000); await page.getByRole("button", { name: "Pause game" }).click();
-  const time = await page.getByRole("timer").textContent(); await page.clock.fastForward(40000); await expect(page.getByRole("timer")).toHaveText(time!);
-  await expect(page.getByRole("button", { name: "Pick up Keys", exact: true })).toBeDisabled();
+test("a missed train preserves progress and Ari's changed plan; pause and hidden tabs freeze play", async ({ page }) => {
+  test.setTimeout(120_000); // WebKit executes the full simulated minute; keep every timer tick.
+  await begin(page, true); await task(page, "keys", true);
+  await page.getByRole("button", { name: "Pause game" }).click();
+  const time = await page.getByRole("timer").textContent(); await page.clock.runFor(5000);
+  await expect(page.getByRole("timer")).toHaveText(time!); await expect(page.getByRole("button", { name: "Fill water", includeHidden: true })).toBeDisabled();
   await page.getByRole("button", { name: "Resume", exact: true }).click();
   await page.evaluate(() => { Object.defineProperty(document, "hidden", { configurable: true, value: true }); document.dispatchEvent(new Event("visibilitychange")); });
-  await expect(page.getByRole("heading", { name: "The world can wait." })).toBeVisible();
+  await expect(page.locator(".tm-game")).toHaveAttribute("data-paused", "true");
   await page.evaluate(() => { Object.defineProperty(document, "hidden", { configurable: true, value: false }); });
-  await page.getByRole("button", { name: "Resume", exact: true }).click(); await page.clock.runFor(25000);
-  await expect(page.getByRole("heading", { name: "Still in the hallway." })).toBeVisible(); await expect(page.locator(".theo-result")).toContainText("Time slipped away");
+  await page.getByRole("button", { name: "Resume", exact: true }).click(); await page.clock.runFor(71000);
+  await expect(page.getByRole("timer")).toHaveText("Departed"); await expect(page.locator(".tm-game")).toHaveAttribute("data-hands", "keys");
+  await page.getByRole("button", { name: "Update Ari" }).click(); await page.clock.runFor(2000);
+  await expect(page.getByRole("status")).toContainText("I’ll go ahead"); await expect(page.getByRole("button", { name: "Update Ari" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Pause game" }).click(); await page.getByRole("button", { name: "Play at your pace" }).click(); await page.getByRole("button", { name: "Resume", exact: true }).click();
+  for (const c of ["bag", "phone", "bottle", "bag", "phone", "bag", "shoes", "door"]) await task(page, c);
+  await expect(page.locator(".tm-game")).toHaveAttribute("data-phase", "departure");
 });
 
-test("small phone through desktop keeps controls visible and accessible", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" }); const errors: string[] = []; page.on("pageerror", e => errors.push(e.message));
-  for (const width of [320, 390, 768, 1440]) {
-    await page.setViewportSize({ width, height: 844 }); await page.goto(URL);
-    await expect(page.getByRole("timer")).toHaveText("No timer");
-    await expect(page.getByLabel("Challenge", { exact: true })).toHaveCount(0);
-
-    await expect(page.getByRole("button", { name: "Open the door" })).toBeInViewport();
-    const door = await page.getByRole("button", { name: "Open the door" }).boundingBox();
-    expect(door!.y + door!.height).toBeLessThanOrEqual(844);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
-    for (const button of await page.locator(".theo-object").all()) { const box = await button.boundingBox(); expect(box!.width).toBeGreaterThanOrEqual(48); expect(box!.height).toBeGreaterThanOrEqual(48); }
-  }
-  await expectNoViolations(page, "Theo active"); await pack(page, ["Keys", "Phone", "Shoes"]); await page.getByRole("button", { name: "Open the door" }).click(); await expectNoViolations(page, "Theo success"); expect(errors).toEqual([]);
-});
-
-test("phone touch can finish an untimed morning", async ({ browser }) => {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: "reduce" });
-  const page = await context.newPage(); await start(page);
-  for (const item of ["Keys", "Phone", "Shoes"]) await page.getByRole("button", { name: `Pick up ${item}`, exact: true }).tap();
-  await page.getByRole("button", { name: "Open the door" }).tap(); await expect(page.getByRole("heading", { name: "And you’re off!" })).toBeVisible(); await context.close();
-});
-
-test("an interrupted touch drag does not pack an item; releasing on the pad does", async ({ browser, browserName }) => {
-  test.skip(browserName !== "chromium", "Native touch cancellation is injected through Chromium's input protocol.");
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
-  const page = await context.newPage(); await page.goto(URL);
-  const cdp = await context.newCDPSession(page);
-  const target = page.getByRole("button", { name: "Pick up Keys", exact: true });
-  const pad = await page.getByRole("group", { name: "Launch pad", exact: true }).boundingBox();
-  for (const cancel of [true, false]) {
-    const box = await target.boundingBox(), x = box!.x + box!.width / 2, y = box!.y + 30;
-    const tx = pad!.x + pad!.width / 2, ty = pad!.y + pad!.height / 2;
-    await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
-    for (let step = 1; step <= 10; step++) {
-      await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x + (tx - x) * step / 10, y: y + (ty - y) * step / 10 }] });
-      await page.waitForTimeout(20);
+test("phone through desktop keeps spatial controls usable and each stage accessible", async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const errors: string[] = []; page.on("pageerror", e => errors.push(e.message));
+  for (const [width, height] of [[320,568],[390,844],[768,1024],[1440,900],[1920,1080],[844,390],[568,320]]) {
+    await page.setViewportSize({ width: width!, height: height! }); await page.goto(URL);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width!);
+    for (const button of await page.locator(".tm-object").all()) {
+      const box = (await button.boundingBox())!; expect(box.width).toBeGreaterThanOrEqual(48); expect(box.height).toBeGreaterThanOrEqual(48);
+      const visible = await button.evaluate(el => { const r = el.getBoundingClientRect(); const house = el.closest(".tm-house")!.getBoundingClientRect(); return r.left >= house.left && r.right <= house.right && r.top >= house.top && r.bottom <= house.bottom; }); expect(visible).toBe(true);
     }
-    await cdp.send("Input.dispatchTouchEvent", { type: cancel ? "touchCancel" : "touchEnd", touchPoints: [] });
-    await expect(page.locator(".theo-game")).toHaveAttribute("data-packed", cancel ? "0" : "1");
-    // Wait for the cancelled object's spring to settle before grabbing it again.
-    await page.waitForTimeout(500);
+    if (info.project.name === "chromium" && [390,1440].includes(width!)) await page.screenshot({ path: `qa/_runs/theo-morning-${width}.png`, fullPage: true });
   }
+  await page.setViewportSize({ width: 390, height: 844 }); await expectNoViolations(page, "Theo house");
+  await firstMorning(page); await arrange(page); await expectNoViolations(page, "Theo evening");
+  if (info.project.name === "chromium") await page.screenshot({ path: "qa/_runs/theo-evening-390.png", fullPage: true });
+  await secondMorning(page); await expectNoViolations(page, "Theo complete"); expect(errors).toEqual([]);
+});
+
+test("touch can play both mornings without drag precision", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: "reduce" });
+  await context.addInitScript(() => localStorage.setItem("adhdme-privacy-ack", "1")); const page = await context.newPage();
+  await page.goto(URL); await expect(page.locator(".tm-game")).toHaveAttribute("data-still", "true");
+  for (const command of firstRoute) await page.locator(`[data-command="${command}"]`).tap();
+  await page.getByRole("button", { name: "Leave", exact: true }).tap(); await expect(page.locator(".tm-game")).toHaveAttribute("data-phase", "departure");
+  await arrange(page); await secondMorning(page); await expect(page.locator(".tm-game")).toHaveAttribute("data-phase", "complete");
   await context.close();
+});
+
+test("every offered home arrangement remains reachable on the smallest phone", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  for (const room of ["Kitchen", "Bedroom", "Hall"]) {
+    await begin(page); await firstMorning(page); await page.getByRole("button", { name: "Later that evening" }).click();
+    for (const name of ["Keys", "Phone", "Water"]) await page.getByRole("button", { name: `Place ${name} in ${room}`, exact: true }).click();
+    await page.getByRole("button", { name: "Tomorrow", exact: true }).click();
+    for (const button of await page.locator(".tm-object").all()) {
+      await button.scrollIntoViewIfNeeded();
+      expect(await button.evaluate(el => { const r=el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)); })).toBe(true);
+    }
+    for (const c of ["keys", "phone", "bag", "bottle", "bag", "shoes", "umbrella", "door"]) await task(page, c);
+    await expect(page.locator(".tm-game")).toHaveAttribute("data-phase", "complete");
+  }
 });

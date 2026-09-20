@@ -49,6 +49,12 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
+  { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
+  { path: "/lives/play/theo-out-the-door", state: "theo-pause", name: "Theo, pause" },
+  { path: "/lives/play/theo-out-the-door", state: "theo-departure", name: "Theo, departure" },
+  { path: "/lives/play/theo-out-the-door", state: "theo-evening", name: "Theo, evening arrangement" },
+  { path: "/lives/play/theo-out-the-door", state: "theo-revisit", name: "Theo, rainy revisit" },
+  { path: "/lives/play/theo-out-the-door", state: "theo-complete", name: "Theo, complete" },
   { path: "/lives/lab/leo-room", state: "bedroom-pause", name: "Leo room preview, pause" },
   { path: "/lives/lab/leo-room", state: "bedroom-wind-down", name: "Leo room preview, reading" },
   { path: "/lives/lab/leo-room", state: "bedroom-rest", name: "Leo room preview, rest" },
@@ -218,6 +224,27 @@ export async function reach(page, route, base) {
     }
   }
 
+  if (route.state?.startsWith("theo-")) {
+    await page.locator('.tm-game[data-ready="true"][data-still="true"]').waitFor();
+    const act = async (command) => command === "door"
+      ? page.getByRole("button", { name: "Leave", exact: true }).click()
+      : page.locator(`[data-command="${command}"]`).click();
+    if (route.state === "theo-pause") await page.getByRole("button", { name: "Pause game" }).click();
+    else {
+      for (const command of ["phone", "bottle", "keys", "bag", "phone", "bag", "shoes"]) await act(command);
+      if (route.state !== "theo-busy") {
+        await act("door");
+        if (route.state !== "theo-departure") {
+          await page.getByRole("button", { name: "Later that evening" }).click();
+          for (const name of ["Keys", "Phone", "Water"]) await page.getByRole("button", { name: `Place ${name} in Hall`, exact: true }).click();
+          if (route.state !== "theo-evening") {
+            await page.getByRole("button", { name: "Tomorrow", exact: true }).click();
+            if (route.state === "theo-complete") for (const command of ["keys", "phone", "bag", "bottle", "bag", "shoes", "umbrella", "door"]) await act(command);
+          }
+        }
+      }
+    }
+  }
   if (route.state === "lives-run") {
     await page.waitForTimeout(1200);
   }
