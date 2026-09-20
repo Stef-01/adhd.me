@@ -38,6 +38,21 @@ export const EXPERTISE_FOR: Partial<Record<Subdomain, readonly ExpertiseTag[]>> 
   manager: ["workplace-adjustments"],
   teachers: ["university-adhd"],
   clinicians: ["medication-review", "late-diagnosis"],
+  /*
+   * O253: `noise` and `peers` had no entry, so `problemFit` returned 0 for them against every
+   * provider on every roster and `fitTags` returned nothing — two of the twenty-five subdomains
+   * could not personalise for anybody, ever, and nothing said so. Measured over the roster
+   * before adding them: 23 of 25 subdomains reached at least one provider, and these were the
+   * two that reached none.
+   *
+   * Neither mapping invents a tag. Noise and light are answered by the two tags that already
+   * mean "change the room you are in", at work and at home. Peers are colleagues and fellow
+   * students, which is what those two tags are already for on the contexts either side of them
+   * (`workplace-context`, `study-context`). If the founder reads either differently it is one
+   * line to change.
+   */
+  noise: ["workplace-adjustments", "household-organisation"],
+  peers: ["workplace-adjustments", "university-adhd"],
 };
 
 export interface Fittable {
@@ -65,6 +80,32 @@ export function fitTags(provider: Fittable, need: Need | null): ExpertiseTag[] {
   const primary = (EXPERTISE_FOR[need.subdomain] ?? []).filter((t) => provider.expertise!.includes(t));
   const secondary = need.contributors.flatMap((c) => EXPERTISE_FOR[c.subdomain] ?? []).filter((t) => provider.expertise!.includes(t) && !primary.includes(t));
   return [...new Set([...primary, ...secondary])];
+}
+
+/**
+ * The provider whose declared expertise best answers this need, or null when nobody's does —
+ * PRD §10's "Best fit for you", as a function rather than a screen's inline sort.
+ *
+ * NULL IS THE IMPORTANT RETURN. A screen that always names somebody would be naming them for a
+ * reason it cannot show, which is the thing `honesty.claim-earned` refuses: the whole point of
+ * the chips beside a match is that they are the person's own map read back to them, so a match
+ * with no matched tags has nothing to say and must not render. Measured over the real roster,
+ * 8 of the 25 subdomains produce a non-zero fit today, and on the other 17 this correctly
+ * returns null rather than putting a name on the screen with an empty reason under it.
+ *
+ * The tiebreak is the one `orderByProblemFit` uses — the strength signal, then the caller's own
+ * order — so the two never disagree about who is first.
+ */
+export function bestFitFor<T extends Fittable>(providers: readonly T[], need: Need | null): T | null {
+  if (!need) return null;
+  let best: { p: T; fit: number; strength: number } | null = null;
+  for (const p of providers) {
+    const fit = problemFit(p, need);
+    if (fit <= 0) continue;
+    const strength = strengthFit(p, need);
+    if (!best || fit > best.fit || (fit === best.fit && strength > best.strength)) best = { p, fit, strength };
+  }
+  return best?.p ?? null;
 }
 
 /** "Works on task initiation — the thing you said is hardest." or null when nothing fits. */

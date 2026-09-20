@@ -149,6 +149,61 @@ test("deleting everything is in settings, where somebody goes looking for it", a
   expect(held, "the record is gone from the device, not hidden").toBeFalsy();
 });
 
+/**
+ * O253 (founder-directed, reading his own screen): "my thing said, try this, one capture place,
+ * when reading it, this meant nothing. It is so cryptic. It should be very clear what the
+ * strategy to learn is that can help" — and, separately, "make sure that when you click, it
+ * directs you to the relevant modules for the try this".
+ *
+ * Two failures in one card. It rendered the recommendation's HEADING alone, and a strategy's
+ * heading is its title, which names something you have not met. And its control sent four of
+ * the seven actions to `/approach`, the bare module list, throwing away the `moduleId` the
+ * recommendation was holding.
+ */
+test("the next step says what it is, and opens the module it names", async ({ page }) => {
+  // The state the budget now walks too: a strategy proposed, nothing accepted yet.
+  await seed(page, {
+    ...LIVED_RECORD,
+    onboarding: { ...LIVED_RECORD.onboarding, lookingFor: "try" },
+    completed: [],
+    experiments: [],
+  });
+  const step = page.locator(".map-step");
+  await expect(step).toBeVisible();
+  // The heading names it, and a second line says the first thing to actually do.
+  await expect(step.getByRole("heading", { level: 2 })).toContainText(/Try this/i);
+  await expect(step.locator(".map-step-do")).not.toBeEmpty();
+  // The control names where it goes, and goes to the module the strategy came from.
+  const link = step.getByRole("link");
+  await expect(link).toHaveText(/module/i);
+  await expect(link).toHaveAttribute("href", /^\/approach\?module=/);
+});
+
+test("a question is left as a question, and still opens its module", async ({ page }) => {
+  // The accepted-experiment card asks how it went. It names the strategy in the asking, so it
+  // takes no instruction under it — an earlier draft put one there and it read as a non-sequitur.
+  await seed(page);
+  const step = page.locator(".map-step");
+  await expect(step.getByRole("heading", { level: 2 })).toContainText(/help\?$/);
+  await expect(step.locator(".map-step-do")).toHaveCount(0);
+  await expect(step.getByRole("link")).toHaveAttribute("href", /^\/approach\?module=/);
+});
+
+test("support names the person whose declared expertise answers this need", async ({ page }) => {
+  // O253: "make sure it is working and live where it personalises the care providers based on
+  // your needs and challenges seen on skill map". The chips are the person's own map read back:
+  // the card renders only when `fitTags` has something to put in them.
+  await seed(page);
+  await page.goto("/support");
+  const best = page.locator(".support-best");
+  await expect(best).toBeVisible();
+  await expect(best.locator(".support-best-tags li")).not.toHaveCount(0);
+  await expect(best.locator(".support-best-tags li")).toHaveCount(await best.locator(".support-best-tags li").count());
+  // A name, not a count, and no number about the person anywhere on it.
+  expect(await best.innerText()).not.toMatch(/\d/);
+  await expectNoViolations(page, "Support, the closest fit");
+});
+
 test("the map fills in when a survey is answered, and says so", async ({ page }) => {
   // Somebody who has only been through the door: one goal, nothing built, nothing answered. This
   // is the person the reward is for, and the person for whom a survey genuinely moves the map.

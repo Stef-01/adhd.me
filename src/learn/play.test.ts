@@ -78,11 +78,19 @@ describe("the runs", () => {
     }
   });
 
-  it("ask how much each round was you, buttons and slider alternating, never on a round that already asks about you", () => {
+  it("ask how much each round was you on one 0-10 scale, never on a round that already asks about you", () => {
+    /*
+     * O253 (founder-directed): the slider everywhere. This used to require BOTH forms in every
+     * run, which pinned the alternation as a feature. It was not one: the two forms write the
+     * same 0–10 number at different resolutions, so `meanRelate` was averaging three-point
+     * answers with eleven-point ones. The requirement is now the opposite — one scale per run,
+     * every round — with the skip on a round that already asks about you left exactly as it was.
+     */
     for (const run of eachOf(RUNS, "the runs")) {
       const forms = run.rounds.map((r, i) => relateFormFor(r, i));
-      expect(forms, run.id).toContain("buttons");
-      expect(forms, run.id).toContain("slider");
+      const asked = forms.filter((f) => f !== null);
+      expect(asked.length, run.id).toBeGreaterThan(0);
+      expect(new Set(asked), run.id).toEqual(new Set(["slider"]));
       run.rounds.forEach((r, i) => { if (r.writes) expect(forms[i], `${run.id}/${r.id}`).toBeNull(); });
     }
     expect(RELATE_BUTTONS.map((b) => b.value)).toEqual([0, 5, 10]);

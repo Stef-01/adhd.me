@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkle } from "@phosphor-icons/react";
 import { recommend } from "@/model/recommend";
+import { interactiveModule } from "@/learn/interactive";
 import { axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
 import { isComplete } from "@/model/onboarding";
 import { activeSafety } from "@/model/store";
@@ -35,7 +36,20 @@ import { SafetyScreen } from "./safety-screen";
 import { acknowledgeSafety } from "@/model/store";
 import { useModel } from "./use-model";
 
-const MAX_FOCUS = 3;
+/**
+ * O253: two contributor chips, not three.
+ *
+ * The action card grew the line that says what the step actually IS — the founder read "Try
+ * this: one capture place." and it meant nothing to him — and the screen went to 62 words
+ * against a ceiling of 60. Something had to go, and the law is delete rather than hide.
+ *
+ * The third chip is the one to delete, for two reasons that are both about this screen rather
+ * than about chips. The contributors are ordered, so the third is the weakest signal by
+ * construction. And they are not lost: the axis sheet lists every contributor for the axis they
+ * belong to, one tap away, which is the screen built to hold them. What could not move is the
+ * step: a next action nobody can read is not a next action.
+ */
+const MAX_FOCUS = 2;
 const MAX_STRENGTHS = 1;
 
 export function MyAdhd() {
@@ -130,8 +144,9 @@ export function MyAdhd() {
               )}
 
               {rec && (
-                <section className="map-step" aria-labelledby="map-step-title">
+                <section className="map-step" aria-labelledby="map-step-title" data-action={rec.action}>
                   <h2 id="map-step-title">{rec.heading}</h2>
+                  {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
                   <NextStepAction rec={rec} />
                 </section>
               )}
@@ -156,17 +171,91 @@ export function MyAdhd() {
   );
 }
 
-/** The one control under the one next step. A module, a strategy, or the way to a person. */
-function NextStepAction({ rec }: { rec: NonNullable<ReturnType<typeof recommend>> }) {
-  const href =
-    rec.action === "LEARN" && rec.moduleId
-      ? `/approach?module=${rec.moduleId}`
-      : rec.action === "EXPLORE_PROVIDER"
-        ? "/support"
-        : rec.action === "TRY_STRATEGY" && rec.moduleId
-          ? `/approach?module=${rec.moduleId}`
-          : "/approach";
-  const label = rec.action === "EXPLORE_PROVIDER" ? "See who helps" : "Open";
+type Recommendation = NonNullable<ReturnType<typeof recommend>>;
+
+/**
+ * WHAT THE STEP ACTUALLY IS, IN ONE LINE (founder, 2026-09-20, reading his own screen: "my thing
+ * said, try this, one capture place, when reading it, this meant nothing. It is so cryptic").
+ *
+ * He was right, and the cause was structural rather than a wording slip. `recommend()` returns a
+ * heading, a body and a reason; Today renders all three; this card rendered the HEADING ALONE.
+ * A strategy's heading is its title — "Try this: one capture place." — which is a NAME for a
+ * thing you have not met yet, so on the one screen that never opened the module it named nothing.
+ *
+ * For a strategy the line is its own FIRST STEP, which is the concrete thing to do and is already
+ * authored beside the strategy (`src/learn/interactive.ts`). For everything else it is the body
+ * the recommendation already carries. Nothing new is written here; what existed is shown.
+ */
+function doLine(rec: Recommendation): string | null {
+  /*
+   * A QUESTION NEEDS NO INSTRUCTION UNDER IT. The pending-experiment card asks "Did 'One capture
+   * place' help?", and the first draft of this put "Choose one place." beneath it — an
+   * instruction answering a question nobody asked twice. That card was never the cryptic one:
+   * a question about a strategy you accepted names the strategy in the asking.
+   */
+  if (rec.explain.ruleTriggered === "experiment.pending") return null;
+  /*
+   * ONLY WHERE THE HEADING IS A NAME. A recommendation that names a module has a NAME for a
+   * heading — a module title, or "Try this: one capture place." — and a short body beside it.
+   * The two that send you to a person instead have a whole sentence for a heading ("An
+   * occupational therapist may be particularly useful for this.") and a paragraph for a body:
+   * measured, that paragraph put this screen at 98 words against a ceiling of 60, and the gate
+   * could not see it because the budget walks one record and that record is in a different
+   * state. Those headings explain themselves; this line exists for the ones that do not.
+   */
+  if (!rec.moduleId) return null;
+  const step = rec.strategy?.steps[0];
+  /*
+   * A module's own subtitle, without the duration. `recommend()` composes the body as
+   * "<subtitle>. <n> min." because Today is where somebody decides to spend seven minutes; the
+   * map is where they see what the thing IS. Dropping the two words is what keeps this screen
+   * inside its ceiling with the new line on it — measured at 62 with them and 60 without — and
+   * the duration is still on the module, on Today, and in the Learn list.
+   */
+  if (!step) return interactiveModule(rec.moduleId)?.subtitle ?? rec.body;
+  /*
+   * THE FIRST CLAUSE, NOT THE WHOLE STEP, and the budget is why the law allows it. A step may
+   * carry its own examples — "Choose one place, a notes app, a card in your pocket, a whiteboard
+   * by the door" is sixteen words, and putting all sixteen here took this screen from 53 to 73
+   * against a ceiling of 60. The examples belong in the module, which is one tap away and which
+   * this card now opens. The clause before them is the instruction, and it is the person's own
+   * step rather than a summary written here: "Choose one place."
+   */
+  const clause = step.split(/,\s*/)[0]!.trim();
+  return /[.!?]$/.test(clause) ? clause : `${clause}.`;
+}
+
+/**
+ * The one control under the one next step, and WHERE IT GOES.
+ *
+ * The old version named three actions and sent the other four to `/approach`, the bare module
+ * list — including `CHANGE_ENVIRONMENT` and `INVOLVE_SUPPORT_PERSON`, which are the same "try a
+ * strategy" branch of `recommend()` seen through the need's dominant layer and which carry the
+ * strategy's own `moduleId`. So the commonest strategy recommendations threw away the module
+ * they were holding and dropped the reader on a list. That is the other half of the founder's
+ * report above: the card was cryptic AND the way out of it led nowhere in particular.
+ *
+ * The rule is now the one Today already used: a recommendation that names a module opens that
+ * module, a recommendation about a person goes to the people screen, and the label says which.
+ */
+function NextStepAction({ rec }: { rec: Recommendation }) {
+  const person = rec.action === "EXPLORE_PROVIDER" || rec.action === "DISCUSS_WITH_EXISTING_CLINICIAN";
+  const href = rec.action === "URGENT_ESCALATION"
+    ? "/urgent"
+    : person
+      ? "/support"
+      : rec.moduleId
+        ? `/approach?module=${rec.moduleId}`
+        : "/approach";
+  const label = rec.action === "URGENT_ESCALATION"
+    ? "Get help now"
+    : rec.action === "EXPLORE_PROVIDER"
+      ? "See who helps"
+      : rec.action === "DISCUSS_WITH_EXISTING_CLINICIAN"
+        ? "Prepare what to say"
+        : rec.strategy
+          ? "See it in the module"
+          : "Open the module";
   return (
     <Link className="learn-primary" href={href}>
       {label} <ArrowRight size={17} weight="bold" aria-hidden="true" />

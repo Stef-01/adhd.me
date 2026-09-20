@@ -84,6 +84,7 @@ export const EXTRA = [
   // THE LIVED-IN STATES. Every screen that reads the personal model, measured as somebody who has
   // actually used the app sees it. Without these the budget is measuring an empty database.
   { path: "/my-adhd", state: "model-lived", name: "My ADHD, lived in" },
+  { path: "/my-adhd", state: "model-learning", name: "My ADHD, a step proposed" },
   { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
   { path: "/my-adhd", state: "share-open", name: "My ADHD, the summary open" },
   { path: "/my-adhd/history", state: "model-lived", name: "History, lived in" },
@@ -200,6 +201,26 @@ export const LIVED_RECORD = {
   checkpoints: [],
 };
 
+/**
+ * THE SAME PERSON, ONE STEP EARLIER — the hub's action card in its OTHER shape (O253).
+ *
+ * `LIVED_RECORD` holds an accepted experiment, so the card is always the follow-up question
+ * ("Did 'One capture place' help?") and the walk never measured the card that PROPOSES
+ * something. That is the shape the founder read and could not understand, and the shape the
+ * "what to do" line was added for — so the gate has to see it, or the fix is unmeasured exactly
+ * the way the whole screen was unmeasured before the map work.
+ *
+ * Nothing is completed and nothing is accepted, and "practical things to try" rather than
+ * "professional support" so the escalation rule does not fire first. Everything else is the
+ * same person.
+ */
+export const LEARNING_RECORD = {
+  ...LIVED_RECORD,
+  onboarding: { ...LIVED_RECORD.onboarding, lookingFor: "try" },
+  completed: [],
+  experiments: [],
+};
+
 export async function reach(page, route, base) {
   if (route.state === "intake") {
     await page.goto(`${base}/match`);
@@ -223,6 +244,10 @@ export async function reach(page, route, base) {
   }
   if (route.state === "map-lived" || route.state === "model-lived") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+  }
+  if (route.state === "model-learning") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LEARNING_RECORD));
     await page.reload({ waitUntil: "networkidle" });
   }
   if (route.state === "sheet-open") {

@@ -270,6 +270,15 @@
   font-weight: 600;
 }
 
+/* O253: what the step actually is, under the name of it. Quieter than the heading because it is
+   the detail rather than the claim, and the card's own gap already separates them. */
+.map-step-do {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.4rem;
+}
+
 .map-screen .map-foot{
   margin-top: var(--sp-lg);
   font-size: 0.8125rem;

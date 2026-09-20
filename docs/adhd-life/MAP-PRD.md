@@ -781,6 +781,7 @@ touches, and puts the text-budget table in the commit message.
 | **4. Share** | `/my-adhd/share`; print stylesheet; `gp-summary.ts`; the referral brief's five textareas deleted from `/support` | `.docx` downloads; `/support` drops below 60 lived in |
 | **5. Support from the map** | "Who could help?" first; `fitTags` chips; `strengthFit` | chips match the person's cells, in e2e |
 | **6. Go deeper** | `deeper` sets for work-study and relationships; the fourth offer rule | fatigue tests green |
+| **7. The loop, joined up (O253)** | the hub's step says what it is and opens its module; `bestFitFor` and the named match on `/support`; `noise` and `peers` mapped; one 0–10 scale for every call-out, writing `cost` | `docs/adhd-life/MAP-CONNECTIONS.md` measures the chain; both hub states in the budget walk |
 
 **End-to-end walk, on a 390 viewport, as acceptance for Phase 5:** Start → one module → the hub
 shows one confident axis → tap it → the aspect page names the friction across five areas →
@@ -788,6 +789,19 @@ Understand my work patterns → the axis fills and the sentence reads → Explor
 → the chips on the provider card match the cells → Take this to my GP → Print.
 
 ---
+
+### 15.1 What Phase 7 found, and what it left open
+
+The appraisal and its numbers are in `docs/adhd-life/MAP-CONNECTIONS.md`. Two things it found are
+decisions rather than defects, and they are the next ones on this plan:
+
+**C1 — the expertise taxonomy has no vocabulary for a psychologist.** `EXPERTISE_TAGS` is fifteen
+practical-systems problems, which is what a coach or an occupational therapist declares and not
+what the eight psychologists on the roster publish. Measured: 8 of 25 subdomains reach a real
+provider through problem fit, and that is the taxonomy's shape rather than the roster's size.
+
+**C2 — profession cards with no real provider behind them.** 17 of 25 subdomains show at least
+one card whose kind the real roster cannot serve; `adhd-coach` accounts for 13.
 
 ## 16. Decisions the founder owns
 

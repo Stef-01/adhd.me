@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-20T05:52:20.549Z",
+  "measuredAt": "2026-09-20T07:20:44.190Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "00:58 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "WRITE THE LINE!",
+          "w": 2,
+          "text": "LOCK IN!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "report",
+          "tag": "span"
         }
       ]
     },
@@ -505,19 +505,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
-        },
-        {
-          "w": 3,
-          "text": "Round the right",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "Straight through",
-          "tag": "button"
+          "text": "CLEAR ONE!",
+          "tag": "p"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -1006,10 +1006,10 @@
       "path": "/story",
       "name": "/story",
       "state": null,
-      "total": 684,
+      "total": 681,
       "fold": 65,
       "chrome": 15,
-      "ratio": 17.1,
+      "ratio": 17,
       "verdict": "long-form",
       "longest": [
         {
@@ -1622,20 +1622,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 2,
-      "fold": 2,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 3,
+          "text": "HOLD THE LID!",
+          "tag": "p"
         },
         {
-          "w": 1,
-          "text": "PIGEONS!",
+          "w": 3,
+          "text": "Say it now",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": ". Then, at",
           "tag": "p"
         }
       ]
@@ -1833,7 +1838,7 @@
       "path": "/my-adhd",
       "name": "My ADHD, lived in",
       "state": "model-lived",
-      "total": 53,
+      "total": 51,
       "fold": 35,
       "chrome": 6,
       "ratio": 1.3,
@@ -1846,13 +1851,40 @@
         },
         {
           "w": 6,
-          "text": "Vague tasks arrive from a manager",
-          "tag": "button"
+          "text": "Once started, work often goes well",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Did “One capture place” help?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, a step proposed",
+      "state": "model-learning",
+      "total": 56,
+      "fold": 35,
+      "chrome": 6,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Starting is your biggest friction right now.",
+          "tag": "p"
         },
         {
           "w": 6,
           "text": "Once started, work often goes well",
           "tag": "span"
+        },
+        {
+          "w": 6,
+          "text": "Try this: the first physical action.",
+          "tag": "h2"
         }
       ]
     },
@@ -1968,10 +2000,10 @@
       "path": "/support",
       "name": "Support, lived in",
       "state": "model-lived",
-      "total": 43,
-      "fold": 43,
+      "total": 55,
+      "fold": 45,
       "chrome": 6,
-      "ratio": 1.1,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {

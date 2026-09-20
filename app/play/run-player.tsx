@@ -23,7 +23,7 @@ import { deviceLearningStorage } from "@/learn/cursor";
 import { track } from "@/model/events";
 import { dimensionsOf } from "@/wellness/map";
 import { NWIA_LABELS } from "@/wellness/nwia";
-import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordRelate, recordResonance, type Frequency, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
+import { acceptExperiment, acknowledgeSafety, activeSafety, confirmInterpretation, markModuleComplete, readModel, recordAnswer, recordInsight, recordReflection, recordRelate, recordResonance, type InsightVerdict, type ModelRecord, type Priority } from "@/model/store";
 import { Bean } from "./beans";
 import { Mechanic, ownsScene } from "./mechanics";
 import { Scene, PlaceArt } from "./scene";
@@ -45,7 +45,6 @@ const TUTORIAL: ReadonlyArray<{ line: string; mood: "engaged" | "thinking" | "pl
 function readFlag(key: string): boolean { try { return deviceLearningStorage.getItem(key) === "1"; } catch { return false; } }
 function writeFlag(key: string, on: boolean): void { try { if (on) deviceLearningStorage.setItem(key, "1"); else deviceLearningStorage.removeItem(key); } catch { /* memory only */ } }
 
-const FREQUENCIES: ReadonlyArray<{ id: Frequency; label: string }> = [{ id: "often", label: "Often" }, { id: "sometimes", label: "Sometimes" }, { id: "rarely", label: "Rarely" }, { id: "unsure", label: "Unsure" }];
 const PRIORITIES: ReadonlyArray<{ id: Priority; label: string }> = [{ id: "yes", label: "Yes" }, { id: "maybe", label: "Maybe" }, { id: "no", label: "No" }];
 const VERDICTS: ReadonlyArray<{ id: InsightVerdict; label: string }> = [{ id: "yes", label: "That’s me" }, { id: "partly", label: "Partly" }, { id: "no", label: "Not really" }];
 
@@ -68,12 +67,25 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
   const [tutorial, setTutorial] = useState<number | null>(null);
   const [labels, setLabels] = useState(false);
   const [safety, setSafety] = useState<ReturnType<typeof activeSafety>>(null);
+  /**
+   * The recognition slider's position while it is being dragged. It starts at the middle rather
+   * than at nothing, the way every other 0–10 control in the app does, and it is only written to
+   * the record on release — a slider that saved on every `change` would write eleven answers on
+   * the way to one.
+   */
+  const [cost, setCost] = useState(5);
   const { phase, round, index } = runPhaseAt(run, step);
 
   useEffect(() => { const r = readModel(deviceLearningStorage); setRecord(r); setSafety(activeSafety(r)); setTutorial(readFlag(TUTORED_KEY) ? -1 : 0); setLabels(readFlag(LABELS_KEY)); track("MODULE_STARTED", { module: run.id, format: "run" }); }, [run.id]);
   const toggleLabels = () => { setLabels((l) => { writeFlag(LABELS_KEY, !l); return !l; }); };
   const endTutorial = () => { writeFlag(TUTORED_KEY, true); setTutorial(-1); };
   const refresh = (r: ModelRecord) => setRecord(r);
+  const saveCost = (value: number) => {
+    const held = Math.max(0, Math.min(10, Math.round(value)));
+    setCost(held);
+    refresh(recordResonance(deviceLearningStorage, run.id, { cost: held }));
+    track("MODULE_RESONANCE_RECORDED", { module: run.id, field: "cost", value: String(held) });
+  };
   const next = useCallback(() => onStep(step + 1), [onStep, step]);
   const finish = () => { refresh(markModuleComplete(deviceLearningStorage, run.id)); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onFinish(); };
   /** The axes this run moves, for the line on its last card. */
@@ -155,17 +167,45 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
           )}
 
           {phase === "recognition" && (() => {
-            // One question per card: how often, then whether they want it easier. The cost is the
-            // mean of the relate beats (needs.ts), so no slider here.
-            const asked = record?.resonance[run.id]?.frequency;
+            /*
+             * O253 (founder-directed, 2026-09-20): "have the call outs all work with slider so
+             * its scale of 1-10 of how much is XYZ an issue".
+             *
+             * This card asked HOW OFTEN, in four buttons, and `needs.ts` turned the answer into a
+             * cost through a lookup table — often 7, sometimes 5, rarely 2, unsure 4. So the one
+             * number the whole model is built on, `functionalCost`, was never asked for: it was
+             * inferred from a frequency, and frequency is not cost. Something that happens rarely
+             * and wrecks the day scored 2.
+             *
+             * `Resonance.cost` already existed and `needs.ts` already preferred it over the
+             * lookup — nothing captured it. The slider captures it, on the same 0–10 scale as
+             * every other call-out in a run, and the old comment claiming "no slider here" goes
+             * with the buttons. `frequency` stays in the type: records written before today hold
+             * it, and the lookup is still the right reading of those.
+             */
+            const asked = typeof record?.resonance[run.id]?.cost === "number" || Boolean(record?.resonance[run.id]?.frequency);
+            const held = record?.resonance[run.id]?.cost;
             return (
               <div className="play-card">
                 <Bean who={run.bean} mood="thinking" size={110} />
                 <h2 className="play-title">{asked ? "Want it easier?" : run.recognition}</h2>
                 {!asked ? (
-                  <div className="play-choices" role="group" aria-label="How often">
-                    {FREQUENCIES.map((f) => <button key={f.id} type="button" className="play-choice" onClick={() => { refresh(recordResonance(deviceLearningStorage, run.id, { frequency: f.id })); track("MODULE_RESONANCE_RECORDED", { module: run.id, field: "frequency", value: f.id }); }}>{f.label}</button>)}
-                  </div>
+                  <label className="play-likert play-recognition-scale">
+                    <span className="play-relate-prompt">How much of an issue is this for you?</span>
+                    <input
+                      type="range"
+                      min={0}
+                      max={10}
+                      step={1}
+                      value={held ?? cost}
+                      aria-label="How much of an issue is this for you?"
+                      aria-valuetext={`${held ?? cost} out of 10, ${(held ?? cost) <= 2 ? "not an issue" : (held ?? cost) >= 8 ? "a big issue" : "some of an issue"}`}
+                      onChange={(e) => setCost(Number(e.target.value))}
+                      onPointerUp={(e) => saveCost(Number((e.target as HTMLInputElement).value))}
+                      onKeyUp={(e) => saveCost(Number((e.target as HTMLInputElement).value))}
+                    />
+                    <span className="play-likert-ends" aria-hidden="true"><span>Not an issue</span><output className="t-digit">{held ?? cost}</output><span>A big issue</span></span>
+                  </label>
                 ) : (
                   <div className="play-choices" role="group" aria-label="Want it easier">
                     {PRIORITIES.map((p) => <button key={p.id} type="button" className="play-choice" aria-pressed={record?.resonance[run.id]?.priority === p.id} onClick={() => { refresh(recordResonance(deviceLearningStorage, run.id, { priority: p.id })); next(); }}>{p.label}</button>)}
@@ -355,7 +395,7 @@ function RoundStage({ run, index, reducedMotion, labels, onDone, onAdvance }: { 
             <div className="play-relate">
               <label className="play-likert">
                 <span className="play-relate-prompt">{RELATE_PROMPT}</span>
-                <input type="range" min={0} max={10} step={1} value={related ?? slid} aria-valuetext={`${related ?? slid} out of 10, ${(related ?? slid) <= 2 ? "not me" : (related ?? slid) >= 8 ? "very me" : "a bit"}`} onChange={(e) => setSlid(Number(e.target.value))} onPointerUp={(e) => relate(Number((e.target as HTMLInputElement).value))} onKeyUp={(e) => relate(Number((e.target as HTMLInputElement).value))} />
+                <input type="range" min={0} max={10} step={1} value={related ?? slid} aria-label={RELATE_PROMPT} aria-valuetext={`${related ?? slid} out of 10, ${(related ?? slid) <= 2 ? "not me" : (related ?? slid) >= 8 ? "very me" : "a bit"}`} onChange={(e) => setSlid(Number(e.target.value))} onPointerUp={(e) => relate(Number((e.target as HTMLInputElement).value))} onKeyUp={(e) => relate(Number((e.target as HTMLInputElement).value))} />
                 <span className="play-likert-ends" aria-hidden="true"><span>Not me</span><output className="t-digit">{related ?? slid}</output><span>Very me</span></span>
               </label>
             </div>

@@ -321,6 +321,9 @@ body:has(.play-run) { overflow-x: clip; }
 .play-relate .play-choices { width: 100%; }
 .play-relate-prompt { margin: 0; color: var(--play-ink); font-size: 1rem; font-weight: 700; }
 .play-likert { position: static; display: grid; gap: 4px; width: 100%; max-width: 360px; justify-items: center; }
+/* O253: the recognition card's own 0-10 scale. It carries a prompt above the track where the
+   round's relate beat carries none, so it needs the gap the prompt asks for and nothing else. */
+.play-recognition-scale { gap: 8px; margin-top: 8px; }
 .play-likert input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--play-blue); }
 .play-likert-ends { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: 100%; color: var(--muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
 .play-likert-ends > span:last-child { text-align: right; }

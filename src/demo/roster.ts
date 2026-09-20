@@ -720,6 +720,9 @@ export const clinicians: Clinician[] = [
     careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd", "non-medication"],
     careAreasSometimes: ["anxiety", "depression"],
     manner: ["non_judgmental", "motivating"],
+    // O253: his page names anger among the presentations he works with, which is what this tag
+    // is for. Nothing else in the expertise taxonomy matches what he published.
+    expertise: ["emotional-regulation"],
     wheelchairAccessible: true,
     appointmentLength: "50-minute sessions; times set with the clinic",
     telehealthFirstAppointment: true,
