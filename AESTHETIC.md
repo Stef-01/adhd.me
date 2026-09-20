@@ -19,6 +19,23 @@ For each screen: capture it (mobile + desktop), compare against the product prin
 move on. Don't write a new `DESIGN-QA.md`-style audit doc per screen — the before/after screenshots
 and a one-line commit message are the record.
 
+Two instruments do the parts that eyes are bad at, both against a `pnpm start` server:
+
+- `BASE=... node scripts/screens.mjs` — every screen the text-budget instrument reaches, twice:
+  `qa/screens/<name>.png` (the whole page) and `qa/screens/viewport/<name>.png` (390 x 844, what a
+  person sees). **Judge anything fixed, sticky or modal from the viewport shot only.** A `fullPage`
+  screenshot paints a fixed element once at the top and then keeps painting the document under it,
+  so the tab bar lands mid-page, a sticky bar looks like it covers what it floats over, and an open
+  modal appears to continue past its own bottom edge. This has produced three false findings on
+  this file's record; it has never produced a true one.
+- `BASE=... node scripts/target-sweep.mjs` — sideways scroll, controls a thumb cannot land on, and
+  text clipped by its own box, at 320 and 390. It reports where a 44px thumb actually lands rather
+  than what the CSS declared, because the tree extends small controls with a transparent `::after`
+  pad and a `for`-associated label is part of its control's target.
+
+Neither asserts. Both list what they could not reach and exit non-zero if anything went unmeasured,
+because "0 findings" and "measured nothing" look identical otherwise.
+
 ## Finder (`app/finder-stages/*`) — patient-facing, mobile-first, highest priority
 
 **RADIANT, unit 1 of 3 (2026-09-06, founder-directed: "make it exactly as the redesign").** The
