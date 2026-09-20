@@ -100,7 +100,8 @@ describe("2026-08-22 constraint-first ranking audit", () => {
     const needs = needsFor("I need a Punjabi-speaking GP");
     expect(needs.map((need) => need.label)).toContain("Punjabi-speaking");
     expect(unservedAsks("I need a Punjabi-speaking GP")[0]).toContain(
-      "Punjabi-speaking is not something any GP listed today declares",
+      // O252: the sentence names the list it is about, and the real roster is no longer GPs only.
+      "Punjabi-speaking is not something any provider listed today declares",
     );
   });
 

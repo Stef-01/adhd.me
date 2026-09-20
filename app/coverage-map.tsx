@@ -87,8 +87,16 @@ const centroid = (list: readonly SuburbPoint[]): readonly [number, number] => [
   list.reduce((sum, s) => sum + s.lat, 0) / list.length,
 ];
 
+/*
+ * O252: the northern pin says "south-east Queensland" rather than "Gold Coast". GOALS Psychology
+ * is in Fortitude Valley, inner Brisbane, about ninety kilometres up the coast from the nearest
+ * Gold Coast suburb — a real clinic a Brisbane reader is now sent to, under a pin telling them
+ * this product covers somewhere else. A third pin is not the answer at this scale: the two
+ * clusters are a few pixels apart on a map of Australia, and the pin only says roughly where.
+ * The precise half is the suburb list in the caption, which says so itself.
+ */
 const MARKERS = [
-  { key: "qld", label: "Gold Coast, QLD", suburbs: QLD, at: toXY(centroid(QLD)) },
+  { key: "qld", label: "South-east QLD", suburbs: QLD, at: toXY(centroid(QLD)) },
   { key: "nsw", label: "Sydney, NSW", suburbs: NSW, at: toXY(centroid(NSW)) },
 ];
 
@@ -103,7 +111,7 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
       {/* The viewBox is wider than the 0–100 map so the pin labels sit INSIDE it: the whole
           graphic then scales as one unit with the container and never clips, on any screen. */}
       <svg viewBox="0 0 136 100" role="img" aria-labelledby="coverage-map-title" focusable="false">
-        <title id="coverage-map-title">{`A map of Australia marking ADHD.ME's two focus areas, Sydney, NSW and the Gold Coast, QLD, across ${SUBURBS.length} suburbs`}</title>
+        <title id="coverage-map-title">{`A map of Australia marking ADHD.ME's two focus areas, Sydney, NSW and south-east Queensland, across ${SUBURBS.length} suburbs`}</title>
         <path className="coverage-land" d={AUSTRALIA_PATH} />
         <path className="coverage-land" d={TASMANIA_PATH} />
         {MARKERS.map((m) => {
@@ -120,7 +128,7 @@ export function CoverageMap({ highlight }: { highlight?: string | null }) {
       {/* The names are the precise half. A reader scanning for their own suburb reads the list; the
           map gives them where, on the coast, the two areas sit. */}
       <figcaption>
-        <span className="coverage-count">Sydney, NSW &amp; the Gold Coast, QLD</span>
+        <span className="coverage-count">Sydney, NSW &amp; south-east Queensland</span>
         <span className="coverage-names">
           {SUBURBS.map((s) => s.suburb).join(", ")}
         </span>

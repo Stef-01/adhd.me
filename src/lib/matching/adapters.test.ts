@@ -2,7 +2,16 @@
 // examples for synthetic entries, and the intake reader takes only what the person stated.
 
 import { describe, expect, it } from "vitest";
-import { clinicians } from "@/demo/roster";
+import { clinicians as everyRealEntry, professionOf } from "@/demo/roster";
+
+/**
+ * O252: the adapter turns a ROSTER ENTRY INTO A GP, and `gpFromClinician` returns null for
+ * anything that is not one (`adapters.ts`). The real roster used to be two GPs, so "every real
+ * entry" and "every real GP" were the same list and this file said the first while meaning the
+ * second. It now holds nine psychologists and an occupational therapist as well, so the two
+ * lists differ and the one these assertions are about is named.
+ */
+const clinicians = everyRealEntry.filter((c) => professionOf(c) === "gp");
 import { demoRoster } from "@/demo/synthetic-roster";
 import { gpFromClinician, patientFromIntake, readStructuredSignals, rosterGPs, statedDurationMonths } from "./adapters";
 import { embedder } from "./test-fixtures";
@@ -45,7 +54,11 @@ describe("M1 the roster becomes GPs", () => {
   });
 
   it("reads capacity from the roster's grade, age groups from care areas, and billing from signals", () => {
-    const child = demoRoster.find((c) => c.careAreas.includes("child-adolescent-adhd") && c.acceptingNewPatients)!;
+    // O252: ... and a GP, for the same reason — the roster's first child-and-adolescent entry
+    // is now a psychologist, whom this adapter correctly declines to turn into a GP.
+    const child = demoRoster.find(
+      (c) => c.careAreas.includes("child-adolescent-adhd") && c.acceptingNewPatients && (c.profession === undefined || c.profession === "gp"),
+    )!;
     const gp = gpFromClinician(child, TODAY)!;
     expect(gp.credentials.ageGroupsTreated).toEqual(["children", "adolescents", "adults"]);
     expect(gp.credentials.caseloadCapacityCurrent).toBeGreaterThan(0);

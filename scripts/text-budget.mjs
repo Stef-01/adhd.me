@@ -6,11 +6,35 @@
 //   DUMP=1 BASE=... node scripts/text-budget.mjs   # every counted line of an over-budget screen
 
 import { chromium } from "@playwright/test";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { BENCHMARK, BUDGET, LONG_FORM, contextFor, measure, reach, routes, summarise, words } from "./text-budget-lib.mjs";
 
 const BASE = process.env.BASE || "http://localhost:3100";
-const browser = await chromium.launch();
+
+/*
+ * O252: the same browser-discovery fallback `playwright.config.ts` already carries, because the
+ * law in CLAUDE.md is that every screen is measured WITH THIS SCRIPT and the script could not
+ * launch on a machine where the harness pre-provisions Chromium instead of letting Playwright
+ * download it. The spec that wraps this library ran fine, since the config handles it there; the
+ * CLI failed at `chromium.launch()` with "Executable doesn't exist", which reads as a broken
+ * script rather than a missing download. Explicit override first, then the pre-provisioned
+ * binary, and only when the pinned revision is genuinely absent — on a machine with a correctly
+ * installed browser this passes nothing and Playwright's own discovery is untouched.
+ */
+const PREINSTALLED_CHROMIUM = "/opt/pw-browsers/chromium";
+function chromiumExecutable() {
+  if (process.env.PW_CHROMIUM_PATH) return process.env.PW_CHROMIUM_PATH;
+  let pinned;
+  try {
+    pinned = chromium.executablePath();
+  } catch {
+    pinned = undefined;
+  }
+  if (pinned && existsSync(pinned)) return undefined;
+  return existsSync(PREINSTALLED_CHROMIUM) ? PREINSTALLED_CHROMIUM : undefined;
+}
+const executablePath = chromiumExecutable();
+const browser = await chromium.launch(executablePath ? { executablePath } : {});
 const CONTEXT = contextFor(BASE);
 let context = await browser.newContext(CONTEXT);
 let page = await context.newPage();

@@ -142,8 +142,8 @@ describe("M8: auditSeparation — the module header's claim, pinned against the 
       REACH_CORPUS.map((entry) => entry.text),
       clinicians,
     );
-    // MEASURED at this commit, over the real two-clinician roster (`anubhav-saxena`, man;
-    // `anusha-saxena`, woman) and the full 447-sentence reach corpus. Re-earned, not inherited:
+    // MEASURED at this commit, over the real roster (two GPs and, since O252, nine more
+    // clinicians) and the full reach corpus. Re-earned, not inherited:
     // a roster or corpus change that moves these numbers is real news about what this schema can
     // and cannot tell a reader, and the pin exists so that news cannot pass silently.
     // O191 re-pinned: the refugee-register corpus line grew the run 447 -> 448; culturally_attuned differs between the two, so valueDiffers 332 -> 333.
@@ -155,12 +155,33 @@ describe("M8: auditSeparation — the module header's claim, pinned against the 
     // "we cannot tell": the intervals overlap, so it is ambiguous too (+3). Both counters moving
     // together is the correct shape for a two-person roster where one has answered and one has not.
     // `intervalSeparates` is genuinely unmoved at 25, which is the part worth checking.
-    expect(result.valueDiffers).toBe(336);
-    expect(result.intervalSeparates).toBe(25);
-    expect(result.ambiguous).toBe(311);
-    // The named risk, checkable rather than merely asserted: every genuine, uncertainty-free
-    // separation this roster's declarations support traces to the one exempt field.
-    expect(result.separatingFacetKeys).toEqual(["pref:woman-gp"]);
+    // O252: the roster went from two people to eleven, and this is the measurement that changed
+    // most interestingly. valueDiffers 336 -> 519 and ambiguous 311 -> 426 are the ordinary
+    // consequence of more pairs to compare. `intervalSeparates` 25 -> 93 is not, and neither is
+    // the list below: for as long as the roster was two people, the ONLY uncertainty-free
+    // separation the schema could produce was the one exempt field, because `declarationState`
+    // never returns 'declared-no' for anything else and an undeclared facet's interval is the
+    // whole [0, weight] range, which overlaps everything.
+    //
+    // FOUR CARE AREAS NOW SEPARATE WITHOUT A NEGATIVE, AND THE MECHANISM IS THE THREE-STATE
+    // GRADE, not a new kind of claim. `scoreInterval` is an exact point for a declaration AT
+    // EITHER GRADE (this file's own third test says so: "certainty needs no third state"), so
+    // two clinicians who both declare an area, one at 'often' and one at 'sometimes', hold two
+    // exact and different values — provably different, with no 'we cannot tell' in it. That
+    // combination did not exist on a two-person roster and now exists on four areas. The module
+    // header's warning stands where it was aimed — an UNDECLARED facet is still ambiguous, and
+    // 426 of these comparisons still are — but the claim that everything provable traces to
+    // gender was a fact about roster size, and is re-measured rather than restated.
+    expect(result.valueDiffers).toBe(519);
+    expect(result.intervalSeparates).toBe(93);
+    expect(result.ambiguous).toBe(426);
+    expect(result.separatingFacetKeys).toEqual([
+      "care:autism-adhd",
+      "care:child-adolescent-adhd",
+      "care:non-medication",
+      "care:trauma-informed",
+      "pref:woman-gp",
+    ]);
   });
 
   it("is non-vacuous: a roster with no real negative anywhere separates on nothing", () => {

@@ -508,6 +508,466 @@ export const clinicians: Clinician[] = [
       "Dr Anu Saxena has a declared interest in ADHD.ME. Disclosed because she appears in a directory run by a company she is connected with, and a reader cannot see the ranking that put her there.",
     realPerson: true,
   },
+  /*
+   * ─────────────────────────────────────────────────────────────────────────────────────────
+   * O252 (founder-directed, 2026-09-20: "implement all profiles from adhd repo"): the nine
+   * clinicians the network page already publishes, brought into the app's own roster.
+   *
+   * WHERE EVERY WORD BELOW COMES FROM. The marketing site (Stef-01/revamped-adhd.me) generates
+   * eleven clinician pages from one data set, `scripts/build-profiles.py`. Two of those eleven
+   * are the GPs above. The other nine were live on the public site and absent from the product,
+   * so a reader inside the app could not reach a single psychologist or occupational therapist
+   * this company already lists. Each field below is copied from that data set, which is itself
+   * each clinician's own published biography. Nothing here is authored for them, and the
+   * real-person law above is unchanged: no portrait is generated, no availability is invented,
+   * no competence is claimed on anybody's behalf. `about` is each person's paragraphs joined
+   * into one string and otherwise verbatim, punctuation included — a first pass through this
+   * block tidied three of them (a duplicated word of Lachlan Avent's, two slashes of Lauren
+   * Poulos's, and "school can't" beside Flynn Simonis's "school refusal") and all three are
+   * restored, because a biography is a person's own words and tidying is authoring.
+   *
+   * THE ONE JUDGEMENT THIS BLOCK MAKES, STATED SO IT CAN BE CHECKED. `careAreas` is a three-state
+   * declaration and nobody here has sat the onboarding interview. So the rule applied uniformly
+   * is the one O2 set: what a clinician LEADS WITH — the work their own page says they focus on
+   * or are passionate about — is recorded at the "often" grade; the flat list of presentations
+   * they say they have experience with is recorded at the "sometimes" grade, at half weight. A
+   * clinician whose page never mentions ADHD carries no ADHD area, however plausible one would
+   * look on a card: Kate Row and Ellie Putland and Samantha Courtney are psychologists this
+   * company lists, not ADHD claims this file is entitled to make for them.
+   *
+   * CAPACITY IS UNDATED ON PURPOSE. Each clinic publishes a booking route, which is a declaration
+   * that they take new clients; none publishes a date it was last confirmed. `capacityGrade`
+   * reads an undated open declaration as `stale-open`, which is exactly what it is, and writing
+   * today's date here to make it read `fresh-open` would be inventing the check.
+   *
+   * NO `disclosedInterest` ON THE GOALS ENTRIES, and that absence is the honest one: the
+   * disclosure the site carries for GOALS Psychology is a statement that the clinic is
+   * independent and ADHD.ME receives no part of what you pay. That is the ABSENCE of an
+   * interest, and this field exists to declare a material interest that exists. It is carried as
+   * a practical signal instead. Paula Garrido's is a real disclosure and is written as one.
+   * ─────────────────────────────────────────────────────────────────────────────────────────
+   */
+  {
+    id: "paula-garrido",
+    name: "Paula Garrido",
+    shortName: "Paula Garrido",
+    profession: "psychologist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Clinical psychologist, MClinPsych ADHD-CCSP ASDCS",
+    // The clinic is online only, so this is where the practice is registered rather than a room
+    // anybody visits — the reach line below says so, and `telehealthFirstAppointment` keeps the
+    // distance sentence off her card entirely.
+    suburb: "Sydney",
+    practice: "Wellness Psychology Clinic",
+    reach: "Telehealth, Australia-wide; the clinic is online only",
+    image: "/clinicians/paula-garrido.jpg",
+    acceptingNewPatients: true,
+    focus: "ADHD and other neurodevelopmental differences, neuroaffirming and trauma-informed",
+    matchLine: "Compassionate, neuroaffirming and trauma-informed care for ADHD and other neurodevelopmental differences.",
+    fitSignals: ["Neuroaffirming", "Trauma-informed", "ADHD & autism certified"],
+    practicalSignals: ["$253 a session, $149 Medicare rebate", "Fee set and charged by the clinic"],
+    summary:
+      "Paula is a clinical psychologist with extensive experience supporting people with ADHD and other neurodevelopmental differences. She has a special interest in compassionate, neuroaffirming and trauma-informed care.",
+    about:
+      "Paula Garrido is a Clinical Psychologist with extensive experience supporting individuals with ADHD and other neurodevelopmental differences. She has a special interest in providing compassionate, neuroaffirming, and trauma-informed psychological care, helping individuals better understand their unique strengths, challenges, and ways of experiencing the world. With additional training in ADHD, autism, complex trauma, and evidence-based psychological therapies, Paula supports individuals to navigate challenges with emotional regulation, executive functioning, anxiety, self-esteem, relationships, and everyday life. Her warm, collaborative, and non-judgmental approach creates a safe space for clients to explore their experiences, develop practical strategies, build self-understanding, and work towards meaningful and lasting change. Paula holds a Master of Clinical Psychology and is an ADHD-Certified Clinical Services Provider (ADHD-CCSP) and Certified Autism Spectrum Disorder Clinical Specialist (ASDCS).",
+    experience: [
+      "Clinical psychologist, Wellness Psychology Clinic, telehealth Australia-wide",
+      "Master of Clinical Psychology",
+      "ADHD-Certified Clinical Services Provider (ADHD-CCSP)",
+      "Certified Autism Spectrum Disorder Clinical Specialist (ASDCS)",
+      "Additional training in ADHD, autism, complex trauma and evidence-based psychological therapies",
+    ],
+    // Not published on her page; English until she names her own.
+    languages: ["English"],
+    careAreas: ["autism-adhd", "trauma-informed", "non-medication"],
+    careAreasSometimes: ["emotional-regulation", "anxiety"],
+    // Her own words: "warm, collaborative, and non-judgmental", and a practice built on helping
+    // people "better understand their unique strengths, challenges, and ways of experiencing".
+    manner: ["collaborative", "non_judgmental", "sense_making", "attuned"],
+    expertise: ["emotional-regulation"],
+    wheelchairAccessible: false,
+    appointmentLength: "60-minute sessions by secure video; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://wellnesspsychologyclinic.com.au/appointment-page/",
+      note: "The clinic takes appointment requests through its own form rather than an online picker.",
+    },
+    disclosedInterestLabel: "Clinic connection disclosed",
+    disclosedInterest:
+      "Paula consults through Wellness Psychology Clinic, which also lists Dr Anu Saxena, who has a declared interest in ADHD.ME.",
+    realPerson: true,
+  },
+  {
+    id: "kate-row",
+    name: "Kate Row",
+    shortName: "Kate Row",
+    profession: "psychologist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Psychologist and clinic director, BSc(Psych) BA PostGradDip(Psych)",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, and telehealth Australia-wide",
+    image: "/clinicians/kate-row.jpg",
+    acceptingNewPatients: true,
+    focus: "Goals, practical coping strategies and NDIS journeys, toddlers through to adults",
+    matchLine: "Toddlers through to adults, working from the goals you name towards a practical toolkit for reaching them.",
+    fitSignals: ["Toddlers to adults", "NDIS journeys", "CBT, ACT & MI"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "Free 15-minute call for new clients"],
+    summary:
+      "Kate works with toddlers, children, teenagers and adults, and directs the clinic. She works from the goals a person names towards a practical toolkit of coping strategies.",
+    about:
+      "Kate works with toddlers, children, teenagers, and adults. The main therapeutic modalities she utilises include Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Motivational Interviewing (MI), solution-focused brief therapy, communication, and social skills building for growing client's toolkits of practical coping strategies. Kate enjoys working with clients to identify their goals and work towards achieving them to improve overall well-being and live their most fulfilling lives possible. She has a life-long passion for working with clients with diffabilities/disabilities and supporting individuals and families through their NDIS journey to thrive. Kate is mum to three children.",
+    experience: [
+      "Psychologist and clinic director, GOALS Psychology, Fortitude Valley",
+      "Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT) and Motivational Interviewing (MI)",
+      "Solution-focused brief therapy, communication and social skills building",
+      "Supporting individuals and families through their NDIS journey",
+      "Career counselling and post-schooling decision making",
+      "Bachelor of Science (Psychology) and Bachelor of Arts",
+      "Postgraduate Diploma in Psychology",
+    ],
+    languages: ["English"],
+    careAreas: ["non-medication"],
+    // Her page names goals, wellbeing and a toolkit a person can use — motivating and
+    // collaborative in the manner vocabulary, and nothing beyond what she wrote.
+    manner: ["motivating", "collaborative"],
+    wheelchairAccessible: true,
+    appointmentLength: "50-minute sessions; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.halaxy.com/book/goals-psychology/location/726621",
+      note: "GOALS Psychology books through Halaxy, and offers new clients a free 15-minute call first.",
+    },
+    realPerson: true,
+  },
+  {
+    id: "ellie-putland",
+    name: "Ellie Putland",
+    shortName: "Ellie Putland",
+    profession: "psychologist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Psychologist, BPsychSc(Hons I)",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, and telehealth Australia-wide",
+    image: "/clinicians/ellie-putland.jpg",
+    acceptingNewPatients: true,
+    focus: "Trauma-informed work with young people, with families brought in where it helps",
+    matchLine: "Trauma-informed work with young people who want to bring their stressors down, with families brought in where it helps.",
+    fitSignals: ["Trauma-informed", "Young people", "CBT, ACT & DBT"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "Free 15-minute call for new clients"],
+    summary:
+      "Ellie works with children, teenagers and adults from a trauma-informed care framework, and works with families towards the goals a person names.",
+    about:
+      "Ellie works with children, teenagers and adults. She works with clients from a trauma-informed care framework and works collaboratively with families on psychoeducation towards their goals. Ellie utilises Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Dialectical Behaviour Therapy (DBT) and Motivational Interviewing. Ellie is experienced in administering an array of assessments, incorporating relevant resources into sessions and liaising with clients' wider support teams wherever helpful towards client goals. By supporting clients to develop and refine their psychological and coping skills, Ellie has a particular passion for supporting young people who would like to reduce their stressors. With a Bachelor of Psychological Science from Griffith University with 1st class Honours, Ellie is also an Associate Member of the Australian Psychological Society.",
+    experience: [
+      "Psychologist, GOALS Psychology, Fortitude Valley",
+      "Trauma-informed care framework, working collaboratively with families",
+      "Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Dialectical Behaviour Therapy (DBT) and Motivational Interviewing",
+      "Experienced in administering an array of assessments",
+      "Liaison with clients' wider support teams",
+      "Bachelor of Psychological Science with First Class Honours, Griffith University",
+      "Associate Member of the Australian Psychological Society",
+    ],
+    languages: ["English"],
+    careAreas: ["trauma-informed", "non-medication"],
+    manner: ["collaborative", "steadying"],
+    wheelchairAccessible: true,
+    appointmentLength: "50-minute sessions; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.halaxy.com/book/goals-psychology/location/726621",
+      note: "GOALS Psychology books through Halaxy, and offers new clients a free 15-minute call first.",
+    },
+    realPerson: true,
+  },
+  {
+    id: "lachlan-avent",
+    name: "Lachlan Avent",
+    shortName: "Lachlan Avent",
+    profession: "psychologist",
+    gender: "man",
+    pronouns: "he/him",
+    title: "Psychologist, BPsychSc(Hons)",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, and telehealth Australia-wide",
+    image: "/clinicians/lachlan-avent.jpg",
+    acceptingNewPatients: true,
+    focus: "Autism and ADHD assessment for children, teenagers and adults, and therapy alongside",
+    matchLine: "A safe space to be heard, plus autism and ADHD assessment, for children, teenagers and adults.",
+    fitSignals: ["Autism & ADHD assessment", "Children to adults", "Triple P practitioner"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "Free 15-minute call for new clients"],
+    summary:
+      "Lachlan works with children, teenagers and adults, and offers autism assessment and ADHD assessment appointments. He is a certified Triple P Stepping Stones practitioner.",
+    about:
+      "Lachlan works with children, teenagers and adults and is passionate about providing a safe space for clients to express themselves, achieve their potential and meet the challenges that life presents. He is experienced working with clients who have autism, ADHD, OCD, specific learning disorders, depression, intellectual disability, are experiencing anxiety, phobias, depression, issues with self-esteem / confidence, stress / burn out, anger, bullying, interpersonal difficulties, and provides parenting support. Lachlan utilises Cognitive Behavioural Therapy (CBT), Dialectical Behavioural Therapy (DBT), Acceptance and Commitment Therapy (ACT), Motivational Interviewing (MI) and Emotion Focussed Therapy (EFT) to support clients to create meaningful change and build skills to live a life that fulfils them. Lachlan is experienced in administering assessments including the WISC, WIAT, WAIS, ADOS, MIGDAS and offers appointments for autism assessment and ADHD assessment. Lachlan is also a certified Triple P Stepping Stones Parenting Program Practitioner. Lachlan holds a Bachelor of Psychological Science with Honours from the University of Queensland.",
+    experience: [
+      "Psychologist, GOALS Psychology, Fortitude Valley",
+      "Autism assessment and ADHD assessment appointments",
+      "Assessment administration including the WISC, WIAT, WAIS, ADOS and MIGDAS",
+      "Cognitive Behavioural Therapy (CBT), Dialectical Behavioural Therapy (DBT), Acceptance and Commitment Therapy (ACT), Motivational Interviewing (MI) and Emotion Focussed Therapy (EFT)",
+      "Certified Triple P Stepping Stones Parenting Program Practitioner",
+      "Bachelor of Psychological Science with Honours, University of Queensland",
+    ],
+    languages: ["English"],
+    careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd", "non-medication"],
+    careAreasSometimes: ["anxiety", "depression"],
+    manner: ["non_judgmental", "motivating"],
+    wheelchairAccessible: true,
+    appointmentLength: "50-minute sessions; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.halaxy.com/book/goals-psychology/location/726621",
+      note: "GOALS Psychology books through Halaxy, and offers new clients a free 15-minute call first.",
+    },
+    realPerson: true,
+  },
+  {
+    id: "samantha-courtney",
+    name: "Samantha Courtney",
+    shortName: "Samantha Courtney",
+    profession: "psychologist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Psychologist, BPsychSc BSocSc(Psych)(Hons I) CEDC-MH",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, and telehealth Australia-wide",
+    image: "/clinicians/samantha-courtney.jpg",
+    acceptingNewPatients: true,
+    focus: "Credentialed eating disorder care, perinatal mental health and trauma",
+    matchLine: "Credentialed eating disorder care, perinatal mental health and trauma, in a calm and inclusive room.",
+    fitSignals: ["Eating disorders", "Perinatal & fertility", "CEDC-MH credentialed"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "Free 15-minute call for new clients"],
+    summary:
+      "Samantha works with teenagers and adults. She is a Credentialed Eating Disorder Clinician, and works from a trauma-informed care framework and a strengths-based lens.",
+    about:
+      "Samantha works with teenagers and adults. She has experience working with clients who are experiencing difficulties with eating disorders, perinatal mental health, fertility, functional neurological disorder (FND), anxiety, depression, postnatal anxiety and depression, trauma and PTSD, and life stressors, including major life transitions such as parenthood, injuries, retiring and personal losses. Samantha is a Credentialed Eating Disorder Clinician (CEDC-MH) and her experience includes supporting clients who are mums, new parents, athletes, and clients from diverse life experiences with co-occurring health conditions to navigate eating disorder treatment. She is able to liaise with clients' wider support teams such as dieticians, GPs and psychiatrists wherever helpful towards client goals. Samantha works from a trauma-informed care framework and a strengths-based lens to provide a calm, inclusive, and supportive environment for her clients to engage in individualised interventions. She utilises therapy modalities including Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT) and Dialectical Behaviour Therapy (DBT). Sam holds a Bachelor of Psychological Science from the University of New England, and a Bachelor of Social Science in Psychology (1st Class Honours) from the University of the Sunshine Coast.",
+    experience: [
+      "Psychologist, GOALS Psychology, Fortitude Valley",
+      "Credentialed Eating Disorder Clinician (CEDC-MH)",
+      "Eating disorder treatment with mums, new parents, athletes, and clients with co-occurring health conditions",
+      "Perinatal mental health, fertility, and functional neurological disorder (FND)",
+      "Trauma-informed care framework and a strengths-based lens",
+      "Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT) and Dialectical Behaviour Therapy (DBT)",
+      "Liaison with dieticians, GPs and psychiatrists",
+      "Bachelor of Psychological Science, University of New England",
+      "Bachelor of Social Science in Psychology (First Class Honours), University of the Sunshine Coast",
+    ],
+    languages: ["English"],
+    careAreas: ["trauma-informed", "non-medication"],
+    careAreasSometimes: ["anxiety", "depression"],
+    // "a calm, inclusive, and supportive environment" and "a strengths-based lens", her words.
+    manner: ["steadying", "non_judgmental", "motivating"],
+    expertise: ["regular-eating"],
+    wheelchairAccessible: true,
+    appointmentLength: "50-minute sessions; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.halaxy.com/book/goals-psychology/location/726621",
+      note: "GOALS Psychology books through Halaxy, and offers new clients a free 15-minute call first.",
+    },
+    realPerson: true,
+  },
+  {
+    id: "lauren-poulos",
+    name: "Lauren Poulos",
+    shortName: "Lauren Poulos",
+    profession: "psychologist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Psychologist, BPsychSc(Hons) MProfPsych",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, telehealth Australia-wide, and home, school and community visits across Brisbane",
+    image: "/clinicians/lauren-poulos.jpg",
+    acceptingNewPatients: true,
+    focus: "Early intervention and play-based work with toddlers and children",
+    matchLine: "Early intervention and play-based work with toddlers and children, and steady support for teens and adults.",
+    fitSignals: ["Toddlers & children", "PCIT & early intervention", "Psychometric assessment"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "Home, school and community visits"],
+    summary:
+      "Lauren works with toddlers, children, teens and adults. She works in early intervention, in clinic and at home, and is experienced with Parent-Child Interaction Therapy.",
+    about:
+      "Lauren works with toddlers, children, teens and adults. She is experienced working with clients who are experiencing anxiety, depression, emotional regulation, neurodivergence, autism, ADHD, intellectual disability, self esteem/ confidence, trauma, friendships & socialising, and offers parenting support among other presenting concerns. Lauren thoroughly enjoys facilitating a safe and collaborative space where clients can explore their goals and work toward meaningful change. She is experienced with Cognitive Behavioural Therapy (CBT), Motivational Interviewing (MI), skills building and coping strategies, Parent-Child Interaction Therapy (PCIT) and facilitating programs relating to managing disruptive behaviours in children to strengthen family dynamics. Lauren also has experience working with children in an early intervention context both in-clinic and at-home settings. Lauren holds a Bachelor of Psychological Sciences with Honours from the University of Queensland and a Master of Professional Psychology from Bond University.",
+    experience: [
+      "Psychologist, GOALS Psychology, Fortitude Valley",
+      "Early intervention with children, in clinic and at home",
+      "Parent-Child Interaction Therapy (PCIT)",
+      "Programs for managing disruptive behaviours in children to strengthen family dynamics",
+      "Cognitive Behavioural Therapy (CBT), Motivational Interviewing (MI), skills building and coping strategies",
+      "Psychometric assessment",
+      "Communication methods including Proloquo2Go, PECS and ALD",
+      "Bachelor of Psychological Sciences with Honours, University of Queensland",
+      "Master of Professional Psychology, Bond University",
+    ],
+    languages: ["English"],
+    careAreas: ["non-medication"],
+    careAreasSometimes: ["child-adolescent-adhd", "autism-adhd", "emotional-regulation", "anxiety", "depression", "trauma-informed"],
+    manner: ["collaborative", "steadying"],
+    expertise: ["emotional-regulation"],
+    wheelchairAccessible: true,
+    appointmentLength: "50-minute sessions; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.halaxy.com/book/goals-psychology/location/726621",
+      note: "GOALS Psychology books through Halaxy, and offers new clients a free 15-minute call first.",
+    },
+    realPerson: true,
+  },
+  {
+    id: "alice-bui",
+    name: "Alice Bui",
+    shortName: "Alice Bui",
+    profession: "psychologist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Provisional psychologist, BPsych BPsychSc(Hons), Master of Clinical Psychology in progress",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, and telehealth Australia-wide",
+    image: "/clinicians/alice-bui.jpg",
+    acceptingNewPatients: true,
+    focus: "Trauma-informed therapy with cultural sensitivity, refugee and newly arrived clients",
+    matchLine: "Trauma-informed therapy with cultural sensitivity, and a particular welcome for refugee and newly arrived clients.",
+    fitSignals: ["Trauma-informed", "CALD & refugee clients", "CBT, ACT, DBT & narrative"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "No Medicare rebate for provisional sessions"],
+    summary:
+      "Alice works with children, teens and adults. Her therapy style is trauma-informed, and she works with refugee and newly arrived clients and clients from culturally and linguistically diverse backgrounds.",
+    about:
+      "Alice works with children, teens and adults. She is experienced working with clients regarding trauma, PTSD, anxiety, depression, adjustment difficulties, autism, ADHD, intellectual disability, neurodivergence, emotional dysregulation, behavioural challenges, among other presenting concerns. Her therapy style is trauma-informed and emphasises a safe collaborative space. Alice has special clinical interests in evidence-based practice for clients who have experienced trauma. She is particularly passionate about working with clients who are refugees and newly arrived backgrounds and thoroughly enjoys supporting clients from culturally and linguistically diverse (CALD) backgrounds who have experienced displacement, cultural transition and complex trauma with cultural sensitivity to tailor interventions to their unique lived experiences. Alice is experienced with Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Dialectical Behaviour Therapy (DBT) and Narrative Therapy. Alice holds a Bachelor of Psychology from Macquarie University, Bachelor of Psychological Science (Honours) and is currently completing a Master of Clinical Psychology.",
+    experience: [
+      "Provisional psychologist, GOALS Psychology, Fortitude Valley",
+      "Evidence-based practice for clients who have experienced trauma",
+      "Work with refugee and newly arrived clients, and clients from culturally and linguistically diverse (CALD) backgrounds",
+      "Displacement, cultural transition and complex trauma",
+      "Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Dialectical Behaviour Therapy (DBT) and Narrative Therapy",
+      "Bachelor of Psychology, Macquarie University",
+      "Bachelor of Psychological Science (Honours)",
+      "Master of Clinical Psychology, currently completing",
+    ],
+    languages: ["English"],
+    careAreas: ["trauma-informed", "non-medication"],
+    careAreasSometimes: ["autism-adhd", "emotional-regulation", "anxiety", "depression"],
+    // "cultural sensitivity to tailor interventions to their unique lived experiences" and
+    // "a safe collaborative space" — her own page, and nothing read into it.
+    manner: ["culturally_attuned", "collaborative", "non_judgmental"],
+    expertise: ["emotional-regulation"],
+    wheelchairAccessible: true,
+    appointmentLength: "50-minute sessions; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.halaxy.com/book/goals-psychology/location/726621",
+      note: "GOALS Psychology books through Halaxy, and offers new clients a free 15-minute call first.",
+    },
+    realPerson: true,
+  },
+  {
+    id: "meera-lakhani",
+    name: "Meera Lakhani",
+    shortName: "Meera Lakhani",
+    profession: "psychologist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Educational and developmental psychologist, BPsychSc MPsych(Ed&Dev)",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, and telehealth Australia-wide",
+    image: "/clinicians/meera-lakhani.jpg",
+    acceptingNewPatients: true,
+    focus: "Autism, ADHD and cognitive assessment, educational and developmental",
+    matchLine: "Autism, ADHD and cognitive assessment that leaves you understanding your own neurotype better.",
+    fitSignals: ["Autism & ADHD assessment", "Cognitive assessment", "Educational & developmental"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "Arranged with the clinic rather than booked online"],
+    summary:
+      "Meera works with children, teenagers and adults. Her current focus is neurodivergence assessment: autism assessment, ADHD assessment and cognitive assessment.",
+    about:
+      "Meera works with children, teenagers and adults. She enjoys working with clients to understand their goals then create a plan to achieve their goals. Meera is passionate about helping clients to identify their unique areas of strengths and difficulties and collaborate with relevant stakeholders to maximise positive outcomes in their lives. Meera's current focus is on neurodivergence assessments: autism assessment, ADHD assessment and cognitive assessment. She utilises assessment tools including WISC, WAIS, WIAT, MIGDAS and others as required to support clients with discovering an enhanced understanding of their unique neurotype. Meera is especially passionate about working with young adults and their families, in a way that aligns with their values and beliefs, to be the best version of themselves. She thrives on supporting clients to lean into vulnerability, learn new skills and navigate life's challenges. Meera holds a Bachelor of Psychological Science from The University of Queensland and a Master of Psychology - Educational & Developmental from Queensland University of Technology. She has previously worked as a Psychologist in a school and at the Queensland Children's Hospital Child Development Service.",
+    experience: [
+      "Educational and developmental psychologist, GOALS Psychology, Fortitude Valley",
+      "Neurodivergence assessment: autism assessment, ADHD assessment and cognitive assessment",
+      "Assessment tools including the WISC, WAIS, WIAT and MIGDAS",
+      "Educational and developmental assessments",
+      "Circle of Security (COS), Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT) and attachment theory",
+      "Previously a psychologist in a school, and at the Queensland Children's Hospital Child Development Service",
+      "Bachelor of Psychological Science, University of Queensland",
+      "Master of Psychology (Educational & Developmental), Queensland University of Technology",
+    ],
+    languages: ["English"],
+    careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd"],
+    careAreasSometimes: ["non-medication"],
+    manner: ["sense_making", "collaborative", "motivating"],
+    expertise: ["late-diagnosis"],
+    wheelchairAccessible: true,
+    appointmentLength: "Arranged with the clinic rather than booked online",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.goalspsychology.com/contact",
+      note: "Meera's appointments are arranged with the clinic rather than booked online.",
+    },
+    realPerson: true,
+  },
+  {
+    id: "flynn-simonis",
+    name: "Flynn Simonis",
+    shortName: "Flynn Simonis",
+    profession: "occupational-therapist",
+    gender: "man",
+    pronouns: "he/him",
+    title: "Occupational therapist",
+    suburb: "Fortitude Valley",
+    practice: "GOALS Psychology",
+    reach: "Clinic appointments in Fortitude Valley, telehealth Australia-wide, and home, school and community visits across Brisbane",
+    image: "/clinicians/flynn-simonis.jpg",
+    acceptingNewPatients: true,
+    focus: "Paediatric occupational therapy led by the child's own interests",
+    matchLine: "Paediatric occupational therapy led by the child's own interests, in clinic, at home or at school.",
+    fitSignals: ["Paediatric OT", "Home & school visits", "FCA report writing"],
+    practicalSignals: ["Independent clinic; fee quoted when you book", "Clinic, home, kindergarten and school visits"],
+    summary:
+      "Flynn works with toddlers, children, teenagers and young adults. He runs sessions guided by his client's interests, in clinic, at home, at kindergarten or at school.",
+    about:
+      "Flynn works with toddlers, children, teenagers and young adults. He is experienced working with clients who have experienced developmental trauma, neurodivergence, autism, Attention-Deficit Hyperactivity Disorder (ADHD), school refusal / school can't, developmental delay, non-verbal communication profiles, Generalised Anxiety Disorder (GAD), emotional regulation, parenting support, intellectual disability, Oppositional Defiant Disorder (ODD), Rett Syndrome, and Muscular Dystrophy and many other presentations. Flynn enjoys supporting children with varying communication styles, sensory profiles, emotional regulation needs, and functional challenges. Flynn is particularly passionate about paediatric occupational therapy including play therapy and parent training. He facilitates sessions that are guided by his client's interests, recognising that children engage and learn best when therapy is meaningful and motivating towards skill development for participation in everyday life. Flynn emphasises a foundation of communication with families, schools and multidisciplinary teams, to create a safe, supportive, creative and fun therapy environment. He values family-centred practice in working with caregivers to ensure that recommended strategies are practical, achievable and able to be easily implemented into daily routines. Flynn offers in-clinic, home visits, kindergarten and school visit appointments where appropriate towards his clients' goals. Flynn is also experienced with Functional Capacity Assessments (FCAs) and report writing, and facilitating group programs including LEGO, Minecraft and Ninja Warrior-style social and movement programs, outdoor adventure and nature camps, all supporting goals including social skills, teamwork, and motor development, building independence, resilience, and confidence in children and young people.",
+    experience: [
+      "Occupational therapist, GOALS Psychology, Fortitude Valley",
+      "Paediatric occupational therapy, including play therapy and parent training",
+      "Functional Capacity Assessments (FCAs) and report writing",
+      "Group programs including LEGO, Minecraft and Ninja Warrior-style social and movement programs",
+      "Outdoor adventure and nature camps building independence, resilience and confidence",
+      "Sensory profiles, emotional regulation needs and functional challenges",
+      "Family-centred practice with caregivers, schools and multidisciplinary teams",
+      "In-clinic, home visit, kindergarten and school visit appointments",
+    ],
+    languages: ["English"],
+    careAreas: ["non-medication"],
+    careAreasSometimes: ["child-adolescent-adhd", "autism-adhd", "emotional-regulation"],
+    // "a safe, supportive, creative and fun therapy environment", "family-centred practice in
+    // working with caregivers", "guided by his client's interests" — his page, in the closed
+    // manner vocabulary.
+    manner: ["steadying", "collaborative", "motivating"],
+    expertise: ["emotional-regulation", "household-organisation"],
+    wheelchairAccessible: true,
+    appointmentLength: "Clinic, home, kindergarten and school visits; times set with the clinic",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.halaxy.com/book/goals-psychology/location/726621",
+      note: "GOALS Psychology books through Halaxy, and offers new clients a free 15-minute call first.",
+    },
+    realPerson: true,
+  },
 ];
 
 /** The profession an entry carries, with the roster's original meaning — no profession is a GP. */

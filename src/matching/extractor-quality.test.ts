@@ -62,13 +62,26 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
   it("the ranking ladder split is IDENTICAL today, and that identity is itself the finding", () => {
     const all = rankingLadderAll();
     const parsed = rankingLadderCorrectlyParsed();
-    expect(all).toEqual({ total: 451, informed: 301, tied: 57, unmatched: 0, unserved: 93 }); // O210: +3 informed
+    /*
+     * O252: 301/57/0/93 -> 422/0/0/29, over the same 451 sentences. Nine clinicians joined the
+     * roster and the ladder moved in the one direction that matters: 121 requests the finder
+     * used to render as an unranked list, it can now order.
+     *
+     * `tied` AT ZERO IS THE HEADLINE AND IT NEEDS SAYING CAREFULLY. It does not mean nothing
+     * ties any more; it means no request now ties the WHOLE roster, which is what this grade
+     * has always measured. A request that leaves eight of eleven level still produces an order,
+     * and `tie-quality.test.ts`'s `partialTie` column — 0 before, 299 now — is where those
+     * requests went. Two reports, one population, and neither is flattering the other: the
+     * strict grade improved because the roster genuinely answers more, and the band-size
+     * measure records how much of the roster is still level underneath the order.
+     *
+     * `unserved` 93 -> 29 is the same thing from the other side: sixty-four requests naming
+     * something nobody declared are now named by somebody who does.
+     */
+    expect(all).toEqual({ total: 451, informed: 422, tied: 0, unmatched: 0, unserved: 29 });
     expect(parsed).toEqual(all);
-    // W234's own tally (`separated`/`unseparated`) is unaffected by M7 — it classifies by RANK
-    // BAND size, not by `matchQuality`'s stricter `informed` grade, so it still reads 300/147
-    // (`tie-quality.test.ts`) even though this ladder's informed/tied split moved beneath it.
-    expect(parsed.informed).toBe(301); // O210
-    expect(parsed.tied + parsed.unmatched + parsed.unserved).toBe(150);
+    expect(parsed.informed).toBe(422);
+    expect(parsed.tied + parsed.unmatched + parsed.unserved).toBe(29);
   });
 });
 

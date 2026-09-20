@@ -393,8 +393,17 @@ export function missedAskCopy(need: NeedSignal): string {
   return `${before}${label}${after}`;
 }
 
-export function unservedCopy(label: string): string {
-  return `${label} is not something any GP listed today declares. That is a gap in our listing, not in what you asked for.`;
+/**
+ * O252: the sentence names the LIST it is about, not "GP" regardless.
+ *
+ * It said "any GP listed today" while the roster was two GPs, which was true and is no longer:
+ * the roster now holds psychologists and an occupational therapist, and a narrowed list holds
+ * one kind of them. Telling somebody reading a list of psychologists that no GP declares what
+ * they asked for is a false statement about the screen in front of them — the same defect
+ * `rosterNoun` was written for in `orderNote`, met a second time in a different sentence.
+ */
+export function unservedCopy(label: string, noun: string = rosterNoun(clinicians).one): string {
+  return `${label} is not something any ${noun} listed today declares. That is a gap in our listing, not in what you asked for.`;
 }
 
 /**
@@ -438,7 +447,7 @@ export function unservedAsks(query: string, roster: readonly Clinician[] = clini
       }
       return false;
     })
-    .map((need) => unservedCopy(need.label));
+    .map((need) => unservedCopy(need.label, rosterNoun(roster).one));
 }
 
 /**
@@ -598,7 +607,11 @@ export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
 /** What the finder says when the order is not earned. Closed vocabulary, like every other reason. */
 export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
   informed: "",
-  tied: "Both of these answer what you asked for equally well, so this is not a ranking, read both.",
+  /* O252: "Both of these ... read both" was written when the roster was two people and the only
+     tie it could produce was a two-way one. `tied` means the WHOLE list scores level, and the
+     list can now be eleven, so the sentence counted a roster that no longer has that size. It
+     says the same thing without the count. */
+  tied: "Everyone here answers what you asked for equally well, so this is not a ranking.",
   // O48: one sentence, not three lines. The clarifier beneath owns the "say more" invitation,
   // so this line only has to state the fact.
   unmatched:

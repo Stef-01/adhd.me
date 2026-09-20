@@ -1,21 +1,42 @@
 import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { clarifiers, PREF_PROMPTS } from "./clarify";
-import { clinicians, matchQuality, rankClinicians } from "@/demo/clinicians";
+import { clinicians, matchQuality, professionOf, rankClinicians } from "@/demo/clinicians";
 import { facetKey, readNeeds } from "./needs";
 
 describe("W225 a question only earns its place if the answer changes the order", () => {
   /** THE PROPERTY THE WHOLE FILE EXISTS FOR. Anything else is data collection from somebody who
-      came here to find a GP. */
+      came here to find a GP.
+   *
+   * O252 STATES IT AS THE TEST'S OWN NAME ALWAYS DID: the answer must REORDER the roster. It
+   * used to be written as `tied` -> `informed`, which was the same thing while the roster was
+   * two people — with two candidates the only way an answer can change the order is to break
+   * the tie. On eleven it is not: the commonest sentence in the product now produces an order
+   * on its own, and a question that merely confirmed an existing order would still read as
+   * `informed` -> `informed` and pass a grade check while earning nothing. So the ranking is
+   * compared directly, and the tie-breaking form is kept below on the GP-narrowed list, where
+   * the two-person condition it describes still holds. */
   it.each(clarifiers("I think I might have ADHD", clinicians).map((c) => [c.prompt, c.answer]))(
     "answering %s actually reorders the roster",
     (_prompt, answer) => {
       const before = "I think I might have ADHD";
       const after = `${before}, ${answer}`;
-      expect(matchQuality(before)).toBe("tied");
+      const order = (query: string) => rankClinicians(query).map((c) => c.id).join(">");
+      expect(order(after)).not.toBe(order(before));
       expect(matchQuality(after)).toBe("informed");
     },
   );
+
+  it("still breaks the tie on the list a reader asking for a GP is shown", () => {
+    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+    const before = "I think I might have ADHD";
+    expect(matchQuality(before, gps)).toBe("tied");
+    const offered = clarifiers(before, gps);
+    expect(offered.length).toBeGreaterThan(0);
+    for (const { answer } of offered) {
+      expect(matchQuality(`${before}, ${answer}`, gps)).toBe("informed");
+    }
+  });
 
   it("offers something for the commonest query in the product", () => {
     expect(clarifiers("I think I might have ADHD", clinicians).length).toBeGreaterThan(0);

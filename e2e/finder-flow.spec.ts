@@ -273,15 +273,26 @@ test("refinement stays with results while the profile leads with the bio", async
   await expect(page.locator(".clarify-chip")).toHaveCount(0);
 });
 
+/**
+ * O252: the query changed, and why is the finding.
+ *
+ * It was "I need an ADHD assessment", on the premise the comment stated: every listing declared
+ * assessment, so the words tied the roster and the star appeared. Four of eleven declare it now,
+ * so that sentence produces a real order and the star correctly does not render — `clarifiable`
+ * is `quality !== "informed"`. "hello there" is the case that still needs a question asked, and
+ * it is the same one `matching-verification.spec.ts` uses for the clarifier.
+ */
 test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
+  const askAgain = async () => {
+    await page.getByRole("button", { name: /Change what you said/i }).click();
+    await page.getByRole("textbox").fill("hello there");
+    await page.getByRole("button", { name: "Find support" }).click();
+    await page.getByRole("button", { name: "Improve my matches" }).click();
+    await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
+    await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
+  };
   await demoResultsRealRosterOnly(page);
-  await page.getByRole("button", { name: /Change what you said/i }).click();
-  // Every listing declares assessment, so this ties the roster and the clarifier renders.
-  await page.getByRole("textbox").fill("I need an ADHD assessment");
-  await page.getByRole("button", { name: "Find support" }).click();
-  await page.getByRole("button", { name: "Improve my matches" }).click();
-  await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
-  await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
+  await askAgain();
 
   const before = await page.locator(".clinician-row strong").allInnerTexts();
   await page.screenshot({ path: "qa/_runs/motion-o52/results-before-clarifier.png", fullPage: false });
@@ -293,14 +304,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
   const chipCount = await page.locator(".clarify-chip").count();
   let reordered = false;
   for (let chip = 0; chip < chipCount && !reordered; chip++) {
-    if (chip > 0) {
-      await page.getByRole("button", { name: /Change what you said/i }).click();
-      await page.getByRole("textbox").fill("I need an ADHD assessment");
-      await page.getByRole("button", { name: "Find support" }).click();
-      await page.getByRole("button", { name: "Improve my matches" }).click();
-  await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
-      await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
-    }
+    if (chip > 0) await askAgain();
     await page.locator(".clarify-chip").nth(chip).click();
     await page.waitForTimeout(600);
     const after = await page.locator(".clinician-row strong").allInnerTexts();
@@ -312,7 +316,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
       await page.screenshot({ path: "qa/_runs/motion-o52/results-after-clarifier.png", fullPage: false });
     }
   }
-  expect(reordered, "no clarifier answer reordered a tied roster").toBe(true);
+  expect(reordered, "no clarifier answer reordered an unordered roster").toBe(true);
 });
 
 /**
@@ -410,6 +414,14 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
     await page.locator("#welcome-request").fill(query);
     await page.getByRole("button", { name: "Find support" }).click();
     await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+
+    // O252: the list shows the first few and keeps the rest behind "{n} more". With two
+    // clinicians there was never a rest, so this read the whole engine order without asking
+    // for it; with eleven it read the first five and compared them against all eleven. The
+    // claim is about the ORDER the engine produced, so the list is widened to hold it.
+    const showAll = page.locator(".show-all");
+    if (await showAll.isVisible().catch(() => false)) await showAll.click();
+    await expect(page.locator(".clinician-row")).toHaveCount(expected[i]!.length);
 
     const rendered = await page.locator(".clinician-row strong").allInnerTexts();
     expect(rendered.map((n) => n.trim()), `"${query}" rendered an order the engine did not produce`).toEqual(

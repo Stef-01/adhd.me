@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { careArchetypes } from "./care-archetypes";
-import { cliniciansMatchingArchetype, clinicians, rankClinicians } from "./clinicians";
+import { cliniciansMatchingArchetype, clinicians, professionOf, rankClinicians } from "./clinicians";
 
 describe("ADHD assessment demo archetypes", () => {
   it("includes six distinct qualitative journeys", () => {
@@ -36,11 +36,25 @@ describe("ADHD assessment demo archetypes", () => {
     expect(eligibleIds.has(rankClinicians(archetype.request)[0]!.id)).toBe(true);
   });
 
-  /** Every active GP must be reachable by some journey, or the roster carries a name nothing routes to. */
-  it("routes to every clinician on the roster", () => {
+  /**
+   * Every active GP must be reachable by some journey, or the roster carries a name nothing
+   * routes to.
+   *
+   * O252 SCOPED THIS TO GPs, AND THE SCOPE IS THE CLAIM. An archetype is an ADHD ASSESSMENT
+   * journey — `anchors every journey on assessment rather than on a subtype`, below, requires
+   * every one of them to hold `adhd-assessment` — and assessment in this product is the GP
+   * pathway. The nine psychologists and the occupational therapist the roster now carries are
+   * reached the other way: by profession from the finder (`narrowByProfession`) and from the
+   * support path, which is what those surfaces are for. Requiring an assessment archetype to
+   * route to an occupational therapist would be asking this file to invent a journey that
+   * ends somewhere the journey was never about.
+   */
+  it("routes to every GP on the roster", () => {
     const reached = new Set(careArchetypes.map((archetype) => archetype.expectedFirstMatch));
+    const gps = clinicians.filter((clinician) => professionOf(clinician) === "gp");
 
-    expect([...reached].sort()).toEqual(clinicians.map((clinician) => clinician.id).sort());
+    expect(gps.length).toBeGreaterThan(0);
+    expect([...reached].sort()).toEqual(gps.map((clinician) => clinician.id).sort());
   });
 
   it("anchors every journey on assessment rather than on a subtype", () => {

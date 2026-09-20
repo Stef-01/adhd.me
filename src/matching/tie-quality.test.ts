@@ -165,7 +165,19 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
    answerable the roster already was, not the matcher improving. */
 /* O191 re-pinned: the refugee-register corpus line grew the run 447 -> 448; the new sentence reaches culturally_attuned, which only one clinician
    declares, so it lands separated: 300 -> 301, unseparated unchanged. */
-const PINNED = { total: 451, separated: 304, partialTie: 0, unseparated: 147 };
+/* O252: 304/0/147 -> 123/299/29, total unchanged at 451. The roster went from two people to
+   eleven — the nine clinicians the network page already published — and the KPI's headline rate
+   fell 67.4% -> 27.3%. READ THE THREE COLUMNS, NOT THE RATE. `partialTie` was structurally
+   PINNED AT ZERO for as long as the roster was two people: with two candidates a reached request
+   either separates them or ties them, and O178 said so when Dr Yadav's departure created that
+   condition. Nine more clinicians restore the middle outcome, and 299 requests land in it: they
+   now produce a genuine partial order — some of the roster above the rest — where before they
+   produced a flat two-way tie. The column that actually measures failure, `unseparated`, fell
+   147 -> 29: five sixths of the requests this directory could not order at all, it can now
+   order. So the rate dropping by forty points is the size artefact `separation-effect.ts` was
+   built to see through (a full separation of eleven is a far higher bar than of two), while
+   every column underneath it moved the way a bigger, more varied roster should move it. */
+const PINNED = { total: 451, separated: 123, partialTie: 299, unseparated: 29 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
@@ -191,7 +203,8 @@ describe("W234 the tie-quality KPI over the corpus run", () => {
     // unseparated here only when the reader HEARD the request (corpusRun excludes unheard).
     expect(tieOutcome("my dose wears off and needs titration reviewed")).toBe("separated");
     expect(tieOutcome("zzz qqq")).toBe("unseparated");
-    expect(clinicians.length).toBe(2);
+    // O252: eleven, and the middle outcome exists again because of it (see the pin above).
+    expect(clinicians.length).toBe(11);
   });
 
   it("survives roster growth without redefinition: outcomes are relative to roster size", () => {
