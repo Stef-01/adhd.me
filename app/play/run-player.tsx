@@ -206,6 +206,22 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
                     />
                     <span className="play-likert-ends" aria-hidden="true"><span>Not an issue</span><output className="t-digit">{held ?? cost}</output><span>A big issue</span></span>
                   </label>
+                ) : null}
+                {!asked ? (
+                  /*
+                   * THE SLIDER NEEDS A WAY FORWARD, and the four buttons it replaced had one by
+                   * being buttons. Somebody whose honest answer is the middle of the scale has
+                   * nothing to press: the card commits on release, and a thumb nobody moved has
+                   * never been released. So the card would sit there, which is exactly how the
+                   * end-to-end walk found it — the walker takes the run's own forward control and
+                   * there was none on this card.
+                   *
+                   * It commits whatever the thumb is on, including the five it started at, which
+                   * is the answer somebody is giving when they read the question and move nothing.
+                   */
+                  <button type="button" className="play-tempt is-go" onClick={() => saveCost(held ?? cost)}>
+                    Next <ArrowRight size={16} weight="bold" aria-hidden="true" />
+                  </button>
                 ) : (
                   <div className="play-choices" role="group" aria-label="Want it easier">
                     {PRIORITIES.map((p) => <button key={p.id} type="button" className="play-choice" aria-pressed={record?.resonance[run.id]?.priority === p.id} onClick={() => { refresh(recordResonance(deviceLearningStorage, run.id, { priority: p.id })); next(); }}>{p.label}</button>)}

@@ -113,6 +113,9 @@ an issue it is, 0–10, and writes the cost directly. `Resonance.cost` already e
   instruction under it, so it has none, and the control still opens the module.
 - **support** — "Closest fit today: Flynn Simonis · Occupational therapist", with the matched tag
   under it, reached from the map's top need rather than from anything typed.
+- **recognition-scale** — the call-out inside a run: the scene's question, "How much of an issue
+  is this for you?", the 0–10 track from "not an issue" to "a big issue", and a Next that commits
+  whatever the thumb is on. The four frequency buttons it replaced are gone.
 
 ## The numbers
 
