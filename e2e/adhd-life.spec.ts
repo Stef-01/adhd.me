@@ -148,23 +148,28 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   expect(record.experiments?.[0]?.strategyId).toBe("first-physical-action");
   expect(record.completed).toContain("starting");
 
+  // WHERE THIS LIVES NOW. The hub is the map, one sentence and one step; the friction is the
+  // sentence, what may be contributing is a chip, and the record of what was tried is one word
+  // away on /my-adhd/history. Nothing was dropped — it moved.
   await page.goto("/my-adhd");
-  await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
-  await expect(page.getByText("Activation for ambiguous tasks", { exact: true })).toBeVisible();
+  // The onboarding is not finished yet here, so the hub is still the door — but the run has
+  // already moved the map, which is what this test is about. The axis says so.
+  await expect(page.getByRole("button", { name: /^Starting/ })).not.toContainText("Unasked");
+  await page.goto("/my-adhd/history");
   await expect(page.getByText("Still testing")).toBeVisible();
   await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
 
-  // The daily action updates the history on the same My ADHD screen.
+  // Today asks how it went, the answer is recorded there, and the record of what was tried is
+  // one word away on its own screen.
   await page.evaluate((k) => { const r = JSON.parse(localStorage.getItem(k) ?? "{}"); r.onboarding = { ...(r.onboarding ?? {}), completedAt: new Date().toISOString() }; localStorage.setItem(k, JSON.stringify(r)); }, MODEL_KEY);
   await page.goto("/today");
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toBeVisible();
   await page.getByRole("button", { name: "A lot" }).click();
-  await expect(page.getByText("Things that help me")).toBeVisible();
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toHaveCount(0);
   await page.getByText("Why am I seeing this?").click();
   await expect(page.locator(".life-why code")).toContainText("rule ");
-  await page.goto("/my-adhd");
-  await expect(page.getByText("Things that help me")).toBeVisible();
+  await page.goto("/my-adhd/history");
+  await expect(page.getByText("Helped a lot")).toBeVisible();
 });
 
 test("Play: with motion on, the clock runs a round on its own and a held 'don't tap' clears", async ({ page }) => {
@@ -230,11 +235,14 @@ test("E2E 6: the support path walks from the problem to professions, and 'See pr
     }));
   }, MODEL_KEY);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "The problem", exact: true })).toBeVisible();
-  await expect(page.locator(".support-step").nth(0)).toContainText(/Starting work before deadline pressure/);
+  // The seven-step walk came to 527 words lived in. It is the question and the answer now: who
+  // could help, in order of fit, each card saying what that kind of care is for in four words.
+  await expect(page.getByRole("heading", { name: "Who could help?" })).toBeVisible();
+  await expect(page.locator(".map-stands-out")).toContainText(/Starting work before deadline pressure/);
   await expect(page.locator(".profession-card.is-first")).toContainText("Occupational therapist");
-  await expect(page.locator(".profession-card.is-first")).toContainText("Why this one");
-  await expect(page.getByText(/What I’d like help with/)).toBeVisible();
+  // The referral brief was five textareas a person had to fill in themselves. It is written for
+  // them now, on the map, one tap away.
+  await expect(page.getByRole("link", { name: /Take this to my GP/ })).toBeVisible();
   await page.locator(".profession-card.is-first").getByRole("link", { name: /See occupational therapists/ }).click();
   await expect(page).toHaveURL(/\/$/);
   await page.getByRole("textbox").fill("help starting ambiguous work, by telehealth");
@@ -349,7 +357,10 @@ test("Phase A: a topic survey is offered, not launched; answered one screen at a
     answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
   })), MODEL_KEY);
   await page.reload();
-  const offer = page.getByRole("link", { name: /Start the survey/ });
+  // OFFERED, NEVER LAUNCHED — and now offered inside the axis it is about rather than as a card
+  // under the map, so the ask arrives where the person is already looking at that part of life.
+  await page.locator(".map-axis").first().click();
+  const offer = page.getByRole("dialog").getByRole("link", { name: /Work & Study/ });
   await expect(offer).toBeVisible();
   await expect(page).toHaveURL(/\/my-adhd$/);
   await offer.click();
@@ -364,11 +375,13 @@ test("Phase A: a topic survey is offered, not launched; answered one screen at a
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: /Once the problem is concrete/ }).click();
   await page.getByRole("button", { name: "See my pattern" }).click();
-  await expect(page.getByRole("heading", { name: "Your work pattern." })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
-  await expect(page.getByText("Environmental amplifier")).toBeVisible();
-  await expect(page.getByText("Sustained engagement once the problem becomes concrete", { exact: false })).toBeVisible();
-  await expect(page.getByRole("button", { name: "I’ll try this" })).toBeVisible();
+  // THE REWARD IS THE MAP, NOT A REPORT (2026-09-19). Four result cards — friction, amplifier,
+  // contributor, strength — became the shape moving, the screen saying so, and one sentence
+  // authored per friction in SURVEY_INSIGHTS. The strategy is still offered by name.
+  await expect(page.getByRole("heading", { name: "Your map just got clearer." })).toBeVisible();
+  await expect(page.locator(".map-chart")).toBeVisible();
+  await expect(page.locator(".map-stands-out")).toContainText(/more about starting and structuring/);
+  await expect(page.getByRole("button", { name: /The first physical action/ })).toBeVisible();
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
   expect(record.surveys["work-study"].completedAt).toBeTruthy();
   expect(record.survey.lastLongAt).toBeTruthy();
@@ -423,13 +436,12 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
     answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
   })), MODEL_KEY);
   await page.reload();
-  // The balance line used to name all nine dimensions twice, about thirty words to say what a
-  // shape says at a glance. The shape is /my-map; this is the count, the honest half ("unasked")
-  // and the door, and the naming of every touched and untouched dimension is asserted there.
-  const balance = page.getByTestId("nwia-balance");
-  await expect(balance).toContainText(/3 of nine touched, the rest unasked/);
-  await balance.getByRole("link", { name: "Your map" }).click();
-  await expect(page).toHaveURL(/\/my-map$/);
+  // The balance COUNT is gone from My ADHD (2026-09-20). It named a number about a person on the
+  // one screen built not to, and the honest half it carried — "unasked" — is now said per axis,
+  // on the hub and on the wellness map alike. Both are asserted, each where it lives.
+  await expect(page.locator(".map-axis").first()).toContainText(/Starting/);
+  await expect(page.locator("main")).not.toContainText(/of nine touched/);
+  await page.goto("/my-map");
   await expect(page.getByRole("button", { name: /^Work/ })).toContainText("Named");
   await expect(page.getByRole("button", { name: /^Physical/ })).toContainText("Unasked");
   // The honest half, said per axis rather than in one long sentence: an untouched dimension is
@@ -556,13 +568,14 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
   }, MODEL_KEY);
   await page.reload();
   await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
-  await page.getByRole("group", { name: "Suggestions for what helps me" }).getByRole("button", { name: /The first physical action/ }).click();
+  // ONE suggestion, not the whole list: a menu of twelve sentences somebody could paste in is the
+  // app writing their manual for them, which §27 forbids.
+  await page.getByRole("list", { name: "Suggestion for what helps me" }).getByRole("button", { name: /The first physical action/ }).click();
   await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step\nThe first physical action");
   expect(page.url()).not.toMatch(/first|step|starting/);
-  // Reachable from My ADHD, and the tab claims it.
-  await page.goto("/my-adhd");
-  await page.getByRole("link", { name: "Open my manual" }).click();
-  await expect(page).toHaveURL(/\/manual$/);
+  // The tab still claims it; the card that used to sit under the map does not.
+  await page.goto("/manual");
+  await expect(page.getByRole("heading", { name: "How I work, in my own words." })).toBeVisible();
 });
 
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
@@ -617,9 +630,9 @@ test("Adjustments on paper (PRD §45): the need's track leads, the other is one 
   expect(page.url()).not.toMatch(/work|overwhelm/);
   // The support path carries the step for an institutional need.
   await page.goto("/support");
-  await expect(page.getByRole("heading", { name: "Adjustments on paper" })).toBeVisible();
-  await page.goto("/my-adhd");
-  await page.getByRole("link", { name: "See what is commonly available" }).click();
+  // Reached from the support path, where the need it answers is on the screen, rather than as a
+  // standing card under somebody's picture of themselves.
+  await page.getByRole("link", { name: /adjustments/i }).first().click();
   await expect(page).toHaveURL(/\/adjustments$/);
 });
 

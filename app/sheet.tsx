@@ -85,6 +85,33 @@ export function Sheet({
   const [detent, setDetent] = useState<Detent>("half");
   const reducedMotion = useReducedMotion();
 
+  /**
+   * THE PAGE BEHIND A DIALOG IS NOT PART OF IT. Focus was already trapped, but the shell stayed
+   * in the accessibility tree the whole time, so a screen reader could still walk the screen
+   * underneath — the half of "modal" that a focus trap does not cover. `inert` takes it out of
+   * the tree, out of the tab order and out of hit testing in one attribute.
+   *
+   * It also makes the text budget count what a person is actually reading. An open sheet used to
+   * measure as the sheet PLUS the screen it covers, which is how "My ADHD, an axis open" came to
+   * 118 words against a ceiling of 60 while neither surface was over on its own.
+   *
+   * DECLARED BEFORE THE FOCUS EFFECT ON PURPOSE. React runs cleanups in declaration order, so the
+   * shell has to lose `inert` before the focus effect below tries to hand focus back to whatever
+   * opened the sheet — a control that is still inert cannot take it, and the focus simply went
+   * nowhere. Three specs caught that.
+   */
+  useEffect(() => {
+    if (!open) return;
+    const shell = document.querySelector<HTMLElement>(".platform-shell") ?? document.getElementById("main-content");
+    if (!shell) return;
+    shell.setAttribute("inert", "");
+    shell.setAttribute("aria-hidden", "true");
+    return () => {
+      shell.removeAttribute("inert");
+      shell.removeAttribute("aria-hidden");
+    };
+  }, [open]);
+
   // Focus: remember who opened it, move in, and give it back on close. `preventScroll` because
   // moving focus into a sheet that is still animating up must not scroll the page behind it.
   useEffect(() => {
@@ -124,28 +151,6 @@ export function Sheet({
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
-
-  /**
-   * THE PAGE BEHIND A DIALOG IS NOT PART OF IT. Focus was already trapped, but the shell stayed
-   * in the accessibility tree the whole time, so a screen reader could still walk the screen
-   * underneath — the half of "modal" that a focus trap does not cover. `inert` takes it out of
-   * the tree, out of the tab order and out of hit testing in one attribute.
-   *
-   * It also makes the text budget count what a person is actually reading. An open sheet used to
-   * measure as the sheet PLUS the screen it covers, which is how "My ADHD, an axis open" came to
-   * 118 words against a ceiling of 60 while neither surface was over on its own.
-   */
-  useEffect(() => {
-    if (!open) return;
-    const shell = document.querySelector<HTMLElement>(".platform-shell") ?? document.getElementById("main-content");
-    if (!shell) return;
-    shell.setAttribute("inert", "");
-    shell.setAttribute("aria-hidden", "true");
-    return () => {
-      shell.removeAttribute("inert");
-      shell.removeAttribute("aria-hidden");
-    };
-  }, [open]);
 
   const cycleDetent = useCallback(() => setDetent((d) => (d === "half" ? "full" : "half")), []);
   // O249: the height is animated, not set — a detent change is a move, with the sheet's own spring.
