@@ -1,5 +1,12 @@
 # My ADHD Map: the plan
 
+> **Superseded in part, 2026-09-20.** The screen specifications in §3 and the visual rules in §8
+> are replaced by **[MAP-PRD.md](MAP-PRD.md)**, which integrates the founder's *Calm Clarity*
+> design system from Stitch: a six-axis radar on the hub instead of five lanes of cells, one
+> click-through per aspect of functioning, and the measured evidence that the lived-in tab renders
+> 336 words. §1 (what the tree already holds), §4 (the matrix reading), §6, §7 and §10 of this
+> document still stand. Read the PRD first.
+
 Founder direction (2026-09-19): the data model can be complex while the interface feels almost
 empty. A person should never feel they are managing a clinical dashboard. The central object is a
 visual skills-by-life-area map that starts mostly blank and fills in as they learn, answer short

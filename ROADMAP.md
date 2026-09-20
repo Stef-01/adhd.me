@@ -52,11 +52,16 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 
 The founder's brief (a skills-by-life-area map that fills in as a person learns and answers short
 questionnaires; provider matching and a one-tap GP summary that emerge from it; the My ADHD tab
-re-cut into a hub and click-throughs) is planned in **[docs/adhd-life/MAP-PLAN.md](docs/adhd-life/MAP-PLAN.md)**:
-what the tree already holds (most of the model), the one new reading (`src/model/matrix.ts`), the
-routes, the copy budget per screen, six phases, and the five decisions the founder still owns.
+re-cut into a hub and click-throughs) is specified in **[docs/adhd-life/MAP-PRD.md](docs/adhd-life/MAP-PRD.md)** — the technical PRD,
+which integrates the founder's *Calm Clarity* design system from Stitch: the token contract, the
+six-axis radar, the screen-by-screen copy and budgets, the test matrix, and six decisions the
+founder owns. [MAP-PLAN.md](docs/adhd-life/MAP-PLAN.md) remains the strategy note behind it, and
+[docs/design/my-adhd-map/](docs/design/my-adhd-map/) holds the design system and the measured
+before-state captures.
 
-- [ ] Phase 1: the matrix reading and the GP summary, pure and tested.
+- [ ] Phase 1: lived-in states in the text-budget instrument (it has only ever measured these
+      screens empty, and the lived-in hub is 336 words), then the matrix reading and the GP
+      summary, pure and tested.
 - [ ] Phase 2: the hub, the five area pages, Today as a screen, history and delete moved off the hub.
 - [ ] Phase 3: the survey result as the map moment.
 - [ ] Phase 4: Take this to my GP.
