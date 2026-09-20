@@ -31,7 +31,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-label { margin: 0; color: var(--muted); font-size: 0.8125rem; font-weight: 600; }
 .play-help { margin-left: auto; }
 .play-help[aria-pressed="true"] { background: var(--play-blue); color: var(--play-paper); border-color: var(--play-blue); }
-.play-title { margin: 0; max-width: 20ch; color: var(--play-ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(1.5rem, 6.5vw, 2rem); font-weight: 460; letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
+.play-title { margin: 0; max-width: 20ch; color: var(--play-ink); font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif; font-size: clamp(1.5rem, 6.5vw, 2rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.12; text-wrap: balance; }
 .play-instruction:focus-visible { outline: none; }
 /* §14 Calm: the instruction stays where it is. No callout, no Faster card. */
 .play-steps-fold { width: 100%; max-width: 640px; text-align: left; }

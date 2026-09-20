@@ -44,6 +44,12 @@ const PIECES: Record<string, ReactElement> = {
   chips: <><path d="M18 30h28l-4 24H22z" fill="#e0616f" strokeLinejoin="round" /><path d="M24 30V14M32 30V10M40 30V14" stroke="#f2d38a" strokeWidth="5" strokeLinecap="round" /></>,
   charger: <><rect x="14" y="26" width="26" height="18" rx="4" fill="#fbfbfd" /><path d="M40 31h8M40 39h8" stroke={I} strokeWidth="3" /><path d="M14 35H8q-4 0-4 6v10" stroke={I} strokeWidth="3" fill="none" /></>,
   banana: <><path d="M14 24q10 26 34 16" stroke="#f2c94c" strokeWidth="10" strokeLinecap="round" fill="none" /><circle cx="47" cy="39" r="4" fill="#6f4a1a" /></>,
+  falling_phone: <><rect x="18" y="14" width="28" height="42" rx="4" fill="#3b4a63" /><rect x="20" y="16" width="24" height="38" rx="2" fill="#eef1fb" /><path d="M26 40h12M30 46h4" stroke="#5b8def" strokeWidth="2" strokeLinecap="round" /></>,
+  notif: <><rect x="8" y="22" width="48" height="20" rx="6" fill="#fbfbfd" /><rect x="14" y="28" width="8" height="8" rx="2" fill="#e0616f" /><path d="M28 28h20M28 34h12" stroke="#cfd6e4" strokeWidth="3" strokeLinecap="round" /></>,
+  idea: <><path d="M32 14c-8 0-14 6-14 14 0 6 4 10 6 14v4h16v-4c2-4 6-8 6-14 0-8-6-14-14-14z" fill="#f7de7a" /><path d="M26 50h12" stroke="#8a90a0" strokeWidth="4" strokeLinecap="round" /><path d="M32 24v8M26 30l4 4M38 30l-4 4" stroke="#e6b36a" strokeWidth="2" strokeLinecap="round" fill="none" /></>,
+  coffee: <><path d="M20 22h24v20c0 6.6-5.4 12-12 12s-12-5.4-12-12V22z" fill="#fbfbfd" /><path d="M44 28h4c3.3 0 6 2.7 6 6s-2.7 6-6 6h-4" stroke="#fbfbfd" strokeWidth="6" fill="none" /><path d="M22 22h20v20c0 5.5-4.5 10-10 10s-10-4.5-10-10V22z" fill="#6f4a1a" /><path d="M26 14q4-6 8 0t8 0" stroke="#cfd6e4" strokeWidth="2" fill="none" opacity=".6" /></>,
+  laptop: <><path d="M12 40h40v-24a4 4 0 0 0-4-4H16a4 4 0 0 0-4 4z" fill="#cfd6e4"/><rect x="16" y="16" width="32" height="20" fill="#3b4a63"/><path d="M8 40h48v6a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4z" fill="#9aa0ad"/><rect x="26" y="42" width="12" height="4" rx="2" fill="#7d8494"/></>,
+  wiki: <><circle cx="32" cy="32" r="22" fill="#fbfbfd"/><path d="M22 22h20M22 32h20M26 42h12" stroke="#cfd6e4" strokeWidth="4" strokeLinecap="round" /><circle cx="32" cy="32" r="20" stroke="#5b8def" strokeWidth="4" fill="none" /></>,
   sock: <><path d="M24 10h16v24l10 10a8 8 0 0 1-12 10L26 42V10z" fill="#6679b9" strokeLinejoin="round" /><rect x="24" y="10" width="16" height="8" fill="#fbfbfd" /></>,
   book: <><rect x="16" y="12" width="32" height="40" rx="3" fill="#5065a6" /><rect x="22" y="12" width="4" height="40" fill="#fbfbfd" fillOpacity=".6" /><path d="M30 24h12" stroke="#fbfbfd" strokeWidth="3" /></>,
   chicken: <><ellipse cx="34" cy="40" rx="18" ry="12" fill="#f2c94c" /><circle cx="18" cy="26" r="9" fill="#f2c94c" /><path d="M8 27l-6 2 6 2z" fill="#e0616f" /><path d="M14 17l3-6 3 6 3-6 3 6" fill="#e0616f" /><circle cx="16" cy="24" r="1.8" fill={I} /></>,
@@ -132,14 +138,14 @@ const KEYS: ReadonlyArray<readonly [string, string]> = [
   ["research", "research"], ["notes", "notes"], ["pizza", "pizza"], ["bagpipes", "bagpipes"], ["bus", "bus"], ["cyclist", "cyclist"], ["dog", "dog"], ["advert", "advert"], ["roadworks", "roadworks"],
   ["thought", "thought"], ["printer", "printer"], ["colleague", "colleague"], ["rewrite", "pen"], ["reread", "glasses"], ["font", "font"], ["question", "question"], ["flights", "flights"],
   ["podcast", "podcast"], ["arrive", "clock"], ["parcel", "parcel"], ["stamps", "stamp"], ["duck", "duck"], ["goose", "goose"], ["send", "plane"], ["spider", "spider"], ["one more", "scroll"],
-  ["notifications", "bell"], ["noise", "wave"], ["toast", "toast"],
+  ["notifications", "bell"], ["noise", "wave"], ["toast", "toast"], ["coffee", "coffee"], ["laptop", "laptop"], ["WIKI", "wiki"],
 ];
 
 /** The idle motion a piece has under motion: wings flap, bubbles bob, a pancake turns, a hazard sways, the rest float. */
 const IDLE: Record<string, "flap" | "bob" | "spin" | "sway"> = {
-  wasp: "flap", pigeon: "flap", seagull: "flap", duck: "flap", goose: "flap", pancake: "spin",
-  bubble: "bob", thought: "bob", cloud: "bob", draft: "bob", speech: "bob", question: "bob", hi: "bob",
-  bus: "sway", cyclist: "sway", dog: "sway", advert: "sway", roadworks: "sway", printer: "sway", colleague: "sway", kayak: "sway", drone: "sway", lamp: "sway", cactus: "sway", waffle: "sway",
+  wasp: "flap", pigeon: "flap", seagull: "flap", duck: "flap", goose: "flap", pancake: "spin", falling_phone: "spin",
+  bubble: "bob", thought: "bob", cloud: "bob", draft: "bob", speech: "bob", question: "bob", hi: "bob", idea: "bob", coffee: "bob", laptop: "bob",
+  bus: "sway", cyclist: "sway", dog: "sway", advert: "sway", roadworks: "sway", printer: "sway", colleague: "sway", kayak: "sway", drone: "sway", lamp: "sway", cactus: "sway", waffle: "sway", notif: "sway", wiki: "sway",
 };
 
 const KIND_CACHE = new Map<string, string | null>();
@@ -217,9 +223,9 @@ const ART: Record<string, (s: SceneState) => ReactElement> = {
     <rect x="312" y="470" width="26" height="6" rx="3" fill="var(--w6)" />
     
     {game === "pancake" && <><rect x="120" y="366" width="150" height="20" rx="6" fill="var(--w7)" /><ellipse cx="195" cy="372" rx="58" ry="14" fill="var(--w7)" /><ellipse cx="195" cy="368" rx="46" ry="9" fill="#4b5160" /><path d="M253 370h50" stroke="var(--w7)" strokeWidth="10" strokeLinecap="round" /><g className="lives-steam" opacity={stake * 0.7}><path d="M170 340q-10-20 0-40M195 335q-10-24 0-48M220 340q-10-20 0-40" stroke="var(--w4)" strokeWidth="6" strokeLinecap="round" fill="none" /></g></>}
-    {game === "toast" && <><rect x="134" y="304" width="130" height="86" rx="14" fill="#000" opacity=".05" /><rect x="130" y="300" width="130" height="86" rx="14" fill="var(--w6)" /><rect x="146" y="306" width="98" height="10" rx="4" fill="var(--w7)" /><rect x="262" y={330 + 20 * stake} width="10" height="26" rx="3" fill="var(--w7)" /></>}
-    {game === "rogue_blender" && <><rect x="154" y="334" width="90" height="56" rx="10" fill="#000" opacity=".05" /><rect x="150" y="330" width="90" height="56" rx="10" fill="var(--w7)" /><g className={`lives-jar${held ? " is-rattling" : ""}`}><path d="M158 200h74l-6 130h-62z" fill="var(--w5)" stroke="var(--w4)" /><path d="M164 300h62" stroke="#e0616f" strokeWidth="14" opacity=".5" /><rect x="152" y="186" width="86" height="18" rx="6" fill="var(--w6)" /></g></>}
-    {game === "sneeze" && <><path d="M274 324h60v66h-60z" fill="#000" opacity=".05" /><path d="M270 320h60v66h-60z" fill="var(--w5)" stroke="var(--w4)" /><rect x="278" y="340" width="44" height="12" fill="var(--w6)" /><g transform={`translate(195 300) scale(${0.4 + stake})`} opacity=".85"><path d="M-40 20a16 16 0 0 1 4-32 22 22 0 0 1 42-6 16 16 0 0 1 4 38z" fill="var(--w5)" stroke="var(--w4)" /></g></>}
+      {game === "toast" && <><rect x="114" y="304" width="160" height="100" rx="6" fill="#000" opacity=".05" /><rect x="110" y="300" width="160" height="100" rx="6" fill="var(--w6)" /><rect x="120" y="310" width="100" height="80" rx="4" fill="var(--w7)" /><rect x="130" y="320" width="80" height="60" rx="4" fill="var(--w2)" /><circle cx="170" cy="350" r="20" fill="var(--w7)" opacity=".3" /><rect x="230" y="310" width="30" height="30" rx="4" fill="var(--w3)" /><rect x="230" y="350" width="30" height="40" rx="4" fill="var(--w4)" /><rect x="240" y="360" width="10" height="20" rx="2" fill="var(--w6)" /><rect x="230" y="310" width={30} height={30 * Math.max(0, stake)} fill="var(--play-alert)" opacity=".5" rx="4" /></>}
+      {game === "rogue_blender" && <><rect x="154" y="334" width="90" height="56" rx="10" fill="#000" opacity=".05" /><rect x="150" y="330" width="90" height="56" rx="10" fill="var(--w7)" /><g className={`lives-jar${held ? " is-rattling" : ""}`} filter="url(#dwtd-flat-shadow)"><path d="M158 200h74l-6 130h-62z" fill="var(--w5)" /><path d="M164 300h62" stroke="#e0616f" strokeWidth="14" opacity=".5" /><rect x="152" y="186" width="86" height="18" rx="6" fill="var(--w6)" /></g></>}
+      {game === "sneeze" && <><path d="M274 324h60v66h-60z" fill="#000" opacity=".05" /><path d="M270 320h60v66h-60z" fill="var(--w5)" filter="url(#dwtd-flat-shadow)" /><rect x="278" y="340" width="44" height="12" fill="var(--w6)" /><g transform={`translate(195 300) scale(${0.4 + stake * 1.2})`} opacity=".85" filter="url(#dwtd-flat-shadow)"><path d="M-30 -20 H 30 A 10 10 0 0 1 40 -10 V 20 A 10 10 0 0 1 30 30 H 10 L -10 50 L -5 30 H -30 A 10 10 0 0 1 -40 20 V -10 A 10 10 0 0 1 -30 -20 Z" fill="var(--w5)" /><circle cx="-15" cy="5" r="4" fill="var(--w1)" /><circle cx="0" cy="5" r="4" fill="var(--w1)" /><circle cx="15" cy="5" r="4" fill="var(--w1)" /></g></>}
   </>,
   crossing: ({ stake }) => <>
     <rect width="390" height="560" fill="var(--w1)" />
@@ -432,9 +438,10 @@ const ART: Record<string, (s: SceneState) => ReactElement> = {
   corridor: () => <>
     <rect width="390" height="560" fill="var(--w1)" />
     <path d="M120 90h150l120 470H0z" fill="var(--w2)" />
-    {[[40, 120, 60, 110], [290, 120, 60, 110], [10, 250, 80, 150], [300, 250, 80, 150]].map(([x, y, w, h]) => <g key={`${x}-${y}`}><rect x={x} y={y} width={w} height={h} rx="4" fill="var(--w3)" /><circle cx={x! + w! - 12} cy={y! + h! / 2} r="4" fill="var(--w6)" /></g>)}
+    {[[40, 120, 60, 110], [290, 120, 60, 110], [10, 250, 80, 150], [300, 250, 80, 150]].map(([x, y, w, h]) => <g key={`${x}-${y}`}><rect x={x! + 4} y={y! + 4} width={w} height={h} rx="4" fill="#000" opacity=".05" /><rect x={x} y={y} width={w} height={h} rx="4" fill="var(--w3)" /><circle cx={x! + w! - 12} cy={y! + h! / 2} r="4" fill="var(--w6)" /></g>)}
+    <rect x="154" y="34" width="90" height="60" rx="4" fill="#000" opacity=".05" />
     <rect x="150" y="30" width="90" height="60" rx="4" fill="var(--w3)" /><rect x="160" y="10" width="70" height="16" rx="3" fill="var(--w6)" />
-    <ellipse cx="195" cy="520" rx="46" ry="14" fill="var(--w4)" /><circle cx="160" cy="530" r="6" fill="var(--w7)" /><circle cx="230" cy="530" r="6" fill="var(--w7)" /><circle cx="195" cy="536" r="6" fill="var(--w7)" />
+    <ellipse cx="195" cy="524" rx="46" ry="14" fill="#000" opacity=".05" /><ellipse cx="195" cy="520" rx="46" ry="14" fill="var(--w4)" /><circle cx="160" cy="530" r="6" fill="var(--w7)" /><circle cx="230" cy="530" r="6" fill="var(--w7)" /><circle cx="195" cy="536" r="6" fill="var(--w7)" />
   </>,
   pond: () => <>
     <rect width="390" height="560" fill="var(--w1)" />
@@ -442,7 +449,11 @@ const ART: Record<string, (s: SceneState) => ReactElement> = {
     <rect y="256" width="390" height="304" fill="var(--w2)" />
     <g className="lives-ripples" stroke="var(--w3)" strokeWidth="4" fill="none" strokeLinecap="round"><path d="M40 320q20-8 40 0t40 0" /><path d="M250 360q20-8 40 0t40 0" /><path d="M90 440q20-8 40 0t40 0" /></g>
     <g stroke="var(--w4)" strokeWidth="6" strokeLinecap="round"><path d="M30 300V180M50 310V200M350 300V190M370 310V210" /></g><ellipse cx="30" cy="180" rx="6" ry="16" fill="var(--w6)" /><ellipse cx="370" cy="210" rx="6" ry="16" fill="var(--w6)" />
-    <rect x="120" y="400" width="150" height="160" fill="var(--w6)" /><path d="M120 430h150M120 460h150M120 490h150M120 520h150" stroke="var(--w7)" strokeWidth="3" opacity=".5" /><rect x="126" y="380" width="12" height="40" fill="var(--w7)" /><rect x="252" y="380" width="12" height="40" fill="var(--w7)" />
+    <rect x="120" y="400" width="150" height="160" fill="var(--w6)" /><path d="M120 430h150M120 460h150M120 490h150M120 520h150" stroke="var(--w7)" strokeWidth="3" opacity=".5" />
+    <rect x="130" y="384" width="12" height="40" fill="#000" opacity=".05" />
+    <rect x="256" y="384" width="12" height="40" fill="#000" opacity=".05" />
+    <rect x="126" y="380" width="12" height="40" fill="var(--w7)" />
+    <rect x="252" y="380" width="12" height="40" fill="var(--w7)" />
   </>,
 };
 

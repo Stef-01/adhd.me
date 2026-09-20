@@ -194,10 +194,10 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={phase === "title" ? `title-${tutorial}` : `${current?.instance ?? 0}-${phase === "faster" ? "faster" : "game"}`} className="play-stage lives-stage" initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={reducedMotion ? undefined : { opacity: 0, transition: { duration: 0.12 } }} transition={FADE}>
           {phase === "faster" && (
-            <div className={`play-card lives-card lives-faster${flash}`} role="status">
+            <motion.div className={`play-card lives-card lives-faster${flash}`} role="status" initial={reducedMotion ? false : { scale: 0.8 }} animate={{ scale: 1 }} transition={reducedMotion ? undefined : { type: "spring", stiffness: 400, damping: 20 }}>
               <p className="lives-faster-word">{faster}</p>
               {reducedMotion && <button type="button" className="play-tempt is-go" onClick={() => session && nextGame(session)} autoFocus>Go <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>}
-            </div>
+            </motion.div>
           )}
 
           {(phase === "intro" || phase === "active" || phase === "resolution") && current && session && (
@@ -205,14 +205,14 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
               {/* DESIGN-dwtd2.md: the game's name small over the shouted verb, on the intro beat only. */}
               {phase === "intro" && !reminding && <p className="lives-game-title">{current.game.title}</p>}
               <p className="lives-shout" aria-live="assertive" tabIndex={-1}>{phase === "intro" && reminding && current.scene.remind ? current.scene.remind : current.game.instruction}</p>
-              {!reducedMotion && <div className="lives-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "active" ? 1 - progress : phase === "resolution" ? 0 : 1})` }} /></div>}
+              {!reducedMotion && <div className="lives-clock" aria-hidden="true"><span style={{ transform: `scaleX(${phase === "active" ? 1 - progress : phase === "resolution" ? 0 : 1})`, background: phase === "active" && progress > 0.7 ? "var(--play-alert)" : undefined }} /></div>}
               <div className="lives-scene" data-engine={current.game.engine} data-game={current.game.id}>
                 {who && current.game.id !== "leo_mosquito" && <div className="lives-scene-bean"><LifeBean who={who} mood={mood} size={phase === "active" ? 72 : 120} /></div>}
                 {(phase === "active" || current.game.id === "leo_mosquito") && (
                   <Engine key={current.instance} game={current.game} scene={current.scene} live={phase === "active" && armed} reducedMotion={reducedMotion} reducedSensory={reducedSensory} progress={progress} elapsedMs={elapsed} onResult={settle} outcome={phase === "resolution" ? last?.outcome : undefined} />
                 )}
                 {phase === "resolution" && last && (
-                  <motion.div className="lives-result" role="status" data-hit={last.outcome === "success" ? "true" : "false"} initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={FADE}>
+                  <motion.div className="lives-result" role="status" data-hit={last.outcome === "success" ? "true" : "false"} initial={reducedMotion ? false : { opacity: 0, scale: 0.85, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={reducedMotion ? undefined : { type: "spring", stiffness: 400, damping: 25 }}>
                     <p className="play-line lives-result-line">{last.line}</p>
                     {last.outcome === "success" ? <p className="lives-delta">+{last.delta}</p> : <p className="lives-delta is-life">One life gone</p>}
                   </motion.div>
