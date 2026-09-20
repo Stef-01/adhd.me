@@ -21,11 +21,13 @@
 /* The clock is the bar UNDER the shout (DESIGN-dwtd2.md): in flow, full width, draining left to right. */
 .lives-clock { position: static; height: 12px; width: 100%; max-width: 640px; border-radius: 999px; overflow: hidden; background: color-mix(in srgb, var(--ink) 12%, transparent); }
 .lives-clock span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transform-origin: left center; transition: none; }
-.lives-shout { margin: 0; min-height: 1.1em; color: var(--ink); font-family: inherit; font-size: clamp(1.75rem, 8.5vw, 2.6rem); font-weight: 850; letter-spacing: -0.02em; line-height: 1.05; text-transform: uppercase; text-wrap: balance; }
+@keyframes lives-shout-pop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.lives-shout { margin: 0; min-height: 1.1em; color: var(--ink); font-family: inherit; font-size: clamp(1.75rem, 8.5vw, 2.6rem); font-weight: 850; letter-spacing: -0.02em; line-height: 1.05; text-transform: uppercase; text-wrap: balance; animation: lives-shout-pop 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; }
 .lives-scene { position: relative; width: calc(100% + 32px); max-width: none; margin-inline: -16px; flex: 1 1 auto; min-height: 300px; border-radius: 0; background: var(--route-soft); overflow: hidden; }
 @media (min-width: 768px) { .lives-scene { width: 100%; margin-inline: 0; border-radius: 20px 20px 0 0; } }
 .lives-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6%; background: color-mix(in srgb, var(--ink) 8%, transparent); pointer-events: none; }
-.lives-scene-bean { position: absolute; left: 12px; bottom: 6%; z-index: 1; pointer-events: none; }
+@keyframes lives-bean-pop { 0% { transform: scale(0.8) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+.lives-scene-bean { position: absolute; left: 12px; bottom: 6%; z-index: 1; pointer-events: none; animation: lives-bean-pop 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; }
 .lives-card.is-hit .lives-scene { background: color-mix(in srgb, #0e8345 18%, var(--paper)); }
 .lives-card.is-miss .lives-scene { background: color-mix(in srgb, var(--accent) 16%, var(--paper)); }
 .lives-card.is-hit .lives-scene-bean .bean { animation: play-hop 0.5s var(--ease-ui) 1; }
@@ -257,11 +259,11 @@
 
 /* Pieces: the drawing is the button. The label is the accessible name, and a caption where the word is the game. */
 .lives-world .lives-thing { background: transparent; border: 0; padding: 0; box-shadow: none; color: #172033; border-radius: 20px; }
-.lives-world .lives-thing .lives-sprite { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 6px 5px rgb(23 32 51 / 0.24)); transition: transform 160ms var(--ease-ui); }
+@keyframes lives-pop-in { 0% { transform: scale(0); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.lives-world .lives-thing .lives-sprite { display: block; width: 100%; height: auto; overflow: visible; animation: lives-pop-in 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; transition: transform 160ms var(--ease-ui); }
 .lives-world .lives-thing.has-caption { gap: 4px; }
 .lives-world .lives-thing.has-caption .lives-sprite { width: 76%; }
 .lives-world .lives-thing-label, .lives-world .lives-trace-label { padding: 3px 9px; border-radius: 999px; background: rgb(255 255 255 / 0.94); color: #172033; font-size: 0.75rem; font-weight: 700; line-height: 1.2; white-space: nowrap; box-shadow: 0 2px 6px rgb(23 32 51 / 0.16); }
-.lives-world .lives-thing[data-role="hazard"] .lives-sprite { filter: drop-shadow(0 0 6px rgb(224 97 111 / 0.75)) drop-shadow(0 6px 5px rgb(23 32 51 / 0.24)); }
 .lives-world .lives-thing.is-keep { background: radial-gradient(circle, rgb(255 255 255 / 0.8) 0 58%, transparent 60%); }
 .lives-world .lives-thing:focus-visible { outline: 3px solid #172033; outline-offset: 3px; }
 @media (hover: hover) { .lives-world .lives-thing:not(:disabled):hover .lives-sprite { transform: scale(1.07); } }
@@ -386,7 +388,7 @@
 .lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) { align-items: flex-start; padding-inline: 22px; }
 .lives-world[data-world="bedroom"] .lives-field:is(.lives-timing, .lives-hold) .lives-hold-button { margin-left: 6px; }
 /* The crossing starts where its character stands. */
-.lives-trace-who { position: absolute; transform: translate(-50%, -70%); z-index: 2; pointer-events: none; filter: drop-shadow(0 4px 4px rgb(23 32 51 / 0.24)); }
+.lives-trace-who { position: absolute; transform: translate(-50%, -70%); z-index: 2; pointer-events: none; }
 .lives-trace:has(.lives-trace-who) ~ .lives-scene-bean, .lives-scene:has(.lives-trace-who) .lives-scene-bean { display: none; }
 /* The shout already names the hold; the cue pill shows only once there is something new to say. */
 .lives-world .lives-cue:empty { visibility: hidden; }

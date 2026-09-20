@@ -5,6 +5,7 @@ import {
   matchEvidence,
   matchQuality,
   needsFor,
+  professionOf,
   rankClinicians,
   scoreAgainst,
   getPersonalizedMatch,
@@ -94,8 +95,16 @@ describe("W221 the ranking and the explanation are one computation", () => {
       // And the score is exactly the evidence's weight — no unexplainable contribution, and
       // since O1 no carve-out either: language evidence is scored like everything else, so the
       // comparison is against the full needs the ranking actually reads.
-      expect(scoreAgainst(clinician, needsFor(query))).toBe(
+      //
+      // O252: `toBeCloseTo`, because `scoreAgainst` rounds its total to three places and this
+      // sum does not. The two agreed exactly while the roster's weights happened to land on
+      // representable thirds; on eleven clinicians one query lands at 27.272999999999996
+      // against a rounded 27.273. The property being pinned is that the score is the evidence
+      // and nothing else, which a half-thousandth of floating-point does not qualify — and a
+      // real unexplained contribution would be a whole facet's weight, orders above this.
+      expect(scoreAgainst(clinician, needsFor(query))).toBeCloseTo(
         evidence.reduce((sum, n) => sum + n.weight, 0),
+        2,
       );
     }
   });
@@ -152,11 +161,15 @@ describe("O1 languages go through the one pipeline (F2)", () => {
    * drift W221 removed (ranked for a reason not given; here, given a reason not ranked on), and
    * these tests hold the guarantee in both directions.
    */
-  it("hears a language-only request and calls the shared answer a tie", () => {
-    // Both active clinicians declare Urdu, so the ask is heard and the list remains honestly tied.
+  it("hears a language-only request and puts the speakers first", () => {
+    // O252: the two GPs are still the only Urdu speakers, and they are now two of eleven rather
+    // than two of two — so the ask is heard AND it orders the list, where before it could only
+    // tie it. Both halves are asserted: the speakers lead, and the finder says the order means
+    // something. The tie half of this guarantee moved to the test below, which uses a language
+    // the whole roster actually shares.
     const query = "a GP who speaks Urdu";
     expect(rankClinicians(query).slice(0, 2).map((c) => c.id).sort()).toEqual(["anubhav-saxena", "anusha-saxena"]);
-    expect(matchQuality(query)).toBe("tied");
+    expect(matchQuality(query)).toBe("informed");
   });
 
   it("reads an inflected language mention the substring matcher was never tested on", () => {
@@ -181,10 +194,13 @@ describe("O1 languages go through the one pipeline (F2)", () => {
   });
 
   it("a language shared by the whole roster ties rather than separates, and says so", () => {
-    // Both active clinicians speak Hindi, so the ask separates nobody — tied and said aloud.
-    const beecroft = clinicians;
-    expect(matchQuality("a GP who speaks Hindi", beecroft)).toBe("tied");
-    expect(matchQuality("a GP who speaks Hindi")).toBe("tied");
+    // O252: Hindi used to be the shared language, because the roster was the two GPs who speak
+    // it. On eleven it separates, so the property is pinned where it is still true — on the two
+    // GPs for Hindi, and on the whole roster for the language every entry declares.
+    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+    expect(matchQuality("a GP who speaks Hindi", gps)).toBe("tied");
+    expect(clinicians.every((c) => c.languages.includes("English"))).toBe(true);
+    expect(matchQuality("a GP who speaks Hindi")).toBe("informed");
   });
 
   it("recognises a governed language nobody declares and reports an unserved request", () => {
@@ -267,7 +283,10 @@ describe("O5 stated importance is the reader's datum (F6)", () => {
     const key = "pref:telehealth-first";
     const weightOf = (needs: ReturnType<typeof needsFor>) =>
       needs.find((n) => facetKey(n.facet) === key)!.weight;
-    expect(weightOf(confirmed)).toBe(weightOf(mentioned) * 1.5);
+    // O252: `toBeCloseTo` for the reason the score identity above takes it — both sides are
+    // rounded to three places by the weighting, and the claim is the 1.5x lift, not the
+    // half-thousandth (7.636 against 7.6365).
+    expect(weightOf(confirmed)).toBeCloseTo(weightOf(mentioned) * 1.5, 2);
   });
 
   it("turns an unmatched request into an informed order when the answer separates the roster", () => {

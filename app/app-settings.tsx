@@ -19,7 +19,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { CaretRight, Gear } from "@phosphor-icons/react";
+import { CaretRight, Gear, Trash } from "@phosphor-icons/react";
+import { deviceLearningStorage } from "@/learn/cursor";
+import { clearCursor } from "@/learn/cursor";
+import { clearProgress } from "@/learn/progress";
+import { clearModel, hasSignals, readModel } from "@/model/store";
 import { Sheet } from "./sheet";
 
 /** One row of the sheet. A real link, so long-press and open-in-new-tab still work. */
@@ -67,8 +71,62 @@ export function AppSettings({ children, fallback = false }: { children?: React.R
           {/* The finder passes its own testing options in, so one sheet holds everything a person
               can change rather than two sheets that look identical and hold different things. */}
           {children}
+          {/* Deleting everything used to sit at the bottom of My ADHD, under the person's own
+              picture of themselves. A destructive control belongs where somebody goes looking for
+              it, which is here, beside what the product holds and how to take it back. */}
+          <DeleteEverything />
         </div>
       </Sheet>
     </>
+  );
+}
+
+/**
+ * The one control that removes everything this device holds. Two taps, and the second one says
+ * what it does — there is no undo and nothing is kept anywhere else.
+ */
+function DeleteEverything() {
+  const [confirming, setConfirming] = useState(false);
+  const [gone, setGone] = useState(false);
+  const [present, setPresent] = useState(false);
+  useEffect(() => {
+    try {
+      setPresent(hasSignals(readModel(deviceLearningStorage)));
+    } catch {
+      setPresent(false);
+    }
+  }, []);
+  if (!present) return null;
+  return (
+    <div className="settings-row is-danger">
+      <span>
+        <strong>Your data</strong>
+        <small>{gone ? "Deleted from this browser." : "Lives in this browser only."}</small>
+      </span>
+      {gone ? null : confirming ? (
+        <span className="settings-danger-actions">
+          <button
+            type="button"
+            className="learn-primary"
+            onClick={() => {
+              clearModel(deviceLearningStorage);
+              clearProgress(deviceLearningStorage);
+              clearCursor(deviceLearningStorage);
+              setGone(true);
+              setConfirming(false);
+            }}
+          >
+            Yes, delete it
+          </button>
+          <button type="button" className="learn-secondary" onClick={() => setConfirming(false)}>
+            Keep it
+          </button>
+        </span>
+      ) : (
+        <button type="button" className="learn-secondary" onClick={() => setConfirming(true)}>
+          <Trash size={15} weight="bold" aria-hidden="true" /> Delete
+        </button>
+      )}
+    </div>
   );
 }

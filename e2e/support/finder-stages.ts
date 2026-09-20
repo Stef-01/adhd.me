@@ -74,10 +74,19 @@ export async function toResults(page: Page, via: Via = "pointer") {
   await expectStage(page, "results");
 }
 
-/** results → profile, on a real GP's row (an example profile has no booking control, O217). */
+/**
+ * results → profile, on a real GP's row (an example profile has no booking control, O217).
+ *
+ * O252: the widen control is `.show-all`, and this helper had been looking for a button named
+ * "Show the other…" that the results screen stopped rendering some time ago. Nothing failed,
+ * because a two-person roster put a Saxena in the first few rows whether the list was widened
+ * or not, so the dead locator sat behind an `isVisible()` that was simply always false. Eleven
+ * clinicians pushed both Saxenas past the fold and the helper started timing out on every spec
+ * that reaches the profile — the roster change did not break this, it revealed it.
+ */
 export async function toProfile(page: Page, via: Via = "pointer") {
-  const showAll = page.getByRole("button", { name: /Show the other/i });
-  if (await showAll.isVisible()) await activate(showAll, via);
+  const showAll = page.locator(".show-all");
+  if (await showAll.isVisible().catch(() => false)) await activate(showAll, via);
   await activate(page.locator(".clinician-row", { hasText: "Saxena" }).first(), via);
   await expectStage(page, "profile");
 }

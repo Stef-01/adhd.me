@@ -37,12 +37,32 @@ export function BeanArt({ id, shape, body, ink, mood = "neutral", size = 120, cl
   const brows = mood === "frustrated" ? <><path d="M34 44l16 5" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /><path d="M86 44l-16 5" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /></>
     : mood === "anxious" || mood === "embarrassed" || mood === "overwhelmed" ? <><path d="M34 48l16-4" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /><path d="M86 48l-16-4" stroke={p.ink} strokeWidth="4" strokeLinecap="round" /></> : null;
   const mouth = mood === "pleased" || mood === "engaged" || mood === "relieved" ? "M44 80q16 16 32 0" : mood === "frustrated" ? "M46 88q14-12 28 0" : mood === "anxious" || mood === "embarrassed" ? "M48 84q12 4 24 0" : mood === "overwhelmed" ? "M46 82q14-6 28 2" : mood === "surprised" ? "M52 84a8 9 0 1 0 16 0a8 9 0 1 0-16 0" : mood === "thinking" ? "M50 84h20" : "M48 82q12 8 24 0";
+  
   return (
-    <svg viewBox="0 0 120 136" width={size} height={size * 136 / 120} aria-hidden="true" className={className ? `bean ${className}` : "bean"} data-bean={id} data-mood={mood} data-look={look}>
+    <svg viewBox="0 0 120 144" width={size} height={size * 144 / 120} aria-hidden="true" className={className ? `bean ${className}` : "bean"} data-bean={id} data-mood={mood} data-look={look} style={{ overflow: "visible" }}>
+      <defs>
+        <mask id={`dwtd-shadow-mask-${id}`}>
+          <rect x="-10" y="-10" width="140" height="156" fill="white" />
+          {/* Shift black mask up and left. The unmasked remainder forms a bottom-right crescent shadow. */}
+          <path d={shape} fill="black" transform="translate(-5, -7) scale(1.02)" />
+        </mask>
+      </defs>
+
+      {/* Floor cast shadow */}
+      <ellipse cx="60" cy="132" rx="30" ry="5" fill="#000" fillOpacity="0.12" />
+
+      {/* Legs (no shadow needed, just flat stroke) */}
       <path d="M44 122v10M76 122v10" stroke={p.ink} strokeWidth="6" strokeLinecap="round" />
+      
       {look === "fit" && <><path d="M14 74q-14 8-6 26" stroke={p.body} strokeWidth="14" strokeLinecap="round" fill="none" /><path d="M106 74q14 8 6 26" stroke={p.body} strokeWidth="14" strokeLinecap="round" fill="none" /></>}
+      
+      {/* Flat Body */}
       <path d={shape} fill={p.body} />
+      {/* Crisp flat DWTD inner shadow */}
+      <path d={shape} fill="#000" fillOpacity="0.15" mask={`url(#dwtd-shadow-mask-${id})`} />
+
       {look === "fit" && <g stroke={p.ink} strokeWidth="3" strokeLinecap="round" fill="none" opacity=".55"><path d="M48 96q12 4 24 0" /><path d="M48 106q12 4 24 0" /><path d="M60 92v18" /></g>}
+      
       {brows}
       {eyes}
       <path d={mouth} stroke={p.ink} strokeWidth="5" strokeLinecap="round" fill="none" />

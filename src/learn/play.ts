@@ -99,11 +99,25 @@ export const RELATE_BUTTONS: ReadonlyArray<{ readonly id: string; readonly label
 ];
 export const RELATE_PROMPT = "How much is this you?";
 
-/** Buttons on even rounds, the slider on odd ones, unless the round says; none on a round that asks about you. */
+/**
+ * The slider, always, unless the round asks about you already (founder, 2026-09-20: "have the
+ * call outs all work with slider so its scale of 1-10 of how much is XYZ an issue when you play
+ * games or do learning modules").
+ *
+ * It used to alternate — buttons on even rounds, the slider on odd ones — and the alternation
+ * was the defect rather than the variety. Both forms write the SAME 0–10 number, so a person
+ * answering ten rounds gave five answers with three points of resolution and five with eleven,
+ * and `meanRelate` averaged them as though they were the same measurement. The buttons also
+ * asked a coarser question than the model can hold: `functionalCost` is 0–10 and a three-point
+ * answer can only ever land on 0, 5 or 10.
+ *
+ * A round may still pin its own form, and `"none"` still means no beat. `RELATE_BUTTONS` stays
+ * because it is what the three button values MEAN on this scale, and the buttons remain
+ * reachable for any round that asks for them by name.
+ */
 export function relateFormFor(round: Round, index: number): RelateForm | null {
   if (round.relate === "none" || round.writes) return null;
-  if (round.relate) return round.relate;
-  return RELATE_FORMS[index % RELATE_FORMS.length]!;
+  return round.relate ?? "slider";
 }
 
 /** A round with a right answer is a guess unless the scene says which; the clue is that saying. */

@@ -4,7 +4,8 @@ import { deriveNeeds } from "@/model/needs";
 import { emptyModel, type ModelRecord } from "@/model/store";
 import { SUBDOMAINS } from "@/model/layers";
 import { EXPERTISE_TAGS } from "./professions";
-import { EXPERTISE_FOR, fitReason, orderByProblemFit, problemFit } from "./problem-fit";
+import { bestFitFor, EXPERTISE_FOR, fitReason, orderByProblemFit, problemFit, strengthFit, strengthReason, wantsAccountability } from "./problem-fit";
+import type { Need } from "@/model/needs";
 
 const need = (): ModelRecord => ({
   ...emptyModel(),
@@ -13,9 +14,16 @@ const need = (): ModelRecord => ({
 });
 
 describe("problem fit (§42)", () => {
-  it("maps only real tags, and covers every subdomain a module targets", () => {
+  it("maps only real tags, and covers EVERY subdomain, not just the brain ones", () => {
     for (const tags of Object.values(EXPERTISE_FOR)) for (const t of tags) expect(EXPERTISE_TAGS).toContain(t);
-    for (const s of SUBDOMAINS) if (s.layer === "brain") expect(EXPERTISE_FOR[s.id], s.id).toBeTruthy();
+    /*
+     * O253 widened this from the brain layer to all of them, which is what let the gap in.
+     * `noise` and `peers` had no entry, so `problemFit` returned 0 for them against every
+     * provider and `fitTags` returned nothing — two subdomains that could never personalise for
+     * anybody. A test that only checked the brain layer could not see it, and nothing else
+     * would have: the failure renders as a screen with no chips, which looks like a thin roster.
+     */
+    for (const s of SUBDOMAINS) expect(EXPERTISE_FOR[s.id], s.id).toBeTruthy();
   });
 
   it("scores the need's own subdomain double, its contributors single, and nothing without expertise", () => {
@@ -49,5 +57,73 @@ describe("problem fit (§42)", () => {
     expect(orderByProblemFit([gp1, psych, gp2, coach, ot], null).map((x) => x.id)).toEqual(["gp1", "psych", "gp2", "coach", "ot"]);
     // Ties keep the engine's order.
     expect(orderByProblemFit([psych, coach], { ...top, subdomain: "sleep", contributors: [] }).map((x) => x.id)).toEqual(["psych", "coach"]);
+  });
+});
+
+describe("strengths in the match", () => {
+  const aNeed = (over: Partial<Need> = {}): Need => ({
+    id: "activation", domain: "work-study", subdomain: "activation",
+    label: "Starting work", signalStrength: 1, functionalCost: 8, userPriority: "yes",
+    confidence: "high", contributors: [], strengths: [], context: [], strategies: [],
+    sources: ["starting"], persistence: 2, ...over,
+  });
+
+  it("reads one closed signal out of what the person said, not a general vibe", () => {
+    expect(wantsAccountability(aNeed({ strengths: ["Company lowers the threshold"] }))).toBe(true);
+    expect(wantsAccountability(aNeed({ context: ["Easier working alongside someone"] }))).toBe(true);
+    expect(wantsAccountability(aNeed({ strengths: ["Deep focus once engaged"] }))).toBe(false);
+    expect(wantsAccountability(null)).toBe(false);
+  });
+
+  it("gives at most one point, and only to a kind of care that works in check-ins", () => {
+    const n = aNeed({ context: ["Easier working alongside someone"] });
+    expect(strengthFit({ profession: "adhd-coach" }, n)).toBe(1);
+    expect(strengthFit({ profession: "occupational-therapist" }, n)).toBe(1);
+    expect(strengthFit({ profession: "psychologist" }, n)).toBe(0);
+    expect(strengthFit({ profession: "adhd-coach" }, aNeed())).toBe(0);
+  });
+
+  it("says why, in an authored sentence, or says nothing", () => {
+    const n = aNeed({ context: ["Easier working alongside someone"] });
+    expect(strengthReason({ profession: "adhd-coach" }, n)).toMatch(/check-ins/);
+    expect(strengthReason({ profession: "psychologist" }, n)).toBeNull();
+    expect(strengthReason({ profession: "adhd-coach" }, null)).toBeNull();
+  });
+
+  it("names the closest fit, or names nobody", () => {
+    const n = aNeed();
+    const providers = [
+      { profession: "psychologist" as const, expertise: ["emotional-regulation" as const] },
+      { profession: "occupational-therapist" as const, expertise: ["task-initiation" as const, "adhd-work-systems" as const] },
+      { profession: "adhd-coach" as const, expertise: ["adhd-work-systems" as const] },
+    ];
+    // Two primary tags beats one: the OT answers `activation` twice over.
+    expect(bestFitFor(providers, n)).toBe(providers[1]);
+    // Nobody's declared expertise answers a sleep need in this list, so nobody is named. This is
+    // the return the support screen reads: a match with nothing under "Why this match?" is a
+    // claim the screen has not earned, so it renders no card at all.
+    expect(bestFitFor(providers, aNeed({ subdomain: "sleep" }))).toBeNull();
+    expect(bestFitFor(providers, null)).toBeNull();
+    expect(bestFitFor([], n)).toBeNull();
+  });
+
+  it("breaks a tie on the strength signal, the same way the ordering does", () => {
+    const n = aNeed({ context: ["Easier working alongside someone"] });
+    const coach = { profession: "adhd-coach" as const, expertise: ["adhd-work-systems" as const] };
+    const psych = { profession: "psychologist" as const, expertise: ["adhd-work-systems" as const] };
+    // Equal fit; accountability is what this person said works, and a coach works that way.
+    expect(bestFitFor([psych, coach], n)).toBe(coach);
+  });
+
+  it("never moves a GP, whatever the strength says", () => {
+    const n = aNeed({ context: ["Easier working alongside someone"] });
+    const ranked = [
+      { profession: "gp" as const, expertise: [] },
+      { profession: "psychologist" as const, expertise: ["perfectionism" as const] },
+      { profession: "gp" as const, expertise: [] },
+      { profession: "adhd-coach" as const, expertise: ["perfectionism" as const] },
+    ];
+    const out = orderByProblemFit(ranked, n);
+    expect(out.map((p) => p.profession)).toEqual(["gp", "adhd-coach", "gp", "psychologist"]);
   });
 });

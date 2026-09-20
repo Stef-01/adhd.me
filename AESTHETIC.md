@@ -859,6 +859,50 @@ the next reader knows the global is the one that matters.
       and `newsreader-latin-wght-italic`, with 9 italic `@font-face` declarations where there were
       0. `pnpm verify` green (3733 tests); `pnpm e2e` **282 passed in 9.3m**.
 
+- [x] **Every screen swept for the defects a screenshot hides — 2026-09-20.** `pnpm start`, then
+      `BASE=... node scripts/target-sweep.mjs`: all 77 routes the text-budget instrument reaches,
+      at 320 and 390, for sideways scroll, a control a thumb cannot land on, and text clipped by
+      its own box. The instrument is new; its value is mostly in what it stopped reporting, because
+      the naive form of all three checks is wrong and each was wrong here first.
+
+      **Three corrections, 49 screen/width pairs down to 2.** *Visibility:* Chromium lays out and
+      exposes rects for content inside a CLOSED `<details>` so the content stays findable, so a
+      non-zero rect is not proof a person can see a thing — the first run reported 33 undersized
+      filter chips on `/profile` and every one was behind a closed fold. *Target size:* the tree
+      extends small controls with a transparent `::after` pad (`.me-close::after { inset: -6px }`
+      turns a 32px button into a 44px target) and a `for`-associated label is part of its control's
+      target; neither is in the element's own box, so the box is the wrong thing to measure. It
+      probes the four edges of a 44px square around the centre and asks the document what is there
+      — where a thumb lands, not what the CSS declared. On that measure `/profile`'s Reset all and
+      close, `/story`'s 18px consent box (a 354x56 wrapping label) and Match prep's six checkboxes
+      all pass. *Clipping:* an `.sr-only` element is 1px wide by design and every one of them
+      "clips". **Inline links in prose are not counted** — WCAG 2.5.8 exempts a target in a
+      sentence, and the alternative is padding citations until the prose comes apart.
+
+      **What it found: nothing, on every screen but one.** Zero sideways scroll, zero clipped text,
+      zero undersized targets across the finder, the console, the public pages, Lives and the map.
+
+      **The care map's twenty-five nodes — open, and a design call rather than a defect to fix.**
+      `/approach/map` draws 25 `role="button"` discs in a wheel at `R_NODE = 26` in a 500-unit
+      viewBox. At 390 the SVG is 350px, so a disc is 36px; at 320 it is 29px. All four 44px probes
+      miss on all 25. They pass WCAG 2.5.8 AA (24px) and they miss the tree's own 44px law, which
+      is the stricter one and the one `PRODUCT.md` states.
+
+      It cannot be fixed by growing the disc. 44px at 390 needs `R_NODE` >= 31.4 units; at 320 it
+      needs >= 39.3, a 51% larger radius and 2.3x the area, and the current packing is already
+      searched to hold every pair of the 25 at least 6 units apart. A transparent hit pad is worse
+      than the problem here, because 25 overlapping pads means a tap lands on a neighbour. So the
+      wheel cannot carry 44px targets on a phone, and the two ways out are both product decisions:
+      the wheel becomes a picture with the 25 as a real list under it (the route is `LONG_FORM`, so
+      the words are affordable), or a tap selects one of the four LAYERS and its seven open from
+      there — four large targets, one consequential decision at a time, and the wheel keeps all 25
+      labels as the diagram it already is. **Not ticked, and not to be ticked by an agent.**
+
+      One thing on that screen was not a decision and is fixed: a label over ten characters was cut
+      to its first word, so "Working memory" read "Working". See the commit; two words stack now,
+      0 of 25 labels overflow their disc, and `every care-map node shows its whole label, inside
+      its own disc` holds both halves.
+
 ## Explicitly not doing
 
 - No new screenshot-diff register or automated design-QA gate. Capture, compare, fix, commit.

@@ -1,6 +1,6 @@
 // M10: the relevance gate — its map, its threshold, and its measured effect on the tied queue.
 import { describe, expect, it } from "vitest";
-import { clinicians, matchQuality, needsFor } from "@/demo/clinicians";
+import { clinicians, matchQuality, needsFor, professionOf } from "@/demo/clinicians";
 import { clarifiers } from "./clarify";
 import { MIN_COOCCURRENCE, cooccurrenceCounts, requestSuggests } from "./clarifier-relevance";
 import { REACH_CORPUS } from "./corpus";
@@ -68,21 +68,35 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
    * texts whose ranking ties are re-ranked here with the gated selector and the whole
    * distribution is pinned: who keeps a full offer, who keeps a partial one, who gets none.
    */
+  /**
+   * O252 MOVED THE POPULATION, NOT THE MEASUREMENT. Nine clinicians joined the roster and the
+   * whole-roster tied queue emptied: no corpus request now ties all eleven (the second
+   * assertion below pins that, because a distribution measured over nothing would pass
+   * silently and mean nothing). The queue this unit was built to measure still exists, on the
+   * GP-narrowed list — which is not a contrivance but the list the finder shows anybody whose
+   * words name a GP (`narrowByProfession`), and is exactly the two-person roster these numbers
+   * were first measured on. So the distribution below is unchanged, 54/2/1 with the same
+   * sentence zeroed, and it is now stated about the list it was always about.
+   */
   it("holds the pinned offer distribution over every tied corpus query", () => {
+    const gps = clinicians.filter((c) => professionOf(c) === "gp");
     let zero = 0;
     let partial = 0;
     let full = 0;
     const zeroed: string[] = [];
+    let tiedOnTheWholeRoster = 0;
     for (const entry of REACH_CORPUS) {
       if (!entry.reaches?.length) continue;
-      if (matchQuality(entry.text, clinicians) !== "tied") continue;
-      const offered = clarifiers(entry.text, clinicians);
+      if (matchQuality(entry.text, clinicians) === "tied") tiedOnTheWholeRoster += 1;
+      if (matchQuality(entry.text, gps) !== "tied") continue;
+      const offered = clarifiers(entry.text, gps);
       if (offered.length === 0) {
         zero += 1;
         zeroed.push(entry.text);
       } else if (offered.length < 3) partial += 1;
       else full += 1;
     }
+    expect(tiedOnTheWholeRoster).toBe(0);
     // 57 tied queries before the gate, 57 after: the gate changes WHICH questions, mostly not
     // WHETHER. 54 keep a full offer, 2 keep one relevant question (pinned below), 1 gets none —
     // and the one zero is the gate's designed outcome, pinned by name below. Gating BEFORE the

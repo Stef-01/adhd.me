@@ -81,6 +81,8 @@ export function ProfileStage({
   onCompare,
   onBook,
   problemFit = null,
+  fitTags = [],
+  strengthFit = null,
 }: {
   clinician: Clinician;
   personalizedSignals: readonly string[];
@@ -95,6 +97,9 @@ export function ProfileStage({
   onBook: () => void;
   /** PRD §42: why this provider fits what the personal model has learned, or null. */
   problemFit?: string | null;
+  /** The declared expertise that answers this person's own map. The traceable half of the match. */
+  fitTags?: readonly string[];
+  strengthFit?: string | null;
 }) {
   const facts = profileFacts(clinician);
   const accessFacts = [
@@ -137,6 +142,15 @@ export function ProfileStage({
               <p className="profile-best-for"><span>Best for</span> {clinician.expertise.map((t) => EXPERTISE_LABELS[t]).join(", ")}</p>
             )}
             {problemFit && <p className="profile-best-for profile-fit"><span>Why you’re seeing them</span> {problemFit}</p>}
+            {/* WHY THIS MATCH, MADE TRACEABLE (founder, 2026-09-19). These are the same expertise
+                tags that filled the person's own map, shown here as the things they have in
+                common — so the card reads as an answer to what somebody said, not as an ad. */}
+            {fitTags.length > 0 && (
+              <ul className="profile-fit-tags" aria-label="What this matches in your map">
+                {fitTags.map((tag) => <li key={tag}>{tag}</li>)}
+              </ul>
+            )}
+            {strengthFit && <p className="profile-best-for profile-fit"><span>And</span> {strengthFit}</p>}
             <p className="profile-location">{locationLabel(clinician)}</p>
             {publicIdentity(clinician) && <p className="profile-cultural-identity">{publicIdentity(clinician)!.identities.map(id => IDENTITY_LABELS[id]).join(" · ")}{publicIdentity(clinician)!.country && <> · Country / Nation: {publicIdentity(clinician)!.country}</>}</p>}
             {publicCareProfile(clinician) && <details className="profile-more profile-care-declaration"><summary>Care they offer <CaretRight size={16} aria-hidden="true" /></summary><ul>{publicCareProfile(clinician)!.needs.map(need => <li key={need}>{CARE_NEEDS[need]}</li>)}</ul>{clinician.synthetic ? <p>Fictional example; not bookable.</p> : <a href={publicCareProfile(clinician)!.source} target="_blank" rel="noopener noreferrer">Clinician declaration ↗</a>}</details>}

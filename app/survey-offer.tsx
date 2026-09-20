@@ -19,7 +19,11 @@ export function SurveyOffer({ record, compact = false }: { record: ModelRecord; 
       <h2 id="survey-offer-title">{offer ? `${offer.survey.title}, ${offer.survey.minutes} min` : "Topic surveys"}</h2>
       <p>{offer ? offer.why : "Eight to twelve questions on one part of life. Never required; each one sharpens what the app suggests."}</p>
       <div className="life-actions">
-        {offer && <Link className="learn-primary" href={`/survey?id=${offer.survey.id}`}>Start the survey <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>}
+        {offer && (
+          <Link className="learn-primary" href={`/survey?id=${offer.survey.id}${offer.deeper ? "&deeper=1" : ""}`}>
+            {offer.deeper ? "Go deeper" : "Start the survey"} <ArrowRight size={17} weight="bold" aria-hidden="true" />
+          </Link>
+        )}
         {available.filter((s) => s.id !== offer?.survey.id).slice(0, offer ? 2 : 5).map((s) => (
           <Link key={s.id} className="learn-secondary" href={`/survey?id=${s.id}`}>{s.title}</Link>
         ))}

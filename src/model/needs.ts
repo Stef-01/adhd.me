@@ -184,7 +184,17 @@ export function deriveNeeds(record: ModelRecord): Need[] {
     else if (related !== null) d.costs.push(related);
     else if (res.frequency) d.costs.push(COST_BY_FREQUENCY[res.frequency]);
     if (res.priority) d.priorities.push(res.priority);
-    if (res.frequency === "often" || res.frequency === "sometimes") d.strengths.add(module.strength);
+    /*
+     * O253: the strength is recorded when the person says this is a real thing for them, and
+     * "a real thing" now has two spellings. The frequency buttons are gone from the run (the
+     * recognition card asks how much of an issue it is, 0–10, and writes `cost`), so a gate that
+     * only read `frequency` would have silently stopped collecting strengths the day the slider
+     * landed. 5 is the threshold because 5 is exactly what `COST_BY_FREQUENCY` gave "sometimes",
+     * which is the weaker of the two frequencies this line already accepted — the same bar, read
+     * off the scale the person actually moved.
+     */
+    const saidItLands = res.frequency === "often" || res.frequency === "sometimes" || (typeof res.cost === "number" && res.cost >= COST_BY_FREQUENCY.sometimes);
+    if (saidItLands) d.strengths.add(module.strength);
     for (const [key, value] of Object.entries(record.answers)) {
       if (!key.startsWith(`${module.id}.`)) continue;
       const questionId = key.slice(module.id.length + 1);

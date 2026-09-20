@@ -67,6 +67,14 @@ export const EVENTS = [
   "STRATEGY_ADDED_TO_TOOLKIT",
   "STRATEGY_MARKED_USEFUL",
   "STRATEGY_MARKED_NOT_USEFUL",
+  // The map (src/model/matrix.ts). §68 again: these count AXES, not people — how many of the six
+  // the app has been able to place, how many just moved, which one was opened. An axis id is a
+  // closed value and a count of axes is a fact about the app's own coverage, never a measurement
+  // of anybody.
+  "MAP_VIEWED",
+  "MAP_AXIS_OPENED",
+  "MAP_CLARIFIED",
+  "SUMMARY_EXPORTED",
 ] as const;
 export type EventName = (typeof EVENTS)[number];
 

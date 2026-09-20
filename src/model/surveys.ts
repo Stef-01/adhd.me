@@ -7,7 +7,7 @@
 // named in the result, and left out of the scoring rather than silently averaged; fewer than
 // half the questions answered is an incomplete survey, which still reads what it can.
 
-import { TOPIC_SURVEYS, topicSurvey, type SurveyOption, type TopicSurvey } from "@/learn/surveys";
+import { SURVEY_INSIGHTS, TOPIC_SURVEYS, topicSurvey, type SurveyOption, type TopicSurvey } from "@/learn/surveys";
 import { needLabel } from "./labels";
 import type { Layer, Subdomain } from "./layers";
 import type { ModelRecord } from "./store";
@@ -120,4 +120,14 @@ export function surveyResults(record: ModelRecord): SurveyResult[] {
 /** Surveys a person may start by choice at any time, whatever the offer rule says — the ones not yet completed. */
 export function availableSurveys(record: ModelRecord): TopicSurvey[] {
   return TOPIC_SURVEYS.filter((s) => !record.surveys[s.id]?.completedAt);
+}
+
+/**
+ * The sentence a result earns: authored per friction in `SURVEY_INSIGHTS`, chosen by which
+ * subdomain the answers pointed at hardest. Null when nothing stood out, because a survey that
+ * found nothing should say nothing rather than reach for a sentence.
+ */
+export function insightFor(result: SurveyResult): string | null {
+  if (!result.friction) return null;
+  return SURVEY_INSIGHTS[result.friction.subdomain] ?? null;
 }

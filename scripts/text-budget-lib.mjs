@@ -86,6 +86,18 @@ export const EXTRA = [
   { path: "/first-step", state: "first-step-stage", name: "First step, the second question" },
   { path: "/first-step", state: "first-step-answer", name: "First step, the answer" },
   { path: "/match/prep", state: "intake", name: "Match prep" },
+
+  // THE LIVED-IN STATES. Every screen that reads the personal model, measured as somebody who has
+  // actually used the app sees it. Without these the budget is measuring an empty database.
+  { path: "/my-adhd", state: "model-lived", name: "My ADHD, lived in" },
+  { path: "/my-adhd", state: "model-learning", name: "My ADHD, a step proposed" },
+  { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
+  { path: "/my-adhd", state: "share-open", name: "My ADHD, the summary open" },
+  { path: "/my-adhd/history", state: "model-lived", name: "History, lived in" },
+  { path: "/today", state: "model-lived", name: "Today, lived in" },
+  { path: "/support", state: "model-lived", name: "Support, lived in" },
+  { path: "/manual", state: "model-lived", name: "My manual, lived in" },
+  { path: "/adjustments", state: "model-lived", name: "Adjustments, lived in" },
 ];
 
 export const LONG_FORM = new Set(["/story", "/faq", "/privacy", "/privacy/automated-decisions", "/privacy/counsel-review", "/terms", "/practices", "/clinicians", "/clinicians/join", "/examples", "/about", "/approach/map", "/lives/lab", "/demo"]);
@@ -145,6 +157,76 @@ export async function measure(page) {
   });
 }
 
+/**
+ * ONE lived-in record, shared by this instrument and the e2e suite.
+ *
+ * The postmortem's fourth finding was "I measured 17 routes and called it every screen". This is
+ * its sibling: for a long time the instrument walked every personal screen in its EMPTY state,
+ * which is the one state a returning person never sees, so a gate stayed green over a My ADHD tab
+ * that rendered 336 words. Anything reading the model is measured against this.
+ */
+export const LIVED_RECORD = {
+  v: 1,
+  onboarding: {
+    improveFirst: "start-earlier",
+    impact: 8,
+    lookingFor: "professional",
+    medication: "no",
+    affects: "work",
+    easier: ["urgent", "alongside"],
+    completedAt: "2026-09-01T00:00:00.000Z",
+  },
+  resonance: {
+    starting: { frequency: "often", cost: 8, priority: "yes", at: "2026-09-01T00:00:00.000Z" },
+    ambiguity: { frequency: "often", cost: 7, priority: "yes", at: "2026-09-02T00:00:00.000Z" },
+    "working-memory": { frequency: "sometimes", cost: 5, priority: "maybe", at: "2026-09-03T00:00:00.000Z" },
+    sleep: { frequency: "often", cost: 7, priority: "yes", at: "2026-09-04T00:00:00.000Z" },
+  },
+  answers: {
+    "starting.hardest-to-start": ["vague"],
+    "starting.what-helps-start": ["person"],
+    "ambiguity.source": ["manager"],
+    "working-memory.capture": "no",
+  },
+  insights: { "starting-threshold": "yes", "ambiguity-threshold": "partly" },
+  experiments: [
+    { strategyId: "first-physical-action", moduleId: "starting", acceptedAt: "2026-09-01T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-02T00:00:00Z" },
+    { strategyId: "define-done", moduleId: "ambiguity", acceptedAt: "2026-09-04T00:00:00Z", outcome: "a-little", outcomeAt: "2026-09-06T00:00:00Z" },
+    { strategyId: "wind-down", moduleId: "sleep", acceptedAt: "2026-09-05T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-07T00:00:00Z" },
+    { strategyId: "one-capture-place", moduleId: "working-memory", acceptedAt: "2026-09-07T00:00:00Z" },
+  ],
+  reflections: [],
+  relates: {},
+  interpretations: [],
+  safety: [],
+  completed: ["starting", "ambiguity", "sleep"],
+  survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null },
+  surveys: {},
+  manual: { helps: "One clear first step and I will run with it.", harder: "", "work-with-me": "", updatedAt: "2026-09-05T00:00:00.000Z" },
+  medication: { changes: "", untouched: "", unwanted: "", updatedAt: null },
+  checkpoints: [],
+};
+
+/**
+ * THE SAME PERSON, ONE STEP EARLIER — the hub's action card in its OTHER shape (O253).
+ *
+ * `LIVED_RECORD` holds an accepted experiment, so the card is always the follow-up question
+ * ("Did 'One capture place' help?") and the walk never measured the card that PROPOSES
+ * something. That is the shape the founder read and could not understand, and the shape the
+ * "what to do" line was added for — so the gate has to see it, or the fix is unmeasured exactly
+ * the way the whole screen was unmeasured before the map work.
+ *
+ * Nothing is completed and nothing is accepted, and "practical things to try" rather than
+ * "professional support" so the escalation rule does not fire first. Everything else is the
+ * same person.
+ */
+export const LEARNING_RECORD = {
+  ...LIVED_RECORD,
+  onboarding: { ...LIVED_RECORD.onboarding, lookingFor: "try" },
+  completed: [],
+  experiments: [],
+};
+
 export async function reach(page, route, base) {
   if (route.state === "intake") {
     await page.goto(`${base}/match`);
@@ -166,21 +248,25 @@ export async function reach(page, route, base) {
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
   }
-  if (route.state === "map-lived") {
-    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify({
-      v: 1,
-      onboarding: { improveFirst: "start-earlier", impact: 8, lookingFor: "professional", completedAt: new Date().toISOString() },
-      resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: new Date().toISOString() }, sleep: { frequency: "often", cost: 7, priority: "yes", at: new Date().toISOString() } },
-      answers: { "starting.hardest-to-start": ["vague"] }, insights: {},
-      experiments: [
-        { strategyId: "first-physical-action", moduleId: "starting", acceptedAt: "2026-09-01T00:00:00Z", outcome: "a-lot", outcomeAt: "2026-09-02T00:00:00Z" },
-        { strategyId: "wind-down", moduleId: "sleep", acceptedAt: "2026-09-03T00:00:00Z", outcome: "a-little", outcomeAt: "2026-09-04T00:00:00Z" },
-      ],
-      reflections: [], relates: {}, interpretations: [], safety: [], completed: ["starting", "sleep", "noise"],
-      survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
-      manual: {}, medication: {}, checkpoints: [],
-    }));
+  if (route.state === "map-lived" || route.state === "model-lived") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
     await page.reload({ waitUntil: "networkidle" });
+  }
+  if (route.state === "model-learning") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LEARNING_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+  }
+  if (route.state === "sheet-open") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator(".map-axis").first().click();
+    await page.locator(".map-sheet").waitFor({ timeout: 8000 });
+  }
+  if (route.state === "share-open") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Share" }).click();
+    await page.locator(".map-sheet").waitFor({ timeout: 8000 });
   }
   if (route.state === "first-step-stage" || route.state === "first-step-answer") {
     await page.getByRole("button", { name: "Me", exact: true }).click();

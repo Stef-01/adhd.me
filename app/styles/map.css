@@ -1,0 +1,615 @@
+/* The My ADHD map (founder, 2026-09-19 — the Calm Clarity design system).
+ *
+ * FLAT, ON PURPOSE, AND THIS IS THE ONE PLACE IN THE APP THAT IS. Calm Clarity prohibits
+ * "simulated real-world lighting, skeletal drop shadows and glassmorphic blurs" so the map reads
+ * as one quiet surface rather than a stack of objects. That overrides `{#type.glass-chrome}` for
+ * this tab and this tab only — Play keeps its `[data-liquid]` scope, and the rest of the app keeps
+ * the glass. `.map-screen` is the scope of the exception, so nothing leaks.
+ *
+ * Every colour is a token. Spacing follows Calm Clarity's own scale, declared once here rather
+ * than as rem scattered through components.
+ */
+
+.map-screen {
+  --sp-xs: 0.25rem;
+  --sp-sm: 0.5rem;
+  --sp-md: 1rem;
+  --sp-lg: 1.5rem;
+  --sp-xl: 2.5rem;
+  --sp-2xl: 3.5rem;
+  --map-size: 320px;
+  --shell-max: 1140px;
+}
+
+/* The glass stands down inside the map. One selector, one scope, one reason. */
+.map-screen :where(.life-card, .sheet, .map-step, .map-chip) {
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.map-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-md);
+}
+
+.map-share {
+  min-height: 44px;
+  padding: 0 var(--sp-md);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.875rem;
+  touch-action: manipulation;
+}
+
+/* ------------------------------------------------------------------ the chart */
+
+.map-screen .map-radar{
+  display: grid;
+  gap: var(--sp-lg);
+  justify-items: center;
+  margin-block: var(--sp-lg);
+}
+
+.map-screen .map-chart-frame{
+  position: relative;
+  width: min(var(--map-size), 100%);
+  aspect-ratio: 1;
+}
+
+.map-screen .map-chart{
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Under 768px the axis words are a grid BELOW the chart, not a ring around it, so the 70-unit
+   margin the viewBox reserves on every side for that ring is dead space. Measured at 390: the
+   hexagon drew at R 115 inside a 320px frame, 72% of the room it had, with 45px empty on all four
+   sides. Scaling it is the same drawing 30% larger in the same layout box — the axis grid below
+   still clears it by 38px — and it also brings the rings back to the weight they carry at 768px
+   and up (0.8 CSS px here against 1.14 there; 1.04 after). From 768px the ring of labels is real
+   and already sits 2px off the viewport edge, so the margin is load-bearing and nothing changes. */
+@media (max-width: 767.98px) {
+  .map-screen .map-chart{
+    transform: scale(1.3);
+  }
+  /* The scale grows the SVG's BOX as well as its drawing, and the box is 28% empty margin, so
+     without this the element reaches 13px past both edges of a 390 viewport and the screen scrolls
+     sideways. The drawing ends 30px inside the frame, so clipping the frame removes the overflow
+     and touches nothing that is drawn. */
+  .map-screen .map-chart-frame{
+    overflow: clip;
+  }
+}
+
+.map-screen .map-ring{
+  fill: none;
+  stroke: var(--map-guide);
+  stroke-width: 1.25;
+}
+
+.map-screen .map-spoke{
+  stroke: var(--map-guide);
+  stroke-width: 1;
+}
+
+/* An axis the model cannot place yet: a soft dotted spoke, so the gap reads as a question this
+   app has not asked rather than a verdict about the person. */
+.map-screen .map-spoke[data-learning]{
+  stroke-dasharray: 3 4;
+}
+
+.map-screen .map-you{
+  fill: var(--map-poly);
+  stroke: var(--map-poly-line);
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  transition: none;
+}
+
+.map-screen .map-node{
+  fill: var(--map-poly-line);
+}
+
+/* The polygon detaches at an unplaced axis: a hollow, dotted knot instead of a solid one. */
+.map-screen .map-node[data-learning]{
+  fill: none;
+  stroke: var(--map-poly-line);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+/* ------------------------------------------------------------------- the axes */
+
+.map-screen .map-axes{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-sm);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-screen .map-axis-seat{
+  display: flex;
+  min-width: 0;
+}
+
+.map-screen .map-axis{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--sp-sm) var(--sp-md);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: left;
+  touch-action: manipulation;
+}
+
+.map-screen .map-axis[aria-pressed="true"]{
+  border-color: var(--ink);
+}
+
+.map-screen .map-axis-name{
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.1rem;
+}
+
+.map-screen .map-axis-word{
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--muted);
+}
+
+.map-screen .map-axis-word.is-quiet{
+  color: var(--faint);
+}
+
+/* The word a cell is on, as a fill. Never red, never a traffic light: support is an ink outline,
+   improvement is the accent tint, held is the sky chip, working is the sage chip. */
+.map-screen .map-axis[data-status="needs-support"]{
+  border-color: var(--ink);
+}
+.map-screen .map-axis[data-status="worth-improving"]{
+  background: var(--accent-soft);
+  border-color: var(--accent-tint);
+}
+.map-screen .map-axis[data-status="mostly-supported"]{
+  background: var(--chip-held-bg);
+  border-color: var(--chip-held-bg);
+}
+.map-screen .map-axis[data-status="mostly-supported"] .map-axis-word{
+  color: var(--chip-held-ink);
+}
+.map-screen .map-axis[data-status="working-well"]{
+  background: var(--chip-strength-bg);
+  border-color: var(--chip-strength-bg);
+}
+.map-screen .map-axis[data-status="working-well"] .map-axis-word{
+  color: var(--chip-strength-ink);
+}
+.map-screen .map-axis[data-learning]{
+  border-style: dashed;
+}
+
+/* From 768px there is room for the comp's own arrangement: the six seats around the perimeter of
+   the chart. Same DOM, so the words are written once and counted once by the text budget. */
+@media (min-width: 768px) {
+  .map-screen {
+    --map-size: 460px;
+  }
+  .map-screen .map-radar{
+    position: relative;
+    padding: var(--sp-2xl);
+  }
+  .map-screen .map-axes{
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+  .map-screen .map-axis-seat{
+    position: absolute;
+    left: var(--seat-x);
+    top: var(--seat-y);
+    transform: translate(-50%, -50%);
+    width: max-content;
+    max-width: 9.5rem;
+  }
+}
+
+/* ------------------------------------------------------- what stands out, chips */
+
+.map-stands-out {
+  margin: 0 0 var(--sp-md);
+  font-family: var(--font-display, inherit);
+  font-size: 1.125rem;
+  line-height: 1.6rem;
+  color: var(--ink);
+}
+
+.map-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+  margin: 0 0 var(--sp-md);
+  padding: 0;
+  list-style: none;
+}
+
+.map-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 var(--sp-md);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  touch-action: manipulation;
+}
+
+.map-chip.is-strength {
+  background: var(--chip-strength-bg);
+  border-color: var(--chip-strength-bg);
+  color: var(--chip-strength-ink);
+}
+
+/* --------------------------------------------------------------- the one step */
+
+.map-step,
+.map-lead {
+  display: grid;
+  gap: var(--sp-md);
+  justify-items: start;
+  padding: var(--sp-lg);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--paper);
+}
+
+.map-step h2,
+.map-lead p {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+
+/* O253: what the step actually is, under the name of it. Quieter than the heading because it is
+   the detail rather than the claim, and the card's own gap already separates them. */
+.map-step-do {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.4rem;
+}
+
+.map-screen .map-foot{
+  margin-top: var(--sp-lg);
+  font-size: 0.8125rem;
+  color: var(--faint);
+}
+
+/* ------------------------------------------------------------------ the sheet */
+
+.map-sheet {
+  display: grid;
+  gap: var(--sp-lg);
+}
+
+.map-sheet-meaning {
+  margin: 0;
+  color: var(--muted);
+}
+
+.map-rows {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  min-height: 44px;
+  padding: var(--sp-sm) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.map-row-name {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.map-row-word {
+  flex: none;
+  padding: 2px var(--sp-sm);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.map-row-word[data-status="needs-support"] {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.map-row-word[data-status="worth-improving"] {
+  background: var(--accent-soft);
+  border-color: var(--accent-tint);
+  color: var(--ink);
+}
+.map-row-word[data-status="mostly-supported"] {
+  background: var(--chip-held-bg);
+  color: var(--chip-held-ink);
+}
+.map-row-word[data-status="working-well"] {
+  background: var(--chip-strength-bg);
+  color: var(--chip-strength-ink);
+}
+.map-row-word[data-status="still-learning"] {
+  border-style: dashed;
+  border-color: var(--line-strong, var(--line));
+}
+
+.map-accuracy p {
+  margin: 0 0 var(--sp-sm);
+  font-weight: 600;
+}
+
+.map-sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+}
+
+/* ------------------------------------------------------------------- the share */
+
+.map-audiences {
+  display: grid;
+  gap: var(--sp-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-audience {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 var(--sp-md);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  text-align: left;
+  touch-action: manipulation;
+}
+
+.map-preview {
+  display: grid;
+  gap: var(--sp-md);
+  padding: var(--sp-lg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+}
+
+.map-preview-block[data-removed] {
+  opacity: 0.45;
+}
+
+.map-preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+}
+
+.map-preview-head h3 {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.map-preview-remove {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--muted);
+  touch-action: manipulation;
+}
+
+.map-preview-block ul {
+  margin: var(--sp-xs) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  line-height: 1.4rem;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ the history */
+
+.map-history {
+  margin-bottom: var(--sp-lg);
+}
+
+.map-history h2 {
+  margin: 0 0 var(--sp-sm);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.map-history ul,
+.map-verdicts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--sp-sm);
+}
+
+.map-verdicts p {
+  margin: 0 0 var(--sp-xs);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------- motion */
+
+/* The only animation in this tab: an axis that just moved, once, on the way in. Calm Clarity's
+   own rule — "zero scale bounces, confetti, or gamified animations". */
+@media (prefers-reduced-motion: no-preference) {
+  .map-screen .map-you{
+    transition: d 240ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .map-screen .map-node[data-moved]{
+    animation: map-node-in 240ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+  .map-screen .map-node[data-moved]:nth-of-type(2){
+    animation-delay: 60ms;
+  }
+}
+
+@keyframes map-node-in {
+  from {
+    r: 0;
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------- print */
+
+/* Print is the PDF. Everything but the summary leaves the page. */
+@media print {
+  body:has(.map-preview) > *:not(.sheet-layer) {
+    display: none !important;
+  }
+  .sheet-layer,
+  .sheet {
+    position: static !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+  .sheet-scrim,
+  .sheet-handle,
+  .sheet-close,
+  .map-sheet-actions,
+  .map-preview-remove,
+  .map-screen .map-foot{
+    display: none !important;
+  }
+  .map-preview {
+    border: 0;
+    padding: 0;
+  }
+  .map-preview-block[data-removed] {
+    display: none !important;
+  }
+}
+
+/* -------------------------------------------------------------------- desktop */
+
+@media (min-width: 1024px) {
+  .map-screen {
+    max-width: var(--shell-max);
+    margin-inline: auto;
+  }
+  /* Calm Clarity's asymmetric split: the shape on the left, what it means on the right. */
+  .map-screen:has(.map-side) {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+      "head head"
+      "radar side";
+    column-gap: var(--sp-2xl);
+    align-items: start;
+  }
+  .map-screen > .minimal-header {
+    grid-column: 1 / -1;
+  }
+  .map-screen > .life-head {
+    grid-area: head;
+  }
+  .map-screen > .map-radar {
+    grid-area: radar;
+    margin-block: 0;
+  }
+  .map-screen > .map-side {
+    grid-area: side;
+    display: grid;
+    gap: var(--sp-xl);
+    align-content: start;
+    justify-items: start;
+  }
+  .map-screen > .map-side > * {
+    margin: 0;
+  }
+}
+
+/* Why this match, as chips: the same expertise tags that filled the person's own map. Capped at
+   three by the caller, per Calm Clarity's "never cluster more than 3". */
+.profile-fit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-fit-tags li {
+  padding: 0.125rem 0.625rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* THE MAP'S SHEETS ARE PORTALLED TO THE BODY, so they sit outside `.map-screen` and the flat
+   scope at the top of this file cannot reach them. `:has()` puts them back inside it.
+   Calm Clarity is specific about the scrim: "an ultra-clean semi-opaque scrim (rgba(17, 24, 39,
+   0.35)) without blur filters". */
+.sheet-layer:has(.map-sheet) .sheet-scrim {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgb(26 28 28 / 0.35);
+}
+
+.sheet-layer:has(.map-sheet) .sheet {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: var(--paper);
+  box-shadow: none;
+  border-top: 1px solid var(--line);
+}

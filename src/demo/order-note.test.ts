@@ -75,9 +75,17 @@ describe("orderNote", () => {
 describe("orderNote names the list it is about", () => {
   it("says GP for the GP roster, the profession for a list narrowed to one kind, and provider for a mix", async () => {
     const { ALLIED_CLINICIANS, demoRoster } = await import("./synthetic-roster");
+    const { professionOf } = await import("./roster");
     const ots = ALLIED_CLINICIANS.filter((c) => c.profession === "occupational-therapist");
     expect(ots.length).toBeGreaterThan(0);
-    expect(orderNote("help with adjustments at work", clinicians)).toContain("every listed GP");
+    // O252: the real roster is no longer GPs only, so the GP case is the GP-narrowed list —
+    // which is what the finder actually shows a reader who asks for a GP, and what this
+    // assertion was always about. The mixed case below is now the real roster too, and is
+    // asserted on it rather than only on the synthetic one.
+    const realGps = clinicians.filter((c) => professionOf(c) === "gp");
+    expect(realGps.length).toBeGreaterThan(0);
+    expect(orderNote("help with adjustments at work", realGps)).toContain("every listed GP");
+    expect(orderNote("help with adjustments at work", clinicians)).toContain("every listed provider");
     expect(orderNote("help with adjustments at work", ots)).toContain("every listed occupational therapist");
     expect(orderNote("help with adjustments at work", ots)).not.toMatch(/\bGP\b/);
     expect(orderNote("help with adjustments at work", demoRoster)).toContain("every listed provider");

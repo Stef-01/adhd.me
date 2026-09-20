@@ -3,7 +3,7 @@
 // interrupting a module, the support path reaching matching providers, the care map opening from
 // the Learn page, and the finder broadened beyond GPs.
 
-import { expect } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { CURSOR_KEY } from "../src/learn/cursor";
 import { runStepCount } from "../src/learn/play";
@@ -19,6 +19,20 @@ test.beforeEach(async ({ page }) => {
 });
 
 /** Play the perfectionism run under reduced motion up to its reflect beat. */
+/**
+ * Move one of the run's 0-10 call-outs and let go (O253).
+ *
+ * Every scale in a run commits on release — `pointerup` or `keyup` — so that a drag across the
+ * track writes one answer rather than eleven. Playwright's `fill` sets the value and never
+ * releases, so it moves the thumb and saves nothing, which reads in a failure log as the next
+ * card never arriving. The keyboard is the same commit path a person using one takes.
+ */
+async function setScale(page: Page, name: RegExp | string, key: string): Promise<void> {
+  const slider = page.getByRole("slider", { name });
+  await slider.focus();
+  await page.keyboard.press(key);
+}
+
 async function playToReflect(page: import("@playwright/test").Page) {
   await page.getByRole("button", { name: "Tap to play" }).click();
   await page.getByRole("button", { name: "I held off" }).click();
@@ -37,7 +51,11 @@ async function playToReflect(page: import("@playwright/test").Page) {
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: /I guess, and aim high/ }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Sometimes" }).click();
+  // O253: the recognition card asks how much of an issue it is, 0-10, and writes the cost
+  // directly. It used to ask how often in four buttons and `needs.ts` looked the cost up.
+  // Driven by keyboard because the slider commits on RELEASE, not on every step of a drag —
+  // `fill` sets the value and never releases, so it would move the thumb and save nothing.
+  await setScale(page, /How much of an issue/i, "ArrowRight");
   await page.getByRole("group", { name: "Want it easier" }).getByRole("button", { name: "Maybe" }).click();
   await page.getByRole("button", { name: "Partly" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
@@ -125,9 +143,13 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await page.getByRole("button", { name: /Vague ones/ }).click();
   await page.getByRole("button", { name: "That’s me" }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Recognition: one question per card (§14). How often, then whether they want it easier; no slider.
-  await expect(page.getByRole("slider")).toHaveCount(0);
-  await page.getByRole("group", { name: "How often" }).getByRole("button", { name: "Often" }).click();
+  /*
+   * Recognition: one question per card (§14), and the question is now HOW MUCH rather than how
+   * often (O253). The old assertion here was `slider count 0` — "no slider here" — which was the
+   * defect written down as a requirement: `functionalCost` is 0–10 and the card was collecting a
+   * four-way frequency that `needs.ts` then looked up in a table. A cost is asked for now.
+   */
+  await setScale(page, /How much of an issue/i, "End");
   await page.getByRole("group", { name: "Want it easier" }).getByRole("button", { name: "Yes" }).click();
   // Insight: rejected. No kicker anywhere on the card.
   await expect(page.locator(".play-kicker")).toHaveCount(0);
@@ -139,32 +161,46 @@ test("E2E 3 & 5: a run's rounds write to My ADHD, and a rejected insight is neve
   await page.getByRole("button", { name: "Finish" }).click();
   await expect(page.locator(".learning-completion")).toContainText("Your picture just got sharper");
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
-  expect(record.resonance?.starting?.frequency).toBe("often");
-  // §14: no cost slider on the recognition card; the cost is the relate beats' mean (needs.ts).
-  expect(record.resonance?.starting?.cost).toBeUndefined();
+  /*
+   * O253: the card writes the COST, and that inverts what this pair of assertions pins.
+   *
+   * It used to write a frequency and leave the cost undefined, and the comment called that §14's
+   * design: "no cost slider on the recognition card; the cost is the relate beats' mean". But
+   * `functionalCost` is a 0–10 number and `needs.ts` was deriving it from a four-way frequency
+   * through a lookup table — 10 is now what the person put on the scale, not what a table said
+   * "often" was worth. `frequency` is left undefined because nothing writes it any more; the
+   * field stays in the type for records written before today.
+   */
+  expect(record.resonance?.starting?.cost).toBe(10);
+  expect(record.resonance?.starting?.frequency).toBeUndefined();
   expect(record.answers?.["starting.hardest-to-start"]).toEqual(["vague"]);
   expect(record.insights?.["starting-threshold"]).toBe("no");
   expect(Object.values(record.insights ?? {})).not.toContain("yes");
   expect(record.experiments?.[0]?.strategyId).toBe("first-physical-action");
   expect(record.completed).toContain("starting");
 
+  // WHERE THIS LIVES NOW. The hub is the map, one sentence and one step; the friction is the
+  // sentence, what may be contributing is a chip, and the record of what was tried is one word
+  // away on /my-adhd/history. Nothing was dropped — it moved.
   await page.goto("/my-adhd");
-  await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
-  await expect(page.getByText("Activation for ambiguous tasks", { exact: true })).toBeVisible();
+  // The onboarding is not finished yet here, so the hub is still the door — but the run has
+  // already moved the map, which is what this test is about. The axis says so.
+  await expect(page.getByRole("button", { name: /^Starting/ })).not.toContainText("Unasked");
+  await page.goto("/my-adhd/history");
   await expect(page.getByText("Still testing")).toBeVisible();
   await expect(page.getByRole("button", { name: "Not really", pressed: true })).toBeVisible();
 
-  // The daily action updates the history on the same My ADHD screen.
+  // Today asks how it went, the answer is recorded there, and the record of what was tried is
+  // one word away on its own screen.
   await page.evaluate((k) => { const r = JSON.parse(localStorage.getItem(k) ?? "{}"); r.onboarding = { ...(r.onboarding ?? {}), completedAt: new Date().toISOString() }; localStorage.setItem(k, JSON.stringify(r)); }, MODEL_KEY);
   await page.goto("/today");
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toBeVisible();
   await page.getByRole("button", { name: "A lot" }).click();
-  await expect(page.getByText("Things that help me")).toBeVisible();
   await expect(page.getByRole("heading", { name: /Did “The first physical action” help/ })).toHaveCount(0);
   await page.getByText("Why am I seeing this?").click();
   await expect(page.locator(".life-why code")).toContainText("rule ");
-  await page.goto("/my-adhd");
-  await expect(page.getByText("Things that help me")).toBeVisible();
+  await page.goto("/my-adhd/history");
+  await expect(page.getByText("Helped a lot")).toBeVisible();
 });
 
 test("Play: with motion on, the clock runs a round on its own and a held 'don't tap' clears", async ({ page }) => {
@@ -174,7 +210,9 @@ test("Play: with motion on, the clock runs a round on its own and a held 'don't 
   await expect(page.locator(".play-clock")).toBeVisible();
   await expect(page.locator('.play-result[data-hit="true"]')).toBeVisible({ timeout: 12000 });
   // The relate beat holds the result (no auto-advance on a round that asks a question); Next moves on, and round two waits for a gesture.
-  await expect(page.getByRole("group", { name: "How much is this you?" })).toBeVisible();
+  // O253: every round's call-out is the 0-10 slider now, so the beat is the slider rather than
+  // the three-button group this used to find on an even round.
+  await expect(page.getByRole("slider", { name: "How much is this you?" })).toBeVisible();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.getByRole("button", { name: "Open the file" })).toBeVisible({ timeout: 4000 });
   // §14: no label unless asked for; the "?" turns the round count and the rule on.
@@ -230,11 +268,14 @@ test("E2E 6: the support path walks from the problem to professions, and 'See pr
     }));
   }, MODEL_KEY);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "The problem", exact: true })).toBeVisible();
-  await expect(page.locator(".support-step").nth(0)).toContainText(/Starting work before deadline pressure/);
+  // The seven-step walk came to 527 words lived in. It is the question and the answer now: who
+  // could help, in order of fit, each card saying what that kind of care is for in four words.
+  await expect(page.getByRole("heading", { name: "Who could help?" })).toBeVisible();
+  await expect(page.locator(".map-stands-out")).toContainText(/Starting work before deadline pressure/);
   await expect(page.locator(".profession-card.is-first")).toContainText("Occupational therapist");
-  await expect(page.locator(".profession-card.is-first")).toContainText("Why this one");
-  await expect(page.getByText(/What I’d like help with/)).toBeVisible();
+  // The referral brief was five textareas a person had to fill in themselves. It is written for
+  // them now, on the map, one tap away.
+  await expect(page.getByRole("link", { name: /Take this to my GP/ })).toBeVisible();
   await page.locator(".profession-card.is-first").getByRole("link", { name: /See occupational therapists/ }).click();
   await expect(page).toHaveURL(/\/$/);
   await page.getByRole("textbox").fill("help starting ambiguous work, by telehealth");
@@ -349,7 +390,10 @@ test("Phase A: a topic survey is offered, not launched; answered one screen at a
     answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
   })), MODEL_KEY);
   await page.reload();
-  const offer = page.getByRole("link", { name: /Start the survey/ });
+  // OFFERED, NEVER LAUNCHED — and now offered inside the axis it is about rather than as a card
+  // under the map, so the ask arrives where the person is already looking at that part of life.
+  await page.locator(".map-axis").first().click();
+  const offer = page.getByRole("dialog").getByRole("link", { name: /Work & Study/ });
   await expect(offer).toBeVisible();
   await expect(page).toHaveURL(/\/my-adhd$/);
   await offer.click();
@@ -364,11 +408,13 @@ test("Phase A: a topic survey is offered, not launched; answered one screen at a
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: /Once the problem is concrete/ }).click();
   await page.getByRole("button", { name: "See my pattern" }).click();
-  await expect(page.getByRole("heading", { name: "Your work pattern." })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Starting work before deadline pressure/ })).toBeVisible();
-  await expect(page.getByText("Environmental amplifier")).toBeVisible();
-  await expect(page.getByText("Sustained engagement once the problem becomes concrete", { exact: false })).toBeVisible();
-  await expect(page.getByRole("button", { name: "I’ll try this" })).toBeVisible();
+  // THE REWARD IS THE MAP, NOT A REPORT (2026-09-19). Four result cards — friction, amplifier,
+  // contributor, strength — became the shape moving, the screen saying so, and one sentence
+  // authored per friction in SURVEY_INSIGHTS. The strategy is still offered by name.
+  await expect(page.getByRole("heading", { name: "Your map just got clearer." })).toBeVisible();
+  await expect(page.locator(".map-chart")).toBeVisible();
+  await expect(page.locator(".map-stands-out")).toContainText(/more about starting and structuring/);
+  await expect(page.getByRole("button", { name: /The first physical action/ })).toBeVisible();
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);
   expect(record.surveys["work-study"].completedAt).toBeTruthy();
   expect(record.survey.lastLongAt).toBeTruthy();
@@ -408,6 +454,40 @@ test("Phase A: voice reflection appends the transcript, and an absent recogniser
   await expect(page.locator(".reflect-field textarea")).toHaveValue(/the brief was vague/);
 });
 
+// A disc on the care map has to hold its own label. The rule that used to keep them inside cut any
+// label over ten characters to its FIRST WORD, which was a general mechanism serving exactly one of
+// the twenty-five: "Working memory" read "Working", a different concept, and the screen was the only
+// place a person met the word. Two things are pinned here — that every visible label is the whole
+// label, and that it still fits the disc it sits in — because the second is what the cut was for.
+test("every care-map node shows its whole label, inside its own disc", async ({ page }) => {
+  await page.goto("/approach/map");
+  await expect(page.locator(".care-map-node")).toHaveCount(25);
+  const nodes = await page.evaluate(() =>
+    [...document.querySelectorAll(".care-map-node")].map((g) => {
+      const circle = g.querySelector("circle") as SVGGraphicsElement;
+      const text = g.querySelector("text") as SVGGraphicsElement;
+      return {
+        // The accessible name is "<label> (<layer>)", so the label is what precedes the bracket.
+        label: (g.getAttribute("aria-label") ?? "").replace(/\s*\(.*$/, ""),
+        // A stacked label is two <tspan> lines, and textContent would run them together
+        // ("Workingmemory"), so the lines are read and rejoined the way they are read aloud.
+        shown: (text.querySelectorAll("tspan").length
+          ? [...text.querySelectorAll("tspan")].map((t) => (t.textContent ?? "").trim()).join(" ")
+          : (text.textContent ?? "")).trim(),
+        textWidth: text.getBBox().width,
+        // The stroke sits on the circle's edge, so the room for a word is the disc less its line.
+        room: circle.getBBox().width - Number(circle.getAttribute("stroke-width") ?? 0) * 2,
+      };
+    }));
+  const renamed = nodes.filter((n) => n.shown.replace(/\s+/g, " ") !== n.label);
+  expect(renamed, "a node that shows less than its own label renames the thing it points at").toEqual([]);
+  const spilling = nodes.filter((n) => n.textWidth > n.room).map((n) => `${n.label}: ${n.textWidth.toFixed(1)} in ${n.room.toFixed(1)}`);
+  expect(spilling, "a label wider than its disc spills into the next one").toEqual([]);
+  // The one that made the old rule necessary, and the proof it now stacks rather than truncates.
+  await expect(page.getByRole("button", { name: /^Working memory \(Brain\)/ })).toBeVisible();
+  expect(nodes.find((n) => n.label === "Working memory")!.shown.replace(/\s+/g, " ")).toBe("Working memory");
+});
+
 test("NWIA: the paradigm is on the care map once and attributed, a node names its dimension, and My ADHD says the balance honestly", async ({ page }) => {
   await page.goto("/approach/map");
   const intro = page.locator(".care-map-nwia");
@@ -423,13 +503,12 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
     answers: {}, insights: {}, experiments: [], reflections: [], safety: [], completed: [], survey: { day: "", answeredToday: 0, abandons: [], lastLongAt: null }, surveys: {},
   })), MODEL_KEY);
   await page.reload();
-  // The balance line used to name all nine dimensions twice, about thirty words to say what a
-  // shape says at a glance. The shape is /my-map; this is the count, the honest half ("unasked")
-  // and the door, and the naming of every touched and untouched dimension is asserted there.
-  const balance = page.getByTestId("nwia-balance");
-  await expect(balance).toContainText(/3 of nine touched, the rest unasked/);
-  await balance.getByRole("link", { name: "Your map" }).click();
-  await expect(page).toHaveURL(/\/my-map$/);
+  // The balance COUNT is gone from My ADHD (2026-09-20). It named a number about a person on the
+  // one screen built not to, and the honest half it carried — "unasked" — is now said per axis,
+  // on the hub and on the wellness map alike. Both are asserted, each where it lives.
+  await expect(page.locator(".map-axis").first()).toContainText(/Starting/);
+  await expect(page.locator("main")).not.toContainText(/of nine touched/);
+  await page.goto("/my-map");
   await expect(page.getByRole("button", { name: /^Work/ })).toContainText("Named");
   await expect(page.getByRole("button", { name: /^Physical/ })).toContainText("Unasked");
   // The honest half, said per axis rather than in one long sentence: an untouched dimension is
@@ -556,13 +635,14 @@ test("My Manual (PRD §27): written by the person, kept on the device, suggestio
   }, MODEL_KEY);
   await page.reload();
   await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step");
-  await page.getByRole("group", { name: "Suggestions for what helps me" }).getByRole("button", { name: /The first physical action/ }).click();
+  // ONE suggestion, not the whole list: a menu of twelve sentences somebody could paste in is the
+  // app writing their manual for them, which §27 forbids.
+  await page.getByRole("list", { name: "Suggestion for what helps me" }).getByRole("button", { name: /The first physical action/ }).click();
   await expect(page.getByRole("textbox", { name: "What helps me" })).toHaveValue("A clear first step\nThe first physical action");
   expect(page.url()).not.toMatch(/first|step|starting/);
-  // Reachable from My ADHD, and the tab claims it.
-  await page.goto("/my-adhd");
-  await page.getByRole("link", { name: "Open my manual" }).click();
-  await expect(page).toHaveURL(/\/manual$/);
+  // The tab still claims it; the card that used to sit under the map does not.
+  await page.goto("/manual");
+  await expect(page.getByRole("heading", { name: "How I work, in my own words." })).toBeVisible();
 });
 
 test("Support-person sharing (PRD §46): a run's link carries the module id and nothing about the person", async ({ page, context }) => {
@@ -617,9 +697,9 @@ test("Adjustments on paper (PRD §45): the need's track leads, the other is one 
   expect(page.url()).not.toMatch(/work|overwhelm/);
   // The support path carries the step for an institutional need.
   await page.goto("/support");
-  await expect(page.getByRole("heading", { name: "Adjustments on paper" })).toBeVisible();
-  await page.goto("/my-adhd");
-  await page.getByRole("link", { name: "See what is commonly available" }).click();
+  // Reached from the support path, where the need it answers is on the screen, rather than as a
+  // standing card under somebody's picture of themselves.
+  await page.getByRole("link", { name: /adjustments/i }).first().click();
   await expect(page).toHaveURL(/\/adjustments$/);
 });
 
@@ -650,26 +730,33 @@ test("Reflection interpretation (PRD §29): a reading is offered in the person's
   await expect(page.locator(".play-reading")).toHaveCount(0);
 });
 
-test("Play P7 (founder): a clue on the scene makes the hit inferable, and after the result the round asks how much it was you, buttons, then a slider", async ({ page }) => {
+test("Play P7 (founder): a clue on the scene makes the hit inferable, and every round asks how much it was you on one 0-10 scale", async ({ page }) => {
+  /*
+   * O253 (founder-directed): "have the call outs all work with slider so its scale of 1-10".
+   * This test used to require the alternation — buttons on round one, the slider on round two —
+   * and the alternation was the defect it was pinning. Both forms wrote the same 0–10 number at
+   * different resolutions, so `meanRelate` averaged three-point answers with eleven-point ones.
+   * The clue half of the test is untouched; only the form of the beat changed.
+   */
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?module=starting");
   await page.getByRole("button", { name: "Tap to play" }).click();
-  // Round 1 (dont-tap) has no right answer to infer, so no clue; its relate beat is the buttons.
+  // Round 1 (dont-tap) has no right answer to infer, so no clue.
   await expect(page.locator(".play-clue")).toHaveCount(0);
   await page.getByRole("button", { name: "I held off" }).click();
-  const relate = page.getByRole("group", { name: "How much is this you?" });
-  await expect(relate).toBeVisible();
-  await relate.getByRole("button", { name: "Very me" }).click();
-  await expect(relate.getByRole("button", { name: "Very me" })).toHaveAttribute("aria-pressed", "true");
+  const relate = () => page.getByRole("slider", { name: "How much is this you?" });
+  await expect(relate()).toBeVisible();
+  await relate().focus();
+  await page.keyboard.press("End");
+  await expect(relate()).toHaveAttribute("aria-valuetext", /10 out of 10, very me/);
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  // Round 2 (order) has a right order, so the clue says which; its relate beat is the slider.
+  // Round 2 (order) has a right order, so the clue says which, and the same scale follows it.
   await expect(page.locator(".play-clue")).toContainText("Opening a file is smaller");
   for (const step of ["Open the file", "Type the title", "Write one bad sentence"]) await page.getByRole("button", { name: step }).click();
-  const slider = page.getByRole("slider", { name: "How much is this you?" });
-  await expect(slider).toBeVisible();
-  await slider.focus();
+  await expect(relate()).toBeVisible();
+  await relate().focus();
   await page.keyboard.press("End");
-  await expect(slider).toHaveAttribute("aria-valuetext", /10 out of 10, very me/);
+  await expect(relate()).toHaveAttribute("aria-valuetext", /10 out of 10, very me/);
   const held = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}").relates, MODEL_KEY);
   expect(held.starting).toEqual({ coffee: 10, "first-move": 10 });
   expect(page.url()).not.toMatch(/relate|very/);

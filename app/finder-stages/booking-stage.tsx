@@ -77,11 +77,18 @@ export function BookingStage({
             </p>
           </>
         ) : (
+          /* O252: the phone sentence is gone. `practice` used to mean one thing — a clinician
+             synced to no online platform, whom you ring — so the copy said so. It now also
+             carries the clinics that book online somewhere other than Healthengine (GOALS on
+             Halaxy, Wellness Psychology Clinic on its own form), and telling those readers to
+             phone would send them to a number when a booking page was one tap away. The route
+             is named once, in the note the entry supplies, and what remains is the fact the
+             note cannot carry: whose booking it is and what ADHD.ME does not see. */
           <>
             <p>{clinician.booking.note}</p>
             <p className="booking-note">
-              {clinician.practice} takes these appointments by phone. Their number and hours
-              are on the practice page.
+              You book with {clinician.practice}. ADHD.ME does not see your booking and no
+              medical details are entered here.
             </p>
           </>
         )}

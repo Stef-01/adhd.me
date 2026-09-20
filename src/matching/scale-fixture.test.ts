@@ -86,21 +86,25 @@ describe("the fixture never reaches a patient", () => {
 
 describe("Q3 item 10's premise", () => {
   /**
-   * THE FINDING, PINNED BOTH DIRECTIONS.
+   * THE FINDING, AND THE EVENT IT WAS WAITING FOR.
    *
    * `clarifiers()` sorts candidates by `|heldBy/size - 0.5|`. On a two-clinician roster every
-   * splitting facet is held by one, so EVERY candidate
-   * has the same evenness and the sort decides nothing at all. The selector's real work today is
-   * done entirely by O33's greedy holder-signature dedup underneath it.
+   * splitting facet was held by exactly one person, so every candidate had the same evenness
+   * and the sort decided nothing at all — the selector's work was done entirely by O33's greedy
+   * holder-signature dedup underneath it. The pin said what would end that: "If the roster
+   * grows, this fails — which is correct: the sort waking up is exactly the event Q3 item 10 is
+   * waiting for."
    *
-   * This is a stronger statement than the doc comment's "the order barely matters today", and it
-   * is why the comment was rewritten rather than left standing. If the roster grows, this fails —
-   * which is correct: the sort waking up is exactly the event Q3 item 10 is waiting for.
+   * O252 IS THAT EVENT. Eleven clinicians, and the questions now carry four distinct evenness
+   * values, so the sort is choosing between them rather than rubber-stamping the dedup's order.
+   * The test keeps its name and its shape and states the number it has woken up to; renaming it
+   * "is no longer inert" would lose the thing worth reading, which is that the premise Q3 wrote
+   * down turned out to be right.
    */
   it("is inert on the real roster: one evenness value across every question", () => {
     const report = clarifierScaleReport(ASK, clinicians);
-    expect(report.rosterSize).toBe(2);
-    expect(report.distinctEvenness).toBe(1);
+    expect(report.rosterSize).toBe(11);
+    expect(report.distinctEvenness).toBe(4);
   });
 
   /**
@@ -114,8 +118,15 @@ describe("Q3 item 10's premise", () => {
     // ASK's corpus evidence suggests, so distinct evenness saturates once every suggested facet
     // is a candidate — growth in the roster no longer manufactures questions the request never
     // suggested, which is the gate doing at scale exactly what it does at three.
+    //
+    // O252: 1/4/5/5 -> 1/4/7/9. The synthetic roster is drawn from the REAL one's declaration
+    // rates (`scale-fixture.ts`'s `rateAmongReal`), so nine more clinicians with a wider spread
+    // of declarations change what a synthetic roster of any size looks like. The plateau the
+    // gate produced at 5 has lifted because more of the suggested facets are now split at
+    // rates far enough apart to be distinct — the gate is still bounding candidates, it simply
+    // has more genuinely different questions inside the bound to tell apart.
     const measured = [3, 8, 20, 40].map((size) => clarifierScaleReport(ASK, syntheticRoster(size)));
-    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 5, 5]);
+    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 7, 9]);
     // Monotone by construction of the evenness function, but pinned because the CLAIM is that it
     // grows — a change that made it non-monotone would falsify the claim while passing the above.
     const evenness = measured.map((r) => r.distinctEvenness);
@@ -135,12 +146,16 @@ describe("Q3 item 10's premise", () => {
    */
   it("turns duplicate questions into distinct ones", () => {
     const real = clarifierScaleReport(ASK, clinicians);
-    // Nine candidates, not the fifteen this pin held before M10: the relevance gate admits only
-    // the facets this ASK's corpus co-occurrence suggests. The signature story is unchanged —
-    // at this roster size the nine still collapse into two distinct reorderings.
-    expect([real.candidates, real.distinctSignatures]).toEqual([9, 2]);
+    // O252: [9, 2] -> [11, 9], and the second number is the one this test is named after.
+    // Two distinct reorderings out of nine candidates meant most of the askable questions were
+    // in effect the SAME question — a two-person roster can only be reordered two ways. Eleven
+    // clinicians make nine of the eleven candidates genuinely different questions, which is
+    // what the "at twenty every one is distinct" half below predicted, arriving early.
+    expect([real.candidates, real.distinctSignatures]).toEqual([11, 9]);
+    // O252: [9, 9] -> [10, 10] at twenty, the same "every candidate is its own question"
+    // shape one candidate wider, from the same rate change that redrew the curve above.
     const atTwenty = clarifierScaleReport(ASK, syntheticRoster(20));
-    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([9, 9]);
+    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([10, 10]);
   });
 
   /** Non-vacuity for the whole report: the selector's order is not the tie-break's order. */

@@ -452,9 +452,12 @@ test("library and playable games retain live glass with a tap-bubble fallback", 
 });
 
 
-test("daily actions live in My ADHD and help is reached through Settings", async ({ page }) => {
+test("daily actions live on Today and help is reached through Settings", async ({ page }) => {
+  // Today stopped redirecting to My ADHD on 2026-09-20. They answer different questions — "what
+  // should I try next?" against "what have I learned about myself?" — and the brief separates
+  // them, so they are two screens again. The My ADHD tab still claims both.
   await page.goto("/today");
-  await expect(page).toHaveURL(/\/my-adhd$/);
+  await expect(page).toHaveURL(/\/today$/);
   await expect(page.getByRole("main")).toHaveCount(1);
   const nav = page.getByRole("navigation", { name: "Sections" });
   await expect(nav.getByRole("link")).toHaveText(["Support", "Learn", "My ADHD"]);

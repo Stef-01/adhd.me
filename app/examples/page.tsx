@@ -111,13 +111,15 @@ export default function ExamplesPage() {
           same order, the only thing that differs between them is how many asks the finder read.
           Three sections that look like three demonstrations, when they are one demonstration run
           three times, is the page overstating itself; `honesty.claim-earned` says a page may only
-          claim what it has earned. Derived, not transcribed, so the day a third GP joins and the
-          orders diverge this sentence stops appearing on its own.
+          claim what it has earned. Derived, not transcribed, so the day the orders diverge this
+          sentence stops appearing on its own — which O252 is: the roster went to eleven and this
+          paragraph now renders only if they still agree. The word is "clinician" rather than
+          "GP" for the same reason: nine of the eleven are not GPs.
         */}
         {sameFirstForAll ? (
           <p>
-            All three land on the same GP first, and that is what a roster this size looks like
-            rather than a finding about anybody: with {rosterSizeInWords()} listed GPs there are
+            All three land on the same clinician first, and that is what a roster this size looks
+            like rather than a finding about anybody: with {rosterSizeInWords()} listed there are
             not many orders available. What differs above is how much of each request the finder
             read.
           </p>

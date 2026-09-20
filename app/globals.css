@@ -149,6 +149,23 @@
   --on-brand: var(--ink);
   --signal: #ff4d2e;
 
+  /* THE MAP (founder, 2026-09-19, the Calm Clarity design system).
+     Four roles nothing existing could fill. The coral is the polygon's and nothing else's: it is
+     the one object on the page that is the person's own shape, and Calm Clarity reserves it
+     strictly — "it avoids the clinical sterility of cold blue while steering entirely clear of
+     emergency red". Measured 3.68:1 on --paper and 3.84:1 on white, so it clears the 3:1 floor a
+     graphical object has to meet. It may never carry a status, a warning or a word.
+     The sage is the only green in the product and says one thing: this works. 6.49:1 on its own
+     fill. Its fill is 1.05:1 against paper, so a chip in it always carries its own text — colour
+     is never the only thing saying what a chip means. */
+  --map-poly: rgba(242, 106, 79, 0.58);
+  --map-poly-line: #e05338;
+  --map-guide: rgba(31, 41, 55, 0.16);
+  --chip-strength-bg: #dcfce7;
+  --chip-strength-ink: #166534;
+  --chip-held-bg: #e0f2fe;
+  --chip-held-ink: #0369a1;
+
   /* The primary button: dark pill, light label. */
   /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than
      retyped. Emil's fourth rule is that easing matters more than duration and that the built-in

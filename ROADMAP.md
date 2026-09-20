@@ -48,6 +48,44 @@ pilot). ADR 0004 records the decision to build the product on this stack rather 
 - [ ] Real allied providers — a founder decision (real people, on the real-person law), then
       Phase B (the PRD's P1 list) in the plan's order.
 
+## My ADHD Map — 2026-09-19
+
+The founder's brief (a skills-by-life-area map that fills in as a person learns and answers short
+questionnaires; provider matching and a one-tap GP summary that emerge from it; the My ADHD tab
+re-cut into a hub and click-throughs) is specified in **[docs/adhd-life/MAP-PRD.md](docs/adhd-life/MAP-PRD.md)** — the technical PRD,
+which integrates the founder's *Calm Clarity* design system from Stitch: the token contract, the
+six-axis radar, the screen-by-screen copy and budgets, the test matrix, and six decisions the
+founder owns. [MAP-PLAN.md](docs/adhd-life/MAP-PLAN.md) remains the strategy note behind it, and
+[docs/design/my-adhd-map/](docs/design/my-adhd-map/) holds the design system and the measured
+before-state captures.
+
+- [x] Phase 1: lived-in states in the text-budget instrument (it has only ever measured these
+      screens empty, and the lived-in hub is 336 words), then the matrix reading and the GP
+      summary, pure and tested. (`src/model/matrix.ts`, `src/model/summary.ts`, `LIVED_RECORD`)
+- [x] Phase 2: the hub, the five area pages, Today as a screen, history and delete moved off the hub.
+      Shipped as a sheet over the hub rather than routes — the comp's own behaviour; see PRD §19.
+- [x] Phase 3: the survey result as the map moment. (`SURVEY_INSIGHTS`, the rewritten result)
+- [x] Phase 4: Take this to my GP. (`src/collateral/gp-summary.ts`, the share sheet, print)
+- [x] Phase 5: support from the map: who could help, chips on the card, strengths in the fit.
+- [x] Phase 6: go deeper surveys. (`WORK_DEEPER`, `RELATIONSHIPS_DEEPER`)
+- [x] Phase 7: the loop joined up — the step says what it is and opens its module, `bestFitFor`
+      names the match, `noise` and `peers` reach a provider. (O253)
+
+**Phase 5 is now held on BOTH surfaces.** O253 pinned it on `/support`; the finder ran the same
+reading through a different path — `care-finder.tsx` reads the record on mount, `orderByProblemFit`
+reorders the allied entries, `fitReason` writes the row's line, `fitTags` fills the profile's chips —
+and nothing asserted any of it. `e2e/finder-personalisation.spec.ts` recomputes the chips from the
+seeded record through `topNeed` and `fitTags` and compares them to the DOM, so a tag the person's
+own cells do not justify fails the suite. Verified in the browser on the shipped default roster: a
+map whose top need is `activation` gets "Works on task initiation, the thing you said is hardest"
+on the row and `Task initiation · ADHD at work · Workplace adjustments` on the profile.
+
+- [ ] C1/C2, the two decisions Phase 7 left open (PRD §15.1) — the expertise taxonomy has no
+      vocabulary for a psychologist (8 of 25 subdomains reach a real provider), and 17 of 25 show a
+      profession card the real roster cannot serve. Both are founder decisions, not engineering:
+      today the personalisation is carried almost entirely by the example roster, and on the real
+      roster alone this person's map reaches exactly one provider.
+
 ## Bidirectional matching — 2026-09-09
 
 The founder's matching-model brief (rich GP bios, GP-declared preferences and capacity, a

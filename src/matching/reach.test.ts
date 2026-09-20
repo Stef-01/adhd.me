@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, matchQuality, MATCH_QUALITY_COPY, needsFor, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
+import { clinicians, matchQuality, MATCH_QUALITY_COPY, needsFor, professionOf, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
 import { selfClaimedPatient, stem, tokenise, tokeniseKeepingStopwords } from "./read";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
@@ -140,19 +140,28 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
   });
 
   /**
-   * The single likeliest sentence anybody types. It reaches only the generic assessment facet,
-   * which BOTH GPs declare, so it cannot separate them — and the finder has to admit that rather
-   * than put one of two real doctors first for no reason.
+   * The single likeliest sentence anybody types. It reaches only the generic assessment facet.
+   *
+   * O252: FOUR OF ELEVEN DECLARE IT NOW, so the sentence orders the list, and the pin moves to
+   * where the honesty rule still bites — the GP-narrowed list, where both entries declare
+   * assessment and one of two real doctors must not be put first for no reason. Both halves are
+   * held, because losing either would be a different product: the finder must order when it can
+   * and must say so when it cannot.
    */
-  it("admits that the commonest query does not separate anybody", () => {
-    expect(matchQuality("I think I might have ADHD")).toBe("tied");
+  it("orders the commonest query where it can, and admits the tie where it cannot", () => {
+    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+    expect(matchQuality("I think I might have ADHD")).toBe("informed");
+    expect(matchQuality("I think I might have ADHD", gps)).toBe("tied");
   });
 
   it("names a care area nobody declares instead of returning a silent list", () => {
-    // Nine of the seventeen care areas are declared by neither GP while the roster is two people.
-    const asks = unservedAsks("I need trauma-informed care, I have a difficult childhood");
+    // O252: trauma-informed care is declared by four of the eleven now, so the live gap moved.
+    // `complex-mental-health` is the area nobody on the roster declares today, and it is the
+    // honest one to pin: a bipolar or psychosis ask is read perfectly and answered by no one.
+    const asks = unservedAsks("I have bipolar as well");
     expect(asks.length).toBeGreaterThan(0);
     expect(unservedAsks("titration and telehealth")).toEqual([]);
+    expect(unservedAsks("I need trauma-informed care, I have a difficult childhood")).toEqual([]);
   });
 
   /**
@@ -165,13 +174,20 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
    */
   it("names an unanswered PREFERENCE, which is where this roster's real gap is", () => {
     const [said] = unservedAsks("I want a GP who bulk bills");
-    expect(said).toContain("Bulk billing is not something any GP listed today declares");
+    expect(said).toContain("Bulk billing is not something any provider listed today declares");
     expect(said).toContain("a gap in our listing, not in what you asked for");
   });
 
   it("names an unanswered MANNER", () => {
-    expect(unservedAsks("someone calm who can steady me")[0])
-      .toContain("Calm and steadying is not something any GP listed today declares");
+    // O252: four of the eleven declare `steadying` now, so this sentence moved sides the way
+    // "I need a longer first appointment" did below. The manner gap is on the narrowed list:
+    // an unhurried first appointment is something one GP declares and no psychologist does,
+    // and a reader whose words name a psychologist is shown that list. The noun in the
+    // sentence follows the list it is about, which is the other half of what changed.
+    const psychologists = clinicians.filter((c) => professionOf(c) === "psychologist");
+    expect(unservedAsks("I don't want to feel rushed", psychologists)[0])
+      .toContain("Unhurried first appointment is not something any psychologist listed today declares");
+    expect(unservedAsks("someone calm who can steady me")).toEqual([]);
   });
 
   it("never says it about something the roster DOES declare", () => {
@@ -191,7 +207,7 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
 
   it("stays a fact about a declaration, never a claim about ability (W193)", () => {
     const said = unservedAsks("I want a GP who bulk bills")[0]!;
-    expect(said).toContain("is not something any GP listed today declares");
+    expect(said).toContain("is not something any provider listed today declares");
     for (const forbidden of ["cannot", "unable", "does not do", "no GP can"]) {
       expect(said.toLowerCase()).not.toContain(forbidden);
     }
@@ -1195,7 +1211,8 @@ describe("§O111 the finder does not say it could not read what it read perfectl
    */
   it("separates a request nobody answers from a request nobody could read", () => {
     expect(matchQuality("gap fees are why I stopped going, I need a GP who bulk bills")).toBe("unserved");
-    expect(matchQuality("someone calm who can steady me")).toBe("unserved");
+    // O252: the calm-and-steadying ask is answered now; the bipolar ask is the live one.
+    expect(matchQuality("I have bipolar as well")).toBe("unserved");
     // The genuine no-read case keeps the value and the sentence that were always true of it.
     expect(matchQuality("zzz qqq")).toBe("unmatched");
   });
@@ -1210,13 +1227,13 @@ describe("§O111 the finder does not say it could not read what it read perfectl
   it("the banner and the gap line agree, on the query that exposed the disagreement", () => {
     const said = "gap fees are why I stopped going, I need a GP who bulk bills";
     expect(MATCH_QUALITY_COPY[matchQuality(said)]).toContain("Nobody listed today answers it");
-    expect(unservedAsks(said)[0]).toContain("Bulk billing is not something any GP listed today declares");
+    expect(unservedAsks(said)[0]).toContain("Bulk billing is not something any provider listed today declares");
   });
 
   it("nothing that branches on an earned order changes: unserved is not informed either", () => {
     // Every honesty branch in the UI asks `quality !== "informed"`, so the new value must sit
     // on the same side of that line as the one it split from.
-    for (const said of ["gap fees are why I stopped going", "zzz qqq", "someone calm who can steady me"]) {
+    for (const said of ["gap fees are why I stopped going", "zzz qqq", "I have bipolar as well"]) {
       expect(matchQuality(said)).not.toBe("informed");
     }
     // And a request the roster genuinely answers is still informed.

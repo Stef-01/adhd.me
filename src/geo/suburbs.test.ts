@@ -33,9 +33,11 @@ describe("the gazetteer covers what the roster claims", () => {
     // Springbrook and Tamborine Mountain, plus Tweed Heads over the border and Brisbane City.
     const inGoldCoast = (s: SuburbPoint) =>
       s.lat > -28.3 && s.lat < -27.7 && s.lon > 153.15 && s.lon < 153.6;
-    const isBrisbane = (s: SuburbPoint) => s.suburb === "Brisbane City";
+    // O252: inner Brisbane, where GOALS Psychology is. Brisbane City used to be the single named
+    // exception; a box is the same guard once there is more than one point in it.
+    const inBrisbane = (s: SuburbPoint) => s.lat > -27.6 && s.lat < -27.35 && s.lon > 152.9 && s.lon < 153.2;
     for (const s of SUBURBS) {
-      expect(inSydney(s) || inEasternSuburbs(s) || inGoldCoast(s) || isBrisbane(s), `${s.suburb} is outside both focus areas`).toBe(true);
+      expect(inSydney(s) || inEasternSuburbs(s) || inGoldCoast(s) || inBrisbane(s), `${s.suburb} is outside every focus area`).toBe(true);
       expect(s.postcode).toMatch(/^\d{4}$/);
     }
   });

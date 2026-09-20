@@ -44,7 +44,7 @@ export const NWIA_LABELS: Readonly<Record<NwiaDimension, string>> = {
 
 /** One line each, in this app's voice — what the dimension is about for a person with ADHD. */
 export const NWIA_MEANINGS: Readonly<Record<NwiaDimension, string>> = {
-  physical: "Sleep, movement, food and energy — the body the brain runs on.",
+  physical: "Sleep, movement, food and energy.",
   social: "The people around you, and how the pattern lands between you.",
   emotional: "How feelings arrive and settle, and what you do in the middle.",
   work: "Work and study: how tasks arrive, start and finish.",

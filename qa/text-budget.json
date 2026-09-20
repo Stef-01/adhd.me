@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-11T17:25:31.429Z",
+  "measuredAt": "2026-09-20T19:03:35.423Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -17,10 +17,10 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 20,
-      "fold": 20,
-      "chrome": 8,
-      "ratio": 0.5,
+      "total": 12,
+      "fold": 12,
+      "chrome": 6,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
@@ -32,11 +32,6 @@
           "w": 4,
           "text": "Try an example search",
           "tag": "button"
-        },
-        {
-          "w": 4,
-          "text": "Start from the problem",
-          "tag": "a"
         }
       ]
     },
@@ -44,9 +39,9 @@
       "path": "/about",
       "name": "/about",
       "state": null,
-      "total": 17,
-      "fold": 17,
-      "chrome": 0,
+      "total": 15,
+      "fold": 15,
+      "chrome": 22,
       "ratio": 0.4,
       "verdict": "target",
       "longest": [
@@ -61,8 +56,8 @@
           "tag": "h1"
         },
         {
-          "w": 4,
-          "text": "Start from the beginning",
+          "w": 2,
+          "text": "Find support",
           "tag": "a"
         }
       ]
@@ -73,7 +68,7 @@
       "state": null,
       "total": 49,
       "fold": 49,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
@@ -98,12 +93,17 @@
       "path": "/approach",
       "name": "/approach",
       "state": null,
-      "total": 46,
-      "fold": 19,
-      "chrome": 8,
-      "ratio": 1.2,
+      "total": 53,
+      "fold": 24,
+      "chrome": 6,
+      "ratio": 1.3,
       "verdict": "ceiling",
       "longest": [
+        {
+          "w": 5,
+          "text": "Just get out the door.",
+          "tag": "strong"
+        },
         {
           "w": 4,
           "text": "A little more understanding.",
@@ -113,11 +113,6 @@
           "w": 4,
           "text": "Same brain, five scenes",
           "tag": "strong"
-        },
-        {
-          "w": 3,
-          "text": "The care map",
-          "tag": "a"
         }
       ]
     },
@@ -125,9 +120,9 @@
       "path": "/approach/map",
       "name": "/approach/map",
       "state": null,
-      "total": 148,
-      "fold": 77,
-      "chrome": 8,
+      "total": 149,
+      "fold": 78,
+      "chrome": 6,
       "ratio": 3.7,
       "verdict": "long-form",
       "longest": [
@@ -152,9 +147,9 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 1,
       "verdict": "target",
       "longest": [
@@ -169,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "03:03 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -179,8 +174,8 @@
       "path": "/clinicians",
       "name": "/clinicians",
       "state": null,
-      "total": 65,
-      "fold": 65,
+      "total": 64,
+      "fold": 64,
       "chrome": 3,
       "ratio": 1.6,
       "verdict": "long-form",
@@ -206,9 +201,9 @@
       "path": "/clinicians/join",
       "name": "/clinicians/join",
       "state": null,
-      "total": 56,
-      "fold": 56,
-      "chrome": 27,
+      "total": 55,
+      "fold": 55,
+      "chrome": 26,
       "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
@@ -233,26 +228,26 @@
       "path": "/demo",
       "name": "/demo",
       "state": null,
-      "total": 17,
-      "fold": 17,
+      "total": 32,
+      "fold": 32,
       "chrome": 0,
-      "ratio": 0.4,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "That link is old or mistyped.",
+          "w": 18,
+          "text": ", one open session, three invited patients. No real patient data, no live SMS, t",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "That page does not exist.",
-          "tag": "h1"
+          "w": 4,
+          "text": "A scripted synthetic practice:",
+          "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Start from the beginning",
-          "tag": "a"
+          "w": 3,
+          "text": "Demo Family Practice",
+          "tag": "p"
         }
       ]
     },
@@ -260,10 +255,10 @@
       "path": "/examples",
       "name": "/examples",
       "state": null,
-      "total": 243,
-      "fold": 156,
-      "chrome": 26,
-      "ratio": 6.1,
+      "total": 236,
+      "fold": 149,
+      "chrome": 25,
+      "ratio": 5.9,
       "verdict": "long-form",
       "longest": [
         {
@@ -287,9 +282,9 @@
       "path": "/faq",
       "name": "/faq",
       "state": null,
-      "total": 432,
-      "fold": 164,
-      "chrome": 25,
+      "total": 431,
+      "fold": 163,
+      "chrome": 24,
       "ratio": 10.8,
       "verdict": "long-form",
       "longest": [
@@ -316,7 +311,7 @@
       "state": null,
       "total": 9,
       "fold": 9,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
@@ -343,7 +338,7 @@
       "state": null,
       "total": 27,
       "fold": 27,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.7,
       "verdict": "target",
       "longest": [
@@ -368,25 +363,25 @@
       "path": "/lives/characters",
       "name": "/lives/characters",
       "state": null,
-      "total": 46,
-      "fold": 28,
-      "chrome": 8,
-      "ratio": 1.2,
+      "total": 53,
+      "fold": 22,
+      "chrome": 6,
+      "ratio": 1.3,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 6,
-          "text": "High achievement, wandering attention, deep focus",
+          "w": 5,
+          "text": "One thing at a time.",
           "tag": "span"
         },
         {
-          "w": 4,
-          "text": "Restlessness and sensory intensity",
+          "w": 5,
+          "text": "Just get out the door.",
           "tag": "span"
         },
         {
-          "w": 4,
-          "text": "Impulsivity and quick feeling",
+          "w": 5,
+          "text": "What did I come for?",
           "tag": "span"
         }
       ]
@@ -397,7 +392,7 @@
       "state": null,
       "total": 518,
       "fold": 53,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 13,
       "verdict": "long-form",
       "longest": [
@@ -419,12 +414,66 @@
       ]
     },
     {
+      "path": "/lives/lab/leo-room",
+      "name": "/lives/lab/leo-room",
+      "state": null,
+      "total": 32,
+      "fold": 32,
+      "chrome": 7,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Catch the buzz. Change the room.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "One tiny sound.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Room to settle",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/lab/play",
+      "name": "/lives/lab/play",
+      "state": null,
+      "total": 11,
+      "fold": 11,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "CLEAR ONE!",
+          "tag": "p"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        }
+      ]
+    },
+    {
       "path": "/lives/learn",
       "name": "/lives/learn",
       "state": null,
       "total": 41,
       "fold": 20,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 1,
       "verdict": "ceiling",
       "longest": [
@@ -449,25 +498,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "Everything was under control thirty seconds ago.",
+          "w": 2,
+          "text": "LIGHTS OUT!",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Eight lives. Three of yours.",
-          "tag": "h2"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
           "w": 1,
-          "text": "Play",
+          "text": "10pm",
           "tag": "button"
         }
       ]
@@ -476,17 +525,12 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 19,
-      "fold": 19,
+      "total": 16,
+      "fold": 16,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
-        {
-          "w": 8,
-          "text": "Catch every mosquito, one wave at a time.",
-          "tag": "p"
-        },
         {
           "w": 3,
           "text": "Leo & the mosquito",
@@ -494,8 +538,40 @@
         },
         {
           "w": 3,
-          "text": "One tiny sound.",
+          "text": "Skip this round",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "GET IT!",
           "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "/lives/play/theo-out-the-door",
+      "state": null,
+      "total": 36,
+      "fold": 36,
+      "chrome": 4,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Drag or tap to pack.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Essentials. Then exit.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Pack for today",
+          "tag": "strong"
         }
       ]
     },
@@ -503,21 +579,16 @@
       "path": "/lives/toolkit",
       "name": "/lives/toolkit",
       "state": null,
-      "total": 17,
-      "fold": 17,
-      "chrome": 8,
-      "ratio": 0.4,
+      "total": 10,
+      "fold": 10,
+      "chrome": 11,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
           "w": 8,
           "text": "Nothing yet. Play a run; save a strategy.",
           "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "ADHD Lives",
-          "tag": "span"
         },
         {
           "w": 2,
@@ -530,10 +601,10 @@
       "path": "/manual",
       "name": "/manual",
       "state": null,
-      "total": 37,
-      "fold": 24,
-      "chrome": 8,
-      "ratio": 0.9,
+      "total": 29,
+      "fold": 25,
+      "chrome": 6,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -542,14 +613,14 @@
           "tag": "h1"
         },
         {
-          "w": 6,
-          "text": "Share it, if you want to",
+          "w": 5,
+          "text": "How to work with me",
           "tag": "h2"
         },
         {
-          "w": 5,
-          "text": "Yours to write and change.",
-          "tag": "p"
+          "w": 4,
+          "text": "What makes it harder",
+          "tag": "h2"
         }
       ]
     },
@@ -559,7 +630,7 @@
       "state": null,
       "total": 30,
       "fold": 30,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.8,
       "verdict": "target",
       "longest": [
@@ -586,7 +657,7 @@
       "state": null,
       "total": 18,
       "fold": 18,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
       "longest": [
@@ -613,7 +684,7 @@
       "state": null,
       "total": 17,
       "fold": 17,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.4,
       "verdict": "target",
       "longest": [
@@ -640,7 +711,7 @@
       "state": null,
       "total": 10,
       "fold": 10,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
@@ -666,8 +737,8 @@
       "name": "/medication",
       "state": null,
       "total": 26,
-      "fold": 19,
-      "chrome": 8,
+      "fold": 22,
+      "chrome": 6,
       "ratio": 0.7,
       "verdict": "target",
       "longest": [
@@ -692,26 +763,53 @@
       "path": "/my-adhd",
       "name": "/my-adhd",
       "state": null,
-      "total": 19,
-      "fold": 19,
-      "chrome": 8,
-      "ratio": 0.5,
+      "total": 25,
+      "fold": 25,
+      "chrome": 6,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "Nothing here yet, and that is honest.",
-          "tag": "h2"
-        },
-        {
-          "w": 7,
-          "text": "Answer a module, or the ten questions.",
+          "w": 8,
+          "text": "Two minutes so this can be about you.",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "My ADHD right now.",
+          "w": 2,
+          "text": "My ADHD.",
           "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "Emotional regulation",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd/history",
+      "name": "/my-adhd/history",
+      "state": null,
+      "total": 7,
+      "fold": 7,
+      "chrome": 6,
+      "ratio": 0.2,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "What you tried.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "My ADHD",
+          "tag": "a"
+        },
+        {
+          "w": 2,
+          "text": "Nothing yet.",
+          "tag": "p"
         }
       ]
     },
@@ -719,20 +817,20 @@
       "path": "/my-map",
       "name": "/my-map",
       "state": null,
-      "total": 49,
+      "total": 43,
       "fold": 20,
-      "chrome": 8,
-      "ratio": 1.2,
+      "chrome": 6,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 11,
-          "text": "Sleep, movement, food and energy — the body the brain runs on.",
+          "w": 6,
+          "text": "Nothing yet. Not a gap, unasked.",
           "tag": "p"
         },
         {
-          "w": 6,
-          "text": "Nothing yet. Not a gap, unasked.",
+          "w": 5,
+          "text": "Sleep, movement, food and energy.",
           "tag": "p"
         },
         {
@@ -746,9 +844,9 @@
       "path": "/practices",
       "name": "/practices",
       "state": null,
-      "total": 764,
-      "fold": 59,
-      "chrome": 23,
+      "total": 763,
+      "fold": 58,
+      "chrome": 22,
       "ratio": 19.1,
       "verdict": "long-form",
       "longest": [
@@ -773,10 +871,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1174,
-      "fold": 220,
-      "chrome": 23,
-      "ratio": 29.4,
+      "total": 1233,
+      "fold": 219,
+      "chrome": 22,
+      "ratio": 30.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -800,9 +898,9 @@
       "path": "/privacy/automated-decisions",
       "name": "/privacy/automated-decisions",
       "state": null,
-      "total": 1549,
-      "fold": 127,
-      "chrome": 27,
+      "total": 1548,
+      "fold": 126,
+      "chrome": 26,
       "ratio": 38.7,
       "verdict": "long-form",
       "longest": [
@@ -827,9 +925,9 @@
       "path": "/privacy/counsel-review",
       "name": "/privacy/counsel-review",
       "state": null,
-      "total": 324,
-      "fold": 175,
-      "chrome": 27,
+      "total": 323,
+      "fold": 174,
+      "chrome": 26,
       "ratio": 8.1,
       "verdict": "long-form",
       "longest": [
@@ -854,12 +952,17 @@
       "path": "/profile",
       "name": "/profile",
       "state": null,
-      "total": 41,
-      "fold": 27,
-      "chrome": 8,
-      "ratio": 1,
+      "total": 45,
+      "fold": 31,
+      "chrome": 6,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
+        {
+          "w": 4,
+          "text": "Care and cultural preferences",
+          "tag": "summary"
+        },
         {
           "w": 3,
           "text": "Where you are",
@@ -869,11 +972,6 @@
           "w": 3,
           "text": "Suburb or postcode",
           "tag": "label"
-        },
-        {
-          "w": 3,
-          "text": "Kind of support",
-          "tag": "summary"
         }
       ]
     },
@@ -883,7 +981,7 @@
       "state": null,
       "total": 17,
       "fold": 17,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.4,
       "verdict": "target",
       "longest": [
@@ -908,14 +1006,14 @@
       "path": "/story",
       "name": "/story",
       "state": null,
-      "total": 682,
-      "fold": 66,
-      "chrome": 16,
-      "ratio": 17.1,
+      "total": 681,
+      "fold": 65,
+      "chrome": 15,
+      "ratio": 17,
       "verdict": "long-form",
       "longest": [
         {
-          "w": 116,
+          "w": 119,
           "text": "Beecroft, Hornsby, Cheltenham, Pennant Hills, Epping, Double Bay, Edgecliff, Ros",
           "tag": "span"
         },
@@ -937,7 +1035,7 @@
       "state": null,
       "total": 39,
       "fold": 39,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 1,
       "verdict": "target",
       "longest": [
@@ -964,7 +1062,7 @@
       "state": null,
       "total": 26,
       "fold": 26,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.7,
       "verdict": "target",
       "longest": [
@@ -981,7 +1079,7 @@
         {
           "w": 2,
           "text": "Work & Study",
-          "tag": "a"
+          "tag": "strong"
         }
       ]
     },
@@ -989,10 +1087,10 @@
       "path": "/terms",
       "name": "/terms",
       "state": null,
-      "total": 698,
-      "fold": 167,
-      "chrome": 25,
-      "ratio": 17.5,
+      "total": 697,
+      "fold": 166,
+      "chrome": 24,
+      "ratio": 17.4,
       "verdict": "long-form",
       "longest": [
         {
@@ -1016,9 +1114,9 @@
       "path": "/thanks",
       "name": "/thanks",
       "state": null,
-      "total": 25,
-      "fold": 25,
-      "chrome": 25,
+      "total": 24,
+      "fold": 24,
+      "chrome": 24,
       "ratio": 0.6,
       "verdict": "target",
       "longest": [
@@ -1043,9 +1141,9 @@
       "path": "/today",
       "name": "/today",
       "state": null,
-      "total": 20,
-      "fold": 20,
-      "chrome": 8,
+      "total": 21,
+      "fold": 21,
+      "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
       "longest": [
@@ -1061,8 +1159,8 @@
         },
         {
           "w": 3,
-          "text": "One useful thing.",
-          "tag": "h1"
+          "text": "View my map",
+          "tag": "a"
         }
       ]
     },
@@ -1072,7 +1170,7 @@
       "state": null,
       "total": 37,
       "fold": 37,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.9,
       "verdict": "target",
       "longest": [
@@ -1094,12 +1192,309 @@
       ]
     },
     {
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, pause",
+      "state": "bedroom-pause",
+      "total": 16,
+      "fold": 16,
+      "chrome": 0,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Nothing to keep up with.",
+          "tag": "h2"
+        },
+        {
+          "w": 4,
+          "text": "Play at my pace",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "A LITTLE SPACE",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, reading",
+      "state": "bedroom-wind-down",
+      "total": 33,
+      "fold": 33,
+      "chrome": 9,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "A page or two. At your pace.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "A little room to settle.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Room to settle",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, rest",
+      "state": "bedroom-rest",
+      "total": 27,
+      "fold": 27,
+      "chrome": 10,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Leave it ready for tomorrow.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Nothing else to chase.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Room to settle",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, next evening",
+      "state": "bedroom-revisit",
+      "total": 33,
+      "fold": 33,
+      "chrome": 8,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Keep the routine. Find your place.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "The next evening.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Room to settle",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, complete",
+      "state": "bedroom-complete",
+      "total": 27,
+      "fold": 27,
+      "chrome": 16,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Same room. A different evening.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "You changed the room.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Room to settle",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina: the first line",
+      "state": null,
+      "total": 15,
+      "fold": 15,
+      "chrome": 1,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Choose the smallest start.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "reorganise the notes",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "1 / 2",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax: just the list",
+      "state": null,
+      "total": 10,
+      "fold": 10,
+      "chrome": 1,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Keep the milk. Clear the extras.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "1 / 2",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Your pace",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia: remember why",
+      "state": null,
+      "total": 11,
+      "fold": 11,
+      "chrome": 1,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "Find the charger.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "1 / 3",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Your pace",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe: before send",
+      "state": null,
+      "total": 11,
+      "fold": 11,
+      "chrome": 1,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "Leave send alone.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "1 / 3",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/arjun-hold-the-thread",
+      "name": "Arjun: the meeting",
+      "state": null,
+      "total": 11,
+      "fold": 11,
+      "chrome": 1,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "Keep what belongs.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "1 / 3",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Your pace",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya: the crossing",
+      "state": null,
+      "total": 17,
+      "fold": 17,
+      "chrome": 1,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Find a clear route.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
+        }
+      ]
+    },
+    {
       "path": "/gp/example-mei-chao",
       "name": "GP profile",
       "state": null,
       "total": 38,
       "fold": 38,
-      "chrome": 0,
+      "chrome": 6,
       "ratio": 1,
       "verdict": "target",
       "longest": [
@@ -1124,10 +1519,10 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 63,
-      "fold": 48,
-      "chrome": 8,
-      "ratio": 1.6,
+      "total": 56,
+      "fold": 51,
+      "chrome": 6,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1153,7 +1548,7 @@
       "state": "finder-profile",
       "total": 49,
       "fold": 49,
-      "chrome": 8,
+      "chrome": 2,
       "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
@@ -1180,7 +1575,7 @@
       "state": null,
       "total": 58,
       "fold": 44,
-      "chrome": 3,
+      "chrome": 2,
       "ratio": 1.5,
       "verdict": "ceiling",
       "longest": [
@@ -1227,26 +1622,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 9,
-      "fold": 9,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Jax at the checkout",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "ONLY THE LIST!",
+          "w": 2,
+          "text": "LIGHTS OUT!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "10pm",
+          "tag": "button"
         }
       ]
     },
@@ -1281,10 +1676,10 @@
       "path": "/lives/play/leo-mosquito",
       "name": "Leo asleep",
       "state": "leo-settled",
-      "total": 24,
-      "fold": 24,
+      "total": 32,
+      "fold": 32,
       "chrome": 0,
-      "ratio": 0.6,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
@@ -1293,14 +1688,14 @@
           "tag": "p"
         },
         {
+          "w": 8,
+          "text": "Same order tomorrow. One less thing to remember.",
+          "tag": "p"
+        },
+        {
           "w": 7,
           "text": "Tiny sounds feel familiar? Explore one idea",
           "tag": "a"
-        },
-        {
-          "w": 3,
-          "text": "Leo & the mosquito",
-          "tag": "span"
         }
       ]
     },
@@ -1309,8 +1704,8 @@
       "name": "Match results",
       "state": "intake",
       "total": 53,
-      "fold": 32,
-      "chrome": 8,
+      "fold": 36,
+      "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
       "longest": [
@@ -1335,15 +1730,15 @@
       "path": "/my-map",
       "name": "Your map, lived in",
       "state": "map-lived",
-      "total": 56,
+      "total": 57,
       "fold": 20,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 9,
-          "text": "Work and study: how tasks arrive, start and finish.",
+          "w": 11,
+          "text": "Often most alert and creative late, a rhythm, not a fault",
           "tag": "p"
         },
         {
@@ -1352,8 +1747,8 @@
           "tag": "p"
         },
         {
-          "w": 6,
-          "text": "Once started, work often goes well",
+          "w": 5,
+          "text": "Sleep, movement, food and energy.",
           "tag": "p"
         }
       ]
@@ -1364,7 +1759,7 @@
       "state": "first-step-stage",
       "total": 18,
       "fold": 18,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
       "longest": [
@@ -1391,7 +1786,7 @@
       "state": "first-step-answer",
       "total": 28,
       "fold": 28,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 0.7,
       "verdict": "target",
       "longest": [
@@ -1418,7 +1813,7 @@
       "state": "intake",
       "total": 56,
       "fold": 49,
-      "chrome": 8,
+      "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
@@ -1436,6 +1831,249 @@
           "w": 4,
           "text": "School reports, primary years",
           "tag": "strong"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, lived in",
+      "state": "model-lived",
+      "total": 51,
+      "fold": 35,
+      "chrome": 6,
+      "ratio": 1.3,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Starting is your biggest friction right now.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Once started, work often goes well",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Did “One capture place” help?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, a step proposed",
+      "state": "model-learning",
+      "total": 56,
+      "fold": 35,
+      "chrome": 6,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Starting is your biggest friction right now.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Once started, work often goes well",
+          "tag": "span"
+        },
+        {
+          "w": 6,
+          "text": "Try this: the first physical action.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, an axis open",
+      "state": "sheet-open",
+      "total": 38,
+      "fold": 31,
+      "chrome": 0,
+      "ratio": 1,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Getting going, especially on something vague.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "The first physical action",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Work & Study, 3 min",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, the summary open",
+      "state": "share-open",
+      "total": 11,
+      "fold": 11,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "Take this to…",
+          "tag": "h2"
+        },
+        {
+          "w": 3,
+          "text": "Work or university",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "My GP",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd/history",
+      "name": "History, lived in",
+      "state": "model-lived",
+      "total": 53,
+      "fold": 53,
+      "chrome": 6,
+      "ratio": 1.3,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 10,
+          "text": "Your difficulty is at the threshold, not in the work.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Starting ambiguous tasks is your biggest friction.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Ask what done looks like",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, lived in",
+      "state": "model-lived",
+      "total": 35,
+      "fold": 35,
+      "chrome": 6,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 14,
+          "text": "You said you would try it. Whatever happened, even nothing, is useful to know.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Did “One capture place” help?",
+          "tag": "h2"
+        },
+        {
+          "w": 5,
+          "text": "Why am I seeing this?",
+          "tag": "summary"
+        }
+      ]
+    },
+    {
+      "path": "/support",
+      "name": "Support, lived in",
+      "state": "model-lived",
+      "total": 55,
+      "fold": 45,
+      "chrome": 6,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Starting work before deadline pressure takes over",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Take this to my GP",
+          "tag": "a"
+        },
+        {
+          "w": 5,
+          "text": "Why am I seeing this?",
+          "tag": "summary"
+        }
+      ]
+    },
+    {
+      "path": "/manual",
+      "name": "My manual, lived in",
+      "state": "model-lived",
+      "total": 60,
+      "fold": 43,
+      "chrome": 6,
+      "ratio": 1.5,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 10,
+          "text": "One clear first step and I will run with it.",
+          "tag": "textarea"
+        },
+        {
+          "w": 10,
+          "text": "Give me a clear first step, not the whole task",
+          "tag": "button"
+        },
+        {
+          "w": 7,
+          "text": "How I work, in my own words.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/adjustments",
+      "name": "Adjustments, lived in",
+      "state": "model-lived",
+      "total": 48,
+      "fold": 48,
+      "chrome": 6,
+      "ratio": 1.2,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "A quieter desk, or days at home",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Most of it already exists.",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "Briefs in writing, done defined",
+          "tag": "span"
         }
       ]
     }
