@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-20T20:58:50.090Z",
-  "base": "http://localhost:3141",
+  "measuredAt": "2026-09-20T21:08:40.590Z",
+  "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -94,7 +94,7 @@
       "name": "/approach",
       "state": null,
       "total": 53,
-      "fold": 24,
+      "fold": 26,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -444,8 +444,8 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 6,
+      "fold": 6,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
@@ -456,14 +456,14 @@
           "tag": "button"
         },
         {
-          "w": 2,
-          "text": "DON’T SCROLL!",
-          "tag": "p"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 2,
-          "text": "ONE MORE",
-          "tag": "span"
+          "w": 1,
+          "text": "DON’T!",
+          "tag": "p"
         }
       ]
     },
@@ -498,25 +498,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "STAY STILL!",
+          "text": "CLEAR ONE!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "the spider",
+          "w": 1,
+          "text": "0",
           "tag": "span"
         }
       ]
@@ -525,15 +525,15 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 16,
-      "fold": 16,
+      "total": 17,
+      "fold": 17,
       "chrome": 0,
       "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Leo & the mosquito",
+          "w": 4,
+          "text": "Leo and the mosquito",
           "tag": "span"
         },
         {
@@ -552,26 +552,26 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "/lives/play/theo-out-the-door",
       "state": null,
-      "total": 39,
-      "fold": 39,
+      "total": 36,
+      "fold": 36,
       "chrome": 4,
-      "ratio": 1,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "Phone flat. Ari’s waiting at the station.",
+          "w": 5,
+          "text": "Drag or tap to pack.",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "One train. One busy brain.",
+          "w": 3,
+          "text": "Essentials. Then exit.",
           "tag": "h1"
         },
         {
-          "w": 4,
-          "text": "A morning with Theo",
-          "tag": "span"
+          "w": 3,
+          "text": "Pack for today",
+          "tag": "strong"
         }
       ]
     },
@@ -1192,168 +1192,6 @@
       ]
     },
     {
-      "path": "/lives/play/theo-out-the-door",
-      "name": "Theo, competing demands",
-      "state": "theo-busy",
-      "total": 40,
-      "fold": 40,
-      "chrome": 4,
-      "ratio": 1,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 5,
-          "text": "One train. One busy brain.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "A morning with Theo",
-          "tag": "span"
-        },
-        {
-          "w": 3,
-          "text": "Park for later",
-          "tag": "button"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/theo-out-the-door",
-      "name": "Theo, pause",
-      "state": "theo-pause",
-      "total": 27,
-      "fold": 27,
-      "chrome": 4,
-      "ratio": 0.7,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 5,
-          "text": "One train. One busy brain.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "A morning with Theo",
-          "tag": "span"
-        },
-        {
-          "w": 4,
-          "text": "The world can wait.",
-          "tag": "h2"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/theo-out-the-door",
-      "name": "Theo, departure",
-      "state": "theo-departure",
-      "total": 24,
-      "fold": 24,
-      "chrome": 4,
-      "ratio": 0.6,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Ari: ‘There you are. Let’s go.’",
-          "tag": "p"
-        },
-        {
-          "w": 4,
-          "text": "A morning with Theo",
-          "tag": "span"
-        },
-        {
-          "w": 3,
-          "text": "Made it out.",
-          "tag": "h1"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/theo-out-the-door",
-      "name": "Theo, evening arrangement",
-      "state": "theo-evening",
-      "total": 29,
-      "fold": 29,
-      "chrome": 4,
-      "ratio": 0.7,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 4,
-          "text": "Make room for tomorrow.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "Filled, ready for tomorrow.",
-          "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "That evening",
-          "tag": "span"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/theo-out-the-door",
-      "name": "Theo, rainy revisit",
-      "state": "theo-revisit",
-      "total": 37,
-      "fold": 37,
-      "chrome": 4,
-      "ratio": 0.9,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Same house. Your setup. And… rain.",
-          "tag": "p"
-        },
-        {
-          "w": 4,
-          "text": "You’ve been here before.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "The next morning",
-          "tag": "span"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/theo-out-the-door",
-      "name": "Theo, complete",
-      "state": "theo-complete",
-      "total": 29,
-      "fold": 29,
-      "chrome": 4,
-      "ratio": 0.7,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Ari: ‘There you are. Let’s go.’",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "A little less to carry.",
-          "tag": "h1"
-        },
-        {
-          "w": 5,
-          "text": "Make your own launch pad",
-          "tag": "a"
-        }
-      ]
-    },
-    {
       "path": "/lives/lab/leo-room",
       "name": "Leo room preview, pause",
       "state": "bedroom-pause",
@@ -1784,26 +1622,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 11,
-      "fold": 11,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "OUT NOW!",
+          "text": "DELETE DRAFTS!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "5 min",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "10 min",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -1811,8 +1649,8 @@
       "path": "/lives/play/leo-mosquito",
       "name": "Leo's routine, first step",
       "state": "leo-routine",
-      "total": 20,
-      "fold": 20,
+      "total": 21,
+      "fold": 21,
       "chrome": 0,
       "ratio": 0.5,
       "verdict": "target",
@@ -1823,8 +1661,8 @@
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Leo & the mosquito",
+          "w": 4,
+          "text": "Leo and the mosquito",
           "tag": "span"
         },
         {
@@ -1838,8 +1676,8 @@
       "path": "/lives/play/leo-mosquito",
       "name": "Leo asleep",
       "state": "leo-settled",
-      "total": 32,
-      "fold": 32,
+      "total": 33,
+      "fold": 33,
       "chrome": 0,
       "ratio": 0.8,
       "verdict": "target",

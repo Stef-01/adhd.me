@@ -201,6 +201,20 @@ test("support names the person whose declared expertise answers this need", asyn
   await expect(best.locator(".support-best-tags li")).toHaveCount(await best.locator(".support-best-tags li").count());
   // A name, not a count, and no number about the person anywhere on it.
   expect(await best.innerText()).not.toMatch(/\d/);
+
+  // The way off this screen must not read as quieter than the note explaining the screen. It did:
+  // "Take this to my GP" was 13px/400 in --muted while the "Why am I seeing this?" disclosure
+  // right below it was 14px/700 in --accent-deep, so the explanation outweighed the thing being
+  // explained — and that link is the map's whole point of arrival (MAP-PRD Phase 4).
+  const weight = (sel: string) => page.locator(sel).first().evaluate((el) => {
+    const s = getComputedStyle(el);
+    return { px: parseFloat(s.fontSize), weight: Number(s.fontWeight) };
+  });
+  const onward = await weight(".map-foot.is-onward a");
+  const aside = await weight(".life-why summary");
+  expect(onward.weight, "the onward action is lighter than the note explaining the screen").toBeGreaterThanOrEqual(aside.weight);
+  expect(onward.px, "the onward action is smaller than the note explaining the screen").toBeGreaterThanOrEqual(aside.px);
+
   await expectNoViolations(page, "Support, the closest fit");
 });
 

@@ -124,7 +124,11 @@ export function SupportPath() {
           {/* The referral brief used to be five textareas at the bottom of this screen, which a
               person had to fill in themselves. It is one tap on the map now, already written from
               what they told the app. */}
-          <p className="map-foot">
+          {/* `.map-foot` on its own is the muted 13px row the map uses for its utility links
+              (history, delete). This is not a utility link — it is the way off this screen, and it
+              was rendering fainter and smaller than the "Why am I seeing this?" disclosure
+              underneath it. `is-onward` gives it that disclosure's weight and no more. */}
+          <p className="map-foot is-onward">
             <Link href="/my-adhd">Take this to my GP <ArrowRight size={14} weight="bold" aria-hidden="true" /></Link>
           </p>
 

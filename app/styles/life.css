@@ -412,6 +412,12 @@
    breaking the line it sits in. */
 .map-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0 5px; margin: 0 auto; color: var(--muted); font-size: 0.8125rem; }
 .map-foot a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-underline-offset: 3px; }
+/* A .map-foot row that carries the screen's onward action rather than a utility link. Measured on
+   /support before this: the action was 13px/400 in --muted (95,94,89) while the "Why am I seeing
+   this?" disclosure below it was 14px/700 in --accent-deep — the explanation outweighed the thing
+   being explained. This matches the disclosure and stops there, so it does not become a fourth
+   button competing with the three provider cards above it. */
+.map-foot.is-onward a { color: var(--accent-deep); font-size: 0.875rem; font-weight: 700; }
 
 /* Writing surfaces need one field boundary, not a card around another box. */
 .platform-shell .manual-section { padding: 0; margin-bottom: 28px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
