@@ -290,3 +290,27 @@ test("the map fills in when a survey is answered, and says so", async ({ page })
   ].join(" ");
   expect(aboutThem, "a count of a person is the one thing this tab is built not to be").not.toMatch(/\d/);
 });
+
+// Below 768px the axis words sit in a grid UNDER the chart rather than in a ring around it, so
+// the chart is scaled up to fill the frame the ring's margin was reserving. A transform grows the
+// SVG's BOX as well as its drawing, and that box is 28% empty margin — the first version of this
+// reached 13px past both edges of a 390 viewport. Nothing on this tab is wide enough to be read
+// sideways, so the map screens are pinned at the four widths the rest of the tree walks.
+test("no map screen scrolls sideways", async ({ page }) => {
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    await seed(page);
+    for (const path of ["/my-adhd", "/my-adhd/history", "/today"]) {
+      await page.goto(path);
+      await expect(page.locator(".life-main, main").first()).toBeVisible();
+      const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(over, `${path} at ${width}px scrolls sideways`).toBeLessThanOrEqual(0);
+    }
+    // The axis sheet is a modal over the same chart, and it is the state the scale is largest in.
+    await page.goto("/my-adhd");
+    await page.locator(".map-axis").first().click();
+    await expect(page.locator(".map-sheet")).toBeVisible();
+    const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(over, `the axis sheet at ${width}px scrolls sideways`).toBeLessThanOrEqual(0);
+  }
+});

@@ -67,6 +67,26 @@
   overflow: visible;
 }
 
+/* Under 768px the axis words are a grid BELOW the chart, not a ring around it, so the 70-unit
+   margin the viewBox reserves on every side for that ring is dead space. Measured at 390: the
+   hexagon drew at R 115 inside a 320px frame, 72% of the room it had, with 45px empty on all four
+   sides. Scaling it is the same drawing 30% larger in the same layout box — the axis grid below
+   still clears it by 38px — and it also brings the rings back to the weight they carry at 768px
+   and up (0.8 CSS px here against 1.14 there; 1.04 after). From 768px the ring of labels is real
+   and already sits 2px off the viewport edge, so the margin is load-bearing and nothing changes. */
+@media (max-width: 767.98px) {
+  .map-screen .map-chart{
+    transform: scale(1.3);
+  }
+  /* The scale grows the SVG's BOX as well as its drawing, and the box is 28% empty margin, so
+     without this the element reaches 13px past both edges of a 390 viewport and the screen scrolls
+     sideways. The drawing ends 30px inside the frame, so clipping the frame removes the overflow
+     and touches nothing that is drawn. */
+  .map-screen .map-chart-frame{
+    overflow: clip;
+  }
+}
+
 .map-screen .map-ring{
   fill: none;
   stroke: var(--map-guide);
