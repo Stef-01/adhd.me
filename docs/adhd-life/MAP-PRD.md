@@ -783,6 +783,12 @@ touches, and puts the text-budget table in the commit message.
 | **6. Go deeper** | `deeper` sets for work-study and relationships; the fourth offer rule | fatigue tests green |
 | **7. The loop, joined up (O253)** | the hub's step says what it is and opens its module; `bestFitFor` and the named match on `/support`; `noise` and `peers` mapped; one 0–10 scale for every call-out, writing `cost` | `docs/adhd-life/MAP-CONNECTIONS.md` measures the chain; both hub states in the budget walk |
 
+**The walk below is now a test.** O253 pinned it as `the loop joins up` in `e2e/my-adhd.spec.ts`,
+because every break that unit found was a break in a JOIN rather than in a screen — the step card
+dropped the recommendation's body, its control dropped the module id, the support screen dropped
+the person, and two subdomains dropped out of matching. Each screen passed its own test while the
+path between them did not work.
+
 **End-to-end walk, on a 390 viewport, as acceptance for Phase 5:** Start → one module → the hub
 shows one confident axis → tap it → the aspect page names the friction across five areas →
 Understand my work patterns → the axis fills and the sentence reads → Explore this → Get more help

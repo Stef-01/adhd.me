@@ -204,6 +204,46 @@ test("support names the person whose declared expertise answers this need", asyn
   await expectNoViolations(page, "Support, the closest fit");
 });
 
+/**
+ * THE WHOLE CHAIN, IN ONE WALK — the PRD's own acceptance for Phase 5 (§15), pinned.
+ *
+ * Every break this session found was a break in a JOIN rather than in a screen: the step card
+ * dropped the recommendation's body, its control dropped the module id, the support screen
+ * dropped the person, and two subdomains dropped out of matching entirely. Each screen passed
+ * its own test while the path between them did not work. So the path gets a test.
+ *
+ * It asserts the joins and deliberately not the copy — the wording of each screen is pinned by
+ * the specs above, and duplicating it here would mean every rewording broke two files.
+ */
+test("the loop joins up: map to axis to a person to the GP summary", async ({ page }) => {
+  await seed(page);
+
+  // The map, and the one sentence it leads with.
+  await expect(page.locator(".map-axis")).toHaveCount(6);
+  await expect(page.locator(".map-stands-out")).toHaveCount(1);
+
+  // An axis opens on the five life areas, and carries the ways on: does this fit, go deeper,
+  // and who helps. The matrix, one column at a time.
+  await page.locator(".map-axis").first().click();
+  const sheet = page.getByRole("dialog");
+  await expect(page.locator(".map-row")).toHaveCount(5);
+  await expect(sheet.getByRole("button", { name: "Partly" })).toBeVisible();
+  await expect(sheet.getByRole("link", { name: /Who helps here/i })).toBeVisible();
+  await page.keyboard.press("Escape");
+
+  // The way to a person names one, and says why in the person's own matched tags.
+  await page.goto("/support");
+  await expect(page.locator(".profession-card")).toHaveCount(3);
+  await expect(page.locator(".support-best-tags li").first()).toBeVisible();
+
+  // And the thing to take to a GP is already written.
+  await page.goto("/my-adhd");
+  await page.getByRole("button", { name: "Share" }).click();
+  await page.getByRole("button", { name: "My GP" }).click();
+  await expect(page.locator(".map-preview")).toContainText("Current priority");
+  await expect(page.getByRole("button", { name: /Print/i })).toBeVisible();
+});
+
 test("the map fills in when a survey is answered, and says so", async ({ page }) => {
   // Somebody who has only been through the door: one goal, nothing built, nothing answered. This
   // is the person the reward is for, and the person for whom a survey genuinely moves the map.
