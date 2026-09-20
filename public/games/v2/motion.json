@@ -1,0 +1,77 @@
+{
+  "version": "2.0.0",
+  "contract": "Animate from accepted model events. Hit regions never inherit squash, shake or decorative translation. Pause/hidden/unmount suspend all tracks.",
+  "tracks": {
+    "pickup": {
+      "durationMs": 180,
+      "scale": [
+        1,
+        1.06,
+        1
+      ],
+      "pivot": "grip",
+      "still": "Show carried object and update inventory immediately."
+    },
+    "place": {
+      "durationMs": 220,
+      "translateY": [
+        -6,
+        0
+      ],
+      "still": "Show object at destination."
+    },
+    "walk": {
+      "poses": [
+        "walk-a",
+        "walk-b"
+      ],
+      "cadenceMs": 240,
+      "pivot": "feet",
+      "still": "Move between graph nodes on action; preserve route cost."
+    },
+    "recover": {
+      "durationMs": 600,
+      "poses": [
+        "overwhelmed",
+        "thinking",
+        "relieved"
+      ],
+      "still": "Use current expression and a static recovery indicator."
+    },
+    "breath": {
+      "durationMs": 6000,
+      "scale": [
+        0.9,
+        1.06,
+        0.9
+      ],
+      "still": "Step-based expand/settle text and static guide, optional."
+    },
+    "noise": {
+      "durationMs": 900,
+      "opacity": [
+        0.3,
+        0.7,
+        0.3
+      ],
+      "still": "Static source mark; do not shake the screen."
+    },
+    "completion": {
+      "durationMs": 700,
+      "opacity": [
+        0,
+        1,
+        0
+      ],
+      "still": "Static success spark; focus the next action."
+    }
+  },
+  "audio": {
+    "autoplay": false,
+    "masterPeakCeiling": 0.22,
+    "maxConcurrentVoices": 4,
+    "loopCrossfadeMs": 120,
+    "pause": "Stop/fade nodes and retain logical play state; never resume without user consent.",
+    "warning": "Individual WAV peaks are bounded; runtime mixing still needs a master limiter and volume control."
+  }
+}

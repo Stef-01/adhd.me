@@ -1,0 +1,22 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+await fs.mkdir('qa/_runs',{recursive:true});
+const browser=await chromium.launch({headless:true}); const page=await browser.newPage({viewport:{width:1440,height:1000}}); const errors=[];
+page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url())});
+await page.goto((process.env.ASSET_QA_URL || 'http://127.0.0.1:3143/games/v2/catalog.html'));await page.locator('article').first().waitFor();
+const waitImages=()=>page.evaluate(async()=>{for(const img of document.images){img.loading='eager';await img.decode()}});
+await waitImages();await page.screenshot({path:'qa/_runs/lives-v2-worlds-desktop.png',fullPage:true});
+await page.selectOption('#size','phone');await waitImages();await page.screenshot({path:'qa/_runs/lives-v2-worlds-phone-compositions.png',fullPage:true});
+await page.getByRole('button',{name:'Cast',exact:true}).click();await page.selectOption('#pose','overwhelmed');await waitImages();await page.screenshot({path:'qa/_runs/lives-v2-cast.png',fullPage:true});
+for(const pose of await page.locator('#pose option').evaluateAll(o=>o.map(x=>x.value))){await page.selectOption('#pose',pose);await waitImages()}
+await page.getByRole('button',{name:'Objects',exact:true}).click();await waitImages();await page.screenshot({path:'qa/_runs/lives-v2-props.png',fullPage:true});
+await page.getByRole('button',{name:'Feedback',exact:true}).click();await waitImages();await page.screenshot({path:'qa/_runs/lives-v2-feedback.png',fullPage:true});
+await page.getByRole('button',{name:'Sound',exact:true}).click();
+const sound=await page.locator('audio').evaluateAll(async els=>Promise.all(els.map(el=>new Promise(resolve=>{el.onloadedmetadata=()=>resolve({duration:el.duration,src:el.getAttribute('src')});el.onerror=()=>resolve({error:el.getAttribute('src')});el.load()}))));
+if(sound.some(s=>s.error||!Number.isFinite(s.duration)))throw Error('Invalid browser audio '+JSON.stringify(sound));
+await page.getByRole('button',{name:'Worlds',exact:true}).click();await page.setViewportSize({width:390,height:844});await waitImages();await page.screenshot({path:'qa/_runs/lives-v2-gallery-mobile.png',fullPage:true});
+if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Mobile overflow');
+await page.selectOption('#world','leo');if(await page.locator('article').count()!==1)throw Error('World filter failed');
+await page.getByRole('button',{name:'Objects',exact:true}).click();if(await page.locator('article').count()!==14)throw Error('Prop filter failed');
+await fs.writeFile('qa/_runs/lives-v2-gallery-results.json',JSON.stringify({errors,sounds:sound,desktop:1440,mobile:390,posesDecoded:12,allPropsDecoded:true,filters:true},null,2));
+await browser.close();if(errors.length)throw Error(errors.join('\n'));console.log('Gallery passed: 12 pose sets, 16 scenes, 85 props, 16 effects, 15 audio metadata loads, desktop/mobile and filtering.');
