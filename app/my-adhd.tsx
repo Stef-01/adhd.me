@@ -1,199 +1,180 @@
 "use client";
 
-// My ADHD (PRD §26): the person's own picture, in words — the biggest friction, what seems to
-// contribute by layer, the pattern, what helps, the current goal, and what is worth exploring —
-// plus insight cards (§33), strategy history (§32) and the one control that deletes everything.
-// No graphs, no score; every line traces to something the person said.
+// My ADHD: one picture of a person, and three things they can do from it.
+//
+// WHAT THIS REPLACED, AND WHY. This screen used to be fourteen stacked cards — Today, the biggest
+// friction, contributors, balance, what helps, the manual, adjustments, medication, the goal, a
+// survey offer, other needs, insight cards, strategy history and a delete button. Measured with
+// the tree's own instrument on a record about three weeks old it came to 336 words and 8,014px at
+// 390px wide, roughly nine and a half screenfuls. The budget never caught it because the budget
+// walked this route with an EMPTY record, which is the one state a returning person never sees.
+// `scripts/text-budget-lib.mjs` now carries the lived-in states; this file is what they measure.
+//
+// THE SHAPE IS THE FOUNDER'S (Calm Clarity, 2026-09-19): the radar, then what stands out, then at
+// most three things currently in focus, then what is working, then exactly one next step. Nothing
+// else. Everything that used to be a card is now either inside an axis (tap it) or one word in the
+// footer row, and the delete control has moved to the settings sheet where a person looks for it.
+//
+// NO EYEBROWS. The comp labels each block ("What stands out", "Current focus", "Working for you").
+// This tree's own law forbids them — `{#layout.calm}`, after a tester with ADHD said the text was
+// jumping everywhere — and dropping them costs nothing a reader needs: the sentence says what
+// stands out, the sage chip says it is working, and the one pill says it is the thing to do.
 
 import Link from "next/link";
-import { useState } from "react";
-import { Check, Sparkle, Trash } from "@phosphor-icons/react";
-import { INTERACTIVE_MODULES } from "@/learn/interactive";
-import { LAYER_LABELS, SUBDOMAINS } from "@/model/layers";
-import { deriveNeeds } from "@/model/needs";
-import { summarise } from "@/model/recommend";
-import { clearModel, hasSignals, recordInsight, type InsightVerdict } from "@/model/store";
-import { clearProgress } from "@/learn/progress";
-import { clearCursor } from "@/learn/cursor";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { ArrowRight, Sparkle } from "@phosphor-icons/react";
+import { recommend } from "@/model/recommend";
+import { axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
+import { isComplete } from "@/model/onboarding";
+import { activeSafety } from "@/model/store";
 import { LifeHeader } from "./life-shell";
+import { MyAdhdRadar } from "./my-adhd-radar";
+import { MyAdhdSheet } from "./my-adhd-sheet";
+import { ShareSheet } from "./my-adhd-share";
+import { SafetyScreen } from "./safety-screen";
+import { acknowledgeSafety } from "@/model/store";
 import { useModel } from "./use-model";
-import { TodayContent } from "./today";
-import { SurveyOffer } from "./survey-offer";
-import { nwiaBalance } from "@/wellness/nwia";
 
-const VERDICT_LABEL: Record<InsightVerdict, string> = { yes: "That’s me", partly: "Partly", no: "Not really" };
+const MAX_FOCUS = 3;
+const MAX_STRENGTHS = 1;
 
 export function MyAdhd() {
   const model = useModel();
   const { record, refresh, storage } = model;
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const summary = record ? summarise(record) : null;
-  const needs = record ? deriveNeeds(record) : [];
-  const insights = record ? INTERACTIVE_MODULES.flatMap((m) => m.steps.filter((s) => s.kind === "insight").map((s) => (s.kind === "insight" ? { ...s, module: m } : null))).filter((x): x is NonNullable<typeof x> => Boolean(x) && Boolean(record.insights[x!.id])) : [];
-  const experiments = record?.experiments ?? [];
-  const byOutcome = (o: string) => experiments.filter((e) => (e.outcome ?? "pending") === o);
+  const [open, setOpen] = useState<Aspect | null>(null);
+  const [sharing, setSharing] = useState(false);
+  const shareRef = useRef<HTMLButtonElement | null>(null);
+
+  const points = useMemo(() => axes(record), [record]);
+  // What may be contributing, as the comp has it: at most three short phrases from the leading
+  // need's own contributors. Repeating the axis names here would say nothing the radar has not.
+  const focus = useMemo(() => {
+    const lead = currentFocus(record, 1)[0];
+    if (!lead) return [] as Array<{ note: string; aspect: Aspect }>;
+    return lead.need.contributors
+      .slice(0, MAX_FOCUS)
+      .map((c) => ({ note: c.note, aspect: lead.aspect }));
+  }, [record]);
+  const line = useMemo(() => standsOut(record), [record]);
+  const rec = useMemo(() => (record ? recommend(record) : null), [record]);
+  const safety = record ? activeSafety(record) : null;
+  const started = isComplete(record?.onboarding ?? null);
+
+  // What is working, from the axes that name a strength. One, because two is a list and this
+  // screen has one job.
+  const strengths = useMemo(
+    () => [...new Set(points.filter((p) => p.strength).map((p) => p.strength!))].slice(0, MAX_STRENGTHS),
+    [points],
+  );
+
+  const openAxis = useCallback((aspect: Aspect) => setOpen(aspect), []);
 
   return (
-    <main id="main-content" className="me-screen life-screen app-page-with-tabs">
+    <main id="main-content" className="me-screen life-screen map-screen app-page-with-tabs">
       <LifeHeader />
-      <header className="life-head">
-        <h1>My ADHD right now.</h1>
-      </header>
 
-      <TodayContent model={model} />
-
-      {record && summary?.need && (
+      {record && safety ? (
+        <SafetyScreen ruleId={safety.ruleId} onAcknowledge={() => refresh(acknowledgeSafety(storage))} />
+      ) : (
         <>
-          <section className="life-card is-lead" aria-labelledby="my-friction">
-            <span className="life-eyebrow">Biggest friction</span>
-            <h2 id="my-friction">{summary.need.label}.</h2>
-            <p>
-              {summary.need.confidence === "high" ? "Consistently, across what you have told the app." : summary.need.confidence === "medium" ? "From one module so far, more will sharpen it." : "From onboarding only; a module would make this surer."}
-            </p>
-            {summary.need.functionalCost > 0 && <p className="learn-card-foot">You put the cost at <span className="t-digit">{summary.need.functionalCost}</span> out of 10.</p>}
-          </section>
-
-          <section className="life-card" aria-labelledby="my-contributes">
-            <h2 id="my-contributes">What seems to contribute</h2>
-            {summary.contributors.length === 0 ? (
-              <p>Not enough yet.</p>
-            ) : (
-              <ul className="life-list">
-                {summary.contributors.map((c) => (
-                  <li key={`${c.layer}:${c.note}`}><span className="layer-pill" data-layer={c.layer}>{c.label}</span> <span>{c.note}</span></li>
-                ))}
-              </ul>
+          <header className="life-head map-head">
+            <h1>My ADHD.</h1>
+            {started && (
+              <button ref={shareRef} type="button" className="map-share" onClick={() => setSharing(true)}>
+                Share
+              </button>
             )}
-            {summary.pattern && <p className="learn-card-foot"><strong>Pattern:</strong> {summary.pattern}.</p>}
-            {/* The NWIA balance principle, which used to be a sentence naming all nine dimensions
-                twice — about thirty words to say what a shape says at a glance. The shape is
-                /my-map now; this is the count and the door to it, and "unasked" stays here because
-                it is the honest half: an untouched dimension is not a gap in a person. */}
-            {(() => {
-              const balance = nwiaBalance([...new Set([...needs.map((n) => n.subdomain), ...needs.flatMap((n) => n.contributors.map((c) => c.subdomain))])], { goal: Boolean(record.onboarding?.improveFirst) });
-              return (
-                <p className="learn-card-foot" data-testid="nwia-balance">
-                  <strong>Balance:</strong> <span className="t-digit">{balance.touched.length}</span> of nine touched, the rest unasked.
-                  {" "}<Link href="/my-map">Your map</Link>
-                </p>
-              );
-            })()}
-          </section>
+          </header>
 
-          <section className="life-card" aria-labelledby="my-helps">
-            <h2 id="my-helps">What helps</h2>
-            {summary.helps.length === 0 && summary.need.strengths.length === 0 ? (
-              <p>Nothing recorded yet. Try one strategy and say how it went.</p>
-            ) : (
-              <ul className="life-list">
-                {summary.helps.map((h) => <li key={h}><Check size={16} weight="bold" aria-hidden="true" /><span>{h}</span></li>)}
-                {summary.need.strengths.map((s) => <li key={s}><Sparkle size={16} weight="fill" aria-hidden="true" /><span>{s}</span></li>)}
-              </ul>
-            )}
-          </section>
+          {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
-          <section className="life-card" aria-labelledby="my-manual">
-            <h2 id="my-manual">My Manual</h2>
-            <p>{record.manual.updatedAt ? "How you work, in your own words. Edit it any time." : "What helps you, what makes things harder, how to work with you, written by you, never for you."}</p>
-            <div className="life-actions"><Link className="learn-secondary" href="/manual">{record.manual.updatedAt ? "Open my manual" : "Start my manual"}</Link></div>
-          </section>
+          {record && (
+            <MyAdhdRadar points={points} onOpen={openAxis} openAspect={open} />
+          )}
 
-          <section className="life-card" aria-labelledby="my-adjustments">
-            <h2 id="my-adjustments">Adjustments on paper</h2>
-            <p>What a university or workplace can change.</p>
-            <div className="life-actions"><Link className="learn-secondary" href="/adjustments">See what is commonly available</Link></div>
-          </section>
-
-          {record.onboarding?.medication === "yes" && (
-            <section className="life-card" aria-labelledby="my-medication">
-              <h2 id="my-medication">Medication</h2>
-              <p>{record.medication.updatedAt ? "Your note on what it changes and what it leaves. Edit it before the next conversation." : "Describe what it seems to change, what it leaves untouched and anything unwanted, to take to whoever manages it."}</p>
-              <div className="life-actions"><Link className="learn-secondary" href="/medication">{record.medication.updatedAt ? "Open the note" : "Start the note"}</Link></div>
+          {record && !started && (
+            <section className="map-lead map-side">
+              <p>Two minutes so this can be about you.</p>
+              <Link className="learn-primary" href="/start">
+                Start <ArrowRight size={17} weight="bold" aria-hidden="true" />
+              </Link>
             </section>
           )}
 
-          <section className="life-card" aria-labelledby="my-goal">
-            <h2 id="my-goal">Current goal</h2>
-            <p>{summary.goal ?? "Not set yet."}</p>
-            {summary.worthExploring && <p className="learn-card-foot"><strong>Worth exploring:</strong> {summary.worthExploring}.</p>}
-            <div className="life-actions">
-              <Link className="learn-secondary" href="/start">Update what matters</Link>
-              <Link className="learn-secondary" href="/approach/map">See it on the map</Link>
+          {record && started && (
+            <div className="map-side">
+              {line && <p className="map-stands-out">{line}</p>}
+
+              {focus.length > 0 && (
+                <ul className="map-chips" aria-label="What is in focus">
+                  {focus.map(({ note, aspect }) => (
+                    <li key={note}>
+                      <button type="button" className="map-chip" onClick={() => openAxis(aspect)}>
+                        {note}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {strengths.length > 0 && (
+                <ul className="map-chips is-strength" aria-label="What is working">
+                  {strengths.map((s) => (
+                    <li key={s}>
+                      <span className="map-chip is-strength">
+                        <Sparkle size={13} weight="fill" aria-hidden="true" /> {s}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {rec && (
+                <section className="map-step" aria-labelledby="map-step-title">
+                  <h2 id="map-step-title">{rec.heading}</h2>
+                  <NextStepAction rec={rec} />
+                </section>
+              )}
             </div>
-          </section>
-
-          <SurveyOffer record={record} />
-
-          {needs.length > 1 && (
-            <section className="life-card" aria-labelledby="my-others">
-              <h2 id="my-others">Also in the picture</h2>
-              <ul className="life-list">
-                {needs.slice(1, 5).map((n) => <li key={n.id}><span className="layer-pill" data-layer={LAYER_OF[n.subdomain] ?? "brain"}>{LAYER_LABELS[LAYER_OF[n.subdomain] ?? "brain"]}</span><span>{n.label}{n.functionalCost ? ` · ${n.functionalCost}/10` : ""}</span></li>)}
-              </ul>
-            </section>
           )}
         </>
       )}
 
-      {record && insights.length > 0 && (
-        <section className="life-card" aria-labelledby="my-insights">
-          <h2 id="my-insights">Insight cards</h2>
-          <p>What the modules suggested. Change any.</p>
-          <div className="strategy-history">
-            {insights.map((i) => (
-              <div key={i.id} className="insight-card">
-                <strong>{i.heading}</strong>
-                <small>{i.module.title}</small>
-                <div className="resonance-row" role="group" aria-label={`Does “${i.heading}” fit`}>
-                  {(["yes", "partly", "no"] as const).map((v) => (
-                    <button key={v} type="button" className="learn-chip" aria-pressed={record.insights[i.id] === v} onClick={() => refresh(recordInsight(storage, i.id, v))}>{VERDICT_LABEL[v]}</button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+      {record && (
+        <MyAdhdSheet
+          aspect={open}
+          record={record}
+          onClose={() => setOpen(null)}
+          onRefresh={refresh}
+          storage={storage}
+        />
       )}
-
-      {record && experiments.length > 0 && (
-        <section className="life-card" aria-labelledby="my-strategies">
-          <h2 id="my-strategies">Strategy history</h2>
-          <div className="strategy-history">
-            {[["a-lot", "Things that help me"], ["a-little", "Helped a little"], ["no", "Not helpful so far"], ["didnt-try", "Didn’t get to it"], ["pending", "Still testing"]].map(([key, title]) => {
-              const list = byOutcome(key!);
-              if (list.length === 0) return null;
-              return (
-                <div key={key}>
-                  <h3>{title}</h3>
-                  <ul>{list.map((e) => <li key={e.strategyId}>{strategyTitle(e.strategyId)}</li>)}</ul>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {record && hasSignals(record) && (
-        <section className="life-card" aria-labelledby="my-delete">
-          <h2 id="my-delete">Your data</h2>
-          <p>Lives in this browser only.</p>
-          {!confirmDelete ? (
-            <button type="button" className="learn-secondary" onClick={() => setConfirmDelete(true)}><Trash size={16} weight="bold" aria-hidden="true" /> Delete everything the app holds about me</button>
-          ) : (
-            <div className="life-actions">
-              <button type="button" className="learn-primary" onClick={() => { clearModel(storage); clearProgress(storage); clearCursor(storage); setConfirmDelete(false); refresh(); }}>Yes, delete it all</button>
-              <button type="button" className="learn-secondary" onClick={() => setConfirmDelete(false)}>Keep it</button>
-            </div>
-          )}
-        </section>
+      {record && (
+        <ShareSheet open={sharing} record={record} onClose={() => setSharing(false)} openedBy={shareRef} />
       )}
     </main>
   );
 }
 
-const LAYER_OF: Record<string, "brain" | "body" | "environment" | "people"> = Object.fromEntries(SUBDOMAINS.map((s) => [s.id, s.layer]));
+/** The one control under the one next step. A module, a strategy, or the way to a person. */
+function NextStepAction({ rec }: { rec: NonNullable<ReturnType<typeof recommend>> }) {
+  const href =
+    rec.action === "LEARN" && rec.moduleId
+      ? `/approach?module=${rec.moduleId}`
+      : rec.action === "EXPLORE_PROVIDER"
+        ? "/support"
+        : rec.action === "TRY_STRATEGY" && rec.moduleId
+          ? `/approach?module=${rec.moduleId}`
+          : "/approach";
+  const label = rec.action === "EXPLORE_PROVIDER" ? "See who helps" : "Open";
+  return (
+    <Link className="learn-primary" href={href}>
+      {label} <ArrowRight size={17} weight="bold" aria-hidden="true" />
+    </Link>
+  );
+}
 
-function strategyTitle(id: string): string {
-  for (const m of INTERACTIVE_MODULES) for (const s of m.steps) if (s.kind === "strategy") { const f = s.strategies.find((x) => x.id === id); if (f) return f.title; }
-  return id;
+/** The leading axis, for anything that needs one without rendering the whole hub. */
+export function leadingAspect(record: Parameters<typeof axes>[0]): Aspect {
+  return leadAxis(axes(record)).aspect;
 }

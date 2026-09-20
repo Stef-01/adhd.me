@@ -38,28 +38,30 @@ export function MyManual() {
     <div className="me-screen learn-screen manual-screen">
       <header className="life-head">
         <h1 className="life-title">How I work, in my own words.</h1>
-        <p className="life-lede">Yours to write and change.</p>
+        <p className="life-lede">Yours to write.</p>
       </header>
 
       {MANUAL_SECTIONS.map((s) => (
         <section key={s.id} className="life-card manual-section" aria-labelledby={`manual-${s.id}`}>
           <h2 id={`manual-${s.id}`}>{s.title}</h2>
           <textarea className="manual-text" id={`manual-text-${s.id}`} aria-label={s.title} rows={4} value={record.manual[s.id]} placeholder={s.placeholder} onChange={(e) => save(s.id, e.target.value)} />
-          {suggestions[s.id].length > 0 && (
-            <div className="manual-suggest" role="group" aria-label={`Suggestions for ${s.title.toLowerCase()}`}>
-              <span className="manual-suggest-label">From what you have told the app</span>
-              <ul className="manual-chips">
-                {suggestions[s.id].map((line) => (
-                  <li key={line}><button type="button" className="manual-chip" onClick={() => add(s.id, line)}><Plus size={14} weight="bold" aria-hidden="true" /> {line}</button></li>
-                ))}
-              </ul>
-            </div>
+          {/* ONE suggestion, not the whole list. PRD §27's own rule is that this app offers and
+              never inserts — and a menu of twelve sentences somebody could paste into their own
+              manual is not an offer, it is the app writing it for them. The lived-in screen
+              measured 167 words against a 60 ceiling, and this was almost all of it. */}
+          {suggestions[s.id][0] && (
+            <ul className="manual-chips" aria-label={`Suggestion for ${s.title.toLowerCase()}`}>
+              <li>
+                <button type="button" className="manual-chip" onClick={() => add(s.id, suggestions[s.id][0]!)}>
+                  <Plus size={14} weight="bold" aria-hidden="true" /> {suggestions[s.id][0]}
+                </button>
+              </li>
+            </ul>
           )}
         </section>
       ))}
 
-      <section className="life-card" aria-labelledby="manual-share">
-        <h2 id="manual-share">Share it, if you want to</h2>
+      <section className="life-card">
         <div className="life-actions">
           <button type="button" className="learn-primary" onClick={copy} disabled={!written}>{copied ? <><Check size={17} weight="bold" aria-hidden="true" /> Copied</> : <><Copy size={17} weight="bold" aria-hidden="true" /> Copy as text</>}</button>
           <Link className="learn-secondary" href="/my-adhd">Back to My ADHD <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link>

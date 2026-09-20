@@ -7,22 +7,27 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Sparkle } from "@phosphor-icons/react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, Check } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { strategyById, interactiveModule } from "@/learn/interactive";
 import { topicSurvey, TOPIC_SURVEYS } from "@/learn/surveys";
-import { LAYER_LABELS } from "@/model/layers";
-import { scoreSurvey } from "@/model/surveys";
-import { acceptExperiment, completeSurvey, recordAbandon, recordSurveyAnswer } from "@/model/store";
+import { insightFor, scoreSurvey } from "@/model/surveys";
+import { axes, movedAxes } from "@/model/matrix";
+import { acceptExperiment, completeSurvey, recordAbandon, recordSurveyAnswer, type ModelRecord } from "@/model/store";
 import { track } from "@/model/events";
 import { LifeHeader } from "./life-shell";
+import { MyAdhdRadar } from "./my-adhd-radar";
 import { useModel } from "./use-model";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 
 export function TopicSurveyScreen() {
-  const id = useSearchParams().get("id") ?? "";
+  const params = useSearchParams();
+  const id = params.get("id") ?? "";
+  // A mode flag, not a fact about anybody: level 4 asks the same survey's extra questions and
+  // writes them into the same store, so nothing already answered is asked twice.
+  const deeper = params.get("deeper") === "1";
   const survey = topicSurvey(id);
   const router = useRouter();
   const reducedMotion = useReducedMotion();
@@ -31,7 +36,7 @@ export function TopicSurveyScreen() {
   const [direction, setDirection] = useState<1 | -1>(1);
   const held = record && survey ? record.surveys[survey.id] : undefined;
   const answers = held?.answers ?? {};
-  const finished = Boolean(held?.completedAt);
+  const finished = Boolean(held?.completedAt) && !deeper;
 
   useEffect(() => {
     if (survey) track("SURVEY_STARTED", { survey: survey.id });
@@ -49,17 +54,19 @@ export function TopicSurveyScreen() {
     );
   }
 
-  const question = survey.questions[index];
+  const questions = deeper && survey.deeper?.length ? survey.deeper : survey.questions;
+  const question = questions[index];
   const go = (next: number) => { setDirection(next > index ? 1 : -1); setIndex(next); window.scrollTo({ top: 0, behavior: "auto" }); };
   const answered = question ? answers[question.id] !== undefined : false;
-  const last = index === survey.questions.length - 1;
+  const last = index === questions.length - 1;
   const finish = () => {
     refresh(completeSurvey(storage, survey.id));
-    track("SURVEY_COMPLETED", { survey: survey.id });
+    track("SURVEY_COMPLETED", { survey: survey.id, deeper });
+    if (deeper) router.push("/my-adhd");
   };
   const leave = () => {
     const done = Object.keys(answers).length;
-    if (!finished && done < Math.ceil(survey.questions.length / 2)) { refresh(recordAbandon(storage, survey.id)); track("SURVEY_ABANDONED", { survey: survey.id, answered: done }); }
+    if (!finished && done < Math.ceil(questions.length / 2)) { refresh(recordAbandon(storage, survey.id)); track("SURVEY_ABANDONED", { survey: survey.id, answered: done }); }
     router.push("/my-adhd");
   };
 
@@ -67,14 +74,14 @@ export function TopicSurveyScreen() {
     <main id="main-content" className="me-screen life-screen onboarding-screen app-page-with-tabs">
       <LifeHeader />
       {finished && record ? (
-        <SurveyResult surveyId={survey.id} answers={answers} onAccept={(strategyId, moduleId) => refresh(acceptExperiment(storage, moduleId, strategyId))} accepted={new Set(record.experiments.map((e) => e.strategyId))} />
+        <SurveyResult surveyId={survey.id} answers={answers} record={record} onAccept={(strategyId, moduleId) => refresh(acceptExperiment(storage, moduleId, strategyId))} accepted={new Set(record.experiments.map((e) => e.strategyId))} />
       ) : (
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={index} className="onboarding-question" initial={reducedMotion ? false : { opacity: 0, x: 24 * direction }} animate={{ opacity: 1, x: 0 }} exit={reducedMotion ? undefined : { opacity: 0, x: -16 * direction, transition: { duration: 0.12 } }} transition={{ ...SPRING, opacity: { duration: 0.2 } }}>
             <ol className="onboarding-progress" aria-hidden="true">
-              {survey.questions.map((q, i) => <li key={q.id} className={i < index ? "is-done" : i === index ? "is-current" : ""} />)}
+              {questions.map((q, i) => <li key={q.id} className={i < index ? "is-done" : i === index ? "is-current" : ""} />)}
             </ol>
-            <p className="life-eyebrow">{survey.title} · {index + 1} of {survey.questions.length}</p>
+            <p className="life-eyebrow">{survey.title} · {index + 1} of {questions.length}</p>
             {question && <h1 tabIndex={-1}>{question.prompt}</h1>}
             {question?.note && <p className="onboarding-note">{question.note}</p>}
             {question?.kind === "scale" ? (
@@ -115,48 +122,77 @@ export function TopicSurveyScreen() {
   );
 }
 
-function SurveyResult({ surveyId, answers, onAccept, accepted }: { surveyId: string; answers: Record<string, string | number>; onAccept: (strategyId: string, moduleId: string) => void; accepted: Set<string> }) {
+/**
+ * The map moment (founder, 2026-09-19): answering a questionnaire fills the map in, and the person
+ * sees it happen.
+ *
+ * This replaced four stacked result cards — friction, amplifier, contributor, strength — with the
+ * one thing the exchange promised: the shape moves, it says so, and it earns one sentence. The
+ * sentence is authored per friction in `SURVEY_INSIGHTS`, never composed here.
+ *
+ * THE "BEFORE" NEEDS NO SNAPSHOT. `deriveNeeds` only reads a survey once it has `completedAt`, so
+ * the record with that one field removed IS the state a moment ago. No extra storage, nothing to
+ * keep in sync, and it stays true if the person reloads the page.
+ */
+function SurveyResult({
+  surveyId,
+  answers,
+  record,
+  onAccept,
+  accepted,
+}: {
+  surveyId: string;
+  answers: Record<string, string | number>;
+  record: ModelRecord;
+  onAccept: (strategyId: string, moduleId: string) => void;
+  accepted: Set<string>;
+}) {
   const survey = topicSurvey(surveyId)!;
   const result = scoreSurvey(survey, answers);
+  const insight = insightFor(result);
   const tryNext = strategyById(result.tryNext);
   const explore = interactiveModule(result.exploreNext);
+
+  const before = useMemo<ModelRecord>(() => {
+    const held = record.surveys[surveyId];
+    if (!held) return record;
+    const { completedAt: _done, ...rest } = held;
+    return { ...record, surveys: { ...record.surveys, [surveyId]: rest } };
+  }, [record, surveyId]);
+
+  const points = useMemo(() => axes(record), [record]);
+  const moved = useMemo(() => movedAxes(before, record), [before, record]);
+
+  useEffect(() => {
+    if (moved.length) track("MAP_CLARIFIED", { survey: surveyId, changed: moved.length });
+  }, [moved, surveyId]);
+
   return (
-    <div role="status">
+    <div role="status" className="map-screen map-moment">
+      <MyAdhdRadar points={points} onOpen={() => undefined} moved={moved} />
       <header className="life-head">
-        <span className="life-eyebrow">{survey.title}</span>
-        <h1>{survey.resultTitle}.</h1>
-        <p>{result.complete ? "From your answers, and nothing else. No score, no verdict." : `From the ${result.answered} you answered. Come back for the rest whenever you like.`}</p>
+        <h1>{moved.length ? "Your map just got clearer." : `${survey.resultTitle}.`}</h1>
       </header>
+      {insight && <p className="map-stands-out">{insight}</p>}
       {result.contradictions.length > 0 && (
-        <p className="learn-reveal">Two answers disagreed, so that part was left out.</p>
+        <p className="map-foot">Two answers disagreed, so that part was left out.</p>
       )}
-      <section className="life-card is-lead" aria-labelledby="sr-friction">
-        <span className="life-eyebrow">Biggest friction</span>
-        <h2 id="sr-friction">{result.friction ? `${result.friction.label}.` : "Nothing stood out yet."}</h2>
-        {result.cost !== null && <p>You put the cost at <span className="t-digit">{result.cost}</span> out of 10.</p>}
-      </section>
-      {result.amplifier && (
-        <section className="life-card"><span className="life-eyebrow">Environmental amplifier</span><h2>{result.amplifier.note}.</h2><p><span className="layer-pill" data-layer={result.amplifier.layer}>{LAYER_LABELS[result.amplifier.layer]}</span></p></section>
-      )}
-      {result.contributor && (
-        <section className="life-card"><span className="life-eyebrow">Possible contributor</span><h2>{result.contributor.note}.</h2><p><span className="layer-pill" data-layer={result.contributor.layer}>{LAYER_LABELS[result.contributor.layer]}</span></p></section>
-      )}
-      {result.strengths.length > 0 && (
-        <section className="life-card"><span className="life-eyebrow">Strength</span><h2><Sparkle size={16} weight="fill" aria-hidden="true" /> {result.strengths[0]}.</h2>{result.strengths.length > 1 && <p>{result.strengths.slice(1).join(" · ")}</p>}</section>
-      )}
-      {tryNext && (
-        <section className="life-card"><span className="life-eyebrow">Try next</span><h2>{tryNext.strategy.title}</h2>
-          <ol className="learn-card-detail">{tryNext.strategy.steps.map((s) => <li key={s}>{s}</li>)}</ol>
-          <div className="life-actions">
-            {accepted.has(tryNext.strategy.id) ? <p className="strategy-accepted"><Check size={14} weight="bold" aria-hidden="true" /> On your list</p> : <button type="button" className="learn-secondary" onClick={() => onAccept(tryNext.strategy.id, tryNext.module.id)}>I’ll try this</button>}
-          </div>
-        </section>
+      {tryNext && !accepted.has(tryNext.strategy.id) && (
+        <div className="map-sheet-actions">
+          <button type="button" className="learn-secondary" onClick={() => onAccept(tryNext.strategy.id, tryNext.module.id)}>
+            {tryNext.strategy.title}
+          </button>
+        </div>
       )}
       {explore && (
-        <section className="life-card"><span className="life-eyebrow">Explore next</span><h2>{explore.title}</h2><p>{explore.subtitle} · {explore.minutes} min</p>
-          <div className="life-actions"><Link className="learn-primary" href={`/approach?module=${explore.id}`}>Open the module <ArrowRight size={17} weight="bold" aria-hidden="true" /></Link><Link className="learn-secondary" href="/my-adhd">My ADHD</Link></div>
+        <section className="map-step">
+          <h2>{explore.title}</h2>
+          <Link className="learn-primary" href={`/approach?module=${explore.id}`}>
+            {explore.minutes} min <ArrowRight size={17} weight="bold" aria-hidden="true" />
+          </Link>
         </section>
       )}
+      <p className="map-foot"><Link href="/my-adhd">My map</Link></p>
     </div>
   );
 }

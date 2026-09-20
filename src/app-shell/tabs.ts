@@ -34,8 +34,8 @@ export const APP_TABS: readonly AppTab[] = [
     href: "/my-adhd",
     label: "My ADHD",
     icon: "Compass",
-    also: ["/today", "/start", "/manual", "/medication", "/adjustments", "/my-map"],
-    purpose: "Your own picture — the biggest friction, what seems to contribute across brain, body, environment and people, and what has helped.",
+    also: ["/today", "/start", "/manual", "/medication", "/adjustments", "/my-map", "/my-adhd/history"],
+    purpose: "Your own picture — the six parts of a week this app can see, what stands out, what is working, and the one-page summary you can take to a GP.",
   },
 ];
 

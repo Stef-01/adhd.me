@@ -9,7 +9,16 @@ import type { ModelRecord } from "./store";
 export interface SurveyOffer {
   readonly survey: TopicSurvey;
   readonly why: string;
-  readonly rule: "need.persisted" | "wants.professional" | "would.sharpen";
+  readonly rule: "need.persisted" | "wants.professional" | "would.sharpen" | "would.drive";
+  /** True when the offer is the level-4 set rather than the survey itself. */
+  readonly deeper?: boolean;
+}
+
+/** Every deeper question answered. Deeper answers share the survey's own store, `d-` prefixed. */
+export function deeperComplete(record: ModelRecord, survey: TopicSurvey): boolean {
+  if (!survey.deeper?.length) return false;
+  const answers = record.surveys[survey.id]?.answers ?? {};
+  return survey.deeper.every((q) => answers[q.id] !== undefined);
 }
 
 /**
@@ -25,7 +34,19 @@ export function offerSurvey(record: ModelRecord, now: Date = new Date()): Survey
   if (!need) return null;
   const survey = surveyForDomain(need.domain);
   if (!survey) return null;
-  if (record.surveys[survey.id]?.completedAt) return null;
+  // LEVEL 4 (§20): only once the app already knows a lot, and only as an offer. "We know quite a
+  // lot about this now. Want to understand what may be driving it?" — the founder's own words.
+  if (record.surveys[survey.id]?.completedAt) {
+    if (!survey.deeper?.length) return null;
+    if (deeperComplete(record, survey)) return null;
+    if (need.functionalCost < 7 || need.confidence !== "high") return null;
+    return {
+      survey,
+      deeper: true,
+      why: `We know quite a lot about ${need.label.toLowerCase()} now. ${survey.deeper.length} more questions would say what may be driving it.`,
+      rule: "would.drive",
+    };
+  }
   const wantsProfessional = record.onboarding?.lookingFor === "professional";
   if (need.persistence >= 2) return { survey, why: `${need.label} has come up more than once. Eight to twelve questions would say which part of it is the friction, and what to try first.`, rule: "need.persisted" };
   if (wantsProfessional) return { survey, why: "You said you are looking for professional support. A few more questions make the match more precise before anybody is suggested.", rule: "wants.professional" };

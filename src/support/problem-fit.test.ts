@@ -4,7 +4,8 @@ import { deriveNeeds } from "@/model/needs";
 import { emptyModel, type ModelRecord } from "@/model/store";
 import { SUBDOMAINS } from "@/model/layers";
 import { EXPERTISE_TAGS } from "./professions";
-import { EXPERTISE_FOR, fitReason, orderByProblemFit, problemFit } from "./problem-fit";
+import { EXPERTISE_FOR, fitReason, orderByProblemFit, problemFit, strengthFit, strengthReason, wantsAccountability } from "./problem-fit";
+import type { Need } from "@/model/needs";
 
 const need = (): ModelRecord => ({
   ...emptyModel(),
@@ -49,5 +50,48 @@ describe("problem fit (§42)", () => {
     expect(orderByProblemFit([gp1, psych, gp2, coach, ot], null).map((x) => x.id)).toEqual(["gp1", "psych", "gp2", "coach", "ot"]);
     // Ties keep the engine's order.
     expect(orderByProblemFit([psych, coach], { ...top, subdomain: "sleep", contributors: [] }).map((x) => x.id)).toEqual(["psych", "coach"]);
+  });
+});
+
+describe("strengths in the match", () => {
+  const aNeed = (over: Partial<Need> = {}): Need => ({
+    id: "activation", domain: "work-study", subdomain: "activation",
+    label: "Starting work", signalStrength: 1, functionalCost: 8, userPriority: "yes",
+    confidence: "high", contributors: [], strengths: [], context: [], strategies: [],
+    sources: ["starting"], persistence: 2, ...over,
+  });
+
+  it("reads one closed signal out of what the person said, not a general vibe", () => {
+    expect(wantsAccountability(aNeed({ strengths: ["Company lowers the threshold"] }))).toBe(true);
+    expect(wantsAccountability(aNeed({ context: ["Easier working alongside someone"] }))).toBe(true);
+    expect(wantsAccountability(aNeed({ strengths: ["Deep focus once engaged"] }))).toBe(false);
+    expect(wantsAccountability(null)).toBe(false);
+  });
+
+  it("gives at most one point, and only to a kind of care that works in check-ins", () => {
+    const n = aNeed({ context: ["Easier working alongside someone"] });
+    expect(strengthFit({ profession: "adhd-coach" }, n)).toBe(1);
+    expect(strengthFit({ profession: "occupational-therapist" }, n)).toBe(1);
+    expect(strengthFit({ profession: "psychologist" }, n)).toBe(0);
+    expect(strengthFit({ profession: "adhd-coach" }, aNeed())).toBe(0);
+  });
+
+  it("says why, in an authored sentence, or says nothing", () => {
+    const n = aNeed({ context: ["Easier working alongside someone"] });
+    expect(strengthReason({ profession: "adhd-coach" }, n)).toMatch(/check-ins/);
+    expect(strengthReason({ profession: "psychologist" }, n)).toBeNull();
+    expect(strengthReason({ profession: "adhd-coach" }, null)).toBeNull();
+  });
+
+  it("never moves a GP, whatever the strength says", () => {
+    const n = aNeed({ context: ["Easier working alongside someone"] });
+    const ranked = [
+      { profession: "gp" as const, expertise: [] },
+      { profession: "psychologist" as const, expertise: ["perfectionism" as const] },
+      { profession: "gp" as const, expertise: [] },
+      { profession: "adhd-coach" as const, expertise: ["perfectionism" as const] },
+    ];
+    const out = orderByProblemFit(ranked, n);
+    expect(out.map((p) => p.profession)).toEqual(["gp", "adhd-coach", "gp", "psychologist"]);
   });
 });

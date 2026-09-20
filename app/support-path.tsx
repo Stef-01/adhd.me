@@ -7,10 +7,8 @@
 // they choose — nothing is shared by the app.
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, CaretRight, Check, Copy } from "@phosphor-icons/react";
-import { INTERACTIVE_MODULES } from "@/learn/interactive";
-import { LAYER_LABELS } from "@/model/layers";
+import { useEffect, useState } from "react";
+import { ArrowRight, CaretRight } from "@phosphor-icons/react";
 import { deriveNeeds, type Need } from "@/model/needs";
 import { adjustmentTrack, trackForSubdomain } from "@/model/adjustments";
 import { escalationEligible, professionsFor, recommend } from "@/model/recommend";
@@ -19,8 +17,6 @@ import { PROFESSION_ENTRIES, profession, type Profession } from "@/support/profe
 import { readFilters, writeFilters } from "@/finder/filters";
 import { LifeHeader, WhyThis } from "./life-shell";
 import { useModel } from "./use-model";
-import { SurveyOffer } from "./survey-offer";
-import { offerSurvey } from "@/model/offer";
 
 export function SupportPath() {
   const { record } = useModel();
@@ -30,9 +26,6 @@ export function SupportPath() {
   const professions = need ? professionsFor(need) : PROFESSION_ENTRIES.map((p) => p.id);
   const eligible = need && record ? escalationEligible(need, record) : false;
   const institution = need ? trackForSubdomain(need.subdomain) : null;
-  const teaching = need ? INTERACTIVE_MODULES.filter((m) => m.targets.includes(need.subdomain)) : [];
-  const strategies = teaching.flatMap((m) => m.steps.filter((s) => s.kind === "strategy").flatMap((s) => (s.kind === "strategy" ? s.strategies : [])));
-  const tried = new Set((record?.experiments ?? []).map((e) => e.strategyId));
 
   useEffect(() => { if (need) track("SUPPORT_RECOMMENDATION_SHOWN", { need: need.subdomain, eligible }); }, [need, eligible]);
 
@@ -47,85 +40,53 @@ export function SupportPath() {
   };
 
   return (
-    <main id="main-content" className="me-screen life-screen app-page-with-tabs">
+    <main id="main-content" className="me-screen life-screen map-screen app-page-with-tabs">
       <LifeHeader />
       <header className="life-head">
-        <h1>{need ? "From the problem to the person." : "Which kind of help?"}</h1>
+        <h1>{need ? "Who could help?" : "Which kind of help?"}</h1>
       </header>
 
       {record && !need && <ColdKinds seeProviders={seeProviders} />}
 
       {record && need && (
-        <ol className="support-steps">
-          <li className="support-step">
-            <h2>The problem</h2>
-            <p>{need.label}. {need.functionalCost ? `You put the cost at ${need.functionalCost} out of 10.` : ""} {need.userPriority === "yes" ? "You want it easier." : ""}</p>
-            {need.contributors.length > 0 && (
-              <p>{need.contributors.map((c) => `${LAYER_LABELS[c.layer]}: ${c.note.toLowerCase()}`).join(" · ")}</p>
-            )}
-          </li>
-          <li className="support-step">
-            <h2>What may help</h2>
-            <p>{teaching[0]?.steps.find((s) => s.kind === "explain")?.body ?? "Understanding the pattern first, then changing the conditions around it."}</p>
-          </li>
-          <li className="support-step">
-            <h2>What you can try yourself</h2>
-            {strategies.length === 0 ? <p>The modules on this problem carry the strategies.</p> : (
-              <ul className="life-list">
-                {strategies.slice(0, 4).map((s) => (
-                  <li key={s.id}>{tried.has(s.id) ? <Check size={16} weight="bold" aria-hidden="true" /> : <ArrowRight size={16} weight="bold" aria-hidden="true" />}<span>{s.title}{tried.has(s.id) ? ", on your list" : ""}</span></li>
-                ))}
-              </ul>
-            )}
-            {teaching[0] && <p><Link href={`/approach?module=${teaching[0].id}`}>Open “{teaching[0].title}”</Link></p>}
-          </li>
-          {offerSurvey(record) && (
-            <li className="support-step">
-              <h2>Sharpen the picture</h2>
-              <p>Optional survey.</p>
-              <SurveyOffer record={record} compact />
-            </li>
-          )}
-          <li className="support-step">
-            <h2>When another person helps</h2>
-            <p>
-              {eligible
-                ? "You have tried what is here and it has not been enough. That is the point at which a person who does this for a living is worth it, not before."
-                : "When the cost stays high after two or three honest attempts, or when you would simply rather work on it with somebody. Nothing here requires that yet."}
-            </p>
-            {need.contributors.some((c) => c.layer === "people") && <p>Sharing a module with them is one kind of help.</p>}
-          </li>
+        <div className="support-now">
+          {/* The problem, in the person's own terms and nothing else. The cost stays off this
+              screen: a number about somebody is the one thing the map is built not to show, and
+              a profession card does not need it to be the right card. */}
+          <p className="map-stands-out">{need.label}.</p>
+
+          <ul className="profession-list">
+            {professions.slice(0, 3).map((id, i) => {
+              const p = profession(id);
+              return (
+                <li key={id} className={`profession-card${i === 0 ? " is-first" : ""}`}>
+                  <strong>{p.label}</strong>
+                  <p>{p.inAWord}</p>
+                  <Link className="learn-secondary" href="/" onClick={() => seeProviders(id)}>
+                    See {p.plural} <ArrowRight size={16} weight="bold" aria-hidden="true" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
           {institution && (
-            <li className="support-step">
-              <h2>Adjustments on paper</h2>
-              <p>{institution === "university" ? "This is the kind of problem a university's accessibility service exists for, and most students are never told it does." : "Most of what helps with this is a way of working a manager can agree to, and some of it can be made formal."} What is commonly available, who grants it, and what to bring.</p>
-              <p><Link href="/adjustments">{adjustmentTrack(institution).title} <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></p>
-            </li>
+            <p className="map-foot">
+              <Link href="/adjustments">
+                {adjustmentTrack(institution).title} <ArrowRight size={14} weight="bold" aria-hidden="true" />
+              </Link>
+            </p>
           )}
-          <li className="support-step">
-            <h2>Which professions could help</h2>
-            <p>In order of fit for this problem. Each card says why.</p>
-            <ul className="profession-list">
-              {professions.map((id, i) => {
-                const p = profession(id);
-                return (
-                  <li key={id} className={`profession-card${i === 0 ? " is-first" : ""}`}>
-                    <strong>{p.label}</strong>
-                    <p>{p.typicallyFor}</p>
-                    <p><em>Why this one:</em> {p.whenToExplore}</p>
-                    <Link className="learn-secondary" href="/" onClick={() => seeProviders(id)}>See {p.plural} <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link>
-                  </li>
-                );
-              })}
-            </ul>
-            {rec && <WhyThis why={rec.why} rule={rec.explain.ruleTriggered} inputs={rec.explain.inputsUsed} version={rec.explain.ruleVersion} />}
-          </li>
-          <li className="support-step">
-            <h2>Before you book: a brief</h2>
-            <p>Built from what you said. Edit, keep or copy.</p>
-            <ReferralBrief need={need} tried={[...tried]} />
-          </li>
-        </ol>
+
+          {/* The referral brief used to be five textareas at the bottom of this screen, which a
+              person had to fill in themselves. It is one tap on the map now, already written from
+              what they told the app. */}
+          <p className="map-foot">
+            <Link href="/my-adhd">Take this to my GP <ArrowRight size={14} weight="bold" aria-hidden="true" /></Link>
+          </p>
+
+          {rec && <WhyThis why={rec.why} rule={rec.explain.ruleTriggered} inputs={rec.explain.inputsUsed} version={rec.explain.ruleVersion} />}
+        </div>
       )}
     </main>
   );
@@ -187,50 +148,4 @@ function ColdKinds({ seeProviders }: { seeProviders: (p: Profession) => void }) 
       </p>
     </section>
   );
-}
-
-function ReferralBrief({ need, tried }: { need: Need; tried: string[] }) {
-  const { record } = useModel();
-  const draft = useMemo(() => {
-    const helped = need.strategies.filter((s) => s.outcome === "a-lot").map((s) => s.title);
-    return {
-      help: `${need.label}.`,
-      noticed: need.contributors.map((c) => c.note).concat(need.context).join("\n"),
-      tried: tried.map((id) => strategyTitle(id)).join("\n"),
-      helped: helped.join("\n"),
-      goal: record?.onboarding?.improveFirst ? need.label : "",
-    };
-  }, [need, tried, record]);
-  const [fields, setFields] = useState(draft);
-  const [copied, setCopied] = useState(false);
-  useEffect(() => setFields(draft), [draft]);
-  const sections: ReadonlyArray<readonly [string, string]> = [
-    ["What I’d like help with", fields.help],
-    ["What I’ve noticed", fields.noticed],
-    ["What I’ve tried", fields.tried],
-    ["What helped", fields.helped],
-    ["My goal", fields.goal],
-  ];
-  const text = sections.filter(([, v]) => v.trim()).map(([k, v]) => `${k}\n${v}`).join("\n\n");
-  return (
-    <div className="brief">
-      {([["help", "What I’d like help with"], ["noticed", "What I’ve noticed"], ["tried", "What I’ve tried"], ["helped", "What helped"], ["goal", "My goal"]] as const).map(([key, label]) => (
-        <label key={key}>
-          {label}
-          <textarea value={fields[key]} rows={2} onChange={(e) => setFields((f) => ({ ...f, [key]: e.target.value }))} />
-        </label>
-      ))}
-      <div className="life-actions">
-        <button type="button" className="learn-secondary" onClick={async () => { try { await navigator.clipboard.writeText(text); setCopied(true); } catch { setCopied(false); } }}>
-          <Copy size={16} weight="bold" aria-hidden="true" /> {copied ? "Copied" : "Copy the brief"}
-        </button>
-      </div>
-      <p className="learn-card-foot">Copies to your clipboard only.</p>
-    </div>
-  );
-}
-
-function strategyTitle(id: string): string {
-  for (const m of INTERACTIVE_MODULES) for (const s of m.steps) if (s.kind === "strategy") { const f = s.strategies.find((x) => x.id === id); if (f) return f.title; }
-  return id;
 }

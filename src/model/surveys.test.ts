@@ -5,10 +5,11 @@ import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { INTERACTIVE_MODULES, strategyById } from "@/learn/interactive";
-import { surveyText, TOPIC_SURVEYS, topicSurvey } from "@/learn/surveys";
+import { SURVEY_INSIGHTS, surveyText, TOPIC_SURVEYS, topicSurvey } from "@/learn/surveys";
 import { deriveNeeds } from "./needs";
 import { offerSurvey } from "./offer";
-import { availableSurveys, contradictionsIn, scoreSurvey, surveyResults } from "./surveys";
+import { availableSurveys, contradictionsIn, insightFor, scoreSurvey, surveyResults } from "./surveys";
+import type { Subdomain } from "./layers";
 import { completeSurvey, emptyModel, readModel, recordResonance, recordSurveyAnswer, saveOnboarding, type ModelRecord } from "./store";
 
 function fakeStorage() {
@@ -164,5 +165,35 @@ describe("the offer rule (§20 level 4)", () => {
     const low = fakeStorage();
     saveOnboarding(low, { improveFirst: "better-sleep", impact: 3 });
     expect(offerSurvey(readModel(low))).toBeNull();
+  });
+});
+
+describe("the sentence a survey earns", () => {
+  it("every friction a survey can point at has an authored sentence, and it passes the copy lint", () => {
+    // The sentence is the reward in "give data, receive insight", and it is the most consequential
+    // thing the product says to somebody about their own mind. Nothing composes one at runtime, so
+    // every friction a real survey can produce has to have one written for it here.
+    const reachable = new Set<Subdomain>();
+    for (const survey of eachOf(TOPIC_SURVEYS, "the topic surveys")) {
+      for (const q of survey.questions) {
+        for (const option of q.options ?? []) {
+          for (const signal of option.signals ?? []) reachable.add(signal.subdomain);
+        }
+      }
+    }
+    expect(reachable.size).toBeGreaterThan(5);
+    const missing = [...reachable].filter((s) => !SURVEY_INSIGHTS[s]);
+    expect(missing, "a friction with no sentence would leave the result screen silent").toEqual([]);
+    for (const subdomain of eachOf([...reachable], "the reachable frictions")) {
+      const sentence = SURVEY_INSIGHTS[subdomain]!;
+      expect(sentence, subdomain).toMatch(/\.$/);
+      expect(lintLandingCopy(sentence), subdomain).toEqual([]);
+      expect(sentence, `${subdomain} must not read like a diagnosis`).not.toMatch(/deficit|impair|disorder|symptom/i);
+    }
+  });
+
+  it("says nothing when nothing stood out", () => {
+    const survey = TOPIC_SURVEYS[0]!;
+    expect(insightFor(scoreSurvey(survey, {}))).toBeNull();
   });
 });

@@ -1,6 +1,6 @@
 # My ADHD Map — technical PRD
 
-**Status:** draft for founder sign-off. **Supersedes** the screen specifications in
+**Status:** BUILT. Phases 1 to 6 are implemented on `claude/adhd-map-ui-integration-45wjok`; §19 records what the build changed about this plan and why. Founder sign-off still open on the two decisions in §16 that remain. **Supersedes** the screen specifications in
 [MAP-PLAN.md](MAP-PLAN.md) §3 and §8; MAP-PLAN remains the strategy note and the map of what the
 tree already holds. **Sources reconciled here:** the founder brief of 2026-09-19 (the skills ×
 life-area map, progressive questionnaires, matching from the map, one-tap GP summary) and the
@@ -8,7 +8,6 @@ life-area map, progressive questionnaires, matching from the map, one-tap GP sum
 (`projects/3007208472686763697`, design system `assets/20907de9ca2f4fb49c329bb9e5a182e4`).
 
 Where those two disagree with the tree's standing law, §3 names the conflict and decides it.
-Nothing in this document is implemented yet.
 
 ---
 
@@ -79,9 +78,9 @@ because changing a rule there without updating both is a build failure, not a re
 | C2 | "Primary action: solid charcoal fill `#1F2937`." | `{#type.no-dark-blocks}` — "No black or near-black fill as a block, a pill or a button on a patient screen." | **No real conflict; resolve by token.** `DESIGN.md` already makes the one primary an ink pill. Charcoal maps to `--ink`. The rule's intent is *no dark blocks*, not *no ink pill*; the register entry gains that clarification. One primary per screen stays. |
 | C3 | Cool grey neutrals: `#F9F9F9`, `#E5E7EB`, `#111827`, `#6B7280`. | Warm neutrals: `--paper #fafaf7`, `--line #e8e6df`, `--ink #1a1c1c`, `--faint #5f5e59`; `{#type.palette-tokens}` forbids raw hex in components. | **Structure from Calm Clarity, values from the tree.** Every Stitch colour maps to an existing token (§4). Only genuinely new roles are added to `:root`. No component carries a hex. |
 | C4 | Coral polygon `#E05338` / `rgba(242,106,79,.58)`. | The 2026-09-19 brief: "Avoid red." `--signal #ff4d2e` is the one warm red in the mark. | **Adopt the coral, constrained.** Calm Clarity is explicit that the coral "steers entirely clear of emergency red", and it is reserved to one object: the radar polygon. It may never carry a status, a warning or a word. It also fixes a defect `DESIGN.md` already admits — "nothing is filled with the deep gold; as a fill it reads olive" — which is exactly what the current radar does (`before/03`). Measured 3.68:1 on paper, 3.84:1 on white: passes the 3:1 floor for a graphical object. |
-| C5 | Six-axis radar on the My ADHD hub. | `/my-map` is a nine-axis NWIA radar, founder-directed 2026-09-11, with `src/wellness/map.ts`, `e2e/my-map.spec.ts` and ADR 0005 behind it. | **One radar per tab — see Decision D2.** Two radars of the same person at different granularity is the clutter this work exists to remove. Recommended: the six-axis hub radar is the only radar and `/my-map` retires. Needs a yes; fallback in D2. |
+| C5 | Six-axis radar on the My ADHD hub. | `/my-map` is a nine-axis NWIA radar, founder-directed 2026-09-11, with `src/wellness/map.ts`, `e2e/my-map.spec.ts` and ADR 0005 behind it. | **The hub radar is the one the tab shows.** `/my-map` still exists and still passes its tests, but nothing links to it any more — the hub radar supersedes it. Retiring it deletes founder-directed work, so it waits on D2. |
 | C6 | "Maximum 3 Current Focus chips", "never cluster more than 3". | `{#layout.five-then-rest}` — "a chooseable few with the remainder one tap away". | **Compatible.** Three is the few; the remainder is the aspect page. |
-| C7 | Radar axis labels around the perimeter. | `e2e/controls.spec.ts` holds every control to 44 px; the current radar is `aria-hidden` with chips as the real controls, after a gate caught 17 px targets. | **The tree wins on mechanics.** Perimeter labels render inside the decorative SVG for sighted users; the chips below remain the focusable 44 px controls and the text equivalent. §7.4. |
+| C7 | Radar axis labels around the perimeter. | `e2e/controls.spec.ts` holds every control to 44 px; the current radar is `aria-hidden` with chips as the real controls, after a gate caught 17 px targets. | **Both, by width.** The comp puts the labels around the perimeter as buttons; at 390px six of those cannot be readable and 44px at once. One list of six controls, positioned two ways: a grid under the chart on a phone, absolutely around it from 768px. Same DOM, so the words are written once and counted once. The chart itself stays `aria-hidden`. §7.4. |
 
 ---
 
@@ -189,14 +188,19 @@ precedent, `src/model/store.ts:176`), so nothing here forces `MODEL_VERSION` pas
 
 ### 6.1 The six aspects
 
-The radar plots **aspects of functioning**, which are the columns of the founder's matrix plus one.
-The brief named five — Starting, Sustaining, Remembering, Regulating, Organising. Calm Clarity
-draws six axes. The sixth is **Connecting**, and it is not padding: the people-layer subdomains
-(`partner`, `family`, `manager`, `teachers`, `peers`, `clinicians`) had no column in the brief's
-matrix, which left Relationships unable to fill. Connecting gives them one.
+**Resolved against the comp (2026-09-20).** The founder's My ADHD screen names its six axes, and
+they are not the tidy taxonomy this plan first guessed at:
+
+**Starting · Focus · Organisation · Emotional regulation · Relationships · Sleep & energy**
+
+Three are aspects of functioning, one is a subdomain and two are areas of a life. That mixture is
+the right call for a person reading it: these are the six words somebody would use about their own
+week. `Remembering` is a column in the founder's written matrix and not an axis in the drawn one,
+so `memory` sits under Organisation — which is the comp's own reading, its Organisation panel
+saying "admin and household filings create prospective memory fatigue".
 
 ```ts
-export const ASPECTS = ["starting","sustaining","remembering","regulating","organising","connecting"] as const;
+export const ASPECTS = ["starting","focus","organisation","emotional-regulation","relationships","sleep-energy"] as const;
 export type Aspect = (typeof ASPECTS)[number];
 
 export const ASPECT_LABELS: Readonly<Record<Aspect, string>> = {
@@ -242,19 +246,21 @@ export type Area = (typeof AREAS)[number];
 export function areaOf(need: Need, record: ModelRecord): Area;
 ```
 
-### 6.3 Status: the four consumer words
+### 6.3 Status: the five consumer words
+
+The comp uses **five**, not the brief's four. The extra one is **Mostly supported**, and it earns
+its place: it is the difference between "there is nothing here" and "there is something here and
+you have it handled", which is a thing somebody built and the map should say so.
 
 ```ts
-export type CellStatus = "unexplored" | "still-learning" | "working-well" | "worth-improving" | "needs-support";
-
-export const STATUS_LABEL: Readonly<Record<CellStatus, string>> = {
-  unexplored:      "",                    // renders as absence, never as a word
-  "still-learning":"Still learning",
-  "working-well":  "Working well",
-  "worth-improving":"Worth improving",
-  "needs-support": "Needs support",
-};
+export type CellStatus =
+  | "unexplored" | "still-learning" | "working-well"
+  | "mostly-supported" | "worth-improving" | "needs-support";
 ```
+
+The comp renders `Needs support` in the error container (`#ffdad6` / `#93000a`), which its own
+colour rules forbid — "emergency red indicators, crimson warnings and danger alerts are strictly
+forbidden". The build uses an ink outline instead, per §4.
 
 Resolved against the best need in the cell, first match wins:
 
@@ -263,8 +269,13 @@ Resolved against the best need in the cell, first match wins:
 | `unexplored` | no need and no contributor touches this (area, aspect) |
 | `still-learning` | only a contributor touches it, **or** the best need has `confidence === "low"` |
 | `working-well` | `userPriority === "no"`, **or** `functionalCost <= 3`, **or** a strength is named and cost < 5 |
-| `needs-support` | `functionalCost >= 7` **and** `userPriority === "yes"` **and** `confidence !== "low"` |
+| `needs-support` | `functionalCost >= 7` **and** `userPriority === "yes"` |
+| `mostly-supported` | a strategy here worked, at a bearable cost |
 | `worth-improving` | everything else |
+
+`needs-support` deliberately outranks `mostly-supported`: worked at and still costly is the
+strongest care-navigation signal the product has, and softening it would hide the person who most
+needs the next screen.
 
 `working-well` is the row that makes the brief's "strong pattern, not currently a problem" true:
 someone who reports constant hyperfocus at zero cost gets a filled cell that reaches outward and
@@ -375,14 +386,16 @@ With six axes the guides are regular hexagons, not circles: `ring(k)` returns th
 
 ### 7.2 The polygon, and how it detaches
 
-The polygon is **not** a single path when an axis is still learning. Calm Clarity requires it to
-*detach* from those nodes. Implementation: walk the six points and emit one `<polyline>` per
-maximal run of confident axes, closing into a `<polygon>` only when all six are confident.
+**The comp settles this, and more simply than this plan proposed.** The polygon stays ONE closed
+shape; at an axis the model cannot place it pulls in to near the centre and the knot is drawn
+hollow and dotted instead of solid. "Detach" means the shape visibly declines to claim a position
+there, not that the path breaks. One path, one fill, no run-splitting.
 
 ```
-all six confident   → one <polygon points=…> fill --map-poly, stroke --map-poly-line 1.5px
-otherwise           → one <polyline> per contiguous confident run, stroke only, no fill
-                      + a low-opacity fill of the confident hull when the run count is 1
+polygon  → always closed, fill --map-poly, stroke --map-poly-line 1.75px, linejoin round
+node     → r=3.5 filled; at an unplaced axis r=3, fill none, dashed stroke
+spoke    → at an unplaced axis, stroke-dasharray 3 4
+reach    → floored at 0.1 so an unplaced knot is still visible off centre
 ```
 
 A dotted spoke renders `stroke-dasharray: 3 4` on `--map-guide`, and its node renders as a hollow
@@ -474,9 +487,13 @@ picture of themselves.
 **No digit anywhere.** `e2e/my-adhd.spec.ts` asserts `not.toMatch(/\d/)` on `main` after stripping
 the wordmark, exactly as `e2e/my-map.spec.ts:38` does today. This is why cost never renders here.
 
-### 8.2 `/my-adhd/[aspect]` — one aspect across a life
+### 8.2 An axis, opened in place — **a sheet, not a route**
 
-Comp: Stitch `eebb4727df47457dabb85d2f2687e4fe` ("Starting Detail").
+The founder's comp opens a domain in a drawer over the map rather than navigating away, and it is
+right to: it keeps the hub as the single object a person is looking at, which is the "minimalist
+end-state" the brief asks for. So `/my-adhd/[aspect]` is **not built**. `app/my-adhd-sheet.tsx`
+reuses `app/sheet.tsx`, so an axis has the same grabber, detents, focus trap and Escape as every
+other modal in the product. The tab therefore has one kind of click-through and no new routes.
 
 ```
 ← My ADHD                                                       2
@@ -781,19 +798,18 @@ The plan proceeds on the **bold** default. Each is a small, named change if the 
 already allows up to five, and the `Sun` icon is already in the union, so adding it later is one
 entry in `APP_TABS` plus the label assertion at `tabs.test.ts:27`.
 
-**D2 — One radar or two.** The hub radar (6 aspects, coral, confidence-dotted) and `/my-map`
-(9 NWIA dimensions, rung words, founder-directed 2026-09-11) are the same idea at different
-granularity. **Default: one radar. `/my-map` retires**, its route redirects to `/my-adhd`, and
-`src/wellness/map.ts` + `e2e/my-map.spec.ts` are rewritten onto the six aspects; ADR 0005 and the
-NWIA attribution are preserved in `src/wellness/nwia.ts` and noted here. *This deletes
-founder-directed work and needs an explicit yes.* Fallback if the answer is no: keep `/my-map`
-behind the single word "Balance" in the hub's footer row, accept two radars, and re-measure the
-hub.
+**D2 — One radar or two. STILL OPEN, and the only thing blocking a tidy tree.** The hub radar
+(six axes, coral, confidence-dotted) and `/my-map` (nine NWIA dimensions, rung words,
+founder-directed 2026-09-11) are the same idea at different granularity. As built, the hub radar
+is the one the tab shows and **nothing links to `/my-map` any more**: it is reachable only by
+typing the URL, and it is dead weight in that state. On a yes it retires — the route redirects to
+`/my-adhd`, `src/wellness/map.ts` keeps only `RUNG_REACH` (which `matrix.ts` imports), and
+`e2e/my-map.spec.ts` goes. ADR 0005 and the NWIA attribution stay in `src/wellness/nwia.ts`
+either way. On a no, it gets one word in the hub's footer row and the hub is re-measured.
 
-**D3 — The six axes.** **Default: Starting · Sustaining · Remembering · Regulating · Organising ·
-Connecting.** If the Stitch comp's axes are the five life areas instead, the change is confined to
-`ASPECTS`, `ASPECT_LABELS` and `ASPECT_OF` in one file; routes, components and tests are unchanged.
-*This is the one thing I could not verify against the comp — see §17.*
+**D3 — The six axes. RESOLVED 2026-09-20** against the comp's own markup, which the founder
+supplied: Starting · Focus · Organisation · Emotional regulation · Relationships · Sleep & energy.
+Built. Nothing outstanding.
 
 **D4 — The tab's name.** **Default: "My ADHD" stays**, and the map is its first screen.
 
@@ -803,7 +819,7 @@ Connecting.** If the Stitch comp's axes are the five life areas instead, the cha
 
 ---
 
-## 17. What could not be verified, and why
+## 17. What could not be verified, and why — CLOSED
 
 The Stitch project's rendered screens and their HTML are served from `lh3.googleusercontent.com`
 and `contribution.usercontent.google.com`. Both are **denied by this environment's egress policy**
@@ -811,10 +827,12 @@ and `contribution.usercontent.google.com`. Both are **denied by this environment
 is allowed, so everything in §3, §4 and §7 is taken from the design system's machine-readable
 tokens and its full style guidelines, which are authoritative and complete.
 
-What this means in practice: **the design system is integrated exactly; the pixel comps were not
-inspected.** The one decision that depends on seeing them is D3, the identity of the six axes.
-To close it, either allow those two hosts for the session, or paste the "My ADHD" comp into the
-thread.
+**Closed 2026-09-20.** The founder pasted the rendered HTML of four comps into the thread, which
+is everything the images would have shown and more: the axis names, the five status words, the
+exact radar geometry (`viewBox 0 0 500 500`, centre 250, R 180, four rings, first axis at twelve
+o'clock), the polygon's real detach behaviour, the 7/5 desktop split and the drawer. D3 is
+resolved, §7.2 is corrected, and the build follows the markup rather than a reading of the
+guidelines. The two hosts remain blocked, which only matters now for looking at future comps.
 
 ## 18. Appendix: Stitch references
 
@@ -837,3 +855,51 @@ Project `3007208472686763697` ("Minimalist ADHD Tab Design"), design system
 
 The five generated comps were produced against the Calm Clarity design system from the copy in §8
 and §9 of this document, so the comps and the build specify the same strings.
+
+---
+
+## 19. What shipped, and what the build changed about this plan
+
+Implemented on `claude/adhd-map-ui-integration-45wjok`. Where the build differs from §5 to §9 as
+first written, the reason is always the same: the founder supplied the comps' own markup on
+2026-09-20, and the markup is a better source than a reading of the guidelines.
+
+| Planned | Shipped | Why |
+| --- | --- | --- |
+| Six aspects incl. a coined "Connecting" | The comp's own six | D3, resolved from the markup |
+| Four status words | Five, with "Mostly supported" | The comp uses five, and the fifth is a real distinction |
+| `/my-adhd/[aspect]` routes | A sheet over the hub | The comp opens a drawer; it keeps the hub the single object, and it adds no routes |
+| `/my-adhd/share` route | A sheet, opened from "Share" top right | Same, and the brief puts Share at the top right |
+| Polygon splits into polylines to detach | One closed polygon that pulls in, with a hollow dotted knot | The comp's own behaviour, and simpler |
+| Reach only, for "your map just got clearer" | Reach **or** the word | Counting reach alone made the reward silent for the person who had earned it most — see `movedAxes` |
+| Five area rows as routes | Five area rows inside the sheet | The matrix, one column at a time |
+
+### 19.1 What the gates caught that review did not
+
+1. **The class names collided.** `.map-axes`, `.map-axis`, `.map-chart`, `.map-ring`, `.map-you`
+   and `.map-foot` already belonged to `/my-map`'s nine-axis radar. The new rules repainted that
+   page, and at 1280 an absolutely positioned axis seat landed on top of the wordmark.
+   `e2e/controls.spec.ts` found it as "a control something is painted over"; every new selector is
+   scoped under `.map-screen` now.
+2. **The sheet kept its blur.** The map's sheets portal to `document.body`, so the flat scope
+   could not reach them and Calm Clarity's "scrim without blur filters" was quietly violated.
+   Fixed with `:has(.map-sheet)`.
+3. **The manual's own headings leaked into the GP summary.** `manualText()` wraps a person's words
+   in this app's section titles, so "What helps me" appeared in a document whose rule is that
+   every line is a heading, a record row, or the person's own words. `summary.test.ts` failed on
+   exactly that line. The summary reads the three raw fields now.
+
+### 19.2 Files
+
+| Area | Files |
+| --- | --- |
+| The reading | `src/model/matrix.ts`, `src/model/summary.ts`, and their tests |
+| The screens | `app/my-adhd.tsx`, `app/my-adhd-radar.tsx`, `app/my-adhd-sheet.tsx`, `app/my-adhd-share.tsx`, `app/my-adhd-history.tsx`, `app/today-screen.tsx` |
+| Routes | `app/(app)/my-adhd/history/page.tsx`, `app/(app)/today/page.tsx` |
+| Style | `app/styles/map.css`, four tokens in `app/globals.css` |
+| The loop | `insightFor` + `SURVEY_INSIGHTS`, the rewritten result in `app/topic-survey.tsx` |
+| Level 4 | `WORK_DEEPER`, `RELATIONSHIPS_DEEPER`, the `would.drive` rule in `src/model/offer.ts` |
+| Support | `strengthFit`/`strengthReason` in `src/support/problem-fit.ts`, chips in `app/finder-stages/profile-stage.tsx`, the rewritten `app/support-path.tsx` |
+| Instrument | `LIVED_RECORD` and eight lived-in states in `scripts/text-budget-lib.mjs` |
+| Law | the glass exception and the ink-pill clarification in `.claude/skills/adhdme-taste/SKILL.md` |
+| Tests | `e2e/my-adhd.spec.ts`, plus additions to the matrix, summary, survey and problem-fit suites |

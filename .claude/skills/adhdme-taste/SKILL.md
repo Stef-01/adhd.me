@@ -67,10 +67,18 @@ without updating the register is a build failure, not a review finding.
   shader refracts, and the studio's pointer blob on its spring on hover devices, melting into
   what it passes. Page grounds go transparent while it runs (`html.has-liquid`); it is absent,
   and the CSS glass whole, without WebGL2 or under reduced transparency. It reads rectangles,
-  never content. {#type.glass-chrome}
+  never content. **One exception, founder 2026-09-19:** the My ADHD tab stands the glass down.
+  Its design system (Calm Clarity, `docs/design/my-adhd-map/calm-clarity.md`) prohibits
+  "simulated real-world lighting, skeletal drop shadows and glassmorphic blurs" so the map reads
+  as one quiet surface rather than a stack of objects, and the newer direction wins on the screens
+  it was drawn for. The exception is scoped by `.map-screen` in `app/styles/map.css` and by
+  `:has(.map-sheet)` for the sheets it opens; Play's `[data-liquid]` scope and every other surface
+  keep the glass. {#type.glass-chrome}
 - **Minimal darkness** (founder, 2026-09-08). Ink is for text. No black or near-black fill as
   a block, a pill or a button on a patient screen; a control sits on paper, stone or the accent.
-  Drawn props are mid-tone, never a dark silhouette. {#type.no-dark-blocks}
+  Drawn props are mid-tone, never a dark silhouette. This governs BLOCKS, not the one primary:
+  `DESIGN.md` already makes that an ink pill with a yellow glyph, and Calm Clarity's charcoal
+  primary maps onto it. One per screen. {#type.no-dark-blocks}
 
 ## Interaction
 

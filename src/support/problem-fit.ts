@@ -91,8 +91,61 @@ export function orderByProblemFit<T extends Fittable>(ranked: readonly T[], need
   if (!need) return [...ranked];
   const alliedPositions = ranked.map((p, i) => (isGp(p) ? -1 : i)).filter((i) => i >= 0);
   const allied = alliedPositions.map((i) => ranked[i]!);
-  const sorted = allied.map((p, i) => ({ p, i, fit: problemFit(p, need) })).sort((a, b) => b.fit - a.fit || a.i - b.i).map((x) => x.p);
+  // Problem fit first, then the one strength signal as a tiebreak, then the engine's own order.
+  const sorted = allied
+    .map((p, i) => ({ p, i, fit: problemFit(p, need), strength: strengthFit(p, need) }))
+    .sort((a, b) => b.fit - a.fit || b.strength - a.strength || a.i - b.i)
+    .map((x) => x.p);
   const out = [...ranked];
   alliedPositions.forEach((pos, k) => { out[pos] = sorted[k]!; });
   return out;
+}
+
+/**
+ * WHAT WORKS FOR SOMEBODY SHOULD CHANGE WHO IS SUGGESTED (founder, 2026-09-19: "because
+ * accountability works well for you, a provider using regular goal check-ins may suit you better
+ * than a highly self-directed approach").
+ *
+ * Until now a strength was something the app showed a person and then ignored. This reads one
+ * specific, closed thing out of it — does external accountability work for you — and lets it break
+ * a tie between allied providers whose declared expertise is otherwise equal.
+ *
+ * DELIBERATELY NARROW. One signal, one closed set of phrases, one closed set of professions. A
+ * general "match the vibe" reading would be the app inventing a claim about how somebody should
+ * be treated, which is exactly what the expertise taxonomy exists to avoid.
+ */
+const ACCOUNTABILITY_PHRASES: readonly RegExp[] = [
+  /alongside/i,
+  /accountab/i,
+  /\bcompany\b/i,
+  /another person/i,
+  /check[- ]in/i,
+  /body ?doubl/i,
+  /somebody (?:else|near|with)/i,
+];
+
+/** Kinds of care whose ordinary shape is a regular, scheduled check-in with a person. */
+const CHECK_IN_PROFESSIONS: ReadonlySet<string> = new Set(["adhd-coach", "occupational-therapist"]);
+
+/** True when the person's own record says working with somebody is one of the things that helps. */
+export function wantsAccountability(need: Need | null): boolean {
+  if (!need) return false;
+  const said = [...need.strengths, ...need.context, ...need.contributors.map((c) => c.note)];
+  return said.some((phrase) => ACCOUNTABILITY_PHRASES.some((re) => re.test(phrase)));
+}
+
+/**
+ * One point, and only ever one. It breaks a tie inside the allied block that `orderByProblemFit`
+ * already assembled; it can never lift an allied provider past a GP, because that function moves
+ * nothing between positions of different kinds.
+ */
+export function strengthFit(provider: Fittable, need: Need | null): number {
+  if (!wantsAccountability(need)) return 0;
+  return CHECK_IN_PROFESSIONS.has(provider.profession ?? "gp") ? 1 : 0;
+}
+
+/** The second sentence on a card, when there is one. Authored, closed, never composed. */
+export function strengthReason(provider: Fittable, need: Need | null): string | null {
+  if (strengthFit(provider, need) === 0) return null;
+  return "Works in regular check-ins, which you said helps.";
 }

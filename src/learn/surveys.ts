@@ -47,10 +47,173 @@ export interface TopicSurvey {
   readonly tryNext: string;
   /** The module the result suggests exploring next. */
   readonly exploreNext: string;
+  /**
+   * LEVEL 4 (PRD §20): ten to twenty more questions, offered only once the app already knows a
+   * lot and the person asks for it. Not a second survey — the same answers, extended, so what is
+   * already recorded is never asked again. Absent where the content has not been written yet.
+   */
+  readonly deeper?: readonly SurveyQuestion[];
 }
 
 const yesNo = (id: string, yes: SurveyOption, no: SurveyOption, sometimes?: SurveyOption): SurveyOption[] =>
   [yes, ...(sometimes ? [sometimes] : []), no].map((o) => ({ ...o, id: `${id}-${o.id}` }));
+
+/**
+ * The one sentence a finished survey earns, by the friction its answers pointed at hardest.
+ *
+ * AUTHORED, NEVER GENERATED. This is the reward in the exchange the founder described — give
+ * data, receive insight — and it is the single most consequential sentence the product says to
+ * somebody about their own mind. So every one of them is written here, reviewed like any other
+ * patient copy, and linted in the test beside this file. Nothing composes one at runtime.
+ *
+ * Each says the same kind of thing: this is more about X than about Y. That shape is what makes
+ * it useful rather than flattering — it rules something out, which is what a person cannot do
+ * for themselves from the inside.
+ */
+export const SURVEY_INSIGHTS: Partial<Record<Subdomain, string>> = {
+  activation:
+    "This looks more about starting and structuring work than about holding attention once you are in it.",
+  "deadline-design":
+    "This looks more about how far away a deadline feels than about how much you care about the work.",
+  attention:
+    "This looks more about staying with a thing than about getting yourself to begin it.",
+  switching:
+    "This looks more about the cost of coming back than about the interruption itself.",
+  noise:
+    "This looks more about what is around you than about anything you are doing differently.",
+  memory:
+    "This looks more about what falls out of mind than about effort or how much you care.",
+  time: "This looks more about how time feels than about how much you have.",
+  structure:
+    "This looks more about how little structure the day has than about willpower inside it.",
+  workload: "This looks more about how much is open at once than about how fast you work.",
+  "emotional-regulation":
+    "This looks more about how long feelings take to settle than about how often they arrive.",
+  inhibition: "This looks more about the pause before acting than about wanting to act at all.",
+  sleep: "This looks more about what a short night costs the next day than about the night itself.",
+  energy: "This looks more about the shape of your day than about how much you are doing in it.",
+  movement: "This looks more about getting started than about keeping going once you have.",
+  appetite: "This looks more about noticing than about appetite itself.",
+  partner: "This looks more about what happens after a conversation than about the conversation.",
+  family: "This looks more about follow-through than about how much anybody cares.",
+  manager: "This looks more about how work arrives than about how you handle it once it has.",
+  teachers: "This looks more about how the course is set up than about how you study.",
+  peers: "This looks more about who is around than about how sociable you are.",
+  "living-environment": "This looks more about who holds the household list than about tidiness.",
+  "study-context": "This looks more about how the course is run than about how hard you work at it.",
+  "workplace-context": "This looks more about how the job is set up than about how you do it.",
+  "medication-experience": "This looks more about what medication leaves untouched than about what it changes.",
+  clinicians: "This looks more about the conversations still to have than about the care you already get.",
+};
+
+
+/**
+ * GO DEEPER: work and study (PRD §20 level 4).
+ *
+ * What the shorter survey cannot separate: whether starting is hard because the task is unclear,
+ * because the standard is unclear, because the work is dull, or because something is at stake.
+ * Those four lead to genuinely different kinds of help, which is the whole reason for asking.
+ * Offered only when the short one is done and the cost is still high — never launched.
+ */
+const WORK_DEEPER: readonly SurveyQuestion[] = [
+  { id: "d-standard", prompt: "Do you usually know how good the work has to be?", kind: "single", options: [
+    { id: "yes", label: "Yes, it is clear", claims: { "standard-known": true } },
+    { id: "guess", label: "I guess, and aim high", signals: [{ subdomain: "activation", weight: 2 }], contributor: { layer: "brain", subdomain: "emotional-regulation", note: "A perfectionistic starting threshold" }, claims: { "standard-known": false } },
+    { id: "no", label: "Rarely", signals: [{ subdomain: "activation", weight: 1 }], contributor: { layer: "environment", subdomain: "workplace-context", note: "The expected standard is unclear" }, claims: { "standard-known": false } },
+  ] },
+  { id: "d-stakes", prompt: "Is it harder to start when somebody will judge the result?", kind: "single", options: [
+    { id: "much", label: "Much harder", signals: [{ subdomain: "emotional-regulation", weight: 2 }], contributor: { layer: "people", subdomain: "manager", note: "Being judged raises the threshold" } },
+    { id: "some", label: "A little", signals: [{ subdomain: "emotional-regulation", weight: 1 }] },
+    { id: "no", label: "No difference" },
+  ] },
+  { id: "d-dull", prompt: "Is dull work harder to begin than difficult work?", kind: "single", options: [
+    { id: "yes", label: "Dull is much harder", signals: [{ subdomain: "attention", weight: 2 }], contributor: { layer: "brain", subdomain: "attention", note: "Interest, not difficulty, is what switches it on" } },
+    { id: "same", label: "About the same" },
+    { id: "no", label: "Difficult is harder", signals: [{ subdomain: "activation", weight: 1 }] },
+  ] },
+  { id: "d-first-step", prompt: "When you do start, what usually gets you moving?", kind: "single", options: [
+    { id: "small", label: "Making the first step tiny", strength: "Can shrink a task down to a first move" },
+    { id: "person", label: "Somebody being there", contributor: { layer: "people", subdomain: "peers", note: "Company lowers the threshold" }, strength: "Uses accountability well" },
+    { id: "deadline", label: "Running out of time", contributor: { layer: "environment", subdomain: "deadline-design", note: "Waiting for urgency" } },
+    { id: "nothing", label: "Nothing reliably", signals: [{ subdomain: "activation", weight: 2 }] },
+  ] },
+  { id: "d-finish", prompt: "Once you are going, do you usually finish?", kind: "single", options: [
+    { id: "yes", label: "Usually", strength: "Once started, work often goes well", claims: { "finishes": true } },
+    { id: "stall", label: "I stall near the end", signals: [{ subdomain: "activation", weight: 1 }], claims: { "finishes": false } },
+    { id: "drift", label: "I drift onto something else", signals: [{ subdomain: "switching", weight: 2 }], claims: { "finishes": false } },
+  ] },
+  { id: "d-planning", prompt: "Do you break work into steps before starting?", kind: "single", options: [
+    { id: "always", label: "Almost always", strength: "Plans before starting" },
+    { id: "sometimes", label: "Sometimes" },
+    { id: "never", label: "Rarely, I just open it", signals: [{ subdomain: "structure", weight: 2 }], contributor: { layer: "environment", subdomain: "structure", note: "Work begun without a first step written down" } },
+  ] },
+  { id: "d-estimate", prompt: "How close are your guesses about how long work takes?", kind: "single", options: [
+    { id: "close", label: "Usually close", strength: "Estimates time well" },
+    { id: "under", label: "I underestimate a lot", signals: [{ subdomain: "time", weight: 2 }] },
+    { id: "unsure", label: "I do not really guess", signals: [{ subdomain: "time", weight: 1 }] },
+  ] },
+  { id: "d-meetings", prompt: "Do meetings and messages break up the day?", kind: "single", options: [
+    { id: "constantly", label: "Constantly", signals: [{ subdomain: "switching", weight: 2 }], contributor: { layer: "environment", subdomain: "workload", note: "The day arrives in fragments" } },
+    { id: "some", label: "Some days", signals: [{ subdomain: "switching", weight: 1 }] },
+    { id: "rarely", label: "Rarely" },
+  ] },
+  { id: "d-asked", prompt: "Have you asked for anything to change at work or in your course?", kind: "single", options: [
+    { id: "yes", label: "Yes", strength: "Has asked for what helps" },
+    { id: "no", label: "No, it has not come up", contributor: { layer: "environment", subdomain: "workplace-context", note: "Nothing has been asked for yet" } },
+    { id: "refused", label: "Yes, and it went nowhere", contributor: { layer: "people", subdomain: "manager", note: "A request that went nowhere" } },
+  ] },
+  { id: "d-cost", prompt: "How much does all this cost you in a normal week?", kind: "scale", costFor: "activation", note: "0 is not at all, 10 is constantly." },
+];
+
+/**
+ * GO DEEPER: relationships.
+ *
+ * The distinction worth paying ten questions for is the one the founder named: whether the
+ * difficulty is in the conversation itself or in what survives it.
+ */
+const RELATIONSHIPS_DEEPER: readonly SurveyQuestion[] = [
+  { id: "d-during", prompt: "During a conversation, how does it usually go?", kind: "single", options: [
+    { id: "well", label: "Well, I am engaged", strength: "Warm and engaged in the moment", claims: { "conversation-fine": true } },
+    { id: "drift", label: "I drift and lose the thread", signals: [{ subdomain: "attention", weight: 2 }], claims: { "conversation-fine": false } },
+    { id: "interrupt", label: "I jump in before they finish", signals: [{ subdomain: "inhibition", weight: 2 }], claims: { "conversation-fine": false } },
+  ] },
+  { id: "d-after", prompt: "What happens to things you agreed to?", kind: "single", options: [
+    { id: "held", label: "I keep them", strength: "Follows through on what was agreed" },
+    { id: "forget", label: "They fall out of my head", signals: [{ subdomain: "memory", weight: 3 }], contributor: { layer: "brain", subdomain: "memory", note: "Agreements made out loud are not kept anywhere" } },
+    { id: "late", label: "I remember late", signals: [{ subdomain: "memory", weight: 2 }] },
+  ] },
+  { id: "d-written", prompt: "Do agreements get written down anywhere?", kind: "single", options: [
+    { id: "yes", label: "Yes, somewhere I check", strength: "Keeps a place outside their head" },
+    { id: "no", label: "No", signals: [{ subdomain: "memory", weight: 2 }], contributor: { layer: "environment", subdomain: "structure", note: "No capture place outside your head" } },
+  ] },
+  { id: "d-carries", prompt: "Who tends to carry the follow-up?", kind: "single", options: [
+    { id: "me", label: "Me" },
+    { id: "partner", label: "A partner", contributor: { layer: "people", subdomain: "partner", note: "A partner carries the follow-up" } },
+    { id: "family", label: "Family", contributor: { layer: "people", subdomain: "family", note: "Family carry the follow-up" } },
+    { id: "nobody", label: "Nobody, things drop", signals: [{ subdomain: "memory", weight: 1 }] },
+  ] },
+  { id: "d-named", prompt: "Has anyone said they feel unheard?", kind: "single", options: [
+    { id: "often", label: "Often", signals: [{ subdomain: "partner", weight: 2 }] },
+    { id: "once", label: "Once or twice", signals: [{ subdomain: "partner", weight: 1 }] },
+    { id: "no", label: "Not that I know of" },
+  ] },
+  { id: "d-sting", prompt: "How long does it take to settle after a difficult conversation?", kind: "single", options: [
+    { id: "long", label: "A long time", signals: [{ subdomain: "emotional-regulation", weight: 3 }] },
+    { id: "while", label: "A while", signals: [{ subdomain: "emotional-regulation", weight: 1.5 }] },
+    { id: "quick", label: "Not long", strength: "Settles quickly after friction" },
+  ] },
+  { id: "d-explained", prompt: "Do the people close to you know how your attention works?", kind: "single", options: [
+    { id: "yes", label: "Yes, we have talked about it", strength: "Has explained how they work to the people close to them" },
+    { id: "partly", label: "Partly" },
+    { id: "no", label: "No", contributor: { layer: "people", subdomain: "partner", note: "The pattern has not been explained to them" } },
+  ] },
+  { id: "d-repair", prompt: "When something goes wrong, does it get talked through?", kind: "single", options: [
+    { id: "yes", label: "Usually", strength: "Repairs things after they go wrong" },
+    { id: "avoid", label: "We avoid it", contributor: { layer: "people", subdomain: "partner", note: "Difficult things go unsaid" } },
+    { id: "escalate", label: "It escalates first", signals: [{ subdomain: "emotional-regulation", weight: 2 }] },
+  ] },
+  { id: "d-cost", prompt: "How much is this costing the relationships that matter?", kind: "scale", costFor: "partner", note: "0 is not at all, 10 is constantly." },
+];
 
 export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
   {
@@ -61,6 +224,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
     minutes: 3,
     tryNext: "first-physical-action",
     exploreNext: "deadlines",
+    deeper: WORK_DEEPER,
     questions: [
       { id: "initiation", prompt: "How hard is it to begin important work?", kind: "single", options: [
         { id: "very", label: "Very, I circle it for ages", signals: [{ subdomain: "activation", weight: 3 }] },
@@ -124,6 +288,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
     minutes: 3,
     tryNext: "name-the-drift",
     exploreNext: "not-listening",
+    deeper: RELATIONSHIPS_DEEPER,
     questions: [
       { id: "unheard", prompt: "How often does someone close to you feel you were not listening?", kind: "single", options: [
         { id: "often", label: "Often", signals: [{ subdomain: "attention", weight: 3 }] },

@@ -6,6 +6,7 @@ import "./styles/learning.css";
 import "./styles/finder.css";
 import "./styles/platform-surfaces.css";
 import "./styles/life.css";
+import "./styles/map.css";
 import "./styles/play.css";
 import "./styles/lives.css";
 import "./styles/glass.css";
