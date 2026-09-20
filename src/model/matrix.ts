@@ -56,12 +56,12 @@ export const ASPECT_LABELS: Readonly<Record<Aspect, string>> = {
 
 /** What each axis is, in the person's own language. The sheet shows it; the hub never does. */
 export const ASPECT_MEANINGS: Readonly<Record<Aspect, string>> = {
-  starting: "Getting going on something, especially when it is vague or a long way from due.",
-  focus: "Staying with a thing once you are in it, and getting back after an interruption.",
-  organisation: "Time, structure, how much is open at once, and what falls out of mind.",
-  "emotional-regulation": "How fast feelings arrive, and how long they take to settle.",
-  relationships: "The people who carry part of the load, or add to it.",
-  "sleep-energy": "Sleep, movement, appetite: the physical conditions everything else runs on.",
+  starting: "Getting going, especially on something vague.",
+  focus: "Staying with a thing, and getting back after an interruption.",
+  organisation: "Time, structure, and what falls out of mind.",
+  "emotional-regulation": "How fast feelings arrive, and how long they settle.",
+  relationships: "The people who carry part of the load.",
+  "sleep-energy": "Sleep, movement and energy.",
 };
 
 /**

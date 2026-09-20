@@ -884,10 +884,37 @@ first written, the reason is always the same: the founder supplied the comps' ow
 2. **The sheet kept its blur.** The map's sheets portal to `document.body`, so the flat scope
    could not reach them and Calm Clarity's "scrim without blur filters" was quietly violated.
    Fixed with `:has(.map-sheet)`.
-3. **The manual's own headings leaked into the GP summary.** `manualText()` wraps a person's words
+3. **An open sheet measured as itself plus the screen it covered.** "My ADHD, an axis open" came
+   to 118 words against a ceiling of 60 while neither surface was over on its own, because
+   `measure()` counts everything visible and the hub was still in the DOM behind the scrim. The
+   fix is the correct behaviour anyway and was a real gap: `app/sheet.tsx` trapped focus but left
+   the shell in the accessibility tree, so a screen reader could still walk the page underneath a
+   modal. It sets `inert` and `aria-hidden` on the shell while a sheet is open now, which takes
+   the page out of the tree, out of the tab order and out of the count in one attribute.
+4. **The manual's own headings leaked into the GP summary.** `manualText()` wraps a person's words
    in this app's section titles, so "What helps me" appeared in a document whose rule is that
    every line is a heading, a record row, or the person's own words. `summary.test.ts` failed on
    exactly that line. The summary reads the three raw fields now.
+
+### 19.1a The numbers, measured
+
+Final run of `e2e/text-budget.spec.ts` against a production build, 2026-09-20:
+
+| | |
+| --- | --- |
+| App screens measured | 62 |
+| Median app screen | 28 words |
+| At or under the 40-word target | 45 of 62 |
+| Over the 60-word ceiling | **0** |
+
+The lived-in My ADHD hub went from **336 words and 8,014 px** to **44 words and 1,160 px** at
+390 px wide. `e2e/my-adhd.spec.ts` passes 9, `e2e/a11y.spec.ts` passes, `e2e/controls.spec.ts`
+reports 314 controls with none under 44 px and none covered, and `e2e/viewports.spec.ts` is clean
+from 320 to 1440. The unit suite is 4,163 across 279 files.
+
+Two screens needed a copy trim to get there rather than a waiver: the axis sheet lost the module
+sentence it was restating (a short "Does this fit?" asks the same thing), and `/my-map`'s Physical
+line lost the clause after its dash.
 
 ### 19.2 Files
 

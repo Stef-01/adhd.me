@@ -100,7 +100,7 @@ export function MyAdhdSheet({
 
           {view.helps.length > 0 && (
             <ul className="map-chips is-strength" aria-label="What helps">
-              {view.helps.map((h) => (
+              {view.helps.slice(0, 1).map((h) => (
                 <li key={h}>
                   <span className="map-chip is-strength">
                     <Sparkle size={13} weight="fill" aria-hidden="true" /> {h}
@@ -112,7 +112,10 @@ export function MyAdhdSheet({
 
           {insight && (
             <div className="map-accuracy">
-              <p>{insight.heading}</p>
+              {/* A short question, not the module's whole sentence. The reading it is asking
+                  about is the axis a person just opened; restating it here cost fifteen words on
+                  a screen whose ceiling is sixty. */}
+              <p>Does this fit?</p>
               <div className="resonance-row" role="group" aria-label="Does this fit">
                 {VERDICTS.map((v) => (
                   <button
