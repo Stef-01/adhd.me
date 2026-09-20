@@ -17,7 +17,14 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-time > span { font-size: 11px; font-weight: 550; }
 .tm-time strong { font-size: 32px; line-height: 1.15; font-weight: 650; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
 .tm-time[data-urgent="true"] { color: #8a3727; }
-.tm-pocket, .tm-setup-items { width: min(100%, 1100px); display: flex; align-items: center; gap: 14px; min-height: 44px; margin-bottom: 10px; font-size: 11px; }
+/* Both rows are pill-shaped items that cannot shrink below their own content (min-width: auto on a
+   flex item), so without wrap they push off the side of a narrow phone rather than reflowing: the
+   evening row's third essential ran to x357 in a 320 viewport and the screen scrolled sideways by
+   37px. Wrapping is the only form of this that cannot overflow at some width, font size or
+   language, so it wraps. At 320 the three essentials take two rows, which is the honest outcome:
+   the alternative was shrinking a drawn prop to 20px to force one line, and the games standard
+   asks for pieces that read as things rather than pieces that fit. */
+.tm-pocket, .tm-setup-items { width: min(100%, 1100px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px; min-height: 44px; margin-bottom: 10px; font-size: 11px; }
 .tm-pocket > span:not(.tm-pocket-label, .tm-hands) { display: flex; align-items: center; gap: 4px; opacity: 1; }
 .tm-pocket > span[data-carried="true"] { opacity: 1; }
 .tm-pocket > span[data-packed="true"] { opacity: 1; font-weight: 750; }

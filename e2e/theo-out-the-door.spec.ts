@@ -145,3 +145,27 @@ test("every offered home arrangement remains reachable on the smallest phone", a
     await expect(page.locator(".tm-game")).toHaveAttribute("data-phase", "complete");
   }
 });
+
+// The evening's three essentials are pill buttons in a flex row, and a flex item cannot shrink
+// below its own content, so without wrap the third ran to x357 in a 320 viewport and the screen
+// scrolled sideways by 37px. Three drawn props at 320 take two rows, which is the right outcome —
+// the alternative was shrinking the art to force one line — so this pins the overflow, not the
+// row count.
+test("the evening's essentials never push the screen sideways", async ({ page }) => {
+  test.setTimeout(120_000);
+  for (const width of [320, 360, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await begin(page);
+    await firstMorning(page);
+    await arrange(page);
+    const items = page.locator(".tm-setup-items");
+    await expect(items).toBeVisible();
+    const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(over, `the evening arrangement at ${width}px scrolls sideways`).toBeLessThanOrEqual(0);
+    // And every essential stays inside the viewport, wherever it wrapped to.
+    const outside = await items.evaluate((el) => [...el.children]
+      .filter((c) => c.getBoundingClientRect().right > document.documentElement.clientWidth + 0.5)
+      .map((c) => c.textContent?.trim() ?? ""));
+    expect(outside, `an essential hangs off the side at ${width}px`).toEqual([]);
+  }
+});
