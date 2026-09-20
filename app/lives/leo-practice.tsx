@@ -95,7 +95,7 @@ export function LeoPractice() {
   return <section data-liquid className="leo-practice lives-run" data-phase={phase} aria-labelledby="leo-title">
     <div className="leo-toolbar">
       <Link href="/lives/learn" aria-label="Back to learning"><ArrowLeft size={22} /></Link>
-      <span>Leo & the mosquito</span>
+      <span>Leo and the mosquito</span>
       {phase === "playing" || phase === "paused" ? <button onClick={() => changePhase(phase === "paused" ? "playing" : "paused")} aria-label={phase === "paused" ? "Resume game" : "Pause game"}>{phase === "paused" ? <Play size={22} weight="fill" /> : <Pause size={22} />}</button> : <button onClick={() => setBuzzOn(on => !on)} aria-label="Buzz sounds" aria-pressed={buzzOn}>{buzzOn ? <SpeakerHigh size={22} /> : <SpeakerSlash size={22} />}</button>}
     </div>
     <h1 id="leo-title" ref={title} tabIndex={-1}>{phase === "paused" ? "Take your time." : settled ? "Quiet all night."
@@ -104,8 +104,12 @@ export function LeoPractice() {
       : phase === "routine" ? (step === 0 ? (won ? "Quiet at last." : "Still wide awake.") : "Change the room.") : "GET IT!"}</h1>
     {/* The clock belongs to the round. Nothing in the routine is timed — it is the opposite of the
         round in exactly that way — so the bar and the timer leave rather than sit there at zero. */}
-    {!after && <div className="leo-countdown">
-      <div className="leo-clock" aria-hidden="true"><span style={{ transform: `scaleX(${still ? 1 : Math.max(0, 1 - elapsed / duration)})` }} /></div>
+    {!after && <div className="leo-countdown" data-still={still ? "true" : undefined}>
+      {/* Under reduced motion the round has no clock, so it has no bar either. It used to draw one
+          at scaleX(1) — a completely full progress bar sitting beside the words "No timer", which
+          reads as time up rather than time irrelevant. The Chaos Run already omits its own bar the
+          same way (`app/lives/run.tsx`); this is that, here. */}
+      {!still && <div className="leo-clock" aria-hidden="true"><span style={{ transform: `scaleX(${Math.max(0, 1 - elapsed / duration)})` }} /></div>}
       <span role="timer" aria-label="Time remaining">{still ? "No timer" : `${Math.max(0, Math.ceil((duration - elapsed) / 1000))}s`}</span>
     </div>}
     <div className="leo-board">
