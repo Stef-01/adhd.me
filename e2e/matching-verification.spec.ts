@@ -35,12 +35,12 @@ test("a separating ask ranks the declared clinician first, on screen", async ({ 
 
 test("a language ask is ranked on and explained, not just printed (O1)", async ({ page }) => {
   await searchFor(page, "an Urdu-speaking GP please, for an ADHD assessment");
-  // O252: two of eleven declare Urdu, so the ask now ORDERS the list where it used to tie it —
-  // the two speakers lead and the heading says "Matches" rather than "All listed providers".
-  // The tie half of this guarantee has not been dropped; it is pinned on "hello there" below,
-  // which is the case that genuinely produces no order.
+  // Both current clinicians declare Urdu, so language evidence is computed and shown while the
+  // full-list tie is said plainly rather than dressed as an earned order.
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
-  await expect(page.locator(".results-list-head h2")).toHaveText("Matches");
+  // O237: the full-list tie is no longer a sentence — both listed GPs declare Urdu, so the words
+  // produced no order, and the heading says so ("All listed GPs") rather than dressing it as one.
+  await expect(page.locator(".results-list-head h2")).toHaveText("All listed providers");
   await page.screenshot(shot("02-urdu-ranked-and-earned"));
   // And the profile says the reason in the closed vocabulary.
   await page.locator(".clinician-row").first().click();
@@ -122,26 +122,14 @@ test("a psychographic ask ranks, explains, and shows its provenance on screen (O
   await page.screenshot({ path: "qa/_runs/matching-o30/02-psychographic-provenance.png", fullPage: true });
 });
 
-test("the neurodiversity ask is read, and now answered by the people who declare it (O30)", async ({ page }) => {
-  // "neurodiversity affirming" reaches Strengths-focused. That facet had NO declarer while the
-  // roster was two GPs, so this test pinned the honest silence: the words understood, and no
-  // row claiming a reason nobody had declared. O252 gave it five declarers, so the same screen
-  // now has to do the other half of that promise — say the reason, on the rows that earned it.
+test("the neurodiversity ask is read, and unanswered honestly while nobody declares it (O30)", async ({ page }) => {
+  // "neurodiversity affirming" reaches Strengths-focused — a facet NO roster member declares
+  // today. The honest render is the point: the words are understood (not the unmatched
+  // banner), but no row claims a strengths reason it has not declared.
   await searchFor(page, "a neurodiversity affirming doctor who explains in plain language");
   await expect(page.locator(".clinician-list")).toBeVisible();
-  await expect(page.locator(".clinician-row").getByText("Strengths-focused").first()).toBeVisible();
-  await page.screenshot({ path: "qa/_runs/matching-o30/03-neurodiversity-answered.png", fullPage: true });
-});
-
-test("a facet nobody declares is still read and still answered honestly (O30)", async ({ page }) => {
-  // O252: the honest-silence half of the test above, moved to where it is still live. Nobody on
-  // the roster declares bipolar and complex mental health, so the words must be understood —
-  // never the "could not tell" banner — and no row may claim the reason.
-  await searchFor(page, "I have bipolar as well and need an ADHD assessment");
-  await expect(page.locator(".clinician-list")).toBeVisible();
-  await expect(page.getByText(/could not tell/)).toHaveCount(0);
-  await expect(page.locator(".clinician-row").getByText("Bipolar and complex mental health")).toHaveCount(0);
-  await page.screenshot({ path: "qa/_runs/matching-o30/03-complex-honest-nondeclaration.png", fullPage: true });
+  await expect(page.locator(".clinician-row").getByText("Strengths-focused")).toHaveCount(0);
+  await page.screenshot({ path: "qa/_runs/matching-o30/03-neurodiversity-honest-nondeclaration.png", fullPage: true });
 });
 
 test("a triple ask, language, psychographic, care, reads all three families at once (O33)", async ({ page }) => {

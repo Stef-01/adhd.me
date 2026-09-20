@@ -13,7 +13,9 @@
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { measured } from "./support/measured";
-import { rankClinicians } from "../src/demo/clinicians";
+import { clinicians, rankClinicians } from "../src/demo/clinicians";
+import { emptyFilters } from "../src/finder/filters";
+import { searchRoster } from "../src/finder/pipeline";
 import { demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/real-roster";
 
 // O226: this file's walks assert REAL-roster facts — named rows above the fold, `rankClinicians`
@@ -283,10 +285,20 @@ test("refinement stays with results while the profile leads with the bio", async
  * it is the same one `matching-verification.spec.ts` uses for the clarifier.
  */
 test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", async ({ page }) => {
+  // The list keeps all but the first few behind "{n} more", and this test compares one rendering
+  // of it against another — so both readings have to be of the whole list, or a row that merely
+  // rose past the fold would read as a row the clarifier invented.
+  const expandAll = async () => {
+    const more = page.locator(".show-all");
+    if (await more.isVisible().catch(() => false)) await more.click();
+    await expect(page.locator(".show-all")).toHaveCount(0);
+  };
   const askAgain = async () => {
     await page.getByRole("button", { name: /Change what you said/i }).click();
     await page.getByRole("textbox").fill("hello there");
     await page.getByRole("button", { name: "Find support" }).click();
+    await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
+    await expandAll();
     await page.getByRole("button", { name: "Improve my matches" }).click();
     await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
     await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
@@ -307,6 +319,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
     if (chip > 0) await askAgain();
     await page.locator(".clarify-chip").nth(chip).click();
     await page.waitForTimeout(600);
+    await expandAll();
     const after = await page.locator(".clinician-row strong").allInnerTexts();
     expect(after.length).toBeGreaterThan(0);
     // Everyone still shown was already known — a clarifier narrows an order, never mints rows.
@@ -399,8 +412,19 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
   //
   // Suburb-free queries on purpose: naming a place would route through `rankCliniciansNear`,
   // which is the suburb test's subject above, not this one's.
+  //
+  // O252: THE EXPECTATION NOW RUNS THE SAME TWO STEPS THE PAGE RUNS, and the second step is the
+  // one the two-GP roster hid. `app/care-finder.tsx` narrows the roster by any profession the
+  // sentence names (`searchRoster`) and THEN ranks what is left. While every entry was a GP,
+  // "a woman GP for ADHD assessment" narrowed to the whole roster and the narrowing was
+  // invisible, so comparing against `rankClinicians` alone happened to agree. With nine
+  // non-GPs on the roster that query narrows to two and the bare ranking returns eleven. The
+  // claim this test makes — the UI follows the engine rather than a fixed order — is about the
+  // ORDER, so the expectation takes the engine's own narrowing with it.
   const QUERIES = ["I need an ADHD assessment", "a woman GP for ADHD assessment"];
-  const expected = QUERIES.map((q) => rankClinicians(q).map((c) => c.name));
+  const expected = QUERIES.map((q) =>
+    rankClinicians(q, searchRoster(clinicians, emptyFilters(), q, null)).map((c) => c.name),
+  );
 
   // The guard that keeps this non-vacuous: the pair must genuinely separate. If a roster change
   // ever makes both queries agree, this fails HERE, demanding a new pair rather than silently
