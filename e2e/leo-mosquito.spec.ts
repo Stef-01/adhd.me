@@ -170,6 +170,10 @@ test("swarm controls and meters fit four screen widths and remain accessible", a
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 844 }); await page.goto(URL);
     await expect(page.getByRole("timer")).toHaveText("No timer");
+    // And no bar beside those words. It used to draw one at scaleX(1) — a completely full progress
+    // bar next to "No timer", which reads as time up rather than time irrelevant. The Chaos Run
+    // omits its own bar under reduced motion the same way.
+    await expect(page.locator(".leo-countdown .leo-clock")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Pause game" })).toBeVisible();
     const play = await page.getByRole("button", { name: "Pause game" }).boundingBox();
     expect(play!.y + play!.height).toBeLessThanOrEqual(844);

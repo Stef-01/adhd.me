@@ -20,6 +20,9 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-countdown { width: min(100%, 600px); display: flex; align-items: center; gap: 14px; font-size: 14px; }
 .leo-countdown .leo-clock { flex: 1 1 auto; width: auto; }
 .leo-countdown [role="timer"] { min-width: 3.2ch; text-align: right; font-size: 20px; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
+/* With no bar beside it the words are the whole row, so they start at the left edge like every
+   other line on the screen rather than hanging off a right edge that is no longer there. */
+.leo-countdown[data-still="true"] [role="timer"] { text-align: left; font-size: 14px; font-weight: 600; }
 .leo-swarm { position: absolute; inset: 0; }
 .leo-swarm .leo-room { top: 60px; }
 .leo-swarm-hud { position: absolute; inset: 0 0 auto; height: 60px; padding: 6px 18px 0; background: #c5c6ed; color: #363454; z-index: 4; display: grid; gap: 6px; align-content: start; }
