@@ -57,3 +57,14 @@ this tree generates a face for a real person.
 
 Adding a clinician in a new suburb also needs a point in `src/geo/suburbs.ts`; `suburbs.test.ts`
 fails loudly rather than letting them rank last for every search forever.
+
+## Evidence
+
+`qa/network-o252/` holds the three screens these nine make reachable, at 390 and 1280:
+
+- **results** — the finder narrowed to psychologists, five of twelve shown, portraits and the
+  declared reason on each row.
+- **profile** — Lachlan Avent: portrait, profession and post-nominals, the suburb, the telehealth
+  and open-books facts, his own first sentence, and the disclosures under it.
+- **booking** — the `practice` route, which no real clinician reached before these nine. It names
+  Halaxy and the clinic's free first call, and says what ADHD.ME does not see.
