@@ -202,3 +202,22 @@ test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kep
   // Nothing about the settings in the URL.
   expect(page.url()).not.toMatch(/flash|sensory|haptic/);
 });
+
+// "Eight lives. Three of yours." is the line the screen opens on, and the cast beside it has to be
+// eight. As a wrapping flex row of 44px beans it needed 380px and had 350 at 390 and 280 at 320,
+// so the eighth sat alone on a second row and the line-up read as seven and a spare. The beans are
+// decorative and aria-hidden, so nothing else would have caught this.
+test("the cast of eight is one row of eight, at both phone widths", async ({ page }) => {
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const path of ["/lives", "/approach"]) {
+      await page.goto(path);
+      const cast = page.locator(".lives-cast").first();
+      await expect(cast).toBeAttached();
+      const rows = await cast.evaluate((el) =>
+        new Set([...el.children].map((c) => Math.round(c.getBoundingClientRect().top))).size);
+      expect(rows, `${path} at ${width}px breaks the cast over ${rows} rows`).toBe(1);
+      await expect(cast.locator(".bean")).toHaveCount(8);
+    }
+  }
+});

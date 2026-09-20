@@ -124,7 +124,13 @@
 .lives-faster { justify-content: center; background: var(--paper); color: var(--ink); }
 .lives-faster.is-flash { background: var(--accent); color: var(--on-accent); }
 .lives-faster-word { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(3rem, 18vw, 6rem); font-weight: 700; letter-spacing: -0.02em; color: inherit; }
-.lives-cast { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; }
+/* Eight lives, on one line of eight. As a wrapping flex row of 44px beans the cast needed 380px
+   and had 350 at 390 and 280 at 320, so the eighth dropped onto a row of its own and the line-up
+   read as seven and a spare — on /lives, which is the door to the whole thing. Eight equal columns
+   instead: each bean takes the width there is (40px at 390, 31px at 320) and stops growing at the
+   size it is drawn at, so the row is never orphaned and never larger than intended. */
+.lives-cast { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); justify-items: center; align-items: end; gap: 4px; max-width: 420px; margin-inline: auto; }
+.lives-cast > .bean { width: 100%; max-width: 44px; height: auto; }
 .lives-play { min-height: 72px; padding: 18px 44px; font-size: 1.375rem; }
 
 /* ── Score screen (§36) ────────────────────────────────────────────────────────────────────── */
