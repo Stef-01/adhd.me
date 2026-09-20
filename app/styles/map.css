@@ -566,3 +566,21 @@
   font-weight: 600;
   color: var(--ink);
 }
+
+/* THE MAP'S SHEETS ARE PORTALLED TO THE BODY, so they sit outside `.map-screen` and the flat
+   scope at the top of this file cannot reach them. `:has()` puts them back inside it.
+   Calm Clarity is specific about the scrim: "an ultra-clean semi-opaque scrim (rgba(17, 24, 39,
+   0.35)) without blur filters". */
+.sheet-layer:has(.map-sheet) .sheet-scrim {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgb(26 28 28 / 0.35);
+}
+
+.sheet-layer:has(.map-sheet) .sheet {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: var(--paper);
+  box-shadow: none;
+  border-top: 1px solid var(--line);
+}
