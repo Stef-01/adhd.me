@@ -454,6 +454,40 @@ test("Phase A: voice reflection appends the transcript, and an absent recogniser
   await expect(page.locator(".reflect-field textarea")).toHaveValue(/the brief was vague/);
 });
 
+// A disc on the care map has to hold its own label. The rule that used to keep them inside cut any
+// label over ten characters to its FIRST WORD, which was a general mechanism serving exactly one of
+// the twenty-five: "Working memory" read "Working", a different concept, and the screen was the only
+// place a person met the word. Two things are pinned here — that every visible label is the whole
+// label, and that it still fits the disc it sits in — because the second is what the cut was for.
+test("every care-map node shows its whole label, inside its own disc", async ({ page }) => {
+  await page.goto("/approach/map");
+  await expect(page.locator(".care-map-node")).toHaveCount(25);
+  const nodes = await page.evaluate(() =>
+    [...document.querySelectorAll(".care-map-node")].map((g) => {
+      const circle = g.querySelector("circle") as SVGGraphicsElement;
+      const text = g.querySelector("text") as SVGGraphicsElement;
+      return {
+        // The accessible name is "<label> (<layer>)", so the label is what precedes the bracket.
+        label: (g.getAttribute("aria-label") ?? "").replace(/\s*\(.*$/, ""),
+        // A stacked label is two <tspan> lines, and textContent would run them together
+        // ("Workingmemory"), so the lines are read and rejoined the way they are read aloud.
+        shown: (text.querySelectorAll("tspan").length
+          ? [...text.querySelectorAll("tspan")].map((t) => (t.textContent ?? "").trim()).join(" ")
+          : (text.textContent ?? "")).trim(),
+        textWidth: text.getBBox().width,
+        // The stroke sits on the circle's edge, so the room for a word is the disc less its line.
+        room: circle.getBBox().width - Number(circle.getAttribute("stroke-width") ?? 0) * 2,
+      };
+    }));
+  const renamed = nodes.filter((n) => n.shown.replace(/\s+/g, " ") !== n.label);
+  expect(renamed, "a node that shows less than its own label renames the thing it points at").toEqual([]);
+  const spilling = nodes.filter((n) => n.textWidth > n.room).map((n) => `${n.label}: ${n.textWidth.toFixed(1)} in ${n.room.toFixed(1)}`);
+  expect(spilling, "a label wider than its disc spills into the next one").toEqual([]);
+  // The one that made the old rule necessary, and the proof it now stacks rather than truncates.
+  await expect(page.getByRole("button", { name: /^Working memory \(Brain\)/ })).toBeVisible();
+  expect(nodes.find((n) => n.label === "Working memory")!.shown.replace(/\s+/g, " ")).toBe("Working memory");
+});
+
 test("NWIA: the paradigm is on the care map once and attributed, a node names its dimension, and My ADHD says the balance honestly", async ({ page }) => {
   await page.goto("/approach/map");
   const intro = page.locator(".care-map-nwia");

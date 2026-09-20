@@ -39,6 +39,18 @@ const R_IN = 64;
    no word spills past its ring into the next. Three rings, with the discs sized so two neighbours on
    adjacent rings clear each other at the closest angle a seven-node wedge produces. */
 const R_NODE = 26;
+/* The gap between two stacked label lines, in viewBox units at the 8.75 label size. */
+const LABEL_LEADING = 9.5;
+
+/* A label wider than its disc used to be cut to its first word, which was a general rule serving
+   exactly one of the twenty-five: "Working memory" read "Working", a different thing. Only the
+   longest single word has to fit the disc, so a two-word label stacks instead of losing half its
+   meaning. Measured at the 8.75 size: the widest word in the set ("Medication") renders 46 units
+   inside a 50.5-unit disc, and "Working"/"memory" are 34 and 29. */
+function labelLines(label: string): string[] {
+  const words = label.split(" ");
+  return words.length > 1 && label.length > 10 ? words : [label];
+}
 /* Outer, inner, middle: consecutive nodes step across all three, so the two nearest in angle are
    never the closest pair of rings. The insets keep each ring off the wedge edges, where the next
    wedge's nodes sit. Searched, not guessed: this set holds every pair of discs at least 6px apart. */
@@ -128,7 +140,11 @@ export function CareMap() {
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(s.id); } }}
             >
               <circle cx={p.x} cy={p.y} r={has ? R_NODE + 2 : R_NODE} fill="#fff" stroke={COLOURS[p.layer].ink} strokeWidth={has ? 3 : 1.5} />
-              <text x={p.x} y={p.y + 3.25} textAnchor="middle" fontSize="8.75" fontWeight="700" fill={COLOURS[p.layer].ink}>{s.label.length > 10 ? s.label.split(" ")[0] : s.label}</text>
+              <text x={p.x} y={p.y + 3.25} textAnchor="middle" fontSize="8.75" fontWeight="700" fill={COLOURS[p.layer].ink}>
+                {labelLines(s.label).map((line, i, all) => (
+                  <tspan key={line} x={p.x} dy={i === 0 ? (all.length - 1) * -LABEL_LEADING / 2 : LABEL_LEADING}>{line}</tspan>
+                ))}
+              </text>
             </g>
           );
         })}
