@@ -36,3 +36,6 @@ Test feasible and inefficient routes, charge overlap, hand capacity, early exit,
 - All 73 measured screens are within their applicable ceiling. Theo: entry 39, competing demands 40, pause 27, departure 24, evening 29, revisit 37, complete 29 words. Screen-state traversal is part of the permanent text-budget gate.
 
 The game's pressure and timings are fictional. This evidence demonstrates technical behavior and observed local playability; patient engagement and strategy understanding have not been measured in this change.
+## Release verification — 2026-09-20
+
+The final corrected public-route suite passed 21/21 cases across Chromium, WebKit and Firefox against the merged production build. The complete Lives model suite passed 104 tests. Build and typecheck passed. The expanded upstream word-budget audit measured 83 screens, with all 69 app screens within their ceilings; Theo's seven measured states remain 39/40/27/24/29/37/29 words. Engagement and strategy understanding still require player review.

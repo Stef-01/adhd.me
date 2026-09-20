@@ -1,5 +1,7 @@
 # Lives gameplay and subtle strategy learning: staged upgrade plan
 
+**2026-09-20 production baseline:** [Lives v2: complete plan](./game-upgrade-v2/PLAN.md) now governs scope, sequencing, per-game mechanics and acceptance gates. [Asset delivery](./game-upgrade-v2/ASSETS.md) records the generated pack and validation. The earlier analysis below remains historical context; it does not override the v2 plan.
+
 **2026-09-18 sequencing update:** The user explicitly prioritised Theo after finding the old object-packing round too easy. His public route now receives the house/route/dependency rebuild in [Theo implementation](./theo-morning-rebuild.md). This supersedes the earlier Zoe-next order; it does not imply Leo's pending patient review or the other characters are finished.
 
 Status: programme in progress. The first Leo L1/L2 candidate is implemented at `/lives/lab/leo-room`; L3 and the remaining rebuilds are pending. See [implementation and QA record](./leo-room-implementation-qa.md).

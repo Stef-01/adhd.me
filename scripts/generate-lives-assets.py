@@ -13,7 +13,7 @@ def group(id,body,transform=''): return f'<g id="{id}"'+(f' transform="{transfor
 def write_svg(key,body,w=128,h=128,**meta):
     dest=OUT/(key+'.svg'); dest.parent.mkdir(parents=True,exist_ok=True)
     title=html.escape(key.replace('/',' / ').replace('-',' '))
-    dest.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img"><title>{title}</title>{body}</svg>\n',encoding='utf-8')
+    dest.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img"><title>{title}</title>{body}</svg>\n',encoding='utf-8',newline='\n')
     ASSETS.append(dict(id=key,path=key+'.svg',kind=key.split('/')[0],width=w,height=h,viewBox=[0,0,w,h],sha256=hashlib.sha256(dest.read_bytes()).hexdigest(),**meta))
 SHAPES=[
 'M60 8c30 0 48 24 48 58s-18 58-48 58S12 100 12 66 30 8 60 8Z',
@@ -148,7 +148,7 @@ add('tissue',path('M18 54h89v58H18Z','#B4C9CB','none')+ellipse(63,58,24,7,'#829C
 add('duck',ellipse(63,82,43,27,'#E6C562')+circle(85,45,23,'#EED276')+path('M102 43h22l-16 12h-8Z','#D99258','none')+path('M27 74L9 60l10 31 M47 79q27-15 32 5-11 19-32-5Z','#D4AF4E','none')+circle(90,40,3,INK))
 add('bubble',circle(64,64,47,'#D4E7E5')+circle(64,64,39,'#E5EEEB')+path('M36 44q8-12 23-13 M88 85l5-9',stroke='#FFFFFF',width=7)+path('M32 90q15 17 37 15',stroke='#BED3D6',width=3))
 add('water-cup',path('M29 23h70l-8 91H37Z','#DAE9E6','#96B5B3',3)+path('M34 66q30-7 60 0l-4 42H38Z','#AFCFCB','none')+path('M42 32l4 58',stroke='#F9FBEB',width=4))
-add('shoe-cue',rect(10,9,108,110,'#F4DE9D',9)+P['shoes'].replace('<path','<path')+circle(99,28,14,'#94B499')+path('M93 28l5 5 8-11',stroke='#FFF8E5',width=3))
+add('shoe-cue',rect(10,9,108,110,'#F4DE9D',9)+P['shoes']+circle(99,28,14,'#94B499')+path('M93 28l5 5 8-11',stroke='#FFF8E5',width=3))
 add('meal-bowl',ellipse(64,52,51,23,'#E2CBA5')+path('M13 52q1 58 51 60 50-2 51-60Z','#ADBC9B','none')+ellipse(64,51,44,16,'#EED6A0')+circle(45,49,10,'#D9936C')+circle(76,50,11,'#83A17A')+path('M39 82q24 16 49 0',stroke='#D5DFC5',width=4))
 add('ball',circle(64,64,46,'#DDA383')+path('M22 43q50 17 84-1 M24 91q42-40 80-7 M47 21q-7 49 25 87',stroke='#B57B63',width=4))
 add('support-card',paper()+circle(52,62,13,'#8EB5AE')+circle(80,62,13,'#C6AACD')+path('M35 95q0-22 17-22 17 0 17 22 M63 95q0-22 17-22 17 0 17 22','#AAC4B7','none'))
@@ -328,7 +328,7 @@ def generate():
     manifest=dict(version='2.0.0',generatedBy='scripts/generate-lives-assets.py',provenance='Original project-authored vector geometry and synthesised PCM. Principal and legacy character silhouettes/colours extend the existing ADHD.ME cast. No third-party raster, music, fonts or copied character art.',
         status='Asset production baseline; gameplay implementation and player validation are separate.',worlds=WORLDS,poses=POSES,cast={k:dict(body=v[0],ink=v[1],role='principal' if k in WORLDS else 'supporting') for k,v in CAST.items()},
         assets=ASSETS,games=games,arcade=arcade,learningRuns=learning,counts={k:sum(a['kind']==k for a in ASSETS) for k in ['characters','scenes','props','effects','audio']})
-    (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+    (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8',newline='\n')
     motion={
         'version':'2.0.0','contract':'Animate from accepted model events. Hit regions never inherit squash, shake or decorative translation. Pause/hidden/unmount suspend all tracks.',
         'tracks':{
@@ -340,7 +340,7 @@ def generate():
             'noise':{'durationMs':900,'opacity':[.3,.7,.3],'still':'Static source mark; do not shake the screen.'},
             'completion':{'durationMs':700,'opacity':[0,1,0],'still':'Static success spark; focus the next action.'}},
         'audio':{'autoplay':False,'masterPeakCeiling':.22,'maxConcurrentVoices':4,'loopCrossfadeMs':120,'pause':'Stop/fade nodes and retain logical play state; never resume without user consent.', 'warning':'Individual WAV peaks are bounded; runtime mixing still needs a master limiter and volume control.'}}
-    (OUT/'motion.json').write_text(json.dumps(motion,indent=2)+'\n',encoding='utf-8')
+    (OUT/'motion.json').write_text(json.dumps(motion,indent=2)+'\n',encoding='utf-8',newline='\n')
     print(json.dumps(dict(total=len(ASSETS),counts=manifest['counts'],games=len(games),arcade=len(arcade),learningRuns=len(learning))))
 
 if __name__=='__main__': generate()

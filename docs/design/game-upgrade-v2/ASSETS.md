@@ -11,7 +11,7 @@ Generated 20 September 2026. This pack is the original editable production basel
 | Optional original synthesised sounds | 15 WAVs |
 | Total | 344 assets |
 
-Asset payload: 1,159,352 bytes, excluding manifest, motion metadata and the review gallery. No third-party fonts, images, music, runtime dependencies or API keys are needed to regenerate the files.
+Asset payload: 1,159,023 bytes, excluding manifest, motion metadata and the review gallery. No third-party fonts, images, music, runtime dependencies or API keys are needed to regenerate the files.
 
 ## Files and reproducibility
 
@@ -20,6 +20,8 @@ Asset payload: 1,159,352 bytes, excluding manifest, motion metadata and the revi
 - `public/games/v2/motion.json`: event-driven motion recipes, reduced-motion alternatives and audio lifecycle rules.
 - `scripts/generate-lives-assets.py`: deterministic Python standard-library generator.
 - `scripts/validate-lives-assets.py`: actual-file validation, SVG parsing, manifest references, pose/layer coverage, inventory ID checks and WAV duration/peak/fade checks.
+
+Generation uses explicit LF line endings so file hashes survive Git checkout on Windows and Linux. Regeneration was verified to leave the manifest unchanged.
 
 Run from the repository: `python scripts/generate-lives-assets.py`, then `python scripts/validate-lives-assets.py`. Serve `public` over HTTP and open `/games/v2/catalog.html`; direct file opening cannot fetch the manifest in all browsers. The gallery is a development artifact and is not linked into patient navigation.
 
@@ -42,3 +44,11 @@ The pack uses the existing canonical Lives and legacy cast geometry/colours. New
 - Browser evidence is under ignored `qa/_runs/lives-v2-*`; the repeatable gallery check is `scripts/qa-lives-assets.mjs`.
 
 Limitations: sound files were structurally and browser-decoder checked, not listener-panel tested. Full in-game focus, hit-target, contrast, timing and audio-mix QA remains part of each game's implementation gates. Asset generation does not establish patient engagement or clinical efficacy.
+
+## Integrated release verification — 20 September 2026
+
+Integrated upstream main `5ee072b`. Production build and typecheck passed. The full Lives model suite passed 104 tests. The asset gallery also passed against the production Next server, including its security headers. All 344 manifest hashes were checked against the actual Git index bytes, not only the working tree.
+
+The repository text-budget script measured 83 screens: all 69 app screens were within their applicable ceiling, with no over-budget screen. Theo's states measured 39 (entry), 40 (competing demands), 27 (pause), 24 (departure), 29 (evening), 37 (revisit) and 29 (complete) words. The asset gallery is development tooling and adds no text to patient screens.
+
+The integrated Theo public-route suite passed all 21 cases across Chromium, WebKit and Firefox. Coverage includes ordinary timed travel, missed-train recovery, pause/hidden-tab suspension, keyboard and touch input, responsive layouts, accessibility checks, all offered object-home arrangements, and the evening-to-rainy-morning transition.

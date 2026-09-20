@@ -70,7 +70,7 @@ Ari has plans too: one update can buy a limited later departure, while Ari may g
 
 **Strategy ending:** place actual essentials in selected homes, prepare water and charging, and set a usable departure cue. **Revisit:** use those exact homes and preparations with rain adding an umbrella. Compare the player's actual journeys, not a canned claim that the strategy worked. Complete at least two different successful arrangements.
 
-**State/tests:** node/edge progress, carried and deposited IDs, charge state, tasks, spill, train, Ari update, prepared homes. Assert item conservation, capacity, no teleporting, action idempotence, pause continuity, missed-train recovery and real saved-layout reuse. Existing 13 model tests and 21 browser cases form the starting baseline; final WebKit timing correction still needs verification before release.
+**State/tests:** node/edge progress, carried and deposited IDs, charge state, tasks, spill, train, Ari update, prepared homes. Assert item conservation, capacity, no teleporting, action idempotence, pause continuity, missed-train recovery and real saved-layout reuse. Existing 13 model tests and 21 browser cases form the starting baseline; the final WebKit timing correction is included in release verification.
 
 ### 2. Leo — One tiny sound
 
