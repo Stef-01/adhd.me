@@ -19,7 +19,6 @@ export function LivesCharacters() {
   return (
     <div className="me-screen learn-screen lives-screen">
       <header className="life-head">
-        <span className="life-eyebrow">ADHD Lives</span>
         <h1 className="life-title">Eight lives</h1>
       </header>
       <ul className="lives-cards lives-cast-list">

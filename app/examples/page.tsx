@@ -42,17 +42,14 @@ export default function ExamplesPage() {
       firstName: rankClinicians(archetype.request)[0]!.name,
       verdict:
         quality === "informed"
-          ? "the order was earned, and the reason is printed on the card"
+          ? "The order was earned; the reason is on the card."
           : quality === "tied"
-            ? "the listed GPs answered it equally well, and the finder says so instead of pretending to rank them"
-            // O111: this page had the same falsehood the finder's banner did. "The words
-            // reached nothing" is true of `unmatched` and false of `unserved`, where the
-            // words reached a facet and the LISTING is what falls short — and saying it
-            // here would blame the reader for the roster's gap in the one place the product
-            // is explaining its own honesty.
+            ? "The listed GPs answered it equally well, and the finder says so."
+            // O111: "the words reached nothing" is true of `unmatched` and false of `unserved`,
+            // where the words reached a facet and the LISTING is what falls short.
             : quality === "unserved"
-              ? "the words were read, nobody listed answers them, and the finder names the gap as ours"
-              : "the words reached nothing, and the finder says so instead of inventing an order",
+              ? "Nobody listed answers it, and the finder names the gap as ours."
+              : "The words reached nothing, and the finder says so.",
     };
   });
 
@@ -69,66 +66,27 @@ export default function ExamplesPage() {
       <main id="main-content" className="prose-wrap">
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Worked examples", href: "/examples" }]} />
         <h1>Worked examples</h1>
-        <p className="prose-note">
-          These are demo scenarios, not patients, nobody’s story is used to sell anything here.
-          Each result below is computed live by the same matching the finder runs, so this page
-          shows what the product actually does, not what a brochure says it does.
-        </p>
-        {/*
-          O203: "From that request" USED TO HAVE NO ANTECEDENT. No request appeared anywhere on the
-          page, a reader met a headline, which is not a request, and then a sentence referring to
-          "that request" as though they had read one.
-
-          The fix is not to print the request. The page's header records why: a first draft rendered
-          the demo requests verbatim and the rendered-copy sweep REFUSED the page, because those
-          sentences carry clinical vocabulary a patient-facing page may not repeat. That control is
-          working. So the constraint gets disclosed instead of hidden, which is the more honest
-          version of the same page rather than a softer one.
-        */}
-        <p className="prose-note">
-          The scenarios themselves are not printed here: they are written as somebody would really
-          say them, and a public page may not repeat that language. What is printed is what the
-          finder made of them.
-        </p>
+        {/* Demo scenarios, not patients: a patient outcome presented as marketing is a testimonial.
+            The requests themselves are not printed, because they carry clinical vocabulary a public
+            page may not repeat (the rendered-copy sweep refused a draft that did). What is printed
+            is what the finder made of them, computed live by the same pipeline. */}
+        <p className="prose-note">Demo scenarios, not patients. Each result is computed live by the finder.</p>
         {examples.map((example) => (
           <section key={example.headline} className="example-item">
             <h2>{example.headline}</h2>
             <p>
-              {/*
-                O203: "From that request," is gone rather than reworded. With the constraint
-                disclosed above, the phrase was doing nothing but pointing at something the reader
-                still cannot see, and the sentence reads better without it.
-              */}
-              The finder read <strong>{example.understood}</strong>{" "}
-              {example.understood === 1 ? "thing" : "things"} the person asked for —{" "}
-              {example.verdict}. Shown first: {example.firstName}.
+              Read <strong>{example.understood}</strong> {example.understood === 1 ? "thing" : "things"} asked
+              for. {example.verdict} First: {example.firstName}.
             </p>
           </section>
         ))}
-        {/*
-          O203: THE SAMENESS IS STATED RATHER THAN LEFT TO LOOK LIKE VARIETY. Measured before this
-          sentence was written: all three scenarios currently rank the same GP first and produce the
-          same order, the only thing that differs between them is how many asks the finder read.
-          Three sections that look like three demonstrations, when they are one demonstration run
-          three times, is the page overstating itself; `honesty.claim-earned` says a page may only
-          claim what it has earned. Derived, not transcribed, so the day the orders diverge this
-          sentence stops appearing on its own — which O252 is: the roster went to eleven and this
-          paragraph now renders only if they still agree. The word is "clinician" rather than
-          "GP" for the same reason: nine of the eleven are not GPs.
-        */}
+        {/* Derived, not transcribed: this line renders only while every scenario still ranks the
+            same clinician first, so the page never claims variety it has not earned
+            (`honesty.claim-earned`). "Clinician", not "GP": most of the roster are not GPs. */}
         {sameFirstForAll ? (
-          <p>
-            All three land on the same clinician first, and that is what a roster this size looks
-            like rather than a finding about anybody: with {rosterSizeInWords()} listed there are
-            not many orders available. What differs above is how much of each request the finder
-            read.
-          </p>
+          <p>All three land on the same clinician first: with {rosterSizeInWords()} listed, there are few orders to give.</p>
         ) : null}
-        <p>
-          The order is never a judgement about who is a better doctor. It is overlap between what
-          you asked for and what each GP declares about their own work, and when your words do
-          not separate the list, the finder tells you that in as many words.
-        </p>
+        <p>The order is overlap between your words and what each GP declares, never a judgement of who is better.</p>
         <div className="prose-doors">
           <Link className="notfound-primary" href="/">Try it with your own words</Link>
         </div>

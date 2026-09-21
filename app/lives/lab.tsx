@@ -40,7 +40,6 @@ export function LivesLab() {
   return (
     <div className="me-screen learn-screen lives-screen lives-lab">
       <header className="life-head">
-        <span className="life-eyebrow">ADHD Lives</span>
         <h1 className="life-title">The lab</h1>
         <p className="life-lede">Why the engine suggests what it suggests, and why the director picked what it picked. Nothing here is about a person.</p>
       </header>

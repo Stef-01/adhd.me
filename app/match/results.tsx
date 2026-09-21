@@ -76,7 +76,6 @@ export function MatchResults() {
       <ol className="match-cards" data-testid="match-cards">
         {view.matches.map((m) => (
           <li key={m.id} className="match-card" data-match={m.id} data-gp={m.gp.id} data-status={m.status}>
-            <span className="match-position">{m.position === 1 ? "First" : m.position === 2 ? "Second" : "Third"}</span>
             <div className="match-card-head">
               <Portrait gp={m.gp} />
               <div>

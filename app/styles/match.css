@@ -23,7 +23,6 @@
 .match-portrait img { width: 100%; height: 100%; object-fit: cover; }
 .match-card-head strong { display: block; font-size: 1.1875rem; font-weight: 700; padding-right: 64px; }
 .match-card-head small { display: block; color: var(--muted); font-size: 0.875rem; margin-top: 2px; }
-.match-position { position: absolute; top: 16px; right: 18px; font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .match-headline { margin: 14px 0 6px; font-size: 1.0625rem; font-weight: 650; line-height: 1.35; }
 .match-points { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; display: grid; gap: 4px; }
 .match-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; padding: 0; list-style: none; }

@@ -21,7 +21,23 @@
 // Routes come off the filesystem, so a new page is measured by existing. Writes
 // qa/text-budget.json and prints every screen with its verdict.
 
-import { readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, statSync } from "node:fs";
+
+/**
+ * The browser the CLIs launch. Playwright's own discovery first; when the pinned revision is
+ * absent and the machine pre-provisions Chromium (CI, the remote harness), that binary. The
+ * config for the e2e suite carries the same fallback; without it the scripts fail at launch with
+ * "Executable doesn't exist", which reads as a broken script rather than a missing download.
+ */
+export function launchOptions(chromium) {
+  if (process.env.PW_CHROMIUM_PATH) return { executablePath: process.env.PW_CHROMIUM_PATH };
+  let pinned;
+  try { pinned = chromium.executablePath(); } catch { pinned = undefined; }
+  if (pinned && existsSync(pinned)) return {};
+  return existsSync(PREINSTALLED_CHROMIUM) ? { executablePath: PREINSTALLED_CHROMIUM } : {};
+}
+const PREINSTALLED_CHROMIUM = "/opt/pw-browsers/chromium";
+
 import { join } from "node:path";
 
 export const BENCHMARK = { headspaceHome: 38, headspaceDetail: 26, headspaceList: 60, finchHome: 19 };

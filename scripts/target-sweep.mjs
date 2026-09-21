@@ -19,11 +19,11 @@
 // After those three corrections the app reports one finding, which is real and is recorded in
 // AESTHETIC.md under "The care map's twenty-five nodes".
 import { chromium } from "@playwright/test";
-import { contextFor, reach, routes } from "./text-budget-lib.mjs";
+import { contextFor, launchOptions, reach, routes } from "./text-budget-lib.mjs";
 const BASE = process.env.BASE || "http://localhost:3100";
 /* The two phone widths the tree already walks: the narrowest it supports, and the reference. */
 const WIDTHS = (process.env.WIDTHS || "320,390").split(",").map(Number);
-const b = await chromium.launch();
+const b = await chromium.launch(launchOptions(chromium));
 const findings = [];
 const unreachable = [];
 for (const width of WIDTHS) {

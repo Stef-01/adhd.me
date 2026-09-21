@@ -41,7 +41,6 @@ export function LivesHome() {
   return (
     <div className="me-screen learn-screen lives-screen lives-home" data-liquid>
       <header className="life-head lives-home-head">
-        <span className="life-eyebrow">ADHD Lives</span>
         <div className="lives-cast" aria-hidden="true">{CHARACTERS.map((c) => <LifeBean key={c.id} who={c.id} mood="engaged" size={44} />)}</div>
         <h1 className="life-title">Eight lives. Three of yours.</h1>
         <Link className="play-tempt is-go lives-play" href="/lives/play"><Play size={20} weight="fill" aria-hidden="true" /> Play</Link>

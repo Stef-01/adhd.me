@@ -15,11 +15,11 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowRight } from "@phosphor-icons/react";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
-import { LAYER_BLURBS, LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Layer, type Subdomain } from "@/model/layers";
+import { LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Layer, type Subdomain } from "@/model/layers";
 import { deriveNeeds } from "@/model/needs";
 import { track } from "@/model/events";
 import { useModel } from "./use-model";
-import { NWIA_LABELS, NWIA_MEANINGS, NWIA_NAME, NWIA_PARADIGM, NWIA_URL, nwiaFor } from "@/wellness/nwia";
+import { NWIA_LABELS, NWIA_NAME, NWIA_PARADIGM, NWIA_URL, nwiaFor } from "@/wellness/nwia";
 
 const COLOURS: Record<Layer, { fill: string; ink: string }> = {
   brain: { fill: "#dcedfa", ink: "#24487a" },
@@ -150,31 +150,22 @@ export function CareMap() {
         })}
       </svg>
 
-      <ul className="care-map-legend" aria-label="Layers">
-        {LAYERS.map((layer) => <li key={layer}><span className="layer-pill" data-layer={layer}>{LAYER_LABELS[layer]}</span></li>)}
-      </ul>
-
       <section className="care-map-detail" aria-live="polite" aria-labelledby="care-map-title">
         {entry ? (
           <>
-            <span className="life-eyebrow">{LAYER_LABELS[entry.layer]}</span>
             <h2 id="care-map-title">{entry.label}</h2>
             <p>{entry.meaning}</p>
             {signal.get(entry.id) && <p className="care-map-you"><strong>For you:</strong> {signal.get(entry.id)}</p>}
-            <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")}, {NWIA_MEANINGS[nwiaFor(entry.id)[0]!]}</p>
+            <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")}</p>
             {teaching.length > 0 ? (
-              <>
-                <p>Modules that work on this:</p>
-                <ul className="care-map-modules">
-                  {teaching.map((m) => <li key={m.id}><Link href={`/approach?module=${m.id}`}>{m.title}<ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>)}
-                </ul>
-              </>
+              <ul className="care-map-modules" aria-label="Modules that work on this">
+                {teaching.map((m) => <li key={m.id}><Link href={`/approach?module=${m.id}`}>{m.title}<ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>)}
+              </ul>
             ) : null}
           </>
         ) : (
           <>
-            <h2 id="care-map-title">Four layers, one life.</h2>
-            {LAYERS.map((layer) => <p key={layer}><strong>{LAYER_LABELS[layer]}.</strong> {LAYER_BLURBS[layer]}</p>)}
+            <h2 id="care-map-title">Tap a part of life.</h2>
             {/* The one place the NWIA paradigm is said (founder-directed, 2026-09-08): attributed, linked, once. */}
             <p className="care-map-nwia">{NWIA_PARADIGM} <a href={NWIA_URL} rel="noopener noreferrer" target="_blank">{NWIA_NAME}</a>.</p>
           </>

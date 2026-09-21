@@ -16,11 +16,11 @@
 // axis sheet. Judge anything fixed, sticky or modal from the viewport shot.
 import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
-import { contextFor, reach, routes } from "./text-budget-lib.mjs";
+import { contextFor, launchOptions, reach, routes } from "./text-budget-lib.mjs";
 
 const BASE = process.env.BASE || "http://localhost:3100";
 mkdirSync("qa/screens/viewport", { recursive: true });
-const browser = await chromium.launch();
+const browser = await chromium.launch(launchOptions(chromium));
 const CONTEXT = contextFor(BASE);
 let context = await browser.newContext(CONTEXT);
 let page = await context.newPage();
