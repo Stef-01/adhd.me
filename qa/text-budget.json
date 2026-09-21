@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-21T14:40:11.500Z",
-  "base": "http://localhost:3145",
+  "measuredAt": "2026-09-21T10:28:23.695Z",
+  "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -444,21 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 3,
-      "fold": 3,
+      "total": 12,
+      "fold": 12,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "JUST MILK!",
-          "tag": "p"
+          "w": 4,
+          "text": "write the perfect email",
+          "tag": "span"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 3,
+          "text": "reorganise the notes",
           "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "START SMALL!",
+          "tag": "p"
         }
       ]
     },
@@ -493,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 18,
-      "fold": 18,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "HOLD THE LID!",
+          "w": 2,
+          "text": "GET OUT!",
           "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "Say it now",
-          "tag": "button"
         },
         {
           "w": 2,
-          "text": ". Then, at",
-          "tag": "p"
+          "text": "open drawer",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -520,26 +525,26 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 32,
-      "fold": 32,
-      "chrome": 7,
-      "ratio": 0.8,
+      "total": 17,
+      "fold": 17,
+      "chrome": 0,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Catch the buzz. Change the room.",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "One tiny sound.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Room to settle",
+          "w": 4,
+          "text": "Leo and the mosquito",
           "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Skip this round",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "GET IT!",
+          "tag": "h1"
         }
       ]
     },
@@ -1325,10 +1330,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, complete",
       "state": "theo-complete",
-      "total": 33,
-      "fold": 33,
+      "total": 29,
+      "fold": 29,
       "chrome": 4,
-      "ratio": 0.8,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1349,8 +1354,8 @@
       ]
     },
     {
-      "path": "/lives/play/leo-mosquito",
-      "name": "Leo, pause",
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, pause",
       "state": "bedroom-pause",
       "total": 16,
       "fold": 16,
@@ -1376,8 +1381,8 @@
       ]
     },
     {
-      "path": "/lives/play/leo-mosquito",
-      "name": "Leo, reading",
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, reading",
       "state": "bedroom-wind-down",
       "total": 33,
       "fold": 33,
@@ -1403,8 +1408,8 @@
       ]
     },
     {
-      "path": "/lives/play/leo-mosquito",
-      "name": "Leo, rest",
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, rest",
       "state": "bedroom-rest",
       "total": 27,
       "fold": 27,
@@ -1430,8 +1435,8 @@
       ]
     },
     {
-      "path": "/lives/play/leo-mosquito",
-      "name": "Leo, next evening",
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, next evening",
       "state": "bedroom-revisit",
       "total": 33,
       "fold": 33,
@@ -1457,12 +1462,12 @@
       ]
     },
     {
-      "path": "/lives/play/leo-mosquito",
-      "name": "Leo, complete",
+      "path": "/lives/lab/leo-room",
+      "name": "Leo room preview, complete",
       "state": "bedroom-complete",
       "total": 27,
       "fold": 27,
-      "chrome": 20,
+      "chrome": 16,
       "ratio": 0.7,
       "verdict": "target",
       "longest": [
@@ -1676,10 +1681,10 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 52,
-      "fold": 47,
+      "total": 56,
+      "fold": 51,
       "chrome": 6,
-      "ratio": 1.3,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1779,26 +1784,80 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 18,
-      "fold": 18,
+      "total": 13,
+      "fold": 13,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "DRAW A PATH!",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo's routine, first step",
+      "state": "leo-routine",
+      "total": 21,
+      "fold": 21,
       "chrome": 0,
       "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "HOLD IT IN!",
+          "w": 5,
+          "text": "The mosquito has other plans.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Say it now",
-          "tag": "button"
+          "w": 4,
+          "text": "Leo and the mosquito",
+          "tag": "span"
         },
         {
-          "w": 2,
-          "text": ". Then, at",
+          "w": 3,
+          "text": "Still wide awake.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo asleep",
+      "state": "leo-settled",
+      "total": 33,
+      "fold": 33,
+      "chrome": 0,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "The mosquito is still out there. Leo is asleep.",
           "tag": "p"
+        },
+        {
+          "w": 8,
+          "text": "Same order tomorrow. One less thing to remember.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Tiny sounds feel familiar? Explore one idea",
+          "tag": "a"
         }
       ]
     },
@@ -1806,10 +1865,10 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 53,
-      "fold": 36,
+      "total": 54,
+      "fold": 37,
       "chrome": 6,
-      "ratio": 1.3,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1941,7 +2000,61 @@
       "path": "/my-adhd",
       "name": "My ADHD, lived in",
       "state": "model-lived",
-      "total": 55,
+      "total": 53,
+      "fold": 35,
+      "chrome": 6,
+      "ratio": 1.3,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Starting is your biggest friction right now.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Once started, work often goes well",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Did “One capture place” help?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, a step proposed",
+      "state": "model-learning",
+      "total": 58,
+      "fold": 35,
+      "chrome": 6,
+      "ratio": 1.5,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Starting is your biggest friction right now.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Once started, work often goes well",
+          "tag": "span"
+        },
+        {
+          "w": 6,
+          "text": "Try this: the first physical action.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, before a care plan",
+      "state": "model-no-plan",
+      "total": 56,
       "fold": 35,
       "chrome": 6,
       "ratio": 1.4,
@@ -1966,28 +2079,28 @@
     },
     {
       "path": "/my-adhd",
-      "name": "My ADHD, a step proposed",
-      "state": "model-learning",
-      "total": 60,
-      "fold": 35,
-      "chrome": 6,
-      "ratio": 1.5,
-      "verdict": "ceiling",
+      "name": "My ADHD, the care plan open",
+      "state": "plan-open",
+      "total": 19,
+      "fold": 19,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "Starting is your biggest friction right now.",
-          "tag": "p"
+          "w": 5,
+          "text": "Take this to my GP",
+          "tag": "a"
         },
         {
-          "w": 6,
-          "text": "Once started, work often goes well",
-          "tag": "span"
-        },
-        {
-          "w": 6,
-          "text": "Try this: the first physical action.",
+          "w": 2,
+          "text": "Care plan",
           "tag": "h2"
+        },
+        {
+          "w": 2,
+          "text": "Occupational therapist",
+          "tag": "span"
         }
       ]
     },
@@ -2103,10 +2216,10 @@
       "path": "/support",
       "name": "Support, lived in",
       "state": "model-lived",
-      "total": 47,
-      "fold": 42,
+      "total": 55,
+      "fold": 45,
       "chrome": 6,
-      "ratio": 1.2,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {

@@ -75,6 +75,11 @@ export const EVENTS = [
   "MAP_AXIS_OPENED",
   "MAP_CLARIFIED",
   "SUMMARY_EXPORTED",
+  // The care plan (src/model/care-plan.ts). §68 again: this says a person confirmed their own plan
+  // numbers, and carries none of them — not the allowance, not what is spent, and no amount of
+  // money, which `care-plan.test.ts` refuses structurally rather than by convention.
+  "CARE_PLAN_SAVED",
+  "CARE_PLAN_OPENED",
 ] as const;
 export type EventName = (typeof EVENTS)[number];
 
