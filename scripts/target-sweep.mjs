@@ -1,6 +1,6 @@
-// Walks every screen the text-budget instrument reaches and measures the three defects a
-// screenshot hides: a screen that scrolls sideways, a control a thumb cannot land on, and text
-// clipped by its own box. Nothing here asserts — it prints, and a person reads it, the way
+// Walks every screen the text-budget instrument reaches and measures four defects a screenshot
+// hides: a screen that scrolls sideways, a control sliced by the viewport edge without the page
+// scrolling at all, a control a thumb cannot land on, and text clipped by its own box. Nothing here asserts — it prints, and a person reads it, the way
 // scripts/screens.mjs does. BASE=http://localhost:PORT, widths from WIDTHS below.
 //
 // The naive version of each of these check is wrong, and each was wrong here first:
@@ -42,7 +42,7 @@ for (const width of WIDTHS) {
       continue;
     }
     const r = await page.evaluate(() => {
-      const out = { sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth, small: [], clipped: [] };
+      const out = { sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth, small: [], clipped: [], cut: [] };
       // Chromium exposes layout rects for content inside a CLOSED <details> (skipped content is
       // findable now), so a rect is not proof of visibility. checkVisibility plus an explicit
       // closed-fold guard is what actually matches what a person can see and tab to.
@@ -58,6 +58,23 @@ for (const width of WIDTHS) {
         const b = e.getBoundingClientRect();
         const inProse = e.tagName === "A" && e.closest("p, li, td, figcaption, blockquote") && getComputedStyle(e).display.startsWith("inline");
         if (inProse) continue;
+        // A control can sit outside the viewport without the DOCUMENT scrolling, when an ancestor
+        // hides its overflow — the control is simply sliced, and the sideways check above cannot
+        // see it. That is how the Chaos Run shipped a choice with 12px cut off its right edge. A
+        // control inside a real horizontal scroller is fine: a person can reach it.
+        const vw = document.documentElement.clientWidth;
+        const scroller = (() => {
+          for (let a = e.parentElement; a; a = a.parentElement) {
+            const ox = getComputedStyle(a).overflowX;
+            if ((ox === "auto" || ox === "scroll") && a.scrollWidth > a.clientWidth + 1) return true;
+          }
+          return false;
+        })();
+        if (!scroller && (b.right > vw + 0.5 || b.left < -0.5)) {
+          const name = (e.getAttribute("aria-label") || e.textContent || e.tagName).replace(/\s+/g, " ").trim().slice(0, 30);
+          const cut = b.left < -0.5 ? Math.round(-b.left) : Math.round(b.right - vw);
+          out.cut.push(`${cut}px off the ${b.left < -0.5 ? "left" : "right"} "${name}"`);
+        }
         if (b.height >= 44 && b.width >= 44) continue;
         // The tree extends small controls with an ::after hit pad (`.me-close::after { inset: -6px }`),
         // and a label associated by `for` is part of its control's target too. Neither shows up in the
@@ -84,7 +101,7 @@ for (const width of WIDTHS) {
       }
       return out;
     });
-    if (r.sideways > 0 || r.small.length || r.clipped.length) {
+    if (r.sideways > 0 || r.small.length || r.clipped.length || r.cut.length) {
       findings.push({ width, name: route.name, ...r });
     }
   }
@@ -96,6 +113,7 @@ for (const f of findings) {
   if (f.sideways > 0) console.log(`  SIDEWAYS +${f.sideways}px`);
   for (const s of [...new Set(f.small)]) console.log(`  SMALL  ${s}`);
   for (const c of [...new Set(f.clipped)]) console.log(`  CLIP   ${c}`);
+  for (const c of [...new Set(f.cut)]) console.log(`  CUT    ${c}`);
 }
 console.log(`\n${findings.length} screen/width pairs with findings`);
 // A run that reached nothing prints "0 findings", which reads exactly like a clean sweep. It is how

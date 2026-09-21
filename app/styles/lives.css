@@ -113,7 +113,14 @@
 .lives-trace-line { stroke: color-mix(in srgb, var(--accent) 55%, transparent); }
 .lives-trace-label { position: absolute; transform: translate(-50%, -50%); color: var(--ink); font-size: 0.8125rem; font-weight: 800; pointer-events: none; }
 .lives-trace .lives-skip { position: absolute; left: 50%; bottom: -56px; transform: translateX(-50%); z-index: 2; }
-.lives-trace .lives-choices { position: absolute; left: 12px; right: 12px; bottom: -58px; z-index: 2; }
+/* `width: auto` matters: .lives-choices carries width: 100% for the normal in-flow case, and on an
+   absolutely positioned box that wins over left/right, so the row resolved to the full 390 of its
+   containing block and then started at left: 12 — running to 402 and slicing 12px off the second
+   choice, under a stage that hides its overflow so nothing scrolled to give it away. The Chaos
+   Run's two trace games (maya_crossing, office_chair) were the ones it showed on. This used to be
+   patched one scope down, on .character-journey only, which is why the practice screens were fine
+   and the Chaos Run was not. */
+.lives-trace .lives-choices { position: absolute; left: 12px; right: 12px; bottom: -58px; z-index: 2; width: auto; }
 
 /* Result, FASTER. */
 .lives-result { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; }
@@ -445,7 +452,6 @@
   .journey-actions p { margin-bottom: 10px; }
 }
 
-.character-journey .lives-trace .lives-choices { width: auto; }
 .character-journey .lives-world[data-motion="false"] .lives-field.lives-trace { bottom: 144px; }
 .character-journey .lives-world[data-motion="false"] .lives-trace .lives-choices { bottom: -132px; }
 .character-journey .lives-world[data-live="false"] * { animation-play-state: paused !important; }

@@ -75,7 +75,10 @@ export function CharacterJourney({ journey }: { journey: LifeJourney }) {
       <header className="journey-heading">
         <span className="journey-chapter">{practical ? "Try it in the moment" : `${round + 1} / ${journey.rounds.length}`}</span>
         <h1 id="journey-title" tabIndex={-1} ref={heading}>{phase === "paused" ? "Take your time." : phase === "complete" ? "A little more space." : phase === "practice" ? task!.title : journey.rounds[round]!.title}</h1>
-        {!practical && <div className="journey-clock"><span role="timer" aria-label="Time remaining">{untimed ? "Your pace" : `${Math.max(0, Math.ceil((duration - elapsed) / 1000))}s`}</span><div aria-hidden="true"><i style={{ transform: `scaleX(${untimed ? 1 : Math.max(0, 1 - elapsed / duration)})` }} /></div></div>}
+        {/* Untimed rounds have no bar. It used to draw one at scaleX(1) — a full track beside the words
+            "Your pace" — which reads as a round that has run out rather than one that cannot. The Chaos
+            Run omits its own bar the same way (`app/lives/run.tsx`), as does Leo's routine. */}
+        {!practical && <div className="journey-clock" data-untimed={untimed ? "true" : undefined}><span role="timer" aria-label="Time remaining">{untimed ? "Your pace" : `${Math.max(0, Math.ceil((duration - elapsed) / 1000))}s`}</span>{!untimed && <div aria-hidden="true"><i style={{ transform: `scaleX(${Math.max(0, 1 - elapsed / duration)})` }} /></div>}</div>}
         <div className="journey-companion" aria-hidden="true"><LifeBean who={journey.who} mood={phase === "complete" || outcome?.outcome === "success" ? "pleased" : phase === "result" ? "thinking" : "engaged"} size={112} /></div>
       </header>
       <div className="journey-stage lives-scene" data-game={definition.id}>
