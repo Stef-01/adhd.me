@@ -134,7 +134,7 @@ function advance(s: BedroomState, ms: number, decision = false): BedroomState {
     const rate = demand ? demand * .008 - (next.headphones ? .004 : 0) : -.085;
     next.activation = Math.max(.06, Math.min(.96, s.activation + rate * ms / 1000));
     if (active && (next.challengeTime >= ROOM_DURATION || next.activation >= .96)) {
-      next = { ...next, mode: "recovery", events: [], line: "Take the time you need. Change the room.", revision: next.revision + 1 };
+      next = { ...next, mode: "recovery", line: "Take the time you need. Change the room.", revision: next.revision + 1 };
     }
   }
   return reconcile(next);
@@ -156,7 +156,10 @@ export function bedroomReducer(s: BedroomState, action: BedroomAction): BedroomS
     return {
       ...s, mode: "revisit", time: 0, activation: .16, lamp: "reading", book: { ...s.book, open: false },
       insects: [{ id: s.nextId, slot: 2, kind: "hoverer", arrivedAt: 0 }], nextId: s.nextId + 1,
-      prevented: s.prevented + 2, held: s.held + 1, events: [],
+      events: [
+        { id: "revisit-arrival", at: 6000, kind: "insects", amount: 2 },
+        { id: "revisit-phone", at: 10_000, kind: "phone", amount: 1 },
+      ],
       line: "Window shut. Phone away. One was hiding inside.", revision: s.revision + 1,
     };
   }
@@ -205,7 +208,7 @@ export function bedroomReducer(s: BedroomState, action: BedroomAction): BedroomS
       next.line = next.lamp === "off" ? "Less light. Your place is still there." : next.lamp === "dim" ? "A softer corner of the evening." : "A little light for the page.";
       break;
     case "recover":
-      next.mode = "recovery"; next.events = [];
+      next.mode = "recovery";
       next.line = "No countdown. Tend to one thing at a time.";
       break;
   }

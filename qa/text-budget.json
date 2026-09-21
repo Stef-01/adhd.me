@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-21T13:36:00.281Z",
+  "measuredAt": "2026-09-21T13:54:44.276Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "00:56 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -444,25 +444,25 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 10,
-      "fold": 10,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Mia, why are you here?",
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "STAY STILL!",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "WHY ARE YOU HERE?",
-          "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
+          "w": 2,
+          "text": "the spider",
           "tag": "span"
         }
       ]
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DRAW A PATH!",
+          "w": 2,
+          "text": "GET OUT!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 2,
+          "text": "open drawer",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -525,26 +525,26 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 17,
-      "fold": 17,
-      "chrome": 0,
-      "ratio": 0.4,
+      "total": 32,
+      "fold": 32,
+      "chrome": 7,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Leo and the mosquito",
-          "tag": "span"
+          "w": 6,
+          "text": "Catch the buzz. Change the room.",
+          "tag": "p"
         },
         {
           "w": 3,
-          "text": "Skip this round",
-          "tag": "button"
+          "text": "One tiny sound.",
+          "tag": "h1"
         },
         {
-          "w": 2,
-          "text": "GET IT!",
-          "tag": "h1"
+          "w": 3,
+          "text": "Room to settle",
+          "tag": "span"
         }
       ]
     },
@@ -1354,8 +1354,8 @@
       ]
     },
     {
-      "path": "/lives/lab/leo-room",
-      "name": "Leo room preview, pause",
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo, pause",
       "state": "bedroom-pause",
       "total": 16,
       "fold": 16,
@@ -1381,8 +1381,8 @@
       ]
     },
     {
-      "path": "/lives/lab/leo-room",
-      "name": "Leo room preview, reading",
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo, reading",
       "state": "bedroom-wind-down",
       "total": 33,
       "fold": 33,
@@ -1408,8 +1408,8 @@
       ]
     },
     {
-      "path": "/lives/lab/leo-room",
-      "name": "Leo room preview, rest",
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo, rest",
       "state": "bedroom-rest",
       "total": 27,
       "fold": 27,
@@ -1435,8 +1435,8 @@
       ]
     },
     {
-      "path": "/lives/lab/leo-room",
-      "name": "Leo room preview, next evening",
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo, next evening",
       "state": "bedroom-revisit",
       "total": 33,
       "fold": 33,
@@ -1462,8 +1462,8 @@
       ]
     },
     {
-      "path": "/lives/lab/leo-room",
-      "name": "Leo room preview, complete",
+      "path": "/lives/play/leo-mosquito",
+      "name": "Leo, complete",
       "state": "bedroom-complete",
       "total": 27,
       "fold": 27,
@@ -1784,80 +1784,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 6,
-      "fold": 6,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "I held off",
+          "text": "DRAW A PATH!",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Round the left",
           "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "DON’T!",
-          "tag": "p"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/leo-mosquito",
-      "name": "Leo's routine, first step",
-      "state": "leo-routine",
-      "total": 21,
-      "fold": 21,
-      "chrome": 0,
-      "ratio": 0.5,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 5,
-          "text": "The mosquito has other plans.",
-          "tag": "p"
-        },
-        {
-          "w": 4,
-          "text": "Leo and the mosquito",
-          "tag": "span"
-        },
-        {
           "w": 3,
-          "text": "Still wide awake.",
-          "tag": "h1"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/leo-mosquito",
-      "name": "Leo asleep",
-      "state": "leo-settled",
-      "total": 33,
-      "fold": 33,
-      "chrome": 0,
-      "ratio": 0.8,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 9,
-          "text": "The mosquito is still out there. Leo is asleep.",
-          "tag": "p"
-        },
-        {
-          "w": 8,
-          "text": "Same order tomorrow. One less thing to remember.",
-          "tag": "p"
-        },
-        {
-          "w": 7,
-          "text": "Tiny sounds feel familiar? Explore one idea",
-          "tag": "a"
+          "text": "Round the right",
+          "tag": "button"
         }
       ]
     },

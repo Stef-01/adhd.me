@@ -71,11 +71,11 @@ export const EXTRA = [
   { path: "/lives/play/theo-out-the-door", state: "theo-evening", name: "Theo, evening arrangement" },
   { path: "/lives/play/theo-out-the-door", state: "theo-revisit", name: "Theo, rainy revisit" },
   { path: "/lives/play/theo-out-the-door", state: "theo-complete", name: "Theo, complete" },
-  { path: "/lives/lab/leo-room", state: "bedroom-pause", name: "Leo room preview, pause" },
-  { path: "/lives/lab/leo-room", state: "bedroom-wind-down", name: "Leo room preview, reading" },
-  { path: "/lives/lab/leo-room", state: "bedroom-rest", name: "Leo room preview, rest" },
-  { path: "/lives/lab/leo-room", state: "bedroom-revisit", name: "Leo room preview, next evening" },
-  { path: "/lives/lab/leo-room", state: "bedroom-complete", name: "Leo room preview, complete" },
+  { path: "/lives/play/leo-mosquito", state: "bedroom-pause", name: "Leo, pause" },
+  { path: "/lives/play/leo-mosquito", state: "bedroom-wind-down", name: "Leo, reading" },
+  { path: "/lives/play/leo-mosquito", state: "bedroom-rest", name: "Leo, rest" },
+  { path: "/lives/play/leo-mosquito", state: "bedroom-revisit", name: "Leo, next evening" },
+  { path: "/lives/play/leo-mosquito", state: "bedroom-complete", name: "Leo, complete" },
 
   { path: "/lives/play/nina-the-first-line", name: "Nina: the first line" },
   { path: "/lives/play/jax-just-the-list", name: "Jax: just the list" },
@@ -90,9 +90,6 @@ export const EXTRA = [
   { path: "/approach?module=everyday", name: "A read module, first card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
   { path: "/lives/play", state: "lives-run", name: "The Chaos Run, first round" },
-  // Leo's routine (app/lives/leo-practice.tsx): the two screens the round now ends into.
-  { path: "/lives/play/leo-mosquito", state: "leo-routine", name: "Leo's routine, first step" },
-  { path: "/lives/play/leo-mosquito", state: "leo-settled", name: "Leo asleep" },
   { path: "/match/results", state: "intake", name: "Match results" },
   // The two questions (app/first-step.tsx). The walk reaches the first one on its own; the second
   // and the answer are taps, and a screen the instrument cannot reach is a screen nobody measured.
@@ -297,15 +294,6 @@ export async function reach(page, route, base) {
     // The longest card in the table, so the number this reports is the worst case rather than a
     // sample of it.
     if (route.state === "first-step-answer") await page.getByRole("button", { name: "Still finding out" }).click();
-  }
-  if (route.state === "leo-routine" || route.state === "leo-settled") {
-    // Reduced motion is on in this context, so the round offers a way out rather than a clock.
-    await page.getByRole("button", { name: "Skip this round" }).click();
-    if (route.state === "leo-settled") {
-      for (const step of ["Close the window", "Phone off", "Headphones on", "Read a little", "Light off"]) {
-        await page.getByRole("button", { name: step, exact: true }).click();
-      }
-    }
   }
   if (route.state?.startsWith("bedroom-")) {
     await page.locator('[data-ready="true"]').waitFor();
