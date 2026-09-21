@@ -190,6 +190,39 @@ test("every game fits its screen, and nothing on it is scrolled or cut", async (
       if (doc.sideways > 2) failures.push(`${where}: ${doc.sideways}px sideways`);
       for (const cut of await clipped(page)) failures.push(`${where}: ${cut}`);
       for (const off of await offscreen(page)) failures.push(`${where}: ${off}`);
+
+      /*
+       * AND THERE IS SOMETHING TO DO. The whole suite runs under reduced motion, which is the
+       * state where a game has to end on a choice rather than on a clock — games-to-leo-standard
+       * asks for "`Skip this round` under reduced motion" for exactly that reason. A drawn scene
+       * whose pieces render but whose controls do not is a screen a reduced-motion player is stuck
+       * on, and it passes every other check in this file: it fits, nothing is clipped, nothing is
+       * off-screen, and nothing can be done.
+       *
+       * Measured across all 22 game surfaces when this went in, the floor was 2 and the median 4,
+       * so a floor of one is not the assertion passing by luck. The page's own chrome — back,
+       * pause, the tab bar, the skip link — is excluded, because none of it is a way to play.
+       *
+       * POLLED, NOT READ ONCE. An engine mounts its pieces after the navigation resolves, and the
+       * surfaces with no `act` step measure the instant the page arrives: the first version of
+       * this read zero on six of them and every one had its pieces a second later. A gate that
+       * races the thing it measures is worse than no gate, because it fails for a reason that is
+       * not the reason it names.
+       */
+      const countActionable = () => page.evaluate(() => {
+        const chrome = ".leo-toolbar, .tm-header, .play-top, .lives-top, .app-tabs, .platform-header, nav, header, .skip-link";
+        return [...document.querySelectorAll("button, [role=button], a[href]")]
+          .filter((e) => e.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true, contentVisibilityAuto: true }))
+          .filter((e) => !e.closest(chrome))
+          .filter((e) => !(e instanceof HTMLButtonElement && e.disabled))
+          .length;
+      });
+      let actionable = await countActionable();
+      for (let waited = 0; actionable < 1 && waited < 4_000; waited += 250) {
+        await page.waitForTimeout(250);
+        actionable = await countActionable();
+      }
+      if (actionable < 1) failures.push(`${where}: nothing on it a reduced-motion player can do`);
     }
   }
   expect(failures, "a game that does not fit is a game with its controls somewhere nobody can reach").toEqual([]);
