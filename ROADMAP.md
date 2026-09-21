@@ -121,11 +121,23 @@ Medicare provider, so the sheet marks rows it cannot cover instead of hiding the
       tab, asks "what should I try next", had 25 words spare and a dead area the row now fills.
       Whether the hub should carry all three is an information-architecture call about the
       practitioner card as much as this one. `CARE-PLAN-PRD.md` §6 records it. **A founder's call.**
-- [ ] Verification: typecheck, 4230 unit, production build, budget 69 of 69 within ceiling and 0
-      over, target sweep clean on every new surface at 320 and 390, and 21 browser checks green
-      across `care-plan.spec.ts` and `my-adhd.spec.ts` plus the budget and axe sweeps. **A full
-      `pnpm e2e` has not completed on this tree** — the run was stopped for machine memory, not by
-      a failure — so the cross-engine sweep is still outstanding.
+- [x] Verification, including on the deployed site. Typecheck, 4230 unit, production build, budget
+      70 of 70 within ceiling and 0 over, target sweep clean on every new surface at 320 and 390,
+      the whole axe sweep green (7 checks), and the care plan green on **chromium, WebKit and
+      Firefox** — `PW_BROWSERS` defaults to chromium, so cross-engine needs asking for: 32 passed
+      on each of the other two over the surfaces this touched.
+      **Verified live on `adhdme.vercel.app`, by measurement rather than by looking**, 2026-09-21:
+      `/api/health` reported `2fa2b99`, an ancestor of `main` and one commit behind it (that one
+      commit being the push from minutes earlier, so the pipeline is working rather than stalled).
+      On that deployment: `/today` renders the card as "Care plan · Ask your GP" with the
+      accessible name "Care plan: ask your GP", and tapping it opens "My plan allows 5 / Used so
+      far 0 / Save". Three of the session's aesthetic fixes were checked on the same deployment —
+      `/lives` draws its eight beans in **1** row, Leo's untimed round shows "Your pace" with
+      **0** bars beside it, and `/adjustments` now reads 16.16:1 on the selected tab against 7.35:1
+      on the unselected one, the right way round.
+      Still not run: a full `pnpm e2e` in one pass. That run was stopped for machine memory rather
+      than by a failure, and the engine coverage it would have added has since been taken
+      per-spec instead.
 - [ ] **D2 is a blocker on copy, not on code.** No screen naming an entitlement count, an item number
       or an eligibility rule ships until a clinician has checked it against the current MBS. Phases
       1–4 are all buildable without any such copy, and **an agent may not tick this.**
