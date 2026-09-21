@@ -68,7 +68,12 @@ describe("Leo's living room", () => {
     const next = act(first, { type: "next-evening" });
     expect(next.mode).toBe("revisit");
     expect(next.window).toBe(first.window); expect(next.phone).toBe(first.phone);
-    expect(next.book.page).toBe(2); expect(next.prevented).toBe(first.prevented + 2);
+    expect(next.book.page).toBe(2); expect(next.prevented).toBe(first.prevented);
+    expect(next.held).toBe(first.held);
+    const later = run(next, 10500);
+    expect(later.prevented).toBe(first.prevented + 2);
+    expect(later.held).toBe(first.held + 1);
+    expect(later.insects).toHaveLength(1);
     expect(next.insects).toHaveLength(1);
     const interrupted = act(act(next, { type: "book" }), { type: "book" });
     expect(interrupted.book.page).toBe(2);
@@ -149,5 +154,29 @@ describe("state invariants across all input sequences", () => {
     expect(s.events.some(e => e.id === "arrival-1")).toBe(true);
     s = act(s, { type: "window" }); s = act(s, { type: "catch", id: 0 }); s = run(s, 3100);
     expect(s.insects).toHaveLength(5); expect(s.prevented).toBe(2);
+  });
+});
+
+
+describe("recovery keeps the world causal", () => {
+  it("removing the countdown does not remove approaching insects or phone demand", () => {
+    const start = createBedroom();
+    const recovery = act(start, { type: "recover" });
+    expect(recovery.events).toEqual(start.events);
+    const later = run(recovery, 10500);
+    expect(later.mode).toBe("recovery");
+    expect(later.challengeTime).toBe(0);
+    expect(later.insects).toHaveLength(5);
+    expect(later.notifications).toBe(1);
+    expect(settle(later).mode).toBe("rest");
+  });
+  it("prevention still works after overload instead of erasing future arrivals", () => {
+    const start = { ...createBedroom(), activation: .959 };
+    const overloaded = run(start, 1000);
+    expect(overloaded.mode).toBe("recovery");
+    expect(overloaded.events.some(event => event.kind === "insects")).toBe(true);
+    const closed = run(act(overloaded, { type: "window" }), 6000);
+    expect(closed.insects).toHaveLength(3);
+    expect(closed.prevented).toBe(2);
   });
 });

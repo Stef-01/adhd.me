@@ -44,7 +44,7 @@ if (ONLY === "all" || ONLY === "chaos") {
 if (ONLY === "all" || ONLY === "leo") {
   await page.goto(`${BASE}/lives/play/leo-mosquito`, { waitUntil: "networkidle" });
   await shot("leo-ready");
-  await page.getByRole("button", { name: /Play Leo/ }).click();
+  await page.locator('.bedroom-game[data-ready="true"]').waitFor();
   await page.waitForTimeout(2500);
   await shot("leo-playing");
 }

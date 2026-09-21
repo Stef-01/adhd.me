@@ -3,7 +3,7 @@ import { pauseNow } from "./support/fake-clock";
 import { test, expect, hydratedUnderFakeClock } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 
-const URL = "/lives/lab/leo-room";
+const URL = "/lives/play/leo-mosquito";
 const game = (page: Page) => page.locator(".bedroom-game");
 async function open(page: Page, still = true) {
   await page.emulateMedia({ reducedMotion: still ? "reduce" : "no-preference" });
@@ -407,4 +407,32 @@ test("keyboard focus holds a flying target and releases it on blur", async ({ pa
   await page.clock.runFor(200);
   await expect(target).toHaveCount(0);
   await expect(page.locator(".bedroom-insect:enabled")).toHaveCount(2);
+});
+
+
+test("Learn opens the living room directly and the old preview remains compatible", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach?pane=games");
+  await page.getByRole("link", { name: /One tiny sound/ }).click();
+  await expect(page).toHaveURL(/lives\/play\/leo-mosquito/);
+  await expect(game(page)).toHaveAttribute("data-ready", "true");
+  await expect(page.getByRole("button", { name: "Close the window", exact: true })).toBeVisible();
+  await expect(page.getByRole("slider")).toHaveCount(0);
+  await expect(page.locator(".leo-practice")).toHaveCount(0);
+  await page.goto("/lives/lab/leo-room");
+  await expect(game(page)).toHaveAttribute("data-ready", "true");
+});
+
+test("removing the countdown keeps future sources active until the room is changed", async ({ page }) => {
+  await timed(page);
+  await page.getByRole("button", { name: "Pause game" }).click();
+  await page.getByRole("button", { name: "Continue without countdown" }).click();
+  await expect(game(page)).toHaveAttribute("data-mode", "recovery");
+  await page.clock.runFor(10500);
+  await expect(page.locator(".bedroom-insect:enabled")).toHaveCount(5);
+  await expect(page.locator(".bedroom-scene")).toHaveAttribute("data-notifications", "1");
+  await expect(page.getByRole("timer")).toHaveText("Your pace");
+  await prepareRoom(page);
+  await readAndRest(page);
+  await expect(game(page)).toHaveAttribute("data-mode", "rest");
 });

@@ -31,8 +31,11 @@ const SURFACES: ReadonlyArray<{ name: string; path: string; act?: (page: Page) =
   { name: "Leo, playing", path: "/lives/play/leo-mosquito", act: async (p) => {  } },
   { name: "Leo, the routine", path: "/lives/play/leo-mosquito", act: async (p) => {
 
-    await p.getByRole("button", { name: "Skip this round" }).click();
+    await p.locator('.bedroom-game[data-ready="true"]').waitFor();
     await p.getByRole("button", { name: "Close the window", exact: true }).click();
+    await p.getByRole("button", { name: "Put phone away", exact: true }).click();
+    for (let i = 0; i < 12 && await p.locator(".bedroom-insect:enabled").count(); i++) await p.locator(".bedroom-insect:enabled").first().click();
+    await p.getByRole("button", { name: "Read a little", exact: true }).click();
   } },
   { name: "The Chaos Run, title", path: "/lives/play" },
   { name: "The Chaos Run, first round", path: "/lives/play", act: async (p) => {  await p.locator(".lives-scene").waitFor(); } },
