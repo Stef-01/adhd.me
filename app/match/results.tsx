@@ -45,7 +45,7 @@ export function MatchResults() {
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
         <AppSettings />
-          <h1 tabIndex={-1}>Nothing to show yet</h1>
+          <h1 tabIndex={-1}>Nothing to show yet.</h1>
           <p className="match-lede">Nothing here yet.</p>
         </header>
         <div className="match-actions">

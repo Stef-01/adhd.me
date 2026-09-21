@@ -60,7 +60,7 @@ export function MatchPrep() {
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
         <AppSettings />
-          <h1 tabIndex={-1}>Nothing to prepare yet</h1>
+          <h1 tabIndex={-1}>Nothing to prepare yet.</h1>
           <p className="match-lede">The checklist is written from your request. Start one first.</p>
         </header>
         <div className="match-actions">
@@ -78,7 +78,7 @@ export function MatchPrep() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <h1 tabIndex={-1}>What to bring</h1>
+        <h1 tabIndex={-1}>What to bring.</h1>
         <p className="match-lede">
           {done} of {view.checklist.items.length} ready.
         </p>
