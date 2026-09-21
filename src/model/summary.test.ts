@@ -24,6 +24,7 @@ import {
   type SectionKey,
 } from "./summary";
 import { emptyManual, emptyMedicationNote, MODEL_VERSION, type ModelRecord } from "./store";
+import { emptyCarePlan } from "./care-plan";
 
 function record(over: Partial<ModelRecord> = {}): ModelRecord {
   return {
@@ -43,6 +44,7 @@ function record(over: Partial<ModelRecord> = {}): ModelRecord {
     manual: emptyManual(),
     medication: emptyMedicationNote(),
     checkpoints: [],
+    carePlan: emptyCarePlan(),
     ...over,
   };
 }

@@ -209,6 +209,10 @@ export const LIVED_RECORD = {
   manual: { helps: "One clear first step and I will run with it.", harder: "", "work-with-me": "", updatedAt: "2026-09-05T00:00:00.000Z" },
   medication: { changes: "", untouched: "", unwanted: "", updatedAt: null },
   checkpoints: [],
+  // A care plan with services left, because the hub's card has two shapes and the instrument had
+  // only ever measured the one without a plan — the same hole §13.1 found for the lived-in hub.
+  // Five allowed, two spent, so the dot row is mixed and three suggestions render.
+  carePlan: { allows: 5, used: 2, year: 2026, confirmedOn: "2026-09-05T00:00:00Z" },
 };
 
 /**

@@ -10,6 +10,7 @@
 
 import { describe, expect, it } from "vitest";
 import { INTERACTIVE_MODULES } from "@/learn/interactive";
+import { hasPlan, remaining, type CarePlan } from "./care-plan";
 // The library is plain ESM the CLI and the e2e suite both share; the types are loose on purpose.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -18,6 +19,7 @@ import { LIVED_RECORD } from "../../scripts/text-budget-lib.mjs";
 type Seed = {
   experiments: { strategyId: string; moduleId: string }[];
   insights: Record<string, string>;
+  carePlan: { allows: number; used: number; year: number; confirmedOn: string };
 };
 
 const seed = LIVED_RECORD as Seed;
@@ -60,5 +62,13 @@ describe("the lived-in seed names only things that exist", () => {
   it("names a real insight in every verdict", () => {
     const unknown = Object.keys(seed.insights).filter((id) => !insights.has(id));
     expect(unknown, "a verdict on an insight no module defines cannot appear on the history screen").toEqual([]);
+  });
+
+  // The hub's care-plan card has two shapes and the instrument had only ever seen the one with no
+  // plan. A seed whose plan has nothing left measures the wrong one of them silently.
+  it("carries a care plan with services still to spend", () => {
+    expect(hasPlan(seed.carePlan as CarePlan)).toBe(true);
+    expect(remaining(seed.carePlan as CarePlan, new Date(`${seed.carePlan.year}-06-01`))).toBeGreaterThan(0);
+    expect(seed.carePlan.used).toBeGreaterThan(0);
   });
 });

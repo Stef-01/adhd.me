@@ -27,6 +27,7 @@ import {
 } from "./matrix";
 import { deriveNeeds, type Need } from "./needs";
 import { emptyManual, emptyMedicationNote, MODEL_VERSION, type ModelRecord } from "./store";
+import { emptyCarePlan } from "./care-plan";
 import { RUNG_REACH } from "@/wellness/map";
 import { lintLandingCopy } from "@/compliance/landing";
 import { topicSurvey } from "@/learn/surveys";
@@ -49,6 +50,7 @@ function record(over: Partial<ModelRecord> = {}): ModelRecord {
     manual: emptyManual(),
     medication: emptyMedicationNote(),
     checkpoints: [],
+    carePlan: emptyCarePlan(),
     ...over,
   };
 }

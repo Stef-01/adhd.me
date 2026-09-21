@@ -14,6 +14,7 @@ import { isProfession } from "@/support/professions";
 import type { OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
 import type { Checkpoint, CheckpointAnswer, CheckpointMonths } from "./checkpoint";
+import { emptyCarePlan, PLAN_MAX, type CarePlan } from "./care-plan";
 
 export const MODEL_VERSION = 1;
 export const MODEL_KEY = `adhdme.model.v${MODEL_VERSION}`;
@@ -93,6 +94,11 @@ export interface ModelRecord {
   medication: MedicationNote;
   /** The waiting checkpoints answered so far (src/model/checkpoint.ts): six months, a year, two years. */
   checkpoints: Checkpoint[];
+  /**
+   * The chronic condition management plan (src/model/care-plan.ts): what it allows, what is spent.
+   * The person's own numbers off their own plan — this app never infers them and holds no money.
+   */
+  carePlan: CarePlan;
 }
 
 export type MedicationField = "changes" | "untouched" | "unwanted";
@@ -137,6 +143,7 @@ export function emptyModel(): ModelRecord {
     manual: emptyManual(),
     medication: emptyMedicationNote(),
     checkpoints: [],
+    carePlan: emptyCarePlan(),
   };
 }
 
@@ -176,6 +183,9 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
       // A record written before checkpoints existed simply has none answered, which is the truth
       // about it — so this needs no version bump and no migration.
       checkpoints: Array.isArray(r.checkpoints) ? r.checkpoints.filter((x) => isObject(x) && typeof x.months === "number").map((e) => e as unknown as Checkpoint) : [],
+      // A record written before the care plan existed simply has no plan, which is the truth about
+      // it — so this needs no version bump and no migration, the same way checkpoints did not.
+      carePlan: isObject(r.carePlan) ? { ...emptyCarePlan(), ...(r.carePlan as Partial<CarePlan>) } : emptyCarePlan(),
     };
   } catch {
     return emptyModel();
@@ -247,6 +257,24 @@ export function recordAnswer(storage: ModelStorage, moduleId: string, questionId
     answers: { ...r.answers, [`${moduleId}.${questionId}`]: value },
     survey: countAnswered(r.survey, 1),
   }));
+}
+
+/**
+ * The person's own plan numbers, clamped to what a plan can hold. `used` may exceed `allows` on
+ * the way through — somebody correcting one field before the other — and `remaining` floors it,
+ * so this stores what they typed rather than arguing with them mid-edit.
+ */
+export function saveCarePlan(storage: ModelStorage, allows: number, used: number, year = new Date().getFullYear()): ModelRecord {
+  const clamp = (n: number) => Math.max(0, Math.min(Math.round(Number.isFinite(n) ? n : 0), PLAN_MAX));
+  return updateModel(storage, (r) => ({
+    ...r,
+    carePlan: { allows: clamp(allows), used: clamp(used), year, confirmedOn: now() },
+  }));
+}
+
+/** Forget the plan entirely, from the same place the record's other deletes live. */
+export function clearCarePlan(storage: ModelStorage): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, carePlan: emptyCarePlan() }));
 }
 
 export function recordInsight(storage: ModelStorage, insightId: string, verdict: InsightVerdict): ModelRecord {
