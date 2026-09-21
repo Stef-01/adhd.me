@@ -28,7 +28,7 @@ import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
 import { axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
 import { isComplete } from "@/model/onboarding";
-import { activeSafety } from "@/model/store";
+import { activeSafety, emptyModel, type ModelRecord } from "@/model/store";
 import { LifeHeader } from "./life-shell";
 import { MyAdhdRadar } from "./my-adhd-radar";
 import { MyAdhdSheet } from "./my-adhd-sheet";
@@ -64,6 +64,13 @@ export function MyAdhd() {
   const shareRef = useRef<HTMLButtonElement | null>(null);
 
   const points = useMemo(() => axes(record), [record]);
+  // Day one: the shape the model drew from the first answers alone. Everything since is what the
+  // person built, and the gap between the two polygons is the only "progress" this tab shows.
+  const dayOne = useMemo(() => (record ? axes(dayOneRecord(record)) : []), [record]);
+  const baseline = useMemo(
+    () => (dayOne.some((d, i) => d.reach !== points[i]?.reach) ? dayOne : null),
+    [dayOne, points],
+  );
   // What may be contributing, as the comp has it: at most three short phrases from the leading
   // need's own contributors. Repeating the axis names here would say nothing the radar has not.
   const focus = useMemo(() => {
@@ -107,7 +114,7 @@ export function MyAdhd() {
           {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
           {record && (
-            <MyAdhdRadar points={points} onOpen={openAxis} openAspect={open} />
+            <MyAdhdRadar points={points} baseline={started ? baseline : null} onOpen={openAxis} openAspect={open} />
           )}
 
           {record && !started && (
@@ -194,6 +201,11 @@ export function MyAdhd() {
       )}
     </main>
   );
+}
+
+/** The record as it stood after onboarding: first answers kept, everything learned since removed. */
+function dayOneRecord(record: ModelRecord): ModelRecord {
+  return { ...emptyModel(), onboarding: record.onboarding, resonance: record.resonance };
 }
 
 type Recommendation = NonNullable<ReturnType<typeof recommend>>;

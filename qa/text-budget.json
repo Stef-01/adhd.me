@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-21T16:13:17.227Z",
+  "measuredAt": "2026-09-21T21:36:46.479Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "00:16 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -444,25 +444,25 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 10,
-      "fold": 10,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Mia, why are you here?",
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "DON’T SCROLL!",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "WHY ARE YOU HERE?",
-          "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
+          "w": 2,
+          "text": "ONE MORE",
           "tag": "span"
         }
       ]
@@ -498,25 +498,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "POP IT!",
+          "w": 3,
+          "text": "DRAW A PATH!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "pale",
+          "w": 3,
+          "text": "Round the right",
           "tag": "button"
         }
       ]
@@ -764,7 +764,7 @@
       "name": "/my-adhd",
       "state": null,
       "total": 25,
-      "fold": 25,
+      "fold": 24,
       "chrome": 6,
       "ratio": 0.6,
       "verdict": "target",
@@ -1791,19 +1791,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
+          "w": 3,
+          "text": "I held off",
           "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 2,
+          "text": "DON’T SCROLL!",
+          "tag": "p"
         },
         {
-          "w": 1,
-          "text": "SWAT!",
-          "tag": "p"
+          "w": 2,
+          "text": "ONE MORE",
+          "tag": "span"
         }
       ]
     },
@@ -1947,7 +1947,7 @@
       "name": "My ADHD, lived in",
       "state": "model-lived",
       "total": 57,
-      "fold": 35,
+      "fold": 32,
       "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
@@ -1974,7 +1974,7 @@
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
       "total": 62,
-      "fold": 35,
+      "fold": 32,
       "chrome": 6,
       "ratio": 1.6,
       "verdict": "OVER",
@@ -2001,7 +2001,7 @@
       "name": "My ADHD, before a care plan",
       "state": "model-no-plan",
       "total": 60,
-      "fold": 35,
+      "fold": 32,
       "chrome": 6,
       "ratio": 1.5,
       "verdict": "ceiling",

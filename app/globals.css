@@ -158,9 +158,21 @@
      The sage is the only green in the product and says one thing: this works. 6.49:1 on its own
      fill. Its fill is 1.05:1 against paper, so a chip in it always carries its own text — colour
      is never the only thing saying what a chip means. */
-  --map-poly: rgba(242, 106, 79, 0.58);
-  --map-poly-line: #e05338;
+  /* The radar polygon, one object one colour: the founder's 2026-09-21 comp draws it forest
+     sage, so the shape reads as ground gained rather than heat. 6.9:1 on paper as a stroke. */
+  --map-poly: rgba(45, 90, 76, 0.35);
+  --map-poly-line: #2d5a4c;
   --map-guide: rgba(31, 41, 55, 0.16);
+  --map-ambient: rgba(45, 90, 76, 0.06);
+  /* Day one's polygon: slate, dashed, under the shape. The one comparison the hub draws. */
+  --map-then: #64748b;
+  /* The six axis discs, the comp's tints: each axis wears one, and it never carries a status. */
+  --disc-warm-bg: #ffdad6;  --disc-warm-ink: #aa3620;
+  --disc-sky-bg: #e0f2fe;   --disc-sky-ink: #0369a1;
+  --disc-stone-bg: #eeeeee; --disc-stone-ink: #4b5563;
+  --disc-cool-bg: #d9e3f6;  --disc-cool-ink: #555f6f;
+  --disc-gold-bg: #ffdea6;  --disc-gold-ink: #7c5800;
+  --disc-sage-bg: #dcfce7;  --disc-sage-ink: #166534;
   --chip-strength-bg: #dcfce7;
   --chip-strength-ink: #166534;
   --chip-held-bg: #e0f2fe;
