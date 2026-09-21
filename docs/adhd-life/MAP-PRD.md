@@ -818,14 +818,30 @@ The plan proceeds on the **bold** default. Each is a small, named change if the 
 already allows up to five, and the `Sun` icon is already in the union, so adding it later is one
 entry in `APP_TABS` plus the label assertion at `tabs.test.ts:27`.
 
-**D2 — One radar or two. STILL OPEN, and the only thing blocking a tidy tree.** The hub radar
-(six axes, coral, confidence-dotted) and `/my-map` (nine NWIA dimensions, rung words,
-founder-directed 2026-09-11) are the same idea at different granularity. As built, the hub radar
-is the one the tab shows and **nothing links to `/my-map` any more**: it is reachable only by
-typing the URL, and it is dead weight in that state. On a yes it retires — the route redirects to
-`/my-adhd`, `src/wellness/map.ts` keeps only `RUNG_REACH` (which `matrix.ts` imports), and
-`e2e/my-map.spec.ts` goes. ADR 0005 and the NWIA attribution stay in `src/wellness/nwia.ts`
-either way. On a no, it gets one word in the hub's footer row and the hub is re-measured.
+**D2 — One radar or two. STILL OPEN.** The hub radar (six axes, coral, confidence-dotted) and
+`/my-map` (nine NWIA dimensions, rung words, founder-directed 2026-09-11) are the same idea at
+different granularity, and the hub radar is the one the tab shows.
+
+**Correction, 2026-09-20 — `/my-map` is not unreached, and this decision was being framed on the
+claim that it is.** This section said "nothing links to `/my-map` any more: it is reachable only
+by typing the URL, and it is dead weight in that state". Measured, there are two live links:
+
+- `app/lives/toolkit.tsx:100` — "Your map", the third button in the Toolkit's action nav, beside
+  "All strategies" and "Play". Unconditional: it is on the Toolkit's empty state, which is the
+  first thing a new person sees there.
+- `app/play/run-player.tsx:313` — "Your map: <dimensions>" on a run's result card, whenever that
+  run moved a dimension (`moved.length > 0`).
+
+So retiring the route is not tidying away something nothing points at; it removes a destination
+from the Toolkit's navigation and from the end of a run, and both of those have to go somewhere.
+That does not decide it — it may still be the right call, and the duplication is real — but the
+"dead weight" framing was wrong and the cost of a yes is larger than this section claimed.
+
+On a yes it retires — the route redirects to `/my-adhd`, **the Toolkit button and the run-result
+link are repointed or removed**, `src/wellness/map.ts` keeps only `RUNG_REACH` (which `matrix.ts`
+imports), and `e2e/my-map.spec.ts` goes. ADR 0005 and the NWIA attribution stay in
+`src/wellness/nwia.ts` either way. On a no, it gets one word in the hub's footer row and the hub
+is re-measured.
 
 **D3 — The six axes. RESOLVED 2026-09-20** against the comp's own markup, which the founder
 supplied: Starting · Focus · Organisation · Emotional regulation · Relationships · Sleep & energy.
