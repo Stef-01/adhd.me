@@ -19,7 +19,9 @@ export interface SkillMatch {
 
 /** Exact declared skill first, contextual contributors second. Never invent expertise to fill a card. */
 export function matchSkill(roster: readonly Clinician[], filters: Filters, record: ModelRecord, context?: Subdomain): SkillMatch | null {
-  const needs = deriveNeeds(record).filter(n => n.userPriority !== "no");
+  const reportedNeeds = deriveNeeds(record);
+  if (context && reportedNeeds.some(n => n.subdomain === context && n.userPriority === "no")) return null;
+  const needs = reportedNeeds.filter(n => n.userPriority !== "no");
   const candidates = searchRoster(roster, filters, "", resolvePlace(filters.place));
   const contextual: Need | undefined = context ? needs.find(n => n.subdomain === context) ?? {
     id: context, subdomain: context, domain: "daily-life", label: "", signalStrength: 0, functionalCost: 0,

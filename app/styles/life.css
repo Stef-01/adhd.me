@@ -168,12 +168,6 @@
    rather than drawing a new one — `layout.one-container` spends a border once per idea, and this
    IS the profession list's idea, resolved to a person. The chips are the map's own chip, so the
    tag a person sees here is drawn exactly as the tag that filled their cell. */
-.support-best { display: grid; gap: 6px; padding: 14px 16px; border: 1px solid var(--accent-tint); border-radius: 14px; background: var(--accent-soft); }
-.support-best h2 { margin: 0 0 2px; color: var(--ink); font-size: 1.0625rem; font-weight: 680; }
-.support-best-who { margin: 0; font-size: 1rem; color: var(--ink); }
-.support-best-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 0; padding: 0; list-style: none; }
-.support-best-tags li { display: inline-flex; align-items: center; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); font-size: 0.8125rem; font-weight: 600; }
-.support-best .learn-secondary { justify-self: start; margin-top: 6px; text-decoration: none; }
 .brief { display: grid; gap: 12px; }
 .brief label { display: grid; gap: 6px; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
 .brief textarea { width: 100%; min-height: 72px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9375rem; line-height: 1.5; text-transform: none; letter-spacing: 0; resize: vertical; }

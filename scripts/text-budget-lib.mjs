@@ -104,14 +104,14 @@ export const EXTRA = [
   // actually used the app sees it. Without these the budget is measuring an empty database.
   { path: "/my-adhd", state: "model-lived", name: "My ADHD, lived in" },
   { path: "/my-adhd", state: "model-learning", name: "My ADHD, a step proposed" },
-  // The care-plan card has two shapes and both are on the hub, so both are measured. The one
-  // without a plan is what everybody meets first and would otherwise never be counted.
-  { path: "/my-adhd", state: "model-no-plan", name: "My ADHD, before a care plan" },
-  { path: "/my-adhd", state: "plan-open", name: "My ADHD, the care plan open" },
   { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
   { path: "/my-adhd", state: "share-open", name: "My ADHD, the summary open" },
   { path: "/my-adhd/history", state: "model-lived", name: "History, lived in" },
   { path: "/today", state: "model-lived", name: "Today, lived in" },
+  // The care-plan card has two shapes and both are on Today, so both are measured. The one
+  // without a plan is what everybody meets first and would otherwise never be counted.
+  { path: "/today", state: "model-no-plan", name: "Today, before a care plan" },
+  { path: "/today", state: "plan-open", name: "Today, the care plan open" },
   { path: "/support", state: "model-lived", name: "Support, lived in" },
   { path: "/manual", state: "model-lived", name: "My manual, lived in" },
   { path: "/adjustments", state: "model-lived", name: "Adjustments, lived in" },
@@ -314,6 +314,7 @@ export async function reach(page, route, base) {
     await page.locator('[data-ready="true"]').waitFor();
     if (route.state === "bedroom-pause") await page.getByRole("button", { name: "Pause game" }).click();
     else {
+      for (let roundTap = 0; roundTap < 12 && await page.locator('.bedroom-game[data-mode="challenge"]').count(); roundTap++) await page.locator(".bedroom-insect:enabled").first().click();
       await page.getByRole("button", { name: "Close the window", exact: true }).click();
       await page.getByRole("button", { name: "Put phone away", exact: true }).click();
       for (let i = 0; i < 12 && await page.locator(".bedroom-insect:enabled").count(); i++) await page.locator(".bedroom-insect:enabled").first().click();

@@ -26,6 +26,14 @@ describe("exact skill matching",()=>{
   expect(match?.basis).toBe("this-practice");expect(match?.sources).toEqual([]);
   expect(matchSkill([provider("sleep",["sleep-routine"])],emptyFilters(),emptyModel())).toBeNull();
  });
+ it("does not resurrect a declined need from a game or module context",()=>{
+  const r=record(); r.resonance.starting!.priority="no";
+  const roster=[provider("start",["task-initiation"]),provider("sleep",["sleep-routine"])];
+  expect(matchSkill(roster,emptyFilters(),r,"activation")).toBeNull();
+  expect(matchSkill(roster,emptyFilters(),r,"sleep")?.basis).toBe("this-practice");
+  r.resonance.starting!.priority="yes";
+  expect(matchSkill(roster,emptyFilters(),r,"activation")?.provider.id).toBe("start");
+ });
  it("respects an explicit no-priority answer and has a deterministic tie",()=>{
   const r=record();r.resonance.starting!.priority="no";
   expect(matchSkill([provider("start",["task-initiation"])],emptyFilters(),r)).toBeNull();

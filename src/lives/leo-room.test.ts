@@ -180,3 +180,33 @@ describe("recovery keeps the world causal", () => {
     expect(closed.prevented).toBe(2);
   });
 });
+
+
+describe("public challenge then settling", () => {
+  it("plays three complete rounds before unlocking the routine", () => {
+    let s=createBedroom(0,true,true);
+    for (const type of ["window","phone","headphones","book","light"] as const) expect(act(s,{type})).toBe(s);
+    for (const count of [3,4,5]) {
+      expect(s.insects).toHaveLength(count);
+      expect(s.mode).toBe("challenge");
+      s=clear(s);
+    }
+    expect(s.caught).toBe(12); expect(s.mode).toBe("recovery");
+    expect(s.window).toBe("open"); expect(s.book.page).toBe(0);
+    s=settle(s); expect(s.mode).toBe("rest");
+    s=act(s,{type:"next-evening"});
+    expect(s.window).toBe("secured"); expect(s.phone).toBe("parked");
+    expect(s.book.page).toBe(2);
+  });
+  it("opens settling on overload and preserves uncaught insects for recovery", () => {
+    const s=run(createBedroom(0,false,true),61000);
+    expect(s.mode).toBe("recovery"); expect(s.insects.length).toBeGreaterThan(0);
+    expect(settle(s).mode).toBe("rest");
+  });
+  it("replay restores the challenge and stale input cannot skip a round",()=>{
+    let s=createBedroom(0,true,true); const id=s.insects[0]!.id;
+    s=act(s,{type:"catch",id}); expect(act(s,{type:"catch",id})).toBe(s);
+    const restarted=act(settle(act(s,{type:"recover"})),{type:"restart"});
+    expect(restarted.rounds).toBe(true);expect(restarted.mode).toBe("challenge");expect(restarted.insects).toHaveLength(3);
+  });
+});

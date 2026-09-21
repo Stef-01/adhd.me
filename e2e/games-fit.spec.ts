@@ -32,6 +32,7 @@ const SURFACES: ReadonlyArray<{ name: string; path: string; act?: (page: Page) =
   { name: "Leo, the routine", path: "/lives/play/leo-mosquito", act: async (p) => {
 
     await p.locator('.bedroom-game[data-ready="true"]').waitFor();
+    for (let roundTap = 0; roundTap < 12 && await p.locator('.bedroom-game[data-mode="challenge"]').count(); roundTap++) await p.locator(".bedroom-insect:enabled").first().click();
     await p.getByRole("button", { name: "Close the window", exact: true }).click();
     await p.getByRole("button", { name: "Put phone away", exact: true }).click();
     for (let i = 0; i < 12 && await p.locator(".bedroom-insect:enabled").count(); i++) await p.locator(".bedroom-insect:enabled").first().click();

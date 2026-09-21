@@ -271,3 +271,8 @@ Reject these shortcuts: eight reskins of one quiz; a timer added everywhere; an 
 Assets are complete for this specification when the manifest resolves every file and game/run mapping, SVGs parse, WAV headers and peaks validate, generator output is repeatable, and the gallery's actual rendered poses, layered scenes and props have been inspected at phone and desktop sizes. Runtime readiness is a separate gate.
 
 The all-games upgrade is complete only when every game passes A–G on its public route, all 32 arcade adapters and 20 learning-run integrations are accounted for, and remaining content/player-review limitations are documented. This document and asset pack establish the production foundation; they do not replace that work.
+
+
+## Required game sequence — September 21 direction
+
+Every public game must begin with its playable challenge. Settling/support strategies become available after the encounter ends, whether the player clears it or reaches recovery. The ending is an untimed interactive scene: the player performs useful actions, sees their consequences, then carries the setup into a changed revisit. Do not expose the whole strategy menu before the initial challenge or replace the ending with a lecture. Keep direct entry, reduced-motion equivalents and an accessible route to recovery. Leo uses three mosquito rounds (3, 4, 5), followed by window, phone, optional headphones, reading and light controls. Other worlds must apply this sequence to their own mechanics, not copy Leo's bedtime actions.

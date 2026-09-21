@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useMotionValue, useReducedMotion } from "motion/react";
 import { bedroomReducer, createBedroom, type BedroomAction } from "@/lives/leo-room";
 
-export function useBedroom() {
+export function useBedroom(rounds = false) {
   const reducedPreference = useReducedMotion();
   const [ready, setReady] = useState(false);
-  const [state, setState] = useState(() => createBedroom());
+  const [state, setState] = useState(() => createBedroom(0, false, rounds));
   const current = useRef(state);
   const clock = useMotionValue(0);
   const dispatch = useCallback((action: BedroomAction) => {

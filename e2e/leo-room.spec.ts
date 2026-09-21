@@ -3,7 +3,7 @@ import { pauseNow } from "./support/fake-clock";
 import { test, expect, hydratedUnderFakeClock } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
 
-const URL = "/lives/play/leo-mosquito";
+const URL = "/lives/lab/leo-room";
 const game = (page: Page) => page.locator(".bedroom-game");
 async function open(page: Page, still = true) {
   await page.emulateMedia({ reducedMotion: still ? "reduce" : "no-preference" });
@@ -416,7 +416,7 @@ test("Learn opens the living room directly and the old preview remains compatibl
   await page.getByRole("link", { name: /One tiny sound/ }).click();
   await expect(page).toHaveURL(/lives\/play\/leo-mosquito/);
   await expect(game(page)).toHaveAttribute("data-ready", "true");
-  await expect(page.getByRole("button", { name: "Close the window", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Close the window", exact: true })).toBeDisabled();
   await expect(page.getByRole("slider")).toHaveCount(0);
   await expect(page.locator(".leo-practice")).toHaveCount(0);
   await page.goto("/lives/lab/leo-room");

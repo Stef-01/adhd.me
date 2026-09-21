@@ -4,9 +4,14 @@ Founder direction, 2026-09-20: integrate "the chronic health care plan inclusion
 key providers so a person "completely uses up their 10 entitlements", and hold it as their plan in
 the My ADHD tab — minimalist, impeccable, as little text as possible.
 
-This is the technical PRD. It plans one card on the hub, one sheet under it, four provider rows, one
-new section in the GP summary, and nothing else. Every screen budget below is a hard number, and the
-whole feature adds **five words** to the hub.
+This is the technical PRD, kept current with what shipped. One card on `/today`, one sheet under it,
+up to four provider rows, one new section in the GP summary, and nothing else. Every screen budget
+below is a hard number, and the whole feature adds **two words** to a screen.
+
+**Built, 2026-09-21**, phases 1 to 6, behind D2: no screen names an entitlement count, an item number
+or an eligibility rule, because the numbers are the person's own. §6 records the one thing the build
+changed its mind about — the card is on `/today`, not the hub — and why that is a founder's question
+rather than a budget accident.
 
 Read with [MAP-PRD.md](MAP-PRD.md) (the tab this lives in), [MAP-CONNECTIONS.md](MAP-CONNECTIONS.md)
 (C1 and C2, which constrain the recommendation), and `src/directory/fees.ts` (the refusals).
@@ -84,8 +89,6 @@ export interface CarePlan {
   readonly used: number;
   /** The calendar year the allowance belongs to, so a new year reads as a new allowance. */
   readonly year: number;
-  /** Provider kinds the person has decided to spend a service on, in their order. */
-  readonly intended: readonly Profession[];
   /** When the person last confirmed these numbers, because a count is perishable. */
   readonly confirmedOn: string;
 }
@@ -97,13 +100,17 @@ Derived, pure, tested, no UI:
 export function remaining(plan: CarePlan): number;           // max(0, allows - used)
 export function spent(plan: CarePlan): readonly boolean[];    // the dot row, length `allows`
 export function lapses(plan: CarePlan): number;               // the year it resets. A fact, said once.
-export function claimableKinds(): readonly Profession[];      // §5
+export const CLAIMABLE: readonly Profession[];                // §5, one array and one test
+export function claimable(kind: Profession): boolean;         // §5
 export function suggestFor(record: ModelRecord, plan: CarePlan): readonly Suggestion[];  // §4
 ```
 
-There is no `rebateCents`, no `valueCents`, no `estimatedSaving`. `care-plan.test.ts` asserts the
-type has no field whose name matches `/cent|dollar|rebate|gap|saving|cost/i`, the same structural way
-`REFUSED_FEE_FIELDS` is tested — a prose rule nobody reads is not a rule.
+There is no `rebateCents`, no `valueCents`, no `estimatedSaving`. `care-plan.test.ts` asserts it over
+the record's keys, the module's exports and every suggestion's fields against
+`/cent|dollar|price|fee|rebate|gap|saving|cost|worth|\$/i`, and that a suggestion carries no number at
+all — the same structural way `REFUSED_FEE_FIELDS` is tested. A prose rule nobody reads is not a rule,
+and `fees.ts`'s own method note is that a scan whose subject matter is the thing it bans will match
+the sentence doing the banning.
 
 ---
 
@@ -120,7 +127,12 @@ reuses that whole chain rather than inventing a parallel one:
 1. Take the person's needs in their existing priority order.
 2. Map each to a profession the way `/support` already does.
 3. **Keep only the kinds a plan can pay for** (§5).
-4. De-duplicate, and stop at `remaining(plan)`.
+4. De-duplicate, and stop at `remaining(plan)` covered rows.
+
+**A GP is never suggested.** `professionsFor` returns `["gp"]` as its fallback whenever no module
+targets a need, which put "see a GP" straight onto a care-plan sheet — circular, since a GP writes
+the plan rather than being a service under it. Skipped rather than marked "Not covered", because it
+was never a thing a person was offered and then denied.
 
 So a person with five services left and starting, organisation and sleep as their top three axes sees
 at most five rows, in the order their own map put them. The plan does not decide what matters — the
@@ -171,14 +183,33 @@ That is not a bug to hide behind ordering. Two things follow, and both are in sc
 Three additions. Nothing new in the tab bar; D1 in MAP-PRD keeps three tabs and this does not reopen it.
 
 ```
-/my-adhd            the hub          + one card, 5 words
+/today              what to try next  + one card, 2 words
   └ care-plan sheet  a sheet, not a route — app/sheet.tsx, the axis sheet's grabber and detents
-/my-adhd/share      the GP summary   + one section, `carePlan`
+/my-adhd            the hub           + `?share=1`, so the sheet's onward action keeps its promise
+/my-adhd/share      the GP summary    + one section, `carePlan`
 ```
 
-The sheet, not a route, for the reason MAP-PRD gives for the axis sheet: the hub stays the single
-object a person is looking at, and the surface inherits the focus trap, Escape and detents every other
-modal in the product has.
+The sheet, not a route, for the reason MAP-PRD gives for the axis sheet: the person stays on the
+single object they are looking at, and the surface inherits the focus trap, Escape and detents every
+other modal in the product has.
+
+**WHY TODAY AND NOT THE HUB — and the decision that belongs to the founder.** The card was built on
+the hub, and measured there: 53 words lived in, 58 with a step proposed, against a ceiling of 60.
+Then the skill-matched practitioner card landed on the same screen and added four more
+(`Task initiation`, `Jane Whitlock`), and the two features together put the step-proposed hub on
+**62 — over**. Neither is individually at fault. The hub had four words of headroom and now carries
+**three recommendation surfaces at once**: the contributor chips, the step card, and a named
+practitioner. Whatever is added to it next will overflow it.
+
+Today is the same tab, its question is literally "what should I understand or try next", it had 25
+words of headroom, and a plan is a thing you act on rather than a thing you have learned about
+yourself. It also had a large dead area below its one card, which the row now occupies. Measured
+after the move: Today 37 lived in, 40 before a plan, 22 with the sheet open; the hub back to 60.
+
+**The hub is now at its ceiling with none of this feature's words on it.** That is the thing for the
+founder to look at, and it is a question about the practitioner card as much as about this one:
+three recommendations stacked on one screen is an information-architecture decision, not a budget
+accident. **Not resolved here.**
 
 ---
 
@@ -188,15 +219,25 @@ The hub is at **51 words** lived in and **56** with a step proposed, against a c
 (`qa/text-budget.json`). `BUDGET.card` is **8**. So the hub card gets five words and the feature is
 designed around that number rather than apologising for it.
 
-### 7.1 The hub card
+### 7.1 The card (on `/today`)
 
 ```
 Care plan            ·  ● ● ○ ○ ○
                         3 of 5 left
 ```
 
-**Five words: "Care plan", "3 of 5 left".** A heading and a count. No explanation, no "what is this?",
-no lede. The dots carry the rest, and the sheet holds the meaning for anybody who taps.
+**Two words: "Care plan".** A name and the dots. No count in words, no explanation, no lede.
+
+The PRD drafted "3 of 5 left" and the build cut it twice. "of 5" says what five dots say. Then
+"3 left" was the difference between a screen inside its ceiling and one over it — so the count is
+the button's accessible name, losslessly ("Care plan: 3 of 5 services left"), and the sheet says it
+in words the moment somebody taps. A sighted reader counts three hollow dots among five; nobody
+else loses anything.
+
+One trap, worth writing down: the first build put the visible words inside `aria-hidden` spans,
+reasoning that the button's own `aria-label` already carried them. The text-budget instrument skips
+`[aria-hidden='true']` subtrees, so the hub measured 51 and 56 — exactly as if the card were not
+there. **A word on screen is a word in the budget**, whatever the accessibility tree thinks.
 
 Empty state, before a person has a plan — **four words**:
 

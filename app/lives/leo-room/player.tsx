@@ -52,8 +52,8 @@ function Prop({ name, label, children, onClick, disabled, selected, still }: {
   </motion.button>;
 }
 
-export function LeoBedroom() {
-  const { state: s, dispatch, clock, ready } = useBedroom();
+export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
+  const { state: s, dispatch, clock, ready } = useBedroom(rounds);
   const [sound, setSound] = useState(false);
   const [soundNotice, setSoundNotice] = useState("");
   const audio = useRef<BedroomAudio | null>(null);
@@ -63,6 +63,7 @@ export function LeoBedroom() {
   const heading = useRef<HTMLHeadingElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const pauseButton = useRef<HTMLButtonElement>(null);
+  const challengeOnly = Boolean(s.rounds && s.mode === "challenge");
   const ended = s.mode === "rest" || s.mode === "complete";
   useEffect(() => { setSoundNotice(""); }, [s.revision]);
   const ids = s.insects.map(i => i.id).join(",");
@@ -83,7 +84,7 @@ export function LeoBedroom() {
     else if (dialog.current?.open) { dialog.current.close(); pauseButton.current?.focus({ preventScroll: true }); }
   }, [s.paused]);
   useEffect(() => {
-    if (["rest", "complete", "revisit", "challenge"].includes(s.mode)) heading.current?.focus({ preventScroll: true });
+    if (["rest", "complete", "revisit", "challenge", "recovery"].includes(s.mode)) heading.current?.focus({ preventScroll: true });
   }, [s.mode, s.scenario]);
   useEffect(() => {
     const key = (event: KeyboardEvent) => {
@@ -116,11 +117,11 @@ export function LeoBedroom() {
     });
   }
   const objective = ended ? s.mode === "complete" ? "Same room. A different evening." : "Leave it ready for tomorrow." :
-    manageable(s) ? pageReady ? "Keep your place. Lower the light." : "A page or two. At your pace." :
+    challengeOnly ? "Catch the mosquitoes. Then help Leo settle." : s.rounds && s.mode === "recovery" ? "Choose what helps Leo settle." : manageable(s) ? pageReady ? "Keep your place. Lower the light." : "A page or two. At your pace." :
     s.mode === "revisit" ? "Keep the routine. Find your place." : "Catch the buzz. Change the room.";
 
   return <section className="bedroom-game lives-run" aria-label="Leo’s evening" data-mode={s.mode} data-still={s.still}
-    data-ready={ready} data-paused={s.paused} data-scenario={s.scenario} data-page={s.book.page}>
+    data-round={s.rounds ? s.round : undefined} data-challenge-only={challengeOnly} data-ready={ready} data-paused={s.paused} data-scenario={s.scenario} data-page={s.book.page}>
     <header className="bedroom-toolbar">
       <Link href="/approach?pane=games" aria-label="Back to learning" className="bedroom-icon"><ArrowLeft size={21} /></Link>
       <span>LEO’S EVENING</span>
@@ -135,6 +136,7 @@ export function LeoBedroom() {
         <div className="bedroom-regulation"><span>Room to settle</span><div role="meter" aria-label="Leo’s regulation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={calm} aria-valuetext={`${calm} out of 100`}>
           <span style={{ transform: `scaleX(${1 - s.activation})` }} />
         </div></div>
+        {challengeOnly && <span className="bedroom-round">Round {s.round} of 3</span>}
         <span className="bedroom-count" aria-label={`${s.insects.length} mosquitoes inside`}>{s.insects.length} inside</span>
         <span className="bedroom-clock" role="timer" aria-label="Time remaining">{s.mode === "challenge" && !s.still ? `${Math.floor(remaining / 60)}:${(remaining % 60).toString().padStart(2, "0")}` : ended ? <Check size={18} aria-label="Evening complete" /> : "Your pace"}</span>
       </div>
@@ -143,19 +145,19 @@ export function LeoBedroom() {
       <BedroomBackdrop />
       <div className="bedroom-bed"><BedAndLeo mood={roomMood(s)} headphones={s.headphones} /></div>
       <div className="bedroom-night-shade" />
-      <Prop name="window" still={s.still} disabled={s.window === "secured" || ended} label={s.window === "secured" ? "Window secured" : "Close the window"} onClick={() => dispatch({ type: "window" })}>
+      <Prop name="window" still={s.still} disabled={challengeOnly || s.window === "secured" || ended} label={s.window === "secured" ? "Window secured" : "Close the window"} onClick={() => dispatch({ type: "window" })}>
         <RoomWindow secured={s.window === "secured"} outside={s.prevented > 0 || s.events.some(event => event.kind === "insects" && event.at - s.time < 2600)} />
       </Prop>
-      <Prop name="phone" still={s.still} disabled={s.phone === "parked" || ended} label={s.phone === "parked" ? "Phone parked" : "Put phone away"} onClick={() => dispatch({ type: "phone" })}>
+      <Prop name="phone" still={s.still} disabled={challengeOnly || s.phone === "parked" || ended} label={s.phone === "parked" ? "Phone parked" : "Put phone away"} onClick={() => dispatch({ type: "phone" })}>
         <RoomPhone parked={s.phone === "parked"} notifications={s.notifications} />
       </Prop>
-      <Prop name="lamp" still={s.still} disabled={ended} label={ended ? "Lights out" : s.lamp === "reading" ? "Dim the light" : s.lamp === "dim" ? "Light off" : "Light on"} onClick={() => dispatch({ type: "light" })}>
+      <Prop name="lamp" still={s.still} disabled={challengeOnly || ended} label={ended ? "Lights out" : s.lamp === "reading" ? "Dim the light" : s.lamp === "dim" ? "Light off" : "Light on"} onClick={() => dispatch({ type: "light" })}>
         <RoomLamp level={s.lamp} />
       </Prop>
-      <Prop name="headphones" still={s.still} disabled={ended} selected={s.headphones} label={ended ? s.headphones ? "Sound softened" : "Quiet works too" : s.headphones ? "Headphones off" : "Headphones on"} onClick={() => dispatch({ type: "headphones" })}>
+      <Prop name="headphones" still={s.still} disabled={challengeOnly || ended} selected={s.headphones} label={ended ? s.headphones ? "Sound softened" : "Quiet works too" : s.headphones ? "Headphones off" : "Headphones on"} onClick={() => dispatch({ type: "headphones" })}>
         <RoomHeadphones worn={s.headphones} />
       </Prop>
-      <Prop name="book" still={s.still} disabled={ended || (pageReady && s.lamp !== "off")} label={bookLabel} onClick={() => dispatch({ type: "book" })}>
+      <Prop name="book" still={s.still} disabled={challengeOnly || ended || (pageReady && s.lamp !== "off")} label={bookLabel} onClick={() => dispatch({ type: "book" })}>
         <motion.div key={`${s.book.open}-${s.book.page}`} initial={s.still ? false : { rotateY: -14, opacity: .7 }} animate={{ rotateY: 0, opacity: 1 }} transition={{ duration: .25 }}>
           <RoomBook open={s.book.open} page={s.book.page} />
         </motion.div>
