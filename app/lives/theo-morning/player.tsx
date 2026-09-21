@@ -1,4 +1,5 @@
 "use client";
+import { SkillRecommendation } from "../../skill-recommendation";
 import Link from "next/link";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -74,5 +75,6 @@ export function TheoMorningGame() {
       {evening && <div className="tm-actions"><span className="tm-setup-count">{Object.keys(state.homes).length}/3 homes</span><button className="tm-primary" disabled={ESSENTIALS.some(k => !state.homes[k])} onClick={() => dispatch({ type: "tomorrow" })}>Tomorrow <ArrowRight size={18}/></button></div>}
       {result && <div className="tm-ending"><span className="tm-result-stat">{state.phase === "complete" ? `${state.first?.trips} → ${state.trips} trips` : `${state.trips} trips · ${Math.round(state.elapsed)}s`}</span>{state.phase === "departure" ? <button className="tm-primary" onClick={() => dispatch({ type: "evening" })}>Later that evening <ArrowRight size={18}/></button> : <><button className="tm-primary" onClick={() => { setSelected("keys"); dispatch({ type: "restart" }); }}><ArrowCounterClockwise size={18}/>Another morning</button><Link href="/lives/learn?module=launch_pad_v1">Make your own launch pad <ArrowRight size={17}/></Link></>}</div>}
     </div>
+    {state.phase === "complete" && <SkillRecommendation context="time" />}
   </section>;
 }

@@ -7,21 +7,18 @@
 // they choose — nothing is shared by the app.
 
 import Link from "next/link";
+import { SkillRecommendation } from "./skill-recommendation";
 import { useEffect, useState } from "react";
 import { ArrowRight, CaretRight } from "@phosphor-icons/react";
 import { deriveNeeds, type Need } from "@/model/needs";
 import { adjustmentTrack, trackForSubdomain } from "@/model/adjustments";
 import { escalationEligible, professionsFor, recommend } from "@/model/recommend";
 import { track } from "@/model/events";
-import { EXPERTISE_LABELS, PROFESSION_ENTRIES, profession, type Profession } from "@/support/professions";
-import { bestFitFor, fitTags } from "@/support/problem-fit";
-import { clinicians, professionOf } from "@/demo/clinicians";
+import { PROFESSION_ENTRIES, profession, type Profession } from "@/support/professions";
 import { readFilters, writeFilters } from "@/finder/filters";
 import { LifeHeader, WhyThis } from "./life-shell";
 import { useModel } from "./use-model";
 
-/** Calm Clarity's ceiling on a row of chips, and the same three the finder's profile shows. */
-const MAX_FIT_TAGS = 3;
 
 export function SupportPath() {
   const { record } = useModel();
@@ -31,29 +28,6 @@ export function SupportPath() {
   const professions = need ? professionsFor(need) : PROFESSION_ENTRIES.map((p) => p.id);
   const eligible = need && record ? escalationEligible(need, record) : false;
   const institution = need ? trackForSubdomain(need.subdomain) : null;
-
-  /*
-   * O253 (founder-directed: "make sure it is working and live where it personalises the care
-   * providers based on your needs and challenges seen on the skill map").
-   *
-   * It was live, and it was four taps away. The map's top need reached `problemFit` only once
-   * the reader had chosen a profession here, opened the finder and opened a person — so the one
-   * screen whose whole job is "who could help with THIS" showed three generic profession cards
-   * and named nobody. This is the missing half: the person on the roster whose own declared
-   * expertise answers this need, with the tags that matched, on the screen where the need is.
-   *
-   * THE REAL ROSTER ONLY, and that is deliberate. The finder ships with the example profiles on
-   * and labels every one of them; a card here that named an invented person as the closest fit
-   * would be putting a fabricated name under a real person's problem, and shortening the
-   * sentence to fit would lose the label. So this names somebody this company actually lists,
-   * or it names nobody.
-   *
-   * IT RENDERS ONLY WHEN THE CHIPS DO. `bestFitFor` returns null when no declared expertise
-   * answers the need, and a match with nothing to show under "Why this match?" is the unearned
-   * claim the taste sheet refuses. Measured today: 8 of the 25 subdomains produce one.
-   */
-  const best = need ? bestFitFor(clinicians, need) : null;
-  const bestTags = best && need ? fitTags(best, need).slice(0, MAX_FIT_TAGS).map((t) => EXPERTISE_LABELS[t]) : [];
 
   useEffect(() => { if (need) track("SUPPORT_RECOMMENDATION_SHOWN", { need: need.subdomain, eligible }); }, [need, eligible]);
 
@@ -98,20 +72,7 @@ export function SupportPath() {
             })}
           </ul>
 
-          {best && bestTags.length > 0 && (
-            <section className="support-best" aria-labelledby="support-best-title">
-              <h2 id="support-best-title">Closest fit today</h2>
-              <p className="support-best-who">
-                <strong>{best.name}</strong> · {profession(professionOf(best)).label}
-              </p>
-              <ul className="support-best-tags" aria-label="Why this match">
-                {bestTags.map((t) => <li key={t}>{t}</li>)}
-              </ul>
-              <Link className="learn-secondary" href="/" onClick={() => seeProviders(professionOf(best))}>
-                See their listing <ArrowRight size={16} weight="bold" aria-hidden="true" />
-              </Link>
-            </section>
-          )}
+          <SkillRecommendation />
 
           {institution && (
             <p className="map-foot">

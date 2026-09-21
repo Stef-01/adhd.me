@@ -1,4 +1,5 @@
 "use client";
+import { SkillRecommendation } from "../skill-recommendation";
 
 // The run player (PLAY-PLAN.md §2): title → rounds → recognition → insight → try → next.
 //
@@ -304,6 +305,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
                 ) : (
                   <button type="button" className="play-tempt is-go" onClick={finish}><Check size={16} weight="bold" aria-hidden="true" /> Finish</button>
                 )}
+                <SkillRecommendation  />
                 {run.next.action !== "try" && <button type="button" className="play-choice" onClick={finish}>Finish for now</button>}
               </div>
               {/* The map moved, said where the moving happened. Two at most: this is a card with a

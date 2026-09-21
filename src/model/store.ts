@@ -1,3 +1,5 @@
+import { readProfile } from "@/lives/profile";
+import type { LearningProfile } from "@/lives/types";
 // The personal ADHD model's device record — everything the app has learned about this person.
 //
 // ONE PLACE, ONE KEY, ON THIS DEVICE. `localStorage` under a versioned key, on the same terms as
@@ -68,6 +70,8 @@ export interface SafetyEvent {
 
 export interface ModelRecord {
   v: typeof MODEL_VERSION;
+  /** Joined on read; Lives remains the source of truth. */
+  learning?: LearningProfile;
   onboarding: OnboardingAnswers | null;
   /** By module id. */
   resonance: Record<string, Resonance>;
@@ -151,7 +155,7 @@ const isObject = (v: unknown): v is Record<string, unknown> => Boolean(v) && typ
 const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every((s) => typeof s === "string");
 
 /** The device's record, or an empty one when none, another version, or malformed. Never throws. */
-export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
+function readStoredModel(storage: Pick<Storage, "getItem">): ModelRecord {
   let raw: string | null;
   try {
     raw = storage.getItem(MODEL_KEY);
@@ -192,9 +196,17 @@ export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
   }
 }
 
+export function readModel(storage: Pick<Storage, "getItem">): ModelRecord {
+  const record = readStoredModel(storage);
+  const learning = readProfile(storage);
+  return learning.resonanceSignals.length || learning.selectedGoals.length || learning.personalStrategies.length ? { ...record, learning } : record;
+}
+
 export function writeModel(storage: Pick<Storage, "setItem">, record: ModelRecord): void {
   try {
-    storage.setItem(MODEL_KEY, JSON.stringify(record));
+    const { learning: _learning, ...stored } = record;
+    storage.setItem(MODEL_KEY, JSON.stringify(stored));
+    if (typeof window !== "undefined") window.dispatchEvent(new Event("adhdme:personalisation"));
   } catch {
     // Storage refused: the session keeps working from memory; it just does not persist.
   }

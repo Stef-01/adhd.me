@@ -1,3 +1,5 @@
+import { learningEvidence, LEARNING_TARGETS } from "./learning-evidence";
+import { STRATEGIES } from "@/lives/strategies";
 // Needs (PRD §24): what the record says matters to this person, derived every time it is read.
 //
 // A need is one identified difficulty with its domain, subdomain, how strongly the signals point
@@ -233,6 +235,25 @@ export function deriveNeeds(record: ModelRecord): Need[] {
     d.priorities.push("yes");
     for (const s of result.strengths) d.strengths.add(s);
     for (const c of result.contributors) d.contributors.set(`${c.layer}:${c.note}`, c);
+  }
+
+  // Legacy Lives recognition joins the same needs as modules and completed self-report surveys.
+  // No cost is invented: a recognition is not a severity rating.
+  for (const evidence of learningEvidence(record.learning)) {
+    const d = get(evidence.domain, evidence.subdomain);
+    d.sources.add(evidence.source);
+    d.occasions += 1;
+    if (evidence.kind === "chosen-goal") d.priorities.push("yes");
+  }
+  for (const personal of record.learning?.personalStrategies ?? []) {
+    const strategy = STRATEGIES.find(s => s.id === personal.strategyId);
+    if (!strategy || record.learning?.dismissedStrategyIds.includes(strategy.id)) continue;
+    const targets = new Set(strategy.domains.map(domain => LEARNING_TARGETS[domain].subdomain));
+    for (const d of drafts.values()) {
+      if (!targets.has(d.subdomain)) continue;
+      d.strategies.set(strategy.id, { strategyId: strategy.id, title: strategy.title,
+        outcome: personal.status === "useful" ? "a-lot" : personal.status === "not_useful" ? "no" : "pending" });
+    }
   }
 
   const context = onboardingContext(record);

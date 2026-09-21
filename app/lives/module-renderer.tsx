@@ -6,6 +6,8 @@
 // configuration and the strategy joins the Toolkit as "trying". No article walls, no quiz, no
 // "lesson complete"; every card is one thing and one button.
 
+import { SkillRecommendation } from "../skill-recommendation";
+import { LEARNING_TARGETS } from "@/model/learning-evidence";
 import { transcript } from "@/lives/transcripts";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -62,6 +64,7 @@ export function ModuleRenderer({ moduleId, onLeave }: { moduleId: string; onLeav
               <LifeBean who={strategy.characterIds[0] ?? "maya"} mood="pleased" size={140} className="play-hero-bean" />
               <h2 id="lives-module-title" className="play-title">Added to your Toolkit</h2>
               <p className="play-line">{strategy.title}, as you set it up. Worth trying this week.</p>
+              <SkillRecommendation context={LEARNING_TARGETS[strategy.domains[0]!].subdomain} />
               <div className="next-actions">
                 <Link className="play-tempt is-go" href="/lives/toolkit"><Check size={16} weight="bold" aria-hidden="true" /> Open the Toolkit</Link>
                 <Link className="play-choice" href="/lives/play"><Play size={14} weight="fill" aria-hidden="true" /> Play again</Link>
@@ -71,7 +74,7 @@ export function ModuleRenderer({ moduleId, onLeave }: { moduleId: string; onLeav
             <div className="play-card lives-card lives-block" data-block={block.type}>
               {step === 0 && <h2 id="lives-module-title" className="lives-module-name">{module.title}</h2>}
               {step !== 0 && <h2 id="lives-module-title" className="sr-only">{module.title}, step {step + 1} of {blocks.length}</h2>}
-              <Block block={block} isLast={step === blocks.length - 1} onNext={next} onFinish={finish} onConfig={(k, v) => setConfig((c) => ({ ...c, [k]: v }))} reducedMotion={reducedMotion} />
+              <Block block={block} isLast={step === blocks.length - 1} onNext={next} onFinish={finish} onConfig={(k, v) => setConfig((c) => ({ ...c, [`block:${step}:${k}`]: v }))} reducedMotion={reducedMotion} />
             </div>
           ) : null}
         </motion.div>
