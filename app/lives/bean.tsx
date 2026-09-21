@@ -28,3 +28,18 @@ export function LifeBean({ who, mood = "neutral", size = 120, className }: { who
 }
 
 export function beanColour(who: CharacterId): string { return PALETTE[who].body; }
+/** The character's dark tone — the one their own face is drawn in. */
+export function beanInk(who: CharacterId): string { return PALETTE[who].ink; }
+
+/**
+ * A tone between a life's two canonical colours, for art that needs more than two (a Theo with
+ * hair, arms and a face). Taking them from the palette rather than picking new hex means a game
+ * cannot drift into a second version of its own character.
+ */
+export function beanTone(who: CharacterId, towardBody: number): string {
+  const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const [ir, ig, ib] = hex(PALETTE[who].ink);
+  const [br, bg, bb] = hex(PALETTE[who].body);
+  const mix = (a: number, b: number) => Math.round(a + (b - a) * towardBody).toString(16).padStart(2, "0");
+  return `#${mix(ir!, br!)}${mix(ig!, bg!)}${mix(ib!, bb!)}`;
+}

@@ -1,5 +1,6 @@
 import { TheoProp } from "../theo-art";
 import type { Command, Room } from "@/lives/theo-morning";
+import { beanColour, beanInk, beanTone } from "../bean";
 
 export function Prop({ kind }: { kind: Command | "clock" | "moon" }) {
   if (["keys", "phone", "shoes", "laundry", "plant", "email"].includes(kind)) return <TheoProp item={kind as "keys" | "phone" | "shoes" | "laundry" | "plant" | "email"} />;
@@ -25,16 +26,29 @@ export function RoomArt({ room, evening }: { room: Room; evening: boolean }) {
   </svg>;
 }
 
+/*
+ * Theo, in Theo's own colours. This avatar was drawn fern (#80b6a0 body, #37564b hair, #284b40
+ * face) while the cast has defined Theo as cyan since the beans were drawn, so the library
+ * thumbnail and the game it opens showed two different people — the conflict the v2 plan names
+ * and resolves in favour of the canonical identity. The four tones are derived from that one
+ * palette entry rather than picked again here, so this cannot drift into a third Theo. The shoes
+ * and the shadow are not identity and keep their own colours.
+ */
+const SKIN = beanColour("theo");
+const FACE = beanInk("theo");
+const HAIR = beanTone("theo", 0.15);
+const ARMS = beanTone("theo", 0.55);
+
 export function TheoAvatar({ load, walking, shoes, carrying }: { load: number; walking: boolean; shoes: boolean; carrying: number }) {
   return <svg viewBox="0 0 100 126" aria-hidden="true" className="tm-avatar" data-walking={walking} data-upset={load > 60}>
     <ellipse cx="50" cy="117" rx="31" ry="6" fill="#725b3f" opacity=".18"/>
-    <g className="tm-leg-left"><path d="m35 93-5 21" stroke="#37564b" strokeWidth="7" strokeLinecap="round"/>{shoes && <path d="M24 109h14l-1 9H21q-5-7 3-9" fill="#c77554"/>}</g>
-    <g className="tm-leg-right"><path d="m65 93 5 21" stroke="#37564b" strokeWidth="7" strokeLinecap="round"/>{shoes && <path d="M65 109h12q8 6 2 9H63z" fill="#c77554"/>}</g>
-    <g className="tm-body"><path d="M19 66V42q0-34 31-34t31 34v27q0 36-31 36T19 66" fill="#80b6a0"/><path d="M20 40Q15 7 45 10q31-15 36 29L66 28l-8 10-10-11-12 11" fill="#37564b"/>
-    <path d={load > 60 ? "m32 44 8-3m20 0 8 3" : "m32 41 8-1m20 0 8 1"} stroke="#284b40" strokeWidth="2.5" strokeLinecap="round"/>
-    <ellipse cx="36" cy="51" rx="2.5" ry="3.5" fill="#284b40"/><ellipse cx="64" cy="51" rx="2.5" ry="3.5" fill="#284b40"/>
-    <path d={load > 60 ? "M43 69q7-7 14 0" : "M43 65q7 8 14 0"} stroke="#284b40" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-    <path d={carrying ? "M20 74 7 63m74 11 12-11" : "M20 69Q7 85 6 68m75 1q13 16 13-1"} fill="none" stroke="#619881" strokeWidth="7" strokeLinecap="round"/>
+    <g className="tm-leg-left"><path d="m35 93-5 21" stroke={HAIR} strokeWidth="7" strokeLinecap="round"/>{shoes && <path d="M24 109h14l-1 9H21q-5-7 3-9" fill="#c77554"/>}</g>
+    <g className="tm-leg-right"><path d="m65 93 5 21" stroke={HAIR} strokeWidth="7" strokeLinecap="round"/>{shoes && <path d="M65 109h12q8 6 2 9H63z" fill="#c77554"/>}</g>
+    <g className="tm-body"><path d="M19 66V42q0-34 31-34t31 34v27q0 36-31 36T19 66" fill={SKIN}/><path d="M20 40Q15 7 45 10q31-15 36 29L66 28l-8 10-10-11-12 11" fill={HAIR}/>
+    <path d={load > 60 ? "m32 44 8-3m20 0 8 3" : "m32 41 8-1m20 0 8 1"} stroke={FACE} strokeWidth="2.5" strokeLinecap="round"/>
+    <ellipse cx="36" cy="51" rx="2.5" ry="3.5" fill={FACE}/><ellipse cx="64" cy="51" rx="2.5" ry="3.5" fill={FACE}/>
+    <path d={load > 60 ? "M43 69q7-7 14 0" : "M43 65q7 8 14 0"} stroke={FACE} strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+    <path d={carrying ? "M20 74 7 63m74 11 12-11" : "M20 69Q7 85 6 68m75 1q13 16 13-1"} fill="none" stroke={ARMS} strokeWidth="7" strokeLinecap="round"/>
     {load > 60 && <path d="M88 29q6 10 0 12-7-2 0-12" fill="#588d9b"/>}</g>
   </svg>;
 }

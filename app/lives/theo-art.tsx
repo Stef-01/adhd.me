@@ -1,4 +1,18 @@
 import type { TheoItem } from "@/lives/theo-launch";
+import { beanColour, beanInk, beanTone } from "./bean";
+
+/*
+ * Theo, in Theo's own colours. This figure and the morning game's avatar were both drawn fern
+ * while the cast has defined Theo as cyan since the beans were drawn, so the library thumbnail
+ * and either game it opens showed two different people. The v2 plan names that conflict and
+ * resolves it in favour of the canonical identity. Both drawings take their four tones from that
+ * one palette entry now, so neither can drift into a third Theo. Shoes, shadows and the room are
+ * not identity and keep their own colours.
+ */
+const SKIN = beanColour("theo");
+const FACE = beanInk("theo");
+const HAIR = beanTone("theo", 0.15);
+const ARMS = beanTone("theo", 0.55);
 
 /** Original, flat illustrated props. Colour is decorative; every control has a text label. */
 export function TheoProp({ item }: { item: TheoItem }) {
@@ -30,13 +44,13 @@ export function TheoHallway({ mood = "ready", packed = 0 }: { mood?: "ready" | "
     <rect x="26" y="151" width="94" height="8" rx="4" fill="#9e6749" /><path d="M37 159v98m69-98v98" stroke="#9e6749" strokeWidth="7" />
     <path d="M34 145h68v-11H34z" fill="#6677b8" /><path d="M45 133h56v-13H45z" fill="#e79b72" />
     <ellipse cx="195" cy="290" rx="65" ry="12" fill="#d1a35e" />
-    <g className="theo-person"><path d="m174 260-7 27m48-27 8 27" stroke="#3e5950" strokeWidth="11" strokeLinecap="round" />
-    <path d="M148 232v-48q0-51 46-51t46 51v48q0 42-46 42t-46-42" fill="#80b6a0" />
-    <path d="M151 178q-6-53 38-49 38-14 49 47l-22-16-12 12-13-15-20 17" fill="#37564b" />
-    <path d={mood === "worried" || mood === "failure" ? "M169 190l12-5m25 0 12 5" : "M169 185h12m25 0h12"} stroke="#30483e" strokeWidth="3" strokeLinecap="round" />
-    <ellipse cx="175" cy="199" rx="3" ry="5" fill="#30483e" /><ellipse cx="211" cy="199" rx="3" ry="5" fill="#30483e" />
-    <path d={mood === "failure" || mood === "worried" ? "M184 218q10-8 19 0" : "M184 214q10 12 19 0"} stroke="#30483e" strokeWidth="3" fill="none" strokeLinecap="round" />
-    <path d="M149 220q-24 16-23-12m115 12q20 12 24-9" fill="none" stroke="#619881" strokeWidth="10" strokeLinecap="round" />
+    <g className="theo-person"><path d="m174 260-7 27m48-27 8 27" stroke={HAIR} strokeWidth="11" strokeLinecap="round" />
+    <path d="M148 232v-48q0-51 46-51t46 51v48q0 42-46 42t-46-42" fill={SKIN} />
+    <path d="M151 178q-6-53 38-49 38-14 49 47l-22-16-12 12-13-15-20 17" fill={HAIR} />
+    <path d={mood === "worried" || mood === "failure" ? "M169 190l12-5m25 0 12 5" : "M169 185h12m25 0h12"} stroke={FACE} strokeWidth="3" strokeLinecap="round" />
+    <ellipse cx="175" cy="199" rx="3" ry="5" fill={FACE} /><ellipse cx="211" cy="199" rx="3" ry="5" fill={FACE} />
+    <path d={mood === "failure" || mood === "worried" ? "M184 218q10-8 19 0" : "M184 214q10 12 19 0"} stroke={FACE} strokeWidth="3" fill="none" strokeLinecap="round" />
+    <path d="M149 220q-24 16-23-12m115 12q20 12 24-9" fill="none" stroke={ARMS} strokeWidth="10" strokeLinecap="round" />
     {packed > 0 && <><path d="m206 233 26-3 4 42h-34z" fill="#6677b8" /><path d="M209 234v-6q10-14 17 0v4" stroke="#475686" strokeWidth="4" fill="none" /></>}
     </g>
     <path d="M274 291h108" stroke="#b07d47" strokeWidth="10" strokeLinecap="round" />
