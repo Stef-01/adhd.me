@@ -68,6 +68,10 @@ export const EXTRA = [
   { path: "/lives/play/arjun-hold-the-thread", name: "Arjun: the meeting" },
   { path: "/lives/play/maya-one-thing-at-a-time", name: "Maya: the crossing" },
   { path: "/gp/example-mei-chao", name: "GP profile" },
+  // `discoverRoutes` skips `[id]`, so a dynamic screen is only measured if it is listed here. This
+  // one is patient-facing and reached from the skill-match dialog's "View full profile", and it
+  // arrived without an entry — so it had no word budget and no capture.
+  { path: "/practitioner/example-mei-chao", name: "Practitioner profile" },
   { path: "/go/anubhav-saxena", skip: "a redirect" },
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
@@ -88,14 +92,14 @@ export const EXTRA = [
   // actually used the app sees it. Without these the budget is measuring an empty database.
   { path: "/my-adhd", state: "model-lived", name: "My ADHD, lived in" },
   { path: "/my-adhd", state: "model-learning", name: "My ADHD, a step proposed" },
-  // The care-plan card has two shapes and both are on the hub, so both are measured. The one
-  // without a plan is what everybody meets first and would otherwise never be counted.
-  { path: "/my-adhd", state: "model-no-plan", name: "My ADHD, before a care plan" },
-  { path: "/my-adhd", state: "plan-open", name: "My ADHD, the care plan open" },
   { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
   { path: "/my-adhd", state: "share-open", name: "My ADHD, the summary open" },
   { path: "/my-adhd/history", state: "model-lived", name: "History, lived in" },
   { path: "/today", state: "model-lived", name: "Today, lived in" },
+  // The care-plan card has two shapes and both are on Today, so both are measured. The one
+  // without a plan is what everybody meets first and would otherwise never be counted.
+  { path: "/today", state: "model-no-plan", name: "Today, before a care plan" },
+  { path: "/today", state: "plan-open", name: "Today, the care plan open" },
   { path: "/support", state: "model-lived", name: "Support, lived in" },
   { path: "/manual", state: "model-lived", name: "My manual, lived in" },
   { path: "/adjustments", state: "model-lived", name: "Adjustments, lived in" },

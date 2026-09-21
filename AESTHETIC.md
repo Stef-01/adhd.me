@@ -28,6 +28,12 @@ Two instruments do the parts that eyes are bad at, both against a `pnpm start` s
   so the tab bar lands mid-page, a sticky bar looks like it covers what it floats over, and an open
   modal appears to continue past its own bottom edge. This has produced three false findings on
   this file's record; it has never produced a true one.
+  **And a focus ring nobody will see.** A screen that moves focus to its own heading on arrival is
+  reached by `page.goto` with no pointer input before it, and Chromium then treats that programmatic
+  focus as keyboard-driven and matches `:focus-visible` — so both shots show a hard ring around the
+  h1 that a person clicking through never gets. Measured on `/practitioner/[id]`: `solid 2px` in the
+  capture, `outlineStyle: "none"` after a real click-through. Reach the screen the way a person does
+  before changing anything about a ring you saw in a capture.
 - `BASE=... node scripts/target-sweep.mjs` — sideways scroll, controls a thumb cannot land on, and
   text clipped by its own box, at 320 and 390. It reports where a 44px thumb actually lands rather
   than what the CSS declared, because the tree extends small controls with a transparent `::after`
@@ -919,6 +925,37 @@ the next reader knows the global is the one that matters.
       to its first word, so "Working memory" read "Working". See the commit; two words stack now,
       0 of 25 labels overflow their disc, and `every care-map node shows its whole label, inside
       its own disc` holds both halves.
+
+- [ ] **`/my-map`'s empty state is a blob, and the hub radar is not the same bug. Recorded, not
+      fixed, because D2 owns the route. 2026-09-21, corrected the same day.**
+
+      An axis nothing has reached sits a little off the centre — `MIN_REACH` 0.1 on the hub,
+      `RUNG_REACH.unmapped` 0.08 on `/my-map` — and the polygon stays one closed shape through it.
+      On `/my-map` with **nine of nine** unasked there is no placed vertex to give that shape any
+      extent, so it degenerates to a dot and nine node discs pile inside a ~24px circle: a
+      first-time person tapping "Your map" from the Toolkit meets a grey web with an amber blob in
+      it and nine "Unasked" chips.
+
+      **The first version of this entry also called the hub radar a milder case of the same bug.
+      That was wrong.** MAP-PRD §7.2 settles it explicitly and against the alternative I had
+      proposed: "The polygon stays ONE closed shape; at an axis the model cannot place it pulls in
+      to near the centre and the knot is drawn hollow and dotted instead of solid. 'Detach' means
+      the shape visibly declines to claim a position there, not that the path breaks. One path, one
+      fill, no run-splitting." The hub is the specified design, and its knot near the centre is the
+      shape declining to claim a position — which is the point, not a defect. Nothing to fix there.
+
+      Nor should the reach be raised. The rule is that "the absence sits on the app, which has not
+      asked, rather than on the person, who has not answered", so an unasked axis may not be drawn
+      at the rim where it would read as full. What is left is the genuinely different case §7.2 does
+      not cover, because the hub cannot reach it: **every** axis unplaced, where a closed polygon
+      has nothing to be a shape between. Drawing no `map-you` at all until one axis is placed —
+      rings and hollow knots only — says the same thing and claims nothing.
+
+      **Left alone on purpose.** `/my-map` is exactly what MAP-PRD **D2** is deciding the fate of,
+      and that decision is open; polishing the empty state of a route that may redirect to
+      `/my-adhd` is work thrown away. So whoever resolves D2 should read this as the cost of
+      "keep": the nine-axis map needs an all-unmapped state before it is worth keeping. The
+      six-axis hub needs nothing. **Not to be ticked by an agent.**
 
 ## Explicitly not doing
 

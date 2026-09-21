@@ -102,13 +102,30 @@ often points at is the one kind a plan can never pay for**: `MAP-CONNECTIONS.md`
 `adhd-coach` as the answer for 13 of the 17 subdomains with no real provider, and a coach is not a
 Medicare provider, so the sheet marks rows it cannot cover instead of hiding them.
 
-- [ ] Phase 1: the plan in the text-budget instrument (the hub has only ever been measured without
-      one), then `src/model/care-plan.ts` and its refusal test, pure and tested. No UI.
-- [ ] Phase 2: the hub card and the dot row, both states, inside the hub's four remaining words.
-- [ ] Phase 3: the sheet — the kind, the axis it came from, and whether a plan covers it.
-- [ ] Phase 4: the two steppers, so the numbers are the person's own.
-- [ ] Phase 5: the `carePlan` section in the GP summary.
-- [ ] Phase 6: the join — the sheet into "Take this to my GP", the covered mark onto `/support`.
+- [x] Phase 1: the plan in the instrument, `src/model/care-plan.ts` and its refusal test — the money
+      one asserted over keys and exports, not prose. 23 unit tests. (2026-09-21)
+- [x] Phase 2: the card and the dot row, both states. **Two** words, not the planned five: the dots
+      are the denominator, and the last two were the difference between a screen inside its ceiling
+      and one over it, so the count is the button's accessible name.
+- [x] Phase 3: the sheet — the kind, the axis it came from, and only the row a plan cannot pay for
+      marked, because every other row is the rule.
+- [x] Phase 4: the two steppers, pointer and keyboard, announced as a spinbutton.
+- [x] Phase 5: the `carePlan` section in the GP summary, before `supports`, rows only.
+- [x] Phase 6: the join — the sheet into "Take this to my GP", and `/my-adhd?share=1` so that
+      promise is kept from another screen instead of landing somebody on the hub to hunt for it.
+- [ ] **The card is on `/today`, not the hub, and the hub is the open question.** It was built on the
+      hub at 58 of 60; the skill-matched practitioner card then added four words to the same screen
+      and the two together made 62. The hub now carries THREE recommendation surfaces at once — the
+      contributor chips, the step card and a named practitioner — and sits at exactly 60 with none
+      of the care plan's words on it, so whatever lands there next overflows it. Today is the same
+      tab, asks "what should I try next", had 25 words spare and a dead area the row now fills.
+      Whether the hub should carry all three is an information-architecture call about the
+      practitioner card as much as this one. `CARE-PLAN-PRD.md` §6 records it. **A founder's call.**
+- [ ] Verification: typecheck, 4230 unit, production build, budget 69 of 69 within ceiling and 0
+      over, target sweep clean on every new surface at 320 and 390, and 21 browser checks green
+      across `care-plan.spec.ts` and `my-adhd.spec.ts` plus the budget and axe sweeps. **A full
+      `pnpm e2e` has not completed on this tree** — the run was stopped for machine memory, not by
+      a failure — so the cross-engine sweep is still outstanding.
 - [ ] **D2 is a blocker on copy, not on code.** No screen naming an entitlement count, an item number
       or an eligibility rule ships until a clinician has checked it against the current MBS. Phases
       1–4 are all buildable without any such copy, and **an agent may not tick this.**

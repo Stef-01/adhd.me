@@ -191,14 +191,19 @@ test("a question is left as a question, and still opens its module", async ({ pa
 
 test("support names the person whose declared expertise answers this need", async ({ page }) => {
   // O253: "make sure it is working and live where it personalises the care providers based on
-  // your needs and challenges seen on skill map". The chips are the person's own map read back:
-  // the card renders only when `fitTags` has something to put in them.
+  // your needs and challenges seen on skill map". The card renders only when the model gives it a
+  // skill to match, so its presence is the personalisation working.
+  //
+  // It used to be `.support-best` with a row of matched tags. The skill-match card replaced it and
+  // carries the same claim in fewer parts — a matched skill and the person it names — so the
+  // assertions follow the markup rather than the class.
   await seed(page);
   await page.goto("/support");
-  const best = page.locator(".support-best");
+  const best = page.locator("[data-skill-match]");
   await expect(best).toBeVisible();
-  await expect(best.locator(".support-best-tags li")).not.toHaveCount(0);
-  await expect(best.locator(".support-best-tags li")).toHaveCount(await best.locator(".support-best-tags li").count());
+  // The skill it matched on, and a person's name under it.
+  await expect(best.locator("strong").first()).not.toBeEmpty();
+  await expect(best.getByRole("button")).toHaveAccessibleName(/.+: .+/);
   // A name, not a count, and no number about the person anywhere on it.
   expect(await best.innerText()).not.toMatch(/\d/);
 
@@ -245,10 +250,10 @@ test("the loop joins up: map to axis to a person to the GP summary", async ({ pa
   await expect(sheet.getByRole("link", { name: /Who helps here/i })).toBeVisible();
   await page.keyboard.press("Escape");
 
-  // The way to a person names one, and says why in the person's own matched tags.
+  // The way to a person names one, and says which matched skill it is for.
   await page.goto("/support");
   await expect(page.locator(".profession-card")).toHaveCount(3);
-  await expect(page.locator(".support-best-tags li").first()).toBeVisible();
+  await expect(page.locator("[data-skill-match] strong").first()).toBeVisible();
 
   // And the thing to take to a GP is already written.
   await page.goto("/my-adhd");
