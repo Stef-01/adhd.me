@@ -36,7 +36,7 @@ export function readProfile(storage: Pick<Storage, "getItem">): LearningProfile 
 }
 
 export function writeProfile(storage: Pick<Storage, "setItem">, profile: LearningProfile): void {
-  try { storage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch { /* memory only */ }
+  try { storage.setItem(PROFILE_KEY, JSON.stringify(profile)); if (typeof window !== "undefined") window.dispatchEvent(new Event("adhdme:personalisation")); } catch { /* memory only */ }
 }
 
 function update(storage: ProfileStorage, change: (p: LearningProfile) => LearningProfile): LearningProfile {

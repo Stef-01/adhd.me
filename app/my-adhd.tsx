@@ -1,4 +1,5 @@
 "use client";
+import { SkillRecommendation } from "./skill-recommendation";
 
 // My ADHD: one picture of a person, and three things they can do from it.
 //
@@ -148,6 +149,7 @@ export function MyAdhd() {
                   <h2 id="map-step-title">{rec.heading}</h2>
                   {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
                   <NextStepAction rec={rec} />
+                  <SkillRecommendation />
                 </section>
               )}
             </div>

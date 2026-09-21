@@ -1,4 +1,5 @@
 "use client";
+import { SkillRecommendation } from "../../skill-recommendation";
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
@@ -166,6 +167,7 @@ export function LeoBedroom() {
       <p role="status" aria-live="polite" aria-atomic="true">{soundNotice || s.line}</p>
       {s.mode === "rest" && <button className="bedroom-next" onClick={() => dispatch({ type: "next-evening" })}>Tomorrow evening <ArrowRight size={19} /></button>}
       {s.mode === "complete" && <div className="bedroom-finish"><button onClick={() => dispatch({ type: "restart" })}>Another evening</button><Link href="/lives/learn?module=lower_sensory_floor_v1">Bring it into your day <ArrowRight size={18} /></Link></div>}
+      {s.mode === "complete" && <SkillRecommendation context="sleep" />}
     </footer>
     <dialog className="bedroom-pause" aria-labelledby="bedroom-pause-title" ref={dialog} onCancel={event => { event.preventDefault(); dispatch({ type: "resume" }); }}>
       <button className="bedroom-icon bedroom-pause-close" aria-label="Close pause menu" onClick={() => dispatch({ type: "resume" })}><X size={20} /></button>
