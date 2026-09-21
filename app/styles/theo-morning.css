@@ -70,7 +70,7 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-spill-position .tm-object { min-height: 64px; background: #dce9e6; }
 .tm-spill-position .tm-object-art { width: 37px; height: 37px; }
 .tm-clear-mark { position: absolute; left: 50%; top: 87%; transform: translateX(-50%); color: #527c68; }
-.tm-character-space { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.tm-character-space { position: absolute; inset: 0; pointer-events: none; z-index: 10; }
 .tm-character { width: 100%; height: 100%; transition: transform .1s linear; }
 .tm-character-anchor { position: absolute; width: 83px; height: 104px; left: -42px; top: -94px; }
 .tm-avatar { width: 100%; height: 100%; overflow: visible; }
@@ -175,8 +175,8 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-game[data-still="true"] .tm-character, .tm-game[data-still="true"] .tm-train { transition: none; }
 
 /* Shared yellow identity around a warm illustrated world. */
-.tm-nav { position: relative; isolation: isolate; }
-.tm-nav::before { content: ""; position: absolute; z-index: -1; top: -12px; bottom: -8px; left: 50%; width: 100vw; transform: translateX(-50%); background: var(--brand, #F1BC31); }
+.tm-nav { position: sticky; top: max(8px, env(safe-area-inset-top)); z-index: 40; flex-shrink: 0; isolation: isolate; }
+.tm-nav::before { content: ""; position: absolute; z-index: -1; top: -12px; bottom: -8px; left: 50%; width: 100vw; transform: translateX(-50%); background: var(--brand, #F1BC31); pointer-events: none; }
 .tm-nav > a, .tm-nav > button { background: #ffffff40; }
 .tm-header { margin-top: 24px; }
 .tm-primary svg { color: var(--brand, #F1BC31); }
@@ -196,3 +196,9 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
   .tm-items-hall { width: 62%; }
   .tm-home-kitchen, .tm-home-bedroom { top: 29% !important; }
 }
+
+/* Keep the scene tall enough for touch targets; short screens scroll under navigation. */
+.tm-game > * { flex-shrink: 0; }
+.tm-game { padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: max(28px, env(safe-area-inset-bottom)); }
+.tm-actions { flex-wrap: wrap; }
+.tm-character-space * { pointer-events: none; }

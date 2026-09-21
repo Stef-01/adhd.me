@@ -48,7 +48,7 @@ test("a complete morning, physical evening arrangement and rainy revisit carry s
   const trips = Number(await page.locator(".tm-game").getAttribute("data-trips"));
   await arrange(page); await page.getByRole("button", { name: "Leave twelve seconds earlier" }).click(); await page.getByRole("button", { name: "Later note" }).click();
   await page.getByRole("button", { name: "Tomorrow", exact: true }).click();
-  await expect(page.getByRole("timer")).toHaveText("82s");
+  await expect(page.getByRole("timer")).toHaveText("102s");
   await expect(page.locator(".tm-items-hall [data-command]")).toHaveCount(3);
   await expect(page.getByRole("button", { name: "Take phone", exact: true })).toBeVisible();
   for (const c of ["keys", "phone", "bag", "bottle", "bag", "shoes"]) await task(page, c);
@@ -94,7 +94,7 @@ test("a missed train preserves progress and Ari's changed plan; pause and hidden
   await page.evaluate(() => { Object.defineProperty(document, "hidden", { configurable: true, value: true }); document.dispatchEvent(new Event("visibilitychange")); });
   await expect(page.locator(".tm-game")).toHaveAttribute("data-paused", "true");
   await page.evaluate(() => { Object.defineProperty(document, "hidden", { configurable: true, value: false }); });
-  await page.getByRole("button", { name: "Resume", exact: true }).click(); await page.clock.runFor(71000);
+  await page.getByRole("button", { name: "Resume", exact: true }).click(); await page.clock.runFor(91000);
   await expect(page.getByRole("timer")).toHaveText("Departed"); await expect(page.locator(".tm-game")).toHaveAttribute("data-hands", "keys");
   await page.getByRole("button", { name: "Update Ari" }).click(); await page.clock.runFor(2000);
   await expect(page.getByRole("status")).toContainText("I’ll go ahead"); await expect(page.getByRole("button", { name: "Update Ari" })).toHaveCount(0);
@@ -169,3 +169,19 @@ test("the evening's essentials never push the screen sideways", async ({ page })
     expect(outside, `an essential hangs off the side at ${width}px`).toEqual([]);
   }
 });
+
+ test("exit stays reachable after scrolling and Theo stays above clickable props", async ({ page }) => {
+  for (const [width, height] of [[320,568], [844,390], [1440,900]]) {
+    await page.setViewportSize({width, height}); await begin(page);
+    const layers = await page.evaluate(() => ({
+      theo: Number(getComputedStyle(document.querySelector(".tm-character-space")!).zIndex),
+      props: Number(getComputedStyle(document.querySelector(".tm-bag-position")!).zIndex),
+    }));
+    expect(layers.theo).toBeGreaterThan(layers.props);
+    await task(page, "keys"); // Character overlaps the collected object's scene without intercepting input.
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const exit = page.getByRole("link", {name: "Back to games"});
+    expect(await exit.evaluate(el => { const r=el.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight && el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)); })).toBe(true);
+    await exit.click(); await expect(page).toHaveURL(/approach\?pane=games/);
+  }
+ });
