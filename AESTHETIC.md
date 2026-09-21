@@ -926,6 +926,31 @@ the next reader knows the global is the one that matters.
       0 of 25 labels overflow their disc, and `every care-map node shows its whole label, inside
       its own disc` holds both halves.
 
+- [ ] **Both radars put an unasked axis in a heap at the middle — and on `/my-map` that is the whole
+      picture. Recorded, not fixed, because D2 owns the route. 2026-09-21.**
+
+      `RUNG_REACH.unmapped` is `0.08`, so an axis nothing has reached sits 8% of the radius from the
+      centre. On the hub that is three of six and reads as a muddy knot. On `/my-map` it is **nine of
+      nine**, and nine node discs inside a ~24px circle render as one small amber blob — a first-time
+      person tapping "Your map" from the Toolkit meets a grey web with a blob in it and nine
+      "Unasked" chips. The blob is the FILLED POLYGON, not the nodes: with every reach equal the
+      polygon degenerates to a dot.
+
+      The position is not an accident and should not simply be raised. MAP-PRD's rule is that "the
+      absence sits on the app, which has not asked, rather than on the person, who has not
+      answered" — so an unasked axis may not be drawn at the rim, where it would read as full, and
+      0.08 is the honest end of that. The fixes worth considering are therefore about the polygon
+      and not the reach: **draw no `map-you` polygon at all while every axis is unmapped** (rings and
+      hollow knots only, which is legible and claims nothing), or detach the polygon at unmapped
+      vertices the way the hub radar's `data-learning` nodes already do.
+
+      **Left alone on purpose.** `/my-map` is exactly what MAP-PRD **D2** is deciding the fate of, and
+      that decision is open. Polishing the empty state of a route that may redirect to `/my-adhd` is
+      work thrown away — and the same defect, milder, is on the hub radar, which is NOT going
+      anywhere. So whoever resolves D2 should read this as part of the cost of "keep": the nine-axis
+      map needs an empty state before it is worth keeping, and the six-axis one needs the polygon
+      fix either way. **Not to be ticked by an agent.**
+
 ## Explicitly not doing
 
 - No new screenshot-diff register or automated design-QA gate. Capture, compare, fix, commit.
