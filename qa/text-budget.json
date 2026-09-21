@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-21T21:21:07.110Z",
-  "base": "http://localhost:3147",
+  "measuredAt": "2026-09-21T21:15:20.989Z",
+  "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "00:45 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -444,17 +444,12 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
-        {
-          "w": 3,
-          "text": "WRITE THE LINE!",
-          "tag": "p"
-        },
         {
           "w": 3,
           "text": "Round the left",
@@ -463,6 +458,11 @@
         {
           "w": 3,
           "text": "Round the right",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "Straight through",
           "tag": "button"
         }
       ]
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "Round the left",
-          "tag": "button"
-        },
-        {
-          "w": 3,
-          "text": "Round the right",
+          "text": "I held off",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "Straight through",
-          "tag": "button"
+          "text": "DON’T SCROLL!",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "ONE MORE",
+          "tag": "span"
         }
       ]
     },
@@ -525,15 +525,15 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 23,
-      "fold": 23,
-      "chrome": 5,
-      "ratio": 0.6,
+      "total": 32,
+      "fold": 32,
+      "chrome": 7,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "Catch the mosquitoes. Then help Leo settle.",
+          "w": 6,
+          "text": "Catch the buzz. Change the room.",
           "tag": "p"
         },
         {
@@ -1141,10 +1141,10 @@
       "path": "/today",
       "name": "/today",
       "state": null,
-      "total": 21,
-      "fold": 21,
+      "total": 26,
+      "fold": 26,
       "chrome": 6,
-      "ratio": 0.5,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1159,8 +1159,8 @@
         },
         {
           "w": 3,
-          "text": "View my map",
-          "tag": "a"
+          "text": "Ask your GP",
+          "tag": "span"
         }
       ]
     },
@@ -1784,26 +1784,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "POP IT!",
+          "text": "DON’T SCROLL!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 2,
+          "text": "ONE MORE",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "pale",
-          "tag": "button"
         }
       ]
     },
@@ -1946,7 +1946,7 @@
       "path": "/my-adhd",
       "name": "My ADHD, lived in",
       "state": "model-lived",
-      "total": 57,
+      "total": 55,
       "fold": 35,
       "chrome": 6,
       "ratio": 1.4,
@@ -1973,33 +1973,6 @@
       "path": "/my-adhd",
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
-      "total": 62,
-      "fold": 35,
-      "chrome": 6,
-      "ratio": 1.6,
-      "verdict": "OVER",
-      "longest": [
-        {
-          "w": 7,
-          "text": "Starting is your biggest friction right now.",
-          "tag": "p"
-        },
-        {
-          "w": 6,
-          "text": "Once started, work often goes well",
-          "tag": "span"
-        },
-        {
-          "w": 6,
-          "text": "Try this: the first physical action.",
-          "tag": "h2"
-        }
-      ]
-    },
-    {
-      "path": "/my-adhd",
-      "name": "My ADHD, before a care plan",
-      "state": "model-no-plan",
       "total": 60,
       "fold": 35,
       "chrome": 6,
@@ -2017,36 +1990,9 @@
           "tag": "span"
         },
         {
-          "w": 5,
-          "text": "Did “One capture place” help?",
+          "w": 6,
+          "text": "Try this: the first physical action.",
           "tag": "h2"
-        }
-      ]
-    },
-    {
-      "path": "/my-adhd",
-      "name": "My ADHD, the care plan open",
-      "state": "plan-open",
-      "total": 22,
-      "fold": 22,
-      "chrome": 0,
-      "ratio": 0.6,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 5,
-          "text": "Take this to my GP",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "Care plan",
-          "tag": "h2"
-        },
-        {
-          "w": 2,
-          "text": "Occupational therapist",
-          "tag": "span"
         }
       ]
     },
@@ -2135,8 +2081,8 @@
       "path": "/today",
       "name": "Today, lived in",
       "state": "model-lived",
-      "total": 35,
-      "fold": 35,
+      "total": 37,
+      "fold": 37,
       "chrome": 6,
       "ratio": 0.9,
       "verdict": "target",
@@ -2155,6 +2101,60 @@
           "w": 5,
           "text": "Why am I seeing this?",
           "tag": "summary"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, before a care plan",
+      "state": "model-no-plan",
+      "total": 40,
+      "fold": 40,
+      "chrome": 6,
+      "ratio": 1,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 14,
+          "text": "You said you would try it. Whatever happened, even nothing, is useful to know.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Did “One capture place” help?",
+          "tag": "h2"
+        },
+        {
+          "w": 5,
+          "text": "Why am I seeing this?",
+          "tag": "summary"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan open",
+      "state": "plan-open",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Take this to my GP",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "Care plan",
+          "tag": "h2"
+        },
+        {
+          "w": 2,
+          "text": "Occupational therapist",
+          "tag": "span"
         }
       ]
     },

@@ -22,7 +22,7 @@ import { SkillRecommendation } from "./skill-recommendation";
 // stands out, the sage chip says it is working, and the one pill says it is the thing to do.
 
 import Link from "next/link";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkle } from "@phosphor-icons/react";
 import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
@@ -32,8 +32,6 @@ import { activeSafety } from "@/model/store";
 import { LifeHeader } from "./life-shell";
 import { MyAdhdRadar } from "./my-adhd-radar";
 import { MyAdhdSheet } from "./my-adhd-sheet";
-import { CarePlanCard, CarePlanSheet } from "./my-adhd-care-plan";
-import { track } from "@/model/events";
 import { ShareSheet } from "./my-adhd-share";
 import { SafetyScreen } from "./safety-screen";
 import { acknowledgeSafety } from "@/model/store";
@@ -60,8 +58,22 @@ export function MyAdhd() {
   const { record, refresh, storage } = model;
   const [open, setOpen] = useState<Aspect | null>(null);
   const [sharing, setSharing] = useState(false);
-  const [planOpen, setPlanOpen] = useState(false);
   const shareRef = useRef<HTMLButtonElement | null>(null);
+
+  /**
+   * `?share=1` opens the GP summary on arrival, so anything that promises "take this to my GP"
+   * can keep the promise from another screen. The care plan on `/today` is the first caller; the
+   * alternative was a link that landed here and left the person to find the Share button, which
+   * is the kind of broken join every defect on this tab has been.
+   *
+   * Read off `location` rather than `useSearchParams`, which would need a Suspense boundary for
+   * one boolean, and stripped from the URL afterwards so a reload does not reopen it.
+   */
+  useEffect(() => {
+    if (!new URLSearchParams(window.location.search).has("share")) return;
+    setSharing(true);
+    window.history.replaceState(null, "", window.location.pathname);
+  }, []);
 
   const points = useMemo(() => axes(record), [record]);
   // What may be contributing, as the comp has it: at most three short phrases from the leading
@@ -155,16 +167,6 @@ export function MyAdhd() {
                   <SkillRecommendation />
                 </section>
               )}
-
-              {/* Four words, under everything else: the plan is a mechanism for reaching the
-                  people above, not the point of the screen. */}
-              <CarePlanCard
-                record={record}
-                onOpen={() => {
-                  setPlanOpen(true);
-                  track("CARE_PLAN_OPENED", {});
-                }}
-              />
             </div>
           )}
         </>
@@ -176,16 +178,6 @@ export function MyAdhd() {
           record={record}
           onClose={() => setOpen(null)}
           onRefresh={refresh}
-          storage={storage}
-        />
-      )}
-      {record && (
-        <CarePlanSheet
-          open={planOpen}
-          record={record}
-          onClose={() => setPlanOpen(false)}
-          onRefresh={refresh}
-          onShare={() => { setPlanOpen(false); setSharing(true); }}
           storage={storage}
         />
       )}

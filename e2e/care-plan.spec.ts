@@ -21,8 +21,13 @@ import { LIVED_RECORD } from "../scripts/text-budget-lib.mjs";
 
 const MODEL_KEY = "adhdme.model.v1";
 
+/**
+ * The plan lives on `/today` rather than the hub: the hub had four words of headroom and now
+ * carries three recommendation surfaces, so the two features together put it over 60. See
+ * `app/today-screen.tsx` for the measurement and CARE-PLAN-PRD.md §6 for the founder's call.
+ */
 async function seed(page: Page, record: unknown = LIVED_RECORD): Promise<void> {
-  await page.goto("/my-adhd");
+  await page.goto("/today");
   await page.evaluate(([k, rec]) => localStorage.setItem(k!, rec!), [MODEL_KEY, JSON.stringify(record)]);
   await page.reload();
 }
@@ -33,12 +38,13 @@ function withoutPlan(): unknown {
   return rest;
 }
 
-test("the hub's card says what is left, in two words and a row of dots", async ({ page }) => {
+test("the card says what is left, in two words and a row of dots", async ({ page }) => {
   await seed(page);
   const card = page.locator(".plan-card");
   await expect(card).toBeVisible();
-  // Two words on screen. The count is in the accessible name, because the hub had four words of
-  // headroom and three hollow dots among five say "3 left" to anybody who can see them.
+  // Two words on screen. The count is in the accessible name: three hollow dots among five say
+  // "3 left" to anybody who can see them, and the words were the difference between a screen
+  // inside its ceiling and one over it.
   await expect(card.locator(".plan-card-name")).toHaveText("Care plan");
   await expect(card).toHaveAccessibleName(/Care plan: 3 of 5 services left/);
   // Five dots for five services, two of them spent.
@@ -155,11 +161,14 @@ test("every target on the plan is one a thumb can land on", async ({ page }) => 
   await page.setViewportSize({ width: 320, height: 844 });
   await page.locator(".plan-card").click();
   await expect(page.locator(".plan-numbers")).toBeVisible();
+  // Half a pixel of tolerance, and the real height in the message. A `min-height: 44px` control in
+  // a flex row measures 43.99 in Chromium, which a bare `< 44` reports as "44px" — a failure that
+  // reads as a contradiction and sends the next person looking for a bug that is not there.
   const small = await page.evaluate(() =>
     [...document.querySelectorAll(".plan-sheet button, .plan-sheet [role=spinbutton]")]
       .map((e) => ({ name: (e.getAttribute("aria-label") ?? e.textContent ?? "").trim().slice(0, 24), r: e.getBoundingClientRect() }))
-      .filter((x) => x.r.height < 44)
-      .map((x) => `${x.name}: ${Math.round(x.r.height)}px`));
+      .filter((x) => x.r.height < 43.5)
+      .map((x) => `${x.name}: ${x.r.height.toFixed(2)}px`));
   expect(small, "a stepper a thumb cannot land on is a stepper on a phone").toEqual([]);
 });
 
@@ -170,6 +179,9 @@ test("the plan reaches the GP summary as rows, and the sheet hands over to it", 
   // navigation that would have dropped the person back on the hub.
   await page.getByRole("button", { name: /Take this to my GP/ }).click();
 
+  // The summary lives on the hub, so this one navigates — and the hub reads `?share=1` on arrival
+  // so the promise is kept rather than leaving somebody hunting for the Share button.
+  await page.waitForURL(/\/my-adhd/);
   const summary = page.locator(".map-sheet");
   await expect(summary).toBeVisible();
   await expect(summary.getByRole("button", { name: "My GP" })).toBeVisible();
