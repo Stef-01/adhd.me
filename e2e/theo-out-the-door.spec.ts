@@ -171,7 +171,7 @@ test("the evening's essentials never push the screen sideways", async ({ page })
 });
 
  test("exit stays reachable after scrolling and Theo stays above clickable props", async ({ page }) => {
-  for (const [width, height] of [[320,568], [844,390], [1440,900]]) {
+  for (const [width, height] of [[320,568], [844,390], [1440,900]] as const) {
     await page.setViewportSize({width, height}); await begin(page);
     const layers = await page.evaluate(() => ({
       theo: Number(getComputedStyle(document.querySelector(".tm-character-space")!).zIndex),
