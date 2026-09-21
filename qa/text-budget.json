@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-21T21:15:20.989Z",
+  "measuredAt": "2026-09-21T21:32:31.776Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "04:17 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Round the left",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 2,
-          "text": "Straight through",
-          "tag": "button"
+          "w": 1,
+          "text": "POP!",
+          "tag": "p"
         }
       ]
     },
@@ -498,26 +498,21 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 2,
+      "fold": 2,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "DON’T SCROLL!",
-          "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "ONE MORE",
+          "w": 1,
+          "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "PIGEONS!",
+          "tag": "p"
         }
       ]
     },
@@ -525,15 +520,15 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 32,
-      "fold": 32,
-      "chrome": 7,
-      "ratio": 0.8,
+      "total": 23,
+      "fold": 23,
+      "chrome": 5,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Catch the buzz. Change the room.",
+          "w": 7,
+          "text": "Catch the mosquitoes. Then help Leo settle.",
           "tag": "p"
         },
         {
@@ -1784,26 +1779,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "I held off",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "DON’T SCROLL!",
+          "text": "DRAW A PATH!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "ONE MORE",
-          "tag": "span"
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
         }
       ]
     },
