@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-20T21:43:40.449Z",
+  "measuredAt": "2026-09-21T00:40:21.553Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
+          "w": 3,
+          "text": "ONLY THE LIST!",
+          "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 3,
+          "text": "a second kayak",
           "tag": "span"
         },
         {
-          "w": 1,
-          "text": "SWAT!",
-          "tag": "p"
+          "w": 2,
+          "text": "pizza oven",
+          "tag": "span"
         }
       ]
     },
@@ -498,8 +498,8 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 12,
-      "fold": 12,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
@@ -510,8 +510,8 @@
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "hissing at you",
+          "w": 2,
+          "text": "small, quacking",
           "tag": "p"
         },
         {
@@ -1060,8 +1060,8 @@
       "path": "/survey",
       "name": "/survey",
       "state": null,
-      "total": 26,
-      "fold": 26,
+      "total": 27,
+      "fold": 27,
       "chrome": 6,
       "ratio": 0.7,
       "verdict": "target",
@@ -1784,26 +1784,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 18,
-      "fold": 18,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "HOLD THE LID!",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "Say it now",
-          "tag": "button"
-        },
-        {
           "w": 2,
-          "text": ". Then, at",
+          "text": "LOCK IN!",
           "tag": "p"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "report",
+          "tag": "span"
         }
       ]
     },

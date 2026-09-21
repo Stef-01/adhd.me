@@ -1,5 +1,5 @@
 // The five topic surveys (PRD §22–§23, §60) as data: Work & Study, Relationships, Daily
-// Organisation, Sleep, Emotional Wellbeing. Eight to twelve questions each, two to four minutes,
+// Life, Sleep & Body, Mind & Emotions. Eight to twelve questions each, two to four minutes,
 // offered — never launched — from My ADHD and the support path.
 //
 // WHAT A SURVEY IS HERE. Level 3 of the progressive survey system: enough questions to say which
@@ -10,7 +10,7 @@
 // each other. Nothing here is a symptom scale and nothing produces a diagnosis; the scorer
 // (`src/model/surveys.ts`) says so in its output shape, which has no total.
 
-import type { Domain, Layer, Subdomain } from "@/model/layers";
+import { DOMAIN_LABELS, type Domain, type Layer, type Subdomain } from "@/model/layers";
 
 export interface SurveyOption {
   readonly id: string;
@@ -37,6 +37,13 @@ export interface SurveyQuestion {
 
 export interface TopicSurvey {
   readonly id: string;
+  /**
+   * ALWAYS `DOMAIN_LABELS[domain]`, never a second name for the same thing. A survey fills one
+   * area of the map, and three of the five used to be called something else on the way in than
+   * the row they filled on the way out — you chose "Emotional Wellbeing" and "Mind & Emotions"
+   * lit up. That is the one join this whole loop is built on (MAP-PRD §9), so it is not left to
+   * whoever writes the next survey. `every survey is named for the area it fills` holds it.
+   */
   readonly title: string;
   readonly domain: Domain;
   /** The heading of the result: "Your work pattern". */
@@ -218,7 +225,7 @@ const RELATIONSHIPS_DEEPER: readonly SurveyQuestion[] = [
 export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
   {
     id: "work-study",
-    title: "Work & Study",
+    title: DOMAIN_LABELS["work-study"],
     domain: "work-study",
     resultTitle: "Your work pattern",
     minutes: 3,
@@ -282,7 +289,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
   },
   {
     id: "relationships",
-    title: "Relationships",
+    title: DOMAIN_LABELS.relationships,
     domain: "relationships",
     resultTitle: "Your relationship pattern",
     minutes: 3,
@@ -337,7 +344,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
   },
   {
     id: "daily-organisation",
-    title: "Daily Organisation",
+    title: DOMAIN_LABELS["daily-life"],
     domain: "daily-life",
     resultTitle: "Your organisation pattern",
     minutes: 3,
@@ -389,7 +396,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
   },
   {
     id: "sleep",
-    title: "Sleep",
+    title: DOMAIN_LABELS["sleep-body"],
     domain: "sleep-body",
     resultTitle: "Your sleep pattern",
     minutes: 2,
@@ -436,7 +443,7 @@ export const TOPIC_SURVEYS: readonly TopicSurvey[] = [
   },
   {
     id: "emotional-wellbeing",
-    title: "Emotional Wellbeing",
+    title: DOMAIN_LABELS["mind-emotions"],
     domain: "mind-emotions",
     resultTitle: "Your emotional pattern",
     minutes: 3,

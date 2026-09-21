@@ -9,7 +9,7 @@ import { SURVEY_INSIGHTS, surveyText, TOPIC_SURVEYS, topicSurvey } from "@/learn
 import { deriveNeeds } from "./needs";
 import { offerSurvey } from "./offer";
 import { availableSurveys, contradictionsIn, insightFor, scoreSurvey, surveyResults } from "./surveys";
-import type { Subdomain } from "./layers";
+import { DOMAIN_LABELS, type Subdomain } from "./layers";
 import { completeSurvey, emptyModel, readModel, recordResonance, recordSurveyAnswer, saveOnboarding, type ModelRecord } from "./store";
 
 function fakeStorage() {
@@ -195,5 +195,25 @@ describe("the sentence a survey earns", () => {
   it("says nothing when nothing stood out", () => {
     const survey = TOPIC_SURVEYS[0]!;
     expect(insightFor(scoreSurvey(survey, {}))).toBeNull();
+  });
+});
+
+// A survey fills exactly one area of the map, and it must be called what that area is called.
+// Three of the five were not: you chose "Daily Organisation", "Sleep" or "Emotional Wellbeing"
+// and "Daily Life", "Sleep & Body" or "Mind & Emotions" filled in. The loop the whole tab is
+// built on is give data, receive insight (MAP-PRD §9), and it reads as two unrelated things when
+// the thing you answered is not the thing that moved. Nothing caught it because both names were
+// correct in isolation — only the join was wrong.
+describe("every survey is named for the area it fills", () => {
+  it("has five surveys over five distinct areas, so this cannot pass vacuously", () => {
+    expect(TOPIC_SURVEYS.length).toBe(5);
+    expect(new Set(TOPIC_SURVEYS.map((s) => s.domain)).size).toBe(5);
+  });
+
+  it("titles each survey with its own area's label", () => {
+    const wrong = TOPIC_SURVEYS
+      .filter((s) => s.title !== DOMAIN_LABELS[s.domain])
+      .map((s) => `${s.id}: titled "${s.title}", fills "${DOMAIN_LABELS[s.domain]}"`);
+    expect(wrong, "a survey named differently from the row it fills breaks the loop in §9").toEqual([]);
   });
 });
