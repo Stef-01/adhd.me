@@ -28,6 +28,12 @@ Two instruments do the parts that eyes are bad at, both against a `pnpm start` s
   so the tab bar lands mid-page, a sticky bar looks like it covers what it floats over, and an open
   modal appears to continue past its own bottom edge. This has produced three false findings on
   this file's record; it has never produced a true one.
+  **And a focus ring nobody will see.** A screen that moves focus to its own heading on arrival is
+  reached by `page.goto` with no pointer input before it, and Chromium then treats that programmatic
+  focus as keyboard-driven and matches `:focus-visible` — so both shots show a hard ring around the
+  h1 that a person clicking through never gets. Measured on `/practitioner/[id]`: `solid 2px` in the
+  capture, `outlineStyle: "none"` after a real click-through. Reach the screen the way a person does
+  before changing anything about a ring you saw in a capture.
 - `BASE=... node scripts/target-sweep.mjs` — sideways scroll, controls a thumb cannot land on, and
   text clipped by its own box, at 320 and 390. It reports where a 44px thumb actually lands rather
   than what the CSS declared, because the tree extends small controls with a transparent `::after`
