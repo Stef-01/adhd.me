@@ -32,6 +32,8 @@ import { activeSafety } from "@/model/store";
 import { LifeHeader } from "./life-shell";
 import { MyAdhdRadar } from "./my-adhd-radar";
 import { MyAdhdSheet } from "./my-adhd-sheet";
+import { CarePlanCard, CarePlanSheet } from "./my-adhd-care-plan";
+import { track } from "@/model/events";
 import { ShareSheet } from "./my-adhd-share";
 import { SafetyScreen } from "./safety-screen";
 import { acknowledgeSafety } from "@/model/store";
@@ -58,6 +60,7 @@ export function MyAdhd() {
   const { record, refresh, storage } = model;
   const [open, setOpen] = useState<Aspect | null>(null);
   const [sharing, setSharing] = useState(false);
+  const [planOpen, setPlanOpen] = useState(false);
   const shareRef = useRef<HTMLButtonElement | null>(null);
 
   const points = useMemo(() => axes(record), [record]);
@@ -152,6 +155,16 @@ export function MyAdhd() {
                   <SkillRecommendation />
                 </section>
               )}
+
+              {/* Four words, under everything else: the plan is a mechanism for reaching the
+                  people above, not the point of the screen. */}
+              <CarePlanCard
+                record={record}
+                onOpen={() => {
+                  setPlanOpen(true);
+                  track("CARE_PLAN_OPENED", {});
+                }}
+              />
             </div>
           )}
         </>
@@ -163,6 +176,16 @@ export function MyAdhd() {
           record={record}
           onClose={() => setOpen(null)}
           onRefresh={refresh}
+          storage={storage}
+        />
+      )}
+      {record && (
+        <CarePlanSheet
+          open={planOpen}
+          record={record}
+          onClose={() => setPlanOpen(false)}
+          onRefresh={refresh}
+          onShare={() => { setPlanOpen(false); setSharing(true); }}
           storage={storage}
         />
       )}

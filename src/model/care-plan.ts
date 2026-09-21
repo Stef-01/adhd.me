@@ -140,6 +140,11 @@ export function suggestFor(record: ModelRecord, plan: CarePlan, today = new Date
   const seen = new Set<Profession>();
   for (const need of deriveNeeds(record)) {
     for (const kind of professionsFor(need)) {
+      // A GP WRITES THE PLAN AND IS NOT A SERVICE UNDER IT, so "see a GP" on a care-plan screen is
+      // circular — and `professionsFor` returns `["gp"]` as its fallback whenever no module targets
+      // a need, which put it straight onto the sheet. Skipped rather than marked "Not covered",
+      // because it is not a thing a person was offered and then denied.
+      if (kind === "gp") continue;
       if (seen.has(kind)) continue;
       seen.add(kind);
       ordered.push({ kind, because: ASPECT_LABELS[ASPECT_OF[need.subdomain]], covered: claimable(kind) });

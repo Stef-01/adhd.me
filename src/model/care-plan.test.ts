@@ -138,6 +138,16 @@ describe("who to spend it on", () => {
     for (const s of out) expect(s.covered).toBe(claimable(s.kind));
   });
 
+  it("never suggests a GP, because a GP writes the plan", () => {
+    // `professionsFor` falls back to ["gp"] whenever no module targets a need, so this is the one
+    // kind that arrives without anybody choosing it — and "see a GP" on a care-plan screen is
+    // circular. Skipped, not marked: it was never on offer to be denied.
+    for (const left of [1, 3, 5]) {
+      const out = suggestFor(record, plan({ allows: left, used: 0 }), TODAY);
+      expect(out.map((s) => s.kind)).not.toContain("gp");
+    }
+  });
+
   it("is deterministic: the same record and plan give the same list", () => {
     const a = suggestFor(record, plan(), TODAY);
     const b = suggestFor(record, plan(), TODAY);

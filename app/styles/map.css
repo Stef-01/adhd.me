@@ -10,7 +10,14 @@
  * than as rem scattered through components.
  */
 
-.map-screen {
+/* The map's sheets are portalled to the body (see "THE MAP'S SHEETS ARE PORTALLED" below), so they
+   sit outside `.map-screen` and this scope could not reach them — which meant every `var(--sp-*)`
+   in a sheet's own rules resolved to nothing. `.map-row`'s row padding has silently been 0 all
+   along, hidden by its 44px floor, and the care plan's rows ran their cells together with no gap
+   at all. `:has()` puts the scale back where the surface is. */
+.map-screen,
+.sheet-layer:has(.map-sheet),
+.sheet-layer:has(.plan-sheet) {
   --sp-xs: 0.25rem;
   --sp-sm: 0.5rem;
   --sp-md: 1rem;
@@ -613,3 +620,149 @@
   box-shadow: none;
   border-top: 1px solid var(--line);
 }
+
+/* ------------------------------------------------------------- the care plan */
+/* docs/adhd-life/CARE-PLAN-PRD.md §8. No new token: a spent dot is --accent, one still to spend is
+   a dashed --line-strong outline, the count is --ink and the axis beside a kind is --muted. */
+
+/* A row, not a card: the plan is a mechanism for reaching the people above it rather than another
+   thing to read, and a fifth bordered box on the hub would claim the same weight as the step. */
+.map-screen .plan-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  width: 100%;
+  min-height: 44px;
+  margin-top: var(--sp-md);
+  padding: var(--sp-sm) 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.map-screen .plan-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+@media (hover: hover) { .map-screen .plan-card:hover .plan-left { color: var(--accent-deep); } }
+
+.plan-card-name { font-size: 0.9375rem; font-weight: 600; }
+.plan-card-state { display: inline-flex; align-items: center; gap: var(--sp-sm); }
+
+/* THE DOT ROW. `.map-node[data-learning]` is the radar's hollow dashed knot for an axis nothing has
+   reached — a service not yet spent is the same idea, so it wears the same clothes. Deliberately
+   not a progress bar: a filling bar says finish me, and §9 refuses that reading. */
+.plan-dots { display: inline-flex; align-items: center; gap: 5px; }
+/* A solid outline rather than the radar's dashed one: a 1px dash around a 9px circle renders as a
+   speckle and the first build of this was barely visible. The HOLLOW is what carries "not yet"; the
+   dash was only ever how the radar drew the same idea at four times the size. */
+.plan-dot {
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: none;
+}
+.plan-dot[data-used] { border-color: var(--accent); background: var(--accent); }
+
+.plan-left { font-size: 0.8125rem; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.plan-card[data-empty] .plan-left { font-weight: 600; color: var(--accent-deep); }
+
+/* ------------------------------------------------------------ the plan sheet */
+
+.plan-sheet { display: grid; gap: var(--sp-md); }
+.plan-state { display: flex; align-items: center; gap: var(--sp-sm); margin: 0; }
+.plan-state .plan-left { font-size: 0.9375rem; }
+
+.plan-rows { display: grid; margin: 0; padding: 0; list-style: none; }
+.plan-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  min-height: 44px;
+  padding: var(--sp-sm) 0;
+  border-bottom: 1px solid var(--line);
+}
+.plan-row-kind { flex: 1 1 auto; min-width: 0; font-size: 0.9375rem; font-weight: 600; }
+/* The axis the person's own map pointed at. Quieter than the kind, the same size as a status word
+   on the axis sheet, because it is the reason rather than the thing. */
+.plan-row-why { flex: none; font-size: 0.75rem; color: var(--muted); }
+/* Only the exception is marked, so the mark can be loud without shouting over four rows. */
+.plan-row-mark {
+  flex: none;
+  padding: 2px var(--sp-sm);
+  border: 1px dashed var(--line-strong);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.plan-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-sm) var(--sp-md); }
+.plan-edit {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.plan-edit:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+/* The onward action, at the weight `.map-foot.is-onward` gives a link — it is a button because it
+   opens the share sheet already on this page rather than navigating. */
+.plan-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  color: var(--accent-deep);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.plan-share:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+/* -------------------------------------------------------------- the two numbers */
+
+.plan-numbers { display: grid; gap: var(--sp-md); justify-items: stretch; }
+.plan-stepper { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-md); margin: 0; }
+.plan-stepper-label { font-size: 0.9375rem; font-weight: 600; }
+.plan-stepper-controls { display: inline-flex; align-items: center; gap: var(--sp-sm); }
+.plan-stepper-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.plan-stepper-controls button:disabled { color: var(--faint); cursor: default; }
+.plan-stepper-controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* The value is focusable and keyboard-operable (role=spinbutton, ArrowUp/Down), so it is a control
+   and gets a control's target. It was 26px, which the spec's own thumb check caught. */
+.plan-stepper-controls output {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.plan-stepper-controls output:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
+.plan-save { justify-self: end; }

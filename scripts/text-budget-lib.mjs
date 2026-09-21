@@ -88,6 +88,10 @@ export const EXTRA = [
   // actually used the app sees it. Without these the budget is measuring an empty database.
   { path: "/my-adhd", state: "model-lived", name: "My ADHD, lived in" },
   { path: "/my-adhd", state: "model-learning", name: "My ADHD, a step proposed" },
+  // The care-plan card has two shapes and both are on the hub, so both are measured. The one
+  // without a plan is what everybody meets first and would otherwise never be counted.
+  { path: "/my-adhd", state: "model-no-plan", name: "My ADHD, before a care plan" },
+  { path: "/my-adhd", state: "plan-open", name: "My ADHD, the care plan open" },
   { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
   { path: "/my-adhd", state: "share-open", name: "My ADHD, the summary open" },
   { path: "/my-adhd/history", state: "model-lived", name: "History, lived in" },
@@ -260,6 +264,17 @@ export async function reach(page, route, base) {
   if (route.state === "model-learning") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LEARNING_RECORD));
     await page.reload({ waitUntil: "networkidle" });
+  }
+  if (route.state === "model-no-plan") {
+    const { carePlan, ...withoutPlan } = LIVED_RECORD;
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(withoutPlan));
+    await page.reload({ waitUntil: "networkidle" });
+  }
+  if (route.state === "plan-open") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator(".plan-card").click();
+    await page.locator(".plan-sheet").waitFor({ timeout: 8000 });
   }
   if (route.state === "sheet-open") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));

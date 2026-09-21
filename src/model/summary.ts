@@ -20,6 +20,7 @@
 // would need a record that outlives the device — the open question in ADR 0008.
 
 import { profession, type Profession } from "@/support/professions";
+import { hasPlan, suggestFor } from "./care-plan";
 import { ADJUSTMENT_TRACKS, trackForSubdomain } from "./adjustments";
 import { ASPECT_LABELS, STATUS_LABEL, areaOf, matrix, type Area } from "./matrix";
 import { AREA_LABELS } from "./matrix";
@@ -47,6 +48,7 @@ export const SECTION_HEADINGS = {
   tried: "Strategies already tried",
   otherAreas: "Other areas",
   goal: "My goal",
+  carePlan: "Care plan",
   supports: "Potential supports for consideration",
   ownWords: "In my own words",
 } as const;
@@ -61,6 +63,8 @@ export const SECTION_ORDER: readonly SectionKey[] = [
   "tried",
   "otherAreas",
   "goal",
+  // Before the supports, because a plan is the mechanism the supports below are reached through.
+  "carePlan",
   "supports",
   "ownWords",
 ];
@@ -80,6 +84,12 @@ export interface GpSummary {
   readonly tried: readonly TriedRow[];
   readonly otherAreas: readonly string[];
   readonly goal: string | null;
+  /**
+   * The person's own plan numbers and the kinds they are considering — rows off the record, never
+   * a drafted request. Empty when they have not told us about a plan, which is most people.
+   * No amount of money, ever: `src/model/care-plan.ts` says why, and its test enforces it.
+   */
+  readonly carePlan: { readonly allows: number; readonly used: number; readonly considering: readonly Profession[] } | null;
   readonly supports: readonly Profession[];
   /** The person's own text, verbatim, never edited and never summarised. */
   readonly ownWords: readonly string[];
@@ -188,7 +198,17 @@ export function gpSummary(record: ModelRecord, audience: Audience = "gp"): GpSum
     if (medLines.length) ownWords.push(medLines.join("\n"));
   }
 
-  return { audience, priority, highestImpact, context, helps, tried, otherAreas, goal, supports, ownWords };
+  const plan = record.carePlan;
+  const carePlan = hasPlan(plan)
+    ? {
+        allows: plan.allows,
+        used: plan.used,
+        // Only the kinds a plan can actually pay for. A GP reading this does not need to be told
+        // about the coach the map suggested; the sheet is where that honesty belongs.
+        considering: suggestFor(record, plan).filter((x) => x.covered).map((x) => x.kind),
+      }
+    : null;
+  return { audience, priority, highestImpact, context, helps, tried, otherAreas, goal, carePlan, supports, ownWords };
 }
 
 /** The rows one section contributes, already in the words they will be read in. */
@@ -208,6 +228,13 @@ export function sectionRows(s: GpSummary, key: SectionKey): string[] {
       return [...s.otherAreas];
     case "goal":
       return s.goal ? [s.goal] : [];
+    case "carePlan":
+      if (!s.carePlan) return [];
+      return [
+        `Plan allows: ${s.carePlan.allows}`,
+        `Used so far: ${s.carePlan.used}`,
+        ...(s.carePlan.considering.length ? [`Considering: ${s.carePlan.considering.map((p) => profession(p).label).join(", ")}`] : []),
+      ];
     case "supports":
       return s.supports.map((p) => profession(p).label);
     case "ownWords":
