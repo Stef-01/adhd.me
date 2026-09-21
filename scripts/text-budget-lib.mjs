@@ -84,6 +84,10 @@ export const EXTRA = [
   { path: "/lives/play/arjun-hold-the-thread", name: "Arjun: the meeting" },
   { path: "/lives/play/maya-one-thing-at-a-time", name: "Maya: the crossing" },
   { path: "/gp/example-mei-chao", name: "GP profile" },
+  // `discoverRoutes` skips `[id]`, so a dynamic screen is only measured if it is listed here. This
+  // one is patient-facing and reached from the skill-match dialog's "View full profile", and it
+  // arrived without an entry — so it had no word budget and no capture.
+  { path: "/practitioner/example-mei-chao", name: "Practitioner profile" },
   { path: "/go/anubhav-saxena", skip: "a redirect" },
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },

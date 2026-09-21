@@ -14,6 +14,15 @@
 // covering the profile's section rows" and "the tab bar sitting mid-page on Learn", both chased
 // before anyone noticed the capture was the problem — and it nearly bought a third on the map's
 // axis sheet. Judge anything fixed, sticky or modal from the viewport shot.
+//
+// AND A SECOND ARTEFACT, IN BOTH SHOTS: A FOCUS RING NOBODY WILL SEE. Screens that move focus to
+// their own heading on arrival — the right thing for a screen reader — are reached here by
+// `page.goto` with no pointer input before it, and Chromium then treats that programmatic focus as
+// keyboard-driven and matches `:focus-visible`. So the capture shows a hard ring around the h1 that
+// a person clicking through never gets. Measured on `/practitioner/[id]`: `solid 2px` in the
+// capture, `outlineStyle: "none"` and `:focus-visible` not matching after a real click-through, on
+// a rule that was already correct. Before changing anything about a ring you see here, reach the
+// screen the way a person does.
 import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 import { contextFor, launchOptions, reach, routes } from "./text-budget-lib.mjs";
