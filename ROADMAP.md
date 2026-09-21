@@ -86,6 +86,33 @@ on the row and `Task initiation · ADHD at work · Workplace adjustments` on the
       today the personalisation is carried almost entirely by the example roster, and on the real
       roster alone this person's map reaches exactly one provider.
 
+## The care plan, on the map — 2026-09-20
+
+The founder's brief (hold a chronic condition management plan in the My ADHD tab, recommend the
+providers that spend its allied-health services, minimalist and as few words as possible) is
+specified in **[docs/adhd-life/CARE-PLAN-PRD.md](docs/adhd-life/CARE-PLAN-PRD.md)**: one hub card of
+five words, one sheet, four provider rows, one `carePlan` section in the GP summary, no new design
+token, and six decisions the founder owns.
+
+Two things in it are worth reading before the phases. **The brief's "ten entitlements" appears to add
+a diabetes-specific group entitlement to the general one** — the figure for this cohort looks like
+five individual services a calendar year — so the PRD makes the allowance DATA the person's own plan
+states rather than a constant the app asserts, and is right either way. And **the kind the map most
+often points at is the one kind a plan can never pay for**: `MAP-CONNECTIONS.md` measured
+`adhd-coach` as the answer for 13 of the 17 subdomains with no real provider, and a coach is not a
+Medicare provider, so the sheet marks rows it cannot cover instead of hiding them.
+
+- [ ] Phase 1: the plan in the text-budget instrument (the hub has only ever been measured without
+      one), then `src/model/care-plan.ts` and its refusal test, pure and tested. No UI.
+- [ ] Phase 2: the hub card and the dot row, both states, inside the hub's four remaining words.
+- [ ] Phase 3: the sheet — the kind, the axis it came from, and whether a plan covers it.
+- [ ] Phase 4: the two steppers, so the numbers are the person's own.
+- [ ] Phase 5: the `carePlan` section in the GP summary.
+- [ ] Phase 6: the join — the sheet into "Take this to my GP", the covered mark onto `/support`.
+- [ ] **D2 is a blocker on copy, not on code.** No screen naming an entitlement count, an item number
+      or an eligibility rule ships until a clinician has checked it against the current MBS. Phases
+      1–4 are all buildable without any such copy, and **an agent may not tick this.**
+
 ## Bidirectional matching — 2026-09-09
 
 The founder's matching-model brief (rich GP bios, GP-declared preferences and capacity, a
