@@ -15,7 +15,7 @@ for (const width of [390,1440]) test(`skill recommendation opens the exact profi
   await trigger.click();
   const dialog=page.getByRole("dialog");
   await expect(dialog).toBeVisible();
-  await expectNoViolations(page, `/support skill match @${width}`);
+  await expectNoViolations(page, `The skill-match dialog at ${width}px`);
   await page.screenshot({path:`qa/_runs/skill-match-${width}.png`,fullPage:true});
   const name=await dialog.getByRole("heading").innerText();
   await page.keyboard.press("Escape");

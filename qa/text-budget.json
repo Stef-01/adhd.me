@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-21T15:02:17.761Z",
+  "measuredAt": "2026-09-21T16:13:17.227Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "04:42 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -451,18 +451,18 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "FIND THE LIST!",
+          "w": 5,
+          "text": "Mia, why are you here?",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "a napkin",
-          "tag": "span"
+          "w": 4,
+          "text": "WHY ARE YOU HERE?",
+          "tag": "p"
         },
         {
-          "w": 2,
-          "text": "a leaflet",
+          "w": 1,
+          "text": "0",
           "tag": "span"
         }
       ]
@@ -498,25 +498,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "WRITE THE LINE!",
+          "w": 2,
+          "text": "POP IT!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
+          "w": 1,
+          "text": "pale",
           "tag": "button"
         }
       ]
@@ -1784,25 +1784,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 18,
-      "fold": 18,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "HOLD IT IN!",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "Say it now",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
-          "w": 2,
-          "text": ". Then, at",
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "SWAT!",
           "tag": "p"
         }
       ]
@@ -1946,7 +1946,7 @@
       "path": "/my-adhd",
       "name": "My ADHD, lived in",
       "state": "model-lived",
-      "total": 55,
+      "total": 57,
       "fold": 35,
       "chrome": 6,
       "ratio": 1.4,
@@ -1973,11 +1973,11 @@
       "path": "/my-adhd",
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
-      "total": 60,
+      "total": 62,
       "fold": 35,
       "chrome": 6,
-      "ratio": 1.5,
-      "verdict": "ceiling",
+      "ratio": 1.6,
+      "verdict": "OVER",
       "longest": [
         {
           "w": 7,
@@ -1998,10 +1998,64 @@
     },
     {
       "path": "/my-adhd",
+      "name": "My ADHD, before a care plan",
+      "state": "model-no-plan",
+      "total": 60,
+      "fold": 35,
+      "chrome": 6,
+      "ratio": 1.5,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Starting is your biggest friction right now.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Once started, work often goes well",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Did “One capture place” help?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
+      "name": "My ADHD, the care plan open",
+      "state": "plan-open",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Take this to my GP",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "Care plan",
+          "tag": "h2"
+        },
+        {
+          "w": 2,
+          "text": "Occupational therapist",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/my-adhd",
       "name": "My ADHD, an axis open",
       "state": "sheet-open",
       "total": 38,
-      "fold": 31,
+      "fold": 24,
       "chrome": 0,
       "ratio": 1,
       "verdict": "target",
