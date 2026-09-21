@@ -761,3 +761,56 @@ test("Play P7 (founder): a clue on the scene makes the hit inferable, and every 
   expect(held.starting).toEqual({ coffee: 10, "first-move": 10 });
   expect(page.url()).not.toMatch(/relate|very/);
 });
+
+// A segmented control has to say which side you are on, IN THE LABEL and not only in a border.
+//
+// Measured on /adjustments before this: the unselected tab had --stone behind full-strength --ink
+// (16.4:1 against paper) while the selected one had amber --accent ink (6.2:1) — so the label of
+// the tab you were NOT on read louder than the label of the tab you were, and the only thing
+// carrying the selection was a 1px border. /lives/learn's identical control had it the right way
+// round the whole time, which is how the inconsistency was found.
+//
+// This asserts the relation rather than the colours, so a future palette change cannot break it
+// and a future inversion cannot pass.
+test("on a segmented control, the tab you are on reads stronger than the tab you are not", async ({ page }) => {
+  for (const path of ["/adjustments", "/lives/learn"]) {
+    await page.goto(path);
+    const tabs = page.getByRole("tab");
+    expect(await tabs.count(), `${path} has no segmented control`).toBeGreaterThan(1);
+
+    const read = await page.evaluate(() => {
+      // Relative luminance and contrast, WCAG's own formulae, so "stronger" is measured.
+      const lum = (c: string) => {
+        const [r, g, b] = (c.match(/\d+(\.\d+)?/g) ?? ["0", "0", "0"]).slice(0, 3).map((n) => Number(n) / 255);
+        const f = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+        return 0.2126 * f(r!) + 0.7152 * f(g!) + 0.0722 * f(b!);
+      };
+      const contrast = (a: string, b: string) => {
+        const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m) as [number, number];
+        return (x + 0.05) / (y + 0.05);
+      };
+      return [...document.querySelectorAll('[role="tab"]')].map((t) => {
+        const s = getComputedStyle(t);
+        return {
+          label: (t.textContent ?? "").trim(),
+          selected: t.getAttribute("aria-selected") === "true",
+          // Against the tab's OWN background, which is what a person compares it to.
+          contrast: contrast(s.color, s.backgroundColor),
+          weight: Number(s.fontWeight),
+        };
+      });
+    });
+
+    const on = read.filter((t) => t.selected);
+    const off = read.filter((t) => !t.selected);
+    expect(on.length, `${path} has no selected tab`).toBe(1);
+    expect(off.length).toBeGreaterThan(0);
+    for (const other of off) {
+      expect(
+        on[0]!.contrast,
+        `${path}: "${other.label}" is not selected and its label reads at ${other.contrast.toFixed(2)}:1, louder than the selected "${on[0]!.label}" at ${on[0]!.contrast.toFixed(2)}:1`,
+      ).toBeGreaterThanOrEqual(other.contrast);
+      expect(on[0]!.weight).toBeGreaterThanOrEqual(other.weight);
+    }
+  }
+});

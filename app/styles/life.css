@@ -226,8 +226,14 @@
 
 /* Adjustments on paper (PRD §45) */
 .adjust-tracks { display: flex; gap: 8px; margin: 0 0 14px; }
-.adjust-tab { flex: 1; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--stone); color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 650; cursor: pointer; }
-.adjust-tab.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--route-strong); }
+/* The same segmented control as `.learn-pane-tab` (app/styles/learning.css), and now the same
+   values. Measured before this: the UNSELECTED tab had `--stone` behind full-strength `--ink`
+   (16.4:1) while the SELECTED one had amber `--accent` ink (6.2:1) — so the label of the tab you
+   are NOT on read louder than the label of the tab you are, and the only thing carrying the
+   selection was the border. Unselected recedes now (paper, `--muted`) and selected advances
+   (accent-soft, accent border, full ink), which is what Learn already did. */
+.adjust-tab { flex: 1; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: 0.9375rem; font-weight: 650; cursor: pointer; }
+.adjust-tab.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
 .adjust-tab:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .life-card h2 svg { vertical-align: -4px; margin-right: 4px; color: var(--route); }
 .adjust-steps { margin: 0; padding-left: 22px; display: grid; gap: 8px; font-size: 0.9375rem; line-height: 1.45; }
