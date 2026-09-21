@@ -4,6 +4,8 @@ export interface RoomInsect { id: number; slot: number; kind: InsectKind; arrive
 export interface RoomEvent { id: string; at: number; kind: "insects" | "phone"; amount: number }
 export interface BedroomState {
   version: 1;
+  rounds?: boolean;
+  round?: number;
   scenario: number;
   mode: RoomMode;
   time: number;
@@ -47,16 +49,16 @@ export const PERCHES = [
   { x: 13, y: 34 }, { x: 36, y: 36 }, { x: 58, y: 13 },
 ] as const;
 
-export function createBedroom(scenario = 0, still = false): BedroomState {
+export function createBedroom(scenario = 0, still = false, rounds = false): BedroomState {
   const variant = ((scenario % 3) + 3) % 3;
-  const count = variant === 1 ? 4 : variant === 2 ? 2 : 3;
+  const count = rounds ? 3 : variant === 1 ? 4 : variant === 2 ? 2 : 3;
   return {
-    version: 1, scenario: variant, mode: "challenge", time: 0, challengeTime: 0,
-    paused: false, still, window: variant === 1 ? "secured" : "open",
+    version: 1, rounds, round: 1, scenario: variant, mode: "challenge", time: 0, challengeTime: 0,
+    paused: false, still, window: !rounds && variant === 1 ? "secured" : "open",
     phone: "available", notifications: variant === 2 ? 2 : 0,
     book: { open: false, page: 0 }, lamp: "reading", headphones: false,
     insects: Array.from({ length: count }, (_, id) => ({ id, slot: id, kind: id % 2 ? "hoverer" : "scout", arrivedAt: 0 })),
-    events: [
+    events: rounds ? [] : [
       { id: "arrival-1", at: 6000, kind: "insects", amount: 2 },
       { id: "phone-1", at: 10_000, kind: "phone", amount: 1 },
       { id: "arrival-2", at: 18_000, kind: "insects", amount: 3 },
@@ -65,7 +67,7 @@ export function createBedroom(scenario = 0, still = false): BedroomState {
       { id: "phone-3", at: 48_000, kind: "phone", amount: 1 },
     ],
     nextId: count, activation: .12, caught: 0, prevented: 0, held: 0,
-    line: variant === 1 ? "Window shut. A few are already inside." : variant === 2 ? "The phone has ideas. So do the mosquitoes." : "Catch what’s here. Stop what comes next.", revision: 0,
+    line: rounds ? "Three rounds. Catch the mosquitoes." : variant === 1 ? "Window shut. A few are already inside." : variant === 2 ? "The phone has ideas. So do the mosquitoes." : "Catch what’s here. Stop what comes next.", revision: 0,
   };
 }
 
@@ -143,7 +145,7 @@ function advance(s: BedroomState, ms: number, decision = false): BedroomState {
 export function bedroomReducer(s: BedroomState, action: BedroomAction): BedroomState {
   if (action.type === "pause") return s.paused ? s : { ...s, paused: true };
   if (action.type === "resume") return !s.paused ? s : { ...s, paused: false };
-  if (action.type === "restart") return createBedroom(s.scenario + 1, s.still);
+  if (action.type === "restart") return createBedroom(s.scenario + 1, s.still, s.rounds);
   if (action.type === "still") return s.still === action.value ? s : { ...s, still: action.value };
   if (s.paused) return s;
   if (action.type === "tick") {
@@ -164,12 +166,29 @@ export function bedroomReducer(s: BedroomState, action: BedroomAction): BedroomS
     };
   }
   if (s.mode === "rest" || s.mode === "complete") return s;
+  if (s.rounds && s.mode === "challenge" && ["window", "phone", "book", "light", "headphones"].includes(action.type)) return s;
   let next = { ...s, revision: s.revision + 1 };
   switch (action.type) {
     case "catch": {
       if (!s.insects.some(i => i.id === action.id)) return s;
       next.insects = s.insects.filter(i => i.id !== action.id);
       next.caught++;
+      if (s.rounds && s.mode === "challenge" && next.insects.length === 0) {
+        const round = s.round ?? 1;
+        if (round < 3) {
+          const count = round + 3;
+          next.round = round + 1;
+          next.insects = Array.from({ length: count }, (_, slot) => ({ id: next.nextId + slot, slot, kind: slot % 2 ? "hoverer" as const : "scout" as const, arrivedAt: s.time }));
+          next.nextId += count;
+          next.line = `Round ${round + 1}. More buzzing at the window.`;
+        } else {
+          next.mode = "recovery";
+          next.events = [];
+          next.line = "The rounds are over. Help Leo settle.";
+        }
+        return reconcile(next);
+      }
+
       next.activation = Math.max(.06, next.activation - .035);
       next.line = next.insects.length ? "One less buzz." : s.window === "open" ? "Quiet for now. The window is still open." : "Nothing buzzing inside.";
       break;

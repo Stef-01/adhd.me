@@ -298,6 +298,7 @@ export async function reach(page, route, base) {
     await page.locator('[data-ready="true"]').waitFor();
     if (route.state === "bedroom-pause") await page.getByRole("button", { name: "Pause game" }).click();
     else {
+      for (let roundTap = 0; roundTap < 12 && await page.locator('.bedroom-game[data-mode="challenge"]').count(); roundTap++) await page.locator(".bedroom-insect:enabled").first().click();
       await page.getByRole("button", { name: "Close the window", exact: true }).click();
       await page.getByRole("button", { name: "Put phone away", exact: true }).click();
       for (let i = 0; i < 12 && await page.locator(".bedroom-insect:enabled").count(); i++) await page.locator(".bedroom-insect:enabled").first().click();

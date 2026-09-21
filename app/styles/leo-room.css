@@ -220,3 +220,8 @@
 /* At 320 the phone's label ("Put phone away", 93px) is wider than the prop and sat 4px past the
    screen's right edge; the prop steps in so its label stays on screen. */
 @media (max-width: 359px) { .bedroom-phone { right: 30px; } }
+
+/* Settling actions enter only after the mosquito challenge. The room stays visually continuous. */
+.bedroom-game[data-challenge-only="true"] .bedroom-prop { pointer-events: none; }
+.bedroom-game[data-challenge-only="true"] .bedroom-prop-label { visibility: hidden; }
+.bedroom-round { font-size: 12px; white-space: nowrap; }

@@ -11,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <main id="main-content"><LeoBedroom /></main>;
+  return <main id="main-content"><LeoBedroom rounds /></main>;
 }
