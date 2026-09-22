@@ -16,6 +16,15 @@
 // A reading module is not a game and is not here: `/lives/learn?module=…` is text, a checklist and
 // a timer, and a long read scrolls.
 //
+// NOR IS THEO, AND THAT IS DELIBERATE — worth saying, because his absence looks like an oversight
+// and reads like one when you measure him. Every phase of `/lives/play/theo-out-the-door` overflows
+// the document at 320x568, by 152 to 331px. It is not a clipping failure: `.tm-game` is
+// `min-height: 100svh` rather than `height` with `overflow: clip`, and `.tm-house` is floored at
+// 440px so the four rooms stay big enough to drop things into, so the screen SCROLLS and
+// everything on it stays reachable. That is a different bargain from the one this file polices —
+// Leo's room is fixed-height and clipped, which is why a control past its fold is unreachable and
+// therefore a bug. Adding Theo here would assert a rule he was not built to.
+//
 // ONE THING THIS DOES NOT EXPLAIN, LEFT WRITTEN DOWN RATHER THAN HIDDEN. The spec has only ever
 // run under the default `PW_BROWSERS=chromium`. Run under `PW_BROWSERS=webkit` it reports exactly
 // one failure — "Leo, ready at 390x844: 77px of scroll" — and that number does not reproduce
