@@ -77,7 +77,7 @@ export function MatchFeedback() {
       <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
         <header className="life-head">
         <AppSettings />
-          <h1 tabIndex={-1}>Nothing to tell us about yet</h1>
+          <h1 tabIndex={-1}>Nothing to tell us about yet.</h1>
           <p className="match-lede">This form opens once a GP has accepted your request.</p>
         </header>
         <div className="match-actions">

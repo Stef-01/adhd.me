@@ -27,7 +27,7 @@ export interface TheoMorning {
   intent: Command | null;
   items: Record<Essential, Place>; plugged: boolean; charge: number; filled: boolean;
   shoes: boolean; umbrella: boolean; spill: "waiting" | "wet" | "clear";
-  demands: Demand[]; handled: Demand[]; load: number; updated: boolean;
+  nextDemandAt: number; demands: Demand[]; handled: Demand[]; load: number; updated: boolean;
   homes: Partial<Record<Essential, Room>>; cue: boolean; note: boolean;
   first: null | { trips: number; elapsed: number; caught: boolean; updated: boolean };
   line: string;
@@ -38,10 +38,10 @@ export function createMorning(attempt = 0, still = false): TheoMorning {
     { keys: "kitchen", phone: "living", bottle: "kitchen" },
     { keys: "bedroom", phone: "living", bottle: "kitchen" },
   ];
-  return { phase: "morning", attempt, paused: false, still, elapsed: 0, deadline: 70,
+  return { phase: "morning", attempt, paused: false, still, elapsed: 0, deadline: 90,
     node: "hall", trips: 0, travel: null, work: null, intent: null,
     items: { ...layouts[attempt % layouts.length]! }, plugged: false, charge: 0, filled: false,
-    shoes: false, umbrella: false, spill: "waiting", demands: [], handled: [], load: 12,
+    shoes: false, umbrella: false, spill: "waiting", nextDemandAt: 18, demands: [], handled: [], load: 12,
     updated: false, homes: {}, cue: false, note: false, first: null,
     line: "Phone flat. Ari’s waiting at the station.",
   };
@@ -127,11 +127,11 @@ function finish(s: TheoMorning, c: Command): TheoMorning {
   if (c === "umbrella") return { ...next, umbrella: true, line: "Ready for the rain." };
   if (c === "spill") return { ...next, spill: "clear", load: Math.max(0, s.load - 10), line: "A clear path. No more stepping around." };
   if (c === "breathe") return { ...next, load: Math.max(0, s.load - 40), line: "One thing at a time." };
-  if (c === "later") return { ...next, demands: [], handled: [...s.handled, ...s.demands], load: Math.max(0, s.load - 20), line: "Written down. It can wait." };
+  if (c === "later") return { ...next, demands: [], nextDemandAt: s.elapsed + 16, handled: [...s.handled, ...s.demands], load: Math.max(0, s.load - 20), line: "Written down. It can wait." };
   if (c === "message") return { ...next, updated: true, deadline: Math.max(s.elapsed, s.deadline) + 25, load: Math.max(0, s.load - 18), line: "Ari: ‘I’ll go ahead. Meet you inside.’" };
   if (c in DEMANDS) {
     const d = c as Demand;
-    return { ...next, demands: s.demands.filter(k => k !== d), handled: [...s.handled, d], load: Math.max(0, s.load - 5), line: "Done. The train is still leaving." };
+    return { ...next, demands: s.demands.filter(k => k !== d), nextDemandAt: s.elapsed + 16, handled: [...s.handled, d], load: Math.max(0, s.load - 5), line: "Done. The train is still leaving." };
   }
   if (c === "door" && canLeave(s)) {
     const caught = s.elapsed <= s.deadline;
@@ -143,11 +143,15 @@ function step(state: TheoMorning, dt: number): TheoMorning {
   if (!isMorning(state) || state.paused) return state;
   let s = { ...state, elapsed: state.elapsed + dt };
   if (s.plugged) s.charge = Math.min(1, s.charge + dt / 16);
-  if (s.spill === "waiting" && s.elapsed >= 20) { s.spill = "wet"; s.line = "Spilled water. Clear it, or step around?"; }
-  for (const d of Object.keys(DEMANDS) as Demand[]) {
-    if (s.elapsed >= DEMANDS[d].at && !s.handled.includes(d) && !s.demands.includes(d)) {
-      s.demands = [...s.demands, d]; s.line = `${DEMANDS[d].title}? The train won’t wait.`;
-    }
+  if (s.spill === "waiting" && s.elapsed >= 30 && s.filled) { s.spill = "wet"; s.line = "Spilled water. Clear it, or step around?"; }
+  // One optional interruption, with a quiet interval after resolving it. Getting
+  // oriented never spawns a stack of chores; the first essential action unlocks them.
+  const spillJustAppeared = state.spill !== s.spill;
+  if (spillJustAppeared) s.nextDemandAt = Math.max(s.nextDemandAt, s.elapsed + 10);
+  if (!s.demands.length && !spillJustAppeared && s.elapsed >= s.nextDemandAt
+    && (s.plugged || s.charge > 0 || s.filled || carrying(s).length || packed(s).length)) {
+    const d = (Object.keys(DEMANDS) as Demand[]).find(d => s.elapsed >= DEMANDS[d].at && !s.handled.includes(d));
+    if (d) { s.demands = [d]; s.line = `${DEMANDS[d].title}? It can wait.`; }
   }
   s.load = Math.min(100, Math.max(0, s.load + dt * (s.demands.length * .23 - .05)));
   if (state.elapsed < state.deadline && s.elapsed >= s.deadline) { s.line = s.updated ? "That train left. You can still get there." : "The train left. Let Ari know?"; s.load = Math.min(100, s.load + 16); }
@@ -179,7 +183,7 @@ export function morningReducer(s: TheoMorning, action: MorningAction): TheoMorni
     case "note": return s.phase === "evening" ? { ...s, note: !s.note, line: s.note ? "Note removed." : "Laundry is on tomorrow’s later list." } : s;
     case "tomorrow": {
       if (s.phase !== "evening" || ESSENTIALS.some(k => !s.homes[k])) return s;
-      return { ...createMorning(s.attempt, s.still), phase: "revisit", first: s.first, homes: s.homes, cue: s.cue, note: s.note, items: { ...s.homes } as Record<Essential, Place>, charge: 1, filled: true, deadline: 70 + (s.cue ? 12 : 0), handled: s.note ? ["laundry"] : [], line: "Same house. Your setup. And… rain." };
+      return { ...createMorning(s.attempt, s.still), phase: "revisit", first: s.first, homes: s.homes, cue: s.cue, note: s.note, items: { ...s.homes } as Record<Essential, Place>, charge: 1, filled: true, deadline: 90 + (s.cue ? 12 : 0), handled: s.note ? ["laundry"] : [], line: "Same house. Your setup. And… rain." };
     }
     case "restart": return createMorning(s.attempt + 1, s.still);
   }

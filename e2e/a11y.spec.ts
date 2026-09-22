@@ -9,7 +9,7 @@
 
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
-import { CONSOLE_ROUTES, PUBLIC_ROUTES } from "./site-routes";
+import { CONSOLE_ROUTES, DYNAMIC_ROUTE_PLAN, PUBLIC_ROUTES, staleDynamicPlanEntries, undeclaredDynamicRoutes } from "./site-routes";
 import { expectNoViolations } from "./support/a11y";
 import { installFakeSpeech } from "./support/fake-speech";
 import { STAGES, openStage } from "./support/finder-stages";
@@ -34,6 +34,43 @@ test.describe("public routes", () => {
         await expectNoViolations(page, `${path}${viewport ? " @390" : ""}`);
       }
     });
+  }
+});
+
+/**
+ * THE PLAN THAT NOTHING WAS ENFORCING. `site-routes.ts` carries `DYNAMIC_ROUTE_PLAN` and says of
+ * it: "A derived sweep that quietly skips anything with a bracket in it has reinvented the
+ * hardcoded array in a new place... `dynamicRoutePlan` below fails on any dynamic route missing
+ * from this record, so adding one forces its author to decide which it is and write down why."
+ *
+ * It did not fail on anything, because nothing called it. Both guard functions were exported and
+ * unreferenced, so the mechanism built to stop an unswept dynamic route appearing had let two
+ * through: `/lives/play/[journey]`, which is every character's game, and `/practitioner/[id]`,
+ * added with the skill-match dialog. Wired up here, beside the sweep that depends on it.
+ */
+test("every dynamic route is either swept or excluded, on purpose", () => {
+  expect(undeclaredDynamicRoutes(), "a dynamic route with no entry in DYNAMIC_ROUTE_PLAN is a screen nobody decided about").toEqual([]);
+  expect(staleDynamicPlanEntries(), "a plan entry naming a route that no longer exists").toEqual([]);
+});
+
+/**
+ * And the samples are actually visited. A `sample` that nothing opens is a promise of coverage
+ * rather than coverage — `/gp/[id]` had declared one since W102 and no sweep had ever loaded it.
+ */
+test("the sampled dynamic routes pass WCAG 2.1 AA", async ({ page }) => {
+  test.setTimeout(240_000);
+  const samples = Object.values(DYNAMIC_ROUTE_PLAN)
+    .filter((entry): entry is { sample: string } => "sample" in entry)
+    .map((entry) => entry.sample)
+    .filter((path) => !path.startsWith("/console"));
+  expect(samples.length, "no dynamic route declares a sample").toBeGreaterThan(2);
+  for (const viewport of [null, PHONE] as const) {
+    if (viewport) await page.setViewportSize(viewport);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    for (const path of samples) {
+      await page.goto(path);
+      await expectNoViolations(page, `${path}${viewport ? " @390" : ""}`);
+    }
   }
 });
 

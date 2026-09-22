@@ -52,7 +52,7 @@ describe("Theo's route-planning morning", () => {
     expect(doTask(doTask(s, "shoes"), "door").phase).toBe("departure");
   });
   it("lets inefficient routes miss a departure, keep inventory and update Ari once", () => {
-    let s = advance(createMorning(), 46);
+    let s = advance(doTask(createMorning(), "keys"), 100);
     for (const c of ["laundry", "plant", "email"] as Command[]) s = doTask(s, c);
     expect(s.elapsed).toBeGreaterThan(70);
     s = doTask(s, "keys"); const items = s.items;
@@ -61,8 +61,8 @@ describe("Theo's route-planning morning", () => {
     s = morning(s); expect(s.phase).toBe("departure"); expect(s.first?.updated).toBe(true);
   });
   it("makes spill cleanup shorten later travel and parking demands lower agitation", () => {
-    let wet = advance(createMorning(), 29);
-    expect(wet.demands).toEqual(["laundry", "plant"]); expect(wet.spill).toBe("wet");
+    let wet = advance(doTask(doTask(createMorning(), "bottle"), "bag"), 35);
+    expect(wet.demands).toEqual(["laundry"]); expect(wet.spill).toBe("wet");
     const cleared = doTask(wet, "spill"); expect(cleared.elapsed - wet.elapsed).toBeCloseTo(4, 0);
     expect(choose(wet, "phone").travel!.duration).toBeGreaterThan(choose(cleared, "phone").travel!.duration);
     wet = { ...wet, load: 70 };
@@ -71,7 +71,7 @@ describe("Theo's route-planning morning", () => {
     const breathed = doTask(wet, "breathe"); expect(breathed.load).toBeLessThan(40); expect(breathed.elapsed).toBeGreaterThan(wet.elapsed);
   });
   it("does not award completed optional chores without actually doing their work", () => {
-    let s = advance(createMorning(), 12); s = choose(s, "laundry"); s = advance(s, 4.5);
+    let s = advance(doTask(createMorning(), "phone"), 18); s = choose(s, "laundry"); s = advance(s, 4.5);
     expect(s.handled).not.toContain("laundry");
     s = choose(s, "keys"); s = advance(s, 20);
     expect(s.handled).not.toContain("laundry");
@@ -82,7 +82,7 @@ describe("Theo's route-planning morning", () => {
     s = morningReducer(s, { type: "cue" }); s = morningReducer(s, { type: "note" });
     s = morningReducer(s, { type: "tomorrow" });
     expect(s.phase).toBe("revisit"); expect(s.items).toEqual({ keys: "hall", phone: "hall", bottle: "kitchen" });
-    expect(s.charge).toBe(1); expect(s.filled).toBe(true); expect(s.deadline).toBe(82);
+    expect(s.charge).toBe(1); expect(s.filled).toBe(true); expect(s.deadline).toBe(102);
     expect(advance(s, 12).demands).not.toContain("laundry");
   });
   it("requires a real arrangement, then proves fewer trips while adding rain", () => {
@@ -125,4 +125,28 @@ it("switching an in-flight task to your pace cannot leave it stuck", () => {
   expect(s.intent).toBe("phone");
   s = morningReducer(s, { type: "pause", paused: false });
   expect(s.intent).toBeNull(); expect(s.plugged).toBe(true);
+});
+
+// Leave room to get oriented and read between actions on every replay layout.
+it("ordinary routes can catch the train with decision time across all layouts", () => {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let s = advance(createMorning(attempt), 8);
+    for (const c of ["phone", "bottle", "keys", "bag", "phone", "bag", "shoes", "door"] as Command[]) {
+      s = advance(s, 2); s = doTask(s, c);
+    }
+    expect(s.phase).toBe("departure"); expect(s.first?.caught).toBe(true);
+  }
+});
+it("never piles up optional demands or immediately replaces a parked one", () => {
+  expect(advance(createMorning(), 100).demands).toEqual([]);
+  let s = advance(doTask(createMorning(), "phone"), 60);
+  expect(s.demands).toHaveLength(1);
+  s = doTask(s, "later");
+  expect(advance(s, 15).demands).toEqual([]);
+  expect(advance(s, 17).demands).toHaveLength(1);
+});
+it("evening strategy practice is untimed and changes the next morning", () => {
+  const s = setup(morning()); expect(advance(s, 300)).toEqual(s);
+  const next = morningReducer(s, { type: "tomorrow" });
+  expect(next.filled).toBe(true); expect(next.charge).toBe(1);
 });

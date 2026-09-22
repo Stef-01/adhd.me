@@ -60,6 +60,17 @@ export const DYNAMIC_ROUTE_PLAN: Readonly<Record<string, { sample: string } | { 
   "/gp/[id]": {
     sample: "/gp/example-mei-chao",
   },
+  "/practitioner/[id]": {
+    // The screen the skill-match dialog's "View full profile" opens. Same roster as `/gp/[id]`,
+    // a different template, and it arrived undeclared — which is the case this record exists for.
+    sample: "/practitioner/example-mei-chao",
+  },
+  "/lives/play/[journey]": {
+    // Every character's own game. Maya's carries the most in one screen — a drawn scene, a timer,
+    // a trace target and a row of choices — so it is the sample; the rest are driven by
+    // `lives-journeys.spec.ts` and `games-fit.spec.ts` under their own names.
+    sample: "/lives/play/maya-the-crossing",
+  },
   "/console/gp/[id]": {
     sample: "/console/gp/example-mei-chao",
   },
