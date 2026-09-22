@@ -21,8 +21,14 @@
 import { chromium } from "@playwright/test";
 import { contextFor, reach, routes } from "./text-budget-lib.mjs";
 const BASE = process.env.BASE || "http://localhost:3100";
-/* The two phone widths the tree already walks: the narrowest it supports, and the reference. */
-const WIDTHS = (process.env.WIDTHS || "320,390").split(",").map(Number);
+/*
+ * Four widths, because two was a hole. It defaulted to the phones — 320, the narrowest supported,
+ * and 390, the reference — and so the patient screens had never been swept at a tablet or a
+ * desktop by this instrument at all, while AESTHETIC.md's own method says "mobile + desktop".
+ * Measured 2026-09-21 at 768 and 1280: nothing. That is the result worth having by default rather
+ * than by remembering to ask for it.
+ */
+const WIDTHS = (process.env.WIDTHS || "320,390,768,1280").split(",").map(Number);
 const b = await chromium.launch();
 const findings = [];
 const unreachable = [];
