@@ -30,7 +30,7 @@ async function secondMorning(page: Page) {
 
 test("the public card enters the new house directly; keyboard actions have physical dependencies", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto("/approach?pane=games");
-  await page.getByRole("link", { name: /Just get out the door/ }).click(); await expect(page).toHaveURL(new RegExp(URL));
+  await page.getByRole("link", { name: "Play Theo", exact: true }).click(); await expect(page).toHaveURL(new RegExp(URL));
   await expect(page.getByRole("heading", { name: "One train. One busy brain." })).toBeVisible();
   await expect(page.getByRole("slider")).toHaveCount(0); await expect(page.getByRole("combobox")).toHaveCount(0);
   await page.getByRole("button", { name: "Leave", exact: true }).click(); await expect(page.getByRole("status")).toHaveText("Three essentials in the bag first.");

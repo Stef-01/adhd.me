@@ -7,6 +7,7 @@
 import Link from "next/link";
 import { Play } from "@phosphor-icons/react";
 import { CHARACTERS, recordResonance, strategy, type ResonanceSignal } from "@/lives";
+import { GAME_ENTRY } from "@/lives/entry-points";
 import { JOURNEYS } from "@/lives/journeys";
 import { track } from "@/model/events";
 import { LifeBean } from "./bean";
@@ -25,7 +26,7 @@ export function LivesCharacters() {
         {CHARACTERS.map((c) => {
           const answer = profile?.resonanceSignals.find((s) => s.sourceType === "character" && s.sourceId === c.id)?.response;
           const journey = JOURNEYS.find(j => j.who === c.id);
-          const href = journey ? `/lives/play/${journey.slug}` : c.id === "leo" ? "/lives/play/leo-mosquito" : "/lives/play/theo-out-the-door";
+          const href = GAME_ENTRY[c.id].href;
           const title = journey?.title ?? (c.id === "leo" ? "One tiny sound." : "Just get out the door.");
           return (
             <li key={c.id} className="life-card lives-character" data-character={c.id}>

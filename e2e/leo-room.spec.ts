@@ -444,7 +444,7 @@ test("keyboard focus holds a flying target and releases it on blur", async ({ pa
 test("Learn opens the living room directly and the old preview remains compatible", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach?pane=games");
-  await page.getByRole("link", { name: /One tiny sound/ }).click();
+  await page.getByRole("link", { name: "Play Leo", exact: true }).click();
   await expect(page).toHaveURL(/lives\/play\/leo-mosquito/);
   await expect(game(page)).toHaveAttribute("data-ready", "true");
   await expect(page.getByRole("button", { name: "Close the window", exact: true })).toBeDisabled();

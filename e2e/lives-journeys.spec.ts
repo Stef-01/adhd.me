@@ -6,8 +6,8 @@ import { layoutGame, SCENE } from "../src/lives/layout";
 import { JOURNEYS } from "../src/lives/journeys";
 import { expectNoViolations } from "./support/a11y";
 
-// Zoe and Mia have dedicated stateful worlds with their own full-flow suites.
-for (const journey of JOURNEYS.filter(j => j.who !== "zoe" && j.who !== "mia")) {
+// Zoe, Mia and Arjun have dedicated stateful worlds with their own full-flow suites.
+for (const journey of JOURNEYS.filter(j => j.who !== "zoe" && j.who !== "mia" && j.who !== "arjun")) {
   test(`${journey.who}: direct entry, every round, practical ending and replay`, async ({ page }) => {
     test.setTimeout(60000);
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -166,7 +166,7 @@ test("Maya can physically trace the clear route and wipe both sensory layers", a
 test("a timed journey pauses when hidden, resumes and resets after a deadline", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.clock.install();
-  await page.goto("/lives/play/mia-remember-why", { waitUntil: "load" });
+  await page.goto("/lives/play/jax-just-the-list", { waitUntil: "load" });
   const root = page.locator(".character-journey");
   await expect(root).toHaveAttribute("data-ready", "true");
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 100));
