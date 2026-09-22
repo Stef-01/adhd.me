@@ -149,6 +149,18 @@ two-stage pipeline with deferred acceptance presenting a top three with a reason
 post-consult feedback) is planned as **Phase M** of [docs/adhd-life/PLAN.md](docs/adhd-life/PLAN.md),
 a six-month sprint to 2027-03-09. ADR 0007 records the decisions.
 
+**Measured 2026-09-21: "a reason each" is currently the same reason three times.**
+`explainMatch` sets the headline to `In common: ${labels[0]}.` — the top SHARED concept — and on
+`/match` all three cards therefore read "In common: adult ADHD assessment.", because a person who
+asked for an adult assessment matches three GPs who all declare it. Nothing is false and nothing is
+hidden: each card's own differentiators are in `rationale.points`, which is correct per-card. But
+they sit behind the card's "Why" disclosure, so the one line every card always shows is the one
+line that cannot tell them apart, and the brief's "a top three with a REASON EACH" is not what a
+person sees. Not changed here, because the fix is a choice rather than a correction — state the
+shared concept once above the three and give each card its first distinct point, or lead each card
+with its own strongest differentiator and keep the shared one as context. **A founder's call**;
+`src/lib/matching/rationale.ts` is where it lands either way.
+
 - [x] M1–M4: the service under `src/lib/matching/`, `/match` and its three, `/gp/[id]`,
       `/console/gp`, `/match/prep`, `/match/feedback`, the e2e loop. (2026-09-09)
 - [ ] M5: wiring. **Landed 2026-09-10:** Supabase behind the store as a journal with hydration
