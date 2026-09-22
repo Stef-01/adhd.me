@@ -49,7 +49,7 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
-  ...["request", "setup", "cue", "owner", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
+  ...["interruption", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
   ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
   { path: "/lives/play/theo-out-the-door", state: "theo-pause", name: "Theo, pause" },
@@ -330,20 +330,31 @@ export async function reach(page, route, base) {
 
   if (route.state?.startsWith("mia-")) {
     await page.goto(base + route.path);
-    const go = async name => { const current = await page.locator('.mw-game').getAttribute('data-room'); const key = name === 'Living room' ? 'living' : name.toLowerCase(); if (current !== key && current !== 'hall') await page.getByRole('button', {name:'Go to Hall',exact:true}).click(); await page.getByRole('button',{name:`Go to ${name}`,exact:true}).click(); };
+    const paths = [[4,0,1,5,9,10,6,7],[4,8,12,13,9,5,6,10,11,7],[4,5,1,2,6,10,9,13,14,15,11,7]];
     const button = name => page.getByRole('button',{name,exact:true});
-    await go('Bedroom'); await button('Pick up Charger').click(); await go('Hall');
-    if (route.state === 'mia-request') return;
-    await button('Ask Sam to collect').click(); await go('Study'); await button('Plug in laptop').click(); await button('Pick up Keys').click(); await go('Living room'); await button('Pick up Parcel').click(); await go('Hall'); await button('Prepare parcel').click();
-    if (route.state === 'mia-setup') return;
-    for (const [item,room] of [['Charger','Study'],['Parcel','Hall'],['Keys','Hall']]) await button(`Give ${item} a home in ${room}`).click();
-    if (route.state === 'mia-cue') return;
-    await button('Hallway cue').click();
-    if (route.state === 'mia-owner') return;
-    await button('Sam collects it').click(); await button('Try tomorrow').click();
-    if (route.state === 'mia-revisit') return;
-    await go('Study'); await button('Plug in laptop').click(); await go('Hall'); await button('Prepare parcel').click();
-    return;
+    for(let n=0;n<5;n++) await page.locator('.mt-tile').last().click();
+    if(route.state==='mia-interruption') return;
+    await button('Park for later').click();
+    const solve = async round => {
+      const path=paths[round];
+      const dir=(a,b)=>b===a-4?0:b===a+1?1:b===a+4?2:3;
+      for(let pass=0;pass<3;pass++) for(let p=0;p<path.length;p++) {
+        const index=path[p], expected=[p===0?3:dir(index,path[p-1]),p===path.length-1?1:dir(index,path[p+1])].sort().join();
+        const tile=page.locator(`.mt-tile[data-index="${index}"]`);
+        for(let n=0;n<4;n++) {
+          if((await tile.getAttribute('data-ports')).split(',').sort().join()===expected) break;
+          await tile.click(); if(await button('Park for later').count()) await button('Park for later').click();
+        }
+      }
+      await button('Send thought').click();
+    };
+    for(let n=0;n<3;n++) { await solve(n); await button(n===2?'Give it a cue':'Next thread').click(); }
+    if(route.state==='mia-setup') return;
+    await button('Write it down').click();
+    if(route.state==='mia-cue') return;
+    await button('Anchor connection 7').click(); await button('Try with my cue').click();
+    if(route.state==='mia-revisit') return;
+    await solve(2); return;
   }
   if (route.state?.startsWith("zoe-")) {
     await page.goto(base + route.path);

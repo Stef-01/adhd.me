@@ -1,79 +1,119 @@
-/** Spatial intentions stay inspectable; fictional play never measures a patient's memory. */
-export type Room = 'hall'|'study'|'bedroom'|'living';
-export type Item = 'charger'|'parcel'|'keys'|'book';
-export type Place = Room|'hand';
-export const ROOMS:Room[]=['study','bedroom','hall','living'];
-export const NAMES:Record<Room,string>={hall:'Hall',study:'Study',bedroom:'Bedroom',living:'Living room'};
-export const ITEMS:Item[]=['charger','parcel','keys','book'];
-export const HOMES:Item[]=['charger','parcel','keys'];
-export const POINTS:Record<Room,{x:number;y:number}>={study:{x:23,y:34},bedroom:{x:76,y:34},hall:{x:50,y:51},living:{x:25,y:83}};
-export interface MiaWorld{
- phase:'encounter'|'setup'|'revisit'|'complete'; scenario:number; room:Room; paused:boolean; moves:number;
- items:Record<Item,Place>; powered:boolean; parcelReady:boolean; request:'waiting'|'offered'|'mia'|'sam'|'done';
- interrupted:boolean; focus:'main'|'request'; homes:Partial<Record<Item,Room>>;
- cue:'portable'|'threshold'|null; owner:'mia'|'sam'|null; cueUses:number;
- firstMoves:number|null; message:string;
+/** A routing puzzle, not an assessment of memory or clinical ability. */
+export type Direction = 0 | 1 | 2 | 3;
+export type Cue = 'note' | 'say';
+export type Phase = 'play' | 'setup' | 'revisit' | 'complete';
+export interface Tile { kind: 'bend' | 'line'; turn: number }
+export const PATHS = [
+  [4, 0, 1, 5, 9, 10, 6, 7],
+  [4, 8, 12, 13, 9, 5, 6, 10, 11, 7],
+  [4, 5, 1, 2, 6, 10, 9, 13, 14, 15, 11, 7],
+];
+export const INTENTIONS = ['Tell Sam: Thursday, 3pm.', 'Ask for a quieter table.', 'Send the finished draft.'];
+export const THOUGHTS = ['Weekend plans', 'That song again', 'Another project'];
+export interface MiaWorld {
+  phase: Phase; round: number; seed: number; tiles: Tile[]; turns: number;
+  paused: boolean; solved: boolean; trace: number[]; pulses: number;
+  parked: number[]; distracted: number | null; shifts: number; shifted: number | null;
+  cue: Cue | null; anchor: number | null; savedTurn: number | null; message: string;
 }
-export type Action={type:'move';room:Room}|{type:'take'|'put';item:Item}|{type:'home';item:Item;room:Room}|{type:'cue';value:'portable'|'threshold'}|{type:'owner';value:'mia'|'sam'}|{type:'pause';value:boolean}|{type:'request';value:'mia'|'sam'}|{type:'power'|'parcel'|'book'|'recall'|'tomorrow'|'restart'};
-export function createMia(scenario=0):MiaWorld{
- const layouts:Record<Item,Place>[]=[{charger:'bedroom',parcel:'living',keys:'study',book:'study'},{charger:'living',parcel:'bedroom',keys:'study',book:'study'},{charger:'bedroom',parcel:'study',keys:'living',book:'study'}];
- return {phase:'encounter',scenario:scenario%3,room:'hall',paused:false,moves:0,items:{...layouts[scenario%3]!},powered:false,parcelReady:false,request:'waiting',interrupted:false,focus:'main',homes:{},cue:null,owner:null,cueUses:0,firstMoves:null,message:'Charge the laptop. Leave the parcel by the door.'};
+export type Action =
+  | { type: 'rotate'; index: number }
+  | { type: 'anchor'; index: number }
+  | { type: 'cue'; cue: Cue }
+  | { type: 'pause'; value: boolean }
+  | { type: 'pulse' | 'park' | 'next' | 'revisit' | 'restart' };
+export function ports(tile: Tile): Direction[] {
+  return (tile.kind === 'bend' ? [0, 1] : [0, 2]).map(d => ((d + tile.turn) % 4) as Direction);
 }
-export const hands=(s:MiaWorld)=>ITEMS.filter(i=>s.items[i]==='hand');
-export const active=(s:MiaWorld)=>s.phase==='encounter'||s.phase==='revisit';
-function finish(s:MiaWorld):MiaWorld{
- if(s.powered&&s.parcelReady&&(s.request==='sam'||s.request==='done'))return {...s,phase:s.phase==='revisit'?'complete':'setup',firstMoves:s.firstMoves??s.moves,message:s.phase==='revisit'?'The cue kept the plan in view.':'Done. Give tomorrow’s things a home.'};
- return s;
+function direction(from: number, to: number): Direction {
+  return to === from - 4 ? 0 : to === from + 1 ? 1 : to === from + 4 ? 2 : 3;
 }
-function at(s:MiaWorld,item:Item){return s.items[item]===s.room||s.items[item]==='hand'}
-export function miaReducer(s:MiaWorld,a:Action):MiaWorld{
- if(a.type==='pause')return {...s,paused:a.value};if(s.paused)return s;
- if(a.type==='restart')return s.phase==='complete'?createMia(s.scenario+1):s;
- if(s.phase==='setup'){
-  if(a.type==='home'&&HOMES.includes(a.item))return {...s,homes:{...s.homes,[a.item]:a.room},message:`${a.item[0]!.toUpperCase()+a.item.slice(1)}: ${NAMES[a.room]}.`};
-  if(a.type==='cue')return {...s,cue:a.value,message:a.value==='portable'?'A note that travels with you.':'A note where rooms meet.'};
-  if(a.type==='owner')return {...s,owner:a.value,message:a.value==='sam'?'Sam: ‘I’ll bring my book.’':'Mia brings the book. Sam makes space.'};
-  if(a.type==='tomorrow'&&HOMES.every(i=>s.homes[i])&&s.cue&&s.owner)return {...createMia(s.scenario),phase:'revisit',homes:s.homes,cue:s.cue,owner:s.owner,firstMoves:s.firstMoves,items:{charger:s.homes.charger!,parcel:s.homes.parcel!,keys:s.homes.keys!,book:'study'},request:s.owner==='sam'?'sam':'mia',message:'Same rooms. Your setup. Sam’s at the door.'};
+export function solution(round: number): Tile[] {
+  const path = PATHS[round % 3]!;
+  return Array.from({ length: 16 }, (_, index) => {
+    const slot = path.indexOf(index);
+    if (slot < 0) return { kind: index % 3 ? 'bend' : 'line', turn: index % 4 };
+    const enter = slot === 0 ? 3 : direction(index, path[slot - 1]!);
+    const leave = slot === path.length - 1 ? 1 : direction(index, path[slot + 1]!);
+    const kind = Math.abs(enter - leave) === 2 ? 'line' : 'bend';
+    for (let turn = 0; turn < 4; turn++) {
+      const tile: Tile = { kind, turn };
+      if (ports(tile).includes(enter) && ports(tile).includes(leave)) return tile;
+    }
+    throw new Error('Invalid path');
+  });
+}
+function shuffled(round: number, seed: number): Tile[] {
+  return solution(round).map((tile, index) => ({ ...tile, turn: (tile.turn + 1 + (index + seed) % 3) % 4 }));
+}
+export function createMia(seed = 0): MiaWorld {
+  return { phase: 'play', round: 0, seed, tiles: shuffled(0, seed), turns: 0,
+    paused: false, solved: false, trace: [], pulses: 0, parked: [], distracted: null,
+    shifts: 0, shifted: null, cue: null, anchor: null, savedTurn: null,
+    message: 'Turn the pieces. Connect Mia to the message.' };
+}
+export function follow(tiles: Tile[]): { trace: number[]; connected: boolean } {
+  let index = 4;
+  let entering: Direction = 3;
+  const trace: number[] = [];
+  while (!trace.includes(index)) {
+    const ends = ports(tiles[index]!);
+    if (!ends.includes(entering)) return { trace, connected: false };
+    trace.push(index);
+    const leave = ends.find(d => d !== entering)!;
+    if (index === 7 && leave === 1) return { trace, connected: true };
+    if ((leave === 0 && index < 4) || (leave === 2 && index >= 12) ||
+      (leave === 3 && index % 4 === 0) || (leave === 1 && index % 4 === 3)) return { trace, connected: false };
+    index += [-4, 1, 4, -1][leave]!;
+    entering = ((leave + 2) % 4) as Direction;
+  }
+  return { trace, connected: false };
+}
+export function miaReducer(s: MiaWorld, a: Action): MiaWorld {
+  if (a.type === 'pause') return { ...s, paused: a.value };
+  if (s.paused) return s;
+  if (a.type === 'restart') return s.phase === 'complete' ? createMia(s.seed + 1) : s;
+  if (s.phase === 'setup') {
+    if (a.type === 'cue') return { ...s, cue: a.cue, message: a.cue === 'note' ? 'A note carries the next action.' : 'Say the next action before switching.' };
+    if (a.type === 'anchor' && s.trace.includes(a.index)) return { ...s, anchor: a.index,
+      savedTurn: s.tiles[a.index]!.turn, message: 'This connection stays when the thought shifts.' };
+    if (a.type === 'revisit' && s.cue && s.anchor !== null && s.savedTurn !== null) {
+      const tiles = shuffled(s.round, s.seed + 1);
+      tiles[s.anchor] = { ...tiles[s.anchor]!, turn: s.savedTurn };
+      return { ...s, phase: 'revisit', tiles, turns: 0, shifts: 0, shifted: null,
+        solved: false, trace: [], distracted: null, message: 'A new interruption. Your cue stays.' };
+    }
+    return s;
+  }
+  if (s.phase === 'complete') return s;
+  if (a.type === 'next' && s.solved) {
+    if (s.round === 2) return { ...s, phase: 'setup', message: 'Give this thought somewhere to return to.' };
+    return { ...s, round: s.round + 1, tiles: shuffled(s.round + 1, s.seed), turns: 0,
+      shifts: 0, shifted: null, distracted: null, solved: false, trace: [], message: 'A longer thread. One thought at a time.' };
+  }
+  if (s.solved) return s;
+  if (a.type === 'park' && s.distracted !== null) return { ...s,
+    parked: [...new Set([...s.parked, s.distracted])], distracted: null,
+    message: 'Saved for later. Back to this thought.' };
+  if (a.type === 'rotate') {
+    if (!Number.isInteger(a.index) || a.index < 0 || a.index > 15 || (s.phase === 'revisit' && a.index === s.anchor)) return s;
+    const tiles = s.tiles.map((tile, index) => index === a.index ? { ...tile, turn: tile.turn + 1 } : tile);
+    const turns = s.turns + 1;
+    const thought = s.phase === 'revisit' ? 3 : s.round;
+    if (turns % 5 === 0 && s.shifts < 2 && !s.parked.includes(thought)) {
+      const path = PATHS[s.round]!;
+      const shifted = path.filter(index => index !== s.anchor && index !== a.index)[s.shifts + 1]!;
+      tiles[shifted] = { ...tiles[shifted]!, turn: tiles[shifted]!.turn + 1 };
+      return { ...s, tiles, turns, trace: [], shifts: s.shifts + 1, shifted,
+        distracted: thought, message: 'Another thought nudged a connection.' };
+    }
+    return { ...s, tiles, turns, trace: [], shifted: null, message: 'Follow the thread from left to right.' };
+  }
+  if (a.type === 'pulse') {
+    const result = follow(s.tiles);
+    return { ...s, trace: result.trace, pulses: s.pulses + 1, solved: result.connected,
+      phase: result.connected && s.phase === 'revisit' ? 'complete' : s.phase,
+      message: result.connected ? (s.phase === 'revisit' ? 'The cue gave the thought a way back.' : 'The thought made it through.') : 'A loose end. Turn a piece and try again.' };
+  }
   return s;
- }
- if(!active(s))return s;
- if(a.type==='cue'&&s.phase==='revisit')return {...s,cue:a.value,focus:a.value==='portable'||s.room==='hall'?'main':s.focus,message:a.value==='portable'?'The cue travels with you now.':'The cue stays at the hallway threshold.'};
- if(a.type==='move'){
-  if(a.room===s.room)return s;
-  // Every route crosses the hall; a room cannot be reached through a wall.
-  if(s.room!=='hall'&&a.room!=='hall')return {...s,message:'Through the hall first.'};
-  let next:MiaWorld={...s,room:a.room,moves:s.moves+1,message:NAMES[a.room]+'.'};
-  if(!s.interrupted&&next.moves>=2){next={...next,interrupted:true,focus:'request',request:s.phase==='encounter'?'offered':s.request,message:s.phase==='encounter'?'Sam: ‘Could you bring my book too?’':'A knock. Sam asks about tomorrow.'}}
-  if(s.cue&&(s.cue==='portable'||a.room==='hall'))next={...next,focus:'main',cueUses:s.cueUses+1,message:next.request==='offered'?next.message:'Your note: charger, parcel, agreed book plan.'};
-  return next;
- }
- if(a.type==='recall')return {...s,focus:'main',message:'Laptop: study. Parcel and keys: hall.'};
- if(a.type==='request'){
-  if(s.request!=='offered')return s;
-  return finish({...s,request:a.value,focus:'main',message:a.value==='sam'?'Sam: ‘Okay, I can collect it.’':'Book added. Two hands; make room when needed.'});
- }
- if(a.type==='take'){
-  if(s.items[a.item]!==s.room)return s;
-  if(hands(s).length===2)return {...s,message:'Two hands full. Put something down first.'};
-  if((a.item==='charger'&&s.powered)||(a.item==='parcel'&&s.parcelReady)||(a.item==='book'&&s.request==='done'))return {...s,message:'That’s already where it needs to be.'};
-  return {...s,items:{...s.items,[a.item]:'hand'},message:`${a.item[0]!.toUpperCase()+a.item.slice(1)} in hand.`};
- }
- if(a.type==='put'){
-  if(s.items[a.item]!=='hand')return s;
-  return {...s,items:{...s.items,[a.item]:s.room},message:`${a.item[0]!.toUpperCase()+a.item.slice(1)} stays in ${NAMES[s.room]}.`};
- }
- if(a.type==='power'){
-  if(s.room!=='study'||!at(s,'charger'))return {...s,message:'The charger needs to reach the study.'};
-  return finish({...s,powered:true,items:{...s.items,charger:'study'},message:'Laptop charging. One intention finished.'});
- }
- if(a.type==='parcel'){
-  if(s.room!=='hall'||!at(s,'parcel'))return {...s,message:'Bring the parcel to the hall.'};
-  if(!at(s,'keys'))return {...s,message:'Keys open the parcel cupboard. Bring them here.'};
-  return finish({...s,parcelReady:true,items:{...s.items,parcel:'hall',keys:'hall'},message:'Parcel ready. Keys on their hook.'});
- }
- if(a.type==='book'){
-  if(s.request!=='mia'||s.room!=='living'||!at(s,'book'))return {...s,message:'Sam’s reading spot is in the living room.'};
-  return finish({...s,request:'done',items:{...s.items,book:'living'},message:'Book delivered. Sam takes it from here.'});
- }
- return s;
 }

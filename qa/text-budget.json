@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-22T10:44:08.288Z",
-  "base": "http://localhost:3155",
+  "measuredAt": "2026-09-22T12:28:04.989Z",
+  "base": "http://localhost:3157",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -457,7 +457,7 @@
         },
         {
           "w": 2,
-          "text": "CATCH IT!",
+          "text": "DELETE DRAFTS!",
           "tag": "p"
         },
         {
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "WRITE THE LINE!",
+          "w": 2,
+          "text": "LOCK IN!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "report",
+          "tag": "span"
         }
       ]
     },
@@ -552,26 +552,26 @@
       "path": "/lives/play/mia-remember-why",
       "name": "/lives/play/mia-remember-why",
       "state": null,
-      "total": 30,
-      "fold": 28,
+      "total": 17,
+      "fold": 17,
       "chrome": 3,
-      "ratio": 0.8,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 9,
-          "text": "Charge the laptop. Leave the parcel by the door.",
+          "w": 8,
+          "text": "Turn the pieces. Connect Mia to the message.",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "What did I come for?",
-          "tag": "h1"
+          "w": 4,
+          "text": "Tell Sam: Thursday, 3pm.",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "Nothing left here.",
-          "tag": "span"
+          "text": "Keep the thread.",
+          "tag": "h1"
         }
       ]
     },
@@ -1247,28 +1247,28 @@
     },
     {
       "path": "/lives/play/mia-remember-why",
-      "name": "Mia, request",
-      "state": "mia-request",
-      "total": 31,
-      "fold": 31,
+      "name": "Mia, interruption",
+      "state": "mia-interruption",
+      "total": 19,
+      "fold": 19,
       "chrome": 3,
-      "ratio": 0.8,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "Sam: ‘Could you bring my book too?’",
+          "w": 5,
+          "text": "Another thought nudged a connection.",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "What did I come for?",
-          "tag": "h1"
+          "w": 4,
+          "text": "Tell Sam: Thursday, 3pm.",
+          "tag": "span"
         },
         {
-          "w": 4,
-          "text": "Ask Sam to collect",
-          "tag": "button"
+          "w": 3,
+          "text": "Keep the thread.",
+          "tag": "h1"
         }
       ]
     },
@@ -1276,33 +1276,6 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, setup",
       "state": "mia-setup",
-      "total": 24,
-      "fold": 24,
-      "chrome": 3,
-      "ratio": 0.6,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Done. Give tomorrow’s things a home.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Leave a clue for later.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "A home for the",
-          "tag": "h2"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/mia-remember-why",
-      "name": "Mia, cue",
-      "state": "mia-cue",
       "total": 22,
       "fold": 22,
       "chrome": 3,
@@ -1310,46 +1283,46 @@
       "verdict": "target",
       "longest": [
         {
+          "w": 7,
+          "text": "Give this thought somewhere to return to.",
+          "tag": "p"
+        },
+        {
           "w": 5,
-          "text": "Leave a clue for later.",
+          "text": "Give it a way back.",
           "tag": "h1"
         },
         {
-          "w": 5,
-          "text": "Where should the clue live?",
-          "tag": "h2"
-        },
-        {
-          "w": 3,
-          "text": "Carry a note",
-          "tag": "button"
+          "w": 4,
+          "text": "Send the finished draft.",
+          "tag": "span"
         }
       ]
     },
     {
       "path": "/lives/play/mia-remember-why",
-      "name": "Mia, owner",
-      "state": "mia-owner",
-      "total": 23,
-      "fold": 23,
+      "name": "Mia, cue",
+      "state": "mia-cue",
+      "total": 19,
+      "fold": 19,
       "chrome": 3,
-      "ratio": 0.6,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Leave a clue for later.",
-          "tag": "h1"
-        },
-        {
-          "w": 5,
-          "text": "A note where rooms meet.",
+          "w": 6,
+          "text": "A note carries the next action.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Mia brings it",
-          "tag": "button"
+          "w": 5,
+          "text": "Give it a way back.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Send the finished draft.",
+          "tag": "span"
         }
       ]
     },
@@ -1357,26 +1330,26 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, revisit",
       "state": "mia-revisit",
-      "total": 35,
-      "fold": 31,
+      "total": 20,
+      "fold": 20,
       "chrome": 3,
-      "ratio": 0.9,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 8,
-          "text": "Same rooms. Your setup. Sam’s at the door.",
+          "w": 6,
+          "text": "A new interruption. Your cue stays.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "The room remembers.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Send Sam the revised draft.",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "Charge laptop · Study",
-          "tag": "span"
+          "text": "Keep the thread.",
+          "tag": "h1"
         }
       ]
     },
@@ -1384,15 +1357,15 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, complete",
       "state": "mia-complete",
-      "total": 24,
-      "fold": 24,
+      "total": 37,
+      "fold": 37,
       "chrome": 3,
-      "ratio": 0.6,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "The cue kept the plan in view.",
+          "w": 8,
+          "text": "The cue gave the thought a way back.",
           "tag": "p"
         },
         {
@@ -1401,9 +1374,9 @@
           "tag": "a"
         },
         {
-          "w": 2,
-          "text": "Living room",
-          "tag": "button"
+          "w": 5,
+          "text": "Send Sam the revised draft.",
+          "tag": "span"
         }
       ]
     },
@@ -1924,26 +1897,26 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia: remember why",
       "state": null,
-      "total": 30,
-      "fold": 28,
+      "total": 17,
+      "fold": 17,
       "chrome": 3,
-      "ratio": 0.8,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 9,
-          "text": "Charge the laptop. Leave the parcel by the door.",
+          "w": 8,
+          "text": "Turn the pieces. Connect Mia to the message.",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "What did I come for?",
-          "tag": "h1"
+          "w": 4,
+          "text": "Tell Sam: Thursday, 3pm.",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "Nothing left here.",
-          "tag": "span"
+          "text": "Keep the thread.",
+          "tag": "h1"
         }
       ]
     },
