@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-21T22:09:24.156Z",
-  "base": "http://localhost:3620",
+  "measuredAt": "2026-09-22T08:10:28.739Z",
+  "base": "http://localhost:3152",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -444,21 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 2,
-      "fold": 2,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "PIGEONS!",
-          "tag": "p"
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "Straight through",
+          "tag": "button"
         }
       ]
     },
@@ -500,19 +505,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Mia, why are you here?",
-          "tag": "p"
-        },
-        {
-          "w": 4,
-          "text": "WHY ARE YOU HERE?",
+          "w": 3,
+          "text": "DUCK OR GOOSE!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "honk",
+          "tag": "p"
         }
       ]
     },
@@ -567,6 +572,33 @@
           "w": 4,
           "text": "A morning with Theo",
           "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "/lives/play/zoe-before-you-send",
+      "state": null,
+      "total": 27,
+      "fold": 27,
+      "chrome": 4,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Ask what happened",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "I’m not sure",
+          "tag": "button"
         }
       ]
     },
@@ -663,7 +695,7 @@
         },
         {
           "w": 6,
-          "text": "Nothing to tell us about yet",
+          "text": "Nothing to tell us about yet.",
           "tag": "h1"
         },
         {
@@ -690,7 +722,7 @@
         },
         {
           "w": 4,
-          "text": "Nothing to prepare yet",
+          "text": "Nothing to prepare yet.",
           "tag": "h1"
         },
         {
@@ -712,7 +744,7 @@
       "longest": [
         {
           "w": 4,
-          "text": "Nothing to show yet",
+          "text": "Nothing to show yet.",
           "tag": "h1"
         },
         {
@@ -866,10 +898,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1233,
+      "total": 1173,
       "fold": 219,
       "chrome": 22,
-      "ratio": 30.8,
+      "ratio": 29.3,
       "verdict": "long-form",
       "longest": [
         {
@@ -1187,13 +1219,175 @@
       ]
     },
     {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, compose",
+      "state": "zoe-compose",
+      "total": 32,
+      "fold": 32,
+      "chrome": 4,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Ask what happened",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "I’m not sure",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, calendar",
+      "state": "zoe-calendar",
+      "total": 25,
+      "fold": 25,
+      "chrome": 4,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Ask what happened",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Room for both.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, setup",
+      "state": "zoe-setup",
+      "total": 20,
+      "fold": 20,
+      "chrome": 4,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "‘Agreed. Let’s give changes a clear check-in.’",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Give the plan a place.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Who checks in?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, cue",
+      "state": "zoe-cue",
+      "total": 22,
+      "fold": 22,
+      "chrome": 4,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Rae will check in. Zoe will reply.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Give the plan a place.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Where will it live?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, revisit",
+      "state": "zoe-revisit",
+      "total": 29,
+      "fold": 29,
+      "chrome": 4,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "‘The bus is late. Could we make it eight?’",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Move it to 8 pm",
+          "tag": "button"
+        },
+        {
+          "w": 4,
+          "text": "A plan can change.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, complete",
+      "state": "zoe-complete",
+      "total": 23,
+      "fold": 23,
+      "chrome": 4,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "A new time. The owner and reminder stay.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Still on the same side.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "checks in ·",
+          "tag": "p"
+        }
+      ]
+    },
+    {
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, competing demands",
       "state": "theo-busy",
-      "total": 40,
-      "fold": 40,
+      "total": 36,
+      "fold": 36,
       "chrome": 4,
-      "ratio": 1,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -1568,26 +1762,26 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe: before send",
       "state": null,
-      "total": 11,
-      "fold": 11,
-      "chrome": 1,
-      "ratio": 0.3,
+      "total": 27,
+      "fold": 27,
+      "chrome": 4,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Leave send alone.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
         },
         {
           "w": 3,
-          "text": "I held off",
+          "text": "Ask what happened",
           "tag": "button"
         },
         {
-          "w": 2,
-          "text": "1 / 3",
-          "tag": "span"
+          "w": 3,
+          "text": "I’m not sure",
+          "tag": "button"
         }
       ]
     },
@@ -1703,10 +1897,10 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 52,
-      "fold": 47,
+      "total": 56,
+      "fold": 51,
       "chrome": 6,
-      "ratio": 1.3,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1819,12 +2013,12 @@
         },
         {
           "w": 2,
-          "text": "DON’T SCROLL!",
+          "text": "STAY STILL!",
           "tag": "p"
         },
         {
           "w": 2,
-          "text": "ONE MORE",
+          "text": "the spider",
           "tag": "span"
         }
       ]

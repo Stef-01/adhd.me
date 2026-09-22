@@ -49,6 +49,7 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
+  ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
   { path: "/lives/play/theo-out-the-door", state: "theo-pause", name: "Theo, pause" },
   { path: "/lives/play/theo-out-the-door", state: "theo-departure", name: "Theo, departure" },
@@ -326,6 +327,24 @@ export async function reach(page, route, base) {
     }
   }
 
+  if (route.state?.startsWith("zoe-")) {
+    await page.goto(base + route.path);
+    if (route.state === "zoe-calendar") { await page.getByRole("button", { name: "Calendar", exact: true }).click(); return; }
+    await page.getByRole("button", { name: "I’m not sure", exact: true }).click();
+    await page.getByRole("button", { name: "More notice", exact: true }).click();
+    await page.getByRole("button", { name: "Meet", exact: true }).click();
+    await page.getByRole("button", { name: "7 pm", exact: true }).click();
+    if (route.state === "zoe-compose") return;
+    await page.getByRole("button", { name: "Propose", exact: true }).click();
+    if (route.state === "zoe-setup") return;
+    await page.getByRole("button", { name: "Rae", exact: true }).click();
+    if (route.state === "zoe-cue") return;
+    await page.getByRole("button", { name: "Phone reminder", exact: true }).click();
+    await page.getByRole("button", { name: "Later that evening", exact: true }).click();
+    if (route.state === "zoe-revisit") return;
+    await page.getByRole("button", { name: "Move it to 8 pm", exact: true }).click();
+    return;
+  }
   if (route.state?.startsWith("theo-")) {
     await page.locator('.tm-game[data-ready="true"][data-still="true"]').waitFor();
     const act = async (command) => command === "door"
