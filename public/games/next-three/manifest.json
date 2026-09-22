@@ -1,0 +1,1660 @@
+{
+  "version": "1.0.0",
+  "status": "Art and integration contracts ready for prototype implementation; not shipped gameplay.",
+  "provenance": "Original project-authored SVG geometry, extending the existing canonical vector cast. No external images or copied artwork.",
+  "assets": [
+    {
+      "id": "zoe/props/draft-envelope",
+      "src": "/games/next-three/zoe/props/draft-envelope.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "e76a027c9b99cff92f2b09ac8abfdb00914e76049ded302c09b1ea4d671c0bc5",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/fact-fragment",
+      "src": "/games/next-three/zoe/props/fact-fragment.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "79c99e48a9a46a376cd7f9bd539e4f606efce598014b083b34279d3389d157f1",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/unknown-fragment",
+      "src": "/games/next-three/zoe/props/unknown-fragment.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "7db156fb5289058cbcafb11f49d60c6df0c59376f376206291c74cd650f6e664",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/need-fragment",
+      "src": "/games/next-three/zoe/props/need-fragment.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "9416b4c134b6a1c81dabd7dec32b2ff1734c317aa9e447b81ba2867d6a094d3d",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/request-fragment",
+      "src": "/games/next-three/zoe/props/request-fragment.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "3f6fa32e7a1fefcccd924c444fbe055d83bb339f3879aa2c9770b74930ebb5f8",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/calendar-open",
+      "src": "/games/next-three/zoe/props/calendar-open.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "b8059f97a59a857c9d9dc3958642c9768ae5d5c939d5a217eac746ae4753a95d",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/calendar-agreed",
+      "src": "/games/next-three/zoe/props/calendar-agreed.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "16a3e366cd0a63fa2f6fd3b8e7b30eea43d0dc1ded4f4ba72da96f827b35fe09",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/boundary-ribbon",
+      "src": "/games/next-three/zoe/props/boundary-ribbon.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "7919b1d099b9e3e521a5aaaa229a9fc0a6d420cc11765b975a5ae0b69e2e1ffe",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/return-cue",
+      "src": "/games/next-three/zoe/props/return-cue.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "69ff51e32ab28e6724974e9c80938b56fee1d1942106a7521eea2d6291c6348b",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/props/agreement-link",
+      "src": "/games/next-three/zoe/props/agreement-link.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "31957faadae87651ea2a47b6c8cfd623dd5ed270dea7e3dcca33706e92e4368e",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "zoe/scenes/desktop/background",
+      "src": "/games/next-three/zoe/scenes/desktop/background.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "47273d0ee9de667efbf65c342c66e31b0e26c780b4310b20b003fac11244446b",
+      "orientation": "desktop",
+      "layer": 0
+    },
+    {
+      "id": "zoe/scenes/desktop/furniture",
+      "src": "/games/next-three/zoe/scenes/desktop/furniture.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "4efde9a42d016b49a180119d39ce80155bae6038c1970ec5918f5fbbb887338f",
+      "orientation": "desktop",
+      "layer": 1,
+      "anchors": {
+        "self": [
+          264,
+          494
+        ],
+        "partner": [
+          936,
+          502
+        ],
+        "draft": [
+          744,
+          266
+        ],
+        "calendar": [
+          1080,
+          175
+        ],
+        "commitment": [
+          816,
+          608
+        ]
+      }
+    },
+    {
+      "id": "zoe/scenes/desktop/complication",
+      "src": "/games/next-three/zoe/scenes/desktop/complication.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "681a078160fea659060c3f6fc92de97e10f8496d097ccbe4e3a55009ac0e0650",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "zoe/scenes/desktop/strategy-setup",
+      "src": "/games/next-three/zoe/scenes/desktop/strategy-setup.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "f8ca05cebdbb3e01cebaa4d1ac7489611416eff3405bdba3da8d2e631661bf6f",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "zoe/scenes/desktop/revisit",
+      "src": "/games/next-three/zoe/scenes/desktop/revisit.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "663c29bf82af5aed6fc1cf602276a97fd702b54afa3d55d109ecc5a16ace37b6",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "zoe/scenes/desktop/composition-preview",
+      "src": "/games/next-three/zoe/scenes/desktop/composition-preview.svg",
+      "kind": "preview",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "bf0ece8362b6f114f3bc0385e202d65635e39565d00fa49cf21ff658e3c54d70",
+      "orientation": "desktop"
+    },
+    {
+      "id": "zoe/scenes/phone/background",
+      "src": "/games/next-three/zoe/scenes/phone/background.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "007f190c2aec0c169c9525a0521d10c775c840dd9430c0de252d16111bf07370",
+      "orientation": "phone",
+      "layer": 0
+    },
+    {
+      "id": "zoe/scenes/phone/furniture",
+      "src": "/games/next-three/zoe/scenes/phone/furniture.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "b6915cf9c2f8dd86a7933ca43be68c58ddd1b4c4ab5556dc02ce7fd746493f1e",
+      "orientation": "phone",
+      "layer": 1,
+      "anchors": {
+        "self": [
+          86,
+          455
+        ],
+        "partner": [
+          304,
+          462
+        ],
+        "draft": [
+          242,
+          245
+        ],
+        "calendar": [
+          351,
+          161
+        ],
+        "commitment": [
+          265,
+          560
+        ]
+      }
+    },
+    {
+      "id": "zoe/scenes/phone/complication",
+      "src": "/games/next-three/zoe/scenes/phone/complication.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "1c07ae5cb98dacdbbf2686abd1a6464c11a1207824f85dcaa844b7f9755dad74",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "zoe/scenes/phone/strategy-setup",
+      "src": "/games/next-three/zoe/scenes/phone/strategy-setup.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "4bcdf092f465966d50a8af92d4a17c0ee6726687d7ac9e06b9153bc777c8e7d9",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "zoe/scenes/phone/revisit",
+      "src": "/games/next-three/zoe/scenes/phone/revisit.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "173cad050151a0123ebcdd6aa0da244e072e4b151285845f30cf76043ae03866",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "zoe/scenes/phone/composition-preview",
+      "src": "/games/next-three/zoe/scenes/phone/composition-preview.svg",
+      "kind": "preview",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "05a9429feb0dd5859892572f6dc97ebe0e547f71f78ef768cd7fd42208892ab4",
+      "orientation": "phone"
+    },
+    {
+      "id": "zoe/characters/hold-draft",
+      "src": "/games/next-three/zoe/characters/hold-draft.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "9a54ad67f752556381b218c66caa26ec32f6ce3003b7411d16649d5dfa2c422e",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "zoe/characters/set-boundary",
+      "src": "/games/next-three/zoe/characters/set-boundary.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "0cbb633ba7ab7dff674c09c730152465eb7afe1fee55beaf296d870a0417bfc7",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "zoe/characters/offer-plan",
+      "src": "/games/next-three/zoe/characters/offer-plan.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "92681670ca1601fbeb06f1d7e8c74c692285e4019ffe2f2f5cd676944f854ac9",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "mia/props/charger-loose",
+      "src": "/games/next-three/mia/props/charger-loose.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "22cf47de4f33dff2c6cef4582023c8b5a6c2241e5ca1295bb463b97fde5a62ee",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/charger-docked",
+      "src": "/games/next-three/mia/props/charger-docked.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "dc3c368eaa9bf992e27ebc98aa6af99e54b9ca22d47a5d2f35b3712ab2b3c5e0",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/parcel-sealed",
+      "src": "/games/next-three/mia/props/parcel-sealed.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "38737bcce0b38d38df3510cdf1abed10416b2ba232d993c52d891bed411ae310",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/parcel-ready",
+      "src": "/games/next-three/mia/props/parcel-ready.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "2b4839e3f000e890dd8aeece6ff62701edb874717ba1eca9a8ea4f68f4669b67",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/portable-cue",
+      "src": "/games/next-three/mia/props/portable-cue.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "fc938971a86042ab62d79b266e795fc8c787db709052796ce1965b826c15d1da",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/threshold-cue",
+      "src": "/games/next-three/mia/props/threshold-cue.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "6207a2e0d9a1bebdb1cc7d2fed56fb49c212f0172117cc24b0e084a66d53a9ce",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/object-home",
+      "src": "/games/next-three/mia/props/object-home.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "28d236a040be7d8f237994b3d63b24f5aec642162c8fe3278344aa471afabb42",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/shared-board",
+      "src": "/games/next-three/mia/props/shared-board.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "0e39bee9cd7c4c10676715ca91ba9c9125966b8a9cda11115a4f4837f7b04687",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/owner-token",
+      "src": "/games/next-three/mia/props/owner-token.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "9667582c7f82477735d4418f101653ca4242f6b23f3c1fc2e12115a82194a057",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/props/intention-thread",
+      "src": "/games/next-three/mia/props/intention-thread.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "c5e82c1754fdf07bf9b55565e4121464e98e0da3412f6fc27ef33c62cd80f7e2",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "mia/scenes/desktop/background",
+      "src": "/games/next-three/mia/scenes/desktop/background.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "d5019ff3040408a41c4acc4d374d874d7da5b2bf565bcc79c2e9560fe7114f44",
+      "orientation": "desktop",
+      "layer": 0
+    },
+    {
+      "id": "mia/scenes/desktop/furniture",
+      "src": "/games/next-three/mia/scenes/desktop/furniture.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "86cf9e6b2afce4c1eb4dc1a16c51acddfeb682e82bb3dccc186da32f20456eb9",
+      "orientation": "desktop",
+      "layer": 1,
+      "anchors": {
+        "self": [
+          552,
+          395
+        ],
+        "partner": [
+          276,
+          638
+        ],
+        "charger": [
+          240,
+          205
+        ],
+        "parcel": [
+          888,
+          289
+        ],
+        "portable": [
+          600,
+          403
+        ],
+        "threshold": [
+          600,
+          357
+        ],
+        "board": [
+          684,
+          578
+        ],
+        "door": [
+          996,
+          646
+        ]
+      }
+    },
+    {
+      "id": "mia/scenes/desktop/complication",
+      "src": "/games/next-three/mia/scenes/desktop/complication.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "717ed3b117a3afedfc2f4824c2a0adfef22f33fcea7a35cf42c1a56f546ae247",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "mia/scenes/desktop/strategy-setup",
+      "src": "/games/next-three/mia/scenes/desktop/strategy-setup.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "24aefeb8455b894d370c42edc9f3c6f7ef908aa29af9ac82c20fb0ea3554df47",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "mia/scenes/desktop/revisit",
+      "src": "/games/next-three/mia/scenes/desktop/revisit.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "c8f400713e27bbef6201e1441373391056fb090ce3e3777221486581ac3e162d",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "mia/scenes/desktop/composition-preview",
+      "src": "/games/next-three/mia/scenes/desktop/composition-preview.svg",
+      "kind": "preview",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "45eccf8e72952e915809b5cd5767476944ebaa9aebf2f7cf1d24f392d1cb8f09",
+      "orientation": "desktop"
+    },
+    {
+      "id": "mia/scenes/phone/background",
+      "src": "/games/next-three/mia/scenes/phone/background.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "e62bf6c690f48ecf574dad18b0f8737743f7547d8908369b72c34b592e7152ed",
+      "orientation": "phone",
+      "layer": 0
+    },
+    {
+      "id": "mia/scenes/phone/furniture",
+      "src": "/games/next-three/mia/scenes/phone/furniture.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "79914691e5a73af3643e2549244ddfe21116ae5a60e444507684f4744597776c",
+      "orientation": "phone",
+      "layer": 1,
+      "anchors": {
+        "self": [
+          179,
+          364
+        ],
+        "partner": [
+          90,
+          588
+        ],
+        "charger": [
+          78,
+          189
+        ],
+        "parcel": [
+          289,
+          266
+        ],
+        "portable": [
+          195,
+          371
+        ],
+        "threshold": [
+          195,
+          329
+        ],
+        "board": [
+          222,
+          532
+        ],
+        "door": [
+          324,
+          595
+        ]
+      }
+    },
+    {
+      "id": "mia/scenes/phone/complication",
+      "src": "/games/next-three/mia/scenes/phone/complication.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "696be9521a51f55d6a31bf35d540dba3c191d5885af175bcc3561309c7d5e355",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "mia/scenes/phone/strategy-setup",
+      "src": "/games/next-three/mia/scenes/phone/strategy-setup.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "fba5e16514a3fb018ddbcd3953ea814899f22aa2dde847d031775c5a74a5cd10",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "mia/scenes/phone/revisit",
+      "src": "/games/next-three/mia/scenes/phone/revisit.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "576bf708505a3a40965c5b0e5b7a5be712b2ea5c16a3160ef341354d006898b2",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "mia/scenes/phone/composition-preview",
+      "src": "/games/next-three/mia/scenes/phone/composition-preview.svg",
+      "kind": "preview",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "a360943fdd3662d4b0cadb2aca47fb12aafd8d3761d90d875fcd360d8cd95c31",
+      "orientation": "phone"
+    },
+    {
+      "id": "mia/characters/place-cue",
+      "src": "/games/next-three/mia/characters/place-cue.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "f9e7ce613d00dde5ee09eb3a82373f5bdc7952f7eabaccb4651fb55ae735689b",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "mia/characters/recall",
+      "src": "/games/next-three/mia/characters/recall.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "31c272985ecfb34cf556755b7ec9fd22fcbdd88ae71aeb1ffaa76a5227292549",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "mia/characters/share-task",
+      "src": "/games/next-three/mia/characters/share-task.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "eb7caaa11a6fd18fbe41f391ec6dd51b0ec239fb3415e03a8d41939ed72298a1",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "arjun/props/agenda-anchor",
+      "src": "/games/next-three/arjun/props/agenda-anchor.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "aa555d99a3e711dcc807387ed3a4ca0397cbb97e13b4361b1a1382811d44be38",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/fact-tile",
+      "src": "/games/next-three/arjun/props/fact-tile.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "874e86c8ea1576387745c93cdb737e6911a3b6632a8ab71f8f01827dc81417d0",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/question-tile",
+      "src": "/games/next-three/arjun/props/question-tile.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "da26370e599c748160bc48acdf1555d52d5541cfdc3ebf32b082e6b4d80a64fa",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/idea-tile",
+      "src": "/games/next-three/arjun/props/idea-tile.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "462a8c1286e8043a1dd465de06e7cab2146a54b3cb6c700af1ea648a1be97b89",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/parking-pocket",
+      "src": "/games/next-three/arjun/props/parking-pocket.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "ab5d847223a4ef5b0781728ce8315616f9cb52549835c24f9c63f5f39611aa21",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/turn-token",
+      "src": "/games/next-three/arjun/props/turn-token.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "1c70c261b65eb33e23032c802cfb0c426dc8dd95f2fc92607dc33be5996dbc0a",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/repeat-token",
+      "src": "/games/next-three/arjun/props/repeat-token.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "f620223f978f9b0464b0f3ec3f9243700cc0f002c0c6c20867968e1220f07063",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/decision-bridge",
+      "src": "/games/next-three/arjun/props/decision-bridge.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "8768171115d7fba916d799b7c71ef917fecd67f4969d89dfe151c2568bf734ea",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/action-card",
+      "src": "/games/next-three/arjun/props/action-card.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "3765be6a5939681710614a823532c3d5e6db69f975c7449f62da103c73584319",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/props/connection-pin",
+      "src": "/games/next-three/arjun/props/connection-pin.svg",
+      "kind": "prop",
+      "viewBox": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "sha256": "0239fad78e508a17954551d4be8f03ae2d751f44c8d2609f1cb109ccbd9ad357",
+      "pivot": [
+        64,
+        112
+      ],
+      "minimumTarget": 48
+    },
+    {
+      "id": "arjun/scenes/desktop/background",
+      "src": "/games/next-three/arjun/scenes/desktop/background.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "197fb3179ba49ed3d9e1a0af590f78cd163c572ff8532bee6fe3ce0a24bd64f8",
+      "orientation": "desktop",
+      "layer": 0
+    },
+    {
+      "id": "arjun/scenes/desktop/furniture",
+      "src": "/games/next-three/arjun/scenes/desktop/furniture.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "8bf9d831e42145cb6a89955c98b15f17ac33277a6932d12e6af69ccf0330e3c7",
+      "orientation": "desktop",
+      "layer": 1,
+      "anchors": {
+        "self": [
+          612,
+          684
+        ],
+        "partner": [
+          384,
+          144
+        ],
+        "colleague": [
+          840,
+          144
+        ],
+        "agenda": [
+          336,
+          220
+        ],
+        "slot1": [
+          348,
+          357
+        ],
+        "slot2": [
+          600,
+          357
+        ],
+        "slot3": [
+          852,
+          357
+        ],
+        "parking": [
+          984,
+          517
+        ],
+        "decision": [
+          540,
+          532
+        ]
+      }
+    },
+    {
+      "id": "arjun/scenes/desktop/complication",
+      "src": "/games/next-three/arjun/scenes/desktop/complication.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "785158f3a5800a23f42823da2f47818acbdfe7d7495cfa8f064b5ed1c51e900b",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "arjun/scenes/desktop/strategy-setup",
+      "src": "/games/next-three/arjun/scenes/desktop/strategy-setup.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "832ad055aa0c7e785b08b7048907960e5b92c28b2e54d45a1a206eb360cc5317",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "arjun/scenes/desktop/revisit",
+      "src": "/games/next-three/arjun/scenes/desktop/revisit.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "a3f600f04af87dbdd280abe6ad4d1d7557957b3cefa8080a2edf49e54d2c7010",
+      "orientation": "desktop",
+      "layer": 2
+    },
+    {
+      "id": "arjun/scenes/desktop/composition-preview",
+      "src": "/games/next-three/arjun/scenes/desktop/composition-preview.svg",
+      "kind": "preview",
+      "viewBox": [
+        0,
+        0,
+        1200,
+        760
+      ],
+      "sha256": "67ec1bb4afeb35ccb8894b226cf35c40f4380de1ada9354d85a0099a4f588008",
+      "orientation": "desktop"
+    },
+    {
+      "id": "arjun/scenes/phone/background",
+      "src": "/games/next-three/arjun/scenes/phone/background.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "6be458a4b04fc23afb058b22c8a03f647ee0ae613c03273e44940a817b55b17d",
+      "orientation": "phone",
+      "layer": 0
+    },
+    {
+      "id": "arjun/scenes/phone/furniture",
+      "src": "/games/next-three/arjun/scenes/phone/furniture.svg",
+      "kind": "scene",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "c9f3781e700564c5aeebb15e008ddf7f3b8a7c23f26835102101b3f05fb81da0",
+      "orientation": "phone",
+      "layer": 1,
+      "anchors": {
+        "self": [
+          199,
+          630
+        ],
+        "partner": [
+          125,
+          133
+        ],
+        "colleague": [
+          273,
+          133
+        ],
+        "agenda": [
+          109,
+          203
+        ],
+        "slot1": [
+          113,
+          329
+        ],
+        "slot2": [
+          195,
+          329
+        ],
+        "slot3": [
+          277,
+          329
+        ],
+        "parking": [
+          320,
+          476
+        ],
+        "decision": [
+          176,
+          490
+        ]
+      }
+    },
+    {
+      "id": "arjun/scenes/phone/complication",
+      "src": "/games/next-three/arjun/scenes/phone/complication.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "1ee27281c6ab69e03aef556be6da40c18acbcf661e7e92f3aa83b04fc43afc71",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "arjun/scenes/phone/strategy-setup",
+      "src": "/games/next-three/arjun/scenes/phone/strategy-setup.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "87b87e818331d15bf72f9a76aa0a69724822959d430219c001ae91dc0ed08163",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "arjun/scenes/phone/revisit",
+      "src": "/games/next-three/arjun/scenes/phone/revisit.svg",
+      "kind": "overlay",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "4bb21fc5107e77896f518be00a8f0369556e7036bf788d661900bb0b4a92ee85",
+      "orientation": "phone",
+      "layer": 2
+    },
+    {
+      "id": "arjun/scenes/phone/composition-preview",
+      "src": "/games/next-three/arjun/scenes/phone/composition-preview.svg",
+      "kind": "preview",
+      "viewBox": [
+        0,
+        0,
+        390,
+        700
+      ],
+      "sha256": "ea12e9746382291abbfb07e601d7dd514b6eb04f059a3726409b1ea47f261fd8",
+      "orientation": "phone"
+    },
+    {
+      "id": "arjun/characters/offer-turn",
+      "src": "/games/next-three/arjun/characters/offer-turn.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "06c9526c05f7409303e322e83ce40afcd239d3ccf57a88ad81b139cd925be7e7",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "arjun/characters/pin-anchor",
+      "src": "/games/next-three/arjun/characters/pin-anchor.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "5a189124466df00c4b3867da060b2fdece6834268571212050583e8f987f710d",
+      "pivot": [
+        80,
+        158
+      ]
+    },
+    {
+      "id": "arjun/characters/retrieve-idea",
+      "src": "/games/next-three/arjun/characters/retrieve-idea.svg",
+      "kind": "character",
+      "viewBox": [
+        0,
+        0,
+        160,
+        176
+      ],
+      "sha256": "9600957b7d17984548b3770233fc0a25ef6ec2fe052a98153a1093788a53cdda",
+      "pivot": [
+        80,
+        158
+      ]
+    }
+  ],
+  "games": {
+    "zoe": {
+      "title": "Before you send",
+      "genre": "Conversation assembly",
+      "wall": "#F0DFE3",
+      "floor": "#D2A4B7",
+      "accent": "#9A5D7A",
+      "partner": "rae",
+      "props": [
+        "draft-envelope",
+        "fact-fragment",
+        "unknown-fragment",
+        "need-fragment",
+        "request-fragment",
+        "calendar-open",
+        "calendar-agreed",
+        "boundary-ribbon",
+        "return-cue",
+        "agreement-link"
+      ],
+      "tactics": [
+        "Clarify the unknown before proposing",
+        "Name uncertainty and propose a feasible alternative"
+      ],
+      "assets": [
+        "zoe/props/draft-envelope",
+        "zoe/props/fact-fragment",
+        "zoe/props/unknown-fragment",
+        "zoe/props/need-fragment",
+        "zoe/props/request-fragment",
+        "zoe/props/calendar-open",
+        "zoe/props/calendar-agreed",
+        "zoe/props/boundary-ribbon",
+        "zoe/props/return-cue",
+        "zoe/props/agreement-link",
+        "zoe/scenes/desktop/background",
+        "zoe/scenes/desktop/furniture",
+        "zoe/scenes/desktop/complication",
+        "zoe/scenes/desktop/strategy-setup",
+        "zoe/scenes/desktop/revisit",
+        "zoe/scenes/desktop/composition-preview",
+        "zoe/scenes/phone/background",
+        "zoe/scenes/phone/furniture",
+        "zoe/scenes/phone/complication",
+        "zoe/scenes/phone/strategy-setup",
+        "zoe/scenes/phone/revisit",
+        "zoe/scenes/phone/composition-preview",
+        "zoe/characters/hold-draft",
+        "zoe/characters/set-boundary",
+        "zoe/characters/offer-plan"
+      ],
+      "reuse": [
+        "/games/v2/characters/zoe/neutral.svg",
+        "/games/v2/characters/zoe/thinking.svg",
+        "/games/v2/characters/zoe/overwhelmed.svg",
+        "/games/v2/characters/zoe/frustrated.svg",
+        "/games/v2/characters/zoe/sad.svg",
+        "/games/v2/characters/zoe/relieved.svg",
+        "/games/v2/characters/zoe/focused.svg",
+        "/games/v2/characters/zoe/reach.svg",
+        "/games/v2/characters/zoe/carry.svg",
+        "/games/v2/characters/zoe/resting.svg",
+        "/games/v2/characters/zoe/walk-a.svg",
+        "/games/v2/characters/zoe/walk-b.svg",
+        "/games/v2/characters/rae/neutral.svg",
+        "/games/v2/characters/rae/thinking.svg",
+        "/games/v2/characters/rae/overwhelmed.svg",
+        "/games/v2/characters/rae/frustrated.svg",
+        "/games/v2/characters/rae/sad.svg",
+        "/games/v2/characters/rae/relieved.svg",
+        "/games/v2/characters/rae/focused.svg",
+        "/games/v2/characters/rae/reach.svg",
+        "/games/v2/characters/rae/carry.svg",
+        "/games/v2/characters/rae/resting.svg",
+        "/games/v2/characters/rae/walk-a.svg",
+        "/games/v2/characters/rae/walk-b.svg",
+        "/games/v2/audio/page-turn.wav",
+        "/games/v2/audio/notify.wav",
+        "/games/v2/audio/place.wav",
+        "/games/v2/audio/breath-out.wav",
+        "/games/v2/props/phone-screen.svg",
+        "/games/v2/props/phone-off.svg",
+        "/games/v2/props/water-cup.svg"
+      ],
+      "renderOrder": [
+        "background",
+        "furniture",
+        "state overlay",
+        "interactive props",
+        "characters",
+        "DOM controls"
+      ],
+      "minimumTarget": 48,
+      "motion": {
+        "acceptedActionMs": 140,
+        "placementMs": 220,
+        "transitionMs": 320,
+        "reducedMotion": "Use static poses, instantaneous placements and persistent status text; no automatic camera motion."
+      },
+      "audio": "Off until explicit consent. Semantic visible feedback accompanies every sound. Stop and release on exit."
+    },
+    "mia": {
+      "title": "Remember why",
+      "genre": "Spatial cue puzzle",
+      "wall": "#E6DDF0",
+      "floor": "#B5A6C9",
+      "accent": "#887299",
+      "partner": "sam",
+      "props": [
+        "charger-loose",
+        "charger-docked",
+        "parcel-sealed",
+        "parcel-ready",
+        "portable-cue",
+        "threshold-cue",
+        "object-home",
+        "shared-board",
+        "owner-token",
+        "intention-thread"
+      ],
+      "tactics": [
+        "Carry a portable intention cue",
+        "Place cues at the threshold and point of action"
+      ],
+      "assets": [
+        "mia/props/charger-loose",
+        "mia/props/charger-docked",
+        "mia/props/parcel-sealed",
+        "mia/props/parcel-ready",
+        "mia/props/portable-cue",
+        "mia/props/threshold-cue",
+        "mia/props/object-home",
+        "mia/props/shared-board",
+        "mia/props/owner-token",
+        "mia/props/intention-thread",
+        "mia/scenes/desktop/background",
+        "mia/scenes/desktop/furniture",
+        "mia/scenes/desktop/complication",
+        "mia/scenes/desktop/strategy-setup",
+        "mia/scenes/desktop/revisit",
+        "mia/scenes/desktop/composition-preview",
+        "mia/scenes/phone/background",
+        "mia/scenes/phone/furniture",
+        "mia/scenes/phone/complication",
+        "mia/scenes/phone/strategy-setup",
+        "mia/scenes/phone/revisit",
+        "mia/scenes/phone/composition-preview",
+        "mia/characters/place-cue",
+        "mia/characters/recall",
+        "mia/characters/share-task"
+      ],
+      "reuse": [
+        "/games/v2/characters/mia/neutral.svg",
+        "/games/v2/characters/mia/thinking.svg",
+        "/games/v2/characters/mia/overwhelmed.svg",
+        "/games/v2/characters/mia/frustrated.svg",
+        "/games/v2/characters/mia/sad.svg",
+        "/games/v2/characters/mia/relieved.svg",
+        "/games/v2/characters/mia/focused.svg",
+        "/games/v2/characters/mia/reach.svg",
+        "/games/v2/characters/mia/carry.svg",
+        "/games/v2/characters/mia/resting.svg",
+        "/games/v2/characters/mia/walk-a.svg",
+        "/games/v2/characters/mia/walk-b.svg",
+        "/games/v2/characters/sam/neutral.svg",
+        "/games/v2/characters/sam/thinking.svg",
+        "/games/v2/characters/sam/overwhelmed.svg",
+        "/games/v2/characters/sam/frustrated.svg",
+        "/games/v2/characters/sam/sad.svg",
+        "/games/v2/characters/sam/relieved.svg",
+        "/games/v2/characters/sam/focused.svg",
+        "/games/v2/characters/sam/reach.svg",
+        "/games/v2/characters/sam/carry.svg",
+        "/games/v2/characters/sam/resting.svg",
+        "/games/v2/characters/sam/walk-a.svg",
+        "/games/v2/characters/sam/walk-b.svg",
+        "/games/v2/audio/footstep.wav",
+        "/games/v2/audio/pickup.wav",
+        "/games/v2/audio/place.wav",
+        "/games/v2/audio/door.wav",
+        "/games/v2/props/keys.svg",
+        "/games/v2/props/bag-empty.svg",
+        "/games/v2/props/bag-packed.svg"
+      ],
+      "renderOrder": [
+        "background",
+        "furniture",
+        "state overlay",
+        "interactive props",
+        "characters",
+        "DOM controls"
+      ],
+      "minimumTarget": 48,
+      "motion": {
+        "acceptedActionMs": 140,
+        "placementMs": 220,
+        "transitionMs": 320,
+        "reducedMotion": "Use static poses, instantaneous placements and persistent status text; no automatic camera motion."
+      },
+      "audio": "Off until explicit consent. Semantic visible feedback accompanies every sound. Stop and release on exit."
+    },
+    "arjun": {
+      "title": "Hold the thread",
+      "genre": "Collaborative information puzzle",
+      "wall": "#E1E9F5",
+      "floor": "#9FB5D0",
+      "accent": "#607DA5",
+      "partner": "noor",
+      "props": [
+        "agenda-anchor",
+        "fact-tile",
+        "question-tile",
+        "idea-tile",
+        "parking-pocket",
+        "turn-token",
+        "repeat-token",
+        "decision-bridge",
+        "action-card",
+        "connection-pin"
+      ],
+      "tactics": [
+        "Anchor the agenda and clarify missing information",
+        "Park an idea and retrieve it when the decision needs it"
+      ],
+      "assets": [
+        "arjun/props/agenda-anchor",
+        "arjun/props/fact-tile",
+        "arjun/props/question-tile",
+        "arjun/props/idea-tile",
+        "arjun/props/parking-pocket",
+        "arjun/props/turn-token",
+        "arjun/props/repeat-token",
+        "arjun/props/decision-bridge",
+        "arjun/props/action-card",
+        "arjun/props/connection-pin",
+        "arjun/scenes/desktop/background",
+        "arjun/scenes/desktop/furniture",
+        "arjun/scenes/desktop/complication",
+        "arjun/scenes/desktop/strategy-setup",
+        "arjun/scenes/desktop/revisit",
+        "arjun/scenes/desktop/composition-preview",
+        "arjun/scenes/phone/background",
+        "arjun/scenes/phone/furniture",
+        "arjun/scenes/phone/complication",
+        "arjun/scenes/phone/strategy-setup",
+        "arjun/scenes/phone/revisit",
+        "arjun/scenes/phone/composition-preview",
+        "arjun/characters/offer-turn",
+        "arjun/characters/pin-anchor",
+        "arjun/characters/retrieve-idea"
+      ],
+      "reuse": [
+        "/games/v2/characters/arjun/neutral.svg",
+        "/games/v2/characters/arjun/thinking.svg",
+        "/games/v2/characters/arjun/overwhelmed.svg",
+        "/games/v2/characters/arjun/frustrated.svg",
+        "/games/v2/characters/arjun/sad.svg",
+        "/games/v2/characters/arjun/relieved.svg",
+        "/games/v2/characters/arjun/focused.svg",
+        "/games/v2/characters/arjun/reach.svg",
+        "/games/v2/characters/arjun/carry.svg",
+        "/games/v2/characters/arjun/resting.svg",
+        "/games/v2/characters/arjun/walk-a.svg",
+        "/games/v2/characters/arjun/walk-b.svg",
+        "/games/v2/characters/noor/neutral.svg",
+        "/games/v2/characters/noor/thinking.svg",
+        "/games/v2/characters/noor/overwhelmed.svg",
+        "/games/v2/characters/noor/frustrated.svg",
+        "/games/v2/characters/noor/sad.svg",
+        "/games/v2/characters/noor/relieved.svg",
+        "/games/v2/characters/noor/focused.svg",
+        "/games/v2/characters/noor/reach.svg",
+        "/games/v2/characters/noor/carry.svg",
+        "/games/v2/characters/noor/resting.svg",
+        "/games/v2/characters/noor/walk-a.svg",
+        "/games/v2/characters/noor/walk-b.svg",
+        "/games/v2/characters/rae/neutral.svg",
+        "/games/v2/characters/rae/thinking.svg",
+        "/games/v2/characters/rae/overwhelmed.svg",
+        "/games/v2/characters/rae/frustrated.svg",
+        "/games/v2/characters/rae/sad.svg",
+        "/games/v2/characters/rae/relieved.svg",
+        "/games/v2/characters/rae/focused.svg",
+        "/games/v2/characters/rae/reach.svg",
+        "/games/v2/characters/rae/carry.svg",
+        "/games/v2/characters/rae/resting.svg",
+        "/games/v2/characters/rae/walk-a.svg",
+        "/games/v2/characters/rae/walk-b.svg",
+        "/games/v2/audio/page-turn.wav",
+        "/games/v2/audio/place.wav",
+        "/games/v2/audio/pickup.wav",
+        "/games/v2/audio/complete.wav",
+        "/games/v2/props/agenda.svg",
+        "/games/v2/props/water-cup.svg"
+      ],
+      "renderOrder": [
+        "background",
+        "furniture",
+        "state overlay",
+        "interactive props",
+        "characters",
+        "DOM controls"
+      ],
+      "minimumTarget": 48,
+      "motion": {
+        "acceptedActionMs": 140,
+        "placementMs": 220,
+        "transitionMs": 320,
+        "reducedMotion": "Use static poses, instantaneous placements and persistent status text; no automatic camera motion."
+      },
+      "audio": "Off until explicit consent. Semantic visible feedback accompanies every sound. Stop and release on exit."
+    }
+  }
+}
