@@ -40,7 +40,9 @@ Zoe's art uses rose, parchment and muted plum; Mia uses lilac with distinct room
 
 Scenarios: late change (clarify why or openly propose an alternative); missed commitment (acknowledge impact and renegotiate); assumed household task (clarify ownership and allow separate responsibilities). Each scenario supports two valid routes and a repair after a sharp reply. Rae retains independent availability and preferences.
 
-### Mia: object-to-state mapping
+### Mia: original object-to-state mapping
+
+Implementation update, 22 September: user review rejected the room-and-inventory design as too similar to Theo. The replacement is a rotating thought-network puzzle. `MIA-IMPLEMENTATION.md` supersedes this section for gameplay; the original room assets remain available but are no longer used by the public Mia game.
 
 - `charger-loose` → `charger-docked`: player places the needed object at a chosen useful home; retain its ID and location.
 - `parcel-sealed` → `parcel-ready`: confirm the action on the parcel rather than treating finding it as completion.

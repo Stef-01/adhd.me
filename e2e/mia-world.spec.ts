@@ -1,15 +1,85 @@
-import {test,expect} from './support/test';
-import {expectNoViolations} from './support/a11y';
-import type {Page} from '@playwright/test';
-const URL='/lives/play/mia-remember-why';
-async function room(page:Page,name:string){const current=await page.locator('.mw-game').getAttribute('data-room');const key=name==='Living room'?'living':name.toLowerCase();if(current!==key&&current!=='hall')await page.getByRole('button',{name:'Go to Hall',exact:true}).click();await page.getByRole('button',{name:`Go to ${name}`,exact:true}).click();if(await page.getByRole('button',{name:'Ask Sam to collect',exact:true}).count())await page.getByRole('button',{name:'Ask Sam to collect',exact:true}).click()}
-async function first(page:Page){await room(page,'Bedroom');await page.getByRole('button',{name:'Pick up Charger',exact:true}).click();await room(page,'Study');await page.getByRole('button',{name:'Plug in laptop',exact:true}).click();await page.getByRole('button',{name:'Pick up Keys',exact:true}).click();await room(page,'Living room');await page.getByRole('button',{name:'Pick up Parcel',exact:true}).click();await room(page,'Hall');await page.getByRole('button',{name:'Prepare parcel',exact:true}).click();await expect(page.locator('.mw-game')).toHaveAttribute('data-phase','setup')}
-async function setup(page:Page,cue='Hallway cue'){for(const [item,home] of [['Charger','Study'],['Parcel','Hall'],['Keys','Hall']])await page.getByRole('button',{name:`Give ${item} a home in ${home}`,exact:true}).click();await page.getByRole('button',{name:cue,exact:true}).click();await page.getByRole('button',{name:'Sam collects it',exact:true}).click();await page.getByRole('button',{name:'Try tomorrow',exact:true}).click()}
-async function revisit(page:Page){await room(page,'Study');await page.getByRole('button',{name:'Plug in laptop',exact:true}).click();await room(page,'Hall');await expect(page.getByRole('status')).toContainText('Your note');await page.getByRole('button',{name:'Prepare parcel',exact:true}).click();await expect(page.locator('.mw-game')).toHaveAttribute('data-phase','complete')}
-test('library enters a spatial world, then placed homes and cues change the revisit',async({page})=>{await page.goto('/lives/characters');await page.getByRole('link',{name:'Play Mia’s moment →',exact:true}).click();await expect(page).toHaveURL(new RegExp(URL));await expect(page.getByRole('slider')).toHaveCount(0);await first(page);await setup(page);await revisit(page);await expect(page.getByRole('link',{name:'Try a cue in my day'})).toHaveAttribute('href','/lives/learn?module=external_cue_v1');await page.getByRole('button',{name:'Another morning',exact:true}).click();await expect(page.locator('.mw-game')).toHaveAttribute('data-phase','encounter')});
-test('carrying limits can be recovered from and accepting the book creates real work',async({page})=>{await page.goto(URL);await room(page,'Study');await page.getByRole('button',{name:'Pick up Keys',exact:true}).click();await page.getByRole('button',{name:'Pick up Book',exact:true}).click();await page.getByRole('button',{name:'Go to Hall',exact:true}).click();await page.getByRole('button',{name:'I’ll bring it',exact:true}).click();await room(page,'Bedroom');await page.getByRole('button',{name:'Pick up Charger',exact:true}).click();await expect(page.getByRole('status')).toContainText('Two hands full');await page.getByRole('button',{name:'Put down Book',exact:true}).click();await page.getByRole('button',{name:'Pick up Charger',exact:true}).click();await room(page,'Study');await page.getByRole('button',{name:'Plug in laptop',exact:true}).click();await room(page,'Living room');await page.getByRole('button',{name:'Pick up Parcel',exact:true}).click();await room(page,'Hall');await page.getByRole('button',{name:'Prepare parcel',exact:true}).click();await expect(page.locator('.mw-game')).toHaveAttribute('data-phase','encounter');await room(page,'Bedroom');await page.getByRole('button',{name:'Pick up Book',exact:true}).click();await room(page,'Living room');await page.getByRole('button',{name:'Leave book for Sam',exact:true}).click();await expect(page.locator('.mw-game')).toHaveAttribute('data-phase','setup')});
-test('pause preserves objects and the plan remains inspectable',async({page})=>{await page.goto(URL);await room(page,'Bedroom');await page.getByRole('button',{name:'Pick up Charger',exact:true}).click();await page.getByRole('button',{name:'Pause game',exact:true}).click();await expect(page.getByRole('button',{name:'Go to Hall',exact:true})).toBeDisabled();await page.getByRole('button',{name:'Resume',exact:true}).click();await expect(page.locator('.mw-game')).toHaveAttribute('data-hands','charger');await page.getByRole('button',{name:'The plan',exact:true}).click();await expect(page.getByLabel('Current intentions')).toContainText('Charge laptop')});
-test('layouts, accessible controls and exit survive both phases on small screens',async({page},info)=>{await page.emulateMedia({reducedMotion:'reduce'});for(const [width,height] of [[320,568],[390,844],[844,390],[1440,900]] as const){await page.setViewportSize({width,height});await page.goto(URL);await first(page);await setup(page,'Carry a note');await revisit(page);expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));const exit=page.getByRole('link',{name:'Back to games'});expect(await exit.evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))})).toBe(true);await exit.click()}
-await page.setViewportSize({width:390,height:844});await page.goto(URL);await expectNoViolations(page,'Mia encounter');if(info.project.name==='chromium')await page.screenshot({path:'qa/_runs/mia-phone.png',fullPage:true});await first(page);await expectNoViolations(page,'Mia setup');await setup(page);await expectNoViolations(page,'Mia revisit');await revisit(page);await expectNoViolations(page,'Mia complete')});
-test('touch can complete both encounters without writing fictional deficits',async({browser,baseURL})=>{const c=await browser.newContext({baseURL,viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});await c.addInitScript(()=>localStorage.setItem('adhdme-privacy-ack','1'));const page=await c.newPage();await page.goto(URL);const stored=await page.evaluate(()=>JSON.stringify(localStorage));
-for(const name of ['Go to Bedroom','Pick up Charger','Go to Hall','Ask Sam to collect','Go to Study','Plug in laptop','Pick up Keys','Go to Hall','Go to Living room','Pick up Parcel','Go to Hall','Prepare parcel','Give Charger a home in Study','Give Parcel a home in Hall','Give Keys a home in Hall','Hallway cue','Sam collects it','Try tomorrow','Carry this cue','Go to Study','Plug in laptop','Go to Hall','Prepare parcel'])await page.getByRole('button',{name,exact:true}).tap();await expect(page.locator('.mw-game')).toHaveAttribute('data-phase','complete');expect(await page.evaluate(()=>JSON.stringify(localStorage))).toBe(stored);await c.close()});
+import { test, expect } from './support/test';
+import { expectNoViolations } from './support/a11y';
+import type { Page } from '@playwright/test';
+import { solution, ports, PATHS } from '../src/lives/mia-world';
+test.setTimeout(90000);
+const URL = '/lives/play/mia-remember-why';
+async function solve(page: Page, tap = false) {
+  const round = Number(await page.locator('.mt-game').getAttribute('data-round'));
+  for (let pass = 0; pass < 3; pass++) {
+    for (const index of PATHS[round]!) {
+      const tile = page.locator(`.mt-tile[data-index="${index}"]`);
+      const expected = ports(solution(round)[index]!).sort().join();
+      for (let n = 0; n < 4; n++) {
+        const actual = (await tile.getAttribute('data-ports'))!.split(',').sort().join();
+        if (actual === expected) break;
+        if (tap) await tile.tap(); else await tile.click();
+        const park = page.getByRole('button', { name: 'Park for later' });
+        if (await park.count()) { if (tap) await park.tap(); else await park.click(); }
+      }
+    }
+  }
+  const send = page.getByRole('button', { name: 'Send thought', exact: true });
+  if (tap) await send.tap(); else await send.click();
+}
+async function toSetup(page: Page) {
+  for (let n = 0; n < 3; n++) { await solve(page); await page.getByRole('button', {name:n===2?'Give it a cue':'Next thread',exact:true}).click(); }
+  await expect(page.locator('.mt-game')).toHaveAttribute('data-phase','setup');
+}
+async function cue(page: Page) {
+  await page.getByRole('button',{name:'Write it down',exact:true}).click();
+  await page.getByRole('button',{name:'Anchor connection 7',exact:true}).click();
+  await page.getByRole('button',{name:'Try with my cue',exact:true}).click();
+}
+test('three distinct networks, cue practice and a changed revisit complete from the library', async ({page}) => {
+  await page.goto('/lives/characters');
+  await page.getByRole('link',{name:'Play Mia’s moment →',exact:true}).click();
+  await expect(page).toHaveURL(new RegExp(URL));
+  await expect(page.locator('.mw-house,.mw-pocket,.tm-game')).toHaveCount(0);
+  await expect(page.getByRole('slider')).toHaveCount(0);
+  await toSetup(page); await cue(page);
+  await expect(page.locator('.mt-tile[data-index="6"]')).toBeDisabled();
+  await solve(page); await expect(page.locator('.mt-game')).toHaveAttribute('data-phase','complete');
+  await expect(page.getByRole('link',{name:'Try a cue in my day'})).toHaveAttribute('href','/lives/learn?module=external_cue_v1');
+  await page.getByRole('button',{name:'Another thread'}).click();
+  await expect(page.locator('.mt-game')).toHaveAttribute('data-round','0');
+});
+test('loose ends, interruption, parking and pause are recoverable', async ({page}) => {
+  await page.goto(URL); await page.getByRole('button',{name:'Send thought',exact:true}).click();
+  await expect(page.getByRole('status')).toContainText('loose end');
+  for(let n=0;n<5;n++) await page.locator('.mt-tile').last().click();
+  await expect(page.getByText('Weekend plans',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Park for later'}).click();
+  const turns = await page.locator('.mt-tile').evaluateAll(es=>es.map(e=>e.getAttribute('data-turn')));
+  await page.getByRole('button',{name:'Pause game'}).click();
+  await expect(page.getByRole('group',{name:'Thought connections'})).toHaveCount(0);
+  await page.getByRole('button',{name:'Resume',exact:true}).click();
+  expect(await page.locator('.mt-tile').evaluateAll(es=>es.map(e=>e.getAttribute('data-turn')))).toEqual(turns);
+  await solve(page); await expect(page.getByRole('button',{name:'Next thread'})).toBeVisible();
+});
+test('phone, landscape and desktop controls stay accessible and exit remains reachable', async ({page}, info) => {
+  await page.emulateMedia({reducedMotion:'reduce'});
+  for(const [width,height] of [[320,568],[390,844],[844,390],[1440,900]] as const) {
+    await page.setViewportSize({width,height}); await page.goto(URL);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    const tile = await page.locator('.mt-tile').first().boundingBox(); expect(tile!.width).toBeGreaterThanOrEqual(48);
+    await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
+    expect(await page.getByRole('link',{name:'Back to games'}).evaluate(el=>{const r=el.getBoundingClientRect(); return r.top>=0&&r.bottom<=innerHeight&&el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})).toBe(true);
+  }
+  await page.setViewportSize({width:390,height:844}); await page.goto(URL);
+  await expectNoViolations(page,'Mia thought puzzle');
+  if(info.project.name==='chromium') await page.screenshot({path:'qa/_runs/mia-thread-phone.png',fullPage:true});
+  await toSetup(page); await expectNoViolations(page,'Mia cue setup'); await cue(page);
+  await expectNoViolations(page,'Mia cue revisit'); await solve(page); await expectNoViolations(page,'Mia completion');
+});
+test('touch and keyboard rotate the same stable targets without saving health inferences', async ({browser,baseURL}) => {
+  const context = await browser.newContext({baseURL,viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});
+  await context.addInitScript(()=>localStorage.setItem('adhdme-privacy-ack','1'));
+  const page=await context.newPage(); await page.goto(URL);
+  const before=await page.evaluate(()=>JSON.stringify(localStorage));
+  const first=page.locator('.mt-tile').first(); const turn=Number(await first.getAttribute('data-turn'));
+  await first.focus(); await page.keyboard.press('Enter');
+  expect(Number(await first.getAttribute('data-turn'))).toBe(turn+1);
+  await solve(page,true); await expect(page.getByRole('button',{name:'Next thread'})).toBeVisible();
+  expect(await page.evaluate(()=>JSON.stringify(localStorage))).toBe(before); await context.close();
+});

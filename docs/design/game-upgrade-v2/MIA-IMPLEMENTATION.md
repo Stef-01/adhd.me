@@ -1,25 +1,33 @@
-# Mia — Remember why
+# Mia — Keep the thread
 
-Implemented 22 September 2026 at `/lives/play/mia-remember-why`.
+Rebuilt 22 September 2026 at `/lives/play/mia-remember-why` after user review identified that the original room-and-inventory game repeated Theo.
 
-A spatial route puzzle using the original Mia asset kit. Players move through connected rooms, carry at most two objects, set objects down and retrieve those same objects later. Charging the laptop, preparing the parcel with its keys, and an optional book delivery have actual location dependencies. The hall connects every room. Three replay layouts change where objects begin.
+## What changed
 
-Sam interrupts after two room changes. Accepting the request adds a real delivery; asking Sam to collect is an equally valid outcome. The plan stays inspectable. There is no timer, speed score or irreversible failure. Pause preserves objects and room state, and hiding the tab pauses play.
+The room scene, object collection, carrying slots and delivery tasks are removed. Mia now uses a four-by-four rotating connection network: rotate stable tiles, send a pulse, inspect its path and repair a loose end. Three authored networks increase in length from eight to ten to twelve connected pieces. Replay changes starting rotations. No timer or reading-speed penalty is used.
 
-After the first encounter the player assigns homes to the charger, parcel and keys, chooses a portable or hallway cue, and agrees who brings the book. The revisit reads these exact choices. A portable cue follows Mia; a threshold cue resurfaces the plan when she crosses the hall. The cue can be moved during the revisit. The ending reports room changes and links to the existing external-cue module; it does not infer a clinical deficit from fictional gameplay.
+Interruptions are coupled to interaction, not a background clock. Every fifth rotation can nudge a different connection, with a maximum of two nudges per thread. The affected tile changes colour and the new thought is visible. Parking that exact thought stops further nudges in the current thread. Players may also continue without parking; recovery remains possible. At completion the saved thought labels return, rather than disappearing behind a count.
 
-## Implementation
+After the three networks, the player chooses writing the next action or saying it aloud, then pins a connection in the completed route. A new interruption follows. The selected connection retains its actual orientation and is protected from both rotation and interruption, while other connections start scrambled. This is a game metaphor for returning to an external cue, not a model of neurological function or evidence that cueing treats a condition. The existing external-cue module provides the practical follow-on.
 
-- `src/lives/mia-world.ts`: pure reducer, object identity, room topology, carrying capacity, request ownership and phase guards.
-- `app/lives/mia-world/player.tsx`: accessible room controls, separate inspectable inventory, responsive native SVG scene, reduced-motion support and focus management.
-- `app/styles/mia-world.css`: yellow navigation, lilac room world, independent layout and reachable sticky exit. Room controls preserve their positioning transform when pressed.
-- Static public route replaces the previous generic Mia journey; library links enter directly.
-- No new dependencies, external requests, personal-health writes or local-storage inference.
+## Deliberate contrast with Theo
 
-## Validation
+| | Theo | Rebuilt Mia |
+|---|---|---|
+| Main verb | Move, collect, prepare | Rotate, trace, reconnect |
+| Challenge | Chores, interruptions, departure | Network topology and displaced connections |
+| Composition | A furnished house and action panel | One centred abstract thought-board |
+| Visual treatment | Warm yellow, illustrated rooms | Deep plum, lilac connections, mint pulse, amber anchor |
+| Ending practice | Evening routine and object homes | Capture a thought and pin a return cue |
 
-11 reducer tests cover all replay layouts, recoverable carrying limits, object continuity, hallway routing, delivery dependencies, interruption, both cue types, repositioning, pause and phase guards. 15 browser checks across Chromium, WebKit and Firefox cover direct library entry, full encounter/setup/revisit, accepted book delivery, touch-only play, persistent exit, overflow at 320×568 / 390×844 / 844×390 / 1440×900, and automated accessibility checks at all four phases. Production build includes TypeScript validation.
+The platform navigation remains yellow. Mia keeps its canonical character artwork. The board is functional SVG geometry rendered inside accessible buttons, with native text and visible direction-based accessible names. Motion rotates the inner path, not the hit target. Reduced motion removes rotation animation and staggered highlights. Exit and pause remain independent of board state.
 
-Text audit: 98 screens measured, all 84 bounded app screens within their ceiling. Mia's audited states contain 22–35 words (entry 30, request 31, home setup 24, cue 22, owner 23, revisit 35, completion 24).
+## Verification and limits
 
-These checks establish functional behaviour, not clinical effectiveness or patient engagement. Patient co-design review and observed playtesting remain necessary. Replay variants currently change object placement, rather than introducing three entirely different narratives.
+Pure reducer tests cover all networks and eight replay seeds, bounded disturbances, parking identity, recoverable failed pulses, both cue choices, retained anchor orientation, phase guards and pause. Browser tests exercise library entry, every thread, setup and revisit, touch and keyboard parity, accessible states, small screens and exit hit targets. The text audit traverses all changed states.
+
+This supersedes the previous spatial-room implementation and its QA notes. Automated functional tests do not establish engagement or clinical effectiveness. Observed playtesting and patient co-design review remain outstanding. The two cue choices use the same protected-connection game mechanic, with different practical prompts; there is no microphone recording or speech assessment.
+
+Measured text: Mia entry 17 words, interruption 19, setup 22, cue selection 19, revisit 20, completion 37. All 83 bounded app screens in the 97-screen audit are within their ceiling. A continuous browser playthrough was recorded under `qa/_runs/mia-thread-video/`, alongside desktop, anchor and ending screenshots.
+
+Final verification: production build passed; all 10 reducer tests passed; all 12 browser checks passed across Chromium, WebKit and Firefox, including the four-phase accessibility scans. Final-build text recheck confirmed 17–37 words. Desktop comparison against Theo and phone screenshot review were completed.
