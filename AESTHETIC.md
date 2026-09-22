@@ -45,6 +45,15 @@ Two instruments do the parts that eyes are bad at, both against a `pnpm start` s
 Neither asserts. Both list what they could not reach and exit non-zero if anything went unmeasured,
 because "0 findings" and "measured nothing" look identical otherwise.
 
+**And `:focus-visible` cuts both ways, which is worth knowing before measuring anything about
+focus.** Chromium matches it for a focus moved by script when no pointer input preceded it, and
+does NOT match it once a click has happened. So a capture reached by `page.goto` shows a ring on a
+heading that a person clicking through never sees (above), and a sweep that calls
+`element.focus()` and looks for an outline finds nothing styled anywhere — run that way, the focus
+check reported 16 screens of bare controls. Driven by real Tab presses, all 684 tab stops across
+84 screens have a ring. `e2e/focus-visible.spec.ts` holds that, and presses Tab for the reason
+written at the top of it.
+
 ## Finder (`app/finder-stages/*`) — patient-facing, mobile-first, highest priority
 
 **RADIANT, unit 1 of 3 (2026-09-06, founder-directed: "make it exactly as the redesign").** The
