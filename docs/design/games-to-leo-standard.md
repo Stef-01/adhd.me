@@ -53,6 +53,25 @@ A game meets the standard when all of these are true. Reviewers tick them per ga
       least three states (neutral, engaged, the outcome), on a data attribute the CSS reads.
 - [ ] **Drawn pieces.** Every tappable, draggable or sortable piece is a drawn component with an
       accessible name equal to the old text. No text chips.
+
+      **Measured deviation, 2026-09-21: the search game captions its own answer.**
+      `Thing` in `app/lives/engines.tsx` takes a `caption` prop and its doc states the rule —
+      "a drawn piece named by its label; a caption where the word is the point." Two engines are
+      right to pass it: `SemanticFilter` (keep the brief, flick the cow) and `TracePath`, where
+      the named hazard is the thing being avoided. **`ObjectSearch` passes it too** (line 219),
+      and there the word is the opposite of the point: the round says "Find the charger." and
+      every object in the room wears a white pill reading `charger`, `sock`, `tiny horse`. The
+      search becomes reading, and §4's own plan for that game says "the room with decoys; the one
+      object glows when found".
+      Measured in both motion states — the captions are not a reduced-motion accommodation, they
+      are always on. The accessible name is on the button either way, so removing the caption
+      costs a screen reader nothing.
+      **Not removed here, because the likely reason it is there is the other half of this bar.**
+      The sprites in that room are hard to read as objects — a sock, a plug and a horse rendered
+      in one terracotta family at ~30px — and a caption is the cheap way to make an unrecognisable
+      drawing identifiable. Taking the words away without making the drawings legible would trade
+      a spoiled game for an unplayable one. So this is one item, not two: **the search game needs
+      art that can be searched, and then it needs its captions off.**
 - [ ] **Piece motion.** Each piece has one idle motion true to what it is (a bob, a flap, a drift,
       a wobble) and one reaction (squash, pop, flap off, shred, honk past, slide in). Both are off
       under `reducedMotion`; the reaction becomes an instant state change.
