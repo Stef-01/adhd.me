@@ -236,3 +236,22 @@
    card in it, so the reserve only comes off in the one state that outgrew it, where the grid's
    `minmax(0, 1fr)` scene gives up the space instead. The min-heights above still floor it. */
 .bedroom-footer:has(> [data-skill-match]) { height: auto; }
+
+/* A 390px-TALL SCREEN CANNOT HOLD ALL THREE, so the card is the one that goes.
+   At 844x390 on `complete` the footer grew to take the practitioner card, which squeezed the
+   middle grid row, and the centred caption overflowed UPWARD across the 48px toolbar and took the
+   hit area of "Back to learning" with it — measured, and `e2e/leo-room.spec.ts` names the covering
+   element (`<h1>`) rather than just reporting that something covers it, which is how this was
+   found rather than guessed.
+   Three fixes were tried before this one. Letting the game scroll itself (`overflow: auto`) does
+   nothing: the rows still fit a definite container height, so the caption overflows its own grid
+   AREA rather than the container, and there is nothing for the container to scroll. Clipping the
+   caption (`min-height: 0; overflow: hidden`) trades a covered control for a cut heading. Raising
+   the toolbar's z-index makes the control hit-testable again while leaving the heading's text
+   sitting under the icons.
+   So the supplementary thing is the thing that gives. The card is still on `/support`, on the hub,
+   and on this same screen at any height above 500px; what it must not do is cover the way out of
+   a game. If the landscape footer is ever re-cut to make room, delete this rule. */
+@media (max-height: 500px) {
+  .bedroom-footer [data-skill-match] { display: none; }
+}

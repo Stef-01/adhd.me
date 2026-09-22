@@ -198,16 +198,22 @@ test("every scene control fits small phones, landscape, tablets and full desktop
         expect(box!.width).toBeGreaterThanOrEqual(44);
         expect(box!.height).toBeGreaterThanOrEqual(44);
         if (await control.isEnabled()) {
-          const unobscured = await control.evaluate(el => {
+          // Reports WHAT covers it, not just that something does. The overlap this found was the
+          // caption's own h1 growing over the toolbar, which the bare boolean could not have said.
+          const probe = await control.evaluate(el => {
             const r = el.getBoundingClientRect();
             const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
-            return top === el || el.contains(top);
+            return {
+              ok: top === el || el.contains(top),
+              by: top ? `<${top.tagName.toLowerCase()} class="${typeof top.className === "string" ? top.className : ""}">` : "nothing",
+            };
           });
+          const unobscured = probe.ok;
           // The width and the phase belong in the message: without them this said only "Back to
           // learning", and finding which of eight viewports and four phases it meant took a
           // separate probe.
           const label = (await control.getAttribute("aria-label")) ?? (await control.innerText());
-          expect(unobscured, `${width}x${height} ${phase}: "${label}" is covered by something`).toBe(true);
+          expect(unobscured, `${width}x${height} ${phase}: "${label}" is covered by ${probe.by}`).toBe(true);
         }
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width!);
