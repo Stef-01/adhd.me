@@ -49,6 +49,7 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
+  ...["request", "setup", "cue", "owner", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
   ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
   { path: "/lives/play/theo-out-the-door", state: "theo-pause", name: "Theo, pause" },
@@ -327,6 +328,23 @@ export async function reach(page, route, base) {
     }
   }
 
+  if (route.state?.startsWith("mia-")) {
+    await page.goto(base + route.path);
+    const go = async name => { const current = await page.locator('.mw-game').getAttribute('data-room'); const key = name === 'Living room' ? 'living' : name.toLowerCase(); if (current !== key && current !== 'hall') await page.getByRole('button', {name:'Go to Hall',exact:true}).click(); await page.getByRole('button',{name:`Go to ${name}`,exact:true}).click(); };
+    const button = name => page.getByRole('button',{name,exact:true});
+    await go('Bedroom'); await button('Pick up Charger').click(); await go('Hall');
+    if (route.state === 'mia-request') return;
+    await button('Ask Sam to collect').click(); await go('Study'); await button('Plug in laptop').click(); await button('Pick up Keys').click(); await go('Living room'); await button('Pick up Parcel').click(); await go('Hall'); await button('Prepare parcel').click();
+    if (route.state === 'mia-setup') return;
+    for (const [item,room] of [['Charger','Study'],['Parcel','Hall'],['Keys','Hall']]) await button(`Give ${item} a home in ${room}`).click();
+    if (route.state === 'mia-cue') return;
+    await button('Hallway cue').click();
+    if (route.state === 'mia-owner') return;
+    await button('Sam collects it').click(); await button('Try tomorrow').click();
+    if (route.state === 'mia-revisit') return;
+    await go('Study'); await button('Plug in laptop').click(); await go('Hall'); await button('Prepare parcel').click();
+    return;
+  }
   if (route.state?.startsWith("zoe-")) {
     await page.goto(base + route.path);
     if (route.state === "zoe-calendar") { await page.getByRole("button", { name: "Calendar", exact: true }).click(); return; }

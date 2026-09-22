@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-22T08:10:28.739Z",
-  "base": "http://localhost:3152",
+  "measuredAt": "2026-09-22T10:44:08.288Z",
+  "base": "http://localhost:3155",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
-        },
-        {
-          "w": 3,
-          "text": "Round the right",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "Straight through",
-          "tag": "button"
+          "text": "CATCH IT!",
+          "tag": "p"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 10,
-      "fold": 10,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "DUCK OR GOOSE!",
+          "text": "WRITE THE LINE!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "honk",
-          "tag": "p"
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
         }
       ]
     },
@@ -544,6 +544,33 @@
         {
           "w": 3,
           "text": "Room to settle",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "/lives/play/mia-remember-why",
+      "state": null,
+      "total": 30,
+      "fold": 28,
+      "chrome": 3,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "Charge the laptop. Leave the parcel by the door.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "What did I come for?",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Nothing left here.",
           "tag": "span"
         }
       ]
@@ -1219,6 +1246,168 @@
       ]
     },
     {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, request",
+      "state": "mia-request",
+      "total": 31,
+      "fold": 31,
+      "chrome": 3,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Sam: ‘Could you bring my book too?’",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "What did I come for?",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Ask Sam to collect",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, setup",
+      "state": "mia-setup",
+      "total": 24,
+      "fold": 24,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Done. Give tomorrow’s things a home.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Leave a clue for later.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "A home for the",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, cue",
+      "state": "mia-cue",
+      "total": 22,
+      "fold": 22,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Leave a clue for later.",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "Where should the clue live?",
+          "tag": "h2"
+        },
+        {
+          "w": 3,
+          "text": "Carry a note",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, owner",
+      "state": "mia-owner",
+      "total": 23,
+      "fold": 23,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Leave a clue for later.",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "A note where rooms meet.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Mia brings it",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, revisit",
+      "state": "mia-revisit",
+      "total": 35,
+      "fold": 31,
+      "chrome": 3,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Same rooms. Your setup. Sam’s at the door.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "The room remembers.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Charge laptop · Study",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, complete",
+      "state": "mia-complete",
+      "total": 24,
+      "fold": 24,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "The cue kept the plan in view.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Try a cue in my day",
+          "tag": "a"
+        },
+        {
+          "w": 2,
+          "text": "Living room",
+          "tag": "button"
+        }
+      ]
+    },
+    {
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, compose",
       "state": "zoe-compose",
@@ -1357,10 +1546,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, complete",
       "state": "zoe-complete",
-      "total": 23,
-      "fold": 23,
+      "total": 28,
+      "fold": 28,
       "chrome": 4,
-      "ratio": 0.6,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1374,9 +1563,9 @@
           "tag": "h1"
         },
         {
-          "w": 2,
-          "text": "checks in ·",
-          "tag": "p"
+          "w": 5,
+          "text": "Try this in my day",
+          "tag": "a"
         }
       ]
     },
@@ -1602,7 +1791,7 @@
       "state": "bedroom-rest",
       "total": 27,
       "fold": 27,
-      "chrome": 10,
+      "chrome": 6,
       "ratio": 0.7,
       "verdict": "target",
       "longest": [
@@ -1735,25 +1924,25 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia: remember why",
       "state": null,
-      "total": 11,
-      "fold": 11,
-      "chrome": 1,
-      "ratio": 0.3,
+      "total": 30,
+      "fold": 28,
+      "chrome": 3,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Find the charger.",
+          "w": 9,
+          "text": "Charge the laptop. Leave the parcel by the door.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "What did I come for?",
           "tag": "h1"
         },
         {
-          "w": 2,
-          "text": "1 / 3",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "Your pace",
+          "w": 3,
+          "text": "Nothing left here.",
           "tag": "span"
         }
       ]
@@ -2000,26 +2189,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
-          "tag": "button"
-        },
-        {
           "w": 2,
-          "text": "STAY STILL!",
+          "text": "LIGHTS OUT!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "the spider",
+          "w": 1,
+          "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "10pm",
+          "tag": "button"
         }
       ]
     },
@@ -2455,17 +2644,5 @@
         }
       ]
     }
-  ],
-  "targetedRecheck": {
-    "base": "http://localhost:3153",
-    "scope": "Zoe states after restoring the completion link",
-    "totals": {
-      "compose": 32,
-      "calendar": 25,
-      "setup": 20,
-      "cue": 22,
-      "revisit": 29,
-      "complete": 28
-    }
-  }
+  ]
 }
