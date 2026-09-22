@@ -17,7 +17,7 @@ The standalone route now uses `ZoeWorldGame` and the pure `zoe-world` reducer in
 
 ## Validation
 
-Nine model tests cover feasible tactics, capacity, correction, repair, draft snapshots, pause, phase guards and strategy carryover. Fifteen browser cases across Chromium, WebKit and Firefox cover the actual library link, full gameplay, touch/keyboard, 320px phones, landscape, desktop, accessible names/contrast and the scrolled exit. Screenshot inspection covered the phone composition. The full text-budget audit measured the new entry and six later states; all were under 40 words before the five-word learning link, and the completed state remains under 40 with it. Production build and strict typechecking are required before publishing.
+Nine model tests cover feasible tactics, capacity, correction, repair, draft snapshots, pause, phase guards and strategy carryover. Fifteen browser cases across Chromium, WebKit and Firefox cover the actual library link, full gameplay, touch/keyboard, 320px phones, landscape, desktop, accessible names/contrast and the scrolled exit. Screenshot inspection covered the phone composition. The full 91-screen text audit passed its ceiling on all 77 app screens. A final targeted measurement after restoring the learning link measured Zoe at 20–32 words across the six later states, including 28 at completion. The merged production build and strict typecheck passed, along with all 45 related Zoe/Theo/Leo model tests.
 
 ## Remaining quality gates
 

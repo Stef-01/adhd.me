@@ -2455,5 +2455,17 @@
         }
       ]
     }
-  ]
+  ],
+  "targetedRecheck": {
+    "base": "http://localhost:3153",
+    "scope": "Zoe states after restoring the completion link",
+    "totals": {
+      "compose": 32,
+      "calendar": 25,
+      "setup": 20,
+      "cue": 22,
+      "revisit": 29,
+      "complete": 28
+    }
+  }
 }
