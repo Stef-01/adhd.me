@@ -90,7 +90,10 @@ function reconcile(s: BedroomState): BedroomState {
     if (s.book.page >= target && s.lamp === "off") return {
       ...s, mode: s.mode === "revisit" ? "complete" : "rest", activation: .08,
       book: { ...s.book, open: false }, events: [],
-      line: s.mode === "revisit" ? "You kept the changes. Leo found his place again." : "The room is ready. Nothing else to chase.",
+      // "Nothing else to chase." is already the rest screen's own heading, and this line is an
+      // aria-live status — so saying it again made the screen repeat itself in print and a screen
+      // reader announce it twice. The status says what changed and stops.
+      line: s.mode === "revisit" ? "You kept the changes. Leo found his place again." : "The room is ready.",
     };
     if (s.mode === "challenge" || s.mode === "recovery") return {
       ...s, mode: "wind-down", activation: Math.min(s.activation, .55), events: [],

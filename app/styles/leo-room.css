@@ -225,3 +225,14 @@
 .bedroom-game[data-challenge-only="true"] .bedroom-prop { pointer-events: none; }
 .bedroom-game[data-challenge-only="true"] .bedroom-prop-label { visibility: hidden; }
 .bedroom-round { font-size: 12px; white-space: nowrap; }
+
+/* THE COMPLETION FOOTER OUTGREW ITS RESERVE. A practitioner card was added to the finished
+   evening, and `.bedroom-footer`'s fixed height cannot hold it alongside the status line and the
+   two links: at 320x568 the card's bottom landed at 594 in a 568 viewport — 26px under the fold on
+   a screen that is `height: 100svh; overflow: clip` and therefore cannot be scrolled to reach it.
+   `e2e/leo-room.spec.ts` had been failing on exactly that.
+   The fixed height is deliberate and stays: it is what stops the scene jumping when the
+   next-evening button appears (leo-room-implementation-qa.md, defect 8). That transition has no
+   card in it, so the reserve only comes off in the one state that outgrew it, where the grid's
+   `minmax(0, 1fr)` scene gives up the space instead. The min-heights above still floor it. */
+.bedroom-footer:has(> [data-skill-match]) { height: auto; }

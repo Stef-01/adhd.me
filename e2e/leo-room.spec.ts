@@ -162,6 +162,27 @@ test("touch can play both evenings and audio is always an explicit choice", asyn
   await context.close();
 });
 
+/*
+ * KNOWN RED, NARROWED. This test has been failing on main with TWO separate faults, and it only
+ * ever reports the first one it meets, which is why it read as one intermittent problem.
+ *
+ *  1. FIXED. At 320x568 on `complete`, the practitioner card added to the finished evening pushed
+ *     its own bottom to 594 in a 568 viewport — 26px under the fold on a screen that is
+ *     `height: 100svh; overflow: clip` and so cannot be scrolled to reach it. `.bedroom-footer`
+ *     had a fixed height that could not hold the card beside the status line and the two links;
+ *     it now sizes to content in that one state (app/styles/leo-room.css).
+ *  2. STILL OPEN. At 844x390 on `complete` — the short-landscape layout, where the footer is a
+ *     245px left-hand COLUMN rather than a bottom bar — "Back to learning" in the toolbar is
+ *     covered by something. Measured: unobscured at 320 and 390 in every phase, and at every
+ *     width on the opening phase, so it is specific to the landscape completion layout and to the
+ *     card that now lands in it. Not fixed here because the fix is a design call: that screen is
+ *     390px tall, the game already fills it, and the honest options are to suppress a
+ *     supplementary card where there is no room for it or to re-cut the landscape footer.
+ *
+ * The assertion messages carry the width and the phase now. Without them the failure said only
+ * "Back to learning", and working out which of eight viewports and four phases it meant took a
+ * separate probe.
+ */
 test("every scene control fits small phones, landscape, tablets and full desktop", async ({ page }) => {
   test.setTimeout(90000);
   for (const [width, height] of [[320,568],[390,844],[768,1024],[1440,900],[1920,1080],[844,390],[568,320],[667,375]]) {
@@ -182,7 +203,11 @@ test("every scene control fits small phones, landscape, tablets and full desktop
             const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
             return top === el || el.contains(top);
           });
-          expect(unobscured, await control.getAttribute("aria-label") ?? await control.innerText()).toBe(true);
+          // The width and the phase belong in the message: without them this said only "Back to
+          // learning", and finding which of eight viewports and four phases it meant took a
+          // separate probe.
+          const label = (await control.getAttribute("aria-label")) ?? (await control.innerText());
+          expect(unobscured, `${width}x${height} ${phase}: "${label}" is covered by something`).toBe(true);
         }
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width!);
