@@ -1,0 +1,33 @@
+import {test,expect} from './support/test';
+import {expectNoViolations} from './support/a11y';
+import type {Page} from '@playwright/test';
+const URL='/lives/play/zoe-before-you-send';
+async function compose(page:Page){await page.getByRole('button',{name:'I’m not sure',exact:true}).click();await page.getByRole('button',{name:'More notice',exact:true}).click();await page.getByRole('button',{name:'Meet',exact:true}).click()}
+async function agree(page:Page){await compose(page);await page.getByRole('button',{name:'7 pm',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click()}
+async function setup(page:Page){await page.getByRole('button',{name:'Rae',exact:true}).click();await page.getByRole('button',{name:'Phone reminder',exact:true}).click();await page.getByRole('button',{name:'Later that evening',exact:true}).click()}
+test('direct entry, independent response, actual setup and changed revisit',async({page})=>{
+ await page.goto('/lives/characters');await page.getByRole('link',{name:'Play Zoe’s moment →',exact:true}).click();await expect(page).toHaveURL(new RegExp(URL));await expect(page.getByRole('heading',{name:'Plans changed.'})).toBeVisible();await expect(page.getByRole('slider')).toHaveCount(0);
+ await compose(page);await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.getByRole('status')).toContainText('working at six');
+ await page.getByRole('button',{name:'7 pm',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','setup');
+ await setup(page);await expect(page.getByRole('status')).toContainText('bus is late');await expect(page.locator('.zw-plan')).toContainText('7 pm');
+ await page.getByRole('button',{name:'Move it to 8 pm',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','complete');await expect(page.locator('.zw-plan')).toContainText('8 pm');await expect(page.locator('.zw-setup')).toContainText('Rae checks in');
+ await expect(page.getByRole('link',{name:'Try this in my day',exact:true})).toHaveAttribute('href','/lives/learn?module=pause_before_send_v1');
+ await page.getByRole('button',{name:'Another situation',exact:true}).click();await expect(page.getByRole('heading',{name:'Still waiting.'})).toBeVisible();
+});
+test('repair and a separate plan remain possible; draft and pause preserve work',async({page})=>{
+ await page.goto(URL);await page.getByRole('button',{name:'I’m not sure',exact:true}).click();await page.getByRole('button',{name:'Some space',exact:true}).click();await page.getByRole('button',{name:'Keep draft',exact:true}).click();await page.getByRole('button',{name:'Edit need'}).click();await page.getByRole('button',{name:'Time together',exact:true}).click();await page.getByRole('button',{name:'Restore draft',exact:true}).click();await expect(page.getByRole('button',{name:'Edit need'})).toContainText('Some space');
+ await page.getByRole('button',{name:'Send “Whatever.”',exact:true}).click();await page.getByRole('button',{name:'Pause game',exact:true}).click();await expect(page.getByRole('button',{name:'Propose',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Resume',exact:true}).click();await page.getByRole('button',{name:'Own the sharp reply',exact:true}).click();await page.getByRole('button',{name:'Separate plans',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await setup(page);await page.getByRole('button',{name:'Keep separate plans',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','complete');
+});
+test('late availability is not unlimited capacity',async({page})=>{
+ await page.goto(URL);await compose(page);await page.getByRole('button',{name:'8 pm',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.getByRole('status')).toContainText('short call');await page.getByRole('button',{name:'Call',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','setup');
+});
+test('phone, landscape and desktop remain accessible with a reachable exit',async({page},info)=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ for(const [width,height] of [[320,568],[390,844],[844,390],[1440,900]] as const){await page.setViewportSize({width,height});await page.goto(URL);await agree(page);await setup(page);await page.getByRole('button',{name:'Move it to 8 pm',exact:true}).click();expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));const exit=page.getByRole('link',{name:'Back to games'});expect(await exit.evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))})).toBe(true);await exit.click();await expect(page).toHaveURL(/approach\?pane=games/)}
+ await page.setViewportSize({width:390,height:844});await page.goto(URL);await expectNoViolations(page,'Zoe conversation');if(info.project.name==='chromium')await page.screenshot({path:'qa/_runs/zoe-phone.png',fullPage:true});await agree(page);await expectNoViolations(page,'Zoe strategy setup');await setup(page);await expectNoViolations(page,'Zoe revisit');await page.getByRole('button',{name:'Keep separate plans',exact:true}).click();await expectNoViolations(page,'Zoe complete');
+});
+
+test('touch and keyboard can complete the same plan without storing fictional performance',async({browser,baseURL})=>{
+ const context=await browser.newContext({baseURL,viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});await context.addInitScript(()=>localStorage.setItem('adhdme-privacy-ack','1'));const page=await context.newPage();await page.goto(URL);const stored=await page.evaluate(()=>JSON.stringify(localStorage));
+ await page.getByRole('button',{name:'I’m not sure',exact:true}).tap();await page.getByRole('button',{name:'Some space',exact:true}).tap();await page.getByRole('button',{name:'Separate plans',exact:true}).focus();await page.keyboard.press('Enter');await page.getByRole('button',{name:'Propose',exact:true}).tap();await setup(page);await page.getByRole('button',{name:'Keep separate plans',exact:true}).tap();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','complete');expect(await page.evaluate(()=>JSON.stringify(localStorage))).toBe(stored);await context.close();
+});

@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-21T23:09:46.761Z",
-  "base": "http://localhost:3620",
+  "measuredAt": "2026-09-22T08:10:28.739Z",
+  "base": "http://localhost:3152",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -120,10 +120,10 @@
       "path": "/approach/map",
       "name": "/approach/map",
       "state": null,
-      "total": 82,
-      "fold": 82,
+      "total": 150,
+      "fold": 79,
       "chrome": 6,
-      "ratio": 2.1,
+      "ratio": 3.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -132,14 +132,14 @@
           "tag": "p"
         },
         {
-          "w": 6,
-          "text": "Where ADHD sits in a life.",
-          "tag": "h1"
+          "w": 18,
+          "text": "The relationships that carry part of the load, or add to it: partner, family, ma",
+          "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Tap a part of life.",
-          "tag": "h2"
+          "w": 16,
+          "text": "How attention, memory, activation and emotion actually run for you, the part mos",
+          "tag": "p"
         }
       ]
     },
@@ -201,20 +201,20 @@
       "path": "/clinicians/join",
       "name": "/clinicians/join",
       "state": null,
-      "total": 30,
-      "fold": 30,
+      "total": 55,
+      "fold": 55,
       "chrome": 26,
-      "ratio": 0.8,
-      "verdict": "target",
+      "ratio": 1.4,
+      "verdict": "ceiling",
       "longest": [
         {
-          "w": 9,
-          "text": "Your name, your practice, what your week looks like.",
+          "w": 23,
+          "text": "Tell us your name, your practice and what your week actually looks like. Everyth",
           "tag": "p"
         },
         {
-          "w": 8,
-          "text": "One email, and a person replies. No forms.",
+          "w": 15,
+          "text": "One email, who you are and where you practise, and a person replies. No forms.",
           "tag": "p"
         },
         {
@@ -255,25 +255,25 @@
       "path": "/examples",
       "name": "/examples",
       "state": null,
-      "total": 121,
-      "fold": 121,
+      "total": 236,
+      "fold": 149,
       "chrome": 25,
-      "ratio": 3,
+      "ratio": 5.9,
       "verdict": "long-form",
       "longest": [
         {
-          "w": 19,
-          "text": "The order is overlap between your words and what each GP declares, never a judge",
+          "w": 47,
+          "text": "The order is never a judgement about who is a better doctor. It is overlap betwe",
           "tag": "p"
         },
         {
-          "w": 12,
-          "text": "Demo scenarios, not patients. Each result is computed live by the finder.",
+          "w": 43,
+          "text": "These are demo scenarios, not patients, nobody’s story is used to sell anything ",
           "tag": "p"
         },
         {
-          "w": 10,
-          "text": "The order was earned; the reason is on the card.",
+          "w": 35,
+          "text": "The scenarios themselves are not printed here: they are written as somebody woul",
           "tag": "p"
         }
       ]
@@ -336,10 +336,10 @@
       "path": "/lives",
       "name": "/lives",
       "state": null,
-      "total": 25,
-      "fold": 25,
+      "total": 27,
+      "fold": 27,
       "chrome": 6,
-      "ratio": 0.6,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -363,8 +363,8 @@
       "path": "/lives/characters",
       "name": "/lives/characters",
       "state": null,
-      "total": 51,
-      "fold": 20,
+      "total": 53,
+      "fold": 22,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -390,10 +390,10 @@
       "path": "/lives/lab",
       "name": "/lives/lab",
       "state": null,
-      "total": 516,
+      "total": 518,
       "fold": 53,
       "chrome": 6,
-      "ratio": 12.9,
+      "ratio": 13,
       "verdict": "long-form",
       "longest": [
         {
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 9,
-      "fold": 9,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "CATCH IT!",
+          "w": 3,
+          "text": "DUCK OR GOOSE!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "honk",
+          "tag": "p"
         }
       ]
     },
@@ -572,6 +572,33 @@
           "w": 4,
           "text": "A morning with Theo",
           "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "/lives/play/zoe-before-you-send",
+      "state": null,
+      "total": 27,
+      "fold": 27,
+      "chrome": 4,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Ask what happened",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "I’m not sure",
+          "tag": "button"
         }
       ]
     },
@@ -668,7 +695,7 @@
         },
         {
           "w": 6,
-          "text": "Nothing to tell us about yet",
+          "text": "Nothing to tell us about yet.",
           "tag": "h1"
         },
         {
@@ -695,7 +722,7 @@
         },
         {
           "w": 4,
-          "text": "Nothing to prepare yet",
+          "text": "Nothing to prepare yet.",
           "tag": "h1"
         },
         {
@@ -717,7 +744,7 @@
       "longest": [
         {
           "w": 4,
-          "text": "Nothing to show yet",
+          "text": "Nothing to show yet.",
           "tag": "h1"
         },
         {
@@ -764,7 +791,7 @@
       "name": "/my-adhd",
       "state": null,
       "total": 25,
-      "fold": 16,
+      "fold": 25,
       "chrome": 6,
       "ratio": 0.6,
       "verdict": "target",
@@ -1192,13 +1219,175 @@
       ]
     },
     {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, compose",
+      "state": "zoe-compose",
+      "total": 32,
+      "fold": 32,
+      "chrome": 4,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Ask what happened",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "I’m not sure",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, calendar",
+      "state": "zoe-calendar",
+      "total": 25,
+      "fold": 25,
+      "chrome": 4,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Ask what happened",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Room for both.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, setup",
+      "state": "zoe-setup",
+      "total": 20,
+      "fold": 20,
+      "chrome": 4,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "‘Agreed. Let’s give changes a clear check-in.’",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Give the plan a place.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Who checks in?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, cue",
+      "state": "zoe-cue",
+      "total": 22,
+      "fold": 22,
+      "chrome": 4,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Rae will check in. Zoe will reply.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Give the plan a place.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Where will it live?",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, revisit",
+      "state": "zoe-revisit",
+      "total": 29,
+      "fold": 29,
+      "chrome": 4,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "‘The bus is late. Could we make it eight?’",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Move it to 8 pm",
+          "tag": "button"
+        },
+        {
+          "w": 4,
+          "text": "A plan can change.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, complete",
+      "state": "zoe-complete",
+      "total": 23,
+      "fold": 23,
+      "chrome": 4,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "A new time. The owner and reminder stay.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Still on the same side.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "checks in ·",
+          "tag": "p"
+        }
+      ]
+    },
+    {
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, competing demands",
       "state": "theo-busy",
-      "total": 40,
-      "fold": 40,
+      "total": 36,
+      "fold": 36,
       "chrome": 4,
-      "ratio": 1,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -1573,26 +1762,26 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe: before send",
       "state": null,
-      "total": 11,
-      "fold": 11,
-      "chrome": 1,
-      "ratio": 0.3,
+      "total": 27,
+      "fold": 27,
+      "chrome": 4,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Leave send alone.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Rae: ‘Can we move dinner?’",
+          "tag": "p"
         },
         {
           "w": 3,
-          "text": "I held off",
+          "text": "Ask what happened",
           "tag": "button"
         },
         {
-          "w": 2,
-          "text": "1 / 3",
-          "tag": "span"
+          "w": 3,
+          "text": "I’m not sure",
+          "tag": "button"
         }
       ]
     },
@@ -1811,20 +2000,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 3,
-      "fold": 3,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "JUST MILK!",
+          "text": "STAY STILL!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 2,
+          "text": "the spider",
           "tag": "span"
         }
       ]
@@ -1833,8 +2027,8 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 50,
-      "fold": 33,
+      "total": 53,
+      "fold": 36,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -1969,7 +2163,7 @@
       "name": "My ADHD, lived in",
       "state": "model-lived",
       "total": 55,
-      "fold": 21,
+      "fold": 35,
       "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
@@ -1996,7 +2190,7 @@
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
       "total": 60,
-      "fold": 21,
+      "fold": 35,
       "chrome": 6,
       "ratio": 1.5,
       "verdict": "ceiling",
@@ -2261,5 +2455,17 @@
         }
       ]
     }
-  ]
+  ],
+  "targetedRecheck": {
+    "base": "http://localhost:3153",
+    "scope": "Zoe states after restoring the completion link",
+    "totals": {
+      "compose": 32,
+      "calendar": 25,
+      "setup": 20,
+      "cue": 22,
+      "revisit": 29,
+      "complete": 28
+    }
+  }
 }
