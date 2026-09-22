@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-22T08:55:39.513Z",
-  "base": "http://localhost:3620",
+  "measuredAt": "2026-09-22T10:44:08.288Z",
+  "base": "http://localhost:3155",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -120,10 +120,10 @@
       "path": "/approach/map",
       "name": "/approach/map",
       "state": null,
-      "total": 82,
-      "fold": 82,
+      "total": 150,
+      "fold": 79,
       "chrome": 6,
-      "ratio": 2.1,
+      "ratio": 3.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -132,14 +132,14 @@
           "tag": "p"
         },
         {
-          "w": 6,
-          "text": "Where ADHD sits in a life.",
-          "tag": "h1"
+          "w": 18,
+          "text": "The relationships that carry part of the load, or add to it: partner, family, ma",
+          "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Tap a part of life.",
-          "tag": "h2"
+          "w": 16,
+          "text": "How attention, memory, activation and emotion actually run for you, the part mos",
+          "tag": "p"
         }
       ]
     },
@@ -201,20 +201,20 @@
       "path": "/clinicians/join",
       "name": "/clinicians/join",
       "state": null,
-      "total": 30,
-      "fold": 30,
+      "total": 55,
+      "fold": 55,
       "chrome": 26,
-      "ratio": 0.8,
-      "verdict": "target",
+      "ratio": 1.4,
+      "verdict": "ceiling",
       "longest": [
         {
-          "w": 9,
-          "text": "Your name, your practice, what your week looks like.",
+          "w": 23,
+          "text": "Tell us your name, your practice and what your week actually looks like. Everyth",
           "tag": "p"
         },
         {
-          "w": 8,
-          "text": "One email, and a person replies. No forms.",
+          "w": 15,
+          "text": "One email, who you are and where you practise, and a person replies. No forms.",
           "tag": "p"
         },
         {
@@ -255,25 +255,25 @@
       "path": "/examples",
       "name": "/examples",
       "state": null,
-      "total": 121,
-      "fold": 121,
+      "total": 236,
+      "fold": 149,
       "chrome": 25,
-      "ratio": 3,
+      "ratio": 5.9,
       "verdict": "long-form",
       "longest": [
         {
-          "w": 19,
-          "text": "The order is overlap between your words and what each GP declares, never a judge",
+          "w": 47,
+          "text": "The order is never a judgement about who is a better doctor. It is overlap betwe",
           "tag": "p"
         },
         {
-          "w": 12,
-          "text": "Demo scenarios, not patients. Each result is computed live by the finder.",
+          "w": 43,
+          "text": "These are demo scenarios, not patients, nobody’s story is used to sell anything ",
           "tag": "p"
         },
         {
-          "w": 10,
-          "text": "The order was earned; the reason is on the card.",
+          "w": 35,
+          "text": "The scenarios themselves are not printed here: they are written as somebody woul",
           "tag": "p"
         }
       ]
@@ -336,10 +336,10 @@
       "path": "/lives",
       "name": "/lives",
       "state": null,
-      "total": 25,
-      "fold": 25,
+      "total": 27,
+      "fold": 27,
       "chrome": 6,
-      "ratio": 0.6,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -363,8 +363,8 @@
       "path": "/lives/characters",
       "name": "/lives/characters",
       "state": null,
-      "total": 51,
-      "fold": 20,
+      "total": 53,
+      "fold": 22,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -390,10 +390,10 @@
       "path": "/lives/lab",
       "name": "/lives/lab",
       "state": null,
-      "total": 516,
+      "total": 518,
       "fold": 53,
       "chrome": 6,
-      "ratio": 12.9,
+      "ratio": 13,
       "verdict": "long-form",
       "longest": [
         {
@@ -444,20 +444,20 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 12,
-      "fold": 12,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DUCK OR GOOSE!",
-          "tag": "p"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
-          "w": 3,
-          "text": "hissing at you",
+          "w": 2,
+          "text": "CATCH IT!",
           "tag": "p"
         },
         {
@@ -498,25 +498,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LIGHTS OUT!",
+          "w": 3,
+          "text": "WRITE THE LINE!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "10pm",
+          "w": 3,
+          "text": "Round the right",
           "tag": "button"
         }
       ]
@@ -544,6 +544,33 @@
         {
           "w": 3,
           "text": "Room to settle",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "/lives/play/mia-remember-why",
+      "state": null,
+      "total": 30,
+      "fold": 28,
+      "chrome": 3,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 9,
+          "text": "Charge the laptop. Leave the parcel by the door.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "What did I come for?",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Nothing left here.",
           "tag": "span"
         }
       ]
@@ -791,7 +818,7 @@
       "name": "/my-adhd",
       "state": null,
       "total": 25,
-      "fold": 16,
+      "fold": 25,
       "chrome": 6,
       "ratio": 0.6,
       "verdict": "target",
@@ -1215,6 +1242,168 @@
           "w": 3,
           "text": "In danger now",
           "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, request",
+      "state": "mia-request",
+      "total": 31,
+      "fold": 31,
+      "chrome": 3,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Sam: ‘Could you bring my book too?’",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "What did I come for?",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Ask Sam to collect",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, setup",
+      "state": "mia-setup",
+      "total": 24,
+      "fold": 24,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Done. Give tomorrow’s things a home.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Leave a clue for later.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "A home for the",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, cue",
+      "state": "mia-cue",
+      "total": 22,
+      "fold": 22,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Leave a clue for later.",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "Where should the clue live?",
+          "tag": "h2"
+        },
+        {
+          "w": 3,
+          "text": "Carry a note",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, owner",
+      "state": "mia-owner",
+      "total": 23,
+      "fold": 23,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Leave a clue for later.",
+          "tag": "h1"
+        },
+        {
+          "w": 5,
+          "text": "A note where rooms meet.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Mia brings it",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, revisit",
+      "state": "mia-revisit",
+      "total": 35,
+      "fold": 31,
+      "chrome": 3,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Same rooms. Your setup. Sam’s at the door.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "The room remembers.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Charge laptop · Study",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/mia-remember-why",
+      "name": "Mia, complete",
+      "state": "mia-complete",
+      "total": 24,
+      "fold": 24,
+      "chrome": 3,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "The cue kept the plan in view.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Try a cue in my day",
+          "tag": "a"
+        },
+        {
+          "w": 2,
+          "text": "Living room",
+          "tag": "button"
         }
       ]
     },
@@ -1735,25 +1924,25 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia: remember why",
       "state": null,
-      "total": 11,
-      "fold": 11,
-      "chrome": 1,
-      "ratio": 0.3,
+      "total": 30,
+      "fold": 28,
+      "chrome": 3,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Find the charger.",
+          "w": 9,
+          "text": "Charge the laptop. Leave the parcel by the door.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "What did I come for?",
           "tag": "h1"
         },
         {
-          "w": 2,
-          "text": "1 / 3",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "Your pace",
+          "w": 3,
+          "text": "Nothing left here.",
           "tag": "span"
         }
       ]
@@ -2008,7 +2197,7 @@
       "longest": [
         {
           "w": 2,
-          "text": "GET OUT!",
+          "text": "LIGHTS OUT!",
           "tag": "p"
         },
         {
@@ -2018,8 +2207,8 @@
         },
         {
           "w": 1,
-          "text": "shoes",
-          "tag": "span"
+          "text": "10pm",
+          "tag": "button"
         }
       ]
     },
@@ -2027,8 +2216,8 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 50,
-      "fold": 33,
+      "total": 53,
+      "fold": 36,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -2163,7 +2352,7 @@
       "name": "My ADHD, lived in",
       "state": "model-lived",
       "total": 55,
-      "fold": 21,
+      "fold": 35,
       "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
@@ -2190,7 +2379,7 @@
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
       "total": 60,
-      "fold": 21,
+      "fold": 35,
       "chrome": 6,
       "ratio": 1.5,
       "verdict": "ceiling",

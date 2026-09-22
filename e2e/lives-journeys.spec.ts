@@ -6,8 +6,8 @@ import { layoutGame, SCENE } from "../src/lives/layout";
 import { JOURNEYS } from "../src/lives/journeys";
 import { expectNoViolations } from "./support/a11y";
 
-// Zoe has a dedicated stateful world, covered end-to-end in zoe-world.spec.ts.
-for (const journey of JOURNEYS.filter(j => j.who !== "zoe")) {
+// Zoe and Mia have dedicated stateful worlds with their own full-flow suites.
+for (const journey of JOURNEYS.filter(j => j.who !== "zoe" && j.who !== "mia")) {
   test(`${journey.who}: direct entry, every round, practical ending and replay`, async ({ page }) => {
     test.setTimeout(60000);
     await page.emulateMedia({ reducedMotion: "reduce" });
