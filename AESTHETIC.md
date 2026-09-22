@@ -34,10 +34,13 @@ Two instruments do the parts that eyes are bad at, both against a `pnpm start` s
   h1 that a person clicking through never gets. Measured on `/practitioner/[id]`: `solid 2px` in the
   capture, `outlineStyle: "none"` after a real click-through. Reach the screen the way a person does
   before changing anything about a ring you saw in a capture.
-- `BASE=... node scripts/target-sweep.mjs` — sideways scroll, controls a thumb cannot land on, and
-  text clipped by its own box, at 320 and 390. It reports where a 44px thumb actually lands rather
-  than what the CSS declared, because the tree extends small controls with a transparent `::after`
-  pad and a `for`-associated label is part of its control's target.
+- `BASE=... node scripts/target-sweep.mjs` — sideways scroll, a control sliced by the viewport edge
+  without the page scrolling at all, a control a thumb cannot land on, and text clipped by its own
+  box, at **320, 390, 768 and 1280**. It reports where a 44px thumb actually lands rather than what
+  the CSS declared, because the tree extends small controls with a transparent `::after` pad and a
+  `for`-associated label is part of its control's target. It defaulted to the two phone widths
+  until 2026-09-21, which meant the patient screens had never been swept at a tablet or a desktop
+  by it — measured at those two on the same day: nothing.
 
 Neither asserts. Both list what they could not reach and exit non-zero if anything went unmeasured,
 because "0 findings" and "measured nothing" look identical otherwise.
