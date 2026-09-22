@@ -162,3 +162,20 @@
 @media (prefers-reduced-motion: reduce) { .platform-shell *, .platform-shell *::before, .platform-shell *::after { animation-duration: 0s; transition-duration: 0s; scroll-behavior: auto; } }
 /* The games scope is a marker for the glass, not a box: its children keep the pane's own layout. */
 .platform-shell .learn-games-scope { display: contents; }
+
+/* Every character game is a direct destination, not hidden inside the cast screen. */
+.learn-game-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:4px 0 18px; }
+.learn-game-toolbar a { display:inline-flex; gap:8px; align-items:center; min-height:48px; font-size:13px; color:var(--ink); text-decoration:none; }
+.learn-game-toolbar .learn-mix-link { background:var(--ink); color:var(--paper); border-radius:99px; padding:12px 20px; }
+.learn-game-roster { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; padding:0; margin:0 0 26px; list-style:none; }
+.learn-game-roster li { min-width:0; }
+.learn-game-roster a { display:flex; align-items:center; gap:12px; min-height:112px; padding:20px 14px; background:var(--game-colour); color:#26323c; border-radius:24px; text-decoration:none; transition:transform 180ms,background 180ms; }
+.learn-game-roster a>span { min-width:0; display:flex; flex-direction:column; gap:5px; }
+.learn-game-roster strong { font-size:17px; }
+.learn-game-roster small { font-size:12px; }
+.learn-game-roster a>svg:last-child { margin-left:auto; flex-shrink:0; }
+.learn-game-roster a:focus-visible { outline:3px solid var(--ink); outline-offset:4px; }
+@media(hover:hover) { .learn-game-roster a:hover { transform:translateY(-3px); } }
+@media(max-width:1100px) { .learn-game-roster { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:460px) { .learn-game-roster { gap:10px; } .learn-game-roster a { gap:8px; padding:16px 10px; min-height:104px; border-radius:20px; } .learn-game-roster a>svg:last-child { display:none; } .learn-game-roster a>svg:first-child { width:42px; flex-shrink:0; } .learn-game-roster strong { font-size:15px; } .learn-game-roster small { font-size:10px; } }
+@media(prefers-reduced-motion:reduce) { .learn-game-roster a { transition:none; } .learn-game-roster a:hover { transform:none; } }

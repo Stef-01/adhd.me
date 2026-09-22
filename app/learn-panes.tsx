@@ -31,8 +31,7 @@ import type { LearnCursor } from "@/learn/cursor";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { LearningCoverArt, LearningScene } from "./learning-scene";
 import { LifeBean } from "./lives/bean";
-import { LeoBedroom } from "./lives/leo-mosquito";
-import { TheoHallway } from "./lives/theo-art";
+import { GAME_ENTRY } from "@/lives/entry-points";
 import { useProfile } from "./lives/profile-hook";
 import { Bean } from "./play/beans";
 
@@ -284,33 +283,15 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { pr
   return (
     <div className="learn-games-scope" data-liquid>
       <Completion completed={completedRun} start={start} />
-      <div className="learn-pane-top">
-      <div className="learn-play-card">
-        <div className="lives-cast" aria-hidden="true">
-          {CHARACTERS.map((c) => (
-            <LifeBean key={c.id} who={c.id} mood="engaged" size={40} />
-          ))}
-        </div>
-        <Link className="play-tempt is-go lives-play" href="/lives/play" data-testid="learn-play">
-          <Play size={20} weight="fill" aria-hidden="true" /> Play
-        </Link>
-        <Link className="learn-play-cast-link" href="/lives/characters">
-          The eight lives <ArrowRight size={16} weight="bold" aria-hidden="true" />
-        </Link>
+      <div className="learn-game-toolbar">
+        <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true"/>Play mix</Link>
+        <Link href="/lives/characters">The eight lives <ArrowRight size={16} aria-hidden="true"/></Link>
       </div>
-      <Link className="leo-feature" href="/lives/play/leo-mosquito">
-        <span className="leo-feature-art">
-          <LeoBedroom />
-        </span>
-        <span>
-          <strong>One tiny sound.</strong>
-          <span>
-            Play Leo&rsquo;s moment <ArrowRight size={18} />
-          </span>
-        </span>
-      </Link>
-      </div>
-      <Link className="leo-feature theo-feature" href="/lives/play/theo-out-the-door"><span className="leo-feature-art"><TheoHallway /></span><span><strong>Just get out the door.</strong><span>Theo’s morning <ArrowRight size={18} /></span></span></Link>
+      <ul className="learn-game-roster" aria-label="All eight character games">
+        {CHARACTERS.map(c=>{const entry=GAME_ENTRY[c.id];return <li key={c.id}><Link href={entry.href} aria-label={`Play ${c.name}`} style={{'--game-colour':entry.colour} as React.CSSProperties}>
+          <LifeBean who={c.id} mood="engaged" size={58}/><span><strong>{c.name}</strong><small>{entry.label}</small></span><ArrowRight size={18} aria-hidden="true"/>
+        </Link></li>})}
+      </ul>
       <ol className="learn-stack" data-testid="learn-games">
         {runs.map((module, index) => (
           <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />

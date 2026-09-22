@@ -49,6 +49,7 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
+  ...["options", "setup", "owner", "negotiation", "revisit", "revisit-options", "complete"].map(state => ({ path: "/lives/play/arjun-hold-the-thread", state: `arjun-${state}`, name: `Arjun, ${state}` })),
   ...["interruption", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
   ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
@@ -328,6 +329,19 @@ export async function reach(page, route, base) {
     }
   }
 
+  if (route.state?.startsWith("arjun-")) {
+    await page.goto(base + route.path);
+    const tap = name => page.getByRole('button',{name,exact:true}).click();
+    for(const name of ['Ask Noor','Ask Rae','Pin Step-free','Park idea','Pin 2pm','Options','Choose Studio']) await tap(name);
+    if(route.state==='arjun-options') return;
+    await tap('Connect the plan'); if(route.state==='arjun-setup') return;
+    await tap('Pin the question'); if(route.state==='arjun-owner') return;
+    await tap('Rae'); await tap('Today'); if(route.state==='arjun-negotiation') return;
+    await tap('Tomorrow'); await tap('Next meeting'); if(route.state==='arjun-revisit') return;
+    for(const name of ['Ask Rae','Return 6 people to notes','Retrieve A quiet break','Options','Choose Library']) await tap(name);
+    if(route.state==='arjun-revisit-options') return;
+    await tap('Connect the plan'); return;
+  }
   if (route.state?.startsWith("mia-")) {
     await page.goto(base + route.path);
     const paths = [[4,0,1,5,9,10,6,7],[4,8,12,13,9,5,6,10,11,7],[4,5,1,2,6,10,9,13,14,15,11,7]];
