@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-22T12:28:04.989Z",
-  "base": "http://localhost:3157",
+  "measuredAt": "2026-09-22T13:19:22.832Z",
+  "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -120,10 +120,10 @@
       "path": "/approach/map",
       "name": "/approach/map",
       "state": null,
-      "total": 150,
-      "fold": 79,
+      "total": 82,
+      "fold": 82,
       "chrome": 6,
-      "ratio": 3.8,
+      "ratio": 2.1,
       "verdict": "long-form",
       "longest": [
         {
@@ -132,14 +132,14 @@
           "tag": "p"
         },
         {
-          "w": 18,
-          "text": "The relationships that carry part of the load, or add to it: partner, family, ma",
-          "tag": "p"
+          "w": 6,
+          "text": "Where ADHD sits in a life.",
+          "tag": "h1"
         },
         {
-          "w": 16,
-          "text": "How attention, memory, activation and emotion actually run for you, the part mos",
-          "tag": "p"
+          "w": 5,
+          "text": "Tap a part of life.",
+          "tag": "h2"
         }
       ]
     },
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "03:04 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -201,20 +201,20 @@
       "path": "/clinicians/join",
       "name": "/clinicians/join",
       "state": null,
-      "total": 55,
-      "fold": 55,
+      "total": 30,
+      "fold": 30,
       "chrome": 26,
-      "ratio": 1.4,
-      "verdict": "ceiling",
+      "ratio": 0.8,
+      "verdict": "target",
       "longest": [
         {
-          "w": 23,
-          "text": "Tell us your name, your practice and what your week actually looks like. Everyth",
+          "w": 9,
+          "text": "Your name, your practice, what your week looks like.",
           "tag": "p"
         },
         {
-          "w": 15,
-          "text": "One email, who you are and where you practise, and a person replies. No forms.",
+          "w": 8,
+          "text": "One email, and a person replies. No forms.",
           "tag": "p"
         },
         {
@@ -255,25 +255,25 @@
       "path": "/examples",
       "name": "/examples",
       "state": null,
-      "total": 236,
-      "fold": 149,
+      "total": 121,
+      "fold": 121,
       "chrome": 25,
-      "ratio": 5.9,
+      "ratio": 3,
       "verdict": "long-form",
       "longest": [
         {
-          "w": 47,
-          "text": "The order is never a judgement about who is a better doctor. It is overlap betwe",
+          "w": 19,
+          "text": "The order is overlap between your words and what each GP declares, never a judge",
           "tag": "p"
         },
         {
-          "w": 43,
-          "text": "These are demo scenarios, not patients, nobody’s story is used to sell anything ",
+          "w": 12,
+          "text": "Demo scenarios, not patients. Each result is computed live by the finder.",
           "tag": "p"
         },
         {
-          "w": 35,
-          "text": "The scenarios themselves are not printed here: they are written as somebody woul",
+          "w": 10,
+          "text": "The order was earned; the reason is on the card.",
           "tag": "p"
         }
       ]
@@ -336,10 +336,10 @@
       "path": "/lives",
       "name": "/lives",
       "state": null,
-      "total": 27,
-      "fold": 27,
+      "total": 25,
+      "fold": 25,
       "chrome": 6,
-      "ratio": 0.7,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -363,8 +363,8 @@
       "path": "/lives/characters",
       "name": "/lives/characters",
       "state": null,
-      "total": 53,
-      "fold": 22,
+      "total": 51,
+      "fold": 20,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -390,10 +390,10 @@
       "path": "/lives/lab",
       "name": "/lives/lab",
       "state": null,
-      "total": 518,
+      "total": 516,
       "fold": 53,
       "chrome": 6,
-      "ratio": 13,
+      "ratio": 12.9,
       "verdict": "long-form",
       "longest": [
         {
@@ -444,25 +444,25 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 9,
-      "fold": 9,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
           "w": 2,
-          "text": "DELETE DRAFTS!",
+          "text": "GET OUT!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "door",
           "tag": "span"
         }
       ]
@@ -498,16 +498,16 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 6,
+      "fold": 6,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LOCK IN!",
-          "tag": "p"
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
         },
         {
           "w": 1,
@@ -516,8 +516,8 @@
         },
         {
           "w": 1,
-          "text": "report",
-          "tag": "span"
+          "text": "DON’T!",
+          "tag": "p"
         }
       ]
     },
@@ -818,7 +818,7 @@
       "name": "/my-adhd",
       "state": null,
       "total": 25,
-      "fold": 25,
+      "fold": 16,
       "chrome": 6,
       "ratio": 0.6,
       "verdict": "target",
@@ -2162,26 +2162,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LIGHTS OUT!",
+          "w": 4,
+          "text": "WHY ARE YOU HERE?",
           "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "tiny horse",
+          "tag": "span"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "10pm",
-          "tag": "button"
         }
       ]
     },
@@ -2189,8 +2189,8 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 53,
-      "fold": 36,
+      "total": 50,
+      "fold": 33,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -2325,7 +2325,7 @@
       "name": "My ADHD, lived in",
       "state": "model-lived",
       "total": 55,
-      "fold": 35,
+      "fold": 21,
       "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
@@ -2352,7 +2352,7 @@
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
       "total": 60,
-      "fold": 35,
+      "fold": 21,
       "chrome": 6,
       "ratio": 1.5,
       "verdict": "ceiling",
