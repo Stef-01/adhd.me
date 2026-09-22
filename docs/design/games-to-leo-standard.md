@@ -81,9 +81,27 @@ A game meets the standard when all of these are true. Reviewers tick them per ga
 - [ ] **Sound, optional.** One synthesised voice where the world has one (a buzz, a sizzle, a
       ping), behind a button, off by default, never required.
 - [ ] **HUD in the world.** Progress and score sit on the scene's palette.
-- [ ] **Accessibility unchanged.** Every existing role, name, data attribute and keyboard path
-      the specs use still works; `Skip this round` under reduced motion; 44px targets.
-- [ ] **No new words.** The text budget holds: a round shows its instruction and nothing more.
+- [x] **Accessibility unchanged**, measured across every game rather than reviewed per game —
+      2026-09-21. Four things now hold it, and three of them are new because the laws were stated
+      and untested:
+      *Axe.* `e2e/a11y-states.spec.ts` scans the 30 patient screens a route alone cannot reach,
+      which includes Leo's five phases, Theo's six and the Chaos Run's first round. All pass
+      WCAG 2.1 AA. The route-level sweep covered none of them before.
+      *Keyboard.* `e2e/focus-visible.spec.ts` presses Tab through 684 stops across 84 screens and
+      every one shows a ring. Measured with real key presses, because `element.focus()` does not
+      match `:focus-visible` and a scripted sweep reports the whole tree as unstyled.
+      *Reduced motion.* `e2e/reduced-motion.spec.ts` finds nothing moving on any screen under a
+      reduce preference. The tree gives animations a `1e-05s` duration rather than `none`, which
+      keeps the final keyframe and the `animationend` event, so the floor is a millisecond.
+      *Targets.* `scripts/target-sweep.mjs` probes where a 44px thumb actually lands — through
+      `::after` pads and `for`-associated labels — at 320, 390, 768 and 1280. Clean everywhere
+      except `/approach/map`'s 25 wheel nodes, recorded in `AESTHETIC.md` as a design call.
+      And `games-fit.spec.ts` now also asserts every game leaves a reduced-motion player something
+      to do: floor 2, median 4, across all 22 surfaces.
+- [x] **No new words** — 2026-09-21. `node scripts/text-budget.mjs`: 70 of 70 app screens within
+      their ceiling, 0 over, median 29. The game screens are the cheapest in the product — a run's
+      title card 6 words, the Chaos Run's first round 7, Leo's rest 22 after a repeated sentence
+      came out of it. `e2e/text-budget.spec.ts` is the gate.
 
 ## 3. The asset register
 
