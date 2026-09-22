@@ -46,7 +46,13 @@ jobs:
     # jobs would buy more, and is the real answer if it outgrows this too — but not for free:
     # playwright.config.ts pins `workers: 1` because the mock rail, console and audit stores are
     # process-global singletons, so splitting the suite is a correctness change, not a config one.
-    timeout-minutes: 45
+    #
+    # 2026-09-22: it happened again. Three sweeps landed in one day (reduced motion, focus rings,
+    # axe over the stateful screens), the suite reached 44.4 minutes with every test passing, and
+    # the last three pushes to main and this branch's own run were all cancelled at 45 with
+    # nothing failed. 75 puts about half an hour back. The next time this number is the reason
+    # a run is red, shard the suite rather than raise it again.
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
