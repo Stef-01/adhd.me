@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-23T18:31:09.155Z",
+  "measuredAt": "2026-09-23T23:47:24.334Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -451,14 +451,14 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "ONLY THE LIST!",
-          "tag": "p"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
           "w": 2,
-          "text": "pizza oven",
-          "tag": "span"
+          "text": "CATCH IT!",
+          "tag": "p"
         },
         {
           "w": 1,
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "FIND THE LIST!",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "SWAT!",
           "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "the other list",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "a receipt",
-          "tag": "span"
         }
       ]
     },
@@ -545,6 +545,33 @@
           "w": 4,
           "text": "Arjun · Hold the thread",
           "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "/lives/play/jax-just-the-list",
+      "state": null,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Steer into the list. Tap the lures away.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Steer into the milk.",
+          "tag": "p"
         }
       ]
     },
@@ -598,6 +625,33 @@
         {
           "w": 3,
           "text": "Keep the thread.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "/lives/play/nina-the-first-line",
+      "state": null,
+      "total": 34,
+      "fold": 34,
+      "chrome": 0,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "A flyer for the garden.",
           "tag": "h1"
         }
       ]
@@ -1381,6 +1435,222 @@
       ]
     },
     {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, till",
+      "state": "jax-till",
+      "total": 10,
+      "fold": 10,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "At the till.",
+          "tag": "h1"
+        },
+        {
+          "w": 1,
+          "text": "Milk",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, setup",
+      "state": "jax-setup",
+      "total": 23,
+      "fold": 23,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Leave the next shop easier.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Stick the list up",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, revisit",
+      "state": "jax-revisit",
+      "total": 15,
+      "fold": 15,
+      "chrome": 0,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Same list, on the handle.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "The list, again.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, complete",
+      "state": "jax-complete",
+      "total": 29,
+      "fold": 29,
+      "chrome": 0,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Same list. The wish was your call.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Park the new idea",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, line-done",
+      "state": "nina-line-done",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Nina · The first line",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "One line down.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "the garden needs",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, setup",
+      "state": "nina-setup",
+      "total": 43,
+      "fold": 43,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Hi neighbours, the garden needs a few hands.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Leave it easy to return to.",
+          "tag": "h1"
+        },
+        {
+          "w": 6,
+          "text": "Tea after, all welcome, thank you!",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, revisit",
+      "state": "nina-revisit",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Where to meet, and rain.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Nina · The first line",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Back at the marker.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, complete",
+      "state": "nina-complete",
+      "total": 43,
+      "fold": 43,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Hi neighbours, the garden needs a few hands.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Meet at the gate. Rain? Next week.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Tea after, all welcome, thank you!",
+          "tag": "p"
+        }
+      ]
+    },
+    {
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, interruption",
       "state": "mia-interruption",
@@ -1978,26 +2248,26 @@
       "path": "/lives/play/nina-the-first-line",
       "name": "Nina: the first line",
       "state": null,
-      "total": 15,
-      "fold": 15,
-      "chrome": 1,
-      "ratio": 0.4,
+      "total": 34,
+      "fold": 34,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Choose the smallest start.",
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "A flyer for the garden.",
           "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "reorganise the notes",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "1 / 2",
-          "tag": "span"
         }
       ]
     },
@@ -2005,26 +2275,26 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax: just the list",
       "state": null,
-      "total": 10,
-      "fold": 10,
-      "chrome": 1,
-      "ratio": 0.3,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Keep the milk. Clear the extras.",
-          "tag": "h1"
+          "w": 8,
+          "text": "Steer into the list. Tap the lures away.",
+          "tag": "p"
         },
         {
-          "w": 2,
-          "text": "1 / 2",
+          "w": 4,
+          "text": "Jax · Just the list",
           "tag": "span"
         },
         {
-          "w": 2,
-          "text": "Your pace",
-          "tag": "span"
+          "w": 4,
+          "text": "Steer into the milk.",
+          "tag": "p"
         }
       ]
     },
@@ -2297,26 +2567,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 18,
-      "fold": 18,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "HOLD IT IN!",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "Say it now",
-          "tag": "button"
-        },
-        {
           "w": 2,
-          "text": ". Then, at",
+          "text": "POP IT!",
           "tag": "p"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "pale",
+          "tag": "button"
         }
       ]
     },
