@@ -49,7 +49,7 @@ export function discoverRoutes() {
 
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
-  ...["options", "setup", "owner", "negotiation", "revisit", "revisit-options", "complete"].map(state => ({ path: "/lives/play/arjun-hold-the-thread", state: `arjun-${state}`, name: `Arjun, ${state}` })),
+  ...["decided", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/arjun-hold-the-thread", state: `arjun-${state}`, name: `Arjun, ${state}` })),
   ...["interruption", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
   ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
@@ -330,17 +330,28 @@ export async function reach(page, route, base) {
   }
 
   if (route.state?.startsWith("arjun-")) {
+    // Reduced motion plays at the player's pace: catch what answers, park ideas, let the rest pass.
     await page.goto(base + route.path);
-    const tap = name => page.getByRole('button',{name,exact:true}).click();
-    for(const name of ['Ask Noor','Ask Rae','Pin Step-free','Park idea','Pin 2pm','Options','Choose Studio']) await tap(name);
-    if(route.state==='arjun-options') return;
-    await tap('Connect the plan'); if(route.state==='arjun-setup') return;
-    await tap('Pin the question'); if(route.state==='arjun-owner') return;
-    await tap('Rae'); await tap('Today'); if(route.state==='arjun-negotiation') return;
-    await tap('Tomorrow'); await tap('Next meeting'); if(route.state==='arjun-revisit') return;
-    for(const name of ['Ask Rae','Return 6 people to notes','Retrieve A quiet break','Options','Choose Library']) await tap(name);
-    if(route.state==='arjun-revisit-options') return;
-    await tap('Connect the plan'); return;
+    const phase = () => page.locator(".aw-game").getAttribute("data-phase");
+    const meet = async until => {
+      for (let guard = 0; guard < 160 && await phase() !== until; guard++) {
+        const p = await phase();
+        if (p === "decided") { if (until === "decided") return; await page.locator(".aw-overlay .kit-primary").click(); continue; }
+        if (p === "setup") return;
+        const stray = page.locator('.aw-card[data-off="true"]').first();
+        if (await stray.count()) { await stray.click(); continue; }
+        const retrieve = page.getByRole("button", { name: "Use the saved idea" });
+        if (await retrieve.count()) { await retrieve.click(); continue; }
+        const keep = page.locator('.aw-bubble[data-relevant="true"]').first();
+        if (await keep.count()) { await keep.click(); continue; }
+        await page.getByRole("button", { name: "Let one pass" }).click();
+      }
+    };
+    if (route.state === "arjun-decided") return meet("decided");
+    await meet("setup"); if (route.state === "arjun-setup") return;
+    for (const name of ["Pin the next question", "Hand the follow-up to Rae", "Tomorrow", "Next meeting"]) await page.getByRole("button", { name, exact: true }).click();
+    if (route.state === "arjun-revisit") return;
+    await meet("complete"); return;
   }
   if (route.state?.startsWith("mia-")) {
     await page.goto(base + route.path);
