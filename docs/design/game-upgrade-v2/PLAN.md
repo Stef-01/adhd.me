@@ -2,6 +2,8 @@
 
 Date: 20 September 2026. Status: production specification and generated asset pack; **not a claim that the games below have been implemented**. The current yellow platform identity remains in place. Build and validate one game at a time.
 
+Build prompts, one per game with sound and music, are in `PROMPTS.md` beside this file.
+
 ## Scope and honest appraisal
 
 The repository has eight Lives characters, 32 arcade rounds and 20 learning runs. Six standalone journeys still lean on shared short activities and explicit strategy choices. Changing their colours or adding motion will not create depth. Leo is a stronger reference because a noisy room has causes the player can change, and its ending lets the player do something useful. Theo's locally rebuilt morning introduces travel, carrying capacity, parallel charging and a changed revisit, but it needs its final release checks.
