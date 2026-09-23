@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-22T22:43:15.058Z",
+  "measuredAt": "2026-09-23T03:20:36.025Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "02:09 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -444,16 +444,16 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 6,
-      "fold": 6,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
-          "tag": "button"
+          "w": 2,
+          "text": "POP IT!",
+          "tag": "p"
         },
         {
           "w": 1,
@@ -462,8 +462,8 @@
         },
         {
           "w": 1,
-          "text": "DON’T!",
-          "tag": "p"
+          "text": "pale",
+          "tag": "button"
         }
       ]
     },
@@ -2378,26 +2378,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 13,
-      "fold": 13,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "WRITE THE LINE!",
+          "w": 2,
+          "text": "LOCK IN!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "agenda",
+          "tag": "span"
         }
       ]
     },
@@ -2729,8 +2729,8 @@
       "path": "/today",
       "name": "Today, the care plan open",
       "state": "plan-open",
-      "total": 22,
-      "fold": 22,
+      "total": 23,
+      "fold": 23,
       "chrome": 0,
       "ratio": 0.6,
       "verdict": "target",
@@ -2741,14 +2741,149 @@
           "tag": "button"
         },
         {
+          "w": 3,
+          "text": "Starting, Sleep & energy",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Who I see",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: six months",
+      "state": "plan-duration",
+      "total": 12,
+      "fold": 12,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Has it been six months or more?",
+          "tag": "p"
+        },
+        {
           "w": 2,
-          "text": "Care plan",
+          "text": "Six months",
+          "tag": "h2"
+        },
+        {
+          "w": 2,
+          "text": "Not yet",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: goals",
+      "state": "plan-goals",
+      "total": 20,
+      "fold": 20,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "What to change first. Up to three.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "In your words",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Emotional regulation",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: who I see",
+      "state": "plan-providers",
+      "total": 29,
+      "fold": 28,
+      "chrome": 0,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Anyone you already see?",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Names, if you like",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Who I see",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: my team",
+      "state": "plan-team",
+      "total": 14,
+      "fold": 14,
+      "chrome": 0,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 2,
+          "text": "My team",
           "tag": "h2"
         },
         {
           "w": 2,
           "text": "Occupational therapist",
           "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Sleep & energy",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: services",
+      "state": "plan-services",
+      "total": 12,
+      "fold": 12,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "My plan allows",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Used so far",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "Services",
+          "tag": "h2"
         }
       ]
     },

@@ -16,7 +16,7 @@ import { isProfession } from "@/support/professions";
 import type { OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
 import type { Checkpoint, CheckpointAnswer, CheckpointMonths } from "./checkpoint";
-import { emptyCarePlan, PLAN_MAX, type CarePlan } from "./care-plan";
+import { emptyCarePlan, PLAN_MAX, sanitisePlan, type CarePlan } from "./care-plan";
 
 export const MODEL_VERSION = 1;
 export const MODEL_KEY = `adhdme.model.v${MODEL_VERSION}`;
@@ -189,7 +189,7 @@ function readStoredModel(storage: Pick<Storage, "getItem">): ModelRecord {
       checkpoints: Array.isArray(r.checkpoints) ? r.checkpoints.filter((x) => isObject(x) && typeof x.months === "number").map((e) => e as unknown as Checkpoint) : [],
       // A record written before the care plan existed simply has no plan, which is the truth about
       // it — so this needs no version bump and no migration, the same way checkpoints did not.
-      carePlan: isObject(r.carePlan) ? { ...emptyCarePlan(), ...(r.carePlan as Partial<CarePlan>) } : emptyCarePlan(),
+      carePlan: sanitisePlan(r.carePlan),
     };
   } catch {
     return emptyModel();
@@ -280,8 +280,16 @@ export function saveCarePlan(storage: ModelStorage, allows: number, used: number
   const clamp = (n: number) => Math.max(0, Math.min(Math.round(Number.isFinite(n) ? n : 0), PLAN_MAX));
   return updateModel(storage, (r) => ({
     ...r,
-    carePlan: { allows: clamp(allows), used: clamp(used), year, confirmedOn: now() },
+    // Spread first: the numbers are one of the helper's five steps, and saving them must not
+    // forget the other four.
+    carePlan: { ...r.carePlan, allows: clamp(allows), used: clamp(used), year, confirmedOn: now() },
   }));
+}
+
+/** The helper's answers, one step at a time. Each is the person's own; nothing here infers one. */
+export type PlanDetails = Pick<CarePlan, "sixMonths" | "goals" | "goalNote" | "providers" | "providerNote" | "team">;
+export function savePlanDetails(storage: ModelStorage, patch: Partial<PlanDetails>): ModelRecord {
+  return updateModel(storage, (r) => ({ ...r, carePlan: sanitisePlan({ ...r.carePlan, ...patch }) }));
 }
 
 /** Forget the plan entirely, from the same place the record's other deletes live. */

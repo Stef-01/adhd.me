@@ -119,6 +119,13 @@ export const EXTRA = [
   // without a plan is what everybody meets first and would otherwise never be counted.
   { path: "/today", state: "model-no-plan", name: "Today, before a care plan" },
   { path: "/today", state: "plan-open", name: "Today, the care plan open" },
+  // Each step of the helper is its own screen: the shell behind an open sheet is inert, so the
+  // instrument measures the step alone, and each has to hold the ceiling on its own.
+  { path: "/today", state: "plan-duration", name: "Today, the care plan: six months" },
+  { path: "/today", state: "plan-goals", name: "Today, the care plan: goals" },
+  { path: "/today", state: "plan-providers", name: "Today, the care plan: who I see" },
+  { path: "/today", state: "plan-team", name: "Today, the care plan: my team" },
+  { path: "/today", state: "plan-services", name: "Today, the care plan: services" },
   { path: "/support", state: "model-lived", name: "Support, lived in" },
   { path: "/manual", state: "model-lived", name: "My manual, lived in" },
   { path: "/adjustments", state: "model-lived", name: "Adjustments, lived in" },
@@ -236,7 +243,11 @@ export const LIVED_RECORD = {
   // A care plan with services left, because the hub's card has two shapes and the instrument had
   // only ever measured the one without a plan — the same hole §13.1 found for the lived-in hub.
   // Five allowed, two spent, so the dot row is mixed and three suggestions render.
-  carePlan: { allows: 5, used: 2, year: 2026, confirmedOn: "2026-09-05T00:00:00Z" },
+  carePlan: {
+    allows: 5, used: 2, year: 2026, confirmedOn: "2026-09-05T00:00:00Z",
+    // The helper, part way through: two goals and one provider named, the team not yet chosen.
+    sixMonths: true, goals: ["starting", "sleep-energy"], goalNote: "", providers: ["psychologist"], providerNote: "", team: null,
+  },
 };
 
 /**
@@ -298,6 +309,14 @@ export async function reach(page, route, base) {
     await page.reload({ waitUntil: "networkidle" });
     await page.locator(".plan-card").click();
     await page.locator(".plan-sheet").waitFor({ timeout: 8000 });
+  }
+  const step = /^plan-(duration|goals|providers|team|services)$/.exec(route.state ?? "")?.[1];
+  if (step) {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator(".plan-card").click();
+    await page.locator(`.plan-step[data-step="${step}"]`).click();
+    await page.locator(`.plan-sheet[data-view="${step}"]`).waitFor({ timeout: 8000 });
   }
   if (route.state === "sheet-open") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));

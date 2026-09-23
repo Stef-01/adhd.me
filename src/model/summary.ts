@@ -20,9 +20,9 @@
 // would need a record that outlives the device — the open question in ADR 0008.
 
 import { profession, type Profession } from "@/support/professions";
-import { hasPlan, suggestFor } from "./care-plan";
+import { done, hasPlan, STEPS, teamFor } from "./care-plan";
 import { ADJUSTMENT_TRACKS, trackForSubdomain } from "./adjustments";
-import { ASPECT_LABELS, STATUS_LABEL, areaOf, matrix, type Area } from "./matrix";
+import { ASPECT_LABELS, STATUS_LABEL, areaOf, matrix, type Area, type Aspect } from "./matrix";
 import { AREA_LABELS } from "./matrix";
 import { deriveNeeds, priorityScore, type Need } from "./needs";
 import { escalationEligible, professionsFor } from "./recommend";
@@ -74,6 +74,28 @@ export interface TriedRow {
   readonly outcome: ExperimentOutcome | "pending";
 }
 
+/** The care-plan section's facts. Every field is the record's own or a label the app already shows. */
+export interface PlanSection {
+  /** Zero until the person has entered their numbers. */
+  readonly allows: number;
+  readonly used: number;
+  readonly sixMonths: boolean | null;
+  readonly goals: readonly Aspect[];
+  readonly goalNote: string;
+  /** Null until asked; empty is "nobody". */
+  readonly providers: readonly Profession[] | null;
+  readonly providerNote: string;
+  /**
+   * The kinds on the plan, each with the axis the map pointed at. The person's own choice when
+   * they have made one; the map's covered proposal until then. Only kinds a plan can pay for: a GP
+   * reading this does not need the coach the map suggested, and the sheet is where that honesty
+   * belongs.
+   */
+  readonly team: readonly { readonly kind: Profession; readonly because: string }[];
+  /** Whether `team` is the person's choice (true) or still the map's proposal (false). */
+  readonly chosen: boolean;
+}
+
 export interface GpSummary {
   readonly audience: Audience;
   /** The leading need's own label, and where it sits. Never a sentence about the person. */
@@ -85,11 +107,12 @@ export interface GpSummary {
   readonly otherAreas: readonly string[];
   readonly goal: string | null;
   /**
-   * The person's own plan numbers and the kinds they are considering — rows off the record, never
-   * a drafted request. Empty when they have not told us about a plan, which is most people.
-   * No amount of money, ever: `src/model/care-plan.ts` says why, and its test enforces it.
+   * The plan the person is preparing or holding: their numbers, their five answers and the kinds
+   * their own map proposes — rows off the record, never a drafted request. Null until they have
+   * answered anything, which is most people. No amount of money, ever: `src/model/care-plan.ts`
+   * says why, and its test enforces it.
    */
-  readonly carePlan: { readonly allows: number; readonly used: number; readonly considering: readonly Profession[] } | null;
+  readonly carePlan: PlanSection | null;
   readonly supports: readonly Profession[];
   /** The person's own text, verbatim, never edited and never summarised. */
   readonly ownWords: readonly string[];
@@ -199,15 +222,25 @@ export function gpSummary(record: ModelRecord, audience: Audience = "gp"): GpSum
   }
 
   const plan = record.carePlan;
-  const carePlan = hasPlan(plan)
-    ? {
-        allows: plan.allows,
-        used: plan.used,
-        // Only the kinds a plan can actually pay for. A GP reading this does not need to be told
-        // about the coach the map suggested; the sheet is where that honesty belongs.
-        considering: suggestFor(record, plan).filter((x) => x.covered).map((x) => x.kind),
-      }
-    : null;
+  let carePlan: PlanSection | null = null;
+  if (STEPS.some((step) => done(plan, step))) {
+    const proposal = teamFor(record).filter((x) => x.covered);
+    const chosen = plan.team !== null;
+    const team = chosen
+      ? plan.team!.map((kind) => ({ kind, because: proposal.find((x) => x.kind === kind)?.because ?? "" }))
+      : proposal.map((x) => ({ kind: x.kind, because: x.because }));
+    carePlan = {
+      allows: hasPlan(plan) ? plan.allows : 0,
+      used: hasPlan(plan) ? plan.used : 0,
+      sixMonths: plan.sixMonths,
+      goals: plan.goals ?? [],
+      goalNote: plan.goalNote.trim(),
+      providers: plan.providers,
+      providerNote: plan.providerNote.trim(),
+      team,
+      chosen,
+    };
+  }
   return { audience, priority, highestImpact, context, helps, tried, otherAreas, goal, carePlan, supports, ownWords };
 }
 
@@ -229,17 +262,32 @@ export function sectionRows(s: GpSummary, key: SectionKey): string[] {
     case "goal":
       return s.goal ? [s.goal] : [];
     case "carePlan":
-      if (!s.carePlan) return [];
-      return [
-        `Plan allows: ${s.carePlan.allows}`,
-        `Used so far: ${s.carePlan.used}`,
-        ...(s.carePlan.considering.length ? [`Considering: ${s.carePlan.considering.map((p) => profession(p).label).join(", ")}`] : []),
-      ];
+      return planRows(s.carePlan);
     case "supports":
       return s.supports.map((p) => profession(p).label);
     case "ownWords":
       return s.ownWords.flatMap((t) => t.split("\n").filter((l) => l.trim()));
   }
+}
+
+/**
+ * The care-plan section, one row per fact the person gave. Labels the app already shows for an
+ * axis or a kind, the person's own numbers, and their two notes verbatim. No sentence about them.
+ */
+function planRows(p: PlanSection | null): string[] {
+  if (!p) return [];
+  const rows: string[] = [];
+  if (p.allows > 0) rows.push(`Plan allows: ${p.allows}`, `Used so far: ${p.used}`);
+  if (p.sixMonths !== null) rows.push(`Six months or more: ${p.sixMonths ? "yes" : "not yet"}`);
+  if (p.goals.length) rows.push(`Goals: ${p.goals.map((a) => ASPECT_LABELS[a]).join(", ")}`);
+  if (p.goalNote) rows.push(p.goalNote);
+  if (p.providers !== null) rows.push(`Current providers: ${p.providers.length ? p.providers.map((k) => profession(k).label).join(", ") : "none"}`);
+  if (p.providerNote) rows.push(p.providerNote);
+  if (p.team.length) {
+    const named = p.team.map((t) => (t.because ? `${profession(t.kind).label} (${t.because})` : profession(t.kind).label)).join(", ");
+    rows.push(`${p.chosen ? "Preferred team" : "Proposed team"}: ${named}`);
+  }
+  return rows;
 }
 
 /** The sections that have anything in them, in document order, minus anything removed. */

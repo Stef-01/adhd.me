@@ -433,3 +433,40 @@ the person's own data and the claimable list is one exported array with one test
 
 No screen in this document has been captured, because none exists yet. Every word count above is a
 budget to hold, not a measurement — the measurements start in Phase 1.
+
+---
+
+## 14. The helper
+
+Built 2026-09-23 on `/today`, in the same sheet as the plan. Five rows, each one thing a GP needs on
+the day, each a tap. A row answered gets a filled tick and its answer beside the name; a row not yet
+answered gets a hollow tick and nothing. No instruction, no progress bar, no count of rows done (§9).
+
+| Row | What it asks | How | Held as | Row in the GP summary |
+|---|---|---|---|---|
+| Six months | Has it been six months or more? | Yes / Not yet, one tap, saves itself | `sixMonths` | `Six months or more: yes` |
+| Goals | What to change first. Up to three. | The map's six axes as chips, and one line in their words | `goals`, `goalNote` | `Goals: Starting, Sleep & energy` and the line verbatim |
+| Who I see | Anyone you already see? | The ten kinds the app knows, minus the GP, and one line for names | `providers`, `providerNote` | `Current providers: Psychologist` or `none`, and the line verbatim |
+| My team | (none) | The map's proposal, every covered row kept until dropped; the uncovered one shown, marked, not keepable | `team` | `Preferred team: Psychologist (Starting), …` |
+| Services | (none) | The two steppers from §8, once a GP has written the plan | `allows`, `used` | `Plan allows: 5`, `Used so far: 2` |
+
+The four a person can answer before the visit come first; the numbers only a written plan can give
+come last. "Nobody", "not yet" and an empty team are answers, and count as such. Until a team is
+chosen the summary carries the map's proposal as `Proposed team:`, so a GP still sees who the map
+points at. An uncovered kind can never be on the team the GP reads: `sanitisePlan` drops it.
+
+What it refuses, unchanged from §2: no money, no eligibility, no clinical prose. The end-to-end spec
+walks every step and asserts none of them says a dollar, a percentage, "eligible", or a number
+larger than the plan's own count.
+
+Measured with `scripts/text-budget.mjs` against the built app (words on screen, ceiling 60):
+
+| Screen | Words |
+|---|---|
+| Today, lived in (the card on the hub) | 37 |
+| The list, four rows answered | 23 |
+| Six months | 12 |
+| Goals | 20 |
+| Who I see | 29 |
+| My team | 14 |
+| Services | 12 |
