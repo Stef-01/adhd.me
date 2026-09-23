@@ -32,9 +32,6 @@ button.aw-seat[aria-pressed="true"] > span { background: #4a5bb0; color: #fff; b
 .aw-arjun { position: absolute; left: 50%; bottom: -6%; height: 32%; max-height: 176px; transform: translateX(-50%); pointer-events: none; z-index: 2; }
 .aw-arjun > svg { height: 100%; width: auto; }
 .aw-arjun[data-emotion="hit"] > svg { animation: aw-shake .32s; }
-.aw-rounds { display: inline-flex; gap: 5px; }
-.aw-rounds i { width: 8px; height: 8px; border-radius: 50%; background: var(--g-soft); box-shadow: inset 0 0 0 1.5px var(--g-accent); }
-.aw-rounds i[data-on="true"] { background: var(--g-accent); }
 .aw-pins, .aw-ideas { display: inline-flex; gap: 2px; color: var(--g-accent); }
 .aw-ideas { color: #b98a10; }
 
@@ -81,7 +78,6 @@ button.aw-seat[aria-pressed="true"] > span { background: #4a5bb0; color: #fff; b
 
 .aw-overlay { position: absolute; inset: auto 0 18% 0; margin: 0 auto; width: min(420px, calc(100% - 32px)); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 22px; border-radius: 26px; background: #fbfbfe; box-shadow: 0 20px 60px #20285a33; z-index: 10; }
 .aw-overlay.is-final { inset: auto 0 12% 0; }
-.aw-stamp { display: inline-flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; letter-spacing: -.02em; text-align: center; }
 .aw-overlay .kit-primary { width: 100%; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
@@ -106,3 +102,4 @@ button.aw-seat[aria-pressed="true"] > span { background: #4a5bb0; color: #fff; b
   .aw-overlay { inset: auto 0 10% 0; }
 }
 @media (max-height: 620px) { .aw-seats img { max-height: 70px; } }
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .aw-room { gap: 6px; } .aw-card { min-height: 46px; padding: 4px 10px; font-size: 13px; } .aw-board { padding: 6px; } .aw-table { min-height: 0; } .aw-bubble { min-height: 46px; } .aw-seats { top: 30%; height: 22%; } }
