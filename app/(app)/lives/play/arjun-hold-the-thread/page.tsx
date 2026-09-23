@@ -1,3 +1,4 @@
+import '../../../../styles/lives-kit.css';
 import '../../../../styles/arjun-world.css';
 import type { Metadata } from 'next';
 import { ArjunWorldGame } from '../../../../lives/arjun-world/player';

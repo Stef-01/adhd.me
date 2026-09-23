@@ -1,34 +1,52 @@
 # Arjun — Hold the thread
 
-Implemented 22 September 2026 at `/lives/play/arjun-hold-the-thread`.
+Rebuilt 23 September 2026 at `/lives/play/arjun-hold-the-thread`, after founder review found the
+card-board version "not even a game" next to Leo. It replaces the ask/pin/select board entirely.
 
-## Gameplay
+## The game
 
-A shared meeting table with three working spaces. Ask Noor about access and Rae about time, then choose which facts to keep in view. An idea initially competes for a space: either park it or return it to the available notes. All information remains inspectable; an incompatible proposal produces a specific response and leaves the board intact.
+A live meeting drawn as a room: window, wall clock, a table in perspective, Noor, Sam and Rae seated
+behind it and Arjun in front. Remarks leave the speakers and drift across the room at one steady
+speed in two lanes (they rise on phones). The player taps what answers the question on the heading;
+each catch springs onto a three-card board. An aside that is tapped takes a card too and must be
+cleared. Arjun's own ideas drift past as thought clouds: tapped, they are parked in his notebook;
+missed, Arjun drifts (his face changes, the room's words blur for three seconds) and the thought
+comes back later. A missed fact always comes round again, and **Ask again** brings it back at once.
 
-Three scenarios cover meeting location, joining format and review format. Options are authored constraints rather than positive/negative answer labels. A real capacity limit matters in the joining scenario. Replay changes the subject, evidence, options and answer position.
+Three rounds rise in pace (8.2, 7.2, 6.4 s crossings). In round three the agenda changes mid-round:
+cards for the old question turn stale and have to be cleared. The wall clock's hand is the stake.
+If the meeting ends first, it becomes a **recap**: the missing remarks wait still until pinned.
+Nothing resets.
 
-After the first agreement, pin the question, retain the idea, and negotiate who will confirm the plan and when. Rae can decline today; agreeing tomorrow or choosing Noor are both valid. The model stores an explicit task, option, owner and time.
+**Setup (untimed, in the scene):** pin the next question to the board, keep the first idea in the
+notebook (already done if it was parked), and hand the follow-up to Noor or Rae by tapping them. Rae
+cannot do today; tomorrow works. **Revisit:** next week's meeting starts with the pinned question,
+and remarks that answer it carry a pin badge, which is the anchor made visible. Mid-meeting Sam says the
+main room is booked; the notebook glows and **Use the saved idea** puts Arjun's own idea into the
+stream. Without it, the idea still returns, later. Completion shows the decision and who follows up.
 
-The revisit keeps that agreement and parked idea. Timing becomes unknown until Rae supplies the update. The previous option offers the new time but lacks the feature needed by the idea, so changing the time alone cannot complete the meeting. Retrieve the exact saved idea, replace a working card, and select a plan that meets access, capacity, time and the new feature. Completion updates the option while preserving the negotiated owner and time. Nothing is booked or sent externally.
+Two tactics work: catch everything relevant as it passes, or let the stream go and use Ask again.
+Parking ideas versus ignoring them changes how much of the room Arjun can read.
 
-## Distinct presentation and implementation
+## Implementation
 
-An open cream page with a pale blue meeting table, paper evidence cards, amber idea card and three participants. This uses the prepared Arjun prop and acting assets. It has no room navigation, object inventory, timed tapping or rotating connection grid.
+- `src/lives/arjun-world.ts`: pure reducer, fixed 50 ms steps, three authored scenarios (a meet-up,
+  a community garden, a group project). 15 Vitest cases cover every scenario to completion, first
+  useful remark under a second, board capacity, duplicate/stale catches, no-stall repeats and
+  recap, ask-again, drift, parking, the agenda change, setup negotiation, the revisit retrieval
+  and its fallback, still mode, pause and replay.
+- `app/lives/kit/`: the shared frame the live worlds use (`shell.tsx`, `use-loop.ts`, `cast.tsx`).
+  Beans are drawn inline; nothing under `public/games/` is loaded.
+- `app/lives/sounds.ts`: one synthesised Web Audio engine, muted by default and persisted in
+  `adhdme.sound`. Arjun's D-dorian score gains layers with the stream; remarks tick, pins stamp,
+  parked ideas scribble, decisions resolve.
+- Reduced motion (or **Play at my pace** in pause) makes the meeting move one remark per action.
 
-`src/lives/arjun-world.ts` holds the pure reducer. The client component owns the inspectable People/Options panel and accessible controls. Card entry motion is brief and respects reduced motion. Navigation is sticky and independent of board layout; decorative characters cannot intercept input. Hiding the page pauses play. There are no clinical inferences or patient-profile writes.
+## Verification
 
-## Discovery
+Five Playwright cases: library entry through three rounds, setup, revisit and replay; keyboard-only
+with sound on; live motion, pause freeze and the recap recovery; 320 to 1440 px widths with 44 px
+targets, reachable exit and axe scans of four phases; no storage writes. Text budget: 17 to 38
+words across the meeting, decided, setup, revisit and complete states.
 
-All eight character games now have direct cards on Learn → Games. `src/lives/entry-points.ts` is shared with the character library so public destinations stay consistent. The twenty quick games remain accessible from the expanded existing library, and Play mix retains the Chaos Run entry.
-
-## Validation
-
-- 10 reducer tests: every scenario through both organisation tactics; insufficient information; three-space recovery; wrong-plan feedback; owner/time negotiation; exact idea retrieval; changed requirements; actual capacity restriction; pause and replay.
-- 12 Arjun browser checks across Chromium, WebKit and Firefox: full playthrough, negotiation, recovery, touch and keyboard controls, small screens, reachable exit and four-phase accessibility scans.
-- 16 Chromium discovery/library/existing-journey checks: direct entry and pause/resume for every character game; all twenty quick games opened and started; separated responsive cards; full Maya, Jax and Nina journeys and their practical endings.
-- Production build passed. Continuous real-click Arjun video and desktop/phone/options/completion screenshots captured under `qa/_runs/`.
-
-These checks establish functional behaviour and entry coverage. They do not establish clinical effectiveness, enjoyment, or full branch coverage for every pre-existing quick game. Observed co-design playtesting remains outstanding.
-
-Final text audit: 105 screens measured, all 91 bounded app screens within their ceiling. Arjun states contain 20–42 words; the main Games page contains 57. Two additional Leo/Theo public-entry regression tests passed after their links moved into the shared roster.
+Automated checks establish function, not engagement. Observed playtesting remains outstanding.
