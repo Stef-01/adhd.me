@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-23T03:20:36.025Z",
+  "measuredAt": "2026-09-23T18:31:09.155Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "02:09 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "POP IT!",
+          "w": 3,
+          "text": "ONLY THE LIST!",
           "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "pizza oven",
+          "tag": "span"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "pale",
-          "tag": "button"
         }
       ]
     },
@@ -505,19 +505,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "OUT NOW!",
+          "w": 3,
+          "text": "FIND THE LIST!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "5 min",
-          "tag": "button"
+          "w": 3,
+          "text": "the other list",
+          "tag": "span"
         },
         {
           "w": 2,
-          "text": "10 min",
-          "tag": "button"
+          "text": "a receipt",
+          "tag": "span"
         }
       ]
     },
@@ -525,25 +525,25 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "/lives/play/arjun-hold-the-thread",
       "state": null,
-      "total": 25,
-      "fold": 25,
-      "chrome": 4,
-      "ratio": 0.6,
+      "total": 32,
+      "fold": 32,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
+          "w": 8,
+          "text": "Tap what answers it. Park Arjun’s own ideas.",
+          "tag": "p"
+        },
+        {
           "w": 5,
-          "text": "Three spaces. Ask what matters.",
+          "text": "Catch what answers the question.",
           "tag": "p"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "A quiet break",
+          "text": "Arjun · Hold the thread",
           "tag": "span"
         }
       ]
@@ -1274,28 +1274,28 @@
     },
     {
       "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, options",
-      "state": "arjun-options",
-      "total": 35,
-      "fold": 35,
-      "chrome": 4,
-      "ratio": 0.9,
+      "name": "Arjun, decided",
+      "state": "arjun-decided",
+      "total": 17,
+      "fold": 17,
+      "chrome": 0,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Compare this option with the board.",
-          "tag": "p"
+          "w": 4,
+          "text": "Arjun · Hold the thread",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "A quiet break",
-          "tag": "button"
+          "text": "Six of us",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "Connect the plan",
-          "tag": "button"
+          "text": "Near the station",
+          "tag": "span"
         }
       ]
     },
@@ -1303,79 +1303,25 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, setup",
       "state": "arjun-setup",
-      "total": 20,
-      "fold": 20,
-      "chrome": 4,
-      "ratio": 0.5,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 7,
-          "text": "That fits. Leave a shared next step.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Leave a shared next step.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Pin the question",
-          "tag": "button"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, owner",
-      "state": "arjun-owner",
-      "total": 27,
-      "fold": 27,
-      "chrome": 4,
-      "ratio": 0.7,
+      "total": 36,
+      "fold": 36,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
           "w": 8,
-          "text": "The question has a place to return to.",
+          "text": "Pin it, keep the idea, share the follow-up.",
           "tag": "p"
         },
         {
           "w": 5,
-          "text": "Leave a shared next step.",
+          "text": "Leave the next step ready.",
           "tag": "h1"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
-          "tag": "span"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, negotiation",
-      "state": "arjun-negotiation",
-      "total": 27,
-      "fold": 27,
-      "chrome": 4,
-      "ratio": 0.7,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Rae: Today is full. Tomorrow works.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Leave a shared next step.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "Where can we meet?",
+          "text": "Arjun · Hold the thread",
           "tag": "span"
         }
       ]
@@ -1384,53 +1330,26 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, revisit",
       "state": "arjun-revisit",
-      "total": 32,
-      "fold": 32,
-      "chrome": 4,
-      "ratio": 0.8,
+      "total": 35,
+      "fold": 35,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "The plan changed. Rae has an update.",
+          "w": 8,
+          "text": "Same people. The plan has a pin now.",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "The plan has changed.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "Where can we meet?",
-          "tag": "span"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, revisit-options",
-      "state": "arjun-revisit-options",
-      "total": 42,
-      "fold": 42,
-      "chrome": 4,
-      "ratio": 1.1,
-      "verdict": "ceiling",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Compare this option with the board.",
+          "w": 5,
+          "text": "Pinned questions show what matters.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "A quiet break",
+          "w": 5,
+          "text": "Next week: still the library?",
           "tag": "span"
-        },
-        {
-          "w": 3,
-          "text": "No quiet space",
-          "tag": "small"
         }
       ]
     },
@@ -1438,25 +1357,25 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, complete",
       "state": "arjun-complete",
-      "total": 34,
-      "fold": 34,
-      "chrome": 4,
-      "ratio": 0.9,
+      "total": 33,
+      "fold": 33,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 8,
-          "text": "A changed plan. Everyone still has a place.",
+          "w": 7,
+          "text": "Same people. Your saved idea decided it.",
           "tag": "p"
         },
         {
-          "w": 6,
-          "text": "A plan with room for everyone.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Next week: still the library?",
+          "tag": "span"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
+          "text": "Arjun · Hold the thread",
           "tag": "span"
         }
       ]
@@ -2167,25 +2086,25 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun: the meeting",
       "state": null,
-      "total": 25,
-      "fold": 25,
-      "chrome": 4,
-      "ratio": 0.6,
+      "total": 32,
+      "fold": 32,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
+          "w": 8,
+          "text": "Tap what answers it. Park Arjun’s own ideas.",
+          "tag": "p"
+        },
+        {
           "w": 5,
-          "text": "Three spaces. Ask what matters.",
+          "text": "Catch what answers the question.",
           "tag": "p"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "A quiet break",
+          "text": "Arjun · Hold the thread",
           "tag": "span"
         }
       ]
@@ -2378,26 +2297,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LOCK IN!",
+          "w": 3,
+          "text": "HOLD IT IN!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 3,
+          "text": "Say it now",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "agenda",
-          "tag": "span"
+          "w": 2,
+          "text": ". Then, at",
+          "tag": "p"
         }
       ]
     },
