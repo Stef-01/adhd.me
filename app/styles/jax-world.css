@@ -82,3 +82,4 @@
   .jw-home-jax { left: 26%; bottom: 26%; }
   .jw-end { bottom: 3%; }
 }
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .jw-scene { width: min(calc(100% - 16px), 640px); } .jw-trolley { width: 26%; } .jw-prop { min-width: 96px; padding: 6px 10px; } }

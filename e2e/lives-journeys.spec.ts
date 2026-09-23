@@ -7,7 +7,7 @@ import { JOURNEYS } from "../src/lives/journeys";
 import { expectNoViolations } from "./support/a11y";
 
 // Zoe, Mia, Arjun and Jax have dedicated stateful worlds with their own full-flow suites.
-const DEDICATED = new Set(["zoe", "mia", "arjun", "jax"]);
+const DEDICATED = new Set(["zoe", "mia", "arjun", "jax", "nina"]);
 for (const journey of JOURNEYS.filter(j => !DEDICATED.has(j.who))) {
   test(`${journey.who}: direct entry, every round, practical ending and replay`, async ({ page }) => {
     test.setTimeout(60000);

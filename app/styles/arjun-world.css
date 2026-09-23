@@ -102,3 +102,4 @@ button.aw-seat[aria-pressed="true"] > span { background: #4a5bb0; color: #fff; b
   .aw-overlay { inset: auto 0 10% 0; }
 }
 @media (max-height: 620px) { .aw-seats img { max-height: 70px; } }
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .aw-room { gap: 6px; } .aw-card { min-height: 46px; padding: 4px 10px; font-size: 13px; } .aw-board { padding: 6px; } .aw-table { min-height: 0; } .aw-bubble { min-height: 46px; } .aw-seats { top: 30%; height: 22%; } }

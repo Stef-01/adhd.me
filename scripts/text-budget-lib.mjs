@@ -51,6 +51,7 @@ export function discoverRoutes() {
 export const EXTRA = [
   ...["decided", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/arjun-hold-the-thread", state: `arjun-${state}`, name: `Arjun, ${state}` })),
   ...["till", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/jax-just-the-list", state: `jax-${state}`, name: `Jax, ${state}` })),
+  ...["line-done", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/nina-the-first-line", state: `nina-${state}`, name: `Nina, ${state}` })),
   ...["interruption", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
   ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
@@ -377,6 +378,34 @@ export async function reach(page, route, base) {
     await page.locator(".jw-wish-board").click(); await page.getByRole("button", { name: "Next shop" }).click();
     if (route.state === "jax-revisit") return;
     await shop("complete"); return;
+  }
+  if (route.state?.startsWith("nina-")) {
+    // Reduced motion moves the pen one cell per arrow: head for the nearest needed phrase, round blots.
+    await page.goto(base + route.path);
+    const phase = () => page.locator(".nw-game").getAttribute("data-phase");
+    const key = () => page.evaluate(() => {
+      const c = el => ({ x: Math.round(+getComputedStyle(el).getPropertyValue("--cx") * 5 - .5), y: Math.round(+getComputedStyle(el).getPropertyValue("--cy") * 7 - .5) });
+      const pen = c(document.querySelector(".nw-pen")), goal = new Set([...document.querySelectorAll('.nw-chunk[data-needed="true"]')].map(c).map(p => `${p.x},${p.y}`));
+      const blocked = new Set([...document.querySelectorAll('.nw-blot, .nw-chunk:not([data-needed="true"])')].map(c).map(p => `${p.x},${p.y}`));
+      const seen = new Map([[`${pen.x},${pen.y}`, null]]), queue = [[pen.x, pen.y]];
+      while (queue.length) { const [x, y] = queue.shift(); const k = `${x},${y}`; if (goal.has(k)) return seen.get(k);
+        for (const [d, dx, dy] of [["ArrowUp", 0, -1], ["ArrowDown", 0, 1], ["ArrowLeft", -1, 0], ["ArrowRight", 1, 0]]) { const nx = x + dx, ny = y + dy, nk = `${nx},${ny}`; if (nx < 0 || ny < 0 || nx > 4 || ny > 6 || seen.has(nk) || blocked.has(nk)) continue; seen.set(nk, seen.get(k) ?? d); queue.push([nx, ny]); } }
+      return "ArrowUp";
+    });
+    const write = async until => {
+      for (let guard = 0; guard < 300; guard++) {
+        const p = await phase();
+        if (p === until || p === "setup" || p === "complete") return;
+        if (p === "line-done") { await page.locator(".nw-done .kit-primary").click(); continue; }
+        const k = await key(); if (k) await page.keyboard.press(k);
+      }
+    };
+    if (route.state === "nina-line-done") return write("line-done");
+    await write("setup"); if (route.state === "nina-setup") return;
+    await page.getByRole("button", { name: "Save the draft" }).click(); await page.getByRole("button", { name: "Leave a marker" }).click();
+    await page.locator(".nw-steps button").first().click(); await page.getByRole("button", { name: "Tomorrow" }).click();
+    if (route.state === "nina-revisit") return;
+    await write("complete"); return;
   }
   if (route.state?.startsWith("mia-")) {
     await page.goto(base + route.path);
