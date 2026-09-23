@@ -63,7 +63,7 @@ export function ArjunWorldGame() {
   }
 
   const hud = live ? <>
-    {s.phase !== "revisit" && <span className="aw-rounds" role="img" aria-label={`Round ${s.round + 1} of 3`}>{[0, 1, 2].map(r => <i key={r} data-on={r <= s.round} />)}</span>}
+    {s.phase !== "revisit" && <span className="kit-rounds" role="img" aria-label={`Round ${s.round + 1} of 3`}>{[0, 1, 2].map(r => <i key={r} data-on={r <= s.round} />)}</span>}
     <span className="aw-pins" role="img" aria-label={`${pinnedCount} of 3 pinned`}>{[0, 1, 2].map(n => <PushPin key={n} size={16} weight={n < pinnedCount ? "fill" : "regular"} />)}</span>
     {s.pocket.length > 0 && <span className="aw-ideas" role="img" aria-label={`${s.pocket.length} ideas parked`}>{s.pocket.map(i => <Lightbulb key={i} size={16} weight="fill" />)}</span>}
   </> : undefined;
@@ -137,11 +137,11 @@ export function ArjunWorldGame() {
           <button className="kit-primary" disabled={!ready(s)} onClick={() => dispatch({ type: "continue" })}>Next meeting <ArrowRight size={19} /></button>
         </div>}
         {s.phase === "decided" && <motion.div className="aw-overlay" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <span className="aw-stamp"><Check size={18} weight="bold" /> {s.decisions.at(-1)}</span>
+          <span className="kit-stamp"><Check size={18} weight="bold" /> {s.decisions.at(-1)}</span>
           <button className="kit-primary" autoFocus onClick={() => dispatch({ type: "continue" })}>{s.round < 2 ? "Next item" : "After the meeting"} <ArrowRight size={19} /></button>
         </motion.div>}
         {s.phase === "complete" && <div className="aw-overlay is-final">
-          <span className="aw-stamp"><Check size={18} weight="bold" /> {name(s.owner ?? "rae")} follows up {s.when}</span>
+          <span className="kit-stamp"><Check size={18} weight="bold" /> {name(s.owner ?? "rae")} follows up {s.when}</span>
           <Link className="kit-primary" href="/lives/learn?module=meeting_anchor_v1">Try a meeting anchor <ArrowRight size={19} /></Link>
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another meeting</button>
         </div>}

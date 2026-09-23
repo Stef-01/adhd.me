@@ -44,7 +44,7 @@ test('library entry, three live rounds, a real setup and a changed revisit', asy
   await setup(page);
   await expect(page.locator('.aw-pin-note')).toContainText('Next week');
   await meet(page, 'complete');
-  await expect(page.locator('.aw-stamp')).toContainText('Rae follows up tomorrow');
+  await expect(page.locator('.kit-stamp')).toContainText('Rae follows up tomorrow');
   await expect(page.getByRole('link', { name: 'Try a meeting anchor' })).toHaveAttribute('href', '/lives/learn?module=meeting_anchor_v1');
   await page.getByRole('button', { name: 'Another meeting' }).click();
   await expect(game(page)).toHaveAttribute('data-scenario', '1');

@@ -50,6 +50,7 @@ export function discoverRoutes() {
 /** Dynamic and stateful screens the walk cannot reach on its own. */
 export const EXTRA = [
   ...["decided", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/arjun-hold-the-thread", state: `arjun-${state}`, name: `Arjun, ${state}` })),
+  ...["till", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/jax-just-the-list", state: `jax-${state}`, name: `Jax, ${state}` })),
   ...["interruption", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
   ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
@@ -352,6 +353,30 @@ export async function reach(page, route, base) {
     for (const name of ["Pin the next question", "Hand the follow-up to Rae", "Tomorrow", "Next meeting"]) await page.getByRole("button", { name, exact: true }).click();
     if (route.state === "arjun-revisit") return;
     await meet("complete"); return;
+  }
+  if (route.state?.startsWith("jax-")) {
+    // Reduced motion steps the aisle: tap what the list needs, knock the nearest lure away, roll on.
+    await page.goto(base + route.path);
+    const phase = () => page.locator(".jw-game").getAttribute("data-phase");
+    const nearest = sel => page.locator(sel).evaluateAll(els => els.map((e, i) => ({ i, y: Number(getComputedStyle(e).getPropertyValue("--y")), lane: e.getAttribute("data-lane") })).sort((a, b) => b.y - a.y)[0]);
+    const shop = async until => {
+      for (let guard = 0; guard < 200; guard++) {
+        const p = await phase();
+        if (p === until || p === "setup" || p === "complete") return;
+        if (p === "till" || p === "revisit-till") { while (await page.locator('.jw-total[data-over="true"]').count()) await page.locator(".jw-back").last().click(); await page.getByRole("button", { name: "Pay" }).click(); continue; }
+        const need = await nearest('.jw-item[data-need="true"]');
+        if (need && need.lane !== await page.locator(".jw-game").getAttribute("data-lane")) { await page.locator('.jw-item[data-need="true"]').nth(need.i).click(); continue; }
+        const lure = await nearest('.jw-item[data-need="false"]');
+        if (lure) { await page.locator('.jw-item[data-need="false"]').nth(lure.i).click(); continue; }
+        await page.getByRole("button", { name: "Roll on" }).click();
+      }
+    };
+    if (route.state === "jax-till") return shop("till");
+    await shop("setup"); if (route.state === "jax-setup") return;
+    for (const name of ["Stick the list up", "Put food away"]) await page.getByRole("button", { name }).click();
+    await page.locator(".jw-wish-board").click(); await page.getByRole("button", { name: "Next shop" }).click();
+    if (route.state === "jax-revisit") return;
+    await shop("complete"); return;
   }
   if (route.state?.startsWith("mia-")) {
     await page.goto(base + route.path);
