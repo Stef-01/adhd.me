@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-23T23:47:24.334Z",
+  "measuredAt": "2026-09-24T04:00:26.577Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -457,7 +457,7 @@
         },
         {
           "w": 2,
-          "text": "CATCH IT!",
+          "text": "DELETE DRAFTS!",
           "tag": "p"
         },
         {
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
-          "w": 1,
-          "text": "0",
+          "w": 3,
+          "text": "reorganise the notes",
           "tag": "span"
         },
         {
-          "w": 1,
-          "text": "SWAT!",
+          "w": 2,
+          "text": "START SMALL!",
           "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "type ‘Hi’",
+          "tag": "span"
         }
       ]
     },
@@ -599,6 +599,33 @@
           "w": 3,
           "text": "Room to settle",
           "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "/lives/play/maya-one-thing-at-a-time",
+      "state": null,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
         }
       ]
     },
@@ -1651,6 +1678,114 @@
       ]
     },
     {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, arrived",
+      "state": "maya-arrived",
+      "total": 10,
+      "fold": 10,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Made it.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "Next place",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, setup",
+      "state": "maya-setup",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Meet Ari by the clock",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Before next time.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, revisit",
+      "state": "maya-revisit",
+      "total": 19,
+      "fold": 19,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 6,
+          "text": "The usual gate has a queue.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Next week, same station.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, complete",
+      "state": "maya-complete",
+      "total": 20,
+      "fold": 20,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "One thing at a time.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Lower the sensory floor",
+          "tag": "a"
+        }
+      ]
+    },
+    {
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, interruption",
       "state": "mia-interruption",
@@ -2383,26 +2518,26 @@
       "path": "/lives/play/maya-one-thing-at-a-time",
       "name": "Maya: the crossing",
       "state": null,
-      "total": 17,
-      "fold": 17,
-      "chrome": 1,
-      "ratio": 0.4,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Find a clear route.",
-          "tag": "h1"
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
         }
       ]
     },
@@ -2567,17 +2702,12 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 2,
+      "fold": 2,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
-        {
-          "w": 2,
-          "text": "POP IT!",
-          "tag": "p"
-        },
         {
           "w": 1,
           "text": "0",
@@ -2585,8 +2715,8 @@
         },
         {
           "w": 1,
-          "text": "pale",
-          "tag": "button"
+          "text": "PIGEONS!",
+          "tag": "p"
         }
       ]
     },
