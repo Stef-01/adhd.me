@@ -54,7 +54,7 @@ export const EXTRA = [
   ...["line-done", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/nina-the-first-line", state: `nina-${state}`, name: `Nina, ${state}` })),
   ...["arrived", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/maya-one-thing-at-a-time", state: `maya-${state}`, name: `Maya, ${state}` })),
   ...["interruption", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
-  ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
+  ...["repair", "reply", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
   { path: "/lives/play/theo-out-the-door", state: "theo-pause", name: "Theo, pause" },
   { path: "/lives/play/theo-out-the-door", state: "theo-departure", name: "Theo, departure" },
@@ -335,6 +335,7 @@ export async function reach(page, route, base) {
   if (route.state?.startsWith("arjun-")) {
     // Reduced motion plays at the player's pace: catch what answers, park ideas, let the rest pass.
     await page.goto(base + route.path);
+    await page.locator('.aw-game[data-still="true"]').waitFor();
     const phase = () => page.locator(".aw-game").getAttribute("data-phase");
     const meet = async until => {
       for (let guard = 0; guard < 160 && await phase() !== until; guard++) {
@@ -359,6 +360,7 @@ export async function reach(page, route, base) {
   if (route.state?.startsWith("jax-")) {
     // Reduced motion steps the aisle: tap what the list needs, knock the nearest lure away, roll on.
     await page.goto(base + route.path);
+    await page.locator('.jw-game[data-still="true"]').waitFor();
     const phase = () => page.locator(".jw-game").getAttribute("data-phase");
     const nearest = sel => page.locator(sel).evaluateAll(els => els.map((e, i) => ({ i, y: Number(getComputedStyle(e).getPropertyValue("--y")), lane: e.getAttribute("data-lane") })).sort((a, b) => b.y - a.y)[0]);
     const shop = async until => {
@@ -383,6 +385,7 @@ export async function reach(page, route, base) {
   if (route.state?.startsWith("nina-")) {
     // Reduced motion moves the pen one cell per arrow: head for the nearest needed phrase, round blots.
     await page.goto(base + route.path);
+    await page.locator('.nw-game[data-still="true"]').waitFor();
     const phase = () => page.locator(".nw-game").getAttribute("data-phase");
     const key = () => page.evaluate(() => {
       const c = el => ({ x: Math.round(+getComputedStyle(el).getPropertyValue("--cx") * 5 - .5), y: Math.round(+getComputedStyle(el).getPropertyValue("--cy") * 7 - .5) });
@@ -411,6 +414,7 @@ export async function reach(page, route, base) {
   if (route.state?.startsWith("maya-")) {
     // Reduced motion moves the crowds one step per step; the dashed outlines show where they will be.
     await page.goto(base + route.path);
+    await page.locator('.mw-game[data-still="true"]').waitFor();
     const phase = () => page.locator(".mw-game").getAttribute("data-phase");
     const choose = () => page.evaluate(() => {
       const board = document.querySelector(".mw-board").getBoundingClientRect();
@@ -469,22 +473,20 @@ export async function reach(page, route, base) {
     await solve(2); return;
   }
   if (route.state?.startsWith("zoe-")) {
+    // Reduced motion shows the whole reply at once and never sends by itself.
     await page.goto(base + route.path);
-    if (route.state === "zoe-calendar") { await page.getByRole("button", { name: "Calendar", exact: true }).click(); return; }
-    await page.getByRole("button", { name: "I’m not sure", exact: true }).click();
-    await page.getByRole("button", { name: "More notice", exact: true }).click();
-    await page.getByRole("button", { name: "Meet", exact: true }).click();
-    await page.getByRole("button", { name: "7 pm", exact: true }).click();
-    if (route.state === "zoe-compose") return;
-    await page.getByRole("button", { name: "Propose", exact: true }).click();
+    await page.locator('.zw-game[data-still="true"]').waitFor();
+    const phase = () => page.locator(".zw-game").getAttribute("data-phase");
+    const reply = async (cool = true) => { if (cool) while (await page.locator(".zw-word.is-hot").count()) await page.locator(".zw-word.is-hot").first().click(); await page.getByRole("button", { name: "Send", exact: true }).click(); };
+    if (route.state === "zoe-repair") { await reply(false); return; }
+    await reply();
+    if (route.state === "zoe-reply") return;
+    for (let beat = 1; beat < 3; beat++) { await page.locator(".zw-actions .kit-primary").click(); await reply(); }
+    await page.locator(".zw-actions .kit-primary").click();
     if (route.state === "zoe-setup") return;
-    await page.getByRole("button", { name: "Rae", exact: true }).click();
-    if (route.state === "zoe-cue") return;
-    await page.getByRole("button", { name: "Phone reminder", exact: true }).click();
-    await page.getByRole("button", { name: "Later that evening", exact: true }).click();
+    for (const name of ["Rae", "Saturday", "Put it in the calendar", "Keep the jar", "Saturday comes"]) await page.getByRole("button", { name, exact: true }).click();
     if (route.state === "zoe-revisit") return;
-    await page.getByRole("button", { name: "Move it to 8 pm", exact: true }).click();
-    return;
+    await reply(); void phase; return;
   }
   if (route.state?.startsWith("theo-")) {
     await page.locator('.tm-game[data-ready="true"][data-still="true"]').waitFor();

@@ -1,26 +1,40 @@
-# Zoe: implemented conversation slice
+# Zoe — Before you send
 
-22 September 2026. Public route: `/lives/play/zoe-before-you-send`.
+Rebuilt 23 September 2026 at `/lives/play/zoe-before-you-send`. The fragment-assembly slice (pick a
+fact, need and request chip, then propose) read as a form next to Leo and is replaced.
 
-The standalone route now uses `ZoeWorldGame` and the pure `zoe-world` reducer instead of the legacy three-round inhibition/hold/tap adapter. The arcade variants remain separate and have not been rebuilt by this change.
+## The game
 
-## Implemented
+A phone held at night fills the frame. Rae's message arrives; Zoe's first reply types itself into a
+live draft bubble, phrase by phrase, while a send fuse burns along the composer and the Send button
+swells. Sharp phrases glow with a heat underline: tapping one turns it into what Zoe means
+("Whatever." becomes "Oh, that's a shame.") and drops the original into a jar on the shelf, kept,
+not deleted. **Breathe** holds the typing and the fuse for a moment, then needs a moment to return.
+Send early once the draft is clean, or let the fuse send whatever is there.
 
-- Direct entry, no difficulty selector. Three replay scenarios: a late change, missed call and assumed household task.
-- Assemble fact/uncertainty, need and request fragments. Revise them in any order. Inspect the calendar or ask for missing information.
-- Rae has independent time availability and limited late-evening capacity. Incompatible proposals are declined without resetting work. Naming uncertainty and clarifying first are both viable routes.
-- A saved draft is a real snapshot, restored independently of subsequent edits. A sharp reply requires acknowledgment before the negotiation continues.
-- Strategy practice follows agreement: choose a check-in owner, then place the plan in a calendar or phone reminder. The next encounter reads the same plan, owner and cue.
-- A changed message supports both rescheduling and keeping separate plans. Completion links to the existing Pause Before Send learning module. Another situation rotates the scenario and clears fictional state.
-- No audio, timer or precision input requirement. Keyboard, touch and reduced-motion paths share the same reducer. Hidden tabs pause; pause preserves the draft. The exit remains above the scene when scrolling.
-- Fictional gameplay stays in component memory. No symptom score, diagnosis, clinical severity or message text is written into the personal model.
+A sharp send is not a reset: Rae's hurt reply arrives, **Say sorry** sends a short repair, and the
+conversation goes on. Three messages rise in pace and in sharp phrases: a late change, a missed
+call, an assumed chore (three scenarios rotate on replay).
 
-## Validation
+**Setup (untimed, in the chat):** agree who checks in and when; Rae cannot do Thursday, Saturday
+works. Put it in the calendar and keep the jar. **Revisit:** "Still on for our plan?" The reply now
+carries the agreed plan in its own words ("Saturday at 7."), with one last sharp phrase to catch.
 
-Nine model tests cover feasible tactics, capacity, correction, repair, draft snapshots, pause, phase guards and strategy carryover. Fifteen browser cases across Chromium, WebKit and Firefox cover the actual library link, full gameplay, touch/keyboard, 320px phones, landscape, desktop, accessible names/contrast and the scrolled exit. Screenshot inspection covered the phone composition. The full 91-screen text audit passed its ceiling on all 77 app screens. A final targeted measurement after restoring the learning link measured Zoe at 20–32 words across the six later states, including 28 at completion. The merged production build and strict typecheck passed, along with all 45 related Zoe/Theo/Leo model tests.
+## Implementation
 
-## Remaining quality gates
+- `src/lives/zoe-world.ts`: pure reducer. 12 Vitest cases: every scenario to completion, typing and
+  fuse timing, cooling into the jar, guards on untyped and calm phrases, fuse send into repair,
+  breathe hold and cooldown, send gating, the Thursday decline and setup gating, the plan in the
+  revisit reply, still mode, pause and replay.
+- `app/lives/zoe-world/`: phone, jar and room drawn in code; shared kit, A-minor score that
+  tightens as the fuse runs with sharp words left, key-tap, zip, buzz and notification cues.
+- At the player's pace the whole reply appears at once and nothing sends by itself.
 
-This is a first playable standalone implementation, not a claim that engagement has been validated with patients. Co-design observation and continuous play-recording review remain pending. The current interaction uses select-and-place message fragments, not free typing or gesture-driven dragging. Do not imply that it is real messaging, that Rae represents another user, or that a successful fictional exchange assesses communication ability. Future work should test whether fragment assembly has enough strategic depth before adding more visual effects.
+## Verification
 
-Mia is the next implementation in the production order; her asset kit is ready. Keep her spatial mechanics independent from Zoe's dialogue model.
+Six Playwright cases: library entry through three replies, setup, the revisit and replay; a sharp
+send repaired with the feeling kept; keyboard-only with sound on; real typing, breathe, pause and
+the fuse sending; 320 to 1440 px including landscape with axe scans of four phases; no message text
+in storage. Text budget: 16 to 34 words.
+
+Function is tested; engagement is not. Observed playtesting remains outstanding.
