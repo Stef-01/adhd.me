@@ -347,7 +347,7 @@ test("the care map opens from the Learn page's map icon, and a node explains its
   await page.goto("/approach");
   await page.getByRole("link", { name: "Open the care map" }).first().click();
   await expect(page).toHaveURL(/\/approach\/map$/);
-  await expect(page.getByRole("heading", { name: "Four layers, one life." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Tap a part of life." })).toBeVisible();
   await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
   await expect(page.getByRole("heading", { name: "Starting" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Why starting can be harder than doing/ })).toBeVisible();

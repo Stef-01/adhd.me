@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-22T21:55:36.708Z",
-  "base": "http://localhost:3160",
+  "measuredAt": "2026-09-24T05:08:12.860Z",
+  "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -120,10 +120,10 @@
       "path": "/approach/map",
       "name": "/approach/map",
       "state": null,
-      "total": 150,
-      "fold": 79,
+      "total": 82,
+      "fold": 82,
       "chrome": 6,
-      "ratio": 3.8,
+      "ratio": 2.1,
       "verdict": "long-form",
       "longest": [
         {
@@ -132,14 +132,14 @@
           "tag": "p"
         },
         {
-          "w": 18,
-          "text": "The relationships that carry part of the load, or add to it: partner, family, ma",
-          "tag": "p"
+          "w": 6,
+          "text": "Where ADHD sits in a life.",
+          "tag": "h1"
         },
         {
-          "w": 16,
-          "text": "How attention, memory, activation and emotion actually run for you, the part mos",
-          "tag": "p"
+          "w": 5,
+          "text": "Tap a part of life.",
+          "tag": "h2"
         }
       ]
     },
@@ -201,20 +201,20 @@
       "path": "/clinicians/join",
       "name": "/clinicians/join",
       "state": null,
-      "total": 55,
-      "fold": 55,
+      "total": 30,
+      "fold": 30,
       "chrome": 26,
-      "ratio": 1.4,
-      "verdict": "ceiling",
+      "ratio": 0.8,
+      "verdict": "target",
       "longest": [
         {
-          "w": 23,
-          "text": "Tell us your name, your practice and what your week actually looks like. Everyth",
+          "w": 9,
+          "text": "Your name, your practice, what your week looks like.",
           "tag": "p"
         },
         {
-          "w": 15,
-          "text": "One email, who you are and where you practise, and a person replies. No forms.",
+          "w": 8,
+          "text": "One email, and a person replies. No forms.",
           "tag": "p"
         },
         {
@@ -255,25 +255,25 @@
       "path": "/examples",
       "name": "/examples",
       "state": null,
-      "total": 236,
-      "fold": 149,
+      "total": 121,
+      "fold": 121,
       "chrome": 25,
-      "ratio": 5.9,
+      "ratio": 3,
       "verdict": "long-form",
       "longest": [
         {
-          "w": 47,
-          "text": "The order is never a judgement about who is a better doctor. It is overlap betwe",
+          "w": 19,
+          "text": "The order is overlap between your words and what each GP declares, never a judge",
           "tag": "p"
         },
         {
-          "w": 43,
-          "text": "These are demo scenarios, not patients, nobody’s story is used to sell anything ",
+          "w": 12,
+          "text": "Demo scenarios, not patients. Each result is computed live by the finder.",
           "tag": "p"
         },
         {
-          "w": 35,
-          "text": "The scenarios themselves are not printed here: they are written as somebody woul",
+          "w": 10,
+          "text": "The order was earned; the reason is on the card.",
           "tag": "p"
         }
       ]
@@ -336,10 +336,10 @@
       "path": "/lives",
       "name": "/lives",
       "state": null,
-      "total": 27,
-      "fold": 27,
+      "total": 25,
+      "fold": 25,
       "chrome": 6,
-      "ratio": 0.7,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -363,8 +363,8 @@
       "path": "/lives/characters",
       "name": "/lives/characters",
       "state": null,
-      "total": 53,
-      "fold": 22,
+      "total": 51,
+      "fold": 20,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -390,10 +390,10 @@
       "path": "/lives/lab",
       "name": "/lives/lab",
       "state": null,
-      "total": 518,
+      "total": 516,
       "fold": 53,
       "chrome": 6,
-      "ratio": 13,
+      "ratio": 12.9,
       "verdict": "long-form",
       "longest": [
         {
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "write the perfect email",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "START SMALL!",
+          "w": 3,
+          "text": "HOLD IT IN!",
           "tag": "p"
         },
         {
+          "w": 3,
+          "text": "Say it now",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "type ‘Hi’",
-          "tag": "span"
+          "text": ". Then, at",
+          "tag": "p"
         }
       ]
     },
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
-          "tag": "button"
-        },
-        {
           "w": 2,
-          "text": "DON’T SCROLL!",
+          "text": "LIGHTS OUT!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "ONE MORE",
+          "w": 1,
+          "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "10pm",
+          "tag": "button"
         }
       ]
     },
@@ -525,26 +525,53 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "/lives/play/arjun-hold-the-thread",
       "state": null,
-      "total": 25,
-      "fold": 25,
-      "chrome": 4,
-      "ratio": 0.6,
+      "total": 32,
+      "fold": 32,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
+          "w": 8,
+          "text": "Tap what answers it. Park Arjun’s own ideas.",
+          "tag": "p"
+        },
+        {
           "w": 5,
-          "text": "Three spaces. Ask what matters.",
+          "text": "Catch what answers the question.",
           "tag": "p"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
-          "tag": "h1"
+          "text": "Arjun · Hold the thread",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "/lives/play/jax-just-the-list",
+      "state": null,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Steer into the list. Tap the lures away.",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "A quiet break",
+          "w": 4,
+          "text": "Jax · Just the list",
           "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Steer into the milk.",
+          "tag": "p"
         }
       ]
     },
@@ -576,6 +603,33 @@
       ]
     },
     {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "/lives/play/maya-one-thing-at-a-time",
+      "state": null,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
       "path": "/lives/play/mia-remember-why",
       "name": "/lives/play/mia-remember-why",
       "state": null,
@@ -598,6 +652,33 @@
         {
           "w": 3,
           "text": "Keep the thread.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "/lives/play/nina-the-first-line",
+      "state": null,
+      "total": 34,
+      "fold": 34,
+      "chrome": 0,
+      "ratio": 0.9,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "A flyer for the garden.",
           "tag": "h1"
         }
       ]
@@ -633,26 +714,26 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "/lives/play/zoe-before-you-send",
       "state": null,
-      "total": 27,
-      "fold": 27,
-      "chrome": 4,
-      "ratio": 0.7,
+      "total": 34,
+      "fold": 34,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Rae: ‘Can we move dinner?’",
+          "w": 7,
+          "text": "Tap the sharp words before it sends.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Ask what happened",
-          "tag": "button"
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "I’m not sure",
-          "tag": "button"
+          "w": 7,
+          "text": "Tap the sharp words before it sends.",
+          "tag": "p"
         }
       ]
     },
@@ -845,7 +926,7 @@
       "name": "/my-adhd",
       "state": null,
       "total": 25,
-      "fold": 25,
+      "fold": 16,
       "chrome": 6,
       "ratio": 0.6,
       "verdict": "target",
@@ -1274,28 +1355,28 @@
     },
     {
       "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, options",
-      "state": "arjun-options",
-      "total": 35,
-      "fold": 35,
-      "chrome": 4,
-      "ratio": 0.9,
+      "name": "Arjun, decided",
+      "state": "arjun-decided",
+      "total": 17,
+      "fold": 17,
+      "chrome": 0,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Compare this option with the board.",
-          "tag": "p"
+          "w": 4,
+          "text": "Arjun · Hold the thread",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "A quiet break",
-          "tag": "button"
+          "text": "Six of us",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "Connect the plan",
-          "tag": "button"
+          "text": "Near the station",
+          "tag": "span"
         }
       ]
     },
@@ -1303,79 +1384,25 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, setup",
       "state": "arjun-setup",
-      "total": 20,
-      "fold": 20,
-      "chrome": 4,
-      "ratio": 0.5,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 7,
-          "text": "That fits. Leave a shared next step.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Leave a shared next step.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Pin the question",
-          "tag": "button"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, owner",
-      "state": "arjun-owner",
-      "total": 27,
-      "fold": 27,
-      "chrome": 4,
-      "ratio": 0.7,
+      "total": 36,
+      "fold": 36,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
           "w": 8,
-          "text": "The question has a place to return to.",
+          "text": "Pin it, keep the idea, share the follow-up.",
           "tag": "p"
         },
         {
           "w": 5,
-          "text": "Leave a shared next step.",
+          "text": "Leave the next step ready.",
           "tag": "h1"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
-          "tag": "span"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, negotiation",
-      "state": "arjun-negotiation",
-      "total": 27,
-      "fold": 27,
-      "chrome": 4,
-      "ratio": 0.7,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Rae: Today is full. Tomorrow works.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Leave a shared next step.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "Where can we meet?",
+          "text": "Arjun · Hold the thread",
           "tag": "span"
         }
       ]
@@ -1384,53 +1411,26 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, revisit",
       "state": "arjun-revisit",
-      "total": 32,
-      "fold": 32,
-      "chrome": 4,
-      "ratio": 0.8,
+      "total": 35,
+      "fold": 35,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "The plan changed. Rae has an update.",
+          "w": 8,
+          "text": "Same people. The plan has a pin now.",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "The plan has changed.",
-          "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "Where can we meet?",
-          "tag": "span"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/arjun-hold-the-thread",
-      "name": "Arjun, revisit-options",
-      "state": "arjun-revisit-options",
-      "total": 42,
-      "fold": 42,
-      "chrome": 4,
-      "ratio": 1.1,
-      "verdict": "ceiling",
-      "longest": [
-        {
-          "w": 6,
-          "text": "Compare this option with the board.",
+          "w": 5,
+          "text": "Pinned questions show what matters.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "A quiet break",
+          "w": 5,
+          "text": "Next week: still the library?",
           "tag": "span"
-        },
-        {
-          "w": 3,
-          "text": "No quiet space",
-          "tag": "small"
         }
       ]
     },
@@ -1438,26 +1438,350 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, complete",
       "state": "arjun-complete",
-      "total": 34,
-      "fold": 34,
-      "chrome": 4,
-      "ratio": 0.9,
+      "total": 33,
+      "fold": 33,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
+          "w": 7,
+          "text": "Same people. Your saved idea decided it.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Next week: still the library?",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Arjun · Hold the thread",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, till",
+      "state": "jax-till",
+      "total": 10,
+      "fold": 10,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "At the till.",
+          "tag": "h1"
+        },
+        {
+          "w": 1,
+          "text": "Milk",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, setup",
+      "state": "jax-setup",
+      "total": 23,
+      "fold": 23,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Leave the next shop easier.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Stick the list up",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, revisit",
+      "state": "jax-revisit",
+      "total": 15,
+      "fold": 15,
+      "chrome": 0,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Same list, on the handle.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "The list, again.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/jax-just-the-list",
+      "name": "Jax, complete",
+      "state": "jax-complete",
+      "total": 29,
+      "fold": 29,
+      "chrome": 0,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Same list. The wish was your call.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Jax · Just the list",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Park the new idea",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, line-done",
+      "state": "nina-line-done",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Nina · The first line",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "One line down.",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "the garden needs",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, setup",
+      "state": "nina-setup",
+      "total": 43,
+      "fold": 43,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
           "w": 8,
-          "text": "A changed plan. Everyone still has a place.",
+          "text": "Hi neighbours, the garden needs a few hands.",
           "tag": "p"
         },
         {
           "w": 6,
-          "text": "A plan with room for everyone.",
+          "text": "Leave it easy to return to.",
+          "tag": "h1"
+        },
+        {
+          "w": 6,
+          "text": "Tea after, all welcome, thank you!",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, revisit",
+      "state": "nina-revisit",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "Where to meet, and rain.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Nina · The first line",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Back at the marker.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/nina-the-first-line",
+      "name": "Nina, complete",
+      "state": "nina-complete",
+      "total": 43,
+      "fold": 43,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Hi neighbours, the garden needs a few hands.",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Meet at the gate. Rain? Next week.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Tea after, all welcome, thank you!",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, arrived",
+      "state": "maya-arrived",
+      "total": 10,
+      "fold": 10,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Made it.",
+          "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "Next place",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, setup",
+      "state": "maya-setup",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Meet Ari by the clock",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Before next time.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, revisit",
+      "state": "maya-revisit",
+      "total": 19,
+      "fold": 19,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 6,
+          "text": "The usual gate has a queue.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Next week, same station.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/maya-one-thing-at-a-time",
+      "name": "Maya, complete",
+      "state": "maya-complete",
+      "total": 20,
+      "fold": 20,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "One thing at a time.",
           "tag": "h1"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
-          "tag": "span"
+          "text": "Lower the sensory floor",
+          "tag": "a"
         }
       ]
     },
@@ -1598,55 +1922,55 @@
     },
     {
       "path": "/lives/play/zoe-before-you-send",
-      "name": "Zoe, compose",
-      "state": "zoe-compose",
-      "total": 32,
-      "fold": 32,
-      "chrome": 4,
-      "ratio": 0.8,
+      "name": "Zoe, repair",
+      "state": "zoe-repair",
+      "total": 28,
+      "fold": 28,
+      "chrome": 0,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Rae: ‘Can we move dinner?’",
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Ask what happened",
-          "tag": "button"
+          "w": 5,
+          "text": "Whatever. Sure. Guess work wins.",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "I’m not sure",
-          "tag": "span"
+          "w": 5,
+          "text": "Ouch. I did say sorry.",
+          "tag": "p"
         }
       ]
     },
     {
       "path": "/lives/play/zoe-before-you-send",
-      "name": "Zoe, calendar",
-      "state": "zoe-calendar",
-      "total": 25,
-      "fold": 25,
-      "chrome": 4,
-      "ratio": 0.6,
+      "name": "Zoe, reply",
+      "state": "zoe-reply",
+      "total": 30,
+      "fold": 30,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Rae: ‘Can we move dinner?’",
+          "w": 8,
+          "text": "Oh, that’s a shame. Sure. Is Friday free?",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Ask what happened",
-          "tag": "button"
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Room for both.",
-          "tag": "h2"
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         }
       ]
     },
@@ -1654,53 +1978,26 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, setup",
       "state": "zoe-setup",
-      "total": 20,
-      "fold": 20,
-      "chrome": 4,
-      "ratio": 0.5,
+      "total": 32,
+      "fold": 32,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 7,
-          "text": "‘Agreed. Let’s give changes a clear check-in.’",
+          "w": 6,
+          "text": "Can we plan a proper catch-up?",
           "tag": "p"
         },
         {
           "w": 5,
-          "text": "Give the plan a place.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Who checks in?",
-          "tag": "h2"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/zoe-before-you-send",
-      "name": "Zoe, cue",
-      "state": "zoe-cue",
-      "total": 22,
-      "fold": 22,
-      "chrome": 4,
-      "ratio": 0.6,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 7,
-          "text": "Rae will check in. Zoe will reply.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Give the plan a place.",
-          "tag": "h1"
+          "text": "Put it in the calendar",
+          "tag": "button"
         },
         {
           "w": 4,
-          "text": "Where will it live?",
-          "tag": "h2"
+          "text": "Zoe · Before you send",
+          "tag": "span"
         }
       ]
     },
@@ -1708,26 +2005,26 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, revisit",
       "state": "zoe-revisit",
-      "total": 29,
-      "fold": 29,
-      "chrome": 4,
-      "ratio": 0.7,
+      "total": 16,
+      "fold": 16,
+      "chrome": 0,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 9,
-          "text": "‘The bus is late. Could we make it eight?’",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Move it to 8 pm",
-          "tag": "button"
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         },
         {
           "w": 4,
-          "text": "A plan can change.",
+          "text": "The plan comes up.",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Saturday at 7.",
+          "tag": "span"
         }
       ]
     },
@@ -1735,26 +2032,26 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, complete",
       "state": "zoe-complete",
-      "total": 28,
-      "fold": 28,
-      "chrome": 4,
-      "ratio": 0.7,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 8,
-          "text": "A new time. The owner and reminder stay.",
+          "w": 5,
+          "text": "Still on for our plan?",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Still on the same side.",
-          "tag": "h1"
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         },
         {
-          "w": 5,
-          "text": "Try this in my day",
-          "tag": "a"
+          "w": 3,
+          "text": "Before you sent.",
+          "tag": "h1"
         }
       ]
     },
@@ -2059,26 +2356,26 @@
       "path": "/lives/play/nina-the-first-line",
       "name": "Nina: the first line",
       "state": null,
-      "total": 15,
-      "fold": 15,
-      "chrome": 1,
-      "ratio": 0.4,
+      "total": 34,
+      "fold": 34,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Choose the smallest start.",
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Steer the pen through the words.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "A flyer for the garden.",
           "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "reorganise the notes",
-          "tag": "span"
-        },
-        {
-          "w": 2,
-          "text": "1 / 2",
-          "tag": "span"
         }
       ]
     },
@@ -2086,26 +2383,26 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax: just the list",
       "state": null,
-      "total": 10,
-      "fold": 10,
-      "chrome": 1,
-      "ratio": 0.3,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Keep the milk. Clear the extras.",
-          "tag": "h1"
+          "w": 8,
+          "text": "Steer into the list. Tap the lures away.",
+          "tag": "p"
         },
         {
-          "w": 2,
-          "text": "1 / 2",
+          "w": 4,
+          "text": "Jax · Just the list",
           "tag": "span"
         },
         {
-          "w": 2,
-          "text": "Your pace",
-          "tag": "span"
+          "w": 4,
+          "text": "Steer into the milk.",
+          "tag": "p"
         }
       ]
     },
@@ -2140,26 +2437,26 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe: before send",
       "state": null,
-      "total": 27,
-      "fold": 27,
-      "chrome": 4,
-      "ratio": 0.7,
+      "total": 34,
+      "fold": 34,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
-          "w": 5,
-          "text": "Rae: ‘Can we move dinner?’",
+          "w": 7,
+          "text": "Tap the sharp words before it sends.",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Ask what happened",
-          "tag": "button"
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "I’m not sure",
-          "tag": "button"
+          "w": 7,
+          "text": "Tap the sharp words before it sends.",
+          "tag": "p"
         }
       ]
     },
@@ -2167,25 +2464,25 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun: the meeting",
       "state": null,
-      "total": 25,
-      "fold": 25,
-      "chrome": 4,
-      "ratio": 0.6,
+      "total": 32,
+      "fold": 32,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
+          "w": 8,
+          "text": "Tap what answers it. Park Arjun’s own ideas.",
+          "tag": "p"
+        },
+        {
           "w": 5,
-          "text": "Three spaces. Ask what matters.",
+          "text": "Catch what answers the question.",
           "tag": "p"
         },
         {
           "w": 4,
-          "text": "Where can we meet?",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "A quiet break",
+          "text": "Arjun · Hold the thread",
           "tag": "span"
         }
       ]
@@ -2194,26 +2491,26 @@
       "path": "/lives/play/maya-one-thing-at-a-time",
       "name": "Maya: the crossing",
       "state": null,
-      "total": 17,
-      "fold": 17,
-      "chrome": 1,
-      "ratio": 0.4,
+      "total": 21,
+      "fold": 21,
+      "chrome": 0,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Find a clear route.",
-          "tag": "h1"
+          "w": 6,
+          "text": "Maya · One thing at a time",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 5,
+          "text": "Step across. Mind the crowds.",
+          "tag": "p"
         }
       ]
     },
@@ -2378,26 +2675,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LOCK IN!",
+          "w": 3,
+          "text": "HOLD THE LID!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "revenue chart",
-          "tag": "span"
+          "w": 3,
+          "text": "Say it now",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 2,
+          "text": ". Then, at",
+          "tag": "p"
         }
       ]
     },
@@ -2405,8 +2702,8 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 53,
-      "fold": 36,
+      "total": 50,
+      "fold": 33,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",
@@ -2541,7 +2838,7 @@
       "name": "My ADHD, lived in",
       "state": "model-lived",
       "total": 55,
-      "fold": 35,
+      "fold": 21,
       "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
@@ -2568,7 +2865,7 @@
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
       "total": 60,
-      "fold": 35,
+      "fold": 21,
       "chrome": 6,
       "ratio": 1.5,
       "verdict": "ceiling",
@@ -2729,8 +3026,8 @@
       "path": "/today",
       "name": "Today, the care plan open",
       "state": "plan-open",
-      "total": 22,
-      "fold": 22,
+      "total": 23,
+      "fold": 23,
       "chrome": 0,
       "ratio": 0.6,
       "verdict": "target",
@@ -2741,14 +3038,149 @@
           "tag": "button"
         },
         {
+          "w": 3,
+          "text": "Starting, Sleep & energy",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Who I see",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: six months",
+      "state": "plan-duration",
+      "total": 12,
+      "fold": 12,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Has it been six months or more?",
+          "tag": "p"
+        },
+        {
           "w": 2,
-          "text": "Care plan",
+          "text": "Six months",
+          "tag": "h2"
+        },
+        {
+          "w": 2,
+          "text": "Not yet",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: goals",
+      "state": "plan-goals",
+      "total": 20,
+      "fold": 20,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "What to change first. Up to three.",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "In your words",
+          "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Emotional regulation",
+          "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: who I see",
+      "state": "plan-providers",
+      "total": 29,
+      "fold": 28,
+      "chrome": 0,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Anyone you already see?",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Names, if you like",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Who I see",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: my team",
+      "state": "plan-team",
+      "total": 14,
+      "fold": 14,
+      "chrome": 0,
+      "ratio": 0.4,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 2,
+          "text": "My team",
           "tag": "h2"
         },
         {
           "w": 2,
           "text": "Occupational therapist",
           "tag": "span"
+        },
+        {
+          "w": 2,
+          "text": "Sleep & energy",
+          "tag": "span"
+        }
+      ]
+    },
+    {
+      "path": "/today",
+      "name": "Today, the care plan: services",
+      "state": "plan-services",
+      "total": 12,
+      "fold": 12,
+      "chrome": 0,
+      "ratio": 0.3,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 3,
+          "text": "My plan allows",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "Used so far",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "Services",
+          "tag": "h2"
         }
       ]
     },

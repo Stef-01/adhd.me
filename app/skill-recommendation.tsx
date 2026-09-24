@@ -34,7 +34,7 @@ export function SkillRecommendation({ context }: { context?: Subdomain }) {
       transition={{ type: "spring", bounce: 0, duration: .3 }}
       onClick={() => dialog.current?.showModal()} aria-haspopup="dialog" aria-label={`${provider.name}: ${label}`}>
       <span className={styles.face}><ClinicianPortrait clinician={provider} variant="thumb" /></span>
-      <span className={styles.copy}><strong>{label}</strong><span>{provider.name}</span></span>
+      <span className={styles.copy}><span className={styles.name}>{provider.name}</span><strong>{label}</strong></span>
       <ArrowUpRight size={19} aria-hidden="true" />
     </motion.button>
     <dialog ref={dialog} className={styles.sheet} aria-labelledby={`skill-name-${provider.id}`} onCancel={event => { event.preventDefault(); close(); }}>

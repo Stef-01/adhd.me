@@ -1,6 +1,6 @@
 "use client";
 
-// The care plan, on the hub (docs/adhd-life/CARE-PLAN-PRD.md §7, §8).
+// The care plan, on the hub (docs/adhd-life/CARE-PLAN-PRD.md §7, §8, §14).
 //
 // TWO WORDS ON THE HUB. "Care plan", and a row of dots. The hub measured 51 words lived in and 56
 // with a step proposed, against a ceiling of 60, and `BUDGET.card` is 8 — so the card was designed
@@ -17,28 +17,43 @@
 // filling bar would say finish me, and this feature must not — §9 refuses the completion mechanic,
 // and two of the bars fixed in this tree read as time up.
 //
-// THE SHEET MARKS THE EXCEPTION, NOT THE RULE. Every row is something to spend the plan on, so
+// THE SHEET IS A LIST OF FIVE THINGS, each a row that opens onto one question. A GP writing a plan
+// needs the same five facts every time — how long, what for, who is already involved, who to
+// refer to, and what the plan allows once written — and the person needs to have thought about the
+// first four before the visit rather than in it. So the sheet asks each one as a tap: a yes or a
+// not yet, a few chips, a row to keep or drop. A row answered gets a filled tick and its answer
+// beside the name; a row not yet answered gets a hollow one and nothing. No instruction, no
+// progress bar, no "3 of 5 done": the ticks are the state and the list is the order.
+//
+// THE TEAM STEP MARKS THE EXCEPTION, NOT THE RULE. Every row is something to spend the plan on, so
 // saying "On a plan" on each of them is three words apiece to state the default. Only the row a
 // plan CANNOT pay for is marked, which is fewer words and a louder mark. It is never dropped:
 // MAP-CONNECTIONS measured `adhd-coach` as the map's answer for 13 of 17 subdomains with no real
 // provider, and a coach is the one kind a plan can never cover, so hiding it would make this
-// screen silently disagree with /support.
+// screen silently disagree with /support. It cannot be kept, because a plan cannot pay for it.
 //
 // NOTHING HERE SAYS MONEY, and nothing here says a person is eligible. See `src/model/care-plan.ts`.
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Minus, Plus } from "@phosphor-icons/react";
 import {
+  CLAIMABLE,
+  done,
+  GOALS_MAX,
   hasPlan,
   lapses,
   PLAN_MAX,
   remaining,
   spent,
-  suggestFor,
+  STEP_LABELS,
+  STEPS,
+  teamFor,
   type CarePlan,
+  type Step,
 } from "@/model/care-plan";
-import { saveCarePlan, type ModelRecord } from "@/model/store";
-import { profession } from "@/support/professions";
+import { ASPECT_LABELS, ASPECTS, type Aspect } from "@/model/matrix";
+import { saveCarePlan, savePlanDetails, type ModelRecord, type PlanDetails } from "@/model/store";
+import { profession, PROFESSIONS, type Profession } from "@/support/professions";
 import { track } from "@/model/events";
 import { Sheet } from "./sheet";
 
@@ -89,9 +104,36 @@ export function CarePlanCard({ record, onOpen }: { record: ModelRecord; onOpen: 
   );
 }
 
+type View = "list" | Step;
+
+const labels = (kinds: readonly Profession[]) => kinds.map((k) => profession(k).label).join(", ");
+
+/** What a row says beside its name once answered: the answer, in the words the app already uses. */
+function stateOf(plan: CarePlan, step: Step): React.ReactNode {
+  if (!done(plan, step)) return step === "services" ? "Not yet" : null;
+  switch (step) {
+    case "services":
+      return (
+        <>
+          <Dots plan={plan} />
+          <span className="plan-left">{remaining(plan)} left</span>
+        </>
+      );
+    case "duration":
+      return plan.sixMonths ? "Yes" : "Not yet";
+    case "goals":
+      return plan.goals!.length ? plan.goals!.map((a) => ASPECT_LABELS[a]).join(", ") : "None";
+    case "providers":
+      return plan.providers!.length ? labels(plan.providers!) : "None";
+    case "team":
+      return plan.team!.length ? labels(plan.team!) : "None";
+  }
+}
+
 /**
- * The sheet: what is left, who the person's own map says to spend it on, when it resets, and one
- * way onward. Under 40 words with four rows.
+ * The sheet: five rows, each one thing a GP will ask, and one way onward. The list is under 25
+ * words answered; each step stays under the screen ceiling on its own, because the shell behind
+ * an open sheet is inert and the instrument measures the sheet alone.
  */
 export function CarePlanSheet({
   open,
@@ -112,47 +154,45 @@ export function CarePlanSheet({
   openedBy?: React.RefObject<HTMLElement | null>;
 }) {
   const plan = record.carePlan;
-  const [editing, setEditing] = useState(false);
-  const has = hasPlan(plan);
-  const left = remaining(plan);
-  const rows = has ? suggestFor(record, plan) : [];
+  const [view, setView] = useState<View>("list");
+  const body = useRef<HTMLDivElement>(null);
+  const mounted = useRef(false);
+
+  // A step replaces the row that opened it, which unmounts the focused control. The first control
+  // of the new view takes focus so a keyboard or screen-reader user is not dropped on the body
+  // outside the trap. Not on first mount: the sheet itself handles that.
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    body.current?.querySelector<HTMLElement>("button, input, [tabindex]")?.focus({ preventScroll: true });
+  }, [view]);
+
+  const close = () => { setView("list"); onClose(); };
+  const save = (step: Step, patch: Partial<PlanDetails>) => {
+    onRefresh(savePlanDetails(storage, patch));
+    track("CARE_PLAN_SAVED", { step });
+    setView("list");
+  };
 
   return (
-    <Sheet open={open} title="Care plan" onClose={onClose} openedBy={openedBy}>
-      <div className="plan-sheet">
-        {editing || !has ? (
-          <PlanNumbers
-            plan={plan}
-            onSave={(allows, used) => {
-              onRefresh(saveCarePlan(storage, allows, used));
-              track("CARE_PLAN_SAVED", {});
-              setEditing(false);
-            }}
-          />
-        ) : (
+    <Sheet open={open} title={view === "list" ? "Care plan" : STEP_LABELS[view]} onClose={close} openedBy={openedBy}>
+      <div ref={body} className="plan-sheet" data-view={view}>
+        {view === "list" && (
           <>
-            <p className="plan-state">
-              <Dots plan={plan} />
-              <span className="plan-left">{left} left</span>
-            </p>
-
-            {rows.length > 0 && (
-              <ul className="plan-rows">
-                {rows.map((r) => (
-                  <li key={r.kind} className="plan-row" data-covered={r.covered ? "true" : undefined}>
-                    <span className="plan-row-kind">{profession(r.kind).label}</span>
-                    <span className="plan-row-why">{r.because}</span>
-                    {/* Only the exception is marked. The rest of the sheet is the rule. */}
-                    {!r.covered && <span className="plan-row-mark">Not covered</span>}
+            <ul className="plan-steps">
+              {STEPS.map((step) => {
+                const answered = done(plan, step);
+                return (
+                  <li key={step}>
+                    <button type="button" className="plan-step" data-step={step} data-done={answered ? "true" : undefined} onClick={() => setView(step)}>
+                      <i className="plan-tick" aria-hidden="true" />
+                      <span className="plan-step-name">{STEP_LABELS[step]}</span>
+                      <span className={step === "services" && answered ? "plan-step-state plan-state" : "plan-step-state"}>{stateOf(plan, step)}</span>
+                    </button>
                   </li>
-                ))}
-              </ul>
-            )}
-
+                );
+              })}
+            </ul>
             <p className="map-foot is-onward plan-foot">
-              <button type="button" className="plan-edit" onClick={() => setEditing(true)}>
-                Resets {new Intl.DateTimeFormat("en-AU", { month: "long" }).format(new Date(lapses(plan), 0, 1))}
-              </button>
               {/* Not a link to `?share=1`: the hub does not read that, so it would have reloaded
                   the screen and dropped the person back where they started. The share sheet is
                   already on this page — this closes one sheet and opens the other. */}
@@ -162,8 +202,151 @@ export function CarePlanSheet({
             </p>
           </>
         )}
+
+        {view === "services" && (
+          <PlanNumbers
+            plan={plan}
+            onSave={(allows, used) => {
+              onRefresh(saveCarePlan(storage, allows, used));
+              track("CARE_PLAN_SAVED", { step: "services" });
+              setView("list");
+            }}
+          />
+        )}
+
+        {view === "duration" && (
+          <div className="plan-step-view">
+            <p className="plan-ask">Has it been six months or more?</p>
+            <p className="plan-choices">
+              {([["Yes", true], ["Not yet", false]] as const).map(([word, value]) => (
+                <button key={word} type="button" className="plan-choice" aria-pressed={plan.sixMonths === value} onClick={() => save("duration", { sixMonths: value })}>
+                  {word}
+                </button>
+              ))}
+            </p>
+          </div>
+        )}
+
+        {view === "goals" && (
+          <Chips<Aspect>
+            ask="What to change first. Up to three."
+            options={ASPECTS}
+            label={(a) => ASPECT_LABELS[a]}
+            max={GOALS_MAX}
+            initial={plan.goals ?? []}
+            note={{ label: "In your words", initial: plan.goalNote }}
+            onSave={(goals, goalNote) => save("goals", { goals, goalNote })}
+          />
+        )}
+
+        {view === "providers" && (
+          <Chips<Profession>
+            ask="Anyone you already see?"
+            options={PROFESSIONS.filter((id) => id !== "gp")}
+            label={(k) => profession(k).label}
+            initial={plan.providers ?? []}
+            note={{ label: "Names, if you like", initial: plan.providerNote }}
+            onSave={(providers, providerNote) => save("providers", { providers, providerNote })}
+          />
+        )}
+
+        {view === "team" && <Team record={record} onSave={(team) => save("team", { team })} />}
       </div>
     </Sheet>
+  );
+}
+
+/** A few chips, an optional line in the person's own words, and Save. Saving nothing is an answer. */
+function Chips<T extends string>({
+  ask,
+  options,
+  label,
+  max = Infinity,
+  initial,
+  note,
+  onSave,
+}: {
+  ask: string;
+  options: readonly T[];
+  label: (v: T) => string;
+  max?: number;
+  initial: readonly T[];
+  note: { label: string; initial: string };
+  onSave: (picked: T[], text: string) => void;
+}) {
+  const [picked, setPicked] = useState<T[]>([...initial]);
+  const [text, setText] = useState(note.initial);
+  const toggle = (v: T) => setPicked((p) => (p.includes(v) ? p.filter((x) => x !== v) : p.length < max ? [...p, v] : p));
+  return (
+    <div className="plan-step-view">
+      <p className="plan-ask">{ask}</p>
+      <p className="plan-chips">
+        {options.map((v) => {
+          const on = picked.includes(v);
+          return (
+            <button key={v} type="button" className="plan-chip" aria-pressed={on} disabled={!on && picked.length >= max} onClick={() => toggle(v)}>
+              {label(v)}
+            </button>
+          );
+        })}
+      </p>
+      <label className="plan-note">
+        <span>{note.label}</span>
+        <input type="text" value={text} maxLength={200} autoComplete="off" onChange={(e) => setText(e.target.value)} />
+      </label>
+      <button type="button" className="learn-primary plan-save" onClick={() => onSave(picked, text.trim())}>
+        Save
+      </button>
+    </div>
+  );
+}
+
+/**
+ * The map's proposal, one row per kind, each a row to keep or drop. The person's earlier choice
+ * is kept where they left it; before any choice, every covered row starts kept, because the map
+ * proposed it. A map with nothing to propose yet gets the four claimable kinds as chips instead.
+ */
+function Team({ record, onSave }: { record: ModelRecord; onSave: (team: Profession[]) => void }) {
+  const plan = record.carePlan;
+  const rows = teamFor(record);
+  const [kept, setKept] = useState<Profession[]>(() => plan.team ? [...plan.team] : rows.filter((r) => r.covered).map((r) => r.kind));
+  const toggle = (k: Profession) => setKept((p) => (p.includes(k) ? p.filter((x) => x !== k) : [...p, k]));
+  return (
+    <div className="plan-step-view">
+      {rows.length > 0 ? (
+        <ul className="plan-rows">
+          {rows.map((r) => (
+            <li key={r.kind} className="plan-row" data-covered={r.covered ? "true" : undefined}>
+              {r.covered ? (
+                <button type="button" className="plan-toggle" aria-pressed={kept.includes(r.kind)} onClick={() => toggle(r.kind)}>
+                  <i className="plan-tick" aria-hidden="true" />
+                  <span className="plan-row-kind">{profession(r.kind).label}</span>
+                  <span className="plan-row-why">{r.because}</span>
+                </button>
+              ) : (
+                <>
+                  <span className="plan-row-kind">{profession(r.kind).label}</span>
+                  <span className="plan-row-why">{r.because}</span>
+                  {/* Only the exception is marked. The rest of the step is the rule. */}
+                  <span className="plan-row-mark">Not covered</span>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="plan-chips">
+          {CLAIMABLE.map((k) => (
+            <button key={k} type="button" className="plan-chip" aria-pressed={kept.includes(k)} onClick={() => toggle(k)}>
+              {profession(k).label}
+            </button>
+          ))}
+        </p>
+      )}
+      <button type="button" className="learn-primary plan-save" onClick={() => onSave(kept)}>
+        Save
+      </button>
+    </div>
   );
 }
 
@@ -174,11 +357,13 @@ export function CarePlanSheet({
 function PlanNumbers({ plan, onSave }: { plan: CarePlan; onSave: (allows: number, used: number) => void }) {
   const [allows, setAllows] = useState(plan.allows || 5);
   const [used, setUsed] = useState(plan.used);
-  const first = useRef<HTMLButtonElement>(null);
   return (
     <div className="plan-numbers">
-      <Stepper label="My plan allows" value={allows} onChange={setAllows} firstRef={first} />
+      <Stepper label="My plan allows" value={allows} onChange={setAllows} />
       <Stepper label="Used so far" value={used} onChange={setUsed} max={allows} />
+      {hasPlan(plan) && (
+        <p className="plan-resets">Resets {new Intl.DateTimeFormat("en-AU", { month: "long" }).format(new Date(lapses(plan), 0, 1))}</p>
+      )}
       <button type="button" className="learn-primary plan-save" onClick={() => onSave(allows, used)}>
         Save
       </button>
@@ -191,13 +376,11 @@ function Stepper({
   value,
   onChange,
   max = PLAN_MAX,
-  firstRef,
 }: {
   label: string;
   value: number;
   onChange: (n: number) => void;
   max?: number;
-  firstRef?: React.RefObject<HTMLButtonElement | null>;
 }) {
   const set = (n: number) => onChange(Math.max(0, Math.min(n, Math.min(max, PLAN_MAX))));
   return (
@@ -206,7 +389,7 @@ function Stepper({
         {label}
       </span>
       <span className="plan-stepper-controls">
-        <button ref={firstRef} type="button" onClick={() => set(value - 1)} aria-label={`${label}: one fewer`} disabled={value <= 0}>
+        <button type="button" onClick={() => set(value - 1)} aria-label={`${label}: one fewer`} disabled={value <= 0}>
           <Minus size={16} weight="bold" aria-hidden="true" />
         </button>
         <output

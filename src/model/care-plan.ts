@@ -27,11 +27,11 @@
 // judgement. Nothing here returns "eligible", and the only thing the product says about getting
 // one is a question to ask a GP.
 
-import { ASPECT_LABELS, ASPECT_OF } from "./matrix";
+import { ASPECT_LABELS, ASPECT_OF, ASPECTS, type Aspect } from "./matrix";
 import { deriveNeeds } from "./needs";
 import { professionsFor } from "./recommend";
 import type { ModelRecord } from "./store";
-import type { Profession } from "@/support/professions";
+import { isProfession, type Profession } from "@/support/professions";
 
 /**
  * The allied-health kinds a chronic condition management plan can refer to, pending the clinical
@@ -66,13 +66,94 @@ export interface CarePlan {
   readonly year: number;
   /** When the person last confirmed these numbers, because a count is perishable. */
   readonly confirmedOn: string;
+
+  // THE HELPER (PRD §14). What a GP needs on the day, asked as a tap each and held as the person's
+  // own answers. `null` on each is "not asked yet"; an empty list is an answer.
+
+  /** Going on six months or more: the person's own answer, never this app's reading of them. */
+  readonly sixMonths: boolean | null;
+  /** The axes they want to change first, in the order they chose them. At most `GOALS_MAX`. */
+  readonly goals: readonly Aspect[] | null;
+  /** The goal in their own words. Verbatim; never rewritten. */
+  readonly goalNote: string;
+  /** Who they already see. Empty means nobody, which is an answer. */
+  readonly providers: readonly Profession[] | null;
+  /** Names, in their own words. Verbatim; never rewritten. */
+  readonly providerNote: string;
+  /** The kinds they want on the plan, chosen from the map's own proposal (`teamFor`). */
+  readonly team: readonly Profession[] | null;
 }
 
 /** The two bounds a person editing by hand can reach, so the steppers and the model agree. */
 export const PLAN_MAX = 20;
+/** Three goals: a plan a GP writes has room for a few, and a list of six is not a choice. */
+export const GOALS_MAX = 3;
+/** The four claimable kinds are the most a proposal can hold, one service each. */
+export const TEAM_MAX = 4;
 
 export function emptyCarePlan(): CarePlan {
-  return { allows: 0, used: 0, year: 0, confirmedOn: "" };
+  return { allows: 0, used: 0, year: 0, confirmedOn: "", sixMonths: null, goals: null, goalNote: "", providers: null, providerNote: "", team: null };
+}
+
+const ASPECT_SET = new Set<string>(ASPECTS);
+const isAspect = (v: unknown): v is Aspect => typeof v === "string" && ASPECT_SET.has(v);
+
+/**
+ * A plan read back off the device, with each field held to its own shape. An old record has none
+ * of the helper's fields and reads as "not asked yet", which is the truth about it.
+ */
+export function sanitisePlan(raw: unknown): CarePlan {
+  const base = emptyCarePlan();
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return base;
+  const r = raw as Partial<Record<keyof CarePlan, unknown>>;
+  const num = (v: unknown, fallback: number) => (typeof v === "number" && Number.isFinite(v) ? v : fallback);
+  const str = (v: unknown) => (typeof v === "string" ? v : "");
+  const kinds = (v: unknown) => (Array.isArray(v) ? [...new Set(v.filter(isProfession))] : null);
+  return {
+    allows: num(r.allows, 0),
+    used: num(r.used, 0),
+    year: num(r.year, 0),
+    confirmedOn: str(r.confirmedOn),
+    sixMonths: typeof r.sixMonths === "boolean" ? r.sixMonths : null,
+    goals: Array.isArray(r.goals) ? [...new Set(r.goals.filter(isAspect))].slice(0, GOALS_MAX) : null,
+    goalNote: str(r.goalNote),
+    providers: kinds(r.providers),
+    providerNote: str(r.providerNote),
+    // A plan can never pay for an uncovered kind, so one can never be on the team the GP reads.
+    team: kinds(r.team)?.filter(claimable) ?? null,
+  };
+}
+
+/**
+ * The five steps of the helper, in the order the sheet lists them: the four a person answers
+ * before the visit, then the numbers only a written plan can give them.
+ */
+export const STEPS = ["duration", "goals", "providers", "team", "services"] as const;
+export type Step = (typeof STEPS)[number];
+
+/** Each step's name on the sheet: one to three words, because the row is a row. */
+export const STEP_LABELS: Readonly<Record<Step, string>> = {
+  duration: "Six months",
+  goals: "Goals",
+  providers: "Who I see",
+  team: "My team",
+  services: "Services",
+};
+
+/** Whether the person has answered a step. Answered, not agreed: "nobody" and "not yet" count. */
+export function done(plan: CarePlan, step: Step): boolean {
+  switch (step) {
+    case "services":
+      return hasPlan(plan);
+    case "duration":
+      return plan.sixMonths !== null;
+    case "goals":
+      return plan.goals !== null;
+    case "providers":
+      return plan.providers !== null;
+    case "team":
+      return plan.team !== null;
+  }
 }
 
 /** A plan a person has actually told us about, as opposed to the empty one every record starts with. */
@@ -134,6 +215,18 @@ export interface Suggestion {
  */
 export function suggestFor(record: ModelRecord, plan: CarePlan, today = new Date()): readonly Suggestion[] {
   const left = remaining(plan, today);
+  if (left === 0) return [];
+  return teamFor(record, left);
+}
+
+/**
+ * The map's proposal for a plan that may not exist yet: the same rows `suggestFor` spends a plan
+ * on, capped at `cap` covered kinds instead of at what is left. This is what the helper's "My
+ * team" step offers before a GP has written anything, because the whole point of preparing is
+ * that there is no plan yet.
+ */
+export function teamFor(record: ModelRecord, cap = TEAM_MAX): readonly Suggestion[] {
+  const left = Math.max(0, Math.min(cap, TEAM_MAX));
   if (left === 0) return [];
 
   const ordered: Suggestion[] = [];

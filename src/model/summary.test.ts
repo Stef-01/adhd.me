@@ -24,7 +24,8 @@ import {
   type SectionKey,
 } from "./summary";
 import { emptyManual, emptyMedicationNote, MODEL_VERSION, type ModelRecord } from "./store";
-import { emptyCarePlan } from "./care-plan";
+import { ASPECT_LABELS } from "./matrix";
+import { emptyCarePlan, teamFor, type CarePlan } from "./care-plan";
 
 function record(over: Partial<ModelRecord> = {}): ModelRecord {
   return {
@@ -103,9 +104,21 @@ function permittedRows(rec: ModelRecord): Set<string> {
       ok.add(s.title);
     }
   }
-  for (const line of [rec.manual.helps, rec.manual.harder, rec.manual["work-with-me"], rec.medication.changes, rec.medication.untouched, rec.medication.unwanted]) {
+  for (const line of [rec.manual.helps, rec.manual.harder, rec.manual["work-with-me"], rec.medication.changes, rec.medication.untouched, rec.medication.unwanted, rec.carePlan.goalNote, rec.carePlan.providerNote]) {
     for (const part of line.split("\n")) if (part.trim()) ok.add(part.trim());
   }
+  // The plan's rows: the person's own numbers and answers, in labels the app already shows them.
+  const plan = rec.carePlan;
+  ok.add(`Plan allows: ${plan.allows}`);
+  ok.add(`Used so far: ${plan.used}`);
+  ok.add(`Six months or more: ${plan.sixMonths ? "yes" : "not yet"}`);
+  if (plan.goals) ok.add(`Goals: ${plan.goals.map((a) => ASPECT_LABELS[a]).join(", ")}`);
+  if (plan.providers) ok.add(`Current providers: ${plan.providers.length ? plan.providers.map((k) => profession(k).label).join(", ") : "none"}`);
+  const proposal = teamFor(rec).filter((r) => r.covered);
+  const named = (kinds: readonly string[]) =>
+    kinds.map((k) => { const why = proposal.find((r) => r.kind === k)?.because; return why ? `${profession(k as never).label} (${why})` : profession(k as never).label; }).join(", ");
+  ok.add(`Proposed team: ${named(proposal.map((r) => r.kind))}`);
+  if (plan.team) ok.add(`Preferred team: ${named(plan.team)}`);
   return ok;
 }
 
@@ -125,6 +138,40 @@ describe("the rule: no clinical text this app authored", () => {
         expect(ok, `"${line}" is not a heading, a record row, or the person's own words`).toBe(true);
       }
     }
+  });
+
+  it("holds a prepared care plan to the same rule: numbers, answers and labels, never a request", () => {
+    const prepared: CarePlan = {
+      allows: 5, used: 2, year: 2026, confirmedOn: "2026-09-05T00:00:00Z",
+      sixMonths: true, goals: ["starting", "sleep-energy"], goalNote: "Get out the door on time.",
+      providers: ["psychologist"], providerNote: "Dr Lee, fortnightly.", team: ["psychologist", "occupational-therapist"],
+    };
+    const rec = record({ ...LIVED, carePlan: prepared });
+    const summary = gpSummary(rec, "gp");
+    const rows = sectionRows(summary, "carePlan");
+    expect(rows).toEqual([
+      "Plan allows: 5",
+      "Used so far: 2",
+      "Six months or more: yes",
+      "Goals: Starting, Sleep & energy",
+      "Get out the door on time.",
+      "Current providers: Psychologist",
+      "Dr Lee, fortnightly.",
+      expect.stringMatching(/^Preferred team: Psychologist/),
+    ]);
+    const allowed = permittedRows(rec);
+    for (const line of rows) expect(allowed.has(line), `"${line}" is not a record row or the person's own words`).toBe(true);
+    // The team a GP reads holds only kinds a plan can pay for, and never a GP.
+    expect(rows.join("\n")).not.toMatch(/coach|\bGP\b/);
+  });
+
+  it("says nothing about a plan nobody has started, and proposes from the map once the numbers exist", () => {
+    expect(sectionRows(gpSummary(LIVED, "gp"), "carePlan")).toEqual([]);
+    const numbers = record({ ...LIVED, carePlan: { ...emptyCarePlan(), allows: 5, used: 2, year: 2026, confirmedOn: "2026-09-05T00:00:00Z" } });
+    const rows = sectionRows(gpSummary(numbers, "gp"), "carePlan");
+    expect(rows.slice(0, 2)).toEqual(["Plan allows: 5", "Used so far: 2"]);
+    expect(rows.some((r) => r.startsWith("Proposed team: "))).toBe(true);
+    expect(rows.join("\n")).not.toMatch(/Six months|Goals:|Current providers/);
   });
 
   it("holds the person's own words byte for byte, never rewritten", () => {

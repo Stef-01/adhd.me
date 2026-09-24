@@ -94,10 +94,19 @@
   }
 }
 
+.map-screen .map-ambient-in{ stop-color: var(--map-poly-line); stop-opacity: 0.07; }
+.map-screen .map-ambient-out{ stop-color: var(--map-poly-line); stop-opacity: 0; }
+
 .map-screen .map-ring{
   fill: none;
   stroke: var(--map-guide);
+  stroke-width: 1;
+}
+.map-screen .map-ring:last-of-type{
   stroke-width: 1.25;
+}
+.map-screen .map-ring[data-dashed]{
+  stroke-dasharray: 3 3;
 }
 
 .map-screen .map-spoke{
@@ -114,21 +123,41 @@
 .map-screen .map-you{
   fill: var(--map-poly);
   stroke: var(--map-poly-line);
-  stroke-width: 1.75;
+  stroke-width: 2.5;
   stroke-linejoin: round;
   transition: none;
 }
 
+/* Day one, dashed slate under the shape: the quiet line the person has moved away from. It has
+   no caption: the two words it would take ("Day one") do not fit the hub's 60, and a dashed
+   hollow outline under a filled one reads as "before" on its own. */
+.map-screen .map-then{
+  fill: none;
+  stroke: var(--map-then);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+  stroke-linejoin: round;
+}
+.map-screen .map-then-node{
+  fill: var(--paper);
+  stroke: var(--map-then);
+  stroke-width: 2;
+}
+
+
+/* A solid knot with a white core, the comp's node. */
 .map-screen .map-node{
   fill: var(--map-poly-line);
+  stroke: var(--paper);
+  stroke-width: 2;
 }
 
 /* The polygon detaches at an unplaced axis: a hollow, dotted knot instead of a solid one. */
 .map-screen .map-node[data-learning]{
-  fill: none;
+  fill: var(--paper);
   stroke: var(--map-poly-line);
-  stroke-width: 1;
-  stroke-dasharray: 2 2;
+  stroke-width: 1.5;
+  stroke-dasharray: none;
 }
 
 /* ------------------------------------------------------------------- the axes */
@@ -149,13 +178,14 @@
 }
 
 .map-screen .map-axis{
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "icon name" "icon word";
+  column-gap: 10px;
+  align-items: center;
   width: 100%;
   min-height: 44px;
-  padding: var(--sp-sm) var(--sp-md);
+  padding: var(--sp-sm) var(--sp-md) var(--sp-sm) var(--sp-sm);
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--paper);
@@ -168,13 +198,34 @@
   border-color: var(--ink);
 }
 
+.map-screen .map-axis-icon{
+  grid-area: icon;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--disc-bg, var(--stone));
+  color: var(--disc-ink, var(--ink));
+}
+.map-screen .map-axis-icon[data-tint="warm"]{ --disc-bg: var(--disc-warm-bg); --disc-ink: var(--disc-warm-ink); }
+.map-screen .map-axis-icon[data-tint="sky"]{ --disc-bg: var(--disc-sky-bg); --disc-ink: var(--disc-sky-ink); }
+.map-screen .map-axis-icon[data-tint="stone"]{ --disc-bg: var(--disc-stone-bg); --disc-ink: var(--disc-stone-ink); }
+.map-screen .map-axis-icon[data-tint="cool"]{ --disc-bg: var(--disc-cool-bg); --disc-ink: var(--disc-cool-ink); }
+.map-screen .map-axis-icon[data-tint="gold"]{ --disc-bg: var(--disc-gold-bg); --disc-ink: var(--disc-gold-ink); }
+.map-screen .map-axis-icon[data-tint="sage"]{ --disc-bg: var(--disc-sage-bg); --disc-ink: var(--disc-sage-ink); }
+
 .map-screen .map-axis-name{
-  font-weight: 600;
+  grid-area: name;
+  align-self: end;
+  font-weight: 700;
   font-size: 0.8125rem;
   line-height: 1.1rem;
 }
 
 .map-screen .map-axis-word{
+  grid-area: word;
+  align-self: start;
   font-size: 0.75rem;
   line-height: 1rem;
   color: var(--muted);
@@ -211,6 +262,23 @@
   border-style: dashed;
 }
 
+/* Under 400px a two-column cell is about 140px, and beside a 32px disc that leaves 74px for a
+   word: "regulation" at 13px bold is 80. So the disc goes above the words there, and the cell
+   has its full width for them. */
+@media (max-width: 399.98px) {
+  .map-screen .map-axis{
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "icon" "name" "word";
+    row-gap: 4px;
+    padding: var(--sp-sm) var(--sp-sm) var(--sp-sm);
+  }
+  .map-screen .map-axis-name,
+  .map-screen .map-axis-word{
+    align-self: auto;
+    overflow-wrap: anywhere;
+  }
+}
+
 /* From 768px there is room for the comp's own arrangement: the six seats around the perimeter of
    the chart. Same DOM, so the words are written once and counted once by the text budget. */
 @media (min-width: 768px) {
@@ -220,6 +288,37 @@
   .map-screen .map-radar{
     position: relative;
     padding: var(--sp-2xl);
+    border: 1px solid var(--line);
+    border-radius: 2rem;
+    background: var(--paper);
+  }
+  .map-screen .map-axis{
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "icon" "name" "word";
+    justify-items: center;
+    row-gap: 2px;
+    padding: var(--sp-xs) var(--sp-sm);
+    border-color: transparent;
+    background: transparent;
+    text-align: center;
+  }
+  .map-screen .map-axis-name{
+    align-self: auto;
+  }
+  .map-screen .map-axis-word{
+    align-self: auto;
+  }
+  .map-screen .map-axis[data-status="needs-support"]{
+    border-color: transparent;
+  }
+  .map-screen .map-axis[aria-pressed="true"]{
+    border-color: var(--line);
+  }
+  .map-screen .map-axis[data-status="worth-improving"],
+  .map-screen .map-axis[data-status="mostly-supported"],
+  .map-screen .map-axis[data-status="working-well"]{
+    background: transparent;
+    border-color: transparent;
   }
   .map-screen .map-axes{
     position: absolute;
@@ -700,20 +799,6 @@
 }
 
 .plan-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-sm) var(--sp-md); }
-.plan-edit {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.8125rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-}
-.plan-edit:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 /* The onward action, at the weight `.map-foot.is-onward` gives a link — it is a button because it
    opens the share sheet already on this page rather than navigating. */
 .plan-share {
@@ -766,3 +851,117 @@
 }
 .plan-stepper-controls output:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
 .plan-save { justify-self: end; }
+
+/* ------------------------------------------------------------------ the helper */
+
+/* Five rows, each one thing a GP will ask. A tick is the state: filled for answered, hollow for
+   not yet — the plan's own dot, at a size a row can carry. No bar, no count of rows done (§9). */
+.plan-steps { display: grid; margin: 0; padding: 0; list-style: none; }
+.plan-step {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  width: 100%;
+  min-height: 52px;
+  padding: var(--sp-sm) 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.plan-step:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.plan-step-name { flex: 1 0 auto; font-size: 0.9375rem; font-weight: 600; }
+/* The answer, beside the name, at the weight of the axis beside a kind: the fact, not the row. It
+   wraps rather than clipping, because a word hidden behind an ellipsis is a word hidden. */
+.plan-step-state { flex: 0 1 auto; min-width: 0; text-align: right; font-size: 0.8125rem; color: var(--muted); }
+.plan-step .plan-state { display: inline-flex; margin: 0; }
+.plan-step .plan-left { font-size: 0.8125rem; }
+
+.plan-tick {
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--paper);
+}
+.plan-step[data-done] > .plan-tick,
+.plan-toggle[aria-pressed="true"] > .plan-tick { border-color: var(--accent); background: var(--accent); }
+.plan-step[data-done] > .plan-tick::after,
+.plan-toggle[aria-pressed="true"] > .plan-tick::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--paper);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* One step: a question, its answers, and Save. The same grid as the two numbers. */
+.plan-step-view { display: grid; gap: var(--sp-md); justify-items: stretch; }
+.plan-ask { margin: 0; font-size: 0.9375rem; line-height: 1.45; color: var(--ink); }
+
+/* Yes or not yet: two equal pills, the chosen one advanced the way a selected tab is. */
+.plan-choices { display: flex; gap: var(--sp-sm); margin: 0; }
+.plan-choice,
+.plan-chip {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.plan-choice { flex: 1; min-height: 48px; font-weight: 650; }
+.plan-choice[aria-pressed="true"],
+.plan-chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
+.plan-chip:disabled { color: var(--faint); cursor: default; }
+.plan-choice:focus-visible,
+.plan-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.plan-chips { display: flex; flex-wrap: wrap; gap: var(--sp-sm); margin: 0; }
+
+/* The person's own words, one line, never required. */
+.plan-note { display: grid; gap: var(--sp-xs); font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
+.plan-note input {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+.plan-note input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* A proposal row is a row to keep or drop, so the whole row is the control. */
+.plan-row:has(> .plan-toggle) { padding: 0; }
+.plan-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--sp-sm) 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.plan-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.plan-toggle .plan-row-kind { flex: 1 1 auto; }
+
+.plan-resets { margin: 0; font-size: 0.8125rem; color: var(--muted); }
