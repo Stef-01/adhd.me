@@ -18,7 +18,7 @@
 .mt-intention { display: inline-flex; align-items: center; gap: 10px; margin: 0; font-size: 14px; color: var(--mt-muted); }
 .mt-intention.has-cue { background: #ead29a; color: #342c3e; border-radius: 12px 12px 12px 2px; padding: 10px 16px; }
 .mt-scene { position: relative; width: min(100%,680px); margin: auto; }
-.mt-board { width: 78%; margin: auto; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 4px; padding: 6px; border-radius: 30px; background: #201c3066; box-shadow: 0 20px 60px #19132340; }
+.mt-board { width: min(78%, calc(100svh - 360px)); min-width: 220px; margin: auto; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 4px; padding: 6px; border-radius: 30px; background: #201c3066; box-shadow: 0 20px 60px #19132340; }
 .mt-tile { position: relative; display: block; min-width: 0; aspect-ratio: 1; overflow: hidden; border: 0; padding: 0; border-radius: 20px; background: #5d5076; transition: background 160ms; }
 .mt-tile svg { display: block; width: 100%; height: 100%; pointer-events: none; }
 .mt-channel { fill: none; stroke: #2b253e; stroke-width: 17; }
@@ -53,6 +53,9 @@
 .mt-secondary { background: transparent; color: #e2d7f4; min-height: 48px; padding: 12px; border: 0; }
 .mt-pause { min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
 @media (max-width:600px) { .mt-heading { margin: 28px auto 22px; } .mt-game h1 { font-size: 28px; } .mt-intention { font-size: 12px; } .mt-board { gap: 3px; padding: 4px; border-radius: 18px; } .mt-tile { border-radius: 12px; } .mt-channel { stroke-width: 19; } .mt-current { stroke-width: 10; } .mt-target svg { width: 17px; height: 17px; } .mt-controls { margin-top: 22px; } .mt-status { max-width: 280px; font-size: 13px; } .mt-cues { gap: 8px; } .mt-cues button { padding: 10px; gap: 6px; font-size: 12px; } .mt-cues img { width: 30px; height: 30px; } .mt-pin { right: 2px; bottom: 2px; width: 19px; height: 19px; padding: 3px; } }
+/* Short screens: the board sizes from the height so the thread never scrolls away. */
+@media (max-height: 560px) { .mt-heading { margin: 4px auto 8px; } .mt-game h1 { font-size: 22px; margin: 4px 0; } .mt-intention { font-size: 12px; } .mt-board { width: min(78%, calc(100svh - 240px)); gap: 3px; padding: 4px; border-radius: 16px; } .mt-tile { border-radius: 10px; } .mt-controls { margin-top: 8px; } .mt-game { padding-bottom: 8px; } }
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .mt-controls { position: fixed; right: 16px; bottom: 12px; margin: 0; z-index: 30; } .mt-status { display: none; } }
 @media (prefers-reduced-motion:reduce) { .mt-game * { transition: none!important; animation: none!important; } }
 
 .mt-saved { text-align:center; font-size:12px; color:#c6bedc; } .mt-saved ul { display:flex; flex-wrap:wrap; justify-content:center; list-style:none; gap:8px; padding:0; margin:10px 0 0; } .mt-saved li { padding:8px 12px; border-radius:12px; background:#534355; color:#ffdfbc; }

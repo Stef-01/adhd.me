@@ -95,6 +95,8 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-demands-list svg { width: 27px; height: 30px; }
 .tm-later { border: 0; border-bottom: 1px solid #819061; background: transparent; min-height: 44px; font-size: 11px !important; white-space: nowrap; padding: 5px; margin-left: auto; }
 .tm-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+/* On screens too short for the whole house, Leave stays in reach while the train counts down. */
+@media (max-height: 700px) { .tm-game { padding-bottom: 96px; } .tm-actions { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0; padding: 18px clamp(14px, 4vw, 64px) max(10px, env(safe-area-inset-bottom)); background: linear-gradient(#fafaf700, var(--paper, #FAFAF7) 40%); } }
 .tm-actions > div { display: flex; gap: 6px; }
 .tm-primary { display: inline-flex; justify-content: center; align-items: center; gap: 12px; min-height: 48px; border: 0; border-radius: 99px; padding: 12px 24px; color: #FAFAF7 !important; background: #1A1C1C; font-weight: 650 !important; font-size: 13px !important; white-space: nowrap; transition: transform .15s cubic-bezier(.2,.8,.2,1); }
 .tm-primary:active { transform: scale(.97); }
@@ -168,8 +170,8 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
   .tm-ending { gap: 8px; }
   .tm-ending > a { width: 100%; justify-content: flex-end; }
 }
-@media (max-width: 359px) { .tm-game .tm-header h1 { font-size: 25px; } .tm-hands { font-size: 8px; } .tm-pocket { gap: 4px; } .tm-house { height: 442px; } }
-@media (max-height: 500px) and (min-width: 600px) { .tm-house { height: 400px; } .tm-game { padding-inline: 30px; } }
+@media (max-width: 359px) { .tm-game .tm-header h1 { font-size: 25px; } .tm-hands { font-size: 8px; } .tm-pocket { gap: 4px; } .tm-house { height: clamp(330px, calc(100svh - 250px), 442px); } }
+@media (max-height: 500px) and (min-width: 600px) { .tm-house { height: max(250px, calc(100svh - 175px)); } .tm-game { padding-inline: 30px; padding-top: 6px; } .tm-header { margin: 4px 0; } .tm-game .tm-header h1 { font-size: 22px; } }
 @media (prefers-reduced-motion: reduce) { .tm-game *, .tm-game *::before, .tm-game *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 .tm-game[data-paused="true"] *, .tm-game[data-still="true"] * { animation-play-state: paused !important; }
 .tm-game[data-still="true"] .tm-character, .tm-game[data-still="true"] .tm-train { transition: none; }

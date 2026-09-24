@@ -1,33 +1,125 @@
-import {test,expect} from './support/test';
-import {expectNoViolations} from './support/a11y';
-import type {Page} from '@playwright/test';
-const URL='/lives/play/zoe-before-you-send';
-async function compose(page:Page){await page.getByRole('button',{name:'I’m not sure',exact:true}).click();await page.getByRole('button',{name:'More notice',exact:true}).click();await page.getByRole('button',{name:'Meet',exact:true}).click()}
-async function agree(page:Page){await compose(page);await page.getByRole('button',{name:'7 pm',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click()}
-async function setup(page:Page){await page.getByRole('button',{name:'Rae',exact:true}).click();await page.getByRole('button',{name:'Phone reminder',exact:true}).click();await page.getByRole('button',{name:'Later that evening',exact:true}).click()}
-test('direct entry, independent response, actual setup and changed revisit',async({page})=>{
- await page.goto('/lives/characters');await page.getByRole('link',{name:'Play Zoe’s moment →',exact:true}).click();await expect(page).toHaveURL(new RegExp(URL));await expect(page.getByRole('heading',{name:'Plans changed.'})).toBeVisible();await expect(page.getByRole('slider')).toHaveCount(0);
- await compose(page);await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.getByRole('status')).toContainText('working at six');
- await page.getByRole('button',{name:'7 pm',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','setup');
- await setup(page);await expect(page.getByRole('status')).toContainText('bus is late');await expect(page.locator('.zw-plan')).toContainText('7 pm');
- await page.getByRole('button',{name:'Move it to 8 pm',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','complete');await expect(page.locator('.zw-plan')).toContainText('8 pm');await expect(page.locator('.zw-setup')).toContainText('Rae checks in');
- await expect(page.getByRole('link',{name:'Try this in my day',exact:true})).toHaveAttribute('href','/lives/learn?module=pause_before_send_v1');
- await page.getByRole('button',{name:'Another situation',exact:true}).click();await expect(page.getByRole('heading',{name:'Still waiting.'})).toBeVisible();
-});
-test('repair and a separate plan remain possible; draft and pause preserve work',async({page})=>{
- await page.goto(URL);await page.getByRole('button',{name:'I’m not sure',exact:true}).click();await page.getByRole('button',{name:'Some space',exact:true}).click();await page.getByRole('button',{name:'Keep draft',exact:true}).click();await page.getByRole('button',{name:'Edit need'}).click();await page.getByRole('button',{name:'Time together',exact:true}).click();await page.getByRole('button',{name:'Restore draft',exact:true}).click();await expect(page.getByRole('button',{name:'Edit need'})).toContainText('Some space');
- await page.getByRole('button',{name:'Send “Whatever.”',exact:true}).click();await page.getByRole('button',{name:'Pause game',exact:true}).click();await expect(page.getByRole('button',{name:'Propose',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Resume',exact:true}).click();await page.getByRole('button',{name:'Own the sharp reply',exact:true}).click();await page.getByRole('button',{name:'Separate plans',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await setup(page);await page.getByRole('button',{name:'Keep separate plans',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','complete');
-});
-test('late availability is not unlimited capacity',async({page})=>{
- await page.goto(URL);await compose(page);await page.getByRole('button',{name:'8 pm',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.getByRole('status')).toContainText('short call');await page.getByRole('button',{name:'Call',exact:true}).click();await page.getByRole('button',{name:'Propose',exact:true}).click();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','setup');
-});
-test('phone, landscape and desktop remain accessible with a reachable exit',async({page},info)=>{
- await page.emulateMedia({reducedMotion:'reduce'});
- for(const [width,height] of [[320,568],[390,844],[844,390],[1440,900]] as const){await page.setViewportSize({width,height});await page.goto(URL);await agree(page);await setup(page);await page.getByRole('button',{name:'Move it to 8 pm',exact:true}).click();expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));const exit=page.getByRole('link',{name:'Back to games'});expect(await exit.evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))})).toBe(true);await exit.click();await expect(page).toHaveURL(/approach\?pane=games/)}
- await page.setViewportSize({width:390,height:844});await page.goto(URL);await expectNoViolations(page,'Zoe conversation');if(info.project.name==='chromium')await page.screenshot({path:'qa/_runs/zoe-phone.png',fullPage:true});await agree(page);await expectNoViolations(page,'Zoe strategy setup');await setup(page);await expectNoViolations(page,'Zoe revisit');await page.getByRole('button',{name:'Keep separate plans',exact:true}).click();await expectNoViolations(page,'Zoe complete');
+import { test, expect } from './support/test';
+import { expectNoViolations } from './support/a11y';
+import type { Page } from '@playwright/test';
+test.setTimeout(120000);
+const URL = '/lives/play/zoe-before-you-send';
+const game = (page: Page) => page.locator('.zw-game');
+
+/** At the player's pace the whole reply is there: cool every sharp phrase, then send. */
+async function reply(page: Page, { keys = false, cool = true } = {}) {
+  if (cool) while (await page.locator('.zw-word.is-hot').count()) {
+    const hot = page.locator('.zw-word.is-hot').first();
+    if (keys) { await hot.focus(); await page.keyboard.press('Enter'); } else await hot.click();
+  }
+  const send = page.getByRole('button', { name: 'Send', exact: true });
+  if (keys) { await send.focus(); await page.keyboard.press('Enter'); } else await send.click();
+}
+async function three(page: Page, keys = false) {
+  for (let beat = 0; beat < 3; beat++) {
+    await reply(page, { keys });
+    await expect(game(page)).toHaveAttribute('data-phase', 'reply');
+    await page.locator('.zw-actions .kit-primary').click();
+  }
+}
+async function setup(page: Page) {
+  await expect(game(page)).toHaveAttribute('data-phase', 'setup');
+  await expect(page.getByRole('button', { name: 'Saturday comes' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Rae', exact: true }).click();
+  await page.getByRole('button', { name: 'Thursday', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Thursday’s full');
+  await page.getByRole('button', { name: 'Saturday', exact: true }).click();
+  await page.getByRole('button', { name: 'Put it in the calendar' }).click();
+  await page.getByRole('button', { name: 'Keep the jar' }).click();
+  await page.getByRole('button', { name: 'Saturday comes' }).click();
+  await expect(game(page)).toHaveAttribute('data-phase', 'revisit');
+}
+
+test('library entry, three replies, a shared plan and a revisit that follows through', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/lives/characters');
+  await page.getByRole('link', { name: 'Play Zoe’s moment →', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(URL));
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Before you send.');
+  await expect(page.locator('.zw-word.is-hot').first()).toBeVisible();
+  await three(page);
+  await setup(page);
+  await expect(page.locator('.zw-word.is-plan')).toHaveText('Saturday at 7.');
+  await reply(page);
+  await expect(game(page)).toHaveAttribute('data-phase', 'complete');
+  await expect(page.locator('.kit-stamp')).toContainText('Saturday at 7');
+  await expect(page.getByRole('link', { name: 'Pause before send' })).toHaveAttribute('href', '/lives/learn?module=pause_before_send_v1');
+  await page.getByRole('button', { name: 'Another conversation' }).click();
+  await expect(game(page)).toHaveAttribute('data-scenario', '1');
 });
 
-test('touch and keyboard can complete the same plan without storing fictional performance',async({browser,baseURL})=>{
- const context=await browser.newContext({baseURL,viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});await context.addInitScript(()=>localStorage.setItem('adhdme-privacy-ack','1'));const page=await context.newPage();await page.goto(URL);const stored=await page.evaluate(()=>JSON.stringify(localStorage));
- await page.getByRole('button',{name:'I’m not sure',exact:true}).tap();await page.getByRole('button',{name:'Some space',exact:true}).tap();await page.getByRole('button',{name:'Separate plans',exact:true}).focus();await page.keyboard.press('Enter');await page.getByRole('button',{name:'Propose',exact:true}).tap();await setup(page);await page.getByRole('button',{name:'Keep separate plans',exact:true}).tap();await expect(page.locator('.zw-game')).toHaveAttribute('data-phase','complete');expect(await page.evaluate(()=>JSON.stringify(localStorage))).toBe(stored);await context.close();
+test('a sharp send is repaired, not reset, and the feeling is kept in the jar', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(URL);
+  await page.locator('.zw-word.is-hot').first().click();
+  await expect(page.locator('.zw-jar')).toHaveAttribute('aria-label', '1 feelings kept in the jar');
+  await reply(page, { cool: false });
+  await expect(game(page)).toHaveAttribute('data-phase', 'repair');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('That came out sharp.');
+  await page.getByRole('button', { name: 'Say sorry' }).click();
+  await expect(game(page)).toHaveAttribute('data-phase', 'reply');
+  await expect(page.getByText('Sorry, that came out sharp.')).toBeVisible();
+});
+
+test('keyboard only, with sound on, reaches the end', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(URL);
+  await page.getByRole('button', { name: 'Sound off' }).click();
+  await expect(page.getByRole('button', { name: 'Sound on' })).toBeVisible();
+  await three(page, true);
+  await setup(page);
+  await reply(page, { keys: true });
+  await expect(game(page)).toHaveAttribute('data-phase', 'complete');
+});
+
+test('the reply types itself, the fuse sends it, breathe and pause hold it', async ({ page }) => {
+  await page.goto(URL);
+  await expect(game(page)).toHaveAttribute('data-still', 'false');
+  await expect(page.locator('.zw-words .zw-word')).toHaveCount(1, { timeout: 3000 });
+  await page.getByRole('button', { name: 'Breathe' }).click();
+  await expect(game(page)).toHaveAttribute('data-holding', 'true');
+  const words = await page.locator('.zw-words .zw-word').count();
+  await page.waitForTimeout(1200);
+  expect(await page.locator('.zw-words .zw-word').count()).toBe(words);
+  await page.getByRole('button', { name: 'Pause game' }).click();
+  await page.waitForTimeout(3000);
+  await expect(game(page)).toHaveAttribute('data-phase', 'typing');
+  await page.getByRole('button', { name: 'Resume' }).click();
+  await expect(game(page)).toHaveAttribute('data-phase', 'repair', { timeout: 15000 });
+});
+
+test('every size fits, the exit is reachable, and each phase passes accessibility', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const [width, height] of [[320, 568], [390, 844], [768, 1024], [844, 390], [1440, 900]] as const) {
+    await page.setViewportSize({ width, height });
+    await page.goto(URL);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    for (const b of await page.locator('.zw-word.is-hot, .zw-send, .zw-breathe').all()) { const box = (await b.boundingBox())!; expect(box.height).toBeGreaterThanOrEqual(40); expect(box.y + box.height).toBeLessThanOrEqual(height); }
+    expect(await page.getByRole('link', { name: 'Back to games' }).evaluate(el => { const r = el.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight && el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); })).toBe(true);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(URL);
+  await expectNoViolations(page, 'Zoe typing');
+  await reply(page, { cool: false });
+  await expectNoViolations(page, 'Zoe repair');
+  await page.getByRole('button', { name: 'Say sorry' }).click();
+  await page.locator('.zw-actions .kit-primary').click();
+  for (let beat = 1; beat < 3; beat++) { await reply(page); await page.locator('.zw-actions .kit-primary').click(); }
+  await expectNoViolations(page, 'Zoe setup');
+  await setup(page);
+  await reply(page);
+  await expectNoViolations(page, 'Zoe complete');
+});
+
+test('no message text is written to storage', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(URL);
+  const before = await page.evaluate(() => Object.keys(localStorage).sort().join());
+  await three(page);
+  expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain('Whatever');
+  expect(await page.evaluate(() => Object.keys(localStorage).sort().join())).toBe(before);
 });

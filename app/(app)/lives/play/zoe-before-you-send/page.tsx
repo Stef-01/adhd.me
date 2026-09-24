@@ -1,3 +1,4 @@
+import '../../../../styles/lives-kit.css';
 import '../../../../styles/zoe-world.css';
 import type { Metadata } from 'next';
 import { ZoeWorldGame } from '../../../../lives/zoe-world/player';
