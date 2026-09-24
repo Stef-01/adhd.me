@@ -67,8 +67,8 @@ export const DYNAMIC_ROUTE_PLAN: Readonly<Record<string, { sample: string } | { 
   },
   "/lives/play/[journey]": {
     // Every character's own game. Maya's carries the most in one screen — a drawn scene, a timer,
-    // a trace target and a row of choices — so it is the sample; the rest are driven by
-    // `lives-journeys.spec.ts` and `games-fit.spec.ts` under their own names.
+    // a trace target and a row of choices — so it is the sample; each live world has its own
+    // `<character>-world.spec.ts`, and `games-fit.spec.ts` drives the rest.
     sample: "/lives/play/maya-the-crossing",
   },
   "/console/gp/[id]": {

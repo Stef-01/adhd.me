@@ -68,6 +68,7 @@ export const EXTRA = [
   ...["decided", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/arjun-hold-the-thread", state: `arjun-${state}`, name: `Arjun, ${state}` })),
   ...["till", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/jax-just-the-list", state: `jax-${state}`, name: `Jax, ${state}` })),
   ...["line-done", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/nina-the-first-line", state: `nina-${state}`, name: `Nina, ${state}` })),
+  ...["arrived", "setup", "revisit", "complete"].map(state => ({ path: "/lives/play/maya-one-thing-at-a-time", state: `maya-${state}`, name: `Maya, ${state}` })),
   ...["interruption", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/mia-remember-why", state: `mia-${state}`, name: `Mia, ${state}` })),
   ...["compose", "calendar", "setup", "cue", "revisit", "complete"].map(state => ({ path: "/lives/play/zoe-before-you-send", state: `zoe-${state}`, name: `Zoe, ${state}` })),
   { path: "/lives/play/theo-out-the-door", state: "theo-busy", name: "Theo, competing demands" },
@@ -441,6 +442,38 @@ export async function reach(page, route, base) {
     await page.locator(".nw-steps button").first().click(); await page.getByRole("button", { name: "Tomorrow" }).click();
     if (route.state === "nina-revisit") return;
     await write("complete"); return;
+  }
+  if (route.state?.startsWith("maya-")) {
+    // Reduced motion moves the crowds one step per step; the dashed outlines show where they will be.
+    await page.goto(base + route.path);
+    const phase = () => page.locator(".mw-game").getAttribute("data-phase");
+    const choose = () => page.evaluate(() => {
+      const board = document.querySelector(".mw-board").getBoundingClientRect();
+      const cell = el => ({ x: Math.round(+getComputedStyle(el).getPropertyValue("--cx") * 5), y: Math.round(+getComputedStyle(el).getPropertyValue("--cy") * 7) });
+      const ghosts = [...document.querySelectorAll(".mw-ghost")].map(g => { const r = g.getBoundingClientRect(); return { row: +g.getAttribute("data-row"), l: (r.left - board.left) / board.width * 5, r: (r.right - board.left) / board.width * 5 }; });
+      const m = cell(document.querySelector(".mw-maya")), gate = cell(document.querySelector(".mw-gate")).x;
+      const q = document.querySelector('.mw-piece:has(rect[fill="#c8513f"])'), queue = q ? cell(q) : null;
+      const over = document.querySelector(".mw-game").getAttribute("data-overwhelmed") === "true";
+      const free = (x, y) => x >= 0 && x < 5 && y >= 0 && y < 7 && !(y === 0 && x !== gate) && !(queue && queue.x === x && queue.y === y) && !ghosts.some(g => g.row === y && x + .5 > g.l - .1 && x + .5 < g.r + .1);
+      const toward = gate > m.x ? "ArrowRight" : "ArrowLeft", away = toward === "ArrowRight" ? "ArrowLeft" : "ArrowRight";
+      const order = over ? [away, toward, "ArrowDown"] : m.y === 1 && m.x !== gate ? [toward, "ArrowDown"] : ["ArrowUp", toward, away, "ArrowDown"];
+      const d = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
+      return order.find(k => free(m.x + d[k][0], m.y + d[k][1])) ?? "ArrowDown";
+    });
+    const cross = async until => {
+      for (let guard = 0; guard < 400; guard++) {
+        const p = await phase();
+        if (p === until || p === "setup" || p === "complete") return;
+        if (p === "arrived") { await page.locator(".mw-done .kit-primary").click(); continue; }
+        if (await page.locator(".mw-ping").count()) { await page.locator(".mw-ping").first().click(); continue; }
+        await page.keyboard.press(await choose());
+      }
+    };
+    if (route.state === "maya-arrived") return cross("arrived");
+    await cross("setup"); if (route.state === "maya-setup") return;
+    for (const name of ["Quiet the phone", "Headphones", "Meet Ari by the clock", "Next week"]) await page.getByRole("button", { name }).click();
+    if (route.state === "maya-revisit") return;
+    await cross("complete"); return;
   }
   if (route.state?.startsWith("mia-")) {
     await page.goto(base + route.path);
