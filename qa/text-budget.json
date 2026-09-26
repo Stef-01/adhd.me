@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-26T23:04:30.293Z",
-  "base": "http://localhost:3620",
+  "measuredAt": "2026-09-26T23:11:40.567Z",
+  "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "03:42 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -498,20 +498,20 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 12,
-      "fold": 12,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "Skip this round",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "GET IT!",
+          "text": "CLEAR ONE!",
           "tag": "p"
         },
         {
@@ -1033,10 +1033,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1173,
+      "total": 1233,
       "fold": 219,
       "chrome": 22,
-      "ratio": 29.3,
+      "ratio": 30.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -1330,21 +1330,21 @@
       "path": "/urgent",
       "name": "/urgent",
       "state": null,
-      "total": 37,
-      "fold": 37,
+      "total": 58,
+      "fold": 58,
       "chrome": 6,
-      "ratio": 0.9,
-      "verdict": "target",
+      "ratio": 1.5,
+      "verdict": "ceiling",
       "longest": [
         {
-          "w": 6,
-          "text": "Free, any hour, from any phone.",
-          "tag": "p"
+          "w": 4,
+          "text": "Reach a person now.",
+          "tag": "h1"
         },
         {
-          "w": 5,
-          "text": "Talk to a person now.",
-          "tag": "h1"
+          "w": 4,
+          "text": "0477 13 11 14",
+          "tag": "span"
         },
         {
           "w": 3,
@@ -2675,26 +2675,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 13,
-      "fold": 13,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DRAW A PATH!",
+          "w": 2,
+          "text": "GET OUT!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "shoes",
+          "tag": "span"
         }
       ]
     },

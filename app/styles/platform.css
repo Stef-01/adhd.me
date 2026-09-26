@@ -138,9 +138,8 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
 }
 
 /* ── Urgent help (/urgent) ─────────────────────────────────────────────────────────────────────
-   Four services, each a row that dials. Nothing to read past the number: a person who needs this
-   screen is not reading. The 44px floor is the tap target, and the number is the target — the
-   whole row is the link, so a shaking thumb cannot miss it. */
+   Each row calls, texts or opens a chat. Nothing to read past the number: a person who needs this
+   screen is not reading. The whole row is the link, so a shaking thumb cannot miss it. */
 .urgent-screen { display: grid; gap: 18px; align-content: start; max-width: 560px; }
 .urgent-screen h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(30px, 8vw, 44px); font-weight: 460; letter-spacing: -.03em; line-height: 1.08; }
 .urgent-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
@@ -155,7 +154,6 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
 .urgent-name span { color: var(--muted); font-size: 0.875rem; }
 .urgent-number { display: inline-flex; align-items: center; gap: 8px; color: var(--accent-deep); font-size: 1.0625rem; font-weight: 750; white-space: nowrap; }
 .urgent-list li:first-child .urgent-call { border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: var(--accent-soft); }
-.urgent-note { margin: 0; color: var(--muted); font-size: 0.9375rem; }
 @media (hover: hover) { .urgent-call:hover { border-color: var(--accent); } }
 
 /* ON A PHONE THE HEADER HOLDS THE BRAND, URGENT HELP AND THE SETTINGS CONTROL, AND THAT IS ALL.
