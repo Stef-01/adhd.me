@@ -24,7 +24,7 @@ export function matchSkill(roster: readonly Clinician[], filters: Filters, recor
   const needs = reportedNeeds.filter(n => n.userPriority !== "no");
   const candidates = searchRoster(roster, filters, "", resolvePlace(filters.place));
   const contextual: Need | undefined = context ? needs.find(n => n.subdomain === context) ?? {
-    id: context, subdomain: context, domain: "daily-life", label: "", signalStrength: 0, functionalCost: 0,
+    id: context, subdomain: context, domain: "daily-life", label: "", signalStrength: 0, functionalCost: 0, costMeasured: false,
     userPriority: "unknown", confidence: "low", contributors: [], strengths: [], context: [], strategies: [], sources: [], persistence: 0,
   } : undefined;
   for (const need of contextual ? [contextual] : needs) {

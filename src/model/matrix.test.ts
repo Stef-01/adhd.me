@@ -31,6 +31,7 @@ import { emptyCarePlan } from "./care-plan";
 import { RUNG_REACH } from "@/wellness/map";
 import { lintLandingCopy } from "@/compliance/landing";
 import { topicSurvey } from "@/learn/surveys";
+import { emptyProfile } from "@/lives/profile";
 
 function record(over: Partial<ModelRecord> = {}): ModelRecord {
   return {
@@ -85,6 +86,7 @@ function need(over: Partial<Need> = {}): Need {
     label: "Starting work",
     signalStrength: 1,
     functionalCost: 5,
+    costMeasured: true,
     userPriority: "yes",
     confidence: "high",
     contributors: [],
@@ -174,6 +176,60 @@ describe("the words", () => {
 
   it("everything else is worth improving", () => {
     expect(statusFor([need({ functionalCost: 6, userPriority: "maybe" })], false)).toBe("worth-improving");
+  });
+});
+
+describe("no measure, no \"Working well\"", () => {
+  // A goal or a "this is me" names a need without asking what it costs. Its cost reads 0, and the
+  // map once turned that 0 into "Working well" on the very axis the person just said was hard.
+  const starting = (r: ModelRecord) => axes(r).find((a) => a.aspect === "starting")!;
+  const goal = { ...emptyProfile(), selectedGoals: ["task_initiation" as const] };
+  const nina = {
+    ...emptyProfile(),
+    resonanceSignals: [{ sourceType: "character" as const, sourceId: "nina", response: "this_is_me" as const, createdAt: 1 }],
+  };
+
+  it("a chosen goal alone is still learning", () => {
+    expect(starting(record({ learning: goal })).status).toBe("still-learning");
+  });
+
+  it("a \"this is me\" alone is still learning", () => {
+    expect(starting(record({ learning: nina })).status).toBe("still-learning");
+  });
+
+  it("a confirmed reading alone is still learning", () => {
+    const read = record({ interpretations: [{ moduleId: "starting", subdomain: "sleep", layer: "body", note: "Short on sleep", at: "2026-09-01T00:00:00Z" }] });
+    expect(starting(read).status).toBe("still-learning");
+  });
+
+  it("a goal and a \"this is me\" together are still learning", () => {
+    const both = { ...goal, resonanceSignals: nina.resonanceSignals };
+    const need = deriveNeeds(record({ learning: both })).find((n) => n.subdomain === "activation")!;
+    expect(need.costMeasured).toBe(false);
+    expect(starting(record({ learning: both })).status).toBe("still-learning");
+  });
+
+  it("a cost the person gave as low is working well", () => {
+    const low = record({ resonance: { starting: { frequency: "rarely", cost: 2, priority: "maybe", at: "2026-09-01T00:00:00Z" } } });
+    expect(deriveNeeds(low).find((n) => n.subdomain === "activation")!.costMeasured).toBe(true);
+    expect(statusFor([need({ functionalCost: 2 })], false)).toBe("working-well");
+  });
+
+  it("\"not something I want to change\" is working well with or without a cost", () => {
+    expect(statusFor([need({ userPriority: "no", costMeasured: false, functionalCost: 0 })], false)).toBe("working-well");
+  });
+
+  it("a goal and a costly run is needs support", () => {
+    const run = record({
+      learning: goal,
+      resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: "2026-09-01T00:00:00Z" } },
+    });
+    expect(starting(run).status).toBe("needs-support");
+  });
+
+  it("an unmeasured need with a strategy that worked says so", () => {
+    const tried = need({ costMeasured: false, functionalCost: 0, strategies: [{ strategyId: "s", title: "A strategy", outcome: "a-lot" }] });
+    expect(statusFor([tried], false)).toBe("mostly-supported");
   });
 });
 
