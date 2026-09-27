@@ -82,6 +82,15 @@ describe("POST /api/finder/read", () => {
     expect(network).toHaveBeenCalledTimes(READS);
   });
 
+  it("stops paying once the day's budget is spent, and answers with the lexicon without a call", async () => {
+    vi.stubEnv("ADHDME_LLM_LEVEL", "1");
+    vi.stubEnv("OPENAI_API_KEY", "k");
+    vi.stubEnv("ADHDME_LLM_DAILY_USD", "0");
+    const { input } = cassette("C7");
+    expect((await read(input)).body).toEqual({ keys: lexiconReading(input).keys, source: "lexicon" });
+    expect(network).not.toHaveBeenCalled();
+  });
+
   it("stops paying after 20 reads a minute from one caller, and answers with the lexicon", async () => {
     vi.stubEnv("ADHDME_LLM_LEVEL", "1");
     vi.stubEnv("OPENAI_API_KEY", "k");
