@@ -640,8 +640,15 @@ Result under prompt `fc7d605b0fd2`: P0 to P3 pass (P3 precision 98.8%). P4 on 35
 precision 92.6%, recall 99.1%, aspires 75.7%, C4 93.2%, `never` 3.3% (fails), mentions dropped 25%,
 $0.000133 a call. The break point (§14) is two requests every read gets wrong the same way: a
 decoy ("the GP in the ad was a woman") and punctuality read as `unhurried` (R4). The finder stays
-at level 0. The next piece of complexity is a check: one more question, "does this person ask for
-each of these for themselves?", asked of the few keys a read returns.
+at level 0.
+
+Then the check (R5): the keys the reads add beyond the lexicon go to a second question, "does the
+person ask for each of these for themselves?", three times at once, and a key goes when most say no.
+It runs only when the reads add something (81 of 358 dev requests). With v11's meaning lines
+(punctuality is not `unhurried`; a description is not an ask), the formal P4 under the new hash:
+precision 92.7%, recall 99.4%, aspires 64.9%, C4 94.9%, `never` 1.6%. Every gate passes but one, and
+that one is a single request, punctuality, with no facet to land on. A punctuality facet (or the
+founder's call on it, `docs/matching/NEEDS-GAPS.md` §3) is what stands between L1 and its P5.
 
 ## 17. Sources
 

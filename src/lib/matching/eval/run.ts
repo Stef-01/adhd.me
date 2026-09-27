@@ -9,7 +9,7 @@ import { FileCache } from "@/lib/llm/cache";
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
 import { modelOf, type Deps } from "@/lib/llm/client";
 import { appendLedger, BudgetMeter, ledgerSpend, RateGate } from "@/lib/llm/meter";
-import { answerFor, lexiconReading, READ_CALL, READS, readRequest, type Reading } from "../llm-read";
+import { answerFor, CHECK_CALL, CHECKS, lexiconReading, READ_CALL, READS, readRequest, type Reading } from "../llm-read";
 import { facetScore, faults, flipRate, mentionsDropped, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
 import { CLASSES, evalEntries, oracleGains, type EvalEntry } from "./sets";
 
@@ -44,6 +44,8 @@ export type Outcome = { code: 0 | 1 | 2; message: string; report?: string };
 type Done = { entry: EvalEntry; reading: Reading };
 
 const gold = (e: EvalEntry) => [...(e.reaches ?? []), ...(e.aspires ?? [])];
+/** A check call's input (`checkInput`); a perfect dry-run checker keeps every key. */
+const isCheck = (input: string) => input.startsWith("Request: ");
 /** Keys as the schema's bare ids: a perfect dry-run reader refuses what a probe only mentions. */
 const bare = (keys: readonly string[] = []) => keys.map((key) => key.slice(key.indexOf(":") + 1));
 const mean = (values: number[]) => (values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null);
@@ -52,7 +54,7 @@ const pct = (value: number | null) => (value === null ? "–" : `${(value * 100)
 
 export function promptHash(level: string, env: Record<string, string | undefined> = process.env): string {
   if (level === "L0") return "lexicon";
-  return createHash("sha256").update(JSON.stringify([modelOf(env), READ_CALL, READS])).digest("hex").slice(0, 12);
+  return createHash("sha256").update(JSON.stringify([modelOf(env), READ_CALL, READS, CHECK_CALL, CHECKS])).digest("hex").slice(0, 12);
 }
 
 export async function runEval(options: EvalOptions): Promise<Outcome> {
@@ -89,7 +91,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   const oracleKeys = (text: string) => [...gold(byText.get(text)!), ...lexiconReading(text).keys.filter((k) => k.startsWith("language:"))];
   const deps: Deps = live
     ? { fetch: options.fetch, env, meter, cache: new FileCache(join(root, ".cache/llm")) }
-    : { fetch: cassetteFetch(CASSETTES, (input) => completed({ ...answerFor(oracleKeys(input)), negated: bare(byText.get(input)?.mentions) })), env: { ...env, OPENAI_API_KEY: "dry" }, meter };
+    : { fetch: cassetteFetch(CASSETTES, (input) => completed(isCheck(input) ? { verdicts: [] } : { ...answerFor(oracleKeys(input)), negated: bare(byText.get(input)?.mentions) })), env: { ...env, OPENAI_API_KEY: "dry" }, meter };
   const gate = new RateGate(limits.concurrency, limits.rpm);
   let [calls, streak, malformed] = [0, 0, 0];
   const read = async (entry: EvalEntry, cached = true): Promise<Done | null> => {

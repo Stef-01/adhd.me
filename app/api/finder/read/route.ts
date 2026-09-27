@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 const MAX_CHARS = 2000;
 const NO_STORE = { "Cache-Control": "no-store" };
 const replay = {
-  fetch: cassetteFetch(CASSETTES, (input) => completed(answerFor(lexiconReading(input).keys))),
+  fetch: cassetteFetch(CASSETTES, (input) => completed(input.startsWith("Request: ") ? { verdicts: [] } : answerFor(lexiconReading(input).keys))),
   env: { OPENAI_API_KEY: "cassette" },
 };
 

@@ -6,7 +6,7 @@ import { BudgetMeter } from "@/lib/llm/meter";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, LEXICON_CUES, needForKey, readNeeds } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
-import { answerFor, fromModel, INSTRUCTIONS, lexiconReading, MEANINGS, READS, readRequest, SCHEMA, VOCABULARY } from "./llm-read";
+import { answerFor, CHECKS, checkInput, fromModel, INSTRUCTIONS, lexiconReading, MEANINGS, READS, readRequest, SCHEMA, VOCABULARY } from "./llm-read";
 
 const ENV = { OPENAI_API_KEY: "k" };
 const TODAY = new Date("2026-09-27T00:00:00Z");
@@ -117,11 +117,39 @@ describe("readRequest", () => {
       { ...EMPTY, prefs: ["woman-gp"], manner: ["unhurried"] },
       { ...EMPTY, prefs: ["woman-gp"], manner: ["unhurried", "steadying"] },
     ];
-    let n = 0;
-    const fetch = async () => new Response(JSON.stringify(completed(answers[n++ % answers.length]!)));
+    let [reads, checks] = [0, 0];
+    const fetch = async (_url: string, init: { body: string }) => {
+      if (JSON.parse(init.body).input === "someone patient") return new Response(JSON.stringify(completed(answers[reads++ % answers.length]!)));
+      checks += 1;
+      return new Response(JSON.stringify(completed({ verdicts: [] })));
+    };
     const reading = await readRequest("someone patient", { fetch, env: ENV });
-    expect(n).toBe(READS);
+    expect([reads, checks]).toEqual([READS, CHECKS]);
     expect(reading).toMatchObject({ keys: ["manner:unhurried", "pref:woman-gp"], source: "llm" });
+  });
+
+  it("checks only the keys the reads add beyond the lexicon, and drops one most checks say is not asked", async () => {
+    const text = "it has to be bulk billed";
+    expect(lexiconReading(text).keys).toEqual(["pref:bulk-billing"]);
+    const inputs: string[] = [];
+    let check = 0;
+    const fetch = async (_url: string, init: { body: string }) => {
+      const { input } = JSON.parse(init.body) as { input: string };
+      inputs.push(input);
+      if (input === text) return new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp", "bulk-billing"] })));
+      const asks = check++ === 0; // one check says asked, two say not
+      return new Response(JSON.stringify(completed({ verdicts: [{ key: "pref:woman-gp", asks }] })));
+    };
+    const reading = await readRequest(text, { fetch, env: ENV });
+    expect(inputs.filter((input) => input !== text)).toEqual(Array(CHECKS).fill(checkInput(text, ["pref:woman-gp"])));
+    expect(reading.keys).toEqual(["pref:bulk-billing"]);
+  });
+
+  it("makes no check when the reads add nothing beyond the lexicon", async () => {
+    let calls = 0;
+    const fetch = async () => (calls += 1, new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] }))));
+    expect((await readRequest("a woman GP", { fetch, env: ENV })).keys).toEqual(["pref:woman-gp"]);
+    expect(calls).toBe(READS);
   });
 
   it("drops a key the lexicon hears only when every read refuses it", async () => {

@@ -76,3 +76,24 @@ numbers before and after.
     has no facet, and the model takes the nearest one even when the meaning line excludes it.
 - **Decision needed:** G7, and whether punctuality and the other candidates in
   `docs/matching/NEEDS-GAPS.md` §3 become facets. Until then these two are L1's break point (§14).
+
+## R5 · `never` at L1, 2026-09-28 · layer: READ · cause: a decoy every read believes
+
+- **Entries:** the formal P4 of the third pass (`reports/L1-P4-2026-09-27T15-17-56-774Z.md`):
+  "the GP in the ad was a woman" → `pref:woman-gp` from every read, and punctuality read as
+  `unhurried`. Rules in the read prompt fixed punctuality (v11: an example in words the corpus does
+  not use, "a practice that runs on schedule") but not the decoy.
+- **Change:** a check. After the reads, the keys they add beyond the lexicon (only those: the lexicon's
+  keys are what recall rests on) go to a second question, "does the person ask for each of these for
+  themselves?", three times at once; a key goes when most checks say no. Checking every key instead
+  took mentions dropped to 87.5% but recall to 86.5% (the corpus pins family wishes and debatable
+  lexicon reads as asks), so the check stays on the model's additions.
+- **Measured on the saved v11 samples (358 dev):** precision 92.5%, recall 99.4%, aspires 67.6%,
+  `never` 0%, C4 94.9%. The check ran for 81 of 358 requests ($0.015); a request the reads add nothing
+  to costs nothing more.
+- **Formal ladder** (prompt and check hashed together): P0 to P3 pass; P4 on 358 dev requests
+  (`reports/L1-P4-2026-09-27T15-58-31-546Z.md`): precision 92.7%, recall 99.4%, aspires 64.9%, C4
+  94.9%, `never` 1.6%. The one violation is punctuality ("I need appointments that start on time")
+  read as `unhurried` by every read and upheld by the checks. The decoy and the described states did
+  not recur. L1's break point is now a single request with no facet to land on (R4).
+
