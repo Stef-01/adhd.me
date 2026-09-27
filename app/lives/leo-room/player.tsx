@@ -121,7 +121,7 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
     });
   }
   const objective = ended ? s.mode === "complete" ? "Same room. A different evening." : "Leave it ready for tomorrow." :
-    challengeOnly ? "Catch the mosquitoes. Then help Leo settle." : s.rounds && s.mode === "recovery" ? "Choose what helps Leo settle." : manageable(s) ? pageReady ? "Keep your place. Lower the light." : "A page or two. At your pace." :
+    challengeOnly ? undefined : s.rounds && s.mode === "recovery" ? "Choose what helps Leo settle." : manageable(s) ? pageReady ? "Keep your place. Lower the light." : "A page or two. At your pace." :
     s.mode === "revisit" ? "Keep the routine. Find your place." : "Catch the buzz. Change the room.";
 
   return <section className="bedroom-game lives-run" aria-label="Leo’s evening" data-mode={s.mode} data-still={s.still}
@@ -135,7 +135,7 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
     </header>
     <div className="bedroom-caption">
       <h1 tabIndex={-1} ref={heading}>{HEADINGS[s.mode]}</h1>
-      <p>{objective}</p>
+      {objective && <p>{objective}</p>}
       <div className="bedroom-hud">
         <div className="bedroom-regulation"><span>Room to settle</span><div role="meter" aria-label="Leo’s regulation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={calm} aria-valuetext={`${calm} out of 100`}>
           <span style={{ transform: `scaleX(${1 - s.activation})` }} />

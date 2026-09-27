@@ -19,6 +19,7 @@
 .bedroom-game .bedroom-caption h1:focus { outline: none; }
 .bedroom-game .bedroom-caption p { margin: 9px 0 17px; font-size: 14px; color: var(--room-muted); }
 .bedroom-hud { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.bedroom-caption h1 + .bedroom-hud { margin-top: 12px; }
 .bedroom-regulation { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 550; }
 .bedroom-regulation [role="meter"] { width: 116px; height: 6px; overflow: hidden; border-radius: 10px; background: #cecfe1; }
 .bedroom-regulation [role="meter"] > span { display: block; background: #666ba0; width: 100%; height: 100%; transform-origin: left; transition: transform .14s linear; border-radius: inherit; }

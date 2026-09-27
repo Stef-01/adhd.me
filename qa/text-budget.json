@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T08:36:30.582Z",
-  "base": "http://localhost:3305",
+  "measuredAt": "2026-09-27T09:04:32.610Z",
+  "base": "http://localhost:3307",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -170,7 +170,7 @@
         },
         {
           "w": 5,
-          "text": "02:31 left in this session",
+          "text": "04:36 left in this session",
           "tag": "small"
         }
       ]
@@ -449,26 +449,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "OUT NOW!",
+          "text": "CATCH IT!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "5 min",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "10 min",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -503,26 +503,21 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 2,
+      "fold": 2,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DRAW A PATH!",
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "PIGEONS!",
           "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
-        },
-        {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
         }
       ]
     },
@@ -530,17 +525,12 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "/lives/play/arjun-hold-the-thread",
       "state": null,
-      "total": 32,
-      "fold": 32,
+      "total": 24,
+      "fold": 24,
       "chrome": 0,
-      "ratio": 0.8,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
-        {
-          "w": 8,
-          "text": "Tap what answers it. Park Arjun’s own ideas.",
-          "tag": "p"
-        },
         {
           "w": 5,
           "text": "Catch what answers the question.",
@@ -550,6 +540,11 @@
           "w": 4,
           "text": "Arjun · Hold the thread",
           "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Where do we meet?",
+          "tag": "h1"
         }
       ]
     },
@@ -557,17 +552,12 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "/lives/play/jax-just-the-list",
       "state": null,
-      "total": 21,
-      "fold": 21,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
-        {
-          "w": 8,
-          "text": "Steer into the list. Tap the lures away.",
-          "tag": "p"
-        },
         {
           "w": 4,
           "text": "Jax · Just the list",
@@ -577,6 +567,11 @@
           "w": 4,
           "text": "Steer into the milk.",
           "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "Just milk.",
+          "tag": "h1"
         }
       ]
     },
@@ -584,17 +579,12 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 28,
-      "fold": 28,
+      "total": 21,
+      "fold": 21,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
-        {
-          "w": 7,
-          "text": "Catch the mosquitoes. Then help Leo settle.",
-          "tag": "p"
-        },
         {
           "w": 5,
           "text": "Three rounds. Catch the mosquitoes.",
@@ -604,6 +594,11 @@
           "w": 3,
           "text": "One tiny sound.",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Room to settle",
+          "tag": "span"
         }
       ]
     },
@@ -2393,17 +2388,12 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax: just the list",
       "state": null,
-      "total": 21,
-      "fold": 21,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
-        {
-          "w": 8,
-          "text": "Steer into the list. Tap the lures away.",
-          "tag": "p"
-        },
         {
           "w": 4,
           "text": "Jax · Just the list",
@@ -2413,6 +2403,11 @@
           "w": 4,
           "text": "Steer into the milk.",
           "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "Just milk.",
+          "tag": "h1"
         }
       ]
     },
@@ -2474,17 +2469,12 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun: the meeting",
       "state": null,
-      "total": 32,
-      "fold": 32,
+      "total": 24,
+      "fold": 24,
       "chrome": 0,
-      "ratio": 0.8,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
-        {
-          "w": 8,
-          "text": "Tap what answers it. Park Arjun’s own ideas.",
-          "tag": "p"
-        },
         {
           "w": 5,
           "text": "Catch what answers the question.",
@@ -2494,6 +2484,11 @@
           "w": 4,
           "text": "Arjun · Hold the thread",
           "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Where do we meet?",
+          "tag": "h1"
         }
       ]
     },
@@ -2901,25 +2896,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
-          "tag": "button"
-        },
-        {
           "w": 2,
-          "text": "DON’T SCROLL!",
+          "text": "LOCK IN!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "ONE MORE",
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "roadmap",
           "tag": "span"
         }
       ]
