@@ -30,7 +30,7 @@ async function secondMorning(page: Page) {
 
 test("the public card enters the new house directly; keyboard actions have physical dependencies", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto("/approach?pane=games");
-  await page.getByRole("link", { name: "Play Theo", exact: true }).click(); await expect(page).toHaveURL(new RegExp(URL));
+  await page.getByTestId("learn-show-all").click(); await page.locator(".learn-game-names").getByRole("link", { name: "Theo", exact: true }).click(); await expect(page).toHaveURL(new RegExp(URL));
   await expect(page.getByRole("heading", { name: "One train. One busy brain." })).toBeVisible();
   await expect(page.getByRole("slider")).toHaveCount(0); await expect(page.getByRole("combobox")).toHaveCount(0);
   await page.getByRole("button", { name: "Leave", exact: true }).click(); await expect(page.getByRole("status")).toHaveText("Three essentials in the bag first.");
@@ -56,7 +56,11 @@ test("a complete morning, physical evening arrangement and rainy revisit carry s
   await task(page, "umbrella"); await task(page, "door");
   await expect(page.getByRole("heading", { name: "A little less to carry." })).toBeVisible();
   expect(Number(await page.locator(".tm-game").getAttribute("data-trips"))).toBeLessThan(trips);
-  expect(await page.evaluate(() => JSON.stringify(localStorage))).toBe(storage);
+  // Play stores no score: the only new key is the played tick (PLAN.md W7), a date and nothing else.
+  const after = await page.evaluate(() => ({ ...localStorage }));
+  expect(JSON.parse(after["adhdme.played.v1"] ?? "{}")).toEqual({ v: 1, at: { theo: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) } });
+  delete after["adhdme.played.v1"];
+  expect(JSON.stringify(after)).toBe(storage);
   await expect(page.getByRole("link", { name: "Make your own launch pad" })).toHaveAttribute("href", "/lives/learn?module=launch_pad_v1");
   await page.getByRole("button", { name: "Another morning" }).click();
   await expect(page.locator(".tm-items-living [data-command=phone]")).toBeVisible();

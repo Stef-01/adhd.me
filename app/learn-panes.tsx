@@ -336,12 +336,17 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
                         <>
                           {g.title}
                           {done && <Check size={16} weight="bold" aria-hidden="true" />}
-                          {done && <span className="sr-only">, played</span>}
                         </>
                       );
+                      // The tick is a picture; the name says it in one phrase.
+                      const name = done ? `${g.title}, played` : undefined;
                       return (
                         <li key={`${g.kind}:${g.id}`} data-played={done || undefined}>
-                          {g.kind === "life" ? <Link href={g.href}>{inner}</Link> : <button type="button" onClick={() => start(g.id)}>{inner}</button>}
+                          {g.kind === "life" ? (
+                            <Link href={g.href} aria-label={name}>{inner}</Link>
+                          ) : (
+                            <button type="button" aria-label={name} onClick={() => start(g.id)}>{inner}</button>
+                          )}
                         </li>
                       );
                     })}
