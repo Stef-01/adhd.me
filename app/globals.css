@@ -6166,6 +6166,8 @@ select { caret-color: var(--route-strong); }
 /* The portrait map draws smaller than the results one, so its pin names are set larger to read at
    12px on a phone (PLAN.md N15). */
 .story-portrait .coverage-pin-label { font-size: 0.33rem; }
+/* The map draws smaller again on the narrowest phones: 0.33rem came to 9.4px at 320. */
+@media (max-width: 379px) { .story-portrait .coverage-pin-label { font-size: 0.43rem; } }
 .story-portrait .coverage-names {
   color: color-mix(in srgb, var(--on-ground) 70%, var(--ink));
   font-size: 0.8125rem;
