@@ -110,6 +110,11 @@ export interface ModelRecord {
    * (src/model/snapshots.ts). Absent on a record written before snapshots; read as none.
    */
   snapshots?: MapSnapshot[];
+  /**
+   * "Answer again" (PLAN.md W4): the new answers, held apart until the last question is done, so
+   * leaving part way changes nothing on the map. Absent when nobody is answering again.
+   */
+  onboardingDraft?: OnboardingAnswers | null;
 }
 
 export type MedicationField = "changes" | "untouched" | "unwanted";
@@ -199,6 +204,7 @@ function readStoredModel(storage: Pick<Storage, "getItem">): ModelRecord {
       carePlan: sanitisePlan(r.carePlan),
       // Validated item by item and carried on every write, or the next update would erase them.
       snapshots: sanitiseSnapshots(r.snapshots),
+      ...(isObject(r.onboardingDraft) ? { onboardingDraft: r.onboardingDraft as OnboardingAnswers } : {}),
     };
   } catch {
     return emptyModel();
@@ -239,12 +245,30 @@ export function updateModel(storage: ModelStorage, change: (record: ModelRecord)
 const now = () => new Date().toISOString();
 const today = () => localDay();
 
+/** An answer to a Start question. While answering again it goes to the draft, never the map. */
 export function saveOnboarding(storage: ModelStorage, patch: Partial<OnboardingAnswers>): ModelRecord {
-  return updateModel(storage, (r) => ({ ...r, onboarding: { ...(r.onboarding ?? {}), ...patch } }));
+  return updateModel(storage, (r) =>
+    r.onboardingDraft ? { ...r, onboardingDraft: { ...r.onboardingDraft, ...patch } } : { ...r, onboarding: { ...(r.onboarding ?? {}), ...patch } },
+  );
 }
 
+/** The last question answered. Answering again swaps the whole new set in at this moment, and only then. */
 export function completeOnboarding(storage: ModelStorage): ModelRecord {
-  return updateModel(storage, (r) => ({ ...r, onboarding: { ...(r.onboarding ?? {}), completedAt: now() } }));
+  return updateModel(storage, (r) => {
+    if (r.onboardingDraft) {
+      const { onboardingDraft, ...rest } = r;
+      return { ...rest, onboarding: { ...onboardingDraft, completedAt: now() } };
+    }
+    return { ...r, onboarding: { ...(r.onboarding ?? {}), completedAt: now() } };
+  });
+}
+
+/** Start the questions again from the answers on file. Nothing reaches the map until the last one. */
+export function answerAgain(storage: ModelStorage): ModelRecord {
+  return updateModel(storage, (r) => {
+    const { completedAt: _done, ...answers } = r.onboarding ?? {};
+    return { ...r, onboardingDraft: answers };
+  });
 }
 
 export function recordResonance(storage: ModelStorage, moduleId: string, patch: Omit<Resonance, "at">): ModelRecord {

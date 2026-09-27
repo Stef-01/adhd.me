@@ -34,6 +34,7 @@ import { LifeHeader } from "./life-shell";
 import { MyAdhdRadar } from "./my-adhd-radar";
 import { MyAdhdSheet } from "./my-adhd-sheet";
 import { ShareSheet } from "./my-adhd-share";
+import { Sheet } from "./sheet";
 import { SafetyScreen } from "./safety-screen";
 import { acknowledgeSafety } from "@/model/store";
 import { useModel } from "./use-model";
@@ -61,6 +62,8 @@ export function MyAdhd() {
   const [open, setOpen] = useState<Aspect | null>(null);
   const [sharing, setSharing] = useState(false);
   const shareRef = useRef<HTMLButtonElement | null>(null);
+  const [fills, setFills] = useState(false);
+  const fillsRef = useRef<HTMLButtonElement | null>(null);
 
   /**
    * `?share=1` opens the GP summary on arrival, so anything that promises "take this to my GP"
@@ -170,11 +173,18 @@ export function MyAdhd() {
             </div>
           )}
 
-          {record && (hasSignals(record) || record.learning) && <p className="map-where">Saved on this device.</p>}
+          {record && (
+            <div className="map-meta">
+              {(hasSignals(record) || record.learning) && <p className="map-where">Saved on this device.</p>}
+              <button ref={fillsRef} type="button" className="map-fills" onClick={() => setFills(true)}>
+                How it fills in
+              </button>
+            </div>
+          )}
 
           {record && !started && (
             <section className="map-lead map-side">
-              <p>Two minutes so this can be about you.</p>
+              <p>Ten quick questions start this map.</p>
               <Link className="learn-primary" href="/start">
                 Start <ArrowRight size={17} weight="bold" aria-hidden="true" />
               </Link>
@@ -243,7 +253,29 @@ export function MyAdhd() {
       {record && (
         <ShareSheet open={sharing} record={record} onClose={() => setSharing(false)} openedBy={shareRef} />
       )}
+      <FillsSheet open={fills} started={started} onClose={() => setFills(false)} openedBy={fillsRef} />
     </main>
+  );
+}
+
+/**
+ * What builds the map (PLAN.md W4, D12): the four things that can move an axis, and the one thing
+ * that never does. Four short rows behind a labelled button, not a paragraph on the hub.
+ */
+function FillsSheet({ open, started, onClose, openedBy }: { open: boolean; started: boolean; onClose: () => void; openedBy: React.RefObject<HTMLButtonElement | null> }) {
+  return (
+    <Sheet open={open} title="How it fills in." onClose={onClose} openedBy={openedBy}>
+      <ul className="map-fills-list">
+        <li>
+          Your ten starting questions
+          {started && <Link className="map-fills-again" href="/start?again=1">Answer again</Link>}
+        </li>
+        <li>A short check on any part</li>
+        <li>What you rate in the games</li>
+        <li>Characters you say are like you</li>
+      </ul>
+      <p className="map-fills-never">Scores never change your map.</p>
+    </Sheet>
   );
 }
 

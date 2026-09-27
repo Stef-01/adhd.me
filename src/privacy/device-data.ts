@@ -158,7 +158,8 @@ const validModel = (v: unknown): v is DeviceCopy["model"] =>
   arrayOf((c) => isObject(c) && oneOf(CHECKPOINTS)(c.months) && oneOf(["still-looking", "found-care", "not-now"])(c.answer) && isTime(c.at))(v.checkpoints) &&
   isObject(v.carePlan) &&
   JSON.stringify(sanitisePlan(v.carePlan)) === JSON.stringify(v.carePlan) &&
-  optional(v.snapshots, (s) => Array.isArray(s) && s.length <= SNAPSHOT_CAP && s.every(isSnapshot));
+  optional(v.snapshots, (s) => Array.isArray(s) && s.length <= SNAPSHOT_CAP && s.every(isSnapshot)) &&
+  optional(v.onboardingDraft, (d) => d === null || validOnboarding(d));
 
 const validLives = (v: unknown): v is LearningProfile =>
   isObject(v) &&

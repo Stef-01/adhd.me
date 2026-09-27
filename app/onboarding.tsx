@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { improveOption, improveOptions, isComplete, QUESTIONS, type OnboardingAnswers } from "@/model/onboarding";
-import { completeOnboarding, saveOnboarding } from "@/model/store";
+import { answerAgain, completeOnboarding, saveOnboarding } from "@/model/store";
 import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
 import { track } from "@/model/events";
@@ -29,11 +29,22 @@ export function Onboarding() {
   /** -1 is the welcome screen; 0–9 the questions; 10 the "Start here" screen. */
   const [index, setIndex] = useState(-1);
   const [direction, setDirection] = useState<1 | -1>(1);
-  const answers: OnboardingAnswers = record?.onboarding ?? {};
+  // While answering again, the questions show and change the draft; the map keeps the old answers.
+  const answers: OnboardingAnswers = record?.onboardingDraft ?? record?.onboarding ?? {};
 
+  // "Answer again" from My ADHD arrives as ?again=1: start a draft from the answers on file.
+  const [arrived, setArrived] = useState(false);
   useEffect(() => {
-    if (record && isComplete(record.onboarding)) setIndex(10);
-  }, [record]);
+    if (!record || arrived) return;
+    setArrived(true);
+    if (new URLSearchParams(window.location.search).has("again") && isComplete(record.onboarding)) {
+      window.history.replaceState(null, "", window.location.pathname);
+      refresh(answerAgain(storage));
+      setIndex(0);
+      return;
+    }
+    if (isComplete(record.onboarding)) setIndex(10);
+  }, [record, arrived, refresh, storage]);
 
   const question = QUESTIONS[index];
   const options = useMemo(() => (question?.key === "improveFirst" ? [...improveOptions(answers), { id: "other", label: "Something else" }] : question?.options ?? []), [question, answers]);
@@ -144,14 +155,20 @@ export function Onboarding() {
             </>
           )}
 
-          {index === 10 && record && <StartHere answers={answers} onStart={(id) => router.push(`/approach?module=${id}`)} />}
+          {index === 10 && record && (
+            <StartHere
+              answers={answers}
+              onStart={(id) => router.push(`/approach?module=${id}`)}
+              onAgain={() => { refresh(answerAgain(storage)); go(0); }}
+            />
+          )}
         </motion.div>
       </AnimatePresence>
     </main>
   );
 }
 
-function StartHere({ answers, onStart }: { answers: OnboardingAnswers; onStart: (moduleId: string) => void }) {
+function StartHere({ answers, onStart, onAgain }: { answers: OnboardingAnswers; onStart: (moduleId: string) => void; onAgain: () => void }) {
   const { record } = useModel();
   const goal = improveOption(answers.improveFirst);
   const rec = record ? recommend(record) : null;
@@ -172,6 +189,7 @@ function StartHere({ answers, onStart }: { answers: OnboardingAnswers; onStart: 
           </div>
         </div>
       )}
+      <button type="button" className="learn-secondary" onClick={onAgain}>Answer again</button>
     </div>
   );
 }

@@ -14,6 +14,7 @@
 // The five areas of a life are rows here rather than screens of their own — this is the matrix
 // read one column at a time, which is why the tab has one kind of click-through and not two.
 
+import { sourceLine } from "@/model/sources";
 import { SkillRecommendation } from "./skill-recommendation";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -88,12 +89,16 @@ export function MyAdhdSheet({
   const nextModule = aspect
     ? modulesOnAspect(aspect).find((m) => !record.completed.includes(m.id)) ?? null
     : null;
+  // Where this axis came from, in words, and whether anything here has been tried.
+  const tried = aspect ? record.experiments.some((e) => modulesOnAspect(aspect).some((m) => m.id === e.moduleId)) : false;
+  const from = view ? sourceLine(view.cells.flatMap((c) => c.needs.flatMap((n) => n.sources)), tried) : null;
 
   return (
     <Sheet open={Boolean(aspect)} title={aspect ? ASPECT_LABELS[aspect] : ""} onClose={onClose}>
       {view && aspect && (
         <div className="map-sheet">
           <p className="map-sheet-meaning">{ASPECT_MEANINGS[aspect]}</p>
+          {from && <p className="map-sheet-from">{from}</p>}
 
           <ul className="map-rows">
             {view.cells.map((cell) => (
@@ -173,6 +178,11 @@ export function MyAdhdSheet({
               </Link>
             )}
           </div>
+          {tried && (
+            <p className="map-foot is-onward">
+              <Link href="/my-adhd/history">What you tried</Link>
+            </p>
+          )}
         </div>
       )}
     </Sheet>

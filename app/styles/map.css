@@ -449,6 +449,44 @@
   line-height: 1.3rem;
 }
 
+/* The line under the map: where it is saved, and what builds it (PLAN.md W4). */
+.map-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+.map-fills {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.map-fills:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.map-fills-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.map-fills-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--stone);
+  font-size: 0.9375rem;
+}
+.map-fills-again { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-deep); font-weight: 650; }
+.map-fills-never { margin: 14px 0 0; color: var(--muted); font-size: 0.9375rem; }
+.map-sheet-from { margin: 0; color: var(--muted); font-size: 0.875rem; }
+
 /* A strategy step is one link: the whole card, 44px and more, with the arrow saying where it goes. */
 .map-step-link {
   display: grid;

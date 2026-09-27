@@ -120,6 +120,7 @@ export const EXTRA = [
   { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
   // The map then and now (PLAN.md W3): day one and a snapshot about six weeks old both on file.
   { path: "/my-adhd", state: "model-compare", name: "My ADHD, then and now" },
+  { path: "/my-adhd", state: "fills-open", name: "My ADHD, how it fills in" },
   // The hub's lead sentence differs by axis (7 to 10 words), so each axis that can lead is measured
   // leading. Relationships cannot lead from a run alone; its sentence is shorter than the longest.
   { path: "/my-adhd", state: "lead-focus", name: "My ADHD, focus leads" },
@@ -356,6 +357,12 @@ export async function reach(page, route, base) {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(compareRecord()));
     await page.reload({ waitUntil: "networkidle" });
     await page.locator(".map-then-pill").waitFor({ timeout: 8000 });
+  }
+  if (route.state === "fills-open") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "How it fills in" }).click({ timeout: 8000 });
+    await page.locator(".map-fills-list").waitFor({ timeout: 8000 });
   }
   const lead = /^lead-(.+)$/.exec(route.state ?? "")?.[1];
   if (lead) {
