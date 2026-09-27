@@ -15,6 +15,7 @@ import { QUESTIONS } from "@/model/onboarding";
 import { SAFETY_RULES } from "@/model/safety";
 import { CHECKPOINTS } from "@/model/checkpoint";
 import { sanitisePlan } from "@/model/care-plan";
+import { SNAPSHOT_CAP, isSnapshot } from "@/model/snapshot-shape";
 import { MODEL_VERSION, emptyModel, readModel, writeModel, type ModelRecord } from "@/model/store";
 import { emptyProfile, readProfile, writeProfile } from "@/lives/profile";
 import type { LearningProfile } from "@/lives/types";
@@ -156,7 +157,8 @@ const validModel = (v: unknown): v is DeviceCopy["model"] =>
   isObject(v.medication) && isString(v.medication.changes) && isString(v.medication.untouched) && isString(v.medication.unwanted) && (v.medication.updatedAt === null || isTime(v.medication.updatedAt)) &&
   arrayOf((c) => isObject(c) && oneOf(CHECKPOINTS)(c.months) && oneOf(["still-looking", "found-care", "not-now"])(c.answer) && isTime(c.at))(v.checkpoints) &&
   isObject(v.carePlan) &&
-  JSON.stringify(sanitisePlan(v.carePlan)) === JSON.stringify(v.carePlan);
+  JSON.stringify(sanitisePlan(v.carePlan)) === JSON.stringify(v.carePlan) &&
+  optional(v.snapshots, (s) => Array.isArray(s) && s.length <= SNAPSHOT_CAP && s.every(isSnapshot));
 
 const validLives = (v: unknown): v is LearningProfile =>
   isObject(v) &&

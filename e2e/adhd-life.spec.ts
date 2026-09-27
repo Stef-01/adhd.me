@@ -420,7 +420,9 @@ test("Phase A: a topic survey is offered, not launched; answered one screen at a
   expect(record.survey.lastLongAt).toBeTruthy();
   await page.goto("/my-adhd");
   await expect(page.getByRole("link", { name: /Start the survey/ })).toHaveCount(0);
-  await expect(page.getByText("Waiting for urgency", { exact: true })).toBeVisible();
+  // The hub shows the top contributor; the axis lists the rest (PLAN.md W3).
+  await page.getByRole("button", { name: /^Starting/ }).click();
+  await expect(page.getByRole("dialog").getByRole("list", { name: "What may be contributing" })).toContainText("Waiting for urgency");
 });
 
 test("Phase A: problem fit orders allied providers by the person's top need, and says why", async ({ page }) => {

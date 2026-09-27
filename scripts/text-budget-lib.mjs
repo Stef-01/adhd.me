@@ -118,6 +118,14 @@ export const EXTRA = [
   { path: "/my-adhd", state: "model-lived", name: "My ADHD, lived in" },
   { path: "/my-adhd", state: "model-learning", name: "My ADHD, a step proposed" },
   { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
+  // The map then and now (PLAN.md W3): day one and a snapshot about six weeks old both on file.
+  { path: "/my-adhd", state: "model-compare", name: "My ADHD, then and now" },
+  // The hub's lead sentence differs by axis (7 to 10 words), so each axis that can lead is measured
+  // leading. Relationships cannot lead from a run alone; its sentence is shorter than the longest.
+  { path: "/my-adhd", state: "lead-focus", name: "My ADHD, focus leads" },
+  { path: "/my-adhd", state: "lead-organisation", name: "My ADHD, organisation leads" },
+  { path: "/my-adhd", state: "lead-emotional-regulation", name: "My ADHD, feelings lead" },
+  { path: "/my-adhd", state: "lead-sleep-energy", name: "My ADHD, sleep leads" },
   { path: "/my-adhd", state: "share-open", name: "My ADHD, the summary open" },
   { path: "/my-adhd/history", state: "model-lived", name: "History, lived in" },
   { path: "/today", state: "model-lived", name: "Today, lived in" },
@@ -256,6 +264,47 @@ export const LIVED_RECORD = {
   },
 };
 
+const SNAP_ASPECTS = ["starting", "focus", "organisation", "emotional-regulation", "relationships", "sleep-energy"];
+const snapshot = (on, statuses, rungs) => ({
+  on,
+  statuses: Object.fromEntries(SNAP_ASPECTS.map((a) => [a, statuses[a] ?? "unexplored"])),
+  rungs: Object.fromEntries(SNAP_ASPECTS.map((a) => [a, rungs[a] ?? "unmapped"])),
+});
+
+const daysAgo = (n) => {
+  const d = new Date(Date.now() - n * 86_400_000);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+
+/**
+ * The lived-in person with a day one about three months ago and a snapshot about six weeks ago, for
+ * the compare pill. Dated from today rather than on a fixed clock, so the month is always named in
+ * one word and no later screen in the walk inherits a frozen clock.
+ */
+export function compareRecord() {
+  return {
+    ...LIVED_RECORD,
+    snapshots: [
+      snapshot(daysAgo(100), { starting: "still-learning" }, { starting: "named" }),
+      snapshot(daysAgo(40), { starting: "needs-support", "sleep-energy": "worth-improving" }, { starting: "explored", "sleep-energy": "named" }),
+    ],
+  };
+}
+
+/** The lived-in person with one axis leading: its run costs the most, the others little. */
+const LEAD_RUN = { focus: "context", organisation: "deadlines", "emotional-regulation": "conflict", "sleep-energy": "sleep" };
+export function leadRecord(aspect) {
+  const calm = { frequency: "sometimes", cost: 3, priority: "maybe", at: "2026-09-01T00:00:00.000Z" };
+  return {
+    ...LIVED_RECORD,
+    resonance: {
+      ...LIVED_RECORD.resonance,
+      starting: calm, ambiguity: calm, "working-memory": calm, sleep: calm,
+      [LEAD_RUN[aspect]]: { frequency: "often", cost: 10, priority: "yes", at: "2026-09-08T00:00:00.000Z" },
+    },
+  };
+}
+
 /**
  * THE SAME PERSON, ONE STEP EARLIER — the hub's action card in its OTHER shape (O253).
  *
@@ -302,6 +351,16 @@ export async function reach(page, route, base) {
     await page.reload({ waitUntil: "networkidle" });
     await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
     await page.locator("#care-map-title", { hasText: "Starting" }).waitFor({ timeout: 8000 });
+  }
+  if (route.state === "model-compare") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(compareRecord()));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator(".map-then-pill").waitFor({ timeout: 8000 });
+  }
+  const lead = /^lead-(.+)$/.exec(route.state ?? "")?.[1];
+  if (lead) {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(leadRecord(lead)));
+    await page.reload({ waitUntil: "networkidle" });
   }
   if (route.state === "map-lived" || route.state === "model-lived") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));

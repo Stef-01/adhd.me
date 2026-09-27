@@ -18,6 +18,7 @@ import type { OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
 import type { Checkpoint, CheckpointAnswer, CheckpointMonths } from "./checkpoint";
 import { emptyCarePlan, PLAN_MAX, sanitisePlan, type CarePlan } from "./care-plan";
+import { sanitiseSnapshots, type MapSnapshot } from "./snapshot-shape";
 
 export const MODEL_VERSION = 1;
 export const MODEL_KEY = `adhdme.model.v${MODEL_VERSION}`;
@@ -104,6 +105,11 @@ export interface ModelRecord {
    * The person's own numbers off their own plan — this app never infers them and holds no money.
    */
   carePlan: CarePlan;
+  /**
+   * The map on the days the hub was opened and the shape had changed, day one first
+   * (src/model/snapshots.ts). Absent on a record written before snapshots; read as none.
+   */
+  snapshots?: MapSnapshot[];
 }
 
 export type MedicationField = "changes" | "untouched" | "unwanted";
@@ -191,6 +197,8 @@ function readStoredModel(storage: Pick<Storage, "getItem">): ModelRecord {
       // A record written before the care plan existed simply has no plan, which is the truth about
       // it — so this needs no version bump and no migration, the same way checkpoints did not.
       carePlan: sanitisePlan(r.carePlan),
+      // Validated item by item and carried on every write, or the next update would erase them.
+      snapshots: sanitiseSnapshots(r.snapshots),
     };
   } catch {
     return emptyModel();

@@ -1,5 +1,4 @@
 "use client";
-import { SkillRecommendation } from "./skill-recommendation";
 
 // My ADHD: one picture of a person, and three things they can do from it.
 //
@@ -26,9 +25,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkle } from "@phosphor-icons/react";
 import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
-import { axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
+import { ASPECT_LABELS, axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
+import { compareFor, compareSentence, nextSnapshots, pointsOf, snapshotOf, storedOrMigrated, type MapSnapshot } from "@/model/snapshots";
+import { localDay } from "@/lib/dates";
 import { isComplete } from "@/model/onboarding";
-import { activeSafety, emptyModel, hasSignals, type ModelRecord } from "@/model/store";
+import { activeSafety, hasSignals, updateModel } from "@/model/store";
 import { LifeHeader } from "./life-shell";
 import { MyAdhdRadar } from "./my-adhd-radar";
 import { MyAdhdSheet } from "./my-adhd-sheet";
@@ -38,7 +39,8 @@ import { acknowledgeSafety } from "@/model/store";
 import { useModel } from "./use-model";
 
 /**
- * O253: two contributor chips, not three.
+ * One contributor chip (PLAN.md W3). The compare pill needed the words, and the axis sheet lists
+ * the top three one tap away. Before that, O253: two contributor chips, not three.
  *
  * The action card grew the line that says what the step actually IS — the founder read "Try
  * this: one capture place." and it meant nothing to him — and the screen went to 62 words
@@ -50,7 +52,7 @@ import { useModel } from "./use-model";
  * belong to, one tap away, which is the screen built to hold them. What could not move is the
  * step: a next action nobody can read is not a next action.
  */
-const MAX_FOCUS = 2;
+const MAX_FOCUS = 1;
 const MAX_STRENGTHS = 1;
 
 export function MyAdhd() {
@@ -76,12 +78,34 @@ export function MyAdhd() {
   }, []);
 
   const points = useMemo(() => axes(record), [record]);
-  // Day one: the shape the model drew from the first answers alone. Everything since is what the
-  // person built, and the gap between the two polygons is the only "progress" this tab shows.
-  const dayOne = useMemo(() => (record ? axes(dayOneRecord(record)) : []), [record]);
-  const baseline = useMemo(
-    () => (dayOne.some((d, i) => d.reach !== points[i]?.reach) ? dayOne : null),
-    [dayOne, points],
+  const started = isComplete(record?.onboarding ?? null);
+
+  // THE MAP THEN AND NOW (PLAN.md W3). A snapshot is taken when the hub opens on a map that has
+  // changed; day one is the first and is never replaced. Writing fires the model event, the hub
+  // re-reads, the map now equals the latest snapshot, and nothing is written again.
+  const now = useMemo(() => (record && started ? snapshotOf(record, localDay()) : null), [record, started]);
+  const snapshots = useMemo(() => (record && started ? storedOrMigrated(record) : []), [record, started]);
+  useEffect(() => {
+    if (!record || !now) return;
+    const next = nextSnapshots(snapshots, now);
+    if (next === record.snapshots) return;
+    if (record.snapshots?.length && next === snapshots) return;
+    refresh(updateModel(storage, (r) => ({ ...r, snapshots: [...next] })));
+  }, [record, now, snapshots, storage, refresh]);
+  const compare = useMemo(() => (now ? compareFor(snapshots, now, new Date()) : null), [snapshots, now]);
+  const options = useMemo(() => {
+    const out: Array<{ id: string; name: string; snapshot: MapSnapshot }> = [];
+    if (compare?.dayOne) out.push({ id: "day-one", name: "Day one", snapshot: compare.dayOne });
+    if (compare?.month) out.push({ id: "month", name: compare.month.name, snapshot: compare.month.snapshot });
+    return out;
+  }, [compare]);
+  // The month is the default when there is one: "then" is most useful as a month ago.
+  const [picked, setPicked] = useState<string | null>(null);
+  const then = options.find((o) => o.id === picked) ?? options[options.length - 1] ?? null;
+  const baseline = useMemo(() => (then ? pointsOf(then.snapshot) : null), [then]);
+  const thenText = useMemo(
+    () => (then && now ? compareSentence(then.snapshot, then.name, now, (a) => ASPECT_LABELS[a]) : []),
+    [then, now],
   );
   // What may be contributing, as the comp has it: at most three short phrases from the leading
   // need's own contributors. Repeating the axis names here would say nothing the radar has not.
@@ -95,7 +119,6 @@ export function MyAdhd() {
   const line = useMemo(() => standsOut(record), [record]);
   const rec = useMemo(() => (record ? recommend(record) : null), [record]);
   const safety = record ? activeSafety(record) : null;
-  const started = isComplete(record?.onboarding ?? null);
 
   // What is working, from the axes that name a strength. One, because two is a list and this
   // screen has one job.
@@ -127,6 +150,24 @@ export function MyAdhd() {
 
           {record && (
             <MyAdhdRadar points={points} baseline={started ? baseline : null} onOpen={openAxis} openAspect={open} />
+          )}
+
+          {then && (
+            <div className="map-then-pill">
+              <span className="map-then-swatch" aria-hidden="true" />
+              {options.length > 1 ? (
+                <span className="map-then-options" role="radiogroup" aria-label="Compare with">
+                  {options.map((o) => (
+                    <button key={o.id} type="button" role="radio" aria-checked={o.id === then.id} onClick={() => setPicked(o.id)}>
+                      {o.name}
+                    </button>
+                  ))}
+                </span>
+              ) : (
+                <span className="map-then-name">{then.name}</span>
+              )}
+              {thenText.length > 0 && <span className="sr-only">{thenText.join(" ")}</span>}
+            </div>
           )}
 
           {record && (hasSignals(record) || record.learning) && <p className="map-where">Saved on this device.</p>}
@@ -183,7 +224,6 @@ export function MyAdhd() {
                       <NextStepAction rec={rec} />
                     </>
                   )}
-                  <SkillRecommendation />
                 </section>
               )}
             </div>
@@ -205,11 +245,6 @@ export function MyAdhd() {
       )}
     </main>
   );
-}
-
-/** The record as it stood after onboarding: first answers kept, everything learned since removed. */
-function dayOneRecord(record: ModelRecord): ModelRecord {
-  return { ...emptyModel(), onboarding: record.onboarding, resonance: record.resonance };
 }
 
 type Recommendation = NonNullable<ReturnType<typeof recommend>>;
