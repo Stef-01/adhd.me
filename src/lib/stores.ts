@@ -21,6 +21,7 @@ import { resetEducation } from "@/education/store";
 import { resetVerticals } from "@/verticals/store";
 import { resetLedger } from "@/credentials/ledger";
 import { resetVault } from "@/credentials/vault";
+import { resetKeyPause } from "@/lib/llm/key-pause";
 import { resetMatching } from "@/lib/matching/store";
 import { resetRateLimits } from "@/lib/rate-limit";
 import { resetReports } from "@/ops/reporter";
@@ -42,6 +43,7 @@ export const STORE_RESETTERS: Record<string, () => unknown> = {
   resetVerticals,
   resetLedger,
   resetVault,
+  resetKeyPause,
   resetMatching,
   resetRateLimits,
   resetOps,

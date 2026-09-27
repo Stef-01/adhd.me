@@ -12,7 +12,7 @@ export function noteKeyFailure(error: string | undefined, now = Date.now()): voi
   if (error && KEY_FAILURE.test(error)) state.until = now + PAUSE_MS;
 }
 
-/** Tests only. */
+/** Clears the pause; registered in src/lib/stores.ts, so a reset of every store clears it too. */
 export function resetKeyPause(): void {
   state.until = 0;
 }
