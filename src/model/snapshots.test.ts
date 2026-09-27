@@ -2,8 +2,9 @@ import { afterEach, describe, expect, it } from "vitest";
 import { RUNGS } from "@/wellness/map";
 import { ASPECTS, ASPECT_LABELS, STATUS_LABEL } from "./matrix";
 import { SNAPSHOT_ASPECTS, SNAPSHOT_CAP, SNAPSHOT_RUNGS, SNAPSHOT_STATUSES, isSnapshot, type MapSnapshot } from "./snapshot-shape";
-import { compareFor, compareSentence, migratedDayOne, monthName, nextSnapshots, pointsOf, snapshotOf } from "./snapshots";
+import { compareFor, compareSentence, isBlank, migratedDayOne, monthName, nextSnapshots, pointsOf, sameMap, snapshotOf, snapshotsToWrite } from "./snapshots";
 import { emptyModel, readModel, writeModel, type ModelRecord } from "./store";
+import { recordResonance as recordSignal, selectGoals } from "@/lives/profile";
 
 function snap(on: string, over: Partial<Record<(typeof ASPECTS)[number], [MapSnapshot["statuses"]["starting"], MapSnapshot["rungs"]["starting"]]>> = {}): MapSnapshot {
   const statuses = Object.fromEntries(ASPECTS.map((a) => [a, over[a]?.[0] ?? "unexplored"])) as MapSnapshot["statuses"];
@@ -91,6 +92,76 @@ describe("migration", () => {
     // Only the first answers: the finished run later on is not part of day one.
     expect(dayOne).toEqual({ ...snapshotOf({ ...emptyModel(), onboarding: record.onboarding, resonance: record.resonance }, dayOne.on), approx: true });
     expect(migratedDayOne(emptyModel())).toBeNull();
+  });
+});
+
+describe("what the hub writes", () => {
+  const today = "2026-09-27";
+  const nowOf = (record: ModelRecord, on = today) => snapshotOf(record, on);
+
+  it("a brand-new record writes nothing, and neither does an empty browser", () => {
+    expect(snapshotsToWrite(emptyModel(), nowOf(emptyModel()))).toBeNull();
+    const fresh = readModel(memory());
+    expect(snapshotsToWrite(fresh, nowOf(fresh))).toBeNull();
+    expect(isBlank(nowOf(fresh))).toBe(true);
+  });
+
+  it("a blank map is never day one, even with a Start answer on file", () => {
+    const partWay: ModelRecord = { ...emptyModel(), onboarding: { stage: "think-so" } };
+    expect(isBlank(nowOf(partWay))).toBe(true);
+    expect(snapshotsToWrite(partWay, nowOf(partWay))).toBeNull();
+  });
+
+  it("a rated game starts the history without Start", () => {
+    const rated: ModelRecord = { ...emptyModel(), resonance: { starting: { frequency: "often", cost: 8, priority: "yes", at: "2026-09-27T01:00:00.000Z" } } };
+    const now = nowOf(rated);
+    expect(isBlank(now)).toBe(false);
+    expect(snapshotsToWrite(rated, now)).toEqual([now]);
+  });
+
+  it("a goal or a character someone says is like them starts it too", () => {
+    const goals = memory();
+    selectGoals(goals, ["task_initiation"]);
+    const chose = readModel(goals);
+    expect(chose.learning).toBeDefined();
+    expect(snapshotsToWrite(chose, nowOf(chose))).toEqual([nowOf(chose)]);
+
+    const character = memory();
+    recordSignal(character, { sourceType: "character", sourceId: "nina", response: "this_is_me" });
+    const me = readModel(character);
+    expect(snapshotsToWrite(me, nowOf(me))).toEqual([nowOf(me)]);
+  });
+
+  it("once written, an unchanged map writes nothing, so the hub cannot loop", () => {
+    const s = memory();
+    selectGoals(s, ["sleep"]);
+    const first = readModel(s);
+    writeModel(s, { ...first, snapshots: [...snapshotsToWrite(first, nowOf(first))!] });
+    const again = readModel(s);
+    expect(snapshotsToWrite(again, nowOf(again))).toBeNull();
+    expect(snapshotsToWrite(again, nowOf(again, "2026-10-30"))).toBeNull();
+  });
+
+  it("finishing Start later adds to the history and keeps the game's day as day one", () => {
+    const rated: ModelRecord = { ...emptyModel(), resonance: { sleep: { frequency: "often", cost: 7, priority: "yes", at: "2026-08-01T01:00:00.000Z" } } };
+    const dayOne = nowOf(rated, "2026-08-01");
+    const started: ModelRecord = {
+      ...rated,
+      snapshots: [dayOne],
+      onboarding: { improveFirst: "start-earlier", impact: 8, completedAt: "2026-09-27T01:00:00.000Z" },
+    };
+    const now = nowOf(started);
+    expect(sameMap(now, dayOne)).toBe(false);
+    expect(snapshotsToWrite(started, now)).toEqual([dayOne, now]);
+  });
+
+  it("a record from before snapshots writes its rebuilt day one once, then nothing", () => {
+    const record: ModelRecord = { ...emptyModel(), onboarding: { improveFirst: "start-earlier", impact: 8, completedAt: "2026-08-01T00:00:00.000Z" } };
+    const written = snapshotsToWrite(record, nowOf(record))!;
+    // The first answers alone drew this map, so the rebuilt day one is all there is.
+    expect(written).toEqual([migratedDayOne(record)]);
+    expect(written[0]!.approx).toBe(true);
+    expect(snapshotsToWrite({ ...record, snapshots: [...written] }, nowOf(record))).toBeNull();
   });
 });
 

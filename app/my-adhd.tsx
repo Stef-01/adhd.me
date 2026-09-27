@@ -26,7 +26,7 @@ import { ArrowRight, Sparkle } from "@phosphor-icons/react";
 import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
 import { ASPECT_LABELS, axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
-import { compareFor, compareSentence, nextSnapshots, pointsOf, snapshotOf, storedOrMigrated, type MapSnapshot } from "@/model/snapshots";
+import { compareFor, compareSentence, pointsOf, snapshotOf, snapshotsToWrite, storedOrMigrated, type MapSnapshot } from "@/model/snapshots";
 import { localDay } from "@/lib/dates";
 import { isComplete } from "@/model/onboarding";
 import { activeSafety, hasSignals, updateModel } from "@/model/store";
@@ -84,17 +84,16 @@ export function MyAdhd() {
   const started = isComplete(record?.onboarding ?? null);
 
   // THE MAP THEN AND NOW (PLAN.md W3). A snapshot is taken when the hub opens on a map that has
-  // changed; day one is the first and is never replaced. Writing fires the model event, the hub
-  // re-reads, the map now equals the latest snapshot, and nothing is written again.
-  const now = useMemo(() => (record && started ? snapshotOf(record, localDay()) : null), [record, started]);
-  const snapshots = useMemo(() => (record && started ? storedOrMigrated(record) : []), [record, started]);
+  // changed, whatever changed it: Start, a rated game, a character or a goal. Day one is the first
+  // and is never replaced, and a blank map is never day one. Writing fires the model event, the
+  // hub re-reads, the map now equals the latest snapshot, and nothing is written again.
+  const now = useMemo(() => (record ? snapshotOf(record, localDay()) : null), [record]);
+  const snapshots = useMemo(() => (record ? storedOrMigrated(record) : []), [record]);
   useEffect(() => {
     if (!record || !now) return;
-    const next = nextSnapshots(snapshots, now);
-    if (next === record.snapshots) return;
-    if (record.snapshots?.length && next === snapshots) return;
-    refresh(updateModel(storage, (r) => ({ ...r, snapshots: [...next] })));
-  }, [record, now, snapshots, storage, refresh]);
+    const next = snapshotsToWrite(record, now);
+    if (next) refresh(updateModel(storage, (r) => ({ ...r, snapshots: [...next] })));
+  }, [record, now, storage, refresh]);
   const compare = useMemo(() => (now ? compareFor(snapshots, now, new Date()) : null), [snapshots, now]);
   const options = useMemo(() => {
     const out: Array<{ id: string; name: string; snapshot: MapSnapshot }> = [];
@@ -194,7 +193,7 @@ export function MyAdhd() {
           {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
           {record && (
-            <MyAdhdRadar points={points} baseline={started ? baseline : null} onOpen={openAxis} openAspect={open} caption={thenPill} />
+            <MyAdhdRadar points={points} baseline={baseline} onOpen={openAxis} openAspect={open} caption={thenPill} />
           )}
 
           {record && (

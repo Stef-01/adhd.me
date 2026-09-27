@@ -1,6 +1,7 @@
 // The map then and now (docs/design/ux-evaluation-2026-09/PLAN.md W3). A device-only record cannot
 // know what the map looked like on a day it was not opened, so a snapshot is taken when the hub is
 // opened and the shape has changed since the last one. Day one is the first, and is never replaced.
+// Any source can start the history, not only the ten Start questions.
 
 import { localDay } from "@/lib/dates";
 import { RUNG_LABEL, RUNG_REACH } from "@/wellness/map";
@@ -61,6 +62,26 @@ export function storedOrMigrated(record: ModelRecord): readonly MapSnapshot[] {
   if (record.snapshots && record.snapshots.length > 0) return record.snapshots;
   const dayOne = migratedDayOne(record);
   return dayOne ? [dayOne] : [];
+}
+
+/** Whether a snapshot draws nothing: the map of a record with nothing in it. */
+export function isBlank(snapshot: MapSnapshot): boolean {
+  return sameMap(snapshot, snapshotOf(emptyModel(), snapshot.on));
+}
+
+/**
+ * What a hub visit writes, or null when it writes nothing. The history starts the first time the
+ * map draws anything, from any source: the ten Start questions, a rated game, a character, a goal.
+ * A blank map is never day one, so a new record writes nothing. A record from before snapshots
+ * gets its rebuilt day one written once. An unchanged map returns null, so the write, the re-read
+ * it causes and the next visit cannot loop.
+ */
+export function snapshotsToWrite(record: ModelRecord, now: MapSnapshot): readonly MapSnapshot[] | null {
+  const held = storedOrMigrated(record);
+  if (held.length === 0 && isBlank(now)) return null;
+  // `held` is the stored list itself when one is on file, so the same list back means no change.
+  const next = nextSnapshots(held, now);
+  return next === record.snapshots ? null : next;
 }
 
 /** A snapshot as the radar draws it: the same points it draws for now. */

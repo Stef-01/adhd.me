@@ -287,8 +287,10 @@ const daysAgo = (n) => {
 
 /**
  * The lived-in person with a day one about three months ago and a snapshot about six weeks ago, for
- * the compare pill. Dated from today rather than on a fixed clock, so the month is always named in
- * one word and no later screen in the walk inherits a frozen clock.
+ * the compare pill. Dated from today rather than on a fixed clock, so no later screen in the walk
+ * inherits a frozen clock. The month is one word for most of the year, but from 1 January to about
+ * 9 February six weeks back is last year, and the month reads "December last year" (or "November
+ * last year"), two words more.
  */
 export function compareRecord() {
   return {
