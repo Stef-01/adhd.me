@@ -25,5 +25,7 @@ export const LIVES_LARGE_KEY = "adhdme.lives.large";
 export const LIVES_REDUCED_FLASHING_KEY = "adhdme.lives.reduced-flashing";
 export const LIVES_REDUCED_SENSORY_KEY = "adhdme.lives.reduced-sensory";
 export const LIVES_HAPTICS_KEY = "adhdme.lives.haptics";
+/** Sound on a hit, a miss, a speed-up and the end (src/lives/sound.ts), off by default, on this device. */
+export const LIVES_SOUND_KEY = "adhdme.lives.sound";
 export function readFlag(key: string): boolean { try { return deviceLearningStorage.getItem(key) === "1"; } catch { return false; } }
 export function writeFlag(key: string, on: boolean): void { try { if (on) deviceLearningStorage.setItem(key, "1"); else deviceLearningStorage.removeItem(key); } catch { /* memory only */ } }

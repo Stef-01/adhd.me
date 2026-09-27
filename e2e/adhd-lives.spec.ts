@@ -208,6 +208,42 @@ test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kep
   expect(page.url()).not.toMatch(/flash|sensory|haptic/);
 });
 
+test("E2E Lives 6: sound is off until switched on, sounds on a hit, and never under reduced sensory effects", async ({ page }) => {
+  // A browser that can make tones, and a count of every tone it was asked for.
+  await page.addInitScript(() => {
+    const w = window as unknown as { __tones: number; AudioContext: unknown };
+    w.__tones = 0;
+    const param = { setValueAtTime: () => undefined, linearRampToValueAtTime: () => undefined };
+    w.AudioContext = class {
+      currentTime = 0; destination = {}; state = "running";
+      resume() { return Promise.resolve(); }
+      createOscillator() { return { type: "sine", frequency: param, connect: (n: unknown) => n, start: () => { w.__tones += 1; }, stop: () => undefined }; }
+      createGain() { return { gain: param, connect: (n: unknown) => n }; }
+    };
+  });
+  const tones = () => page.evaluate(() => (window as unknown as { __tones: number }).__tones);
+  await page.goto("/lives/play?seed=quiet");
+  await expect(page.locator(".lives-run:not([data-sound])")).toBeVisible();
+  await drive(page, "hit", async () => (await page.locator(".lives-result[data-hit='true']").count()) > 0);
+  expect(await tones()).toBe(0);
+  await page.goto("/lives");
+  await page.locator(".lives-settings summary").click();
+  const chip = page.getByRole("button", { name: "Sound", exact: true });
+  expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await chip.click();
+  await expect(chip).toHaveAttribute("aria-pressed", "true");
+  await page.goto("/lives/play?seed=quiet");
+  await expect(page.locator(".lives-run[data-sound='true']")).toBeVisible();
+  await drive(page, "hit", async () => (await page.locator(".lives-result[data-hit='true']").count()) > 0);
+  await expect.poll(tones).toBeGreaterThan(0);
+  // Reduced sensory effects wins: the run carries no sound at all.
+  await page.goto("/lives");
+  await page.locator(".lives-settings summary").click();
+  await page.getByRole("button", { name: "Reduced sensory effects", exact: true }).click();
+  await page.goto("/lives/play?seed=quiet");
+  await expect(page.locator(".lives-run[data-reduced-sensory='true']:not([data-sound])")).toBeVisible();
+});
+
 // "Eight lives. Three of yours." is the line the screen opens on, and the cast beside it has to be
 // eight. As a wrapping flex row of 44px beans it needed 380px and had 350 at 390 and 280 at 320,
 // so the eighth sat alone on a second row and the line-up read as seven and a spare. The beans are

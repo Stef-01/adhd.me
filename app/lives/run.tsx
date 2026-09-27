@@ -12,12 +12,12 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { allowedMs, beginGame, fasterWord, GAMES, haptic, hashSeed, layoutGame, recordHighScore, resolveGame, startSession, type CharacterId, type GameDefinition, type GameResult, type GameScene, type SessionState } from "@/lives";
+import { allowedMs, beginGame, fasterWord, GAMES, haptic, hashSeed, playCue, layoutGame, recordHighScore, resolveGame, startSession, type CharacterId, type GameDefinition, type GameResult, type GameScene, type SessionState } from "@/lives";
 import { track } from "@/model/events";
 import { LifeBean, type LifeMood } from "./bean";
 import { Engine, EXPIRY_IS_SUCCESS, type EngineResult } from "./engines";
 import { Results } from "./results";
-import { LIVES_HAPTICS_KEY, LIVES_LARGE_KEY, LIVES_REDUCED_FLASHING_KEY, LIVES_REDUCED_SENSORY_KEY, LIVES_RELAXED_KEY, readFlag, useProfile } from "./profile-hook";
+import { LIVES_HAPTICS_KEY, LIVES_LARGE_KEY, LIVES_REDUCED_FLASHING_KEY, LIVES_REDUCED_SENSORY_KEY, LIVES_RELAXED_KEY, LIVES_SOUND_KEY, readFlag, useProfile } from "./profile-hook";
 
 const FADE = { duration: 0.18, ease: "easeOut" } as const;
 /** §44: INTRO 350–800 ms; RESOLUTION 500–1500 ms; TRANSITION 150–350 ms. §59: FASTER 700 ms. */
@@ -71,10 +71,12 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
   const [reducedFlashing, setReducedFlashing] = useState(false);
   const [reducedSensory, setReducedSensory] = useState(false);
   const [haptics, setHaptics] = useState(false);
+  const [sound, setSound] = useState(false);
   useEffect(() => {
     setTutorial(-1);
     setRelaxed(readFlag(LIVES_RELAXED_KEY)); setLarge(readFlag(LIVES_LARGE_KEY));
     setReducedFlashing(readFlag(LIVES_REDUCED_FLASHING_KEY)); setReducedSensory(readFlag(LIVES_REDUCED_SENSORY_KEY)); setHaptics(readFlag(LIVES_HAPTICS_KEY));
+    setSound(readFlag(LIVES_SOUND_KEY));
   }, []);
   const flash = reducedFlashing ? "" : " is-flash";
   // The high score to beat is read before a run begins, never during one: the last game writes the
@@ -125,10 +127,12 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
     setPhase("resolution");
     // §93 haptics: one short pattern per moment; the end of the run replaces the last miss's.
     haptic(resolution.over ? "end" : success ? "hit" : "miss", haptics);
+    // Sound, when switched on: the same moment, or the speed-up when that is what comes next.
+    playCue(resolution.over ? "end" : resolution.faster ? "faster" : success ? "hit" : "miss", sound, reducedSensory);
     track(success ? "MINIGAME_SUCCESS" : "MINIGAME_FAILURE", { game: current.game.id, difficulty: session.difficulty, outcome: result.outcome });
     if (resolution.faster) track("DIFFICULTY_INCREASED", { to: resolution.state.difficulty });
     if (resolution.over) { if (!labRun.current) apply((s) => recordHighScore(s, resolution.state.score)); track("SESSION_COMPLETED", { games: resolution.state.completedGames, score: resolution.state.score }); }
-  }, [session, current, phase, reducedMotion, apply, haptics]);
+  }, [session, current, phase, reducedMotion, apply, haptics, sound, reducedSensory]);
 
   /** After the resolution beat: FASTER, the next game, or the end. */
   const advance = useCallback(() => {
@@ -185,7 +189,7 @@ export function ChaosRun({ seed, only }: { seed?: string; /** The lab's one-game
   }
 
   return (
-    <section data-liquid className={`lives-run play-run${large ? " is-large" : ""}`} aria-labelledby="lives-run-title" data-phase={phase} data-relaxed={relaxed ? "true" : undefined} data-reduced-flashing={reducedFlashing ? "true" : undefined} data-reduced-sensory={reducedSensory ? "true" : undefined} data-haptics={haptics ? "true" : undefined}>
+    <section data-liquid className={`lives-run play-run${large ? " is-large" : ""}`} aria-labelledby="lives-run-title" data-phase={phase} data-relaxed={relaxed ? "true" : undefined} data-reduced-flashing={reducedFlashing ? "true" : undefined} data-reduced-sensory={reducedSensory ? "true" : undefined} data-haptics={haptics ? "true" : undefined} data-sound={sound && !reducedSensory ? "true" : undefined}>
       <h1 id="lives-run-title" className="sr-only">ADHD Lives</h1>
       <div className="play-top lives-top">
         <Link className="play-x" href="/lives" aria-label="Leave the run"><X size={20} weight="bold" aria-hidden="true" /></Link>

@@ -30,6 +30,7 @@ export const KEPT_PREFERENCES: readonly string[] = [
   "adhdme.lives.reduced-flashing",
   "adhdme.lives.reduced-sensory",
   "adhdme.lives.haptics",
+  "adhdme.lives.sound",
   "adhdme.lives.tutored",
 ];
 const KEPT_PREFIXES = ["adhdme.play."];
