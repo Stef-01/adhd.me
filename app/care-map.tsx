@@ -29,8 +29,8 @@ const COLOURS: Record<Layer, { fill: string; ink: string }> = {
   people: { fill: "var(--layer-people-bg)", ink: "var(--layer-people-ink)" },
 };
 
-/** At most three of each in the panel; the rest are on the Learn page. */
-const PANEL_MAX = 3;
+/** At most five rows in the panel, games first; the rest are on the Learn page. */
+const PANEL_MAX = 5;
 
 /** Where each layer's wedge sits, in degrees from the top, clockwise. */
 const WEDGE: Record<Layer, [number, number]> = { brain: [-90, 0], body: [0, 90], environment: [90, 180], people: [180, 270] };
@@ -107,7 +107,7 @@ export function CareMap() {
   const [selected, setSelected] = useState<Subdomain | null>(null);
   const positions = useMemo(nodePositions, []);
   const panel = useRef<HTMLElement>(null);
-  // Under 1024px the panel sits below the wheel: after a tap, bring it into view if it is off the
+  // Under 1200px the panel sits below the wheel: after a tap, bring it into view if it is off the
   // bottom of the screen (PLAN.md W9). Focus stays on the node; the panel's live region announces.
   const open = (id: Subdomain) => {
     setSelected(id);
@@ -127,7 +127,7 @@ export function CareMap() {
   }
   const entry = selected ? SUBDOMAINS.find((s) => s.id === selected) : null;
   const games = selected ? gamesFor(selected).slice(0, PANEL_MAX) : [];
-  const modules = selected ? modulesFor(selected).slice(0, PANEL_MAX) : [];
+  const modules = selected ? modulesFor(selected).slice(0, PANEL_MAX - games.length) : [];
 
   return (
     <div className="care-map">

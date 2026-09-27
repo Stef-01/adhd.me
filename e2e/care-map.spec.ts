@@ -43,13 +43,17 @@ test("the wheel and its panel say words, never a number about the person", async
   expect(about).not.toMatch(/\d/);
 });
 
-test("from 1024px the panel sits beside the wheel and stays there; below it, a tap brings the panel into view", async ({ page }) => {
+test("from 1200px the panel sits beside the wheel and stays there; below it, a tap brings the panel into view", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/approach/map");
   const [wheel, panel] = [page.locator(".care-map-svg"), page.locator(".care-map-detail")];
   const [w, p] = [(await wheel.boundingBox())!, (await panel.boundingBox())!];
-  expect(w.width).toBeLessThanOrEqual(560.5);
+  expect(w.width).toBeLessThanOrEqual(690.5);
   expect(p.x, "the panel is to the right of the wheel").toBeGreaterThanOrEqual(w.x + w.width);
+  // Under 1200px the panel would be too narrow beside a full wheel, so it sits below it.
+  await page.setViewportSize({ width: 1100, height: 800 });
+  const [w2, p2] = [(await wheel.boundingBox())!, (await panel.boundingBox())!];
+  expect(p2.y, "the panel is below the wheel").toBeGreaterThanOrEqual(w2.y + w2.height);
   await page.setViewportSize({ width: 390, height: 700 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach/map");
@@ -57,6 +61,17 @@ test("from 1024px the panel sits beside the wheel and stays there; below it, a t
   await expect(page.getByRole("heading", { name: "Sleep" })).toBeInViewport();
   // Focus stays on the node that was tapped.
   expect(await page.evaluate(() => document.activeElement?.getAttribute("aria-label"))).toMatch(/^Sleep \(Body\)/);
+});
+
+test("on a desk a node's name renders at 12px or more", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/approach/map");
+  // The label's size in viewBox units times the SVG's scale on screen.
+  const px = await page.locator(".care-map-node text").first().evaluate((el) => {
+    const text = el as SVGTextElement;
+    return parseFloat(getComputedStyle(text).fontSize) * text.getScreenCTM()!.a;
+  });
+  expect(px).toBeGreaterThanOrEqual(12);
 });
 
 test("the wheel draws from the palette: no raw colour on it", async ({ page }) => {
