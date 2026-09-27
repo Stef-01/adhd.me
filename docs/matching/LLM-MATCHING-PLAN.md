@@ -665,6 +665,26 @@ ranker on each reading, graded against the oracle order; L0 from `qa/_runs/l0dev
 The ledger held 8,526 paid calls and $1.17 at this point (the commit that built the check said $1.49;
 the ledger is the record).
 
+## 16d. Where L1 stands, 2026-09-28, and what only the founder can decide
+
+The read is three reads that must agree, the lexicon's keys kept unless all three refuse them, a
+check of what the reads add, and an `unlisted` list for asks no facet covers (`llm-read.ts`). On
+three samples of the 358 dev requests it passes every L1 gate (precision 92.3%, recall 99.7%,
+aspires 73.0%, `never` 0%, C4 94.9%). A formal run is one sample, and the small gates fail on single
+requests: P3's C4 has six entries. The ledger holds 10,743 paid calls and $1.42 of the $8 cap.
+
+The decisions the loop cannot make:
+
+1. **G7.** May the read take a condition from a state someone describes ("flat for months" as
+   depression)? The check removes these today, as the corpus asks.
+2. **Three labels.** "just someone to talk to" as `non-medication`; the chef's narrative as
+   `adhd-assessment`; "someone who lets me get to the end of a sentence" as `attuned`.
+3. **Facets.** Punctuality, after hours, new patients and wheelchair access (the finder already
+   filters on the last two), and the other candidates in `docs/matching/NEEDS-GAPS.md` §3.
+4. **Level 1 in the finder.** `ADHDME_LLM_LEVEL=1` with `ADHDME_LLM_DAILY_USD` set; reads take 5
+   to 9 seconds (the check adds the most), inside the finder's 12-second fallback. The holdout stays
+   unread until a formal P4 passes.
+
 ## 17. Sources
 
 - OpenAI pricing and model facts (gpt-5-nano $0.05 / $0.005 cached / $0.40 per million tokens,
