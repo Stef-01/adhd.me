@@ -92,6 +92,9 @@ body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outl
 .platform-shell .me-sticky { position: static; background: transparent; padding-top: 12px; }
 .platform-shell .me-head-title { margin-bottom: 24px; }
 .platform-shell .me-screen:not(.learn-screen) { max-width: 1120px; }
+/* The care map is two columns from 1200px; at 1120 its panel had about 230px of text beside a
+   690px wheel, so its page takes the wide shell. */
+.platform-shell .me-screen:has(.care-map) { max-width: 1440px; }
 body:has(.platform-shell) .aoc-band { padding: 24px max(24px, calc((100vw - 1280px) / 2)); min-height: 0; background: var(--stone); color: var(--muted); }
 body:has(.platform-shell) .aoc-band svg { display: none; }
 body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-height: 1.6; color: var(--muted); }

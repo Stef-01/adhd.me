@@ -3,7 +3,7 @@ import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { CHARACTER_IDS } from "@/lives/types";
 import { SUBDOMAINS } from "@/model/layers";
-import { GAME_GROUPS, GAME_HINTS, LIFE_GAMES, RUN_GAMES, gamesFor, matchesGoal, modulesFor, relatedLife, relatedRun, subjectOf, tryFirst, type GameItem } from "./games";
+import { GAME_GROUPS, GAME_HINTS, LIFE_GAMES, PANEL_MAX, RUN_GAMES, gamesFor, matchesGoal, modulesFor, panelFor, relatedLife, relatedRun, subjectOf, tryFirst, type GameItem } from "./games";
 import { markPlayed, parsePlayed, readPlayed } from "./played";
 import { markDone, readProgress } from "./progress";
 
@@ -93,7 +93,7 @@ describe("played", () => {
 });
 
 describe("the care map's panel", () => {
-  it("lists the runs that target a part of life, then the character games whose journey works on it", () => {
+  it("lists the runs that target a part of life, then the character games whose subject holds it", () => {
     expect(gamesFor("activation").map((g) => g.id)).toContain("starting");
     const sleep = gamesFor("sleep");
     expect(sleep.some((g) => g.kind === "run" && g.id === "sleep")).toBe(true);
@@ -104,6 +104,21 @@ describe("the care map's panel", () => {
     expect(modulesFor("sleep").length).toBeGreaterThan(0);
     const reached = new Set(SUBDOMAINS.flatMap((s) => gamesFor(s.id).map((g) => `${g.kind}:${g.id}`)));
     for (const g of eachOf(RUN_GAMES, "the runs")) expect(reached.has(`run:${g.id}`), g.id).toBe(true);
+  });
+
+  it("holds at most five rows, keeps room for two modules, and keeps a character game when the part has one", () => {
+    for (const s of SUBDOMAINS) {
+      const { games, modules } = panelFor(s.id);
+      expect(games.length + modules.length, s.id).toBeLessThanOrEqual(PANEL_MAX);
+      expect(modules.length, s.id).toBe(Math.min(modulesFor(s.id).length, PANEL_MAX - games.length));
+      expect(modules.length, s.id).toBeGreaterThanOrEqual(Math.min(2, modulesFor(s.id).length));
+      if (gamesFor(s.id).some((g) => g.kind === "life")) expect(games.some((g) => g.kind === "life"), s.id).toBe(true);
+    }
+  });
+
+  it("shows every one of the eight lives on some part of the map, Leo and Theo included", () => {
+    const shown = new Set(SUBDOMAINS.flatMap((s) => panelFor(s.id).games.filter((g) => g.kind === "life").map((g) => g.id)));
+    for (const life of eachOf(LIFE_GAMES, "the lives")) expect(shown.has(life.id), life.id).toBe(true);
   });
 });
 

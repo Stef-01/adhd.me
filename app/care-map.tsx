@@ -14,7 +14,7 @@
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { ArrowRight, BookOpen, Play } from "@phosphor-icons/react";
-import { gamesFor, modulesFor } from "@/learn/games";
+import { panelFor } from "@/learn/games";
 import { LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Layer, type Subdomain } from "@/model/layers";
 import { deriveNeeds } from "@/model/needs";
 import { track } from "@/model/events";
@@ -28,9 +28,6 @@ const COLOURS: Record<Layer, { fill: string; ink: string }> = {
   environment: { fill: "var(--layer-environment-bg)", ink: "var(--layer-environment-ink)" },
   people: { fill: "var(--layer-people-bg)", ink: "var(--layer-people-ink)" },
 };
-
-/** At most five rows in the panel, games first; the rest are on the Learn page. */
-const PANEL_MAX = 5;
 
 /** Where each layer's wedge sits, in degrees from the top, clockwise. */
 const WEDGE: Record<Layer, [number, number]> = { brain: [-90, 0], body: [0, 90], environment: [90, 180], people: [180, 270] };
@@ -126,8 +123,7 @@ export function CareMap() {
     for (const c of n.contributors) if (!signal.has(c.subdomain)) signal.set(c.subdomain, `${c.note}.`);
   }
   const entry = selected ? SUBDOMAINS.find((s) => s.id === selected) : null;
-  const games = selected ? gamesFor(selected).slice(0, PANEL_MAX) : [];
-  const modules = selected ? modulesFor(selected).slice(0, PANEL_MAX - games.length) : [];
+  const { games, modules } = selected ? panelFor(selected) : { games: [], modules: [] };
 
   return (
     <div className="care-map">
