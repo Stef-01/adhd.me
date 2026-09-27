@@ -6,6 +6,7 @@
 // than ten consecutive questions without a break; when fatigue is high, stop offering optional
 // questions and say so in the PRD's own words.
 
+import { localDay } from "@/lib/dates";
 import type { ModelRecord } from "./store";
 
 export const MAX_CONSECUTIVE_QUESTIONS = 10;
@@ -23,9 +24,9 @@ export interface Fatigue {
 const HIGH = 0.6;
 
 export function surveyFatigue(record: ModelRecord, now: Date = new Date()): Fatigue {
-  const day = now.toISOString().slice(0, 10);
+  const day = localDay(now);
   const answeredToday = record.survey.day === day ? record.survey.answeredToday : 0;
-  const week = new Date(now.getTime() - 7 * 86_400_000).toISOString().slice(0, 10);
+  const week = localDay(new Date(now.getTime() - 7 * 86_400_000));
   const abandons7d = record.survey.abandons.filter((a) => a.slice(0, 10) >= week).length;
   const daysSinceLongSurvey = record.survey.lastLongAt ? Math.floor((now.getTime() - Date.parse(record.survey.lastLongAt)) / 86_400_000) : null;
   const depth = record.onboarding?.depth ?? "medium";

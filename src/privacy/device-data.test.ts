@@ -83,7 +83,7 @@ describe("one delete", () => {
 
 describe("a copy", () => {
   it("is named by the day it was saved", () => {
-    expect(copyFileName(new Date("2026-09-26T10:00:00Z"))).toBe("adhdme-backup-2026-09-26.json");
+    expect(copyFileName(new Date(2026, 8, 26, 10, 0))).toBe("adhdme-backup-2026-09-26.json");
   });
 
   it("carries the whole record out and back, so a new browser shows the same map", () => {

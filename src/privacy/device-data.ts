@@ -8,6 +8,7 @@
 // Restore checks a file field by field and refuses the whole file if any field is wrong. A copy is
 // from outside the app, so it is never trusted the way this browser's own storage is.
 
+import { localDay } from "@/lib/dates";
 import { LEARNING_TARGETS } from "@/model/learning-evidence";
 import { SUBDOMAINS } from "@/model/layers";
 import { QUESTIONS } from "@/model/onboarding";
@@ -80,7 +81,7 @@ export interface DeviceCopy {
 }
 
 export function copyFileName(now = new Date()): string {
-  return `adhdme-backup-${now.toISOString().slice(0, 10)}.json`;
+  return `adhdme-backup-${localDay(now)}.json`;
 }
 
 export function makeCopy(storage: Pick<Storage, "getItem">, now = new Date()): DeviceCopy {

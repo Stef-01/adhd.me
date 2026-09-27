@@ -1,4 +1,5 @@
 import { readProfile } from "@/lives/profile";
+import { localDay } from "@/lib/dates";
 import type { LearningProfile } from "@/lives/types";
 // The personal ADHD model's device record — everything the app has learned about this person.
 //
@@ -228,7 +229,7 @@ export function updateModel(storage: ModelStorage, change: (record: ModelRecord)
 }
 
 const now = () => new Date().toISOString();
-const today = () => new Date().toISOString().slice(0, 10);
+const today = () => localDay();
 
 export function saveOnboarding(storage: ModelStorage, patch: Partial<OnboardingAnswers>): ModelRecord {
   return updateModel(storage, (r) => ({ ...r, onboarding: { ...(r.onboarding ?? {}), ...patch } }));
