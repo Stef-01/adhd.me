@@ -1,0 +1,3 @@
+import {chromium} from '@playwright/test';
+import {pathToFileURL} from 'node:url';import path from 'node:path';
+const browser=await chromium.launch();const page=await browser.newPage({viewport:{width:1440,height:1100}});await page.goto(pathToFileURL(path.resolve('design/marketing/static-2026/transparent-png/index.html')).href);await page.screenshot({path:'design/marketing/static-2026/review/transparency-preview.png'});await browser.close();

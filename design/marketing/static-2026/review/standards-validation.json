@@ -1,0 +1,528 @@
+{
+  "passed": true,
+  "layoutCount": 44,
+  "transparentProductionCount": 16,
+  "inventoryCount": 73,
+  "checks": [
+    {
+      "file": "exports/social-square.png",
+      "width": 1080,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 794928
+    },
+    {
+      "file": "exports/social-portrait.png",
+      "width": 1080,
+      "height": 1350,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 886078
+    },
+    {
+      "file": "exports/story-static.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 1224285
+    },
+    {
+      "file": "exports/social-conversation.png",
+      "width": 1080,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 864666
+    },
+    {
+      "file": "exports/carousel-01.png",
+      "width": 1080,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 30799
+    },
+    {
+      "file": "exports/carousel-02.png",
+      "width": 1080,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 42418
+    },
+    {
+      "file": "exports/carousel-03.png",
+      "width": 1080,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 45357
+    },
+    {
+      "file": "exports/newsletter-header.png",
+      "width": 1200,
+      "height": 600,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 544145
+    },
+    {
+      "file": "exports/newsletter-feature.png",
+      "width": 1200,
+      "height": 600,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 357990
+    },
+    {
+      "file": "exports/editorial-cover.png",
+      "width": 1600,
+      "height": 2000,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 1599489
+    },
+    {
+      "file": "exports/article-banner.png",
+      "width": 1600,
+      "height": 900,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 977542
+    },
+    {
+      "file": "exports/presentation-cover.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 877067
+    },
+    {
+      "file": "exports/presentation-divider.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 59713
+    },
+    {
+      "file": "exports/presentation-framework.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 76584
+    },
+    {
+      "file": "exports/program-cover.png",
+      "width": 1240,
+      "height": 1754,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 1367870
+    },
+    {
+      "file": "exports/reflection-worksheet.png",
+      "width": 1240,
+      "height": 1754,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 60611
+    },
+    {
+      "file": "exports/poster-a-series.png",
+      "width": 1240,
+      "height": 1754,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 50540
+    },
+    {
+      "file": "exports/info-sheet.png",
+      "width": 1240,
+      "height": 1754,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 99617
+    },
+    {
+      "file": "exports/speaker-card.png",
+      "width": 1600,
+      "height": 900,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 33089
+    },
+    {
+      "file": "exports/name-bar.png",
+      "width": 1600,
+      "height": 360,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 68.41,
+      "bytes": 14168
+    },
+    {
+      "file": "exports/name-badge.png",
+      "width": 1063,
+      "height": 591,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 23414
+    },
+    {
+      "file": "exports/pamphlet-outside.png",
+      "width": 1754,
+      "height": 1240,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 403960
+    },
+    {
+      "file": "exports/pamphlet-inside.png",
+      "width": 1754,
+      "height": 1240,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 753454
+    },
+    {
+      "file": "exports/linkedin-landscape-628.png",
+      "width": 1200,
+      "height": 628,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 566928
+    },
+    {
+      "file": "exports/linkedin-landscape-627.png",
+      "width": 1200,
+      "height": 627,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 566106
+    },
+    {
+      "file": "exports/linkedin-square.png",
+      "width": 1200,
+      "height": 1200,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 932483
+    },
+    {
+      "file": "exports/linkedin-portrait.png",
+      "width": 720,
+      "height": 900,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 465620
+    },
+    {
+      "file": "exports/newsletter-header-1320.png",
+      "width": 1320,
+      "height": 660,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 638393
+    },
+    {
+      "file": "exports/newsletter-feature-1320.png",
+      "width": 1320,
+      "height": 660,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 418908
+    },
+    {
+      "file": "exports/accent-arrow-ink.png",
+      "width": 600,
+      "height": 240,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 91.52,
+      "bytes": 3186
+    },
+    {
+      "file": "exports/accent-arrow-white.png",
+      "width": 600,
+      "height": 240,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 91.52,
+      "bytes": 2792
+    },
+    {
+      "file": "exports/accent-stop.png",
+      "width": 256,
+      "height": 256,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 52.73,
+      "bytes": 888
+    },
+    {
+      "file": "exports/quote-mark-yellow.png",
+      "width": 512,
+      "height": 384,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 72.42,
+      "bytes": 4411
+    },
+    {
+      "file": "exports/editorial-rule.png",
+      "width": 1600,
+      "height": 96,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 95.17,
+      "bytes": 957
+    },
+    {
+      "file": "exports/slide-corner-frame.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 99.5,
+      "bytes": 10755
+    },
+    {
+      "file": "exports/photo-frame-portrait.png",
+      "width": 1080,
+      "height": 1350,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 96.15,
+      "bytes": 11366
+    },
+    {
+      "file": "exports/name-bar-light-1920.png",
+      "width": 1920,
+      "height": 360,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 73.67,
+      "bytes": 14807
+    },
+    {
+      "file": "exports/name-bar-dark-1920.png",
+      "width": 1920,
+      "height": 360,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 73.67,
+      "bytes": 15001
+    },
+    {
+      "file": "exports/program-cover-a4-300ppi.png",
+      "width": 2480,
+      "height": 3508,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 3879063
+    },
+    {
+      "file": "exports/reflection-worksheet-a4-300ppi.png",
+      "width": 2480,
+      "height": 3508,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 143907
+    },
+    {
+      "file": "exports/poster-a-series-a4-300ppi.png",
+      "width": 2480,
+      "height": 3508,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 113127
+    },
+    {
+      "file": "exports/info-sheet-a4-300ppi.png",
+      "width": 2480,
+      "height": 3508,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 241499
+    },
+    {
+      "file": "exports/pamphlet-outside-a4-300ppi.png",
+      "width": 3508,
+      "height": 2480,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 1312844
+    },
+    {
+      "file": "exports/pamphlet-inside-a4-300ppi.png",
+      "width": 3508,
+      "height": 2480,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 2575070
+    },
+    {
+      "file": "identity/mark-colour-2x.png",
+      "width": 2000,
+      "height": 1300,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 76.9,
+      "bytes": 63438
+    },
+    {
+      "file": "identity/mark-reverse-2x.png",
+      "width": 2000,
+      "height": 1300,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 76.9,
+      "bytes": 61792
+    },
+    {
+      "file": "identity/mark-mono-ink-2x.png",
+      "width": 2000,
+      "height": 1300,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 76.9,
+      "bytes": 63437
+    },
+    {
+      "file": "identity/mark-mono-white-2x.png",
+      "width": 2000,
+      "height": 1300,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 76.9,
+      "bytes": 49111
+    },
+    {
+      "file": "identity/mark-yellow-2x.png",
+      "width": 2000,
+      "height": 1300,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 57699
+    },
+    {
+      "file": "identity/mark-ivory-2x.png",
+      "width": 2000,
+      "height": 1300,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 59494
+    },
+    {
+      "file": "identity/wordmark-ink-2x.png",
+      "width": 1326,
+      "height": 380,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 79.58,
+      "bytes": 16733
+    },
+    {
+      "file": "identity/wordmark-white-2x.png",
+      "width": 1326,
+      "height": 380,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 79.58,
+      "bytes": 15932
+    }
+  ]
+}

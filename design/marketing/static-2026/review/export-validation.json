@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-27T23:40:00.695Z",
+  "checkedAt": "2026-09-27T23:45:33.502Z",
   "assets": [
     {
       "id": "social-square",
@@ -184,6 +184,174 @@
       "textBounds": "pass",
       "imagesDecoded": true,
       "sha256": "832883fc853521126b58891c5d5d7e3b4ae5b02dcd0a468daddcc8ec3ccf0ee2"
+    },
+    {
+      "id": "linkedin-landscape-628",
+      "width": 1200,
+      "height": 628,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "564cdafa11093d35a40e8fa4b59761fe0e174ff94722fcc043b84ce97c08779c"
+    },
+    {
+      "id": "linkedin-landscape-627",
+      "width": 1200,
+      "height": 627,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "3646908d21350cabf2e80ff36add477b7ee69e273b3335e6df673cdb0fc80ab0"
+    },
+    {
+      "id": "linkedin-square",
+      "width": 1200,
+      "height": 1200,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "b346b2482895b0c46e5bca507fd523fa7f5e79276e95ac2f78724e7664d8c009"
+    },
+    {
+      "id": "linkedin-portrait",
+      "width": 720,
+      "height": 900,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "7a5fed7a58088f7a305e0b5186bc5d6febad5c6cd25b4659af210476419ab93c"
+    },
+    {
+      "id": "newsletter-header-1320",
+      "width": 1320,
+      "height": 660,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "47c3f9fa5828a9a97164dd75b68d4cdc73832b5d8e25a288174c5cf230f102c6"
+    },
+    {
+      "id": "newsletter-feature-1320",
+      "width": 1320,
+      "height": 660,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "042103424eb0b76a020a39f9af1a0d5bfa6c8cbd76db38b355fe34234b95a0e6"
+    },
+    {
+      "id": "accent-arrow-ink",
+      "width": 600,
+      "height": 240,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "54b13ed6e723955898d5bdcaec0ce3b5c96096f1d5ec37fa227fcca1bb9db9cd"
+    },
+    {
+      "id": "accent-arrow-white",
+      "width": 600,
+      "height": 240,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "cef3be14d4ace0a38485078298178aa37a60e72d6fdced406d21019e524ef0a1"
+    },
+    {
+      "id": "accent-stop",
+      "width": 256,
+      "height": 256,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "e624968f3c2a911595e3b38e5199b4f9dd3e5249c1dd1343a46dbbef1672db41"
+    },
+    {
+      "id": "quote-mark-yellow",
+      "width": 512,
+      "height": 384,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "7533f0e393c2cd0bddb9b59798fdd7ddb9a92ec069445c8ef64de0344f316fc1"
+    },
+    {
+      "id": "editorial-rule",
+      "width": 1600,
+      "height": 96,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "e395119e20f1a437fb06daac11f80141bb54e36f62255c3fc9012406c9f9a58e"
+    },
+    {
+      "id": "slide-corner-frame",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "10ebaaf148eccf4668ff7c6ed69af5e635763320e85cd7771122610580136783"
+    },
+    {
+      "id": "photo-frame-portrait",
+      "width": 1080,
+      "height": 1350,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "bdb839d678a669616bdc9f1c86f3daf7b9a5e636ba0f5e7b78b6d17865ae0611"
+    },
+    {
+      "id": "name-bar-light-1920",
+      "width": 1920,
+      "height": 360,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "9375b00afa866cf8ed35b2c81263e5069c0e43fbaff36fe56e4259d2ffb64acf"
+    },
+    {
+      "id": "name-bar-dark-1920",
+      "width": 1920,
+      "height": 360,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "3034e4b47e5be864c20136ff2facca02864ef1b2d7eb4eb3e2a2cf423603ccdf"
+    },
+    {
+      "id": "program-cover-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "f615f74cbb450d2d37ac74fc96b2d59d8556c53afbb71da749a8e1d78bb5b7f6"
+    },
+    {
+      "id": "reflection-worksheet-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "d8b5cea8a8ac950790994f8ca028d38e245659dad1c0bfbefe9e9c334a90abef"
+    },
+    {
+      "id": "poster-a-series-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "8d792b40a2dcebc0c853c641dd9ec6b157c61c39367bd607de98ae84aca530af"
+    },
+    {
+      "id": "info-sheet-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "73b4bf6b1614920bf100f99a9ad033cb22a6f36fabf75651d08ed8f417403eed"
+    },
+    {
+      "id": "pamphlet-outside-a4-300ppi",
+      "width": 3508,
+      "height": 2480,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "8d99a8f6d3f16f7c3037d5f70dc235c2e81b845fd31db3240c8c06590210dc80"
+    },
+    {
+      "id": "pamphlet-inside-a4-300ppi",
+      "width": 3508,
+      "height": 2480,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "ee9a91124178d509bdaa8435640a73d9decb893e2bcc4c22299d0dedfd599bcb"
     }
   ]
 }

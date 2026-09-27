@@ -1,5 +1,5 @@
 {
-  "status": "First static release: 23 exported layouts; geometry and image decode verified; full-size social and pamphlet crops inspected. Remaining brief items are in README.md.",
+  "status": "44 editable layouts with PNG exports; platform-specific formats and reusable alpha graphics; see STANDARDS.md and inventory.csv.",
   "assets": [
     {
       "id": "social-square",
@@ -9,7 +9,8 @@
       "export": "exports/social-square.png",
       "layout": "split",
       "photo": "morning-note",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "social-portrait",
@@ -19,7 +20,8 @@
       "export": "exports/social-portrait.png",
       "layout": "stack",
       "photo": "study-cue",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "story-static",
@@ -29,7 +31,8 @@
       "export": "exports/story-static.png",
       "layout": "stack",
       "photo": "morning-note",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "social-conversation",
@@ -39,7 +42,8 @@
       "export": "exports/social-conversation.png",
       "layout": "stack",
       "photo": "supportive-conversation",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "carousel-01",
@@ -49,7 +53,8 @@
       "export": "exports/carousel-01.png",
       "layout": "type",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "carousel-02",
@@ -59,7 +64,8 @@
       "export": "exports/carousel-02.png",
       "layout": "type",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "carousel-03",
@@ -69,7 +75,8 @@
       "export": "exports/carousel-03.png",
       "layout": "type",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "newsletter-header",
@@ -79,7 +86,9 @@
       "export": "exports/newsletter-header.png",
       "layout": "split",
       "photo": "morning-note",
-      "editableName": false
+      "editableName": false,
+      "maxBytes": 1000000,
+      "transparent": false
     },
     {
       "id": "newsletter-feature",
@@ -89,7 +98,9 @@
       "export": "exports/newsletter-feature.png",
       "layout": "split",
       "photo": "supportive-conversation",
-      "editableName": false
+      "editableName": false,
+      "maxBytes": 1000000,
+      "transparent": false
     },
     {
       "id": "editorial-cover",
@@ -99,7 +110,8 @@
       "export": "exports/editorial-cover.png",
       "layout": "stack",
       "photo": "study-cue",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "article-banner",
@@ -109,7 +121,8 @@
       "export": "exports/article-banner.png",
       "layout": "split",
       "photo": "morning-note",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "presentation-cover",
@@ -119,7 +132,8 @@
       "export": "exports/presentation-cover.png",
       "layout": "split",
       "photo": "supportive-conversation",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "presentation-divider",
@@ -129,7 +143,8 @@
       "export": "exports/presentation-divider.png",
       "layout": "type",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "presentation-framework",
@@ -139,7 +154,8 @@
       "export": "exports/presentation-framework.png",
       "layout": "framework",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "program-cover",
@@ -149,7 +165,8 @@
       "export": "exports/program-cover.png",
       "layout": "stack",
       "photo": "supportive-conversation",
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "reflection-worksheet",
@@ -159,7 +176,8 @@
       "export": "exports/reflection-worksheet.png",
       "layout": "worksheet",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "poster-a-series",
@@ -169,7 +187,8 @@
       "export": "exports/poster-a-series.png",
       "layout": "type",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "info-sheet",
@@ -179,7 +198,8 @@
       "export": "exports/info-sheet.png",
       "layout": "information",
       "photo": null,
-      "editableName": false
+      "editableName": false,
+      "transparent": false
     },
     {
       "id": "speaker-card",
@@ -189,7 +209,8 @@
       "export": "exports/speaker-card.png",
       "layout": "speaker",
       "photo": null,
-      "editableName": true
+      "editableName": true,
+      "transparent": false
     },
     {
       "id": "name-bar",
@@ -199,7 +220,8 @@
       "export": "exports/name-bar.png",
       "layout": "name",
       "photo": null,
-      "editableName": true
+      "editableName": true,
+      "transparent": true
     },
     {
       "id": "name-badge",
@@ -209,7 +231,8 @@
       "export": "exports/name-badge.png",
       "layout": "badge",
       "photo": null,
-      "editableName": true
+      "editableName": true,
+      "transparent": false
     },
     {
       "id": "pamphlet-outside",
@@ -217,7 +240,8 @@
       "height": 1240,
       "layout": "pamphlet",
       "source": "templates/pamphlet-outside.html",
-      "export": "exports/pamphlet-outside.png"
+      "export": "exports/pamphlet-outside.png",
+      "transparent": false
     },
     {
       "id": "pamphlet-inside",
@@ -225,7 +249,289 @@
       "height": 1240,
       "layout": "pamphlet",
       "source": "templates/pamphlet-inside.html",
-      "export": "exports/pamphlet-inside.png"
+      "export": "exports/pamphlet-inside.png",
+      "transparent": false
+    },
+    {
+      "id": "linkedin-landscape-628",
+      "width": 1200,
+      "height": 628,
+      "source": "templates/linkedin-landscape-628.html",
+      "export": "exports/linkedin-landscape-628.png",
+      "layout": "split",
+      "photo": "morning-note",
+      "editableName": false,
+      "specification": "https://www.linkedin.com/help/linkedin/answer/a426534",
+      "sizeBasis": "published channel dimensions",
+      "maxBytes": 5000000,
+      "transparent": false
+    },
+    {
+      "id": "linkedin-landscape-627",
+      "width": 1200,
+      "height": 627,
+      "source": "templates/linkedin-landscape-627.html",
+      "export": "exports/linkedin-landscape-627.png",
+      "layout": "split",
+      "photo": "morning-note",
+      "editableName": false,
+      "specification": "https://business.linkedin.com/advertise/ads/ads-guide",
+      "sizeBasis": "published channel dimensions",
+      "maxBytes": 5000000,
+      "transparent": false
+    },
+    {
+      "id": "linkedin-square",
+      "width": 1200,
+      "height": 1200,
+      "source": "templates/linkedin-square.html",
+      "export": "exports/linkedin-square.png",
+      "layout": "split",
+      "photo": "morning-note",
+      "editableName": false,
+      "specification": "https://www.linkedin.com/help/linkedin/answer/a426534",
+      "sizeBasis": "published channel dimensions",
+      "maxBytes": 5000000,
+      "transparent": false
+    },
+    {
+      "id": "linkedin-portrait",
+      "width": 720,
+      "height": 900,
+      "source": "templates/linkedin-portrait.html",
+      "export": "exports/linkedin-portrait.png",
+      "layout": "stack",
+      "photo": "study-cue",
+      "editableName": false,
+      "specification": "https://www.linkedin.com/help/linkedin/answer/a426534",
+      "sizeBasis": "published channel dimensions",
+      "maxBytes": 5000000,
+      "transparent": false
+    },
+    {
+      "id": "newsletter-header-1320",
+      "width": 1320,
+      "height": 660,
+      "source": "templates/newsletter-header-1320.html",
+      "export": "exports/newsletter-header-1320.png",
+      "layout": "split",
+      "photo": "morning-note",
+      "editableName": false,
+      "specification": "https://mailchimp.com/help/image-requirements-for-templates/",
+      "sizeBasis": "published channel dimensions",
+      "maxBytes": 1000000,
+      "transparent": false
+    },
+    {
+      "id": "newsletter-feature-1320",
+      "width": 1320,
+      "height": 660,
+      "source": "templates/newsletter-feature-1320.html",
+      "export": "exports/newsletter-feature-1320.png",
+      "layout": "split",
+      "photo": "supportive-conversation",
+      "editableName": false,
+      "specification": "https://mailchimp.com/help/image-requirements-for-templates/",
+      "sizeBasis": "published channel dimensions",
+      "maxBytes": 1000000,
+      "transparent": false
+    },
+    {
+      "id": "accent-arrow-ink",
+      "width": 600,
+      "height": 240,
+      "source": "templates/accent-arrow-ink.html",
+      "export": "exports/accent-arrow-ink.png",
+      "vector": "graphics/accent-arrow-ink.svg",
+      "layout": "utility",
+      "transparent": true,
+      "sizeBasis": "house utility canvas; not a platform mandate"
+    },
+    {
+      "id": "accent-arrow-white",
+      "width": 600,
+      "height": 240,
+      "source": "templates/accent-arrow-white.html",
+      "export": "exports/accent-arrow-white.png",
+      "vector": "graphics/accent-arrow-white.svg",
+      "layout": "utility",
+      "transparent": true,
+      "sizeBasis": "house utility canvas; not a platform mandate"
+    },
+    {
+      "id": "accent-stop",
+      "width": 256,
+      "height": 256,
+      "source": "templates/accent-stop.html",
+      "export": "exports/accent-stop.png",
+      "vector": "graphics/accent-stop.svg",
+      "layout": "utility",
+      "transparent": true,
+      "sizeBasis": "house utility canvas; not a platform mandate"
+    },
+    {
+      "id": "quote-mark-yellow",
+      "width": 512,
+      "height": 384,
+      "source": "templates/quote-mark-yellow.html",
+      "export": "exports/quote-mark-yellow.png",
+      "vector": "graphics/quote-mark-yellow.svg",
+      "layout": "utility",
+      "transparent": true,
+      "sizeBasis": "house utility canvas; not a platform mandate"
+    },
+    {
+      "id": "editorial-rule",
+      "width": 1600,
+      "height": 96,
+      "source": "templates/editorial-rule.html",
+      "export": "exports/editorial-rule.png",
+      "vector": "graphics/editorial-rule.svg",
+      "layout": "utility",
+      "transparent": true,
+      "sizeBasis": "house utility canvas; not a platform mandate"
+    },
+    {
+      "id": "slide-corner-frame",
+      "width": 1920,
+      "height": 1080,
+      "source": "templates/slide-corner-frame.html",
+      "export": "exports/slide-corner-frame.png",
+      "vector": "graphics/slide-corner-frame.svg",
+      "layout": "utility",
+      "transparent": true,
+      "sizeBasis": "house utility canvas; not a platform mandate"
+    },
+    {
+      "id": "photo-frame-portrait",
+      "width": 1080,
+      "height": 1350,
+      "source": "templates/photo-frame-portrait.html",
+      "export": "exports/photo-frame-portrait.png",
+      "vector": "graphics/photo-frame-portrait.svg",
+      "layout": "utility",
+      "transparent": true,
+      "sizeBasis": "house utility canvas; not a platform mandate"
+    },
+    {
+      "id": "name-bar-light-1920",
+      "width": 1920,
+      "height": 360,
+      "source": "templates/name-bar-light-1920.html",
+      "export": "exports/name-bar-light-1920.png",
+      "layout": "name",
+      "transparent": true,
+      "editableName": true,
+      "sizeBasis": "house overlay canvas for 1920-wide artwork"
+    },
+    {
+      "id": "name-bar-dark-1920",
+      "width": 1920,
+      "height": 360,
+      "source": "templates/name-bar-dark-1920.html",
+      "export": "exports/name-bar-dark-1920.png",
+      "layout": "name",
+      "transparent": true,
+      "editableName": true,
+      "sizeBasis": "house overlay canvas for 1920-wide artwork"
+    },
+    {
+      "id": "program-cover-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "source": "templates/program-cover-a4-300ppi.html",
+      "export": "exports/program-cover-a4-300ppi.png",
+      "layout": "stack",
+      "photo": "supportive-conversation",
+      "editableName": false,
+      "transparent": false,
+      "sizeBasis": "A4 trim-size raster at nominal 300 pixels per inch; RGB, no bleed",
+      "physicalSizeMm": [
+        210,
+        297
+      ],
+      "nominalPpi": 300
+    },
+    {
+      "id": "reflection-worksheet-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "source": "templates/reflection-worksheet-a4-300ppi.html",
+      "export": "exports/reflection-worksheet-a4-300ppi.png",
+      "layout": "worksheet",
+      "photo": null,
+      "editableName": false,
+      "transparent": false,
+      "sizeBasis": "A4 trim-size raster at nominal 300 pixels per inch; RGB, no bleed",
+      "physicalSizeMm": [
+        210,
+        297
+      ],
+      "nominalPpi": 300
+    },
+    {
+      "id": "poster-a-series-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "source": "templates/poster-a-series-a4-300ppi.html",
+      "export": "exports/poster-a-series-a4-300ppi.png",
+      "layout": "type",
+      "photo": null,
+      "editableName": false,
+      "transparent": false,
+      "sizeBasis": "A4 trim-size raster at nominal 300 pixels per inch; RGB, no bleed",
+      "physicalSizeMm": [
+        210,
+        297
+      ],
+      "nominalPpi": 300
+    },
+    {
+      "id": "info-sheet-a4-300ppi",
+      "width": 2480,
+      "height": 3508,
+      "source": "templates/info-sheet-a4-300ppi.html",
+      "export": "exports/info-sheet-a4-300ppi.png",
+      "layout": "information",
+      "photo": null,
+      "editableName": false,
+      "transparent": false,
+      "sizeBasis": "A4 trim-size raster at nominal 300 pixels per inch; RGB, no bleed",
+      "physicalSizeMm": [
+        210,
+        297
+      ],
+      "nominalPpi": 300
+    },
+    {
+      "id": "pamphlet-outside-a4-300ppi",
+      "width": 3508,
+      "height": 2480,
+      "layout": "pamphlet",
+      "source": "templates/pamphlet-outside-a4-300ppi.html",
+      "export": "exports/pamphlet-outside-a4-300ppi.png",
+      "transparent": false,
+      "sizeBasis": "A4 trim-size raster at nominal 300 pixels per inch; RGB, no bleed",
+      "physicalSizeMm": [
+        297,
+        210
+      ],
+      "nominalPpi": 300
+    },
+    {
+      "id": "pamphlet-inside-a4-300ppi",
+      "width": 3508,
+      "height": 2480,
+      "layout": "pamphlet",
+      "source": "templates/pamphlet-inside-a4-300ppi.html",
+      "export": "exports/pamphlet-inside-a4-300ppi.png",
+      "transparent": false,
+      "sizeBasis": "A4 trim-size raster at nominal 300 pixels per inch; RGB, no bleed",
+      "physicalSizeMm": [
+        297,
+        210
+      ],
+      "nominalPpi": 300
     }
   ]
 }

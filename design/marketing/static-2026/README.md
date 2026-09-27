@@ -4,9 +4,13 @@ Open `review/index.html` for the contact sheet. Click a preview to open its edit
 
 ## Included in this release
 
-23 static layouts: four social/story assets; three carousel cards; two newsletter headers; editorial cover and article banner; three presentation graphics; training cover and reflection worksheet; poster, information sheet and two-sided six-panel pamphlet; speaker card, name bar and badge. Each has an HTML source with real editable text and a PNG export. Four original generated photographs and two generated logo masters accompany them.
+44 static layouts and utility exports, including the original core set: four social/story assets; three carousel cards; two newsletter headers; editorial cover and article banner; three presentation graphics; training cover and reflection worksheet; poster, information sheet and two-sided six-panel pamphlet; speaker card, name bar and badge. Each has an HTML source with real editable text and a PNG export. Four original generated photographs and two generated logo masters accompany them.
 
 Names and roles on speaker/name templates are editable fields. Replace them with authorised details; no fictional practitioner biographies or testimonial claims have been invented. All four photographed scenes use AI-generated fictional people. See `sources/RESEARCH.md` and `sources/generation-record.json` for reference and provenance notes.
+
+16 reusable transparent PNGs are collected in `transparent-png/`, with previews on light and dark backgrounds. `inventory.csv` lists 73 canonical PNG/SVG files (convenience copies excluded). See `STANDARDS.md` for researched channel requirements and exact sizing.
+
+The additions include four LinkedIn formats, two 1320px newsletter exports, seven transparent utility graphics, two wide name bars, and six A4 proofs at nominal 300ppi.
 
 ## Format and editing
 
@@ -22,6 +26,10 @@ These are RGB digital exports. The A-series ratio is useful for review and layou
 - Apply the chosen vector identity consistently to the remaining campaign applications.
 - Export the two-sided six-panel pamphlet and other print layouts as PDFs with documented physical sizes and printer fold tolerances.
 - Flesh out the training handout set and add presentation diagrams/backgrounds.
-- Inspect final full-size crops and all identity variants; deliver complete manifest, prompt archive and consolidated downloadable pack.
+- Extend visual review as further campaign applications are added.
 
 No video, motion or B-roll is part of this brief. These materials are kept outside the public app bundle; the app navigation wordmark is unchanged.
+
+## Rebuild and verify
+
+Run `python scripts/standardize-static-campaign.py`, `node scripts/export-static-campaign.mjs`, `node scripts/validate-static-campaign.mjs`, then `python scripts/validate-campaign-deliverables.py`. The last step checks PNG dimensions, alpha and channel byte limits, rebuilds the transparent collection and exact inventory, and writes `review/standards-validation.json`.
