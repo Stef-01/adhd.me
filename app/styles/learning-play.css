@@ -62,8 +62,7 @@
 .platform-shell .learn-module .learn-option.is-right { background: #e4f1d9; border-color: #366247; }
 .platform-shell .learn-module .learn-option.is-wrong { background: #fff0df; border-color: #8a5a16; }
 .activity { clear: both; padding-top: 32px; margin-top: 28px; border-top: 1px solid color-mix(in srgb, var(--lesson-ink, var(--ink)) 20%, transparent); }
-.activity-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 12px; color: var(--lesson-ink-quiet, #42463d); margin-bottom: 20px; }
-.activity-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 750; letter-spacing: .1em; }
+.activity-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--lesson-ink-quiet, #42463d); margin-bottom: 20px; }
 .activity h3 { font-size: 28px; line-height: 1.2; letter-spacing: -.035em; margin: 10px 0 14px; }
 .activity > p { max-width: 64ch; line-height: 1.6; }
 .discovery-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin-top: 24px; }
@@ -71,7 +70,6 @@
 .discovery-grid button[aria-pressed="true"] { border-color: var(--ink); }
 .discovery-glyph { width: 66px; height: 66px; border-radius: 18px; display: grid; place-items: center; font-size: 38px; background: var(--lesson-colour); }
 .discovery-grid strong { font-size: 19px; }
-.discovery-grid button > span:last-child { display: flex; align-items: center; gap: 10px; font-size: 13px; }
 .activity-feedback { background: var(--paper); border-radius: 16px; padding: 20px; margin-top: 22px; min-height: 68px; line-height: 1.6; }
 .activity-feedback:empty { display: none; }
 .discovery-earned { display: flex; align-items: center; gap: 10px; margin-top: 18px; font-weight: 650; }

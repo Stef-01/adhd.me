@@ -65,7 +65,7 @@ describe("the modules", () => {
 
   it("every word a reader meets passes the patient-surface rules — no diagnosis, no urgency, no claims", () => {
     const text = [
-      ...SCENES.flatMap((s) => [s.eyebrow, s.heading, s.body, ...(s.detail ?? []), s.foot ?? ""]),
+      ...SCENES.flatMap((s) => [s.heading, s.body, ...(s.detail ?? []), s.foot ?? ""]),
       ...MODULES.flatMap((m) => [m.title, m.subtitle, ...(m.questions ?? []).flatMap((q) => [q.prompt, ...q.options, q.explain])]),
     ].join("\n");
     expect(text.length).toBeGreaterThan(1000);

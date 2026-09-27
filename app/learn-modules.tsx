@@ -216,7 +216,6 @@ export function LearnModules() {
               transition={{ ...SPRING, opacity: { duration: 0.2 } }}
             >
               <motion.div className="learning-lesson-art" key={`art-${card.n}-${i === step}`} initial={reducedMotion || i !== step ? false : { opacity: .5, y: 18, rotate: -3 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ ...SPRING, delay: .08 }}><LearningScene topic={current.id} variant={i} /></motion.div>
-              <p className="learn-card-eyebrow">{card.eyebrow}</p>
               <LessonHeading active={i === step}>{card.heading}</LessonHeading>
               <p className="learn-card-body">{card.body}</p>
               {card.detail && (

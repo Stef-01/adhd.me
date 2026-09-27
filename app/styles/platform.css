@@ -59,6 +59,9 @@ body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outl
   padding: 0 var(--shell-gutter) 48px; border: 0; border-radius: 0;
   box-shadow: none; overflow: visible; background: var(--paper);
 }
+/* A module's "All modules" button sat flush under the header. Room above it, on the module page only. */
+.platform-shell .me-screen.learn-screen:has(.learn-module-bar) { padding-top: 16px; }
+@media (min-width: 600px) { .platform-shell .me-screen.learn-screen:has(.learn-module-bar) { padding-top: 24px; } }
 .platform-shell .patient-v2 .screen { width: 100%; min-width: 0; min-height: auto; padding: 0 0 40px; }
 .platform-shell .patient-v2 .screen:not(.results-screen) { padding-inline: 0; max-width: 880px; margin-inline: auto; }
 /* In flow here, not pinned: the glass blur it carries in the phone shell has nothing to blur and
