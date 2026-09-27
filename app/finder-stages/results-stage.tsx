@@ -16,6 +16,7 @@ import {
   type MatchQuality,
 } from "@/demo/clinicians";
 import { type Clarifier } from "@/matching/clarify";
+import { type HeardChip } from "@/finder/heard";
 import { type WayOut } from "@/finder/pipeline";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
@@ -33,6 +34,7 @@ const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap),
   loading: () => <div className="nearby-map nearby-map-loading" aria-hidden="true" />,
 });
 import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, PRESS_SPRING, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
+import { HeardRow } from "./heard-row";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -73,6 +75,9 @@ export function ResultsStage({
   waysOut,
   onRelax,
   emptyKind,
+  heard,
+  removedHeard,
+  onToggleHeard,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -113,6 +118,10 @@ export function ResultsStage({
   onRelax: (next: Filters) => void;
   /** With no filter on, the kind the sentence named and the listing lacks ("dietitians"), or null. */
   emptyKind: string | null;
+  /** What the request was read as asking for, strongest first, and the ones taken out. */
+  heard: readonly HeardChip[];
+  removedHeard: ReadonlySet<string>;
+  onToggleHeard: (key: string) => void;
 }) {
   /** The filters the strip cannot show — a language, a distance, a way of working — as a count on the Filters pill. The kind has its own pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length - (filters.professions.length > 0 ? 1 : 0);
@@ -206,6 +215,7 @@ export function ResultsStage({
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
+        {!empty && <HeardRow chips={heard} removed={removedHeard} onToggle={onToggleHeard} />}
       </div>
 
       {/* O244: the questions, in the sheet. Tapping one appends the answer in the reader's own

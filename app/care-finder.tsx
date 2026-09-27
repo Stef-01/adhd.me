@@ -13,6 +13,7 @@ import {
   needsFor,
   orderNote,
   rankBands,
+  rankClinicians,
   rankCliniciansNear,
   topTieNote,
   missedAsks,
@@ -27,6 +28,9 @@ import { readModel } from "@/model/store";
 import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
+import { facetKey, shortLabel } from "@/matching/needs";
+import { heardChips, qualityOf } from "@/finder/heard";
+import { FINDER_COPY } from "./finder-copy";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
   DEFAULT_SPEECH_LANGUAGE,
@@ -175,7 +179,26 @@ export function CareFinder() {
    */
   const [need, setNeed] = useState<Need | null>(null);
   useEffect(() => { setNeed(topNeed(readModel(deviceLearningStorage))); }, []);
-  const matches = useMemo(() => orderByProblemFit(rankCliniciansNear(request, origin, roster), need), [request, origin, roster, need]);
+  /**
+   * "What we heard" (LLM-MATCHING-PLAN §15): the read the ranking runs on, its strongest facets as
+   * chips, and the ones the person took out, which last until the words change. With none taken
+   * out the list is exactly the one it always was; with some, `rankClinicians` ranks on the rest,
+   * in the browser, without a request.
+   */
+  const [removedHeard, setRemovedHeard] = useState<{ request: string; keys: readonly string[] }>({ request: "", keys: [] });
+  const removed = useMemo(() => new Set(removedHeard.request === request ? removedHeard.keys : []), [removedHeard, request]);
+  const read = useMemo(() => needsFor(request, roster), [request, roster]);
+  const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
+  const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
+  /** A removed facet is no reason for a row or a profile either. */
+  const removedLabels = useMemo(() => {
+    const keptLabels = new Set(kept.map((n) => n.label));
+    return new Set(read.filter((n) => removed.has(facetKey(n.facet)) && !keptLabels.has(n.label)).map((n) => n.label));
+  }, [read, removed, kept]);
+  const matches = useMemo(
+    () => orderByProblemFit(removed.size === 0 ? rankCliniciansNear(request, origin, roster) : rankClinicians(request, roster, undefined, kept), need),
+    [request, origin, roster, need, removed, kept],
+  );
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // The matched tags, in the taxonomy's own order, capped at the three Calm Clarity allows in a
   // row. These are the person's own map read back to them.
@@ -314,11 +337,16 @@ export function CareFinder() {
     () => request.trim() === archetype.request ? archetype.headline : getRequestHeadline(request, requestSummary),
     [archetype.headline, archetype.request, request, requestSummary],
   );
+  /** A row names a facet in its chip's words: one fact, said the same way across one screen. */
+  const chipWords = useMemo(() => new Map(read.map((n) => [n.label, shortLabel(n)])), [read]);
   /** O222: ONE pass — the rows index into this instead of re-running the lexicon per row,
    * and the roster threads through so the printed reasons derive from the ranked roster. */
   const allMatches = useMemo(
-    () => matches.map((item) => getPersonalizedMatch(item, request, roster)),
-    [matches, request, roster],
+    () => matches.map((item) => {
+      const match = getPersonalizedMatch(item, request, roster);
+      return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s)).map((s) => chipWords.get(s) ?? s) };
+    }),
+    [matches, request, roster, removedLabels, chipWords],
   );
   const allSignals = useMemo(() => allMatches.map((m) => m.signals), [allMatches]);
   /**
@@ -326,7 +354,7 @@ export function CareFinder() {
    * some more than once, and every call re-runs the full lexicon read over the request — a
    * dozen redundant scans per keystroke once the geo field re-renders the results stage.
    */
-  const quality = useMemo(() => matchQuality(request, roster), [request, roster]);
+  const quality = useMemo(() => (removed.size === 0 ? matchQuality(request, roster) : qualityOf(kept, roster)), [request, roster, removed, kept]);
   const tieNote = useMemo(() => topTieNote(request, roster), [request, roster]);
   /** Read only when a tie exists — unconditional, this would ADD a rankBands run to the common
    * no-tie render; conditional, it matches the old cost exactly with the derivation named. */
@@ -353,7 +381,10 @@ export function CareFinder() {
   }, [tieNote, bands]);
   const shown = showAll ? matches : matches.slice(0, visibleCount);
 
-  const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request, roster), [clinician, request, roster]);
+  const personalizedMatch = useMemo(() => {
+    const match = getPersonalizedMatch(clinician, request, roster);
+    return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s)) };
+  }, [clinician, request, roster, removedLabels]);
   /**
    * The evidence behind the pills, with provenance (O21). `matchEvidence` already carries the
    * phrase from the reader's OWN words that reached each facet (`matched`) — the ranking has
@@ -365,7 +396,7 @@ export function CareFinder() {
   // evidence and its "does not answer" list ran over the 2-entry real roster while the ranking
   // ran over 22 — exactly what the comment on `roster` above promises cannot happen. The
   // call-site pin in engine-seam.test.ts now refuses a defaulted roster read in this file.
-  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster), [clinician, request, roster]);
+  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, removed]);
   /**
    * The asks this clinician does NOT answer (O51) — the same needsFor read as the evidence
    * with the filter inverted, so the two lists partition what the reader asked and cannot
@@ -373,7 +404,7 @@ export function CareFinder() {
    * reader to assume the rest were hits too, which is the quiet dishonesty the console's
    * "Missed" column was built to prevent — for staff. The reader gets the same truth.
    */
-  const profileMissed = useMemo(() => missedAsks(clinician, request, roster), [clinician, request, roster]);
+  const profileMissed = useMemo(() => missedAsks(clinician, request, roster).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, removed]);
 
   /**
    * O102: the other GP to hold this one against, and the table that compares them.
@@ -404,13 +435,13 @@ export function CareFinder() {
     const right = declaredBy(compareWith);
     const seen = new Set<string>();
     const rows: CompareRow[] = [];
-    for (const ask of needsFor(request, roster)) {
+    for (const ask of kept) {
       if (seen.has(ask.label)) continue;
       seen.add(ask.label);
       rows.push({ label: ask.label, left: left.has(ask.label), right: right.has(ask.label) });
     }
     return rows;
-  }, [clinician, compareWith, request, roster]);
+  }, [clinician, compareWith, request, roster, kept]);
 
   /** @param restarted U9: a language change on the listening screen, which the live region names. */
   function startListening(language = speechLang, restarted = false) {
@@ -587,6 +618,14 @@ export function CareFinder() {
     setShowAll(false);
   }
 
+  /** A "What we heard" chip tapped: out of the ranking, or back in. The list re-ranks in place. */
+  function toggleHeard(key: string) {
+    const keys = removed.has(key) ? [...removed].filter((k) => k !== key) : [...removed, key];
+    setRemovedHeard({ request, keys });
+    setMatchIndex(0);
+    setShowAll(false);
+  }
+
   /** One held filter dropped from the empty screen's way out, written to the device like a chip. */
   function relaxFilters(next: Filters) {
     writeFilters(window.localStorage, next);
@@ -716,6 +755,9 @@ export function CareFinder() {
             waysOut={ways}
             onRelax={relaxFilters}
             emptyKind={emptyKind}
+            heard={heardFacets}
+            removedHeard={removed}
+            onToggleHeard={toggleHeard}
             place={place}
             filters={effectiveFilters}
             onToggleFilter={toggleFilter}

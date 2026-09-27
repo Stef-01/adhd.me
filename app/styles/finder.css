@@ -73,6 +73,24 @@
 .platform-shell .results-summary-words { min-height: 60px; padding: 14px 20px; border: 0; border-radius: 12px; }
 .platform-shell .results-summary-text { font-size: 16px; line-height: 1.5; }
 .platform-shell .results-head h1 { max-width: 32ch; margin: 24px 0 4px; font-size: clamp(24px, 3vw, 34px); line-height: 1.25; letter-spacing: -.025em; text-wrap: balance; }
+/* What we heard: the strongest facets of the words above, as chips. A tap takes one out (struck
+   through, dashed) and a second puts it back, in place, so nothing on the row moves. */
+.heard-row { margin: 12px 0 0; }
+.heard-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.heard-chips > li { display: flex; }
+.heard-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px 0 16px; border: 1px solid var(--accent-tint); border-radius: 999px; background: var(--accent-soft); color: var(--accent-deep); font: inherit; font-size: 13px; font-weight: 600; line-height: 1.2; white-space: nowrap; cursor: pointer; touch-action: manipulation; transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-ui); }
+.heard-chip svg { flex: none; }
+.heard-chip[data-removed="true"] { border-style: dashed; border-color: var(--line-strong); background: transparent; color: var(--muted); text-decoration: line-through; }
+.heard-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.heard-chip:active { transform: scale(0.96); }
+@media (hover: hover) {
+  .heard-chip:hover { border-color: var(--accent-mid); }
+  .heard-chip[data-removed="true"]:hover { border-color: var(--accent-mid); color: var(--ink); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heard-chip { transition: none; }
+  .heard-chip:active { transform: none; }
+}
 /* The strip: the kind of support first, then every yes/no filter, the Filters door, and Clear at
    the end. One row that wraps on a desk and scrolls sideways on a phone, so three rows of chips
    never push the first result under the fold. A pressed filter is the ink pill (DESIGN.md), and

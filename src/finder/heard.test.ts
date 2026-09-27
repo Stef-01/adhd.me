@@ -1,0 +1,54 @@
+import { describe, expect, it } from "vitest";
+import { clinicians, matchQuality, needsFor } from "@/demo/clinicians";
+import { rosterFor } from "@/demo/synthetic-roster";
+import { REACH_CORPUS } from "@/matching/corpus";
+import { facetKey } from "@/matching/needs";
+import { heardChips, qualityOf } from "./heard";
+
+const roster = rosterFor(true);
+const chipsFor = (text: string) => heardChips(needsFor(text, roster), 4);
+
+describe("heardChips", () => {
+  it("reads the text budget's request as three chips, access first, then care, then manner", () => {
+    const chips = chipsFor("an adult ADHD assessment, telehealth, not rushed");
+    expect(chips.map((c) => c.label)).toEqual(["Telehealth", "ADHD assessment", "Unhurried"]);
+    expect(chips.map((c) => c.spoken)).toEqual(["telehealth", "ADHD assessment", "unhurried"]);
+  });
+
+  it("shows the four strongest of five, in the ranker's order, and nothing else", () => {
+    const text = "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment";
+    expect(new Set(needsFor(text, roster).map((n) => facetKey(n.facet))).size).toBe(5);
+    expect(chipsFor(text).map((c) => c.label)).toEqual(["Hindi-speaking", "Bulk billing", "Longer appointment", "Woman clinician"]);
+  });
+
+  it("gives a long label its short one", () => {
+    expect(chipsFor("my son Oliver cannot sit still in class and the school keeps calling").map((c) => c.label)).toEqual(["Children, teens"]);
+  });
+
+  it("shows nothing when nothing was read", () => {
+    expect(chipsFor("hello")).toEqual([]);
+  });
+
+  it("across the corpus: at most four chips, one per facet, each a facet the ranking read", () => {
+    for (const { text } of REACH_CORPUS) {
+      const read = needsFor(text, roster);
+      const chips = heardChips(read, 4);
+      const keys = new Set(read.map((n) => facetKey(n.facet)));
+      expect(chips.length).toBe(Math.min(4, keys.size));
+      expect(new Set(chips.map((c) => c.key)).size).toBe(chips.length);
+      for (const chip of chips) expect(keys.has(chip.key), text).toBe(true);
+    }
+  });
+});
+
+describe("qualityOf", () => {
+  it("agrees with matchQuality on every corpus request, on both rosters", () => {
+    for (const r of [clinicians, roster]) {
+      for (const { text } of REACH_CORPUS) expect(qualityOf(needsFor(text, r), r), text).toBe(matchQuality(text, r));
+    }
+  });
+
+  it("claims no order once every heard facet is taken out", () => {
+    expect(qualityOf([], roster)).toBe("unmatched");
+  });
+});

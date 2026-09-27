@@ -919,6 +919,35 @@ const LANGUAGE_WEIGHT = 30;
 export const NEED_LABELS: readonly string[] = LEXICON.map((entry) => entry.label);
 
 /**
+ * A label in two words or fewer, for a chip. Only labels longer than that carry one here; a
+ * manner's sits beside its label in `EI_QUALITIES`. Same facet, same voice: a care preference,
+ * never a finding about the reader.
+ */
+const SHORT_LABELS: Readonly<Record<string, string>> = {
+  "care:child-adolescent-adhd": "Children, teens",
+  "care:titration": "Dose review",
+  "care:shared-care": "Shared care",
+  "care:depression": "Low mood",
+  "care:complex-mental-health": "Complex care",
+  "care:autism-adhd": "Autism",
+  "care:substance-history": "Substances, safely",
+  "pref:woman-gp": "Woman clinician",
+  "pref:telehealth-first": "Telehealth",
+  "pref:longer-appointment": "Longer appointment",
+};
+
+export function shortLabel(need: Pick<NeedSignal, "facet" | "label">): string {
+  if (need.facet.kind === "manner") return EI_QUALITIES[need.facet.trait].short ?? need.label;
+  return SHORT_LABELS[facetKey(need.facet)] ?? need.label;
+}
+
+/** Every lexicon label with its chip words, for the test that holds each chip to its cap. */
+export const NEED_SHORT_LABELS: ReadonlyArray<{ label: string; short: string }> = LEXICON.map((entry) => ({
+  label: entry.label,
+  short: shortLabel(entry),
+}));
+
+/**
  * Every phrase in the lexicon with the facet it belongs to, for the self-reachability pin
  * (O7/F10): a stemmer or tokeniser edit that silently unhooks a cue from its own facet must
  * fail a test, not wait for a probe. Phrases only — no weights, no labels — so nothing new is
