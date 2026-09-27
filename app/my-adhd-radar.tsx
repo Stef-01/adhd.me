@@ -21,7 +21,7 @@
 // the comp's own "axis confidence state", and it is the honest rendering of unasked: the absence
 // sits on the app, which has not asked, rather than on the person, who has not answered.
 
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { HeartStraight, Lightning, ListChecks, Moon, Target, UsersThree, type Icon } from "@phosphor-icons/react";
 import { ASPECT_LABELS, STATUS_LABEL, type AxisPoint } from "@/model/matrix";
 
@@ -68,12 +68,15 @@ export function MyAdhdRadar({
   openAspect,
   /** Ids of axes that just moved, for the one animation in this tab. */
   moved = [],
+  /** What sits right under the chart: the name of the dashed shape (PLAN.md W3). */
+  caption = null,
 }: {
   points: readonly AxisPoint[];
   baseline?: readonly AxisPoint[] | null;
   onOpen: (aspect: AxisPoint["aspect"]) => void;
   openAspect?: AxisPoint["aspect"] | null;
   moved?: ReadonlyArray<AxisPoint["aspect"]>;
+  caption?: ReactNode;
 }) {
   const n = points.length;
   const shape = useMemo(
@@ -144,6 +147,7 @@ export function MyAdhdRadar({
           })}
         </svg>
       </div>
+      {caption}
 
       <ul className="map-axes">
         {points.map((p, i) => {

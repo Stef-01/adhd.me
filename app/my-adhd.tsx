@@ -120,6 +120,24 @@ export function MyAdhd() {
       .map((c) => ({ note: c.note, aspect: lead.aspect }));
   }, [record]);
   const line = useMemo(() => standsOut(record), [record]);
+  // The name of the dashed shape, right under the chart and above the axes it is drawn across.
+  const thenPill = then && (
+    <div className="map-then-pill">
+      <span className="map-then-swatch" aria-hidden="true" />
+      {options.length > 1 ? (
+        <span className="map-then-options" role="radiogroup" aria-label="Compare with">
+          {options.map((o) => (
+            <button key={o.id} type="button" role="radio" aria-checked={o.id === then.id} onClick={() => setPicked(o.id)}>
+              {o.name}
+            </button>
+          ))}
+        </span>
+      ) : (
+        <span className="map-then-name">{then.name}</span>
+      )}
+      {thenText.length > 0 && <span className="sr-only">{thenText.join(" ")}</span>}
+    </div>
+  );
   const rec = useMemo(() => (record ? recommend(record) : null), [record]);
   const safety = record ? activeSafety(record) : null;
 
@@ -152,25 +170,7 @@ export function MyAdhd() {
           {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
           {record && (
-            <MyAdhdRadar points={points} baseline={started ? baseline : null} onOpen={openAxis} openAspect={open} />
-          )}
-
-          {then && (
-            <div className="map-then-pill">
-              <span className="map-then-swatch" aria-hidden="true" />
-              {options.length > 1 ? (
-                <span className="map-then-options" role="radiogroup" aria-label="Compare with">
-                  {options.map((o) => (
-                    <button key={o.id} type="button" role="radio" aria-checked={o.id === then.id} onClick={() => setPicked(o.id)}>
-                      {o.name}
-                    </button>
-                  ))}
-                </span>
-              ) : (
-                <span className="map-then-name">{then.name}</span>
-              )}
-              {thenText.length > 0 && <span className="sr-only">{thenText.join(" ")}</span>}
-            </div>
+            <MyAdhdRadar points={points} baseline={started ? baseline : null} onOpen={openAxis} openAspect={open} caption={thenPill} />
           )}
 
           {record && (

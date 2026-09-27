@@ -440,6 +440,12 @@
 }
 .map-then-options button[aria-checked="true"] { background: var(--stone); color: var(--ink); }
 .map-then-options button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* From 768px the six axis seats sit around the chart inside its card, and the bottom seat is where
+   the pill would go, so the pill hangs just under the card instead. */
+@media (min-width: 768px) {
+  .map-screen .map-radar:has(> .map-then-pill) { margin-bottom: 68px; }
+  .map-screen .map-radar > .map-then-pill { position: absolute; left: 0; right: 0; top: calc(100% + 12px); }
+}
 
 /* Where the record lives, said once under the map. Quiet, and still AA on the page. */
 .map-where {
