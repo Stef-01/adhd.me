@@ -126,7 +126,7 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
     data-round={s.rounds ? s.round : undefined} data-challenge-only={challengeOnly} data-ready={ready} data-paused={s.paused} data-scenario={s.scenario} data-page={s.book.page}>
     <header className="bedroom-toolbar">
       <Link href="/approach?pane=games" aria-label="Back to learning" className="bedroom-icon"><ArrowLeft size={21} /></Link>
-      <span>LEO’S EVENING</span>
+      <span>Leo’s evening</span>
       <div><button className="bedroom-icon" onClick={toggleSound} aria-label={sound ? "Mute room sounds" : "Enable room sounds"} aria-pressed={sound}>
         {sound ? <SpeakerHigh size={21} /> : <SpeakerSlash size={21} />}
       </button><button className="bedroom-icon" ref={pauseButton} onClick={() => dispatch({ type: "pause" })} aria-label="Pause game"><Pause size={21} /></button></div>
@@ -165,7 +165,7 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
         </motion.div>
       </Prop>
       <AnimatePresence initial={false}>{s.insects.map(insect => <Mosquito key={insect.id} insect={insect} clock={clock} still={s.still || s.paused} catchIt={keyboard => catchInsect(insect.id, keyboard)} />)}</AnimatePresence>
-      {s.mode === "revisit" && <span className="bedroom-night-label">ONE EVENING LATER</span>}
+      {s.mode === "revisit" && <span className="bedroom-night-label">One evening later</span>}
     </div>
     <footer className="bedroom-footer">
       <p role="status" aria-live="polite" aria-atomic="true">{soundNotice || s.line}</p>
@@ -175,7 +175,7 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
     </footer>
     <dialog className="bedroom-pause" aria-labelledby="bedroom-pause-title" ref={dialog} onCancel={event => { event.preventDefault(); dispatch({ type: "resume" }); }}>
       <button className="bedroom-icon bedroom-pause-close" aria-label="Close pause menu" onClick={() => dispatch({ type: "resume" })}><X size={20} /></button>
-      <span className="bedroom-pause-eyebrow">A LITTLE SPACE</span><h2 id="bedroom-pause-title">Nothing to keep up with.</h2>
+      <h2 id="bedroom-pause-title">Nothing to keep up with.</h2>
       <button className="bedroom-next" autoFocus onClick={() => dispatch({ type: "resume" })}>Resume <ArrowRight size={19} /></button>
       <button className="bedroom-pace" aria-pressed={s.still} onClick={() => dispatch({ type: "still", value: !s.still })}><span>Play at my pace</span><span className="bedroom-switch" aria-hidden="true" data-on={s.still}><span /></span></button>
       {!ended && s.mode !== "revisit" && <button className="bedroom-pause-quiet" onClick={() => { dispatch({ type: "resume" }); dispatch({ type: "recover" }); }}>Continue without countdown</button>}

@@ -26,7 +26,6 @@ const NOT_PATIENT = new Set(["/clinicians"]);
  * fixes it. Anything under 12px outside this list fails. When a game is redrawn, its line goes.
  */
 const LEDGER: ReadonlyArray<{ match: RegExp; what: string }> = [
-  { match: /\bbedroom-/, what: "Leo's evening: prop labels, counts, toolbar and footer at 8 to 11px (PLAN.md N15)" },
 ];
 
 /** Text colour, size and box for one node, with its text made invisible so the pixels behind show. */
