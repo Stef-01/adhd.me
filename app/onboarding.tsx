@@ -106,7 +106,7 @@ export function Onboarding() {
               <ol className="onboarding-progress" aria-hidden="true">
                 {QUESTIONS.map((q, i) => <li key={q.key} className={i < index ? "is-done" : i === index ? "is-current" : ""} />)}
               </ol>
-              <p className="life-eyebrow">Question {index + 1} of {QUESTIONS.length}</p>
+              <p className="onboarding-count">Question {index + 1} of {QUESTIONS.length}</p>
               <h1 tabIndex={-1} className="t-question">{question.prompt}</h1>
               {question.note && <p className="onboarding-note">{question.note}</p>}
               {question.kind === "scale" ? (
@@ -181,7 +181,6 @@ function StartHere({ answers, onStart, onAgain }: { answers: OnboardingAnswers; 
       <p>{rec?.why}</p>
       {module && (
         <div className="life-card is-lead">
-          <span className="life-eyebrow">Recommended first module</span>
           <h2>{module.title}</h2>
           <p>{module.subtitle} · {module.minutes} min</p>
           <div className="life-actions">
@@ -190,7 +189,7 @@ function StartHere({ answers, onStart, onAgain }: { answers: OnboardingAnswers; 
           </div>
         </div>
       )}
-      <button type="button" className="learn-secondary" onClick={onAgain}>Answer again</button>
+      <button type="button" className="onboarding-again" onClick={onAgain}>Answer again</button>
     </div>
   );
 }

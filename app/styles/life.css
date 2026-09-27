@@ -124,6 +124,8 @@
 .onboarding-progress li { flex: 1; height: 4px; border-radius: 999px; background: var(--line); }
 .onboarding-progress li.is-done, .onboarding-progress li.is-current { background: var(--accent); }
 .onboarding-question { flex: 1; }
+/* "Question N of 10" is progress, not a label (PLAN.md W10): it stays, quiet, in sentence case. */
+.onboarding-count { margin: 0 0 6px; color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
 .onboarding-question h1 {
   margin: 0 0 8px; color: var(--ink);
   font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
@@ -138,6 +140,10 @@
 .onboarding-welcome { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; }
 .onboarding-welcome h1 { margin: 0; font-size: clamp(2rem, 8vw, 2.75rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.05; text-wrap: balance; }
 .onboarding-welcome p { margin: 0; color: var(--muted); font-size: 1.0625rem; line-height: 1.55; max-width: 34ch; }
+/* "Answer again" on the end screen is a way back, not a second primary: plain text at the left. */
+.onboarding-again { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 650; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; touch-action: manipulation; }
+.onboarding-again:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+@media (hover: hover) { .onboarding-again:hover { text-decoration-thickness: 2px; } }
 .onboarding-cast { display: flex; gap: 6px; margin: 8px 0 12px; }
 .onboarding-cast .character-mark { width: 48px; height: 50px; }
 
