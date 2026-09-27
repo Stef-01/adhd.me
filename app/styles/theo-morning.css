@@ -10,8 +10,6 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-nav > a, .tm-nav > button, .tm-nav > span:last-child { width: 44px; height: 44px; }
 .tm-nav > a, .tm-nav > button { display: grid; place-items: center; border: 0; background: #fff6dc70; border-radius: 50%; color: inherit; }
 .tm-header { width: min(100%, 1100px); display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 16px 0; }
-/* The time of the story ("That evening"), in sentence case at reading size: content, not a label (PLAN.md N15). */
-.tm-kicker { font-size: 13px; font-weight: 650; }
 .tm-game .tm-header h1 { font-family: "Newsreader Variable", Georgia, serif; font-weight: 550; font-size: clamp(30px, 3.5vw, 48px); line-height: 1.06; letter-spacing: -.035em; margin: 6px 0 0; color: var(--tm-ink); }
 .tm-header h1:focus { outline: none; }
 .tm-time { display: flex; flex-direction: column; text-align: right; flex-shrink: 0; min-width: 95px; }
@@ -135,7 +133,6 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
   .tm-game { padding: 8px 12px 22px; }
   .tm-header { margin: 12px 0 10px; gap: 10px; }
   .tm-game .tm-header h1 { font-size: 29px; max-width: 250px; }
-  .tm-kicker { font-size: 12px; }
   .tm-time { min-width: 72px; }
   .tm-time strong { font-size: 25px; }
   .tm-time > span { font-size: 12px; }

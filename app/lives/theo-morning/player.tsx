@@ -37,7 +37,8 @@ export function TheoMorningGame() {
   const left = Math.max(0, Math.ceil(state.deadline - state.elapsed));
   const action = state.work?.command ?? state.intent;
   const progress = state.work ? state.work.elapsed / state.work.duration : 0;
-  const titleText = evening ? "Make room for tomorrow." : state.phase === "complete" ? "A little less to carry." : state.phase === "departure" ? state.first?.caught ? "Made it out." : "A different train." : state.phase === "revisit" ? "You’ve been here before." : "One train. One busy brain.";
+  // A heading says when the scene is where the story moves in time; no kicker above it ({#layout.calm}).
+  const titleText = evening ? "That evening, make room for tomorrow." : state.phase === "complete" ? "A little less to carry." : state.phase === "departure" ? state.first?.caught ? "Made it out." : "A different train." : state.phase === "revisit" ? "Next morning. You’ve been here before." : "One train. One busy brain.";
   const chooseHome = (room: Room) => {
     dispatch({ type: "home", item: selected, room });
     const next = ESSENTIALS.find(k => k !== selected && !state.homes[k]); if (next) setSelected(next);
@@ -50,11 +51,9 @@ export function TheoMorningGame() {
       {isBusy && <span className="tm-object-progress" aria-hidden="true"><i style={{ transform: `scaleX(${progress})` }}/></span>}
     </button>;
   }
-  // The kicker tells the story's time; the first morning needs none, the toolbar already names it.
-  const kicker = evening ? "That evening" : state.phase === "revisit" || state.phase === "complete" ? "The next morning" : null;
   return <section className="tm-game lives-run" data-phase={state.phase} data-paused={state.paused} data-still={state.still} data-packed={inBag.length} data-node={state.node} data-trips={state.trips} data-intent={state.intent ?? ""} data-hands={hand.join(",")} data-ready={ready} aria-labelledby="tm-title">
     <nav className="tm-nav" aria-label="Game navigation"><Link href="/approach?pane=games" aria-label="Back to games"><ArrowLeft size={21}/></Link><span>Theo · Out the door</span>{active ? <button aria-label={state.paused ? "Resume game" : "Pause game"} onClick={() => dispatch({ type: "pause", paused: !state.paused })}>{state.paused ? <Play size={20}/> : <Pause size={20}/>}</button> : <span/>}</nav>
-    <header className="tm-header"><div>{kicker && <span className="tm-kicker">{kicker}</span>}<h1 id="tm-title" ref={title} tabIndex={-1}>{titleText}</h1></div>{active && <div className="tm-time" data-urgent={left < 16}><span>{state.still ? "Planning time" : state.updated ? "Next train" : "Train leaves"}</span><strong role="timer" aria-label="Time until train">{left ? `${left}s` : "Departed"}</strong></div>}</header>
+    <header className="tm-header"><div><h1 id="tm-title" ref={title} tabIndex={-1}>{titleText}</h1></div>{active && <div className="tm-time" data-urgent={left < 16}><span>{state.still ? "Planning time" : state.updated ? "Next train" : "Train leaves"}</span><strong role="timer" aria-label="Time until train">{left ? `${left}s` : "Departed"}</strong></div>}</header>
     {active && <div className="tm-pocket" aria-label="Bag contents"><span className="tm-pocket-label">Bag</span>{ESSENTIALS.map(item => <span key={item} data-packed={state.items[item] === "bag"} data-carried={state.items[item] === "hand"}><Prop kind={item}/><span>{ITEM_NAMES[item]}</span>{state.items[item] === "bag" && <Check size={13} aria-label="packed"/>}</span>)}<span className="tm-hands">{hand.length}/2 hands</span></div>}
     {evening && <div className="tm-setup-items" role="group" aria-label="Choose an essential to give a home">{ESSENTIALS.map(item => <button key={item} aria-pressed={selected === item} onClick={() => setSelected(item)}><Prop kind={item}/>{ITEM_NAMES[item]}{state.homes[item] && <Check size={15}/>}</button>)}</div>}
     <div className="tm-theatre" data-evening={evening} data-rain={state.phase === "revisit" || state.phase === "complete"}>
