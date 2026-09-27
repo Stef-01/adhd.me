@@ -158,8 +158,9 @@ export function MyAdhdSheet({
           )}
 
           {/* The practitioner whose declared skill answers this axis (D11: moved here from the hub,
-              where it repeated what "Who helps here" already offers). */}
-          {top && <SkillRecommendation context={top.subdomain} />}
+              where it repeated what "Who helps here" already offers). Only when the sheet does not
+              offer "Who helps here" itself: the two together said the same thing twice. */}
+          {top && !eligible && <SkillRecommendation context={top.subdomain} />}
 
           <div className="map-sheet-actions">
             {survey && !done ? (
