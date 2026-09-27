@@ -267,7 +267,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
           {phase === "reflect" && run.reflect && !reading && (
             <div className="play-card">
               <Bean who={run.bean} mood="thinking" size={100} />
-              <h2 className="play-title">{run.reflect.prompt}</h2>
+              <h2 className="play-title t-question">{run.reflect.prompt}</h2>
               <label className="reflect-field" style={{ width: "100%" }}>
                 <span className="sr-only">Your reflection</span>
                 <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} rows={3} placeholder="In your own words, or leave it blank. It stays on this device." maxLength={2000} />

@@ -2043,7 +2043,6 @@ summary:focus-visible {
      rule for headings; O166 applied it to the profile name and this one sat a screen away.
      Found by running the whole checklist rather than the rules I remembered. */
   text-wrap: balance;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: clamp(1.625rem, 7vw, 2.25rem);
   font-weight: 430;
   line-height: 1.12;
@@ -9828,7 +9827,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 /* The list head: the heading in Newsreader, the noun in italic accent, the count and the mark. */
 .results-list-head { padding: 12px var(--shell-gutter) 8px; }
 .results-list-head h2 {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -9936,7 +9934,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .me-head-lead { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; }
 .me-head-title h1 {
   margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -10138,7 +10135,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
    sans, one leading. Sizes stay each page's own; family, weight, tracking and leading are one
    law. Unlayered, so the rule outranks a page's utility classes whatever they say. */
 main:not(.console-main) h1 {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-weight: 500;
   letter-spacing: -0.025em;
   line-height: 1.06;

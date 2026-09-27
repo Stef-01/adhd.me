@@ -144,7 +144,7 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
    Each row calls, texts or opens a chat. Nothing to read past the number: a person who needs this
    screen is not reading. The whole row is the link, so a shaking thumb cannot miss it. */
 .urgent-screen { display: grid; gap: 18px; align-content: start; max-width: 560px; }
-.urgent-screen h1 { margin: 0; font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: clamp(30px, 8vw, 44px); font-weight: 460; letter-spacing: -.03em; line-height: 1.08; }
+.urgent-screen h1 { margin: 0; font-size: clamp(30px, 8vw, 44px); font-weight: 460; letter-spacing: -.03em; line-height: 1.08; }
 .urgent-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .urgent-call {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;

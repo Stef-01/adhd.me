@@ -107,7 +107,7 @@ export function Onboarding() {
                 {QUESTIONS.map((q, i) => <li key={q.key} className={i < index ? "is-done" : i === index ? "is-current" : ""} />)}
               </ol>
               <p className="life-eyebrow">Question {index + 1} of {QUESTIONS.length}</p>
-              <h1 tabIndex={-1}>{question.prompt}</h1>
+              <h1 tabIndex={-1} className="t-question">{question.prompt}</h1>
               {question.note && <p className="onboarding-note">{question.note}</p>}
               {question.kind === "scale" ? (
                 <label className="onboarding-scale">

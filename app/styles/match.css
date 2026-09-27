@@ -1,7 +1,7 @@
 /* Phase M (ADR 0007): the matching surfaces. Cards are 16px, controls are pills or 12px, the
    tokens are the site's; nothing here introduces a colour or a family. */
 .match-screen { max-width: 720px; margin-inline: auto; padding: 12px 0 96px; }
-.match-screen h1 { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-weight: 430; letter-spacing: -0.035em; line-height: 1.05; font-size: clamp(1.75rem, 6.2vw, 2.5rem); margin: 8px 0 12px; }
+.match-screen h1 { font-weight: 430; letter-spacing: -0.035em; line-height: 1.05; font-size: clamp(1.75rem, 6.2vw, 2.5rem); margin: 8px 0 12px; }
 .match-screen h2 { font-size: 1.0625rem; font-weight: 680; margin: 0 0 8px; }
 .match-lede { margin: 0 0 20px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; max-width: 60ch; }
 .match-form { display: grid; gap: 18px; }

@@ -45,7 +45,7 @@ export function SupportPath() {
     <main id="main-content" className="me-screen life-screen map-screen app-page-with-tabs">
       <LifeHeader />
       <header className="life-head">
-        <h1>{need ? "Who could help?" : "Which kind of help?"}</h1>
+        <h1 className="t-question">{need ? "Who could help?" : "Which kind of help?"}</h1>
       </header>
 
       {record && !need && <ColdKinds seeProviders={seeProviders} />}

@@ -54,3 +54,23 @@ test("every real control on the app's screens clears the 44px floor", async ({ p
   }
   expect(short).toEqual([]);
 });
+
+// D1 (docs/design/ux-evaluation-2026-09/PLAN.md W6a): Newsreader for a question asked of the
+// person, Plus Jakarta Sans for a statement. The rule is one class, so it is checked where it shows.
+test("a question asked of the person is serif, and a statement is sans", async ({ page }) => {
+  const family = async (selector: string) =>
+    (await page.locator(selector).first().evaluate((el) => getComputedStyle(el).fontFamily)).split(",")[0]!.replace(/["']/g, "");
+  await page.goto("/");
+  expect(await family("main h1")).toMatch(/^Newsreader/);
+  await page.goto("/start");
+  await page.getByRole("button", { name: /^Start/ }).click();
+  // The start card crossfades into the first question; read the question, not the card leaving.
+  await expect(page.locator("main h1")).toHaveClass(/t-question/);
+  expect(await family("main h1")).toMatch(/^Newsreader/);
+  await page.goto("/survey?id=work-study");
+  expect(await family("main h1")).toMatch(/^Newsreader/);
+  for (const route of ["/my-adhd", "/today", "/urgent"]) {
+    await page.goto(route);
+    expect(await family("main h1"), route).toMatch(/^Plus Jakarta Sans/);
+  }
+});

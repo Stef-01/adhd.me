@@ -36,6 +36,10 @@ body { font-family: var(--font-ui); }
 }
 .platform-shell .app-tab { border-radius: 999px; }
 .platform-shell main h1 { font-family: var(--font-ui); }
+/* D1 (docs/design/ux-evaluation-2026-09/PLAN.md): Newsreader for a question asked of the person
+   and for a quoted voice; Plus Jakarta Sans for every statement. One class carries it, so a
+   heading is serif because of what it says, not because of which page it is on. */
+.platform-shell main .t-question, .t-question, .t-voice { font-family: var(--font-display); font-weight: 460; letter-spacing: -0.025em; }
 .platform-shell .voice-prompt h1 {
   font-family: var(--font-display); font-weight: 430;
   font-size: clamp(42px, 5vw, 54px); line-height: .99; letter-spacing: -.035em;

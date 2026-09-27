@@ -41,7 +41,7 @@ without updating the register is a build failure, not a review finding.
 
 ## Type & colour
 
-- Serif (`Newsreader`) at display scale for statements; the sans carries controls and body. {#type.serif-display}
+- Serif (`Newsreader`) for a question asked of the person and for a quoted voice (class `t-question` or `t-voice`); the sans carries statements, controls and body. {#type.serif-display}
 - Accent colour is reserved for **live tokens** — the value that changes, the word that
   matters. If everything is accented, nothing is. {#type.accent-live-tokens}
 - `tabular-nums` wherever numbers change or align. Curly quotes, real ellipses (`…`),

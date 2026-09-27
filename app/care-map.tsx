@@ -178,7 +178,7 @@ export function CareMap() {
           <>
             <h2 id="care-map-title">Tap a part of life.</h2>
             {/* The one place the NWIA paradigm is said (founder-directed, 2026-09-08): attributed, linked, once. */}
-            <p className="care-map-nwia">{NWIA_PARADIGM} <a href={NWIA_URL} rel="noopener noreferrer" target="_blank">{NWIA_NAME}</a>.</p>
+            <p className="care-map-nwia t-voice">{NWIA_PARADIGM} <a href={NWIA_URL} rel="noopener noreferrer" target="_blank">{NWIA_NAME}</a>.</p>
           </>
         )}
       </section>

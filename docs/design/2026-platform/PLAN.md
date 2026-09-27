@@ -99,7 +99,7 @@ Calculated starting contrast pairs: blue/white 5.41:1; secondary ink/canvas 5.60
 
 ### Type, space, shape, and icons
 
-- Keep self-hosted **Plus Jakarta Sans** for application headings, copy, controls, and data. Use weight and scale for hierarchy. Reserve Newsreader for optional public-story passages; avoid changing between serif and sans for the same app role.
+- Keep self-hosted **Plus Jakarta Sans** for application headings, copy, controls, and data. Use weight and scale for hierarchy. Reserve Newsreader for a question asked of the person, a quoted voice, and optional public-story passages (UX plan D1, 2026-09-27); avoid changing between serif and sans for the same app role.
 - Start with page titles 32–40px desktop / 28–32px mobile; section titles 22–26px; lesson titles 28–36px; body 16px with 1.5–1.65 line height; secondary metadata 13–14px. Consequential helper and error copy should remain comfortably readable.
 - Use a 4/8/12/16/24/32/48/64px spacing scale. Desktop content gutters 32–48px, tablet 24px, mobile 16–20px. Give headings more space above than below.
 - Controls approximately 10–12px radius; panels 16px; learning covers 20–24px. Pills are for topic filters, segmented selection, and badges, not every component.
