@@ -3889,7 +3889,7 @@ summary:focus-visible {
 .story-stats dd { max-width: 32ch; margin: 9px 0 0; color: var(--s-muted); font-size: 0.90625rem; line-height: 1.5; }
 /* The figures above are indicative and unsourced (see src/compliance/landing-copy.ts). The note
    is not fine print hidden at the foot of the page — it sits under the rail it qualifies. */
-.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 0.6875rem; line-height: 1.55; }
+.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 0.75rem; line-height: 1.55; }
 
 /* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
 /* The one dark beat. The accent cannot carry text here (2.6:1 on --s-dark), so the emphasis
@@ -6122,7 +6122,7 @@ select { caret-color: var(--route-strong); }
   border-radius: 50%;
   color: var(--on-ground);
   background: var(--ink);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -6163,6 +6163,9 @@ select { caret-color: var(--route-strong); }
 .story-portrait .coverage-pin-halo { fill: color-mix(in srgb, var(--hero-orange) 26%, transparent); }
 .story-portrait .coverage-pin-label,
 .story-portrait .coverage-count { color: var(--on-ground); fill: var(--on-ground); }
+/* The portrait map draws smaller than the results one, so its pin names are set larger to read at
+   12px on a phone (PLAN.md N15). */
+.story-portrait .coverage-pin-label { font-size: 0.33rem; }
 .story-portrait .coverage-names {
   color: color-mix(in srgb, var(--on-ground) 70%, var(--ink));
   font-size: 0.8125rem;
