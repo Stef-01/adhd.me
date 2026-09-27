@@ -1,0 +1,231 @@
+{
+  "status": "First static release: 23 exported layouts; geometry and image decode verified; full-size social and pamphlet crops inspected. Remaining brief items are in README.md.",
+  "assets": [
+    {
+      "id": "social-square",
+      "width": 1080,
+      "height": 1080,
+      "source": "templates/social-square.html",
+      "export": "exports/social-square.png",
+      "layout": "split",
+      "photo": "morning-note",
+      "editableName": false
+    },
+    {
+      "id": "social-portrait",
+      "width": 1080,
+      "height": 1350,
+      "source": "templates/social-portrait.html",
+      "export": "exports/social-portrait.png",
+      "layout": "stack",
+      "photo": "study-cue",
+      "editableName": false
+    },
+    {
+      "id": "story-static",
+      "width": 1080,
+      "height": 1920,
+      "source": "templates/story-static.html",
+      "export": "exports/story-static.png",
+      "layout": "stack",
+      "photo": "morning-note",
+      "editableName": false
+    },
+    {
+      "id": "social-conversation",
+      "width": 1080,
+      "height": 1080,
+      "source": "templates/social-conversation.html",
+      "export": "exports/social-conversation.png",
+      "layout": "stack",
+      "photo": "supportive-conversation",
+      "editableName": false
+    },
+    {
+      "id": "carousel-01",
+      "width": 1080,
+      "height": 1080,
+      "source": "templates/carousel-01.html",
+      "export": "exports/carousel-01.png",
+      "layout": "type",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "carousel-02",
+      "width": 1080,
+      "height": 1080,
+      "source": "templates/carousel-02.html",
+      "export": "exports/carousel-02.png",
+      "layout": "type",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "carousel-03",
+      "width": 1080,
+      "height": 1080,
+      "source": "templates/carousel-03.html",
+      "export": "exports/carousel-03.png",
+      "layout": "type",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "newsletter-header",
+      "width": 1200,
+      "height": 600,
+      "source": "templates/newsletter-header.html",
+      "export": "exports/newsletter-header.png",
+      "layout": "split",
+      "photo": "morning-note",
+      "editableName": false
+    },
+    {
+      "id": "newsletter-feature",
+      "width": 1200,
+      "height": 600,
+      "source": "templates/newsletter-feature.html",
+      "export": "exports/newsletter-feature.png",
+      "layout": "split",
+      "photo": "supportive-conversation",
+      "editableName": false
+    },
+    {
+      "id": "editorial-cover",
+      "width": 1600,
+      "height": 2000,
+      "source": "templates/editorial-cover.html",
+      "export": "exports/editorial-cover.png",
+      "layout": "stack",
+      "photo": "study-cue",
+      "editableName": false
+    },
+    {
+      "id": "article-banner",
+      "width": 1600,
+      "height": 900,
+      "source": "templates/article-banner.html",
+      "export": "exports/article-banner.png",
+      "layout": "split",
+      "photo": "morning-note",
+      "editableName": false
+    },
+    {
+      "id": "presentation-cover",
+      "width": 1920,
+      "height": 1080,
+      "source": "templates/presentation-cover.html",
+      "export": "exports/presentation-cover.png",
+      "layout": "split",
+      "photo": "supportive-conversation",
+      "editableName": false
+    },
+    {
+      "id": "presentation-divider",
+      "width": 1920,
+      "height": 1080,
+      "source": "templates/presentation-divider.html",
+      "export": "exports/presentation-divider.png",
+      "layout": "type",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "presentation-framework",
+      "width": 1920,
+      "height": 1080,
+      "source": "templates/presentation-framework.html",
+      "export": "exports/presentation-framework.png",
+      "layout": "framework",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "program-cover",
+      "width": 1240,
+      "height": 1754,
+      "source": "templates/program-cover.html",
+      "export": "exports/program-cover.png",
+      "layout": "stack",
+      "photo": "supportive-conversation",
+      "editableName": false
+    },
+    {
+      "id": "reflection-worksheet",
+      "width": 1240,
+      "height": 1754,
+      "source": "templates/reflection-worksheet.html",
+      "export": "exports/reflection-worksheet.png",
+      "layout": "worksheet",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "poster-a-series",
+      "width": 1240,
+      "height": 1754,
+      "source": "templates/poster-a-series.html",
+      "export": "exports/poster-a-series.png",
+      "layout": "type",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "info-sheet",
+      "width": 1240,
+      "height": 1754,
+      "source": "templates/info-sheet.html",
+      "export": "exports/info-sheet.png",
+      "layout": "information",
+      "photo": null,
+      "editableName": false
+    },
+    {
+      "id": "speaker-card",
+      "width": 1600,
+      "height": 900,
+      "source": "templates/speaker-card.html",
+      "export": "exports/speaker-card.png",
+      "layout": "speaker",
+      "photo": null,
+      "editableName": true
+    },
+    {
+      "id": "name-bar",
+      "width": 1600,
+      "height": 360,
+      "source": "templates/name-bar.html",
+      "export": "exports/name-bar.png",
+      "layout": "name",
+      "photo": null,
+      "editableName": true
+    },
+    {
+      "id": "name-badge",
+      "width": 1063,
+      "height": 591,
+      "source": "templates/name-badge.html",
+      "export": "exports/name-badge.png",
+      "layout": "badge",
+      "photo": null,
+      "editableName": true
+    },
+    {
+      "id": "pamphlet-outside",
+      "width": 1754,
+      "height": 1240,
+      "layout": "pamphlet",
+      "source": "templates/pamphlet-outside.html",
+      "export": "exports/pamphlet-outside.png"
+    },
+    {
+      "id": "pamphlet-inside",
+      "width": 1754,
+      "height": 1240,
+      "layout": "pamphlet",
+      "source": "templates/pamphlet-inside.html",
+      "export": "exports/pamphlet-inside.png"
+    }
+  ]
+}

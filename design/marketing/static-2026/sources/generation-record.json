@@ -1,0 +1,35 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "file": "identity/brand-master-yellow.png",
+      "brief": "Refine supplied square yellow me. mark, floating A D H D letters, black type and red square stop; flat and optically balanced.",
+      "sha256": "e8c5042cd2e62633e5140842a1e182210bce61dc532bdcafe8f9bcf51ac7986c"
+    },
+    {
+      "file": "photography/morning-note.png",
+      "brief": "Warm editorial landscape: woman writing one note at kitchen table, face-down phone, yellow mug, left clearspace.",
+      "sha256": "cd15a402894f327069345e87e69dd9deaac2f6ac73a337b6e5ab3eb573002019"
+    },
+    {
+      "file": "photography/supportive-conversation.png",
+      "brief": "Warm editorial landscape: equal-level supportive conversation between two adults, yellow notebook, neutral community workspace.",
+      "sha256": "cf6552c6990dabddfc82aa6e796ba67160e3325e3cdf7f89f38030e2ebb57aea"
+    },
+    {
+      "file": "photography/study-cue.png",
+      "brief": "Portrait editorial: young adult placing a note next to laptop in university library, mustard overshirt, natural light.",
+      "sha256": "a129b6570d4585073066b4e0894e106fb4a557489cfd7da8725b68a7d514f958"
+    },
+    {
+      "file": "identity/brand-mark-transparent.png",
+      "brief": "Remove yellow background from the refined mark with genuine alpha; preserve me, floating ADHD letters and red square.",
+      "sha256": "b6da26f073bc01d046d5c662813fa680aea5946337cdfdd8ad7a881e0c8522f9"
+    },
+    {
+      "file": "photography/park-conversation.png",
+      "brief": "Warm editorial wide photograph of two adult friends talking on an accessible Australian urban park path; yellow, cream, olive and charcoal; left copy space.",
+      "sha256": "59fa47cd90c067bbb98a3f20d204b24b8d7480039b01aaa054e0aa7943b3657d"
+    }
+  ]
+}

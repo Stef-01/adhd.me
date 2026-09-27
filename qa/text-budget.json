@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T12:51:00.453Z",
-  "base": "http://localhost:3100",
+  "measuredAt": "2026-09-27T13:28:41.325Z",
+  "base": "http://localhost:3162",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "03:05 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -449,26 +449,21 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 3,
+      "fold": 3,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
         {
           "w": 2,
-          "text": "POP IT!",
+          "text": "JUST MILK!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "pale",
-          "tag": "button"
         }
       ]
     },
@@ -503,10 +498,10 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
@@ -515,14 +510,14 @@
           "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 2,
+          "text": "CLEAR ONE!",
+          "tag": "p"
         },
         {
           "w": 1,
-          "text": "POP!",
-          "tag": "p"
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -611,8 +606,8 @@
       "path": "/lives/play/maya-one-thing-at-a-time",
       "name": "/lives/play/maya-one-thing-at-a-time",
       "state": null,
-      "total": 16,
-      "fold": 16,
+      "total": 17,
+      "fold": 17,
       "chrome": 0,
       "ratio": 0.4,
       "verdict": "target",
@@ -1043,10 +1038,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1485,
+      "total": 1425,
       "fold": 219,
       "chrome": 22,
-      "ratio": 37.1,
+      "ratio": 35.6,
       "verdict": "long-form",
       "longest": [
         {
@@ -1745,8 +1740,8 @@
       "path": "/lives/play/maya-one-thing-at-a-time",
       "name": "Maya, revisit",
       "state": "maya-revisit",
-      "total": 19,
-      "fold": 19,
+      "total": 20,
+      "fold": 20,
       "chrome": 0,
       "ratio": 0.5,
       "verdict": "target",
@@ -2015,17 +2010,12 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, revisit",
       "state": "zoe-revisit",
-      "total": 21,
-      "fold": 21,
+      "total": 16,
+      "fold": 16,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
-        {
-          "w": 5,
-          "text": "Still on for our plan?",
-          "tag": "p"
-        },
         {
           "w": 4,
           "text": "Zoe · Before you send",
@@ -2035,6 +2025,11 @@
           "w": 4,
           "text": "The plan comes up.",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Saturday at 7.",
+          "tag": "span"
         }
       ]
     },
@@ -2501,8 +2496,8 @@
       "path": "/lives/play/maya-one-thing-at-a-time",
       "name": "Maya: the crossing",
       "state": null,
-      "total": 16,
-      "fold": 16,
+      "total": 17,
+      "fold": 17,
       "chrome": 0,
       "ratio": 0.4,
       "verdict": "target",
@@ -2901,26 +2896,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 12,
-      "fold": 12,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
           "w": 3,
-          "text": "TURN IT DOWN!",
+          "text": "HOLD THE LID!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 2,
+          "text": ". Then, at",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "it stops",
+          "tag": "p"
         }
       ]
     },

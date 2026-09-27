@@ -1,0 +1,189 @@
+{
+  "checkedAt": "2026-09-27T13:28:34.680Z",
+  "assets": [
+    {
+      "id": "social-square",
+      "width": 1080,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "f07177a0cf703078f6dc6d469ead3699340ab0d934a07f4ea0afb2b67506966e"
+    },
+    {
+      "id": "social-portrait",
+      "width": 1080,
+      "height": 1350,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "3fcfdf658e2a7dfca9164077ed70dc138714485da61212f54a09935228345488"
+    },
+    {
+      "id": "story-static",
+      "width": 1080,
+      "height": 1920,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "4ebeda9e976959f14172c8871c749934d5e92e85e3ebb485696f8ed5e81eaef6"
+    },
+    {
+      "id": "social-conversation",
+      "width": 1080,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "89288af629dcb9a8cc20e3db49586de99eebba264dd56f660a2982ce5d63cf40"
+    },
+    {
+      "id": "carousel-01",
+      "width": 1080,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "2c7f94418e4915f26e4f03a7ef226b030a7cb9b0307830ac6e40a74942ae827e"
+    },
+    {
+      "id": "carousel-02",
+      "width": 1080,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "39b64e2705f44b6bab367fcca63c3a7424ce465ae49de0668c3c822b865de6d9"
+    },
+    {
+      "id": "carousel-03",
+      "width": 1080,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "4899cc9931b57b0084fbd32836a0f91a13a9b3b7616d1d9d474e849f61462a7a"
+    },
+    {
+      "id": "newsletter-header",
+      "width": 1200,
+      "height": 600,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "ae602a9f9dd7f5859dea0d1aa715b4274a0c2dea99dca97cece6043d20fb8562"
+    },
+    {
+      "id": "newsletter-feature",
+      "width": 1200,
+      "height": 600,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "cd8d0ddec409ff71830874a375c2c2d03fe39f7c9ded8123482d2bf845bb07ef"
+    },
+    {
+      "id": "editorial-cover",
+      "width": 1600,
+      "height": 2000,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "ecbaed8d921ee9a8740ee8138c3bdf3d3ce4bd666a763a6cf8db11f5eabc04e0"
+    },
+    {
+      "id": "article-banner",
+      "width": 1600,
+      "height": 900,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "bd8ac9e2b6f6b1dd2391069ad493c23560df248253cb6cdb5243c2347b33dc92"
+    },
+    {
+      "id": "presentation-cover",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "a1e8860e2622b51fa064daee6872f49c3137de959f2a0897015fe9888314afaa"
+    },
+    {
+      "id": "presentation-divider",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "6bcf6492364a33c909c9e9816b9c3bede3e7c25ae773cf6eb28eac66dfd2c7bf"
+    },
+    {
+      "id": "presentation-framework",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "a7fbd428056fa671125fde3d0550dee29d93cc2168fdf79d824ef59afe210c1e"
+    },
+    {
+      "id": "program-cover",
+      "width": 1240,
+      "height": 1754,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "f5ab72315453585a314431c133be4d3c067ac19524650fad82f8894ce69013e7"
+    },
+    {
+      "id": "reflection-worksheet",
+      "width": 1240,
+      "height": 1754,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "c724c75d7551538a311891315a0f0eb686bbc339e2c0a6148b75e865b2cdf513"
+    },
+    {
+      "id": "poster-a-series",
+      "width": 1240,
+      "height": 1754,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "eea76f589bcefc6611185a9edd926922a253d51cdf747cbba9bc7139a39326ea"
+    },
+    {
+      "id": "info-sheet",
+      "width": 1240,
+      "height": 1754,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "3aa9ec1772c0ce08bf20bc25a3634524f18f0e9a6c39f47210a43abbf622b3ba"
+    },
+    {
+      "id": "speaker-card",
+      "width": 1600,
+      "height": 900,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "a68b768c6bae81f86eb91181cdc213e26ab6c4ffe2b435b0c7ef0f0e65b90501"
+    },
+    {
+      "id": "name-bar",
+      "width": 1600,
+      "height": 360,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "af266e74f0aecce877caddec63cb6733c7261fcb6bf6e70eaa16594249a07796"
+    },
+    {
+      "id": "name-badge",
+      "width": 1063,
+      "height": 591,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "b135f8fecbfb4ca79690d774ed229f38e05daa0c405dbbe26aa8f28c43ae6fb4"
+    },
+    {
+      "id": "pamphlet-outside",
+      "width": 1754,
+      "height": 1240,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "814d77754e767da267fbbceca46bf01e7759e901a6296131e97f1f2540895299"
+    },
+    {
+      "id": "pamphlet-inside",
+      "width": 1754,
+      "height": 1240,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "832883fc853521126b58891c5d5d7e3b4ae5b02dcd0a468daddcc8ec3ccf0ee2"
+    }
+  ]
+}
