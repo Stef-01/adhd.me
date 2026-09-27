@@ -1,14 +1,7 @@
 // The finder's "What we heard" row (docs/matching/LLM-MATCHING-PLAN.md §15): what the request was
 // read as asking for, as chips a person can take away and put back.
 
-import {
-  facetStrength,
-  INFORMED_SEPARATION_RATIO,
-  labelInSentence,
-  rankingProfile,
-  type Clinician,
-  type MatchQuality,
-} from "@/demo/clinicians";
+import { labelInSentence } from "@/demo/clinicians";
 import { facetKey, shortLabel, type NeedSignal } from "@/matching/needs";
 
 export type HeardChip = {
@@ -38,18 +31,4 @@ export function heardChips(needs: readonly NeedSignal[], max: number): HeardChip
       const label = shortLabel(need);
       return { key, label, spoken: labelInSentence({ ...need, label }) };
     });
-}
-
-/**
- * `matchQuality` for a read already in hand, so the heading claims an order only while the kept
- * facets earn one. `heard.test.ts` holds it equal to `matchQuality` on every corpus request.
- */
-export function qualityOf(needs: readonly NeedSignal[], roster: readonly Clinician[]): MatchQuality {
-  if (needs.length === 0) return "unmatched";
-  const scores = roster.map((clinician) => rankingProfile(clinician, needs).weightedScore);
-  if (scores.every((score) => score === 0)) return "unserved";
-  if (new Set(scores).size === 1) return "tied";
-  const facets = new Map(needs.map((need) => [facetKey(need.facet), need.facet]));
-  const differing = [...facets.values()].filter((facet) => new Set(roster.map((c) => facetStrength(c, facet))).size > 1).length;
-  return differing / facets.size >= INFORMED_SEPARATION_RATIO ? "informed" : "tied";
 }

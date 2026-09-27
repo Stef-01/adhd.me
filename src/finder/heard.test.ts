@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { clinicians, matchQuality, needsFor } from "@/demo/clinicians";
+import { matchQuality, needsFor } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
 import { REACH_CORPUS } from "@/matching/corpus";
 import { facetKey } from "@/matching/needs";
-import { heardChips, qualityOf } from "./heard";
+import { heardChips } from "./heard";
 
 const roster = rosterFor(true);
 const chipsFor = (text: string) => heardChips(needsFor(text, roster), 4);
@@ -41,14 +41,8 @@ describe("heardChips", () => {
   });
 });
 
-describe("qualityOf", () => {
-  it("agrees with matchQuality on every corpus request, on both rosters", () => {
-    for (const r of [clinicians, roster]) {
-      for (const { text } of REACH_CORPUS) expect(qualityOf(needsFor(text, r), r), text).toBe(matchQuality(text, r));
-    }
-  });
-
+describe("matchQuality on the chips that are kept", () => {
   it("claims no order once every heard facet is taken out", () => {
-    expect(qualityOf([], roster)).toBe("unmatched");
+    expect(matchQuality("an adult ADHD assessment, telehealth, not rushed", roster, [])).toBe("unmatched");
   });
 });

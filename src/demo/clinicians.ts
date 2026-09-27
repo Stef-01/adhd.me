@@ -529,8 +529,7 @@ export function separationRatio(query: string, roster: readonly Clinician[] = cl
   return separationRatioForNeeds(needsFor(query, roster), roster);
 }
 
-export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
-  const needs = needsFor(query, roster);
+export function matchQuality(query: string, roster: readonly Clinician[] = clinicians, needs: readonly NeedSignal[] = needsFor(query, roster)): MatchQuality {
   if (needs.length === 0) return "unmatched";
   const profiles = roster.map((clinician) => rankingProfile(clinician, needs));
   const scores = profiles.map((profile) => profile.weightedScore);
@@ -1046,11 +1045,12 @@ export function rankCliniciansNear(
   origin: SuburbPoint | null,
   roster: readonly Clinician[] = clinicians,
   today: Date = new Date(),
+  needs?: readonly NeedSignal[],
 ): Clinician[] {
-  const byFit = rankClinicians(query, roster, today);
+  const byFit = rankClinicians(query, roster, today, needs);
   if (!origin) return byFit;
 
-  const needs = needsFor(query, roster);
+  const read = needs ?? needsFor(query, roster);
   // O85: the distance a clinician sorts on is the nearest of their consulting locations —
   // somebody with Hornsby rooms IS near a Hornsby reader, whatever their primary suburb says.
   const km = (c: Clinician) => nearestLocation(c, origin)?.km ?? null;
@@ -1070,7 +1070,7 @@ export function rankCliniciansNear(
    */
   const out = [...byFit];
   const tieKey = (c: Clinician) => {
-    const profile = rankingProfile(c, needs);
+    const profile = rankingProfile(c, read);
     return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.weightedScore}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}`;
   };
   let start = 0;

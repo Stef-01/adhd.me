@@ -3,9 +3,10 @@
 // the query itself, exactly as before.
 
 import { describe, expect, it } from "vitest";
-import { capacityGrade, clinicians, needsFor, rankClinicians, rankingProfile, type Clinician } from "./clinicians";
+import { capacityGrade, clinicians, needsFor, rankClinicians, rankCliniciansNear, rankingProfile, type Clinician } from "./clinicians";
 import { rosterFor } from "./synthetic-roster";
 import { REACH_CORPUS } from "@/matching/corpus";
+import { resolvePlace } from "@/geo/suburbs";
 import { facetKey, type NeedSignal } from "@/matching/needs";
 
 const TODAY = new Date("2026-09-27T00:00:00Z");
@@ -61,5 +62,18 @@ describe.each(ROSTERS)("rankClinicians with needs, $name roster", ({ roster }) =
     }
     expect(compared).toBeGreaterThan(100);
     expect(moved).toBeGreaterThan(50);
+  });
+});
+
+describe("rankCliniciansNear with needs", () => {
+  const hornsby = resolvePlace("Hornsby")!;
+
+  it("ranks as before when the read is passed in, and still sorts by distance on a subset", () => {
+    const roster = rosterFor(true);
+    const text = "a woman GP for an ADHD assessment";
+    const read = needsFor(text, roster);
+    expect(ids(rankCliniciansNear(text, hornsby, roster, TODAY, read))).toEqual(ids(rankCliniciansNear(text, hornsby, roster, TODAY)));
+    const kept = read.filter((n) => n.facet.kind === "care");
+    expect(ids(rankCliniciansNear(text, hornsby, roster, TODAY, kept))).not.toEqual(ids(rankClinicians(text, roster, TODAY, kept)));
   });
 });

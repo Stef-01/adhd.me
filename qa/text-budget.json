@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-27T09:15:36.145Z",
+  "measuredAt": "2026-09-27T09:29:43.216Z",
   "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
@@ -503,16 +503,16 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "GET OUT!",
-          "tag": "p"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
           "w": 1,
@@ -521,8 +521,8 @@
         },
         {
           "w": 1,
-          "text": "shoes",
-          "tag": "span"
+          "text": "SWAT!",
+          "tag": "p"
         }
       ]
     },
@@ -1961,17 +1961,12 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, reply",
       "state": "zoe-reply",
-      "total": 30,
-      "fold": 30,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.8,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
-        {
-          "w": 8,
-          "text": "Oh, that’s a shame. Sure. Is Friday free?",
-          "tag": "p"
-        },
         {
           "w": 7,
           "text": "Can we move dinner? Work ran late.",
@@ -1981,6 +1976,11 @@
           "w": 4,
           "text": "Zoe · Before you send",
           "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Said what you meant.",
+          "tag": "h1"
         }
       ]
     },
@@ -2582,8 +2582,8 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 56,
-      "fold": 51,
+      "total": 54,
+      "fold": 42,
       "chrome": 6,
       "ratio": 1.4,
       "verdict": "ceiling",
@@ -2600,7 +2600,7 @@
         },
         {
           "w": 3,
-          "text": "Unhurried first appointment",
+          "text": "Beecroft & Double Bay",
           "tag": "small"
         }
       ]
@@ -2901,25 +2901,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 12,
-      "fold": 12,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "write the perfect email",
-          "tag": "span"
-        },
-        {
           "w": 3,
-          "text": "reorganise the notes",
+          "text": "DUCK OR GOOSE!",
+          "tag": "p"
+        },
+        {
+          "w": 1,
+          "text": "0",
           "tag": "span"
         },
         {
-          "w": 2,
-          "text": "START SMALL!",
+          "w": 1,
+          "text": "quack",
           "tag": "p"
         }
       ]

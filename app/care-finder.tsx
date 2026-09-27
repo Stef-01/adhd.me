@@ -13,7 +13,6 @@ import {
   needsFor,
   orderNote,
   rankBands,
-  rankClinicians,
   rankCliniciansNear,
   topTieNote,
   missedAsks,
@@ -29,7 +28,7 @@ import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
 import { facetKey, shortLabel } from "@/matching/needs";
-import { heardChips, qualityOf } from "@/finder/heard";
+import { heardChips } from "@/finder/heard";
 import { FINDER_COPY } from "./finder-copy";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
@@ -196,7 +195,7 @@ export function CareFinder() {
     return new Set(read.filter((n) => removed.has(facetKey(n.facet)) && !keptLabels.has(n.label)).map((n) => n.label));
   }, [read, removed, kept]);
   const matches = useMemo(
-    () => orderByProblemFit(removed.size === 0 ? rankCliniciansNear(request, origin, roster) : rankClinicians(request, roster, undefined, kept), need),
+    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, removed.size === 0 ? undefined : kept), need),
     [request, origin, roster, need, removed, kept],
   );
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
@@ -354,7 +353,7 @@ export function CareFinder() {
    * some more than once, and every call re-runs the full lexicon read over the request — a
    * dozen redundant scans per keystroke once the geo field re-renders the results stage.
    */
-  const quality = useMemo(() => (removed.size === 0 ? matchQuality(request, roster) : qualityOf(kept, roster)), [request, roster, removed, kept]);
+  const quality = useMemo(() => matchQuality(request, roster, removed.size === 0 ? undefined : kept), [request, roster, removed, kept]);
   const tieNote = useMemo(() => topTieNote(request, roster), [request, roster]);
   /** Read only when a tie exists — unconditional, this would ADD a rankBands run to the common
    * no-tie render; conditional, it matches the old cost exactly with the derivation named. */

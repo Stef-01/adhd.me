@@ -32,6 +32,16 @@ W6c, W6d: the refine button's label, one sparkle, Start over in the bar.
 | Before | ![Finder results, before, 390](finder-results-before-390.jpg) | ![Finder results, before, 1440](finder-results-before-1440.jpg) |
 | After | ![Finder results, after, 390](finder-results-after-390.jpg) | ![Finder results, after, 1440](finder-results-after-1440.jpg) |
 
+## Finder results, what we heard
+
+`docs/matching/LLM-MATCHING-PLAN.md` §15: the request read back as chips. A tap takes a facet out
+and the list re-ranks in the browser; the chip stays, struck through, and a second tap puts it back.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Read | ![What we heard, 390](finder-heard-390.jpg) | ![What we heard, 1440](finder-heard-1440.jpg) |
+| Telehealth taken out | ![Telehealth taken out, 390](finder-heard-removed-390.jpg) | ![Telehealth taken out, 1440](finder-heard-removed-1440.jpg) |
+
 ## Settings, your data
 
 W5: save a copy, restore a copy, one delete.
