@@ -2,7 +2,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { CHARACTER_IDS } from "@/lives/types";
-import { GAME_GROUPS, GAME_HINTS, LIFE_GAMES, RUN_GAMES, matchesGoal, tryFirst, type GameItem } from "./games";
+import { SUBDOMAINS } from "@/model/layers";
+import { GAME_GROUPS, GAME_HINTS, LIFE_GAMES, RUN_GAMES, gamesFor, matchesGoal, modulesFor, tryFirst, type GameItem } from "./games";
 import { markPlayed, parsePlayed, readPlayed } from "./played";
 import { markDone, readProgress } from "./progress";
 
@@ -76,5 +77,20 @@ describe("played", () => {
     expect(readPlayed(s)).toEqual({ v: 1, at: { leo: "2026-09-01" } });
     expect(parsePlayed({ v: 1, at: { leo: "2026-09-01", score: 9 } })).toBeNull();
     expect(parsePlayed({ v: 1, at: { nobody: "2026-09-01" } })).toBeNull();
+  });
+});
+
+describe("the care map's panel", () => {
+  it("lists the runs that target a part of life, then the character games whose journey works on it", () => {
+    expect(gamesFor("activation").map((g) => g.id)).toContain("starting");
+    const sleep = gamesFor("sleep");
+    expect(sleep.some((g) => g.kind === "run" && g.id === "sleep")).toBe(true);
+    expect(sleep.findIndex((g) => g.kind === "life")).not.toBe(0);
+  });
+
+  it("lists strategy modules by their domains, and every game and module reaches at least one part of life", () => {
+    expect(modulesFor("sleep").length).toBeGreaterThan(0);
+    const reached = new Set(SUBDOMAINS.flatMap((s) => gamesFor(s.id).map((g) => `${g.kind}:${g.id}`)));
+    for (const g of eachOf(RUN_GAMES, "the runs")) expect(reached.has(`run:${g.id}`), g.id).toBe(true);
   });
 });

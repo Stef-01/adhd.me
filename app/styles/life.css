@@ -169,7 +169,14 @@
 
 /* ── Care map ─────────────────────────────────────────────────────────────────────────────── */
 .care-map { display: grid; gap: 16px; }
-.care-map-svg { width: 100%; height: auto; display: block; }
+.care-map-svg { width: min(560px, 100%); height: auto; display: block; margin: 0 auto; }
+/* Two columns from 1024px (PLAN.md W9): the wheel capped at 560px, the panel beside it and sticky,
+   so a tap changes the words next to the wheel rather than below the fold. */
+@media (min-width: 1024px) {
+  .care-map { grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .care-map-svg { margin: 0; }
+  .care-map-detail { position: sticky; top: 96px; }
+}
 .care-map-node { cursor: pointer; }
 .care-map-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 999px; }
 .care-map-node circle { transition: r var(--dur-tap) var(--ease-ui), stroke-width var(--dur-tap) var(--ease-ui); }
@@ -180,6 +187,8 @@
 .care-map-detail h2 { margin: 0 0 6px; font-size: 1.25rem; font-weight: 680; }
 .care-map-detail p { margin: 0 0 10px; color: var(--muted); font-size: 0.9375rem; line-height: 1.55; }
 .care-map-modules { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.care-map-modules a > span { flex: 1; min-width: 0; }
+.care-map-modules a > svg:first-child { color: var(--accent-deep); flex: none; }
 .care-map-modules a { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 8px 12px; border-radius: 10px; background: var(--stone); color: var(--ink); font-size: 0.9375rem; font-weight: 600; text-decoration: none; }
 .care-map-modules a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) { .care-map-modules a:hover { background: var(--accent-soft); } }

@@ -177,6 +177,11 @@
   --chip-strength-ink: #166534;
   --chip-held-bg: #e0f2fe;
   --chip-held-ink: #0369a1;
+  /* The care map's four layers (app/care-map.tsx): each wedge's fill and the ink that reads on it. */
+  --layer-brain-bg: #dcedfa;       --layer-brain-ink: #24487a;
+  --layer-body-bg: #fff8e6;        --layer-body-ink: #785a00;
+  --layer-environment-bg: #dcefe4; --layer-environment-ink: #0e6b3a;
+  --layer-people-bg: #ebe0f7;      --layer-people-ink: #5b3a8a;
 
   /* The primary button: dark pill, light label. */
   /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than

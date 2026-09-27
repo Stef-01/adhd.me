@@ -6,7 +6,8 @@ import { CHARACTERS } from "@/lives/characters";
 import { GAME_ENTRY } from "@/lives/entry-points";
 import { JOURNEYS } from "@/lives/journeys";
 import { STRATEGIES } from "@/lives/strategies";
-import type { CharacterId, LearningDomain } from "@/lives/types";
+import type { CharacterId, LearningDomain, StrategyDefinition } from "@/lives/types";
+import type { Subdomain } from "@/model/layers";
 import { LEARNING_TARGETS } from "@/model/learning-evidence";
 import { INTERACTIVE_MODULES } from "./interactive";
 import { MODULES, SHELVES } from "./scenes";
@@ -111,3 +112,23 @@ export function tryFirst(goals: readonly LearningDomain[], played: (game: GameIt
   return out;
 }
 
+/** Whether a character game's journey teaches a strategy for this part of life. */
+function lifeTouches(game: GameItem, subdomain: Subdomain): boolean {
+  const journey = JOURNEYS.find((j) => j.who === game.id);
+  const domains = STRATEGIES.find((s) => s.id === journey?.strategy)?.domains ?? [];
+  return domains.some((d) => LEARNING_TARGETS[d].subdomain === subdomain);
+}
+
+/**
+ * The games about one part of life, for the care map's panel (PLAN.md W9): the runs that target it,
+ * then the character games whose journey works on it.
+ */
+export function gamesFor(subdomain: Subdomain): GameItem[] {
+  const runs = RUN_GAMES.filter((g) => INTERACTIVE_MODULES.find((m) => m.id === g.id)?.targets.includes(subdomain));
+  return [...runs, ...LIFE_GAMES.filter((g) => lifeTouches(g, subdomain))];
+}
+
+/** The strategy modules that work on one part of life: a strategy's domains map to it through `LEARNING_TARGETS`. */
+export function modulesFor(subdomain: Subdomain): StrategyDefinition[] {
+  return STRATEGIES.filter((s) => s.active && s.domains.some((d) => LEARNING_TARGETS[d].subdomain === subdomain));
+}

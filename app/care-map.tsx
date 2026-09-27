@@ -12,21 +12,25 @@
 // The SVG is a list of real buttons: every node is focusable, labelled, and works by keyboard.
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { ArrowRight } from "@phosphor-icons/react";
-import { INTERACTIVE_MODULES } from "@/learn/interactive";
+import { useMemo, useRef, useState } from "react";
+import { ArrowRight, BookOpen, Play } from "@phosphor-icons/react";
+import { gamesFor, modulesFor } from "@/learn/games";
 import { LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Layer, type Subdomain } from "@/model/layers";
 import { deriveNeeds } from "@/model/needs";
 import { track } from "@/model/events";
 import { useModel } from "./use-model";
 import { NWIA_LABELS, NWIA_NAME, NWIA_PARADIGM, NWIA_URL, nwiaFor } from "@/wellness/nwia";
 
+/** Each layer's wedge and ink, from the palette (`--layer-*` in globals.css). */
 const COLOURS: Record<Layer, { fill: string; ink: string }> = {
-  brain: { fill: "#dcedfa", ink: "#24487a" },
-  body: { fill: "#fff8e6", ink: "#785a00" },
-  environment: { fill: "#dcefe4", ink: "#0e6b3a" },
-  people: { fill: "#ebe0f7", ink: "#5b3a8a" },
+  brain: { fill: "var(--layer-brain-bg)", ink: "var(--layer-brain-ink)" },
+  body: { fill: "var(--layer-body-bg)", ink: "var(--layer-body-ink)" },
+  environment: { fill: "var(--layer-environment-bg)", ink: "var(--layer-environment-ink)" },
+  people: { fill: "var(--layer-people-bg)", ink: "var(--layer-people-ink)" },
 };
+
+/** At most three of each in the panel; the rest are on the Learn page. */
+const PANEL_MAX = 3;
 
 /** Where each layer's wedge sits, in degrees from the top, clockwise. */
 const WEDGE: Record<Layer, [number, number]> = { brain: [-90, 0], body: [0, 90], environment: [90, 180], people: [180, 270] };
@@ -102,6 +106,19 @@ export function CareMap() {
   const { record } = useModel();
   const [selected, setSelected] = useState<Subdomain | null>(null);
   const positions = useMemo(nodePositions, []);
+  const panel = useRef<HTMLElement>(null);
+  // Under 1024px the panel sits below the wheel: after a tap, bring it into view if it is off the
+  // bottom of the screen (PLAN.md W9). Focus stays on the node; the panel's live region announces.
+  const open = (id: Subdomain) => {
+    setSelected(id);
+    track("CARE_MAP_OPENED", { node: id });
+    requestAnimationFrame(() => {
+      const box = panel.current?.getBoundingClientRect();
+      if (!box || box.top < window.innerHeight - 48) return;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      panel.current?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+    });
+  };
   const needs = record ? deriveNeeds(record) : [];
   const signal = new Map<Subdomain, string>();
   for (const n of needs) {
@@ -109,7 +126,8 @@ export function CareMap() {
     for (const c of n.contributors) if (!signal.has(c.subdomain)) signal.set(c.subdomain, `${c.note}.`);
   }
   const entry = selected ? SUBDOMAINS.find((s) => s.id === selected) : null;
-  const teaching = selected ? INTERACTIVE_MODULES.filter((m) => m.targets.includes(selected)) : [];
+  const games = selected ? gamesFor(selected).slice(0, PANEL_MAX) : [];
+  const modules = selected ? modulesFor(selected).slice(0, PANEL_MAX) : [];
 
   return (
     <div className="care-map">
@@ -126,16 +144,16 @@ export function CareMap() {
           const arcId = `care-map-arc-${layer}`;
           return (
             <g key={layer}>
-              <path d={wedgePath(layer)} fill={COLOURS[layer].fill} stroke="#fff" strokeWidth="4" />
+              <path d={wedgePath(layer)} style={{ fill: COLOURS[layer].fill, stroke: "var(--paper)" }} strokeWidth="4" />
               <defs><path id={arcId} d={`M${x1} ${y1}A${r} ${r} 0 0 ${bottom ? 0 : 1} ${x2} ${y2}`} /></defs>
-              <text className="care-map-layer" fontSize="11" fontWeight="800" letterSpacing="1.5" fill={COLOURS[layer].ink}>
+              <text className="care-map-layer" fontSize="11" fontWeight="800" letterSpacing="1.5" style={{ fill: COLOURS[layer].ink }}>
                 <textPath href={`#${arcId}`} startOffset="50%" textAnchor="middle">{LAYER_LABELS[layer].toUpperCase()}</textPath>
               </text>
             </g>
           );
         })}
-        <circle cx={CX} cy={CY} r={R_IN - 6} fill="#fff" />
-        <text x={CX} y={CY + 5} textAnchor="middle" fontSize="13" fontWeight="700" fill="#221a16">You</text>
+        <circle cx={CX} cy={CY} r={R_IN - 6} style={{ fill: "var(--paper)" }} />
+        <text x={CX} y={CY + 5} textAnchor="middle" fontSize="13" fontWeight="700" style={{ fill: "var(--ink)" }}>You</text>
         {SUBDOMAINS.map((s) => {
           const p = positions.get(s.id)!;
           const has = signal.has(s.id);
@@ -147,11 +165,11 @@ export function CareMap() {
               tabIndex={0}
               aria-label={`${s.label} (${LAYER_LABELS[s.layer]})${has ? ", in your picture" : ""}`}
               aria-pressed={selected === s.id}
-              onClick={() => { setSelected(s.id); track("CARE_MAP_OPENED", { node: s.id }); }}
-              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(s.id); } }}
+              onClick={() => open(s.id)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(s.id); } }}
             >
-              <circle cx={p.x} cy={p.y} r={has ? R_NODE + 2 : R_NODE} fill="#fff" stroke={COLOURS[p.layer].ink} strokeWidth={has ? 3 : 1.5} />
-              <text x={p.x} y={p.y + 3.25} textAnchor="middle" fontSize="8.75" fontWeight="700" fill={COLOURS[p.layer].ink}>
+              <circle cx={p.x} cy={p.y} r={has ? R_NODE + 2 : R_NODE} style={{ fill: "var(--paper)", stroke: COLOURS[p.layer].ink }} strokeWidth={has ? 3 : 1.5} />
+              <text x={p.x} y={p.y + 3.25} textAnchor="middle" fontSize="8.75" fontWeight="700" style={{ fill: COLOURS[p.layer].ink }}>
                 {labelLines(s.label).map((line, i, all) => (
                   <tspan key={line} x={p.x} dy={i === 0 ? (all.length - 1) * -LABEL_LEADING / 2 : LABEL_LEADING}>{line}</tspan>
                 ))}
@@ -161,16 +179,35 @@ export function CareMap() {
         })}
       </svg>
 
-      <section className="care-map-detail" aria-live="polite" aria-labelledby="care-map-title">
+      <section ref={panel} className="care-map-detail" aria-live="polite" aria-labelledby="care-map-title">
         {entry ? (
           <>
             <h2 id="care-map-title">{entry.label}</h2>
             <p>{entry.meaning}</p>
             {signal.get(entry.id) && <p className="care-map-you"><strong>For you:</strong> {signal.get(entry.id)}</p>}
             <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")}</p>
-            {teaching.length > 0 ? (
-              <ul className="care-map-modules" aria-label="Modules that work on this">
-                {teaching.map((m) => <li key={m.id}><Link href={`/approach?module=${m.id}`}>{m.title}<ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>)}
+            {/* Games about this part of life beside the modules for it (PLAN.md W9), so the map leads
+                to both. A glyph tells them apart, not a label. */}
+            {games.length + modules.length > 0 ? (
+              <ul className="care-map-modules" aria-label="Games and modules for this">
+                {games.map((g) => (
+                  <li key={`${g.kind}:${g.id}`}>
+                    <Link href={g.kind === "life" ? g.href : `/approach?module=${g.id}`} aria-label={`${g.title}, a game`}>
+                      <Play size={16} weight="fill" aria-hidden="true" />
+                      <span>{g.title}</span>
+                      <ArrowRight size={16} weight="bold" aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
+                {modules.map((m) => (
+                  <li key={m.id}>
+                    <Link href={`/lives/learn?module=${encodeURIComponent(m.moduleId)}`} aria-label={`${m.title}, a module`}>
+                      <BookOpen size={16} weight="bold" aria-hidden="true" />
+                      <span>{m.title}</span>
+                      <ArrowRight size={16} weight="bold" aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
               </ul>
             ) : null}
           </>

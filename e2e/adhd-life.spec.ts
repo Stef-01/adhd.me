@@ -350,7 +350,10 @@ test("the care map opens from the Learn page's care map row, and a node explains
   await expect(page.getByRole("heading", { name: "Tap a part of life." })).toBeVisible();
   await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
   await expect(page.getByRole("heading", { name: "Starting" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Why starting can be harder than doing/ })).toBeVisible();
+  // The panel lists the games about it and the modules for it (PLAN.md W9).
+  const panel = page.getByRole("list", { name: "Games and modules for this" });
+  await expect(panel.getByRole("link", { name: "The blank page, a game" })).toHaveAttribute("href", "/approach?module=starting");
+  await expect(panel.getByRole("link", { name: /, a module$/ }).first()).toHaveAttribute("href", /^\/lives\/learn\?module=/);
   // Keyboard reaches a node too.
   await page.getByRole("button", { name: /^Sleep \(Body\)/ }).focus();
   await page.keyboard.press("Enter");

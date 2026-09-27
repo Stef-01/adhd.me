@@ -32,5 +32,36 @@ test("the wheel and its panel say words, never a number about the person", async
   await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
   const panel = page.locator(".care-map-detail");
   await expect(panel).toContainText("you said it costs a lot");
-  expect(await panel.innerText()).not.toMatch(/\d/);
+  // What the panel says about the person; the games and modules it lists are titles, and a title
+  // like "60-Second Start" is not a number about anybody.
+  const about = await panel.evaluate((el) => {
+    const copy = el.cloneNode(true) as HTMLElement;
+    copy.querySelector(".care-map-modules")?.remove();
+    return copy.textContent ?? "";
+  });
+  expect(about).toContain("costs a lot");
+  expect(about).not.toMatch(/\d/);
+});
+
+test("from 1024px the panel sits beside the wheel and stays there; below it, a tap brings the panel into view", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/approach/map");
+  const [wheel, panel] = [page.locator(".care-map-svg"), page.locator(".care-map-detail")];
+  const [w, p] = [(await wheel.boundingBox())!, (await panel.boundingBox())!];
+  expect(w.width).toBeLessThanOrEqual(560.5);
+  expect(p.x, "the panel is to the right of the wheel").toBeGreaterThanOrEqual(w.x + w.width);
+  await page.setViewportSize({ width: 390, height: 700 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/approach/map");
+  await page.getByRole("button", { name: /^Sleep \(Body\)/ }).click();
+  await expect(page.getByRole("heading", { name: "Sleep" })).toBeInViewport();
+  // Focus stays on the node that was tapped.
+  expect(await page.evaluate(() => document.activeElement?.getAttribute("aria-label"))).toMatch(/^Sleep \(Body\)/);
+});
+
+test("the wheel draws from the palette: no raw colour on it", async ({ page }) => {
+  await page.goto("/approach/map");
+  const raw = await page.locator(".care-map-svg [fill], .care-map-svg [stroke]").evaluateAll((els) =>
+    els.flatMap((el) => ["fill", "stroke"].map((a) => el.getAttribute(a)).filter((v): v is string => Boolean(v && v.startsWith("#")))));
+  expect(raw).toEqual([]);
 });
