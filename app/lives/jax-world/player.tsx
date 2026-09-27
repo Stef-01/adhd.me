@@ -27,7 +27,6 @@ function objective(s: JaxWorld) {
   if (s.phase === "till" || s.phase === "revisit-till") return spent(s) > budget(s) ? "Over budget. Put something back." : undefined;
   if (s.phase === "setup") return "Leave the next shop easier.";
   if (s.phase === "complete") return "Same list. The wish was your call.";
-  if (s.trip === 0) return "Steer into the list. Tap the lures away.";
   return undefined;
 }
 

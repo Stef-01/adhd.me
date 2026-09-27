@@ -92,7 +92,7 @@ function begin(s: JaxWorld, n: number): JaxWorld {
   const next: JaxWorld = { ...s, trip: n, phase: n === 3 ? 'revisit' : 'aisle', t: 0, lane: 1, items: [], nextAt: 400, spawn: 0, basket: [], requested: false, soldOutSeen: false, bump: 0, revision: s.revision + 1 };
   const t = trip(next);
   next.list = t.soldOut ? t.list.map(key => key === t.soldOut!.key ? t.soldOut!.swap : key) : [...t.list];
-  next.message = n === 3 ? 'Same list, on the handle.' : n === 0 ? 'Steer into the milk.' : '';
+  next.message = n === 3 ? 'Same list, on the handle.' : n === 0 ? `Steer into the ${PRODUCTS[next.list[0]!]!.name.toLowerCase()}.` : '';
   return fill(next);
 }
 export function createJax(scenario = 0, still = false): JaxWorld {

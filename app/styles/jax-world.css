@@ -72,7 +72,7 @@
 .jw-note > svg { width: 24px; height: 25px; }
 .jw-home-jax { position: absolute; left: 30%; bottom: 20%; width: clamp(80px, 14vmin, 130px); transform: translateX(-50%); z-index: 2; pointer-events: none; }
 .jw-home-jax > svg { width: 100%; height: auto; }
-.jw-next { position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); z-index: 5; }
+.jw-next { position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); z-index: 5; white-space: nowrap; }
 .jw-end { position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); width: min(360px, calc(100% - 28px)); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; border-radius: 22px; background: #fffdf6; box-shadow: 0 14px 40px #1f302626; z-index: 6; }
 .jw-end .kit-primary { width: 100%; }
 
