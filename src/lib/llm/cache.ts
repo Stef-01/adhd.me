@@ -7,9 +7,7 @@ import { join } from "node:path";
 import type { Cached, CallJson } from "./client";
 
 export function cacheKey(call: CallJson): string {
-  return createHash("sha256")
-    .update(JSON.stringify([call.model, call.effort, call.instructions, call.schema, call.input]))
-    .digest("hex");
+  return createHash("sha256").update(JSON.stringify([call.model, call.effort, call.instructions, call.schema, call.input])).digest("hex");
 }
 
 export class FileCache {

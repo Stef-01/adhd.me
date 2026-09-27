@@ -10,8 +10,7 @@ export class BudgetError extends Error { name = "BudgetError"; }
 export class BudgetMeter {
   spent = 0;
   calls = 0;
-  /** Failed attempts (network, 429, 5xx, timeout), retries included. */
-  errors = 0;
+  errors = 0; // failed attempts (network, 429, 5xx, timeout), retries included
   private held = 0;
 
   constructor(readonly capUsd: number, private readonly onCharge?: (costUsd: number, usage: Usage, model: string) => void) {}
@@ -69,7 +68,7 @@ export function appendLedger(path: string, row: LedgerRow, now = new Date()): vo
 }
 
 export function ledgerSpend(path: string): number {
-  let total = 0;
-  if (existsSync(path)) for (const line of readFileSync(path, "utf8").split("\n")) if (line.trim()) total += (JSON.parse(line) as LedgerRow).costUsd;
-  return total;
+  if (!existsSync(path)) return 0;
+  const rows = readFileSync(path, "utf8").split("\n").filter((line) => line.trim());
+  return rows.reduce((total, line) => total + (JSON.parse(line) as LedgerRow).costUsd, 0);
 }

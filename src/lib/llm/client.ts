@@ -7,12 +7,10 @@ import type { BudgetMeter } from "./meter";
 export type CallJson = {
   model?: string;
   effort: "minimal" | "low";
-  /** Static and first, so the prefix can cache; the request is `input`, last. */
-  instructions: string;
+  instructions: string; // static and first, so the prefix can cache; the request is `input`, last
   input: string;
   schema: { name: string; schema: object };
-  /** At least 400, so reasoning cannot starve the answer. */
-  maxOutputTokens: number;
+  maxOutputTokens: number; // at least 400, so reasoning cannot starve the answer
 };
 export type Usage = { input: number; cached: number; output: number; reasoning: number };
 export type CallResult<T> = { data: T; usage: Usage; costUsd: number; fromCache: boolean };
@@ -35,6 +33,7 @@ export const PRICES: Record<string, { input: number; cached: number; output: num
   "gpt-5-mini": { input: 0.25, cached: 0.025, output: 2 }, // to be confirmed on the pricing page before use
 };
 export const TIMEOUT_MS = 20_000;
+export const modelOf = (env: Record<string, string | undefined>) => env.ADHDME_LLM_MODEL ?? "gpt-5-nano";
 
 export class IncompleteError extends Error { name = "IncompleteError"; }
 export class RefusalError extends Error { name = "RefusalError"; }
@@ -58,7 +57,7 @@ type Body = {
 
 export async function callJson<T>(request: CallJson, deps: Deps = {}): Promise<CallResult<T>> {
   const env = deps.env ?? process.env;
-  const call = { ...request, model: request.model ?? env.ADHDME_LLM_MODEL ?? "gpt-5-nano" };
+  const call = { ...request, model: request.model ?? modelOf(env) };
   const hit = deps.cache?.get(call);
   if (hit) return { data: hit.data as T, usage: hit.usage, costUsd: 0, fromCache: true };
   const key = env.OPENAI_API_KEY;

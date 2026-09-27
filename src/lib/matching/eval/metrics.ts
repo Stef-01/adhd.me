@@ -69,11 +69,7 @@ export function facetScore(t: Tally): { recall: number | null; precision: number
 
 /** Null when no id has any gain: there is no order to get right. */
 export function ndcgAt(k: number, order: readonly string[], gain: ReadonlyMap<string, number>): number | null {
-  const dcg = (gains: readonly number[]) => {
-    let sum = 0;
-    gains.slice(0, k).forEach((g, i) => (sum += g / Math.log2(i + 2)));
-    return sum;
-  };
+  const dcg = (gains: readonly number[]) => gains.slice(0, k).reduce((sum, g, i) => sum + g / Math.log2(i + 2), 0);
   const ideal = dcg([...gain.values()].sort((a, b) => b - a));
   return ideal === 0 ? null : dcg(order.map((id) => gain.get(id) ?? 0)) / ideal;
 }

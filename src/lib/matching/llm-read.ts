@@ -120,9 +120,6 @@ export function fromModel(data: unknown): Reading {
 
 /** The answer that reads as exactly `keys`: `fromModel`'s inverse, for dry runs. */
 export function answerFor(keys: readonly string[]): Record<string, string[]> {
-  const answer: Record<string, string[]> = {};
-  for (const field of FIELDS) {
-    answer[field] = keys.filter((key) => key.startsWith(`${VOCABULARY[field].prefix}:`)).map((key) => key.slice(key.indexOf(":") + 1));
-  }
-  return { ...answer, negated: [] };
+  const ids = (field: Field) => keys.filter((key) => key.startsWith(`${VOCABULARY[field].prefix}:`)).map((key) => key.slice(key.indexOf(":") + 1));
+  return { ...Object.fromEntries(FIELDS.map((field) => [field, ids(field)])), negated: [] };
 }
