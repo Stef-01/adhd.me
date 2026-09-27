@@ -8,24 +8,11 @@
       "skillPath": "skills/adhd/SKILL.md",
       "computedHash": "06debe68a370206acd93e0b2ee54d6395bc367fdfbc079f2348e3ce2966dac0a"
     },
-    "design-motion-principles": {
-      "source": "kylezantos/design-motion-principles",
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
       "sourceType": "github",
-      "skillPath": "skills/design-motion-principles/SKILL.md",
-      "computedHash": "6410c1844f511249f11f38d30d217cfecf7f595f45a868d74284b6380bab47d7"
-    },
-    "frontend-design": {
-      "source": "anthropics/skills",
-      "sourceType": "github",
-      "sourceCommit": "3b3fad96af16a10759d930941b4520ba0c40edae",
-      "skillPath": "skills/frontend-design/SKILL.md",
-      "computedHash": "1608ea77fbb6fc30d13a97d12cfa8ebf31358d40f0dd97beed24829d6b3f45dd"
-    },
-    "impeccable": {
-      "source": "pbakaus/impeccable",
-      "sourceType": "github",
-      "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "computedHash": "fc9106b2b240a4abdbe9abf1e5d026ab06c3315f3b79b7e029383e17abb341b2"
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "computedHash": "80161e6836b3b40f4e83730a290deb40ac14d877d38c97ad5f6d71be37ce74c3"
     },
     "brainstorming": {
       "source": "obra/superpowers",
@@ -33,6 +20,12 @@
       "sourceCommit": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797",
       "skillPath": "skills/brainstorming/SKILL.md",
       "computedHash": "74edf03ea6d24ef53db48677b93558d14a979bdf052ca3f57ecdca0c66791608"
+    },
+    "design-motion-principles": {
+      "source": "kylezantos/design-motion-principles",
+      "sourceType": "github",
+      "skillPath": "skills/design-motion-principles/SKILL.md",
+      "computedHash": "6410c1844f511249f11f38d30d217cfecf7f595f45a868d74284b6380bab47d7"
     },
     "dispatching-parallel-agents": {
       "source": "obra/superpowers",
@@ -54,6 +47,19 @@
       "sourceCommit": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797",
       "skillPath": "skills/finishing-a-development-branch/SKILL.md",
       "computedHash": "8db5a922b242dd4e1bf824cb91c13b3e8d8e8a86d6ceaf7f0774eb9cce909d65"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceCommit": "3b3fad96af16a10759d930941b4520ba0c40edae",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "1608ea77fbb6fc30d13a97d12cfa8ebf31358d40f0dd97beed24829d6b3f45dd"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "fc9106b2b240a4abdbe9abf1e5d026ab06c3315f3b79b7e029383e17abb341b2"
     },
     "receiving-code-review": {
       "source": "obra/superpowers",
