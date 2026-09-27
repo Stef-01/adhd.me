@@ -64,7 +64,7 @@
 .sim-cell:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sim-cell:disabled { cursor: default; }
 
-.next-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.next-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
 .next-actions .learn-primary { text-decoration: none; }
 
 .safety-screen { max-width: 640px; margin: 24px auto 48px; padding: clamp(24px, 4vw, 40px); border: 2px solid var(--accent); border-radius: 24px; background: var(--surface-raised); }
