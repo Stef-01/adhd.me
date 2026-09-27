@@ -3,7 +3,7 @@
 // opened and the shape has changed since the last one. Day one is the first, and is never replaced.
 
 import { localDay } from "@/lib/dates";
-import { RUNG_REACH } from "@/wellness/map";
+import { RUNG_LABEL, RUNG_REACH } from "@/wellness/map";
 import { ASPECTS, STATUS_LABEL, axes, type Aspect, type AxisPoint } from "./matrix";
 import { emptyModel, type ModelRecord } from "./store";
 import { SNAPSHOT_CAP, type MapSnapshot } from "./snapshot-shape";
@@ -80,20 +80,24 @@ function parseDay(on: string): Date {
   return new Date(y, m - 1, d);
 }
 
-/** Whole calendar months between two local days. */
-function monthsBetween(from: Date, to: Date): number {
-  let months = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
-  if (to.getDate() < from.getDate()) months -= 1;
-  return months;
-}
-
-/** A past day named the way the pill says it: "August", "August last year", "Two years ago". Never a digit. */
+/**
+ * A past day named the way the pill says it: "August", "August last year", "Two years ago". Never a
+ * digit. Named by calendar year, not by months gone by: last September, eleven months and a day
+ * ago, would otherwise read as this September. Anything from two calendar years back, which
+ * includes everything twenty four months or more ago, is "Two years ago", or "The September
+ * before last" when it is under two years, because "last year" would name the wrong year.
+ */
 export function monthName(on: string, today: Date): string {
   const then = parseDay(on);
-  const months = monthsBetween(then, today);
-  if (months >= 24) return "Two years ago";
+  const years = today.getFullYear() - then.getFullYear();
   const name = then.toLocaleString("en-AU", { month: "long" });
-  return months > 11 ? `${name} last year` : name;
+  if (years >= 2) {
+    // Two calendar years back but under two years ago, as a December seen in the January after
+    // next: "last year" would name the wrong December and "Two years ago" would overstate it.
+    const months = years * 12 + today.getMonth() - then.getMonth() - (today.getDate() < then.getDate() ? 1 : 0);
+    return months >= 24 ? "Two years ago" : `The ${name} before last`;
+  }
+  return years === 1 ? `${name} last year` : name;
 }
 
 export interface Compare {
@@ -114,12 +118,22 @@ export function compareFor(snapshots: readonly MapSnapshot[], now: MapSnapshot, 
   return { dayOne, month };
 }
 
-const when = (name: string) => (name === "Day one" ? "on day one" : name === "Two years ago" ? "two years ago" : `in ${name}`);
+const when = (name: string) =>
+  name === "Day one" ? "on day one" : name === "Two years ago" ? "two years ago" : name.startsWith("The ") ? `in the ${name.slice(4)}` : `in ${name}`;
 
-/** The text a screen reader gets for the drawing: each axis that differs, in the screen's own words. */
+/**
+ * The text a screen reader gets for the drawing: each axis that differs, in the screen's own words.
+ * The dashed outline is drawn from the rung, so a rung that moved is named with its rung word, and
+ * a status that moved with its status word. When both moved, both are said.
+ */
 export function compareSentence(then: MapSnapshot, thenName: string, now: MapSnapshot, label: (a: Aspect) => string): string[] {
-  const word = (s: MapSnapshot["statuses"][Aspect]) => STATUS_LABEL[s] || "Unasked";
-  return ASPECTS.filter((a) => then.statuses[a] !== now.statuses[a] || then.rungs[a] !== now.rungs[a]).map(
-    (a) => `${label(a)}: ${word(then.statuses[a])} ${when(thenName)}, ${word(now.statuses[a])} now.`,
-  );
+  return ASPECTS.flatMap((a) => {
+    const moved: Array<(s: MapSnapshot) => string> = [];
+    if (then.statuses[a] !== now.statuses[a]) moved.push((s) => STATUS_LABEL[s.statuses[a]] || "Unasked");
+    if (then.rungs[a] !== now.rungs[a]) moved.push((s) => RUNG_LABEL[s.rungs[a]]);
+    if (moved.length === 0) return [];
+    // One "Unasked" for an axis with neither a status nor a rung, not two.
+    const say = (s: MapSnapshot) => [...new Set(moved.map((w) => w(s)))].join(" and ");
+    return [`${label(a)}: ${say(then)} ${when(thenName)}, ${say(now)} now.`];
+  });
 }

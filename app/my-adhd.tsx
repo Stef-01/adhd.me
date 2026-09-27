@@ -104,6 +104,7 @@ export function MyAdhd() {
   }, [compare]);
   // The month is the default when there is one: "then" is most useful as a month ago.
   const [picked, setPicked] = useState<string | null>(null);
+  const thenRadios = useRef<HTMLSpanElement | null>(null);
   const then = options.find((o) => o.id === picked) ?? options[options.length - 1] ?? null;
   const baseline = useMemo(() => (then ? pointsOf(then.snapshot) : null), [then]);
   const thenText = useMemo(
@@ -120,14 +121,37 @@ export function MyAdhd() {
       .map((c) => ({ note: c.note, aspect: lead.aspect }));
   }, [record]);
   const line = useMemo(() => standsOut(record), [record]);
+  // The radio pattern: only the checked one is in the tab order, and the arrows move the choice
+  // and the focus together, wrapping at either end.
+  const pickByKey = (event: React.KeyboardEvent<HTMLButtonElement>, at: number) => {
+    const last = options.length - 1;
+    const to =
+      event.key === "ArrowRight" || event.key === "ArrowDown" ? (at === last ? 0 : at + 1)
+      : event.key === "ArrowLeft" || event.key === "ArrowUp" ? (at === 0 ? last : at - 1)
+      : event.key === "Home" ? 0
+      : event.key === "End" ? last
+      : null;
+    if (to === null) return;
+    event.preventDefault();
+    setPicked(options[to]!.id);
+    thenRadios.current?.querySelectorAll<HTMLButtonElement>('[role="radio"]')[to]?.focus();
+  };
   // The name of the dashed shape, right under the chart and above the axes it is drawn across.
   const thenPill = then && (
     <div className="map-then-pill">
       <span className="map-then-swatch" aria-hidden="true" />
       {options.length > 1 ? (
-        <span className="map-then-options" role="radiogroup" aria-label="Compare with">
-          {options.map((o) => (
-            <button key={o.id} type="button" role="radio" aria-checked={o.id === then.id} onClick={() => setPicked(o.id)}>
+        <span ref={thenRadios} className="map-then-options" role="radiogroup" aria-label="Compare with">
+          {options.map((o, i) => (
+            <button
+              key={o.id}
+              type="button"
+              role="radio"
+              aria-checked={o.id === then.id}
+              tabIndex={o.id === then.id ? 0 : -1}
+              onClick={() => setPicked(o.id)}
+              onKeyDown={(event) => pickByKey(event, i)}
+            >
               {o.name}
             </button>
           ))}

@@ -17,7 +17,11 @@ function memory() {
 }
 
 const tz = process.env.TZ;
-afterEach(() => { process.env.TZ = tz; });
+afterEach(() => {
+  // Assigning undefined would store the string "undefined", which is not an unset zone.
+  if (tz === undefined) delete process.env.TZ;
+  else process.env.TZ = tz;
+});
 
 describe("the stored shape", () => {
   it("names the same axes, words and rungs the map does", () => {
@@ -119,10 +123,57 @@ describe("what the hub compares against", () => {
     expect(monthName("2026-08-20", today)).toBe("August");
   });
 
+  it("says last year for any month in last year, even under twelve whole months", () => {
+    // Eleven months and a day: this month's own name, a year back.
+    expect(monthName("2025-09-28", today)).toBe("September last year");
+    expect(monthName("2025-09-27", today)).toBe("September last year");
+    // A later month number than today's, eleven months back.
+    expect(monthName("2025-10-01", today)).toBe("October last year");
+    expect(monthName("2025-12-31", today)).toBe("December last year");
+    // The first day of this year is still this year.
+    expect(monthName("2026-01-01", today)).toBe("January");
+  });
+
+  it("says two years ago from two calendar years back, where last year would name the wrong year", () => {
+    // Twenty three whole months, but last September was a year later than this one.
+    expect(monthName("2024-09-28", today)).toBe("The September before last");
+    expect(monthName("2024-09-27", today)).toBe("Two years ago");
+    // Across New Year: last December is last year; the December before it is not.
+    const january = new Date(2026, 0, 10);
+    expect(monthName("2025-12-15", january)).toBe("December last year");
+    expect(monthName("2024-12-20", january)).toBe("The December before last");
+    expect(monthName("2025-01-10", january)).toBe("January last year");
+  });
+
+  it("says the month before last in the middle of a sentence without a capital", () => {
+    const then = snap("2024-09-28", { starting: ["needs-support", "named"] });
+    const now = snap("2026-09-27", { starting: ["needs-support", "kept"] });
+    expect(compareSentence(then, "The September before last", now, (a) => ASPECT_LABELS[a])).toEqual([
+      `${ASPECT_LABELS.starting}: Named in the September before last, Kept now.`,
+    ]);
+  });
+
   it("gives the drawing a sentence per axis that moved, in the screen's words", () => {
     const lines = compareSentence(august, "August", now, (a) => ASPECT_LABELS[a]);
-    expect(lines).toEqual([`${ASPECT_LABELS.starting}: Needs support in August, Mostly supported now.`]);
+    expect(lines).toEqual([`${ASPECT_LABELS.starting}: Needs support and Explored in August, Mostly supported and Working now.`]);
     expect(lines.join(" ")).not.toMatch(/\d/);
+  });
+
+  it("names a rung that moved, because the dashed outline is drawn from the rung", () => {
+    const named = snap("2026-08-20", { starting: ["needs-support", "named"] });
+    const kept = snap("2026-09-27", { starting: ["needs-support", "kept"] });
+    const lines = compareSentence(named, "August", kept, (a) => ASPECT_LABELS[a]);
+    expect(lines).toEqual([`${ASPECT_LABELS.starting}: Named in August, Kept now.`]);
+    expect(lines.join(" ")).not.toMatch(/\d/);
+  });
+
+  it("names only the status when only the status moved, and says Unasked once", () => {
+    const before = snap("2026-08-20", { starting: ["needs-support", "kept"] });
+    const after = snap("2026-09-27", { starting: ["mostly-supported", "kept"], focus: ["still-learning", "named"] });
+    expect(compareSentence(before, "Day one", after, (a) => ASPECT_LABELS[a])).toEqual([
+      `${ASPECT_LABELS.starting}: Needs support on day one, Mostly supported now.`,
+      `${ASPECT_LABELS.focus}: Unasked on day one, Still learning and Named now.`,
+    ]);
   });
 
   it("draws then the way the radar draws now", () => {
