@@ -634,8 +634,11 @@ After a skip with nothing else to go on there is no "For you", so "Choose goals"
 - The panel lists at most five rows, games first and modules after, instead of three of each.
 - N8, the phone design: two prototypes, dots with lists and four quadrants, are drawn from the real
   parts and palette by `scripts/care-map-phone-proto.mjs` and captured at 390 with word counts under
-  "The care map on a phone: two options" in `qa/ux-2026-09/README.md`. They wait on the founder. The
-  shipped map is unchanged on a phone and its labels stay exempt from the 12px sweep until one is built.
+  "The care map on a phone" in `qa/ux-2026-09/README.md`. The founder chose four quadrants
+  (2026-09-27), and it is built: under 768px (below which the full wheel's names fall under 12px) the
+  wheel is four quarters, each a button, a tap lists that quarter's parts under it, and a part opens the
+  panel. Before a part is chosen the panel is hidden on a phone, so the NWIA line shows from 768px and in
+  each part's "Wellness dimension" line. The map's exemption from the 12px sweep is gone.
 
 ### W10. The module page (6.01, 6.02, N2, N12) · P2 · Phase 1
 

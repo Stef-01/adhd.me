@@ -160,11 +160,19 @@ W9: upright labels, no count, games and modules in the panel, two columns on des
 | Before | ![The care map, a part of life open, before, 390](care-map-open-before-390.jpg) | ![The care map, a part of life open, before, 1440](care-map-open-before-1440.jpg) |
 | After | ![The care map, a part of life open, after, 390](care-map-open-after-390.jpg) | ![The care map, a part of life open, after, 1440](care-map-open-after-1440.jpg) |
 
-## The care map on a phone: two options
+## The care map on a phone
 
-N8: at 390 the names on the wheel render at about 8px. These are the two ways to fix it, drawn from
-the real parts and palette by `scripts/care-map-phone-proto.mjs`. The shipped map stays as it is until
-one is chosen.
+N8: at 390 the names on the wheel rendered at about 8px. The founder chose option 2 (2026-09-27), and
+it is built: under 768px the wheel is four quarters, a tap lists that quarter's parts, and a part opens
+the panel. `/approach/map` 80 → 11 words at 390; with a part open 94 → 77.
+
+| Closed | Brain open | A part open |
+| --- | --- | --- |
+| ![Care map on a phone, 390](care-map-phone-after-390.png) | ![Brain open, 390](care-map-phone-after-open-390.png) | ![Starting open, 390](care-map-phone-after-part-390.png) |
+
+### The two options it was chosen from
+
+Drawn from the real parts and palette by `scripts/care-map-phone-proto.mjs`.
 
 | | Option 1: dots and lists | Option 2: four quadrants |
 | --- | --- | --- |

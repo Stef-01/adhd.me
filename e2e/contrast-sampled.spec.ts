@@ -4,9 +4,9 @@
 // the pixels behind it, and holds the text colour to 4.5:1 (3:1 when large) against the median.
 //
 // It also holds a floor on size: no visible patient text under 12px, at the four widths PLAN.md
-// §8 names: 320, 390, 768 and 1440 (W11). The care map's SVG labels are exempt until the phone design in PLAN.md
-// W9 (N8) is chosen and built. Text drawn into decorative artwork (an aria-hidden SVG) and the
-// logotype are pictures, not reading text.
+// §8 names: 320, 390, 768 and 1440 (W11). The care map's labels are held too: under 768px the wheel
+// is four quarters (N8), and from 768px a node's name renders at 12px or more. Text drawn into
+// decorative artwork (an aria-hidden SVG) and the logotype are pictures, not reading text.
 
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page } from "@playwright/test";
@@ -18,7 +18,7 @@ import { contextFor, reach, routes } from "../scripts/text-budget-lib.mjs";
 
 type Route = { path: string; name: string; state?: string };
 const PER_ROUTE = 60;
-const SMALL_EXEMPT = ".care-map-svg, svg[aria-hidden='true'], .brand-mark";
+const SMALL_EXEMPT = "svg[aria-hidden='true'], .brand-mark";
 /** Staff and clinician pages: their text is held by the console's own checks, not this patient floor. */
 const NOT_PATIENT = new Set(["/clinicians"]);
 

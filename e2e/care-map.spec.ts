@@ -57,6 +57,7 @@ test("from 1200px the panel sits beside the wheel and stays there; below it, a t
   await page.setViewportSize({ width: 390, height: 700 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach/map");
+  await page.getByRole("button", { name: "Body", exact: true }).click();
   await page.getByRole("button", { name: /^Sleep \(Body\)/ }).click();
   await expect(page.getByRole("heading", { name: "Sleep" })).toBeInViewport();
   // Focus stays on the node that was tapped.
@@ -79,4 +80,50 @@ test("the wheel draws from the palette: no raw colour on it", async ({ page }) =
   const raw = await page.locator(".care-map-svg [fill], .care-map-svg [stroke]").evaluateAll((els) =>
     els.flatMap((el) => ["fill", "stroke"].map((a) => el.getAttribute(a)).filter((v): v is string => Boolean(v && v.startsWith("#")))));
   expect(raw).toEqual([]);
+});
+
+// N8, the founder's pick (2026-09-27): on a phone the wheel is four quarters, a tap lists that
+// quarter's parts under it, and every name on the screen renders at 12px or more.
+for (const width of [320, 390]) {
+  test(`on a ${width}px phone the wheel is four quarters, and a tap lists that quarter's parts`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto("/approach/map");
+    await expect(page.locator(".care-map-svg")).toBeHidden();
+    await expect(page.locator(".care-map-detail")).toBeHidden();
+    const quarters = page.locator(".care-map-quarter");
+    await expect(quarters).toHaveCount(4);
+    const sizes = await page.locator(".care-map-quarters text").evaluateAll((els) =>
+      els.map((el) => parseFloat(getComputedStyle(el).fontSize) * (el as SVGTextElement).getScreenCTM()!.a));
+    for (const px of sizes) expect(px).toBeGreaterThanOrEqual(12);
+    for (const q of await quarters.all()) {
+      const box = (await q.boundingBox())!;
+      expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
+    }
+
+    const brain = page.getByRole("button", { name: "Brain", exact: true });
+    await brain.click();
+    await expect(brain).toHaveAttribute("aria-expanded", "true");
+    const parts = page.locator(".care-map-parts button");
+    await expect(parts).toHaveCount(7);
+    await expect(parts.first()).toHaveText("Starting");
+    for (const p of await parts.all()) expect((await p.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+
+    await page.getByRole("button", { name: /^Working memory \(Brain\)/ }).click();
+    await expect(page.getByRole("heading", { name: "Working memory" })).toBeVisible();
+
+    // Another quarter swaps the list and closes a panel that belongs to the first.
+    await page.getByRole("button", { name: "People", exact: true }).click();
+    await expect(brain).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator(".care-map-detail")).toBeHidden();
+    await expect(page.locator("#care-map-parts-title")).toHaveText("People");
+  });
+}
+
+test("from 768px the wheel of named parts is back", async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 900 });
+  await page.goto("/approach/map");
+  await expect(page.locator(".care-map-phone")).toBeHidden();
+  const px = await page.locator(".care-map-node text").first().evaluate((el) =>
+    parseFloat(getComputedStyle(el).fontSize) * (el as SVGTextElement).getScreenCTM()!.a);
+  expect(px).toBeGreaterThanOrEqual(12);
 });

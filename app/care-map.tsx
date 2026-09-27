@@ -10,9 +10,13 @@
 // life does this sit?" without a chart.
 //
 // The SVG is a list of real buttons: every node is focusable, labelled, and works by keyboard.
+//
+// On a phone (under 768px, where the wheel is too narrow for a node's name to reach 12px) the wheel
+// is four quarters instead (N8, founder's pick, 2026-09-27): a tap on a quarter lists its parts
+// under the wheel, and a tap on a part opens the same panel.
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { ArrowRight, BookOpen, Play } from "@phosphor-icons/react";
 import { panelFor } from "@/learn/games";
 import { LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Layer, type Subdomain } from "@/model/layers";
@@ -99,9 +103,13 @@ function costWords(cost: number): string {
 /** Body and environment sit on the bottom half, where a clockwise arc would draw letters upside down. */
 const BOTTOM: ReadonlySet<Layer> = new Set(["body", "environment"]);
 
+/** The phone wheel's quarter labels sit at the middle of each quarter, in viewBox units. */
+const QUARTER_LABEL_R = 156;
+
 export function CareMap() {
   const { record } = useModel();
   const [selected, setSelected] = useState<Subdomain | null>(null);
+  const [quarter, setQuarter] = useState<Layer | null>(null);
   const positions = useMemo(nodePositions, []);
   const panel = useRef<HTMLElement>(null);
   // Under 1200px the panel sits below the wheel: after a tap, bring it into view if it is off the
@@ -123,6 +131,13 @@ export function CareMap() {
     for (const c of n.contributors) if (!signal.has(c.subdomain)) signal.set(c.subdomain, `${c.note}.`);
   }
   const entry = selected ? SUBDOMAINS.find((s) => s.id === selected) : null;
+  // A second tap on the open quarter closes it; a part from another quarter leaves the panel.
+  const toggleQuarter = (layer: Layer) => {
+    const next = quarter === layer ? null : layer;
+    setQuarter(next);
+    if (entry && entry.layer !== next) setSelected(null);
+  };
+  const ordered = [...LAYERS.filter((l) => l !== quarter), ...LAYERS.filter((l) => l === quarter)];
   const { games, modules } = selected ? panelFor(selected) : { games: [], modules: [] };
 
   return (
@@ -175,7 +190,58 @@ export function CareMap() {
         })}
       </svg>
 
-      <section ref={panel} className="care-map-detail" aria-live="polite" aria-labelledby="care-map-title">
+      {/* The phone's wheel: four quarters, each a button. The open one is drawn last so its ring
+          is not covered by a neighbour. */}
+      <div className="care-map-phone">
+        <svg className="care-map-quarters" viewBox="0 0 500 500" role="group" aria-label="The care map: brain, body, environment and people">
+          {ordered.map((layer) => {
+            const [a, b] = WEDGE[layer];
+            const [x, y] = polar((a + b) / 2, QUARTER_LABEL_R);
+            const isOpen = quarter === layer;
+            return (
+              <g
+                key={layer}
+                className="care-map-quarter"
+                role="button"
+                tabIndex={0}
+                aria-label={LAYER_LABELS[layer]}
+                aria-expanded={isOpen}
+                onClick={() => toggleQuarter(layer)}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleQuarter(layer); } }}
+              >
+                <path d={wedgePath(layer)} style={{ fill: COLOURS[layer].fill, stroke: isOpen ? "var(--ink)" : "var(--paper)" }} strokeWidth={isOpen ? 5 : 4} />
+                <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontSize="25" fontWeight="700" style={{ fill: COLOURS[layer].ink }}>
+                  {LAYER_LABELS[layer]}<tspan aria-hidden="true" dx="8">{isOpen ? "−" : "+"}</tspan>
+                </text>
+              </g>
+            );
+          })}
+          <circle cx={CX} cy={CY} r={R_IN - 6} style={{ fill: "var(--paper)" }} />
+          <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central" fontSize="22" fontWeight="700" style={{ fill: "var(--ink)" }}>You</text>
+        </svg>
+        {quarter && (
+          <section className="care-map-parts" aria-labelledby="care-map-parts-title" style={{ "--l-bg": COLOURS[quarter].fill, "--l-ink": COLOURS[quarter].ink } as CSSProperties}>
+            <h2 id="care-map-parts-title">{LAYER_LABELS[quarter]}</h2>
+            <ul>
+              {subdomainsOf(quarter).map((s) => (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    className={signal.has(s.id) ? "is-signal" : undefined}
+                    aria-label={`${s.label} (${LAYER_LABELS[s.layer]})${signal.has(s.id) ? ", in your picture" : ""}`}
+                    aria-pressed={selected === s.id}
+                    onClick={() => open(s.id)}
+                  >
+                    {s.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+
+      <section ref={panel} className={`care-map-detail${entry ? "" : " is-empty"}`} aria-live="polite" aria-labelledby="care-map-title">
         {entry ? (
           <>
             <h2 id="care-map-title">{entry.label}</h2>

@@ -203,6 +203,27 @@
 .care-map-modules a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) { .care-map-modules a:hover { background: var(--accent-soft); } }
 .care-map-you { margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-deep); font-size: 0.875rem; line-height: 1.5; }
+/* The phone's care map (N8, founder's pick 2026-09-27): under 768px the wheel is too narrow for a
+   node's 8.75-unit name to reach 12px, so it becomes four quarters, each a button, and a tap lists
+   that quarter's parts under it. The quarter names render at 14px on a 320px phone, 18px at 390. */
+.care-map-phone { display: none; }
+.care-map-quarters { width: min(420px, 100%); height: auto; display: block; margin: 0 auto; }
+.care-map-quarter { cursor: pointer; touch-action: manipulation; }
+.care-map-quarter:focus:not(:focus-visible) { outline: none; }
+.care-map-quarter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.care-map-parts h2 { margin: 0 0 12px; font-size: 1.0625rem; font-weight: 700; }
+.care-map-parts ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.care-map-parts button { min-height: 44px; padding: 0 14px; border: 1.5px solid var(--l-ink); border-radius: 999px; background: var(--paper); color: var(--l-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; touch-action: manipulation; }
+.care-map-parts button.is-signal { border-color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.care-map-parts button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); background: var(--l-bg); }
+.care-map-parts button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) { .care-map-parts button:hover { background: var(--l-bg); } }
+@media (max-width: 767.98px) {
+  .care-map-svg { display: none; }
+  .care-map-phone { display: grid; gap: 20px; }
+  /* Before a part is chosen the panel has nothing to say on a phone; the quarters are the invitation. */
+  .care-map-detail.is-empty { display: none; }
+}
 
 @media (max-width: 767px) {
   .perspective-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -366,6 +366,9 @@ export async function reach(page, route, base) {
   if (route.state === "care-map-tap") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
     await page.reload({ waitUntil: "networkidle" });
+    // On a phone the wheel is four quarters: the part is one tap further in (N8).
+    const quarter = page.locator(".care-map-quarter[aria-label='Brain']");
+    if (await quarter.isVisible()) await quarter.click();
     await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
     await page.locator("#care-map-title", { hasText: "Starting" }).waitFor({ timeout: 8000 });
   }
