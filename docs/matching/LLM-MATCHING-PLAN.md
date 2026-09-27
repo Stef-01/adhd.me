@@ -540,15 +540,18 @@ server-side setting (`ADHDME_LLM_LEVEL=0..5`); at 0 the finder is exactly today'
 Built: `src/lib/llm/client.ts` (128 lines), `meter.ts` (75), `cache.ts` (27);
 `src/lib/matching/llm-read.ts` (128, with the key meaning lines); `eval/metrics.ts` (104),
 `eval/sets.ts` (73), `eval/run.ts` (243); `scripts/match-eval.mjs` (26); 12 hand-written cassettes.
-804 source lines against the 350 this plan estimated for step 0 and L1; the runner is the largest
-part (report, gates, breakers) and the first place to trim. 707 lines of tests. `pnpm test` passes.
+804 source lines against the 350 this plan estimated for step 0 and L1, trimmed to 774 with the
+reports unchanged (one source for the default model instead of three, duplication out); what is left
+is the gates and report fields this plan names. 707 lines of tests. `pnpm test` passes.
 
 Where the plan was wrong, and what the build did instead:
 
-- The vocabulary has 9 manner traits, not 6, and the corpus 563 entries, not 565. Five probe
-  requests in `probes.json` add the classes the corpus lacks; C6 still has 1 entry and C8 has 2, so
-  P2 and P3 take every entry of a class that has fewer than they ask for. Writing ten long
-  narratives (C6) and ten requests with instructions in them (C8) is the next corpus task.
+- The vocabulary has 9 manner traits, not 6, and the corpus 563 entries, not 565. `probes.json`
+  adds what the corpus lacks: 25 requests, among them ten long narratives (C6) and ten requests with
+  instructions in them (C8), five of each in cue words (pinned in `reaches`) and five without (pinned
+  in `aspires`); two C8 entries pin `never` keys the instruction tries to add. C6 now has 11 entries
+  and C8 12, enough for P3's six each. L0 on them: C6 NDCG@3 0.827 real and 0.694 synthetic, read
+  exactly right 45%; C8 0.845 and 0.872, 58%, no `never` key heard.
 - `reaches` pins are by definition what the lexicon hears, so L0 recall on them is 1.000 and "at
   least L0's" allowed no miss at all. The gate is now "within 0.02 of L0's" (section 7).
 - 11 of the 31 `aspires` pins wait on the founder's decision about reading self-states, and the
@@ -564,11 +567,12 @@ Where the plan was wrong, and what the build did instead:
   resolve the `@/` imports; `syntheticRoster` is passed in by the script, since `src/` may not
   import it.
 
-**L0 baseline** (the lexicon, 568 entries including probes): recall on `reaches` 1.000, `aspires`
-0 of 31, precision (lower bound) 1.000, `never` violations 0, read exactly right 94.4%. Ranking
-against the oracle: real roster NDCG@3 0.963, hit@1 0.946; `syntheticRoster(50)` 0.970 and 0.957.
-The weak classes are C7 (NDCG@3 0.467, hit@1 0.250: exactly where the lexicon cannot hear) and C4
-(0.972). Reports: `qa/matching/reports/L0-P0-*.md`, `L1-P0-*.md` (L1 passes P0 on cassettes).
+**L0 baseline** (the lexicon, 588 entries including probes): recall on `reaches` 1.000, `aspires`
+keys 0 of 53 heard, precision (lower bound) 1.000, `never` violations 0, read exactly right 92.9%. Ranking
+against the oracle: real roster NDCG@3 0.957, hit@1 0.935; `syntheticRoster(50)` 0.961 and 0.944.
+The weak classes are exactly where the lexicon cannot hear: C7 (NDCG@3 0.467, hit@1 0.250), C6
+(0.827, and 0.694 on the synthetic roster), C8 (0.845) and C4 (0.972). Reports:
+`qa/matching/reports/L0-P0-*.md`, `L1-P0-*.md` (L1 passes P0 on cassettes).
 
 **The founder's first live run:** put `OPENAI_API_KEY` in `.env.local`, leave
 `ADHDME_LLM_MODEL` unset so the prompt hash matches the committed P0 report, then run
