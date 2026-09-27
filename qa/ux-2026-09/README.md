@@ -320,3 +320,22 @@ The place sits under the words in the search card; the map's caption is 12px.
 | --- | --- | --- |
 | Before | ![Nothing understood, before, 390](finder-unread-before-390.jpg) | ![Nothing understood, before, 1440](finder-unread-before-1440.jpg) |
 | After | ![Nothing understood, after, 390](finder-unread-after-390.jpg) | ![Nothing understood, after, 1440](finder-unread-after-1440.jpg) |
+
+### A profile, "Why matched" open
+
+No serif "About" over the bio, the name in the sans at every width, no stray dividers in the facts
+at 390, and a quote under a reason only where it says more than the reason. 97 → 92 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Why matched open, before, 390](profile-why-before-390.jpg) | ![Why matched open, before, 1440](profile-why-before-1440.jpg) |
+| After | ![Why matched open, after, 390](profile-why-after-390.jpg) | ![Why matched open, after, 1440](profile-why-after-1440.jpg) |
+
+### Compare
+
+One table, differences first, no uppercase labels; the foot is one line. 57 → 28 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Compare, before, 390](compare-before-390.jpg) | ![Compare, before, 1440](compare-before-1440.jpg) |
+| After | ![Compare, after, 390](compare-after-390.jpg) | ![Compare, after, 1440](compare-after-1440.jpg) |

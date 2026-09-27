@@ -270,7 +270,9 @@ test("refinement stays with results while the profile leads with the bio", async
   await intoResults(page);
   await page.locator(".clinician-row").first().click();
   await expect(page.locator(".profile-content")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "About" })).toBeVisible();
+  // The bio leads, under no heading of its own: the sentence says what it is.
+  await expect(page.locator(".profile-about p").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "About" })).toHaveCount(0);
   await expect(page.locator(".profile-clarify")).toHaveCount(0);
   await expect(page.locator(".clarify-chip")).toHaveCount(0);
 });
@@ -378,7 +380,7 @@ test("collective roster coverage is never presented as one doctor's complete fit
   await page.locator(".clinician-row").filter({ hasText: "Dr Anu Saxena" }).click();
   const why = page.locator(".profile-disclosure").filter({ hasText: "Why matched" });
   await why.locator("summary").click();
-  await expect(why).toContainText("this listing does not show a telehealth first appointment");
+  await expect(why).toContainText(/telehealth[^.]*, which this listing does not show\./i);
 });
 
 test("and still says it when the fit really is complete (O121 non-vacuity)", async ({ page }) => {

@@ -196,8 +196,7 @@ export function ProfileStage({
           })}
         </ul>
 
-        <section className="profile-about">
-          <h2>About</h2>
+        <section className="profile-about" aria-label="About">
           <p>{firstSentence(clinician.summary)}</p>
           <details className="profile-more">
             <summary>
@@ -222,7 +221,9 @@ export function ProfileStage({
                     {profileEvidence.slice(0, 3).map((need) => (
                       <li key={need.label}>
                         <strong>{need.label}</strong>
-                        <span>From your words: &ldquo;{need.matched}&rdquo;</span>
+                        {/* The quote only where it says more than the label: "longer first
+                            appointment" under "A longer first appointment" said it twice. */}
+                        {!saysAgain(need.label, need.matched) && <span>From your words: &ldquo;{need.matched}&rdquo;</span>}
                       </li>
                     ))}
                   </ul>
@@ -293,6 +294,14 @@ export function ProfileStage({
       </div>
     </MotionScreen>
   );
+}
+
+/** True when the label already carries every word of the quote, so the quote adds nothing. */
+function saysAgain(label: string, quote: string): boolean {
+  const words = (text: string) => text.toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const inLabel = new Set(words(label));
+  const quoted = words(quote);
+  return quoted.length > 0 && quoted.every((word) => inLabel.has(word));
 }
 
 /** The first sentence of a declaration; the rest waits behind the fold. */

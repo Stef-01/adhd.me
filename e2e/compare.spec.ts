@@ -54,17 +54,20 @@ test("comparison is tucked inside the profile's match explanation", async ({ pag
   await expect(why.getByRole("button", { name: /Compare with Dr/ })).toBeVisible();
 });
 
-test("comparison opens on both names and groups useful rows first", async ({ page }) => {
+test("comparison opens on both names and puts the rows where they differ first", async ({ page }) => {
   await intoResults(page);
   await openCompare(page);
 
   await expect(page.locator(".compare-head")).toHaveCount(2);
-  await expect(page.locator(".compare-group li")).not.toHaveCount(0);
-  const headings = await page.locator(".compare-group h2").allTextContents();
-  if (headings.includes("Where they differ")) expect(headings[0]).toBe("Where they differ");
-  for (const group of await page.locator(".compare-group").all()) {
-    expect(await group.locator("li").count()).toBeGreaterThan(0);
-  }
+  const rows = page.locator(".compare-rows li");
+  await expect(rows).not.toHaveCount(0);
+  // One table, no group labels: every row carries both verdicts, and the rows that differ lead.
+  const differs = await rows.evaluateAll((items) =>
+    items.map((li) => new Set([...li.querySelectorAll(".compare-cell")].map((c) => c.classList.contains("is-listed"))).size > 1),
+  );
+  expect(differs.length).toBeGreaterThan(0);
+  expect(differs.indexOf(false) === -1 || differs.slice(differs.indexOf(false)).every((d) => !d)).toBe(true);
+  await expect(page.locator(".compare-content h2")).toHaveCount(0);
 });
 
 test("the table states its basis and refuses to become a ranking", async ({ page }) => {
@@ -72,7 +75,7 @@ test("the table states its basis and refuses to become a ranking", async ({ page
   await openCompare(page);
 
   const basis = page.locator(".compare-basis");
-  await expect(basis).toContainText("declares about their own practice");
+  await expect(basis).toContainText("declares");
   await expect(basis).toContainText("not a ranking");
   const body = (await page.locator(".compare-content").innerText()).toLowerCase();
   for (const forbidden of ["better", "best", "winner", "score", "%", "out of"]) {

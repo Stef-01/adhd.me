@@ -67,5 +67,5 @@ test("progressive disclosure opens known details without changing the page hiera
   await why.locator("summary").click();
   await expect(why).toHaveAttribute("open", "");
   await expect(why.locator(".profile-disclosure-body")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "About" })).toBeVisible();
+  await expect(page.locator(".profile-about p").first()).toBeVisible();
 });

@@ -373,11 +373,12 @@ export function missedAskParts(need: NeedSignal): { before: string; label: strin
   if (facet.kind === "language") {
     after = ", not listed among the languages they consult in. Another listing may.";
   } else if (facet.kind === "preference") {
+    // The label is already in the sentence ("You also asked for bulk billing"): the rest does not say it twice.
     const detail: Record<typeof facet.preference, string> = {
       "woman-gp": "this clinician does not match that preference",
-      "telehealth-first": "this listing does not show a telehealth first appointment",
-      "bulk-billing": "this listing does not show bulk billing",
-      "longer-appointment": "this listing does not show a longer first appointment",
+      "telehealth-first": "which this listing does not show",
+      "bulk-billing": "which this listing does not show",
+      "longer-appointment": "which this listing does not show",
     };
     after = `, ${detail[facet.preference]}. Another listing may.`;
   }

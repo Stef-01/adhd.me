@@ -10,8 +10,7 @@
 // evidence the ranking scored, so this table cannot disagree with the order it explains.
 // There is no score, no total and no winner: the list already has an order, and a compare
 // screen that re-asserted it would be arguing rather than explaining. W193's posture is
-// stated ONCE beneath the table instead of per cell, because "not something they declare"
-// eight times is a drumbeat, and the reader needs the fact once.
+// stated ONCE beneath the table, in one short line.
 
 import { ArrowLeft, CheckCircle, Minus } from "@phosphor-icons/react";
 import { type Clinician } from "@/demo/clinicians";
@@ -22,50 +21,14 @@ import { ClinicianPortrait, MotionScreen, StatusLine, Wordmark } from "./shared"
 export type CompareRow = { label: string; left: boolean; right: boolean };
 
 /**
- * The three things a comparison can tell somebody, in the order they are useful.
- *
- * Differences first: they are the only rows that can decide anything. Then what both answer,
- * which is why the two were shown together. Then what neither does — the listing gap the
- * finder already says out loud on the results screen, said here about these two.
- *
- * ONLY ONE GROUP IS A TABLE, and that is the point of this screen. Two of the three headings
- * already fix both verdicts: under "Both declare" every cell said "Declared" and under
- * "Neither declares" every cell said "Not declared", so up to two-thirds of the verdicts on
- * the screen restated their own heading, in columns, twice per row. A comparison table earns
- * its columns by putting two different answers next to each other; where the answers cannot
- * differ there is nothing to put side by side, and the columns are scanning cost with no
- * information behind them. Those groups are now plain lists of the asks, and the heading
- * carries the verdict for all of them — which is also the sentence a screen reader gets,
- * unchanged, because the heading is read before its list. `columns` is the switch.
+ * The rows in the order they are useful: differences first, the only rows that can decide
+ * anything; then what both answer, which is why the two were shown together; then what neither
+ * does. One table and no group labels: each row's two verdicts say which kind it is.
  */
-const GROUPS: ReadonlyArray<{
-  key: "differ" | "both" | "neither";
-  heading: string;
-  note: string | null;
-  columns: boolean;
-  holds: (row: CompareRow) => boolean;
-}> = [
-  {
-    key: "differ",
-    heading: "Where they differ",
-    note: null,
-    columns: true,
-    holds: (row) => row.left !== row.right,
-  },
-  {
-    key: "both",
-    heading: "Both declare",
-    note: null,
-    columns: false,
-    holds: (row) => row.left && row.right,
-  },
-  {
-    key: "neither",
-    heading: "Neither declares",
-    note: "That is a gap in our listing, not in what you asked for.",
-    columns: false,
-    holds: (row) => !row.left && !row.right,
-  },
+const ORDER: ReadonlyArray<(row: CompareRow) => boolean> = [
+  (row) => row.left !== row.right,
+  (row) => row.left && row.right,
+  (row) => !row.left && !row.right,
 ];
 
 function Cell({ answered, who, ask }: { answered: boolean; who: string; ask: string }) {
@@ -117,7 +80,7 @@ export function CompareStage({
             put one name over the ask column and left the reader joining a fact across two
             regions, the thing the layout law names outright. */}
         <div className="compare-heads">
-          <p className="compare-heads-label">What you asked for</p>
+          <span aria-hidden="true" />
           <div className="compare-head">
             <span className="compare-portrait">
               <ClinicianPortrait clinician={left} variant="thumb" />
@@ -154,38 +117,20 @@ export function CompareStage({
           </p>
         )}
 
-        {GROUPS.map((group) => {
-          const inGroup = rows.filter(group.holds);
-          if (inGroup.length === 0) return null;
-          return (
-            <section
-              className={group.columns ? "compare-group" : "compare-group is-list"}
-              key={group.key}
-            >
-              <h2>{group.heading}</h2>
-              <ul>
-                {inGroup.map((row) => (
-                  <li key={row.label}>
-                    <span className="compare-ask">{row.label}</span>
-                    {group.columns && (
-                      <>
-                        <Cell answered={row.left} who={left.shortName} ask={row.label} />
-                        <Cell answered={row.right} who={right.shortName} ask={row.label} />
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              {group.note && <p className="compare-note">{group.note}</p>}
-            </section>
-          );
-        })}
+        {rows.length > 0 && (
+          <ul className="compare-rows">
+            {ORDER.flatMap((holds) => rows.filter(holds)).map((row) => (
+              <li key={row.label}>
+                <span className="compare-ask">{row.label}</span>
+                <Cell answered={row.left} who={left.shortName} ask={row.label} />
+                <Cell answered={row.right} who={right.shortName} ask={row.label} />
+              </li>
+            ))}
+          </ul>
+        )}
 
         {/* W193's posture, once, for the whole table. */}
-        <p className="compare-basis">
-          Both columns are what each GP declares about their own practice, not a check ADHD.ME
-          performed. This is not a ranking of one against the other.
-        </p>
+        <p className="compare-basis">What each declares, not a ranking.</p>
       </div>
     </MotionScreen>
   );
