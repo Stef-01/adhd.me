@@ -148,6 +148,30 @@ describe("retries and timeouts", () => {
     await done;
     expect(fetch).toHaveBeenCalledTimes(1);
   });
+
+  it("gives the flex tier sixty seconds before it aborts", async () => {
+    vi.useFakeTimers();
+    let settled = false;
+    const fetch = (_url: string, init: { signal: AbortSignal }) =>
+      new Promise<Response>((_resolve, reject) => init.signal.addEventListener("abort", () => reject(new Error("aborted"))));
+    const done = callJson(CALL, { fetch, env: ENV, tier: "flex" }).catch((error: unknown) => ((settled = true), error));
+    await vi.advanceTimersByTimeAsync(20_000);
+    expect(settled).toBe(false);
+    await vi.advanceTimersByTimeAsync(40_000);
+    expect(await done).toBeInstanceOf(TimeoutError);
+  });
+});
+
+describe("OpenAI's options", () => {
+  it("sends the cache key, the retention and the tier only when they are set", async () => {
+    const { fetch, calls } = recording(() => reply(completed("{}")));
+    await callJson(CALL, { fetch, env: ENV });
+    await callJson({ ...CALL, cacheKey: "adhdme-l1-read", cacheRetention: "24h" }, { fetch, env: ENV, tier: "flex" });
+    const bodies = calls.map((call) => JSON.parse(call.body) as Record<string, unknown>);
+    expect(bodies[0]).not.toHaveProperty("prompt_cache_key");
+    expect(bodies[0]).not.toHaveProperty("service_tier");
+    expect(bodies[1]).toMatchObject({ prompt_cache_key: "adhdme-l1-read", prompt_cache_retention: "24h", service_tier: "flex" });
+  });
 });
 
 describe("cost", () => {
@@ -165,5 +189,14 @@ describe("cost", () => {
     expect(meter.spent).toBe(result.costUsd);
     await expect(callJson(CALL, { fetch, env: ENV, meter: new BudgetMeter(0.0001) })).rejects.toThrow(BudgetError);
     expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("charges flex at half, by the tier the answer says it was served on", async () => {
+    expect(costOf({ input: 1_000_000, cached: 0, output: 1_000_000, reasoning: 0 }, "gpt-5-nano", "flex")).toBeCloseTo((0.05 + 0.4) / 2, 12);
+    const served = (tier: string) => recording(() => reply(completed("{}", { service_tier: tier }))).fetch;
+    const flex = await callJson(CALL, { fetch: served("flex"), env: ENV, tier: "flex" });
+    const fellBack = await callJson(CALL, { fetch: served("default"), env: ENV, tier: "flex" });
+    expect(flex.costUsd).toBeCloseTo((800 * 0.05 + 60 * 0.4) / 2 / 1e6, 12);
+    expect(fellBack.costUsd).toBeCloseTo((800 * 0.05 + 60 * 0.4) / 1e6, 12);
   });
 });

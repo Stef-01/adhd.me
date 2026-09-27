@@ -128,3 +128,32 @@ numbers before and after.
   the cache (the calls are unchanged; only the vote is new) and fails the same one C4 entry, "just
   someone to talk to" read as `non-medication` (R6). Re-running cannot change it, and a prompt tuned
   to one entry of six would be tuning on the test.
+
+## R8 · cost and wait, 2026-09-28 · layer: the calls, not the reading
+
+Measured from the ledger and a benchmark of the finder's own path (`qa/_runs/bench*.mjs`, standard
+tier, no eval cache, one request after another).
+
+- **Checks never cached.** Their fixed prefix was about 937 tokens, under OpenAI's 1,024-token
+  threshold: 0.3% of their input was served from cache. Eight examples, in words the corpus does not
+  use, now carry it past the threshold and teach the one nuance the corpus asks for (a wish of someone
+  close counts unless the person refuses it): 86.3% cached, $0.000115 → $0.000057 a check on flex.
+  Accuracy on the 358 dev requests holds: precision 92.8%, recall 99.4%, aspires 70.3% (was 73.0%),
+  `never` 0%, C4 93.2%.
+- **The prefix went cold between searches.** A read after 20 idle minutes had 0 of 1,376 tokens
+  cached. Reads and checks now send `prompt_cache_key` and `prompt_cache_retention: "24h"`; in the
+  benchmark reads were 77% cached and checks 71%.
+- **Evals ran at full price.** gpt-5-nano accepts `service_tier: "flex"` at Batch rates (half); every
+  live eval phase now uses it with a 60-second timeout, and the client charges by the tier the answer
+  reports. The finder stays on the standard tier; the "fast" tier is not offered for gpt-5-nano.
+- **The last read and the last check were waited for when they could change nothing.** A reading is
+  settled once the answered reads agree on nothing beyond the lexicon and every lexicon key's refusal
+  is decided either way; a check once most checks have said no or too few are left to. Same answers by
+  construction. The finder's wait, p50 3.7 s → 3.0 s; the check stage, p90 8.2 s → 3.6 s. A request
+  the check runs for still takes about 6.9 s at p90 (three reads, then the check).
+- **Two reads instead of three** would save 28% of a search's cost but thins every margin: precision
+  90.8% to 91.4%, `never` up to 1.6%, mentions 12.5% to 25%. Kept at three. A search costs about
+  $0.00053 on the standard tier, about 1,900 to the dollar.
+- **The key.** No OpenAI key in any tracked file or in history (the pattern with a word boundary; the
+  three loose matches were "task-based" and "multiple-ask-languages"). `src/lib/llm/secrets.test.ts`
+  now fails the build if one appears.

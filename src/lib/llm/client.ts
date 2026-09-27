@@ -12,6 +12,9 @@ export type CallJson = {
   schema: { name: string; schema: object };
   maxOutputTokens: number; // at least 400, so reasoning cannot starve the answer
   sample?: number; // which of several reads of one input this is, so each caches apart; never sent
+  /** OpenAI's own prompt cache: requests with one key share a cache, and "24h" keeps a prefix warm between sparse requests. */
+  cacheKey?: string;
+  cacheRetention?: "24h";
 };
 export type Usage = { input: number; cached: number; output: number; reasoning: number };
 export type CallResult<T> = { data: T; usage: Usage; costUsd: number; fromCache: boolean };
@@ -26,14 +29,20 @@ export type Deps = {
   meter?: BudgetMeter;
   /** Evals only: a hit costs nothing and makes no fetch. */
   cache?: { get(call: CallJson): Cached | undefined; set(call: CallJson, value: Cached): void };
+  /** Evals only: "flex" is billed at Batch rates (half) and may be slower or briefly unavailable (a 429). */
+  tier?: "flex";
 };
 
-/** USD per million tokens. Reasoning tokens are billed as output. */
+/** USD per million tokens, standard tier (the pricing page, 2026-09-28). Reasoning tokens are billed as output. */
 export const PRICES: Record<string, { input: number; cached: number; output: number }> = {
   "gpt-5-nano": { input: 0.05, cached: 0.005, output: 0.4 },
-  "gpt-5-mini": { input: 0.25, cached: 0.025, output: 2 }, // to be confirmed on the pricing page before use
+  "gpt-5-mini": { input: 0.25, cached: 0.025, output: 2 },
 };
+/** The flex tier is billed at Batch rates: half of every standard price, for both models above. */
+export const FLEX_RATE = 0.5;
 export const TIMEOUT_MS = 20_000;
+/** Flex answers more slowly and is for evals, where nobody is waiting. */
+export const FLEX_TIMEOUT_MS = 60_000;
 export const modelOf = (env: Record<string, string | undefined>) => env.ADHDME_LLM_MODEL ?? "gpt-5-nano";
 /** `ADHDME_LLM_LEVEL` in effect: 0 unless there is a key, or the e2e cassettes stand in for one. */
 export const levelOf = (env: Record<string, string | undefined>) =>
@@ -45,14 +54,16 @@ export class SchemaError extends Error { name = "SchemaError"; }
 export class TimeoutError extends Error { name = "TimeoutError"; }
 export class HttpError extends Error { name = "HttpError"; }
 
-export function costOf(usage: Usage, model: string): number {
+export function costOf(usage: Usage, model: string, tier?: string): number {
   const price = PRICES[model];
   if (!price) throw new Error(`no price for ${model}`);
-  return ((usage.input - usage.cached) * price.input + usage.cached * price.cached + usage.output * price.output) / 1e6;
+  const rate = tier === "flex" ? FLEX_RATE : 1;
+  return (rate * ((usage.input - usage.cached) * price.input + usage.cached * price.cached + usage.output * price.output)) / 1e6;
 }
 
 type Body = {
   status?: string;
+  service_tier?: string;
   incomplete_details?: { reason?: string } | null;
   output_text?: string;
   output?: { type: string; content?: { type: string; text?: string; refusal?: string }[] }[];
@@ -69,7 +80,7 @@ export async function callJson<T>(request: CallJson, deps: Deps = {}): Promise<C
 
   // Worst case: every three characters a token, every output token spent.
   const chars = call.instructions.length + call.input.length + JSON.stringify(call.schema).length;
-  const hold = costOf({ input: Math.ceil(chars / 3), cached: 0, output: call.maxOutputTokens, reasoning: 0 }, call.model);
+  const hold = costOf({ input: Math.ceil(chars / 3), cached: 0, output: call.maxOutputTokens, reasoning: 0 }, call.model, deps.tier);
   deps.meter?.reserve(hold);
   try {
     const body = await post(call, key, env.ADHDME_LLM_BASE ?? "https://api.openai.com", deps);
@@ -80,7 +91,7 @@ export async function callJson<T>(request: CallJson, deps: Deps = {}): Promise<C
       output: u.output_tokens ?? 0,
       reasoning: u.output_tokens_details?.reasoning_tokens ?? 0,
     };
-    const costUsd = costOf(usage, call.model);
+    const costUsd = costOf(usage, call.model, body.service_tier); // the tier the API says it used
     deps.meter?.charge(costUsd, usage, call.model);
 
     if (body.status === "incomplete") throw new IncompleteError(body.incomplete_details?.reason ?? "incomplete");
@@ -103,12 +114,14 @@ export async function callJson<T>(request: CallJson, deps: Deps = {}): Promise<C
 
 async function post(call: CallJson & { model: string }, key: string, base: string, deps: Deps): Promise<Body> {
   const fetchFn: FetchLike = deps.fetch ?? ((url, init) => fetch(url, init));
-  const { model, instructions, input, effort, maxOutputTokens, schema } = call;
+  const { model, instructions, input, effort, maxOutputTokens, schema, cacheKey, cacheRetention } = call;
   const format = { type: "json_schema", name: schema.name, schema: schema.schema, strict: true };
-  const body = JSON.stringify({ model, instructions, input, reasoning: { effort }, max_output_tokens: maxOutputTokens, text: { format } });
+  const options = { ...(cacheKey ? { prompt_cache_key: cacheKey } : {}), ...(cacheRetention ? { prompt_cache_retention: cacheRetention } : {}), ...(deps.tier ? { service_tier: deps.tier } : {}) };
+  const body = JSON.stringify({ model, instructions, input, reasoning: { effort }, max_output_tokens: maxOutputTokens, text: { format }, ...options });
+  const timeoutMs = deps.tier === "flex" ? FLEX_TIMEOUT_MS : TIMEOUT_MS;
   for (let attempt = 0; ; attempt += 1) {
     const abort = new AbortController();
-    const timer = setTimeout(() => abort.abort(), TIMEOUT_MS);
+    const timer = setTimeout(() => abort.abort(), timeoutMs);
     let reply: Reply;
     try {
       const headers = { "content-type": "application/json", authorization: `Bearer ${key}` };
@@ -116,7 +129,7 @@ async function post(call: CallJson & { model: string }, key: string, base: strin
       if (reply.ok) return (await reply.json()) as Body;
     } catch (error) {
       if (deps.meter) deps.meter.errors += 1;
-      throw abort.signal.aborted ? new TimeoutError(`no answer in ${TIMEOUT_MS / 1000}s`) : error;
+      throw abort.signal.aborted ? new TimeoutError(`no answer in ${timeoutMs / 1000}s`) : error;
     } finally {
       clearTimeout(timer);
     }

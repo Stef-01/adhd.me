@@ -100,14 +100,14 @@ describe("fromModel", () => {
 
 describe("readRequest", () => {
   it("sends the static instructions and the request as input, at low effort with room to reason", async () => {
-    const bodies: { instructions: string; input: string; reasoning: object; max_output_tokens: number }[] = [];
+    const bodies: { instructions: string; input: string; reasoning: object; max_output_tokens: number; prompt_cache_key?: string; prompt_cache_retention?: string }[] = [];
     const fetch = async (_url: string, init: { body: string }) => {
       bodies.push(JSON.parse(init.body));
       return new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] })));
     };
     const reading = await readRequest("a woman GP", { fetch, env: ENV });
     expect(reading).toMatchObject({ keys: ["pref:woman-gp"], source: "llm" });
-    expect(bodies[0]).toMatchObject({ instructions: INSTRUCTIONS, input: "a woman GP", reasoning: { effort: "low" }, max_output_tokens: 1600 });
+    expect(bodies[0]).toMatchObject({ instructions: INSTRUCTIONS, input: "a woman GP", reasoning: { effort: "low" }, max_output_tokens: 1600, prompt_cache_key: "adhdme-l1-read", prompt_cache_retention: "24h" });
     expect(bodies[0]!.max_output_tokens).toBeGreaterThanOrEqual(400);
   });
 
@@ -155,6 +155,34 @@ describe("readRequest", () => {
     const fetch = async () => new Response(JSON.stringify(completed(answers[n++ % 3]!)));
     const reading = await readRequest("after-hours only, I do night shifts at the mine", { fetch, env: ENV });
     expect(reading).toMatchObject({ keys: [], source: "llm", unlisted: ["after hours", "a small practice"] });
+  });
+
+  it("settles on two reads that add nothing beyond the lexicon, without waiting for the third", async () => {
+    let n = 0;
+    const fetch = () => (n++ < 2 ? Promise.resolve(new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] })))) : new Promise<Response>(() => {}));
+    const reading = await Promise.race([readRequest("a woman GP", { fetch, env: ENV }), new Promise((resolve) => setTimeout(() => resolve("waited"), 1000))]);
+    expect(reading).toMatchObject({ keys: ["pref:woman-gp"], source: "llm" });
+  });
+
+  it("waits for the third read when the first two add a key, which the third can take away", async () => {
+    let n = 0;
+    const added = { ...EMPTY, manner: ["unhurried"] };
+    const fetch = async () => {
+      const at = n++;
+      if (at === 2) await new Promise((resolve) => setTimeout(resolve, 30));
+      return new Response(JSON.stringify(completed(at === 2 ? EMPTY : added)));
+    };
+    expect((await readRequest("someone patient", { fetch, env: ENV })).keys).toEqual([]);
+  });
+
+  it("settles the checks once two agree a key is not asked, without waiting for the third", async () => {
+    let check = 0;
+    const fetch = (_url: string, init: { body: string }) => {
+      if (JSON.parse(init.body).input === "it has to be bulk billed") return Promise.resolve(new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp", "bulk-billing"] }))));
+      return check++ < 2 ? Promise.resolve(new Response(JSON.stringify(completed({ verdicts: [{ key: "pref:woman-gp", asks: false }] })))) : new Promise<Response>(() => {});
+    };
+    const reading = await Promise.race([readRequest("it has to be bulk billed", { fetch, env: ENV }), new Promise((resolve) => setTimeout(() => resolve("waited"), 1000))]);
+    expect(reading).toMatchObject({ keys: ["pref:bulk-billing"] });
   });
 
   it("makes no check when the reads add nothing beyond the lexicon", async () => {

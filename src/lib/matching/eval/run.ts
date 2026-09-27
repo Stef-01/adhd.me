@@ -90,7 +90,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   // The corpus pins no languages, so the oracle also takes any language the text names.
   const oracleKeys = (text: string) => [...gold(byText.get(text)!), ...lexiconReading(text).keys.filter((k) => k.startsWith("language:"))];
   const deps: Deps = live
-    ? { fetch: options.fetch, env, meter, cache: new FileCache(join(root, ".cache/llm")) }
+    ? { fetch: options.fetch, env, meter, cache: new FileCache(join(root, ".cache/llm")), tier: "flex" } // nobody is waiting: half price
     : { fetch: cassetteFetch(CASSETTES, (input) => completed(isCheck(input) ? { verdicts: [] } : { ...answerFor(oracleKeys(input)), negated: bare(byText.get(input)?.mentions) })), env: { ...env, OPENAI_API_KEY: "dry" }, meter };
   const gate = new RateGate(limits.concurrency, limits.rpm);
   let [calls, streak, malformed] = [0, 0, 0];
@@ -175,7 +175,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
     `# ${level} ${phase}, ${stamp}`,
     "",
     `Result: ${pass ? "PASS" : "FAIL"}`,
-    `Prompt: ${prompt} · model ${modelOf(env)} · ${live ? "live" : level === "L0" ? "no calls" : "dry run: cassettes, then each entry's gold keys"}`,
+    `Prompt: ${prompt} · model ${modelOf(env)} · ${live ? "live, flex tier" : level === "L0" ? "no calls" : "dry run: cassettes, then each entry's gold keys"}`,
     "",
     "| Gate | Value | Pass |",
     "| --- | --- | --- |",
