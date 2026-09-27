@@ -36,11 +36,13 @@ jobs:
     # `workers: 1` are never shared between shards; every spec that needs the console seeds or
     # resets it itself (`POST /api/mock/console`, e2e/support/fixtures.ts). Two shards put each
     # run near half the wall clock. Add a third before raising any ceiling.
+    # 2026-09-27, later: a third, when the axe and sampled-contrast sweeps gained 320 and 768 as
+    # well as 390 and 1440 (docs/design/ux-evaluation-2026-09/PLAN.md §8).
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2]
-    name: e2e shard ${{ matrix.shard }} of 2
+        shard: [1, 2, 3]
+    name: e2e shard ${{ matrix.shard }} of 3
     # The suite measures ~8 minutes locally plus its own `next build`; the ceiling is
     # generous so a slow runner reports a real result rather than a timeout that reads
     # like a product failure.
@@ -77,7 +79,7 @@ jobs:
       # playwright.config.ts owns the server: it runs `next build && next start` on its
       # own port with the env the production build fails closed without. Nothing to
       # start here.
-      - run: pnpm e2e --shard=${{ matrix.shard }}/2
+      - run: pnpm e2e --shard=${{ matrix.shard }}/3
         env:
           CI: "true"
       # A red compliance gate has to be diagnosable from the run that caught it, or the

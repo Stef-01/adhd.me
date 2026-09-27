@@ -3,8 +3,8 @@
 // walks every screen the text budget walks, takes each incomplete node, hides its text, samples
 // the pixels behind it, and holds the text colour to 4.5:1 (3:1 when large) against the median.
 //
-// It also holds a floor on size: no visible patient text under 12px, at a phone's width and at a
-// desktop's (PLAN.md W11). The care map's SVG labels are exempt until the phone design in PLAN.md
+// It also holds a floor on size: no visible patient text under 12px, at the four widths PLAN.md
+// §8 names: 320, 390, 768 and 1440 (W11). The care map's SVG labels are exempt until the phone design in PLAN.md
 // W9 (N8) is chosen and built. Text drawn into decorative artwork (an aria-hidden SVG) and the
 // logotype are pictures, not reading text.
 
@@ -120,7 +120,7 @@ async function smallText(page: Page): Promise<Array<{ key: string; line: string 
 
 // The games' small labels were raised in N15, one game at a time, and the ledger that named them
 // is gone: anything under 12px now fails at either width.
-for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) test(`text axe cannot measure still clears AA, and nothing reads under 12px at ${viewport.width}`, async ({ browser, baseURL }) => {
+for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) test(`text axe cannot measure still clears AA, and nothing reads under 12px at ${viewport.width}`, async ({ browser, baseURL }) => {
   test.setTimeout(900_000);
   const base = baseURL!;
   const options = { ...contextFor(base), viewport } as Parameters<typeof browser.newContext>[0];
