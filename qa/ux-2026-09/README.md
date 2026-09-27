@@ -16,12 +16,48 @@ W1: text and chat rows beside the call rows.
 
 ## Support home
 
-W6b: example searches under the box; W6c/d: refine label, Start over.
+W6b: example searches under the box.
 
 | | 390 | 1440 |
 | --- | --- | --- |
 | Before | ![Support home, before, 390](finder-before-390.jpg) | ![Support home, before, 1440](finder-before-1440.jpg) |
 | After | ![Support home, after, 390](finder-after-390.jpg) | ![Support home, after, 1440](finder-after-1440.jpg) |
+
+## Finder results
+
+W6c, W6d: the refine button's label, one sparkle, Start over in the bar.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Finder results, before, 390](finder-results-before-390.jpg) | ![Finder results, before, 1440](finder-results-before-1440.jpg) |
+| After | ![Finder results, after, 390](finder-results-after-390.jpg) | ![Finder results, after, 1440](finder-results-after-1440.jpg) |
+
+## Settings, your data
+
+W5: save a copy, restore a copy, one delete.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Settings, your data, before, 390](settings-data-before-390.jpg) | ![Settings, your data, before, 1440](settings-data-before-1440.jpg) |
+| After | ![Settings, your data, after, 390](settings-data-after-390.jpg) | ![Settings, your data, after, 1440](settings-data-after-1440.jpg) |
+
+## Start, the welcome
+
+W5: answers stay on this device.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Start, the welcome, before, 390](start-welcome-before-390.jpg) | ![Start, the welcome, before, 1440](start-welcome-before-1440.jpg) |
+| After | ![Start, the welcome, after, 390](start-welcome-after-390.jpg) | ![Start, the welcome, after, 1440](start-welcome-after-1440.jpg) |
+
+## Privacy
+
+W5 and the matching request: what is kept and where.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Privacy, before, 390](privacy-before-390.jpg) | ![Privacy, before, 1440](privacy-before-1440.jpg) |
+| After | ![Privacy, after, 390](privacy-after-390.jpg) | ![Privacy, after, 1440](privacy-after-1440.jpg) |
 
 ## Start, the first question
 
@@ -162,12 +198,39 @@ N15: nothing under 12px, the pause eyebrow gone.
 
 ## Nina's desk
 
-N15: letter chunks at 12px.
+N15: letter chunks at 12px; the shared game shell's toolbar at 12px.
 
 | | 390 | 1440 |
 | --- | --- | --- |
 | Before | ![Nina's desk, before, 390](nina-before-390.jpg) | ![Nina's desk, before, 1440](nina-before-1440.jpg) |
 | After | ![Nina's desk, after, 390](nina-after-390.jpg) | ![Nina's desk, after, 1440](nina-after-1440.jpg) |
+
+## Jax's shop
+
+N15: price tags at 12px.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Jax's shop, before, 390](jax-before-390.jpg) | ![Jax's shop, before, 1440](jax-before-1440.jpg) |
+| After | ![Jax's shop, after, 390](jax-after-390.jpg) | ![Jax's shop, after, 1440](jax-after-1440.jpg) |
+
+## Mia's morning
+
+N15: the pocket count at 12px.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Mia's morning, before, 390](mia-before-390.jpg) | ![Mia's morning, before, 1440](mia-before-1440.jpg) |
+| After | ![Mia's morning, after, 390](mia-after-390.jpg) | ![Mia's morning, after, 1440](mia-after-1440.jpg) |
+
+## Maya's crossing
+
+N15: the shared game shell's toolbar and meter at 12px.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Maya's crossing, before, 390](maya-before-390.jpg) | ![Maya's crossing, before, 1440](maya-before-1440.jpg) |
+| After | ![Maya's crossing, after, 390](maya-after-390.jpg) | ![Maya's crossing, after, 1440](maya-after-1440.jpg) |
 
 ## /story
 
@@ -177,3 +240,12 @@ N15: route stops, pins and the figures note at 12px.
 | --- | --- | --- |
 | Before | ![/story, before, 390](story-before-390.jpg) | ![/story, before, 1440](story-before-1440.jpg) |
 | After | ![/story, after, 390](story-after-390.jpg) | ![/story, after, 1440](story-after-1440.jpg) |
+
+## A learning run, its last card
+
+A finished run links to the character game on the same subject.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A learning run, its last card, before, 390](run-last-card-before-390.jpg) | ![A learning run, its last card, before, 1440](run-last-card-before-1440.jpg) |
+| After | ![A learning run, its last card, after, 390](run-last-card-after-390.jpg) | ![A learning run, its last card, after, 1440](run-last-card-after-1440.jpg) |
