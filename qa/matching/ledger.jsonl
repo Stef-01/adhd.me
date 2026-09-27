@@ -12222,3 +12222,36 @@
 {"time":"2026-09-27T22:41:21.049Z","level":"L1","phase":"RCA timing overlap","model":"gpt-5-nano","usage":{"input":1137,"cached":1024,"output":196,"reasoning":128},"costUsd":0.00008917}
 {"time":"2026-09-27T22:41:21.049Z","level":"L1","phase":"RCA timing overlap","model":"gpt-5-nano","usage":{"input":1137,"cached":1024,"output":153,"reasoning":64},"costUsd":0.00007197}
 {"time":"2026-09-27T22:41:21.185Z","level":"L1","phase":"RCA timing overlap","model":"gpt-5-nano","usage":{"input":1137,"cached":1024,"output":267,"reasoning":192},"costUsd":0.00011757}
+{"time":"2026-09-27T23:02:10.193Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":0,"output":144,"reasoning":64},"costUsd":0.0001265}
+{"time":"2026-09-27T23:02:10.195Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":1280,"output":159,"reasoning":64},"costUsd":0.0000749}
+{"time":"2026-09-27T23:02:11.197Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":1280,"output":164,"reasoning":128},"costUsd":0.0000769}
+{"time":"2026-09-27T23:02:11.198Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1377,"cached":1280,"output":173,"reasoning":128},"costUsd":0.00008045}
+{"time":"2026-09-27T23:02:11.199Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":0,"output":173,"reasoning":128},"costUsd":0.00013810000000000002}
+{"time":"2026-09-27T23:02:11.199Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1383,"cached":0,"output":182,"reasoning":128},"costUsd":0.00014194999999999998}
+{"time":"2026-09-27T23:02:11.199Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1383,"cached":1280,"output":193,"reasoning":128},"costUsd":0.00008875}
+{"time":"2026-09-27T23:02:11.200Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":0,"output":215,"reasoning":128},"costUsd":0.0001549}
+{"time":"2026-09-27T23:02:11.201Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":0,"output":233,"reasoning":192},"costUsd":0.0001621}
+{"time":"2026-09-27T23:02:11.201Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1377,"cached":1280,"output":205,"reasoning":128},"costUsd":0.00009325}
+{"time":"2026-09-27T23:02:11.202Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1376,"cached":1280,"output":187,"reasoning":128},"costUsd":0.000086}
+{"time":"2026-09-27T23:02:11.202Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":1280,"output":148,"reasoning":64},"costUsd":0.0000705}
+{"time":"2026-09-27T23:02:11.202Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1377,"cached":1280,"output":236,"reasoning":128},"costUsd":0.00010565}
+{"time":"2026-09-27T23:02:11.203Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1379,"cached":1280,"output":245,"reasoning":192},"costUsd":0.00010934999999999999}
+{"time":"2026-09-27T23:02:11.203Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":1280,"output":203,"reasoning":128},"costUsd":0.0000925}
+{"time":"2026-09-27T23:02:11.204Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1383,"cached":0,"output":227,"reasoning":128},"costUsd":0.00015995}
+{"time":"2026-09-27T23:02:11.204Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":0,"output":203,"reasoning":128},"costUsd":0.00015010000000000002}
+{"time":"2026-09-27T23:02:11.206Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1385,"cached":1280,"output":276,"reasoning":192},"costUsd":0.00012205000000000001}
+{"time":"2026-09-27T23:02:11.207Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1379,"cached":1280,"output":260,"reasoning":192},"costUsd":0.00011535}
+{"time":"2026-09-27T23:02:11.208Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1376,"cached":1280,"output":261,"reasoning":192},"costUsd":0.0001156}
+{"time":"2026-09-27T23:02:11.208Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":1280,"output":297,"reasoning":256},"costUsd":0.00013010000000000002}
+{"time":"2026-09-27T23:02:11.209Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1376,"cached":1280,"output":193,"reasoning":128},"costUsd":0.00008840000000000001}
+{"time":"2026-09-27T23:02:11.209Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":1280,"output":174,"reasoning":128},"costUsd":0.0000809}
+{"time":"2026-09-27T23:02:11.212Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1379,"cached":1280,"output":293,"reasoning":256},"costUsd":0.00012855}
+{"time":"2026-09-27T23:02:11.234Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1378,"cached":1280,"output":312,"reasoning":256},"costUsd":0.00013610000000000003}
+{"time":"2026-09-27T23:02:12.185Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1385,"cached":1280,"output":271,"reasoning":192},"costUsd":0.00012005000000000002}
+{"time":"2026-09-27T23:02:12.190Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1385,"cached":1280,"output":362,"reasoning":320},"costUsd":0.00015645}
+{"time":"2026-09-27T23:02:12.192Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1382,"cached":0,"output":400,"reasoning":320},"costUsd":0.0002291}
+{"time":"2026-09-27T23:02:12.193Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1382,"cached":1280,"output":384,"reasoning":320},"costUsd":0.00016510000000000003}
+{"time":"2026-09-27T23:02:12.195Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1382,"cached":0,"output":484,"reasoning":384},"costUsd":0.00026270000000000004}
+{"time":"2026-09-27T23:02:15.184Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1139,"cached":1024,"output":223,"reasoning":192},"costUsd":0.00010007000000000001}
+{"time":"2026-09-27T23:02:15.185Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1139,"cached":0,"output":225,"reasoning":192},"costUsd":0.00014695}
+{"time":"2026-09-27T23:02:16.186Z","level":"L1","phase":"RCA burst","model":"gpt-5-nano","usage":{"input":1139,"cached":0,"output":406,"reasoning":320},"costUsd":0.00021935000000000002}

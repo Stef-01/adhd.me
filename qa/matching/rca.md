@@ -193,3 +193,6 @@ reading, $0, 1.6 seconds. Two changes came of it.
   key left has been checked. The same 22 requests, the finder's path: p50 3.0 s → 2.5 s, p90 6.9 s →
   5.5 s; a request with no check 2.2 s at p50, one with a check 5.5 s. Evals keep the plain order, so
   their numbers are exact; the finder's check can see one candidate the third read later drops.
+- **A burst.** Ten searches at once along the finder's path (32 calls in flight together): all done in
+  7.2 s, each waiting 3.2 s at p50 and 7.2 s at most (the burst opens new connections), no failed
+  attempt, no fallback, $0.0004 a search. The project's ceilings are nowhere near.
