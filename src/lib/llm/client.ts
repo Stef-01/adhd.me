@@ -54,6 +54,9 @@ export class SchemaError extends Error { name = "SchemaError"; }
 export class TimeoutError extends Error { name = "TimeoutError"; }
 export class HttpError extends Error { name = "HttpError"; }
 
+/** The API's own error text echoes a masked key ("sk-proj-****1234"); nothing of a key stays in ours. */
+export const withoutKeys = (text: string) => text.replace(/sk-[A-Za-z0-9_*.\-]+/g, "sk-…");
+
 export function costOf(usage: Usage, model: string, tier?: string): number {
   const price = PRICES[model];
   if (!price) throw new Error(`no price for ${model}`);
@@ -134,9 +137,11 @@ async function post(call: CallJson & { model: string }, key: string, base: strin
       clearTimeout(timer);
     }
     if (deps.meter) deps.meter.errors += 1;
-    if ((reply.status !== 429 && reply.status < 500) || attempt === 2) {
-      const detail = ((await reply.json().catch(() => null)) as { error?: { message?: string } } | null)?.error?.message ?? "";
-      throw new HttpError(`${reply.status} ${detail}`.trim());
+    const failure = ((await reply.json().catch(() => null)) as { error?: { message?: string; code?: string } } | null)?.error;
+    // An account out of credit answers 429 too, and waiting will not fix it.
+    const spent = failure?.code === "insufficient_quota";
+    if ((reply.status !== 429 && reply.status < 500) || spent || attempt === 2) {
+      throw new HttpError(withoutKeys(`${reply.status} ${failure?.code === "insufficient_quota" ? "insufficient_quota " : ""}${failure?.message ?? ""}`.trim()));
     }
     const wait = Number(reply.headers.get("retry-after")) * 1000;
     await new Promise((resolve) => setTimeout(resolve, wait > 0 ? wait : 1000 * 2 ** attempt + Math.random() * 250));

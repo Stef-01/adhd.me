@@ -162,6 +162,23 @@ describe("retries and timeouts", () => {
   });
 });
 
+describe("a key that fails", () => {
+  it("keeps no part of a key in the error, though the API's own text echoes one", async () => {
+    const { fetch } = recording(() => reply({ error: { message: "Incorrect API key provided: sk-proj-abc************************1234. You can find your API key at …", code: "invalid_api_key" } }, 401));
+    const error = (await callJson(CALL, { fetch, env: ENV }).catch((failure: unknown) => failure)) as Error;
+    expect(error).toBeInstanceOf(HttpError);
+    expect(error.message).toMatch(/^401 Incorrect API key provided: sk-…/);
+    expect(error.message).not.toMatch(/abc|1234/);
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not wait and retry when a 429 says the account is out of credit", async () => {
+    const { fetch } = recording(() => reply({ error: { message: "You exceeded your current quota", code: "insufficient_quota" } }, 429));
+    await expect(callJson(CALL, { fetch, env: ENV })).rejects.toThrow(/^429 insufficient_quota You exceeded/);
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("OpenAI's options", () => {
   it("sends the cache key, the retention and the tier only when they are set", async () => {
     const { fetch, calls } = recording(() => reply(completed("{}")));

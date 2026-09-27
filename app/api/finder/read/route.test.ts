@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CASSETTES, cassetteFetch } from "@/lib/llm/cassettes";
 import { CHECKS, lexiconReading, READS } from "@/lib/matching/llm-read";
 import { resetRateLimits } from "@/lib/rate-limit";
+import { PAUSE_MS, resetKeyPause } from "@/lib/llm/key-pause";
 import { POST } from "./route";
 
 const cassette = (name: string) => CASSETTES.find((c) => c.class === name && c.expect.source === "llm")!;
@@ -17,6 +18,7 @@ const read = async (text: unknown) => {
 let network: ReturnType<typeof vi.fn>;
 beforeEach(() => {
   resetRateLimits();
+  resetKeyPause();
   vi.stubEnv("OPENAI_API_KEY", "");
   vi.stubEnv("ADHDME_LLM_LEVEL", "");
   vi.stubEnv("ADHDME_LLM_CASSETTES", "");
@@ -80,6 +82,23 @@ describe("POST /api/finder/read", () => {
     expect((await read(42)).status).toBe(400);
     expect((await read("a".repeat(2000))).status).toBe(200);
     expect(network).toHaveBeenCalledTimes(READS);
+  });
+
+  it("after a key fails, reads with the lexicon for ten minutes without a call, then tries again", async () => {
+    vi.stubEnv("ADHDME_LLM_LEVEL", "1");
+    vi.stubEnv("OPENAI_API_KEY", "k");
+    const refused = vi.fn(async () => new Response(JSON.stringify({ error: { message: "Incorrect API key provided", code: "invalid_api_key" } }), { status: 401 }));
+    vi.stubGlobal("fetch", refused);
+    const { input } = cassette("C7");
+    const lexicon = { keys: lexiconReading(input).keys, source: "lexicon" };
+    expect((await read(input)).body).toEqual(lexicon);
+    expect(refused).toHaveBeenCalledTimes(READS);
+    expect((await read(input)).body).toEqual(lexicon);
+    expect(refused).toHaveBeenCalledTimes(READS);
+    vi.useFakeTimers({ now: Date.now() + PAUSE_MS + 1, toFake: ["Date"] });
+    await read(input);
+    vi.useRealTimers();
+    expect(refused).toHaveBeenCalledTimes(2 * READS);
   });
 
   it("stops paying once the day's budget is spent, and answers with the lexicon without a call", async () => {

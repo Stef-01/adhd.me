@@ -157,3 +157,16 @@ tier, no eval cache, one request after another).
 - **The key.** No OpenAI key in any tracked file or in history (the pattern with a word boundary; the
   three loose matches were "task-based" and "multiple-ask-languages"). `src/lib/llm/secrets.test.ts`
   now fails the build if one appears.
+
+## R9 · a key that fails, 2026-09-28 · layer: the client and the route
+
+Tested live with a fake key against the real API: 3 calls (one per read), no retries, the lexicon's
+reading, $0, 1.6 seconds. Two changes came of it.
+
+- **The API's error text echoes a masked key** ("Incorrect API key provided: sk-this-****0000").
+  Nothing wrote it anywhere, but `withoutKeys` now scrubs any key-shaped text from an HttpError, so no
+  fragment of a real key can reach a log or a report.
+- **A key that fails would charge every search its wait**, and an account out of credit answers 429,
+  which the client used to retry twice with backoff. A 429 whose code is `insufficient_quota` is no
+  longer retried, and after a 401, a 403 or an out-of-credit answer the finder's route pauses model
+  reads for ten minutes (`src/lib/llm/key-pause.ts`) and reads with the lexicon without a call.
