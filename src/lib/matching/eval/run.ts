@@ -151,7 +151,8 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
     gates.push(["schema-valid answers", pct(valid), phase <= "P2" ? valid === 1 : valid >= 0.995]);
     if (phase >= "P3") {
       const base = lexicon(done);
-      gates.push(["recall on reaches at least L0's", `${pct(all.recall)} vs ${pct(base.recall)}`, (all.recall ?? 1) >= (base.recall ?? 1)]);
+      // L0 hears every `reaches` pin by construction (the pins are what the lexicon hears), so "at least L0's" would allow no miss at all.
+      gates.push(["recall on reaches within 0.02 of L0's", `${pct(all.recall)} vs ${pct(base.recall)}`, (all.recall ?? 1) >= (base.recall ?? 1) - 0.02]);
       gates.push(["aspires reached", pct(all.aspires), (all.aspires ?? 1) >= 0.5]);
       gates.push(["precision (lower bound)", pct(all.precision), (all.precision ?? 1) >= 0.9]);
       gates.push(["never violations", pct(all.never), (all.never ?? 0) <= 0.01]);

@@ -37,8 +37,9 @@ which is what makes a cheap LLM programme possible: the gold labels and the metr
   vocabulary with a stemmed, ordered-subsequence cue matcher (`src/matching/read.ts`). The
   vocabulary: 12 care areas (`adhd-assessment`, `child-adolescent-adhd`, `titration`,
   `shared-care`, `depression`, `anxiety`, `trauma-informed`, `complex-mental-health`,
-  `autism-adhd`, `substance-history`, `emotional-regulation`, `non-medication`), 6 manner
-  traits (`attuned`, `steadying`, `motivating`, `unhurried`, `collaborative`, `structured`),
+  `autism-adhd`, `substance-history`, `emotional-regulation`, `non-medication`), 9 manner
+  traits (`attuned`, `steadying`, `sense_making`, `motivating`, `unhurried`, `non_judgmental`,
+  `collaborative`, `culturally_attuned`, `structured`),
   4 preferences (`woman-gp`, `telehealth-first`, `longer-appointment`, `bulk-billing`) and
   spoken languages (`MATCHABLE_LANGUAGES` in `src/matching/languages.ts`).
 - `rankClinicians(query, roster)` in `src/demo/clinicians.ts` sorts in tiers: constraint
@@ -50,7 +51,7 @@ which is what makes a cheap LLM programme possible: the gold labels and the metr
 
 **The evaluation base** (reused, not rebuilt):
 
-- `src/matching/corpus.ts`: 565 first-person requests, each pinned with `reaches` (facets it
+- `src/matching/corpus.ts`: 563 first-person requests, each pinned with `reaches` (facets it
   must reach), `never` (facets it must not) and `aspires` (facets it is about that the lexicon
   cannot hear yet). Per-facet floors in `REACH_FLOORS` only ever rise.
 - `src/matching/extractor-quality.ts`: precision and recall for the reader alone, and ranking
@@ -226,7 +227,7 @@ loop's stop rule (section 12) marks the break point, and the plan records it rat
 | Level | What the model does | Calls per request | What it tests | Gates to pass |
 | --- | --- | --- | --- | --- |
 | **L0** | Nothing. The lexicon reader and the tiered ranker. | 0 | The baseline every level must beat. | Measured, not gated: per-facet recall and precision, NDCG@3, hit@1. |
-| **L1** | Reads the request into facet keys. The ranker is unchanged. | 1 | Can the cheapest model map words to a closed vocabulary? | Schema-valid 100% at P2, ≥ 99.5% at P4. Recall ≥ L0 recall on `reaches`, and ≥ 50% of `aspires` reached. Precision (lower bound) ≥ 0.90. `never` violations ≤ 1%. Negation class C4 ≥ 90% correct. Flip rate over 3 repeats ≤ 5%. |
+| **L1** | Reads the request into facet keys. The ranker is unchanged. | 1 | Can the cheapest model map words to a closed vocabulary? | Schema-valid 100% at P2, ≥ 99.5% at P4. Recall on `reaches` within 0.02 of L0's (L0 is 1.000 by construction), and ≥ 50% of `aspires` reached. Precision (lower bound) ≥ 0.90. `never` violations ≤ 1%. Negation class C4 ≥ 90% correct. Flip rate over 3 repeats ≤ 5%. |
 | **L2** | Also marks each key `must` or `nice`, and lists negated keys. `must` keys join the constraint tier. | 1 | Can it tell a requirement from a wish, and "not X" from X? | L1 gates hold. `must` agrees with gold on ≥ 85%. Ranking with its tiers: NDCG@3 ≥ L1. |
 | **L3** | Reads a clinician's free-text bio into declared facet keys (the other side). | 1 per bio, cached | Can it read the supply side as well as the demand side? | Against the roster's declared facets: precision ≥ 0.95 (a false claim about a doctor costs more than a miss), recall ≥ 0.80. |
 | **L4** | Reorders the ranker's top 10 (compact cards, not bios). Code re-applies the constraint floor after. | 1 | Does the model's judgement improve the order code produces? | Raw permutation valid ≥ 95%, 100% after repair. Constraint violations after the floor: 0. NDCG@3 ≥ L2, and better on C2 and C7. Kendall tau between two shuffled inputs ≥ 0.8. |
@@ -273,7 +274,7 @@ cost cents.
 
 ## 9. Test sets and gold
 
-**Requests: the existing corpus.** 565 entries, split once and for all by a hash of the text:
+**Requests: the existing corpus.** 563 entries, split once and for all by a hash of the text:
 60% dev (tune prompts here), 40% holdout (run once per level, never tuned on). The split lives
 in code so it cannot drift.
 
@@ -394,6 +395,7 @@ Each flaw has a code the reports and the RCA log use.
 | F23 | Fallback hides failure | Metrics look fine while the model fails | Fallbacks counted as failures | `source` on every result; the report shows the fallback rate |
 | F24 | Ties on a small roster | 11 clinicians give many equal scores | `tie-quality` on synthetic rosters | Measure ranking at L6 sizes, not only on the real roster |
 | F25 | Local terms misread | "bulk bill", "Medicare", "GP" not understood | Class C9 | Meaning lines use Australian terms |
+| F26 | Refusal | The model declines to answer a request | `RefusalError` from the client; counted as a fallback | Read the request text: if it is out of scope, the lexicon's reading stands; if it is an ordinary request, reword the instructions |
 
 ## 12. The improvement loop
 
@@ -532,6 +534,45 @@ server-side setting (`ADHDME_LLM_LEVEL=0..5`); at 0 the finder is exactly today'
 | 5 | L4 rerank with the floor | ~$0.60 | L4 gates |
 | 6 | L5 shuffles and reason line, UI reason slot | ~$1.00 | L5 gates; copy caps pass |
 | 7 | L6 scale with Batch | ~$1.50 | Break-point map complete |
+
+## 16a. As built, 2026-09-27 (step 0 and the L1 reader)
+
+Built: `src/lib/llm/client.ts` (128 lines), `meter.ts` (75), `cache.ts` (27);
+`src/lib/matching/llm-read.ts` (128, with the key meaning lines); `eval/metrics.ts` (104),
+`eval/sets.ts` (73), `eval/run.ts` (243); `scripts/match-eval.mjs` (26); 12 hand-written cassettes.
+804 source lines against the 350 this plan estimated for step 0 and L1; the runner is the largest
+part (report, gates, breakers) and the first place to trim. 707 lines of tests. `pnpm test` passes.
+
+Where the plan was wrong, and what the build did instead:
+
+- The vocabulary has 9 manner traits, not 6, and the corpus 563 entries, not 565. Five probe
+  requests in `probes.json` add the classes the corpus lacks; C6 still has 1 entry and C8 has 2, so
+  P2 and P3 take every entry of a class that has fewer than they ask for. Writing ten long
+  narratives (C6) and ten requests with instructions in them (C8) is the next corpus task.
+- `reaches` pins are by definition what the lexicon hears, so L0 recall on them is 1.000 and "at
+  least L0's" allowed no miss at all. The gate is now "within 0.02 of L0's" (section 7).
+- 11 of the 31 `aspires` pins wait on the founder's decision about reading self-states, and the
+  instructions say never to infer a key from a feeling. The 50% `aspires` gate is kept; if it
+  fails only on those 11, the RCA names the open decision rather than the model.
+- The corpus pins no languages, so language keys are not scored; the oracle adds any language the
+  text names.
+- `rankClinicians(query, roster, today, needs)` skips the lexicon path's rarity and clarifier
+  weighting when `needs` is passed. The eval ranks L0, L1 and the oracle all on unweighted keys so
+  the comparison is fair; the route step decides how model keys are weighted.
+- A refusal had no flaw code; it is F26.
+- The runner is TypeScript loaded through vitest (`createVitest`), because Node alone cannot
+  resolve the `@/` imports; `syntheticRoster` is passed in by the script, since `src/` may not
+  import it.
+
+**L0 baseline** (the lexicon, 568 entries including probes): recall on `reaches` 1.000, `aspires`
+0 of 31, precision (lower bound) 1.000, `never` violations 0, read exactly right 94.4%. Ranking
+against the oracle: real roster NDCG@3 0.963, hit@1 0.946; `syntheticRoster(50)` 0.970 and 0.957.
+The weak classes are C7 (NDCG@3 0.467, hit@1 0.250: exactly where the lexicon cannot hear) and C4
+(0.972). Reports: `qa/matching/reports/L0-P0-*.md`, `L1-P0-*.md` (L1 passes P0 on cassettes).
+
+**The founder's first live run:** put `OPENAI_API_KEY` in `.env.local`, leave
+`ADHDME_LLM_MODEL` unset so the prompt hash matches the committed P0 report, then run
+`pnpm match:eval --level L1 --phase P1 --live`, and P2 after it passes.
 
 ## 17. Sources
 
