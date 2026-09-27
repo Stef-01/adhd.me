@@ -79,7 +79,7 @@ export function NinaWorldGame() {
   const cell = (x: number, y: number) => ({ "--cx": (x + .5) / COLS, "--cy": (y + .5) / ROWS } as CSSProperties);
   const line = (words: (string | null)[], cls = "") => <p className={`nw-line ${cls}`}>{words.map((w, i) => <span key={i} data-empty={!w}>{w ?? "···"}</span>)}</p>;
 
-  return <GameShell name="nw-game" label="Nina’s desk" eyebrow="Nina · The first line" heading={heading(s)} objective={s.phase === "writing" && s.line === 0 ? "Steer the pen through the words." : undefined}
+  return <GameShell name="nw-game" label="Nina’s desk" eyebrow="Nina · The first line" heading={heading(s)}
     hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
     phaseKey={`${s.phase}-${s.line}`} data={{ phase: s.phase, line: s.line, scenario: s.scenario, emotion }}
     score={SCORES.nina} playing={live} intensity={.3 + s.filled.filter(Boolean).length * .18 + s.draft.length * .05}>

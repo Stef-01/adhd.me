@@ -51,7 +51,7 @@ export function ZoeWorldGame() {
   </> : undefined;
   const typedAll = s.typed >= b.zoe.length;
 
-  return <GameShell name="zw-game" label="Zoe’s phone" eyebrow="Zoe · Before you send" heading={heading(s)} objective={s.phase === "typing" && s.beat === 0 ? "Tap the sharp words before it sends." : undefined}
+  return <GameShell name="zw-game" label="Zoe’s phone" eyebrow="Zoe · Before you send" heading={heading(s)}
     hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
     phaseKey={`${s.phase}-${s.beat}`} data={{ phase: s.phase, beat: s.beat, scenario: s.scenario, emotion, holding }}
     score={SCORES.zoe} playing={live && !holding} intensity={.3 + fuse * .6 * (hotLeft(s) > 0 ? 1 : .4)}>
