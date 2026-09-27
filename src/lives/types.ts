@@ -55,10 +55,12 @@ export type GameConfig =
   | { readonly kind: "target_swat"; readonly targets: readonly string[]; readonly escalation?: readonly string[] }
   | { readonly kind: "semantic_filter"; readonly relevant: readonly string[]; readonly irrelevant: readonly string[]; readonly nearMiss?: readonly string[] }
   | { readonly kind: "trace_path"; readonly hazards: readonly string[]; readonly pathWidth: number }
-  | { readonly kind: "inhibition"; readonly temptation: string; readonly taunts: readonly string[] }
+  /** `still`: the thing stays its size. A spider that grows toward the player is exposure, not restraint. */
+  | { readonly kind: "inhibition"; readonly temptation: string; readonly taunts: readonly string[]; readonly still?: boolean }
   | { readonly kind: "object_search"; readonly goal: string; readonly decoys: readonly string[]; readonly remindBefore: boolean }
   | { readonly kind: "goal_protection"; readonly keep: string; readonly intruders: readonly string[] }
-  | { readonly kind: "hold_release"; readonly verb: string; readonly releaseAt: string }
+  /** `release`: what letting go does, when it is not speaking. Reads "say it" by default. */
+  | { readonly kind: "hold_release"; readonly verb: string; readonly releaseAt: string; readonly release?: string }
   | { readonly kind: "rapid_sorting"; readonly bins: readonly string[]; readonly items: readonly { readonly label: string; readonly bin: string }[] }
   | { readonly kind: "wipe_scrub"; readonly covering: string }
   | { readonly kind: "precision_timing"; readonly marks: readonly string[]; readonly hitIndex: number };

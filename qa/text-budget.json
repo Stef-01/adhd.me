@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-27T00:05:26.109Z",
+  "measuredAt": "2026-09-27T01:19:19.617Z",
   "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
@@ -165,7 +165,7 @@
         },
         {
           "w": 5,
-          "text": "03:05 left in this session",
+          "text": "04:18 left in this session",
           "tag": "small"
         }
       ]
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 10,
-      "fold": 10,
+      "total": 20,
+      "fold": 20,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "ONLY THE LIST!",
+          "text": "let it out",
           "tag": "p"
         },
         {
           "w": 3,
-          "text": "a second kayak",
-          "tag": "span"
+          "text": "Let it out",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 2,
+          "text": "TISSUE UP!",
+          "tag": "p"
         }
       ]
     },
@@ -498,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "Round the left",
-          "tag": "button"
-        },
-        {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "text": "HOLD THE LID!",
+          "tag": "p"
         },
         {
           "w": 2,
-          "text": "Straight through",
-          "tag": "button"
+          "text": ". Then, at",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "it stops",
+          "tag": "p"
         }
       ]
     },
@@ -2756,25 +2756,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "DON’T SCROLL!",
+          "text": "DELETE DRAFTS!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "ONE MORE",
+          "w": 1,
+          "text": "0",
           "tag": "span"
         }
       ]
