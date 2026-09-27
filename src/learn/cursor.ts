@@ -31,9 +31,14 @@ export function clearCursor(storage: Pick<Storage, "removeItem">): void {
   try { storage.removeItem(CURSOR_KEY); } catch { /* Session remains usable. */ }
 }
 
-/** The cursor "Continue" may offer: none for a module this device has already finished. */
+/**
+ * The cursor "Continue" may offer: none when it is only the last card of a finished module, kept
+ * for Back (openingStep). A finished module replayed and left part way is offered as before.
+ */
 export function resumable(cursor: LearnCursor | null, done: readonly string[]): LearnCursor | null {
-  return cursor && !done.includes(cursor.moduleId) ? cursor : null;
+  const module = MODULES.find(module => module.id === cursor?.moduleId);
+  if (!cursor || !module) return null;
+  return done.includes(cursor.moduleId) && cursor.step === cardCount(module) - 1 ? null : cursor;
 }
 
 /**

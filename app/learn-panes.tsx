@@ -431,7 +431,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
   const started = profile?.saved.find((s) => s.status === "started");
   const toolkit = (profile?.personalStrategies.length ?? 0) > 0;
   const quick = STRATEGIES.filter((s) => s.estimatedMinutes <= 2);
-  // A module already ticked is not offered as Continue, though Back may still find its last card.
+  // A finished run's last card is kept for Back, not offered as Continue (resumable).
   const resume = resumable(cursor, progress.done);
   const continuing = resume ? MODULES.find((m) => m.id === resume.moduleId) : undefined;
 

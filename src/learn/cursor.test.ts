@@ -30,11 +30,15 @@ describe("learning resume", () => {
     expect(readCursor(denied)).toBeNull();
     expect(() => writeCursor(denied, "adhd", 1)).not.toThrow();
   });
-  it("offers Continue only for a module not yet finished", () => {
+  it("offers Continue part way through any module, but not on a finished module's last card", () => {
     const cursor = { v: 1, moduleId: "mornings", step: 3 } as const;
+    const last = { v: 1, moduleId: "mornings", step: cardCount(MODULES.find((m) => m.id === "mornings")!) - 1 } as const;
     expect(resumable(cursor, [])).toEqual(cursor);
     expect(resumable(cursor, ["adhd"])).toEqual(cursor);
-    expect(resumable(cursor, ["mornings"])).toBeNull();
+    // Finished once, replayed, and left part way: Continue still takes the person back.
+    expect(resumable(cursor, ["mornings"])).toEqual(cursor);
+    expect(resumable(last, ["mornings"])).toBeNull();
+    expect(resumable(last, [])).toEqual(last);
     expect(resumable(null, [])).toBeNull();
   });
   it("reopens a finished run on its last card on Back, and at its title from anywhere else", () => {
