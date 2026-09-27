@@ -244,7 +244,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-scale li:last-child { transform: translateX(-100%); text-align: right; }
 .play-scale li.is-last { color: var(--play-go); }
 .play-share { display: grid; gap: 6px; justify-items: center; margin-top: 4px; }
-.play-share .play-choice { width: auto; min-height: 44px; }
+.play-share .play-choice { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; min-height: 44px; }
 .play-share-note { margin: 0; color: var(--muted); font-size: 0.8125rem; }
 .play-rule { margin: 0; max-width: 34ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.4; }
 /* Recall: the list as objects on a table; the interruption covers it; the cover lifts. */
