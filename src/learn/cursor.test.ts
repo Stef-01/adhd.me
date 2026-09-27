@@ -39,6 +39,12 @@ describe("learning resume", () => {
     expect(resumable(cursor, ["mornings"])).toEqual(cursor);
     expect(resumable(last, ["mornings"])).toBeNull();
     expect(resumable(last, [])).toEqual(last);
+    // At a finished module's title card, and for a finished quiz (always step 0), Continue would restart it.
+    const title = { v: 1, moduleId: "mornings", step: 0 } as const;
+    expect(resumable(title, ["mornings"])).toBeNull();
+    expect(resumable(title, [])).toEqual(title);
+    const quiz = MODULES.find((m) => m.kind === "quiz")!;
+    expect(resumable({ v: 1, moduleId: quiz.id, step: 0 }, [quiz.id])).toBeNull();
     expect(resumable(null, [])).toBeNull();
   });
   it("reopens a finished run on its last card on Back, and at its title from anywhere else", () => {

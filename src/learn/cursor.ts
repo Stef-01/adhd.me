@@ -32,13 +32,15 @@ export function clearCursor(storage: Pick<Storage, "removeItem">): void {
 }
 
 /**
- * The cursor "Continue" may offer: none when it is only the last card of a finished module, kept
- * for Back (openingStep). A finished module replayed and left part way is offered as before.
+ * The cursor "Continue" may offer. A finished module is offered only when it was replayed and left
+ * part way: not at its title card (Continue would be a restart; a quiz's cursor is always there)
+ * and not on its last card, which is kept for Back alone (openingStep).
  */
 export function resumable(cursor: LearnCursor | null, done: readonly string[]): LearnCursor | null {
   const module = MODULES.find(module => module.id === cursor?.moduleId);
   if (!cursor || !module) return null;
-  return done.includes(cursor.moduleId) && cursor.step === cardCount(module) - 1 ? null : cursor;
+  const endpoint = cursor.step === 0 || cursor.step === cardCount(module) - 1;
+  return done.includes(cursor.moduleId) && endpoint ? null : cursor;
 }
 
 /**
