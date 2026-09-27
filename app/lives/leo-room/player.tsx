@@ -10,6 +10,7 @@ import { BedroomBackdrop, BedAndLeo, RoomBook, RoomHeadphones, RoomLamp, RoomMos
 import { BedroomAudio } from "./audio";
 import { useBedroom } from "./use-bedroom";
 import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 const HEADINGS: Record<BedroomState["mode"], string> = {
   challenge: "One tiny sound.", recovery: "The room can change.", "wind-down": "A little room to settle.",
@@ -171,7 +172,7 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
     <footer className="bedroom-footer">
       <p role="status" aria-live="polite" aria-atomic="true">{soundNotice || s.line}</p>
       {s.mode === "rest" && <button className="bedroom-next" onClick={() => dispatch({ type: "next-evening" })}>Tomorrow evening <ArrowRight size={19} /></button>}
-      {s.mode === "complete" && <div className="bedroom-finish"><button onClick={() => dispatch({ type: "restart" })}>Another evening</button><Link href="/lives/learn?module=lower_sensory_floor_v1">Bring it into your day <ArrowRight size={18} /></Link></div>}
+      {s.mode === "complete" && <div className="bedroom-finish"><button onClick={() => dispatch({ type: "restart" })}>Another evening</button><Link href="/lives/learn?module=lower_sensory_floor_v1">Bring it into your day <ArrowRight size={18} /></Link><RelatedRun who="leo" className="bedroom-related" /></div>}
       {s.mode === "complete" && <SkillRecommendation context="sleep" />}
     </footer>
     <dialog className="bedroom-pause" aria-labelledby="bedroom-pause-title" ref={dialog} onCancel={event => { event.preventDefault(); dispatch({ type: "resume" }); }}>

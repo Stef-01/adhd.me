@@ -51,6 +51,8 @@
 .mt-hint { margin: 0; font-size: 14px; color: #f7d37a; }
 .mt-ending { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .mt-secondary { background: transparent; color: #e2d7f4; min-height: 48px; padding: 12px; border: 0; }
+a.mt-secondary { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+@media (hover: hover) { a.mt-secondary:hover { text-decoration: underline; text-underline-offset: 4px; } }
 .mt-pause { min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
 @media (max-width:600px) { .mt-heading { margin: 28px auto 22px; } .mt-game h1 { font-size: 28px; } .mt-intention { font-size: 12px; } .mt-board { gap: 3px; padding: 4px; border-radius: 18px; } .mt-tile { border-radius: 12px; } .mt-channel { stroke-width: 19; } .mt-current { stroke-width: 10; } .mt-target svg { width: 17px; height: 17px; } .mt-controls { margin-top: 22px; } .mt-status { max-width: 280px; font-size: 13px; } .mt-cues { gap: 8px; } .mt-cues button { padding: 10px; gap: 6px; font-size: 12px; } .mt-cues img { width: 30px; height: 30px; } .mt-pin { right: 2px; bottom: 2px; width: 19px; height: 19px; padding: 3px; } }
 /* Short screens: the board sizes from the height so the thread never scrolls away. */

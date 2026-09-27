@@ -3,7 +3,7 @@ import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { CHARACTER_IDS } from "@/lives/types";
 import { SUBDOMAINS } from "@/model/layers";
-import { GAME_GROUPS, GAME_HINTS, LIFE_GAMES, RUN_GAMES, gamesFor, matchesGoal, modulesFor, tryFirst, type GameItem } from "./games";
+import { GAME_GROUPS, GAME_HINTS, LIFE_GAMES, RUN_GAMES, gamesFor, matchesGoal, modulesFor, relatedLife, relatedRun, subjectOf, tryFirst, type GameItem } from "./games";
 import { markPlayed, parsePlayed, readPlayed } from "./played";
 import { markDone, readProgress } from "./progress";
 
@@ -104,5 +104,49 @@ describe("the care map's panel", () => {
     expect(modulesFor("sleep").length).toBeGreaterThan(0);
     const reached = new Set(SUBDOMAINS.flatMap((s) => gamesFor(s.id).map((g) => `${g.kind}:${g.id}`)));
     for (const g of eachOf(RUN_GAMES, "the runs")) expect(reached.has(`run:${g.id}`), g.id).toBe(true);
+  });
+});
+
+describe("a game and a run on the same subject", () => {
+  const shares = (a: GameItem, b: GameItem) => subjectOf(a).some((p) => subjectOf(b).includes(p));
+
+  it("every life leads to the run it shares most with, and that run leads back to it", () => {
+    const pairs = Object.fromEntries(LIFE_GAMES.map((g) => [g.id, relatedRun(g.id)?.id]));
+    expect(pairs).toEqual({
+      maya: "interruption", leo: "sleep", arjun: "more-than-attention", zoe: "conflict",
+      theo: "mornings", mia: "working-memory", jax: "money", nina: "starting",
+    });
+    for (const life of eachOf(LIFE_GAMES, "the lives")) {
+      const run = relatedRun(life.id)!;
+      expect(shares(life, run), life.id).toBe(true);
+      expect(relatedLife(run.id)?.id, life.id).toBe(life.id);
+    }
+  });
+
+  it("every run that shares a part of life with a life gets one that does, and null only when none does", () => {
+    for (const run of eachOf(RUN_GAMES, "the runs")) {
+      const life = relatedLife(run.id);
+      expect(life !== null, run.id).toBe(LIFE_GAMES.some((l) => shares(l, run)));
+      if (life) expect(shares(life, run), run.id).toBe(true);
+      // Nearest means nothing shares more.
+      const most = Math.max(...LIFE_GAMES.map((l) => subjectOf(l).filter((p) => subjectOf(run).includes(p)).length));
+      if (life) expect(subjectOf(life).filter((p) => subjectOf(run).includes(p)).length, run.id).toBe(most);
+    }
+    expect(RUN_GAMES.filter((r) => relatedLife(r.id))).toHaveLength(20);
+    expect(relatedLife("no-such-run")).toBeNull();
+  });
+
+  it("is deterministic: the same game always finds the same partner", () => {
+    const once = RUN_GAMES.map((r) => relatedLife(r.id)?.id);
+    expect(RUN_GAMES.map((r) => relatedLife(r.id)?.id)).toEqual(once);
+    expect(LIFE_GAMES.map((l) => relatedRun(l.id)?.id)).toEqual(LIFE_GAMES.map((l) => relatedRun(l.id)?.id));
+    // A pair carries what the screens link to: a run's short title, a life's name and entry.
+    expect(relatedRun("nina")).toMatchObject({ kind: "run", id: "starting", title: "The blank page" });
+    expect(relatedLife("mornings")).toMatchObject({ kind: "life", id: "theo", title: "Theo", href: "/lives/play/theo-out-the-door" });
+  });
+
+  it("Leo and Theo, with no journey, are about their own evening and morning", () => {
+    expect(subjectOf(LIFE_GAMES.find((g) => g.id === "leo")!)[0]).toBe("sleep");
+    expect(subjectOf(LIFE_GAMES.find((g) => g.id === "theo")!)[0]).toBe("time");
   });
 });

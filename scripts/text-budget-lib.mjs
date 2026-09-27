@@ -100,6 +100,7 @@ export const EXTRA = [
   { path: "/approach?module=everyday", name: "A read module, first card" },
   { path: "/approach?module=adhd", name: "A read module, the ADHD card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
+  { path: "/approach?module=starting", state: "run-last", name: "A game run, last card" },
   { path: "/approach?pane=modules", name: "Learn, the modules pane" },
   // The modules pane with three goals chosen (PLAN.md W8): "For you" and its longest reason line.
   // And with every shelf one tap away, opened.
@@ -647,6 +648,15 @@ export async function reach(page, route, base) {
         }
       }
     }
+  }
+  if (route.state === "run-last") {
+    // The run's last card, resumed through the device's cursor: the dots count the run's cards.
+    await page.locator(".play-dots li").first().waitFor({ state: "attached", timeout: 8000 });
+    const last = (await page.locator(".play-dots li").count()) - 1;
+    const id = new URL(route.path, base).searchParams.get("module");
+    await page.evaluate(([moduleId, step]) => localStorage.setItem("adhdme.learn.cursor.v1", JSON.stringify({ v: 1, moduleId, step })), [id, last]);
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator('.play-run[data-phase="next"]').waitFor({ timeout: 8000 });
   }
   if (route.state === "lives-run") {
     await page.waitForTimeout(1200);

@@ -11,6 +11,7 @@ import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Bench, Crowd, Gate, Queue, Speaker } from "./art";
 import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 type Emotion = "braced" | "startled" | "walking" | "settled";
 const MOOD: Record<Emotion, Mood> = { braced: "anxious", startled: "overwhelmed", walking: "engaged", settled: "relieved" };
@@ -117,6 +118,7 @@ export function MayaWorldGame() {
         </div> : <div className="mw-choices">
           <span className="kit-stamp"><Check size={18} weight="bold" /> Ari found you</span>
           <Link className="kit-primary" href="/lives/learn?module=lower_sensory_floor_v1">Lower the sensory floor <ArrowRight size={18} /></Link>
+          <RelatedRun who="maya" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another place</button>
         </div>}
       </div>}

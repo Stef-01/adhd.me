@@ -11,6 +11,7 @@ import { MeetingRoom, TableTop } from "./art";
 import { CastBean } from "../kit/cast";
 import type { Mood } from "@/learn/interactive";
 import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 const SEATS: Speaker[] = ["noor", "sam", "rae"];
 const SEAT_X: Record<Speaker, number> = { noor: .16, sam: .5, rae: .84, arjun: .5 };
@@ -145,6 +146,7 @@ export function ArjunWorldGame() {
         {s.phase === "complete" && <div className="aw-overlay is-final">
           <span className="kit-stamp"><Check size={18} weight="bold" /> {name(s.owner ?? "rae")} follows up {s.when}</span>
           <Link className="kit-primary" href="/lives/learn?module=meeting_anchor_v1">Try a meeting anchor <ArrowRight size={19} /></Link>
+          <RelatedRun who="arjun" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another meeting</button>
         </div>}
       </div>

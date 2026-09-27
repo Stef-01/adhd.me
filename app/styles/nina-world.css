@@ -55,6 +55,13 @@
 .nw-steps button[aria-pressed="true"] { border-color: var(--g-accent); background: #fbefc9; }
 .nw-setup .kit-primary { width: 100%; }
 .nw-sheet.is-draft { gap: 14px; bottom: auto; }
+/* A short phone: the finished draft and the four things under it stay above the table's edge. */
+@media (max-height: 620px) {
+  .nw-game[data-phase="complete"] .nw-sheet.is-draft { gap: 8px; }
+  .nw-game[data-phase="complete"] .nw-paper { padding: 14px 18px; }
+  .nw-game[data-phase="complete"] .nw-paper p { margin-bottom: 4px; }
+  .nw-game[data-phase="complete"] .nw-setup { gap: 2px; }
+}
 
 @media (max-width: 640px) {
   .nw-scene { width: calc(100% - 16px); bottom: 4px; border-radius: 20px; }

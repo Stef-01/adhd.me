@@ -20,7 +20,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Play, Question, ShareNetwork, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { expiryIsHit, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run, RELATE_BUTTONS, RELATE_PROMPT, relateFormFor } from "@/learn/play";
-import { deviceLearningStorage } from "@/learn/cursor";
+import { clearCursor, deviceLearningStorage } from "@/learn/cursor";
+import { relatedLife } from "@/learn/games";
+import { markDone } from "@/learn/progress";
 import { track } from "@/model/events";
 import { dimensionsOf } from "@/wellness/map";
 import { NWIA_LABELS } from "@/wellness/nwia";
@@ -91,6 +93,10 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
   const finish = () => { refresh(markModuleComplete(deviceLearningStorage, run.id)); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onFinish(); };
   /** The axes this run moves, for the line on its last card. */
   const moved = dimensionsOf(run.id).slice(0, 2);
+  /** The character game on the same subject, one tap from the last card. */
+  const life = relatedLife(run.id);
+  /** A link off the last card completes the run as Finish does: in the model, on the Learn list, and with no card left to resume. */
+  const leaveDone = () => { markModuleComplete(deviceLearningStorage, run.id); markDone(deviceLearningStorage, run.id); clearCursor(deviceLearningStorage); track("MODULE_COMPLETED", { module: run.id, format: "run" }); };
   /** The reflect beat: save, check for safety, and either stop on the safety screen or move on. */
   const leaveReflection = () => {
     if (reflection.trim()) {
@@ -301,10 +307,11 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
                 {run.next.action === "learn" && run.next.moduleId ? (
                   <button type="button" className="play-tempt is-go" onClick={() => { markModuleComplete(deviceLearningStorage, run.id); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onOpenModule(run.next.moduleId!); }}>Play the next one <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
                 ) : run.next.action === "support" ? (
-                  <Link className="play-tempt is-go" href="/support" onClick={() => { markModuleComplete(deviceLearningStorage, run.id); track("MODULE_COMPLETED", { module: run.id, format: "run" }); }}>Explore support <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link>
+                  <Link className="play-tempt is-go" href="/support" onClick={leaveDone}>Explore support <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link>
                 ) : (
                   <button type="button" className="play-tempt is-go" onClick={finish}><Check size={16} weight="bold" aria-hidden="true" /> Finish</button>
                 )}
+                {life && <Link className="play-choice play-related" href={life.href} onClick={leaveDone}>{life.title} <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link>}
                 <SkillRecommendation  />
                 {run.next.action !== "try" && <button type="button" className="play-choice" onClick={finish}>Finish for now</button>}
               </div>

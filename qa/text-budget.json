@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T04:19:23.518Z",
-  "base": "http://localhost:3100",
+  "measuredAt": "2026-09-27T05:58:18.334Z",
+  "base": "http://localhost:3317",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "04:36 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -449,8 +449,8 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
@@ -461,14 +461,14 @@
           "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 2,
+          "text": "DELETE DRAFTS!",
+          "tag": "p"
         },
         {
           "w": 1,
-          "text": "SWAT!",
-          "tag": "p"
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -503,26 +503,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "GET OUT!",
-          "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "door",
-          "tag": "span"
+          "text": "Straight through",
+          "tag": "button"
         }
       ]
     },
@@ -1443,10 +1443,10 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, complete",
       "state": "arjun-complete",
-      "total": 33,
-      "fold": 33,
+      "total": 36,
+      "fold": 36,
       "chrome": 0,
-      "ratio": 0.8,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -1551,10 +1551,10 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax, complete",
       "state": "jax-complete",
-      "total": 29,
-      "fold": 29,
+      "total": 34,
+      "fold": 34,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -1563,14 +1563,14 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Jax · Just the list",
-          "tag": "span"
+          "w": 5,
+          "text": "Where did the money go",
+          "tag": "a"
         },
         {
           "w": 4,
-          "text": "Park the new idea",
-          "tag": "a"
+          "text": "Jax · Just the list",
+          "tag": "span"
         }
       ]
     },
@@ -1659,10 +1659,10 @@
       "path": "/lives/play/nina-the-first-line",
       "name": "Nina, complete",
       "state": "nina-complete",
-      "total": 43,
-      "fold": 43,
+      "total": 46,
+      "fold": 46,
       "chrome": 0,
-      "ratio": 1.1,
+      "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
@@ -1767,10 +1767,10 @@
       "path": "/lives/play/maya-one-thing-at-a-time",
       "name": "Maya, complete",
       "state": "maya-complete",
-      "total": 20,
-      "fold": 20,
+      "total": 22,
+      "fold": 22,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -1902,10 +1902,10 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, complete",
       "state": "mia-complete",
-      "total": 37,
-      "fold": 37,
+      "total": 40,
+      "fold": 40,
       "chrome": 3,
-      "ratio": 0.9,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
         {
@@ -1929,10 +1929,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 18,
-      "fold": 18,
+      "total": 28,
+      "fold": 28,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1941,14 +1941,14 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
+          "w": 5,
+          "text": "Whatever. Sure. Guess work wins.",
+          "tag": "p"
         },
         {
-          "w": 4,
-          "text": "That came out sharp.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Ouch. I did say sorry.",
+          "tag": "p"
         }
       ]
     },
@@ -2037,10 +2037,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, complete",
       "state": "zoe-complete",
-      "total": 30,
-      "fold": 30,
+      "total": 35,
+      "fold": 35,
       "chrome": 0,
-      "ratio": 0.8,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -2054,9 +2054,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
+          "w": 5,
+          "text": "It started about the dishes",
+          "tag": "a"
         }
       ]
     },
@@ -2199,10 +2199,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, complete",
       "state": "theo-complete",
-      "total": 33,
-      "fold": 33,
+      "total": 36,
+      "fold": 34,
       "chrome": 4,
-      "ratio": 0.8,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -2336,7 +2336,7 @@
       "state": "bedroom-complete",
       "total": 27,
       "fold": 27,
-      "chrome": 20,
+      "chrome": 21,
       "ratio": 0.7,
       "verdict": "target",
       "longest": [
@@ -2704,6 +2704,33 @@
       ]
     },
     {
+      "path": "/approach?module=starting",
+      "name": "A game run, last card",
+      "state": "run-last",
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Nothing about you is in the link.",
+          "tag": "p"
+        },
+        {
+          "w": 6,
+          "text": "Try the first physical action tomorrow.",
+          "tag": "h2"
+        },
+        {
+          "w": 3,
+          "text": "Share this run",
+          "tag": "button"
+        }
+      ]
+    },
+    {
       "path": "/approach?pane=modules",
       "name": "Learn, the modules pane",
       "state": null,
@@ -2869,16 +2896,16 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 6,
-      "fold": 6,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
-          "tag": "button"
+          "w": 2,
+          "text": "LOCK IN!",
+          "tag": "p"
         },
         {
           "w": 1,
@@ -2887,8 +2914,8 @@
         },
         {
           "w": 1,
-          "text": "DON’T!",
-          "tag": "p"
+          "text": "slides",
+          "tag": "span"
         }
       ]
     },

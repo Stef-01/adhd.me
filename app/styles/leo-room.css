@@ -54,8 +54,8 @@
 .bedroom-footer p { margin: 0; font-size: 12px; color: #545471; text-align: center; max-width: 380px; line-height: 1.45; }
 .bedroom-next { border: 0; border-radius: 40px; background: #4f568e; color: #fff; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 16px; font-size: 13px; font-weight: 600; padding: 12px 22px; cursor: pointer; white-space: nowrap; }
 .bedroom-next:hover { background: #434979; }
-.bedroom-finish { display: flex; align-items: center; gap: 22px; }
-.bedroom-finish :is(a,button) { border: 0; color: #464d83; background: none; font-size: 12px; font-weight: 650; min-height: 44px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.bedroom-finish { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 22px; }
+.bedroom-finish :is(a,button) { border: 0; color: #464d83; background: none; font-size: 12px; font-weight: 650; min-height: 44px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; white-space: nowrap; }
 .bedroom-pause { position: fixed; margin: auto; inset: 0; border: 0; padding: 46px 30px 25px; width: min(390px, calc(100vw - 32px)); border-radius: 28px; background: #f2f2f8; color: var(--room-ink); box-shadow: 0 24px 90px #2523482b; }
 .bedroom-pause::backdrop { background: #2e2a4c63; backdrop-filter: blur(7px); }
 .bedroom-pause-close { position: absolute; top: 8px; right: 8px; }
@@ -239,6 +239,9 @@
    card in it, so the reserve only comes off in the one state that outgrew it, where the grid's
    `minmax(0, 1fr)` scene gives up the space instead. The min-heights above still floor it. */
 .bedroom-footer:has(> [data-skill-match]) { height: auto; }
+/* The finished evening's three links wrap to a second row on the narrowest phones, which the
+   reserve cannot hold either; the same trade, for the same one state. */
+.bedroom-game[data-mode="complete"] .bedroom-footer { height: auto; }
 
 /* A 390px-TALL SCREEN CANNOT HOLD ALL THREE, so the card is the one that goes.
    At 844x390 on `complete` the footer grew to take the practitioner card, which squeezed the
@@ -257,4 +260,10 @@
    a game. If the landscape footer is ever re-cut to make room, delete this rule. */
 @media (max-height: 500px) {
   .bedroom-footer [data-skill-match] { display: none; }
+}
+/* The run on the same subject gives way on the same screens and for the same reason: a third link
+   in the landscape footer's column pushed the caption over "Back to learning" at 844x390 and
+   568x320 (`e2e/leo-room.spec.ts`). It stays at every height above 500px, and on Learn. */
+@media (max-height: 500px) {
+  .bedroom-finish .bedroom-related { display: none; }
 }

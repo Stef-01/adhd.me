@@ -11,6 +11,7 @@ import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Aisle, Kitchen, Product, Trolley } from "./art";
 import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 type Emotion = "steady" | "tempted" | "firm" | "done";
 const MOOD: Record<Emotion, Mood> = { steady: "neutral", tempted: "anxious", firm: "engaged", done: "pleased" };
@@ -145,6 +146,7 @@ export function JaxWorldGame() {
         : <div className="jw-end">
           <span className="kit-stamp"><Check size={18} weight="bold" /> {s.receipts.at(-1)?.items.includes(t.wish) ? `${PRODUCTS[t.wish]!.name}, on sale` : "Wish still saved"}</span>
           <Link className="kit-primary" href="/lives/learn?module=park_the_idea_v1">Park the new idea <ArrowRight size={18} /></Link>
+          <RelatedRun who="jax" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another shop</button>
         </div>}
     </div>}

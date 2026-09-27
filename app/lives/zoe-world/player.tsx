@@ -10,6 +10,7 @@ import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 type Emotion = "steady" | "itch" | "sent" | "sorry" | "repaired";
 const MOOD: Record<Emotion, Mood> = { steady: "neutral", itch: "frustrated", sent: "pleased", sorry: "embarrassed", repaired: "relieved" };
@@ -103,6 +104,7 @@ export function ZoeWorldGame() {
           {s.phase === "complete" && <div className="zw-actions">
             <span className="kit-stamp"><Check size={18} weight="bold" /> {dayName(s.day)} at 7</span>
             <Link className="kit-primary" href="/lives/learn?module=pause_before_send_v1">Pause before send <ArrowRight size={18} /></Link>
+            <RelatedRun who="zoe" className="kit-next" arrow={17} />
             <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another conversation</button>
           </div>}
         </div>

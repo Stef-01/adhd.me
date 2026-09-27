@@ -11,6 +11,7 @@ import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Blot, Desk, Nib } from "./art";
 import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 type Emotion = "stuck" | "hover" | "typing" | "kept";
 const MOOD: Record<Emotion, Mood> = { stuck: "frustrated", hover: "anxious", typing: "engaged", kept: "pleased" };
@@ -116,6 +117,7 @@ export function NinaWorldGame() {
         </div> : <div className="nw-setup">
           <span className="kit-stamp"><Check size={18} weight="bold" /> Next: {s.next?.toLowerCase()}</span>
           <Link className="kit-primary" href="/lives/learn?module=sixty_second_start_v1">Try a 60-second start <ArrowRight size={18} /></Link>
+          <RelatedRun who="nina" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another draft</button>
         </div>}
       </div>}

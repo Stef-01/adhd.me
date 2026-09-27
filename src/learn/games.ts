@@ -52,24 +52,26 @@ export const GAME_HINTS: Readonly<Record<string, string>> = {
 export type GameItem =
   | { readonly kind: "life"; readonly id: CharacterId; readonly title: string; readonly hint: string; readonly href: string }
   | { readonly kind: "run"; readonly id: string; readonly title: string; readonly hint: string };
+export type LifeGame = Extract<GameItem, { kind: "life" }>;
+export type RunGame = Extract<GameItem, { kind: "run" }>;
 
 const RUNS = MODULES.filter((m) => m.kind === "run");
 
-function lifeItem(id: CharacterId): GameItem {
+function lifeItem(id: CharacterId): LifeGame {
   const c = CHARACTERS.find((x) => x.id === id)!;
   return { kind: "life", id, title: c.name, hint: GAME_HINTS[id] ?? "", href: GAME_ENTRY[id].href };
 }
 
-function runItem(id: string): GameItem {
+function runItem(id: string): RunGame {
   const m = RUNS.find((x) => x.id === id)!;
   return { kind: "run", id, title: m.title, hint: GAME_HINTS[id] ?? "" };
 }
 
 /** The eight lives, in the cast's order. */
-export const LIFE_GAMES: readonly GameItem[] = CHARACTERS.map((c) => lifeItem(c.id));
+export const LIFE_GAMES: readonly LifeGame[] = CHARACTERS.map((c) => lifeItem(c.id));
 
 /** The twenty runs, in their teaching order. */
-export const RUN_GAMES: readonly GameItem[] = INTERACTIVE_MODULES.filter((m) => RUNS.some((r) => r.id === m.id)).map((m) => runItem(m.id));
+export const RUN_GAMES: readonly RunGame[] = INTERACTIVE_MODULES.filter((m) => RUNS.some((r) => r.id === m.id)).map((m) => runItem(m.id));
 
 /** "All games": the eight lives, then the runs by the Learn shelves they already sit on. */
 export const GAME_GROUPS: ReadonlyArray<{ readonly title: string; readonly games: readonly GameItem[] }> = [
@@ -132,4 +134,55 @@ export function gamesFor(subdomain: Subdomain): GameItem[] {
 /** The strategy modules that work on one part of life: a strategy's domains map to it through `LEARNING_TARGETS`. */
 export function modulesFor(subdomain: Subdomain): StrategyDefinition[] {
   return STRATEGIES.filter((s) => s.active && s.domains.some((d) => LEARNING_TARGETS[d].subdomain === subdomain));
+}
+
+/**
+ * The parts of life a game is about, its lead part first. A run: its targets. A character game:
+ * the domains of the strategy its journey teaches. Leo and Theo have no journey, so their own
+ * domains stand in: the evening Leo cannot settle and the morning Theo cannot leave.
+ */
+export function subjectOf(game: GameItem): readonly Subdomain[] {
+  if (game.kind === "run") return INTERACTIVE_MODULES.find((m) => m.id === game.id)?.targets ?? [];
+  const journey = JOURNEYS.find((j) => j.who === game.id);
+  const domains = journey ? STRATEGIES.find((s) => s.id === journey.strategy)?.domains ?? [] : CHARACTERS.find((c) => c.id === game.id)?.domains ?? [];
+  return [...new Set(domains.map((d) => LEARNING_TARGETS[d].subdomain))];
+}
+
+/** Whether rank `a` is ahead of rank `b`: the first place they differ decides; equal is not ahead. */
+function ahead(a: readonly number[], b: readonly number[]): boolean {
+  const i = a.findIndex((x, k) => x !== b[k]);
+  return i >= 0 && a[i]! > b[i]!;
+}
+
+/**
+ * The game among `among` nearest a subject, or null when none shares a part of life with it. Nearest
+ * is, in order: the most parts shared; the one `back` prefers; the one that holds the subject's lead
+ * part; the one whose own lead part the subject holds; the narrower. Then list order, so the same
+ * subject always finds the same game.
+ */
+function nearest<T extends GameItem>(subject: readonly Subdomain[], among: readonly T[], back: (game: T) => boolean = () => false): T | null {
+  let best: { game: T; rank: number[] } | null = null;
+  for (const game of among) {
+    const parts = subjectOf(game);
+    const shared = parts.filter((p) => subject.includes(p)).length;
+    if (shared === 0) continue;
+    const rank = [shared, back(game) ? 1 : 0, parts.includes(subject[0]!) ? 1 : 0, subject.includes(parts[0]!) ? 1 : 0, -parts.length];
+    if (!best || ahead(rank, best.rank)) best = { game, rank };
+  }
+  return best?.game ?? null;
+}
+
+/** The run on the same subject as a character game, or null when they share no part of life. */
+export function relatedRun(id: CharacterId): RunGame | null {
+  const life = LIFE_GAMES.find((g) => g.id === id);
+  return life ? nearest(subjectOf(life), RUN_GAMES) : null;
+}
+
+/**
+ * The character game on the same subject as a run, or null when none shares a part of life with it.
+ * Among equals, the life whose own run this is comes first, so a pair leads both ways.
+ */
+export function relatedLife(runId: string): LifeGame | null {
+  const run = RUN_GAMES.find((g) => g.id === runId);
+  return run ? nearest(subjectOf(run), LIFE_GAMES, (life) => relatedRun(life.id)?.id === runId) : null;
 }

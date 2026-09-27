@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { ArrowLeft, Pause, Play, ArrowRight, PushPin, PaperPlaneTilt } from '@phosphor-icons/react';
 import { createMia, miaReducer, INTENTIONS, THOUGHTS, ports } from '@/lives/mia-world';
 import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 const ART = '/games/next-three/mia/';
 export function MiaWorldGame() {
   const [s, dispatch] = useReducer(miaReducer, undefined, () => createMia());
@@ -68,7 +69,7 @@ export function MiaWorldGame() {
             <button onClick={() => dispatch({ type: 'cue', cue: 'note' })}><img src={ART + 'props/portable-cue.svg'} alt=""/>Write it down</button>
             <button onClick={() => dispatch({ type: 'cue', cue: 'say' })}><img src={ART + 'props/intention-thread.svg'} alt=""/>Say it aloud</button>
           </div> : s.anchor === null ? <p className="mt-hint">Choose a glowing connection.</p> : <button className="mt-primary" onClick={() => dispatch({ type: 'revisit' })}>Try with my cue <ArrowRight/></button>}
-        </> : complete ? <><div className="mt-ending"><Link className="mt-primary" href="/lives/learn?module=external_cue_v1">Try a cue in my day <ArrowRight/></Link><button className="mt-secondary" onClick={() => dispatch({ type: 'restart' })}>Another thread</button></div>{s.parked.length > 0 && <div className="mt-saved"><span>Saved for later</span><ul>{s.parked.map(id => <li key={id}>{THOUGHTS[id] ?? 'Tomorrow’s plans'}</li>)}</ul></div>}</> : <>
+        </> : complete ? <><div className="mt-ending"><Link className="mt-primary" href="/lives/learn?module=external_cue_v1">Try a cue in my day <ArrowRight/></Link><RelatedRun who="mia" className="mt-secondary"/><button className="mt-secondary" onClick={() => dispatch({ type: 'restart' })}>Another thread</button></div>{s.parked.length > 0 && <div className="mt-saved"><span>Saved for later</span><ul>{s.parked.map(id => <li key={id}>{THOUGHTS[id] ?? 'Tomorrow’s plans'}</li>)}</ul></div>}</> : <>
           {s.distracted !== null && <div className="mt-distraction"><span>{THOUGHTS[s.distracted] ?? 'Tomorrow’s plans'}</span><button onClick={() => dispatch({ type: 'park' })}>Park for later <ArrowRight size={16}/></button></div>}
           <button className="mt-primary" onClick={() => dispatch({ type: s.solved ? 'next' : 'pulse' })}>{s.solved ? (s.round === 2 ? 'Give it a cue' : 'Next thread') : 'Send thought'}{s.solved ? <ArrowRight/> : <Play weight="fill"/>}</button>
           {s.parked.length > 0 && <span className="mt-pocket" aria-label={`${s.parked.length} thoughts saved for later`}>{s.parked.length} saved for later</span>}
