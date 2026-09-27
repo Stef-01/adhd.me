@@ -155,18 +155,31 @@ function ahead(a: readonly number[], b: readonly number[]): boolean {
 }
 
 /**
- * The game among `among` nearest a subject, or null when none shares a part of life with it. Nearest
- * is, in order: the most parts shared; the one `back` prefers; the one that holds the subject's lead
- * part; the one whose own lead part the subject holds; the narrower. Then list order, so the same
- * subject always finds the same game.
+ * Runs tied between lives, whose partner the ranking below would find by the order of a list (the
+ * run's targets, or the cast), named here instead. The life named wins only among the lives tied
+ * for the most parts shared, and never over the life whose own run this is, so every pair still
+ * leads both ways.
  */
-function nearest<T extends GameItem>(subject: readonly Subdomain[], among: readonly T[], back: (game: T) => boolean = () => false): T | null {
+const TIED_RUNS: Readonly<Record<string, CharacterId>> = {
+  // Attention is listed first, but the run is the phone at 12:40am: its last card sends it to the sleep run, and Leo's night puts the phone away.
+  screens: "leo",
+  // Tied with Zoe on regulation alone, by list order; the run's movement is for Leo's restlessness and early nights, not a message sent in heat.
+  exercise: "leo",
+};
+
+/**
+ * The game among `among` nearest a subject, or null when none shares a part of life with it. Nearest
+ * is, in order: the most parts shared; the one `back` prefers; the one `named` prefers; the one that
+ * holds the subject's lead part; the one whose own lead part the subject holds; the narrower. Then
+ * list order, so the same subject always finds the same game.
+ */
+function nearest<T extends GameItem>(subject: readonly Subdomain[], among: readonly T[], back: (game: T) => boolean = () => false, named: (game: T) => boolean = () => false): T | null {
   let best: { game: T; rank: number[] } | null = null;
   for (const game of among) {
     const parts = subjectOf(game);
     const shared = parts.filter((p) => subject.includes(p)).length;
     if (shared === 0) continue;
-    const rank = [shared, back(game) ? 1 : 0, parts.includes(subject[0]!) ? 1 : 0, subject.includes(parts[0]!) ? 1 : 0, -parts.length];
+    const rank = [shared, back(game) ? 1 : 0, named(game) ? 1 : 0, parts.includes(subject[0]!) ? 1 : 0, subject.includes(parts[0]!) ? 1 : 0, -parts.length];
     if (!best || ahead(rank, best.rank)) best = { game, rank };
   }
   return best?.game ?? null;
@@ -180,9 +193,10 @@ export function relatedRun(id: CharacterId): RunGame | null {
 
 /**
  * The character game on the same subject as a run, or null when none shares a part of life with it.
- * Among equals, the life whose own run this is comes first, so a pair leads both ways.
+ * Among equals, the life whose own run this is comes first, so a pair leads both ways; then the life
+ * TIED_RUNS names.
  */
 export function relatedLife(runId: string): LifeGame | null {
   const run = RUN_GAMES.find((g) => g.id === runId);
-  return run ? nearest(subjectOf(run), LIFE_GAMES, (life) => relatedRun(life.id)?.id === runId) : null;
+  return run ? nearest(subjectOf(run), LIFE_GAMES, (life) => relatedRun(life.id)?.id === runId, (life) => TIED_RUNS[runId] === life.id) : null;
 }

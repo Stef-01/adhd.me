@@ -30,3 +30,20 @@ export function writeCursor(storage: Pick<Storage, "setItem">, moduleId: string,
 export function clearCursor(storage: Pick<Storage, "removeItem">): void {
   try { storage.removeItem(CURSOR_KEY); } catch { /* Session remains usable. */ }
 }
+
+/** The cursor "Continue" may offer: none for a module this device has already finished. */
+export function resumable(cursor: LearnCursor | null, done: readonly string[]): LearnCursor | null {
+  return cursor && !done.includes(cursor.moduleId) ? cursor : null;
+}
+
+/**
+ * The step a module opens on when the address names it: the cursor's, when the cursor is on it.
+ * A finished module left from its last card (a link off a run's last card) keeps its cursor there
+ * for Back alone; any other way in starts it again.
+ */
+export function openingStep(moduleId: string, cursor: LearnCursor | null, done: readonly string[], back: boolean): number {
+  const module = MODULES.find(module => module.id === moduleId);
+  if (!module || cursor?.moduleId !== moduleId) return 0;
+  const left = done.includes(moduleId) && cursor.step === cardCount(module) - 1;
+  return left && !back ? 0 : cursor.step;
+}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { CURSOR_KEY, readCursor, writeCursor } from "./cursor";
+import { CURSOR_KEY, openingStep, readCursor, resumable, writeCursor } from "./cursor";
 import { markDone, PROGRESS_KEY, readProgress } from "./progress";
+import { cardCount, MODULES } from "./scenes";
 
 function storage() {
   const data = new Map<string, string>();
@@ -28,5 +29,24 @@ describe("learning resume", () => {
     const denied = { getItem: () => { throw new Error("blocked"); }, setItem: () => { throw new Error("blocked"); } };
     expect(readCursor(denied)).toBeNull();
     expect(() => writeCursor(denied, "adhd", 1)).not.toThrow();
+  });
+  it("offers Continue only for a module not yet finished", () => {
+    const cursor = { v: 1, moduleId: "mornings", step: 3 } as const;
+    expect(resumable(cursor, [])).toEqual(cursor);
+    expect(resumable(cursor, ["adhd"])).toEqual(cursor);
+    expect(resumable(cursor, ["mornings"])).toBeNull();
+    expect(resumable(null, [])).toBeNull();
+  });
+  it("reopens a finished run on its last card on Back, and at its title from anywhere else", () => {
+    const last = cardCount(MODULES.find((m) => m.id === "mornings")!) - 1;
+    const left = { v: 1, moduleId: "mornings", step: last } as const;
+    expect(openingStep("mornings", left, ["mornings"], true)).toBe(last);
+    expect(openingStep("mornings", left, ["mornings"], false)).toBe(0);
+    // Not finished, or not on the last card: the cursor is where the person is, however they arrive.
+    expect(openingStep("mornings", left, [], false)).toBe(last);
+    expect(openingStep("mornings", { v: 1, moduleId: "mornings", step: 2 }, ["mornings"], false)).toBe(2);
+    // A cursor on another module, or none, opens at the start.
+    expect(openingStep("starting", left, [], true)).toBe(0);
+    expect(openingStep("mornings", null, [], true)).toBe(0);
   });
 });

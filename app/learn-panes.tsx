@@ -28,7 +28,7 @@ import { reasonLine, recentlyCompleted, recommendStrategies, selectGoals, skipGo
 import { MODULES, type LearnModule } from "@/learn/scenes";
 import type { Progress } from "@/learn/progress";
 import type { LearnCursor } from "@/learn/cursor";
-import { deviceLearningStorage } from "@/learn/cursor";
+import { deviceLearningStorage, resumable } from "@/learn/cursor";
 import { LearningCoverArt, LearningScene } from "./learning-scene";
 import { LifeBean } from "./lives/bean";
 import { GAME_ENTRY } from "@/lives/entry-points";
@@ -428,7 +428,9 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
   const started = profile?.saved.find((s) => s.status === "started");
   const toolkit = (profile?.personalStrategies.length ?? 0) > 0;
   const quick = STRATEGIES.filter((s) => s.estimatedMinutes <= 2);
-  const continuing = cursor ? MODULES.find((m) => m.id === cursor.moduleId) : undefined;
+  // A module already ticked is not offered as Continue, though Back may still find its last card.
+  const resume = resumable(cursor, progress.done);
+  const continuing = resume ? MODULES.find((m) => m.id === resume.moduleId) : undefined;
 
   return (
     <>
@@ -438,7 +440,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
           <div className="learning-feature">
             <div>
               <h2>Get to know ADHD.</h2>
-              <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "adhd", Boolean(cursor))}>
+              <button className="learn-primary" type="button" onClick={() => start(resume?.moduleId ?? "adhd", Boolean(resume))}>
                 {continuing ? `Continue ${continuing.title}` : "Start"} <ArrowRight size={18} aria-hidden="true" />
               </button>
             </div>

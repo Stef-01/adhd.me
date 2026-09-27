@@ -136,10 +136,14 @@ describe("a game and a run on the same subject", () => {
     expect(relatedLife("no-such-run")).toBeNull();
   });
 
-  it("is deterministic: the same game always finds the same partner", () => {
-    const once = RUN_GAMES.map((r) => relatedLife(r.id)?.id);
-    expect(RUN_GAMES.map((r) => relatedLife(r.id)?.id)).toEqual(once);
-    expect(LIFE_GAMES.map((l) => relatedRun(l.id)?.id)).toEqual(LIFE_GAMES.map((l) => relatedRun(l.id)?.id));
+  it("each of the twenty runs leads to the life named here, so a changed tie-break fails loudly", () => {
+    const partners = Object.fromEntries(RUN_GAMES.map((r) => [r.id, relatedLife(r.id)?.id]));
+    expect(partners).toEqual({
+      context: "arjun", "more-than-attention": "arjun", starting: "nina", deadlines: "theo", "working-memory": "mia",
+      hyperfocus: "arjun", ambiguity: "nina", interruption: "maya", perfectionism: "nina", "not-listening": "arjun",
+      "forgotten-commitments": "mia", conflict: "zoe", household: "theo", sleep: "leo", exercise: "leo",
+      eating: "arjun", gut: "leo", money: "jax", mornings: "theo", screens: "leo",
+    });
     // A pair carries what the screens link to: a run's short title, a life's name and entry.
     expect(relatedRun("nina")).toMatchObject({ kind: "run", id: "starting", title: "The blank page" });
     expect(relatedLife("mornings")).toMatchObject({ kind: "life", id: "theo", title: "Theo", href: "/lives/play/theo-out-the-door" });

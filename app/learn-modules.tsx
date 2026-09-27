@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearProgress, markDone, readProgress, type Progress } from "@/learn/progress";
-import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
+import { clearCursor, deviceLearningStorage, openingStep, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
 import { MODULES, scenesOf, type LearnModule, type Question } from "@/learn/scenes";
 import { LearningScene, LearningExplorer, CarePathExplorer } from "./learning-scene";
 import { LearnPanes, writePane } from "./learn-panes";
@@ -66,10 +66,19 @@ function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
  * the page arrives on was not, and a script's focus there draws a ring nobody asked for (N12).
  */
 let interacted = false;
+/**
+ * The address the browser's Back or Forward last arrived at, until a press or a key starts
+ * something else. A finished run reopens on its last card only then (openingStep).
+ */
+let returnedTo: string | null = null;
 if (typeof window !== "undefined") {
   const mark = () => { interacted = true; };
   window.addEventListener("pointerdown", mark, { capture: true, once: true });
   window.addEventListener("keydown", mark, { capture: true, once: true });
+  const forget = () => { returnedTo = null; };
+  window.addEventListener("pointerdown", forget, { capture: true });
+  window.addEventListener("keydown", forget, { capture: true });
+  window.addEventListener("popstate", () => { returnedTo = window.location.href; });
 }
 
 function LessonHeading({ active, children, className = "learn-card-heading" }: { active: boolean; children: React.ReactNode; className?: string }) {
@@ -121,7 +130,7 @@ export function LearnModules() {
     const saved = readCursor(deviceLearningStorage);
     if (module) writePane(module.kind === "run" ? "games" : "modules");
     setOpen(module?.id ?? null);
-    setStep(module && saved?.moduleId === module.id ? saved.step : 0);
+    setStep(module ? openingStep(module.id, saved, readProgress(deviceLearningStorage).done, returnedTo === window.location.href) : 0);
     setPicks([]);
   }, [moduleId]);
 

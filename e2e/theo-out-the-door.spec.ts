@@ -63,7 +63,7 @@ test("a complete morning, physical evening arrangement and rainy revisit carry s
   expect(JSON.stringify(after)).toBe(storage);
   await expect(page.getByRole("link", { name: "Make your own launch pad" })).toHaveAttribute("href", "/lives/learn?module=launch_pad_v1");
   // The run on the same subject, by its title: Theo's morning leads to Out the door.
-  await expect(page.getByRole("link", { name: "Out the door", exact: true })).toHaveAttribute("href", "/approach?module=mornings");
+  await expect(page.getByRole("link", { name: "Out the door, a game", exact: true })).toHaveAttribute("href", "/approach?module=mornings");
   await page.getByRole("button", { name: "Another morning" }).click();
   await expect(page.locator(".tm-items-living [data-command=phone]")).toBeVisible();
   await expect(page.locator(".tm-game")).toHaveAttribute("data-packed", "0");

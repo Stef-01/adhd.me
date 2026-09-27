@@ -20,7 +20,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Play, Question, ShareNetwork, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { expiryIsHit, rampedSeconds, RULES, runPhaseAt, runStepCount, type Run, RELATE_BUTTONS, RELATE_PROMPT, relateFormFor } from "@/learn/play";
-import { clearCursor, deviceLearningStorage } from "@/learn/cursor";
+import { deviceLearningStorage } from "@/learn/cursor";
 import { relatedLife } from "@/learn/games";
 import { markDone } from "@/learn/progress";
 import { track } from "@/model/events";
@@ -45,6 +45,12 @@ const TUTORIAL: ReadonlyArray<{ line: string; mood: "engaged" | "thinking" | "pl
   { line: "Sometimes the line says do nothing. Waiting is the move.", mood: "thinking" },
   { line: "A miss costs nothing. After each round, say how much it was you.", mood: "pleased" },
 ];
+/**
+ * Runs whose completion this page has recorded since each was last opened at its title. Finish and a
+ * link off the last card can both be reached on one visit (a link opened in a new tab leaves the
+ * card here; Back returns to it), and a run is recorded as completed, or started again, once.
+ */
+const completedRuns = new Set<string>();
 function readFlag(key: string): boolean { try { return deviceLearningStorage.getItem(key) === "1"; } catch { return false; } }
 function writeFlag(key: string, on: boolean): void { try { if (on) deviceLearningStorage.setItem(key, "1"); else deviceLearningStorage.removeItem(key); } catch { /* memory only */ } }
 
@@ -78,8 +84,14 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
    */
   const [cost, setCost] = useState(5);
   const { phase, round, index } = runPhaseAt(run, step);
+  /** The step the run opened on: its title is a fresh start, its last card after Back is not. */
+  const openedAt = useRef(step);
 
-  useEffect(() => { const r = readModel(deviceLearningStorage); setRecord(r); setSafety(activeSafety(r)); setTutorial(readFlag(TUTORED_KEY) ? -1 : 0); setLabels(readFlag(LABELS_KEY)); track("MODULE_STARTED", { module: run.id, format: "run" }); }, [run.id]);
+  useEffect(() => {
+    const r = readModel(deviceLearningStorage); setRecord(r); setSafety(activeSafety(r)); setTutorial(readFlag(TUTORED_KEY) ? -1 : 0); setLabels(readFlag(LABELS_KEY));
+    if (openedAt.current === 0) completedRuns.delete(run.id);
+    if (!completedRuns.has(run.id)) track("MODULE_STARTED", { module: run.id, format: "run" });
+  }, [run.id]);
   const toggleLabels = () => { setLabels((l) => { writeFlag(LABELS_KEY, !l); return !l; }); };
   const endTutorial = () => { writeFlag(TUTORED_KEY, true); setTutorial(-1); };
   const refresh = (r: ModelRecord) => setRecord(r);
@@ -90,13 +102,27 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
     track("MODULE_RESONANCE_RECORDED", { module: run.id, field: "cost", value: String(held) });
   };
   const next = useCallback(() => onStep(step + 1), [onStep, step]);
-  const finish = () => { refresh(markModuleComplete(deviceLearningStorage, run.id)); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onFinish(); };
+  /** Completion in the model, counted once however the person leaves the last card. */
+  const complete = () => {
+    const r = markModuleComplete(deviceLearningStorage, run.id);
+    if (!completedRuns.has(run.id)) { completedRuns.add(run.id); track("MODULE_COMPLETED", { module: run.id, format: "run" }); }
+    return r;
+  };
+  const finish = () => { refresh(complete()); onFinish(); };
   /** The axes this run moves, for the line on its last card. */
   const moved = dimensionsOf(run.id).slice(0, 2);
   /** The character game on the same subject, one tap from the last card. */
   const life = relatedLife(run.id);
-  /** A link off the last card completes the run as Finish does: in the model, on the Learn list, and with no card left to resume. */
-  const leaveDone = () => { markModuleComplete(deviceLearningStorage, run.id); markDone(deviceLearningStorage, run.id); clearCursor(deviceLearningStorage); track("MODULE_COMPLETED", { module: run.id, format: "run" }); };
+  /**
+   * A plain click on a link off the last card completes the run as Finish does, in the model and on
+   * the Learn list. The cursor stays, so Back returns to this card. Cmd, Ctrl, Shift or Alt opens
+   * the link elsewhere and leaves the person here, so that click completes nothing.
+   */
+  const leaveDone = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    complete();
+    markDone(deviceLearningStorage, run.id);
+  };
   /** The reflect beat: save, check for safety, and either stop on the safety screen or move on. */
   const leaveReflection = () => {
     if (reflection.trim()) {
@@ -305,13 +331,13 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
               <h2 className="play-title">{run.next.heading}</h2>
               <div className="next-actions">
                 {run.next.action === "learn" && run.next.moduleId ? (
-                  <button type="button" className="play-tempt is-go" onClick={() => { markModuleComplete(deviceLearningStorage, run.id); track("MODULE_COMPLETED", { module: run.id, format: "run" }); onOpenModule(run.next.moduleId!); }}>Play the next one <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
+                  <button type="button" className="play-tempt is-go" onClick={() => { complete(); onOpenModule(run.next.moduleId!); }}>Play the next one <ArrowRight size={16} weight="bold" aria-hidden="true" /></button>
                 ) : run.next.action === "support" ? (
                   <Link className="play-tempt is-go" href="/support" onClick={leaveDone}>Explore support <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link>
                 ) : (
                   <button type="button" className="play-tempt is-go" onClick={finish}><Check size={16} weight="bold" aria-hidden="true" /> Finish</button>
                 )}
-                {life && <Link className="play-choice play-related" href={life.href} onClick={leaveDone}>{life.title} <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link>}
+                {life && <Link className="play-choice play-related" href={life.href} aria-label={`${life.title}, a game`} onClick={leaveDone}>{life.title} <ArrowRight size={16} weight="bold" aria-hidden="true" /></Link>}
                 <SkillRecommendation  />
                 {run.next.action !== "try" && <button type="button" className="play-choice" onClick={finish}>Finish for now</button>}
               </div>

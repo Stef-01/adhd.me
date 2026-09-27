@@ -139,13 +139,16 @@ test("a run's last card leads to the character game on the same subject, and the
   await page.goto("/approach");
   await page.evaluate(([k, step]) => localStorage.setItem(k as string, JSON.stringify({ v: 1, moduleId: "mornings", step })), [CURSOR_KEY, last] as const);
   await page.goto("/approach?module=mornings");
-  const theo = page.getByRole("link", { name: "Theo", exact: true });
+  const theo = page.getByRole("link", { name: "Theo, a game", exact: true });
   await expect(theo).toHaveAttribute("href", GAME_ENTRY.theo.href);
   expect((await theo.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await theo.click();
   await expect(page).toHaveURL(new RegExp(`${GAME_ENTRY.theo.href}$`));
   await expect(page.getByRole("heading", { name: "One train. One busy brain." })).toBeVisible();
-  const stored = await page.evaluate((k) => ({ done: JSON.parse(localStorage.getItem("adhdme.learn.v1") ?? "{}").done, cursor: localStorage.getItem(k) }), CURSOR_KEY);
-  expect(stored.done).toContain("mornings");
-  expect(stored.cursor).toBeNull();
+  const done = await page.evaluate(() => JSON.parse(localStorage.getItem("adhdme.learn.v1") ?? "{}").done);
+  expect(done).toContain("mornings");
+  // Back returns to the last card the person left, not the run's title.
+  await page.goBack();
+  await expect(page.locator('.play-run[data-phase="next"]')).toBeVisible();
+  await expect(page.getByRole("link", { name: "Theo, a game", exact: true })).toBeVisible();
 });
