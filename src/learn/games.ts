@@ -148,23 +148,26 @@ function panelGames(subdomain: Subdomain): GameItem[] {
 let mapPanels: Map<Subdomain, GameItem[]> | null = null;
 
 /**
- * Every part's games, looked at across the whole map: a game no part shows takes the place of the
- * last game of its own kind, on the first of its parts, that another part shows as well. So every
- * run and every life is on the map somewhere, and no game leaves it to make room.
+ * Every part's games, looked at across the whole map: a game no part shows takes the place of a
+ * game of its own kind that another part shows as well. It looks first for one that is a guest on
+ * that part (the part is not its lead), across all of its own parts, and only then for any; within
+ * a part, the last such game gives way. So every run and every life is on the map somewhere, no
+ * game leaves it to make room, and a game keeps its own lead part where it can.
  */
 function panelsOfMap(): Map<Subdomain, GameItem[]> {
   if (mapPanels) return mapPanels;
   const map = new Map(SUBDOMAINS.map((s) => [s.id, panelGames(s.id)] as const));
   const shownOn = (game: GameItem) => [...map.values()].filter((games) => games.includes(game)).length;
+  const spareOn = (game: GameItem, part: Subdomain, guestOnly: boolean) =>
+    [...(map.get(part) ?? [])].reverse().find((g) => g.kind === game.kind && shownOn(g) > 1 && (!guestOnly || subjectOf(g)[0] !== part));
   for (const game of [...RUN_GAMES, ...LIFE_GAMES]) {
     if (shownOn(game) > 0) continue;
-    for (const part of subjectOf(game)) {
-      const games = map.get(part) ?? [];
-      const spare = [...games].reverse().find((g) => g.kind === game.kind && shownOn(g) > 1);
-      if (spare) {
-        games[games.indexOf(spare)] = game;
-        break;
-      }
+    for (const guestOnly of [true, false]) {
+      const part = subjectOf(game).find((p) => spareOn(game, p, guestOnly));
+      if (!part) continue;
+      const games = map.get(part)!;
+      games[games.indexOf(spareOn(game, part, guestOnly)!)] = game;
+      break;
     }
   }
   return (mapPanels = map);
