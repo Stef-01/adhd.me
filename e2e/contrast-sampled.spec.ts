@@ -27,7 +27,6 @@ const NOT_PATIENT = new Set(["/clinicians"]);
  */
 const LEDGER: ReadonlyArray<{ match: RegExp; what: string }> = [
   { match: /\bbedroom-/, what: "Leo's evening: prop labels, counts, toolbar and footer at 8 to 11px (PLAN.md N15)" },
-  { match: /\bkit-(toolbar|meter)\b/, what: "the shared game shell's toolbar and meter at 10 to 11px, in Arjun's, Jax's, Maya's, Nina's and Zoe's games (PLAN.md N15)" },
   { match: /\bnw-chunk\b/, what: "Nina's letter chunks at 11px (PLAN.md N15)" },
   { match: /\bjw-tag\b/, what: "Jax's price tags at 11px (PLAN.md N15)" },
   { match: /\bmt-pocket\b/, what: "Mia's pocket count at 11px (PLAN.md N15)" },

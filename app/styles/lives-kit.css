@@ -12,7 +12,7 @@
 .kit-game button { cursor: pointer; }
 .kit-game button:focus-visible, .kit-game a:focus-visible { outline: 3px solid var(--g-focus); outline-offset: 3px; }
 .kit-toolbar { height: 64px; padding: 8px 28px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: relative; z-index: 20; }
-.kit-toolbar > span { font-size: 10px; font-weight: 700; letter-spacing: .17em; color: var(--g-muted); text-transform: uppercase; }
+.kit-toolbar > span { font-size: 13px; font-weight: 700; color: var(--g-muted); text-align: center; }
 .kit-toolbar > div { display: flex; justify-content: end; gap: 4px; }
 .kit-icon { display: inline-grid; place-items: center; width: 48px; height: 48px; padding: 0; background: transparent; border: 0; border-radius: 50%; color: var(--g-ink); cursor: pointer; }
 .kit-icon:hover { background: var(--g-soft); }
@@ -46,10 +46,11 @@
 .kit-switch[data-on="true"] > span { transform: translateX(18px); }
 @media (max-width: 640px) {
   .kit-toolbar { height: 54px; padding: 3px 8px; }
+  .kit-toolbar > span { font-size: 12px; line-height: 1.25; }
   .kit-caption { padding: 0 14px 10px; }
   .kit-game .kit-caption h1 { font-size: 26px; }
   .kit-game .kit-caption p { font-size: 12px; margin: 6px 0 10px; }
-  .kit-hud { gap: 6px 12px; font-size: 11px; }
+  .kit-hud { gap: 6px 12px; font-size: 12px; }
   .kit-meter > div { width: 84px; }
   .kit-status { min-height: 40px; padding: 10px 14px; font-size: 12px; }
 }
