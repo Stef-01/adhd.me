@@ -44,7 +44,7 @@
 .mt-primary svg { width: 20px; height: 20px; }
 .mt-distraction { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: min(100%,380px); padding: 8px 8px 8px 18px; border-radius: 18px; background: #614b49; color: #ffdfbc; font-size: 12px; }
 .mt-distraction button { display: flex; align-items: center; gap: 8px; border: 0; background: #ffe0b9; color: #493623; border-radius: 12px; min-height: 48px; padding: 8px 12px; }
-.mt-pocket { color: #c6bedc; font-size: 11px; }
+.mt-pocket { color: #c6bedc; font-size: 12px; }
 .mt-cues { display: flex; gap: 16px; }
 .mt-cues button { display: flex; align-items: center; gap: 10px; padding: 12px 18px; background: #594c6b; color: #fff5df; border: 0; border-radius: 18px; min-height: 64px; font-size: 13px; }
 .mt-cues img { width: 44px; height: 44px; }
