@@ -76,10 +76,13 @@ test('touch and keyboard rotate the same stable targets without saving health in
   const context = await browser.newContext({baseURL,viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});
   await context.addInitScript(()=>localStorage.setItem('adhdme-privacy-ack','1'));
   const page=await context.newPage(); await page.goto(URL);
+  // Its own context, so not the suite's page: wait for React to attach as the fixture would, or an
+  // Enter pressed before hydration reaches a tile with no handler yet (CI, 2026-09-27).
+  await page.waitForFunction(()=>Number(document.documentElement.getAttribute('data-hydrated')??'0')>=2,undefined,{timeout:30_000});
   const before=await page.evaluate(()=>JSON.stringify(localStorage));
   const first=page.locator('.mt-tile').first(); const turn=Number(await first.getAttribute('data-turn'));
   await first.focus(); await page.keyboard.press('Enter');
-  expect(Number(await first.getAttribute('data-turn'))).toBe(turn+1);
+  await expect(first).toHaveAttribute('data-turn',String(turn+1));
   await solve(page,true); await expect(page.getByRole('button',{name:'Next thread'})).toBeVisible();
   expect(await page.evaluate(()=>JSON.stringify(localStorage))).toBe(before); await context.close();
 });
