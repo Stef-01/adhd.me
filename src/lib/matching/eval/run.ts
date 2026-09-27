@@ -9,7 +9,6 @@ import { FileCache } from "@/lib/llm/cache";
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
 import type { Deps } from "@/lib/llm/client";
 import { appendLedger, BudgetMeter, ledgerSpend, RateGate } from "@/lib/llm/meter";
-import { syntheticRoster } from "@/matching/scale-fixture";
 import { answerFor, lexiconReading, READ_CALL, readRequest, type Reading } from "../llm-read";
 import { facetScore, faults, flipRate, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
 import { CLASSES, evalEntries, oracleGains, type EvalEntry } from "./sets";
@@ -40,6 +39,8 @@ export type EvalOptions = {
   root?: string;
   now?: () => Date;
   estimateUsd?: number;
+  /** Rosters to rank on, by name. The script adds syntheticRoster(50), which no src/ module may import. */
+  rosters?: Record<string, readonly Clinician[]>;
 };
 export type Outcome = { code: 0 | 1 | 2; message: string; report?: string };
 type Done = { entry: EvalEntry; reading: Reading };
@@ -110,7 +111,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   const keysOf = new Map(done.map((d) => [d.entry.text, d.reading.keys]));
   const score = (of: Done[]) => scoreReader(of.map((d) => d.entry), (text) => keysOf.get(text)!);
   const lexicon = (of: Done[]) => scoreReader(of.map((d) => d.entry), (text) => lexiconReading(text).keys);
-  const rosters: [string, readonly Clinician[]][] = [["real", clinicians], ["synthetic-50", syntheticRoster(50)]];
+  const rosters = Object.entries(options.rosters ?? { real: clinicians });
   const orders = new Map(
     done.map((d) => [
       d,

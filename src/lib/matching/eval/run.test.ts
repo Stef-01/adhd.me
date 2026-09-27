@@ -2,8 +2,10 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { clinicians } from "@/demo/clinicians";
 import { completed } from "@/lib/llm/cassettes";
 import { appendLedger, ledgerSpend } from "@/lib/llm/meter";
+import { syntheticRoster } from "@/matching/scale-fixture";
 import { promptHash, runEval } from "./run";
 
 const ENV = { OPENAI_API_KEY: "k" };
@@ -31,9 +33,11 @@ function api(answer: (n: number) => { body: object; status?: number }) {
 
 describe("P0 and L0", () => {
   it("runs L1 at P0 end to end on the cassettes and writes a passing report", async () => {
-    const outcome = await runEval({ level: "L1", phase: "P0", root: workspace(), env: {} });
+    const rosters = { real: clinicians, "synthetic-50": syntheticRoster(50) };
+    const outcome = await runEval({ level: "L1", phase: "P0", root: workspace(), env: {}, rosters });
     expect(outcome.code).toBe(0);
     const report = readFileSync(outcome.report!, "utf8");
+    expect(report).toContain("| NDCG@3 synthetic-50 |");
     expect(report).toMatch(/^Result: PASS$/m);
     expect(report).toContain(`Prompt: ${promptHash("L1", {})} `);
     expect(report).toContain("| every answer reads back as sent | 0 differ | yes |");
