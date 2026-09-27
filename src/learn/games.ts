@@ -7,7 +7,7 @@ import { GAME_ENTRY } from "@/lives/entry-points";
 import { JOURNEYS } from "@/lives/journeys";
 import { STRATEGIES } from "@/lives/strategies";
 import type { CharacterId, LearningDomain, StrategyDefinition } from "@/lives/types";
-import type { Subdomain } from "@/model/layers";
+import { SUBDOMAINS, type Subdomain } from "@/model/layers";
 import { LEARNING_TARGETS } from "@/model/learning-evidence";
 import { INTERACTIVE_MODULES } from "./interactive";
 import { MODULES, SHELVES } from "./scenes";
@@ -118,14 +118,14 @@ export function tryFirst(goals: readonly LearningDomain[], played: (game: GameIt
 /**
  * The games about one part of life (PLAN.md W9): the runs that target it, then the character games
  * whose subject holds it, by the same reading as the partner links (`subjectOf`), so Leo and Theo,
- * who have no journey, are on the map too. The character games whose lead part this is come first,
- * then the narrower, so a game about fewer things is found where it is most at home.
+ * who have no journey, are on the map too. Within each, the games whose lead part this is come
+ * first, then the narrower, so a game about fewer things is found where it is most at home.
  */
 export function gamesFor(subdomain: Subdomain): GameItem[] {
-  const runs = RUN_GAMES.filter((g) => INTERACTIVE_MODULES.find((m) => m.id === g.id)?.targets.includes(subdomain));
   const rank = (g: GameItem) => [subjectOf(g)[0] === subdomain ? 1 : 0, -subjectOf(g).length];
-  const lives = LIFE_GAMES.filter((g) => subjectOf(g).includes(subdomain)).sort((a, b) => (ahead(rank(a), rank(b)) ? -1 : ahead(rank(b), rank(a)) ? 1 : 0));
-  return [...runs, ...lives];
+  const byRank = <T extends GameItem>(games: readonly T[]) =>
+    games.filter((g) => subjectOf(g).includes(subdomain)).sort((a, b) => (ahead(rank(a), rank(b)) ? -1 : ahead(rank(b), rank(a)) ? 1 : 0));
+  return [...byRank(RUN_GAMES), ...byRank(LIFE_GAMES)];
 }
 
 /** The strategy modules that work on one part of life: a strategy's domains map to it through `LEARNING_TARGETS`. */
@@ -136,19 +136,48 @@ export function modulesFor(subdomain: Subdomain): StrategyDefinition[] {
 /** At most five rows in the care map's panel; the rest are on the Learn page. */
 export const PANEL_MAX = 5;
 
-/**
- * The care map's panel for one part of life: games first, but always room for up to two modules, so
- * the map leads to both. Runs come before character games, so when the room runs out the first
- * character game keeps the last games place; otherwise a life could appear on no part of the map.
- */
-export function panelFor(subdomain: Subdomain): { games: GameItem[]; modules: StrategyDefinition[] } {
-  const allModules = modulesFor(subdomain);
+/** A part's games before the whole map is looked at: games first, room for up to two modules, one character game kept. */
+function panelGames(subdomain: Subdomain): GameItem[] {
   const allGames = gamesFor(subdomain);
-  const room = PANEL_MAX - Math.min(2, allModules.length);
+  const room = PANEL_MAX - Math.min(2, modulesFor(subdomain).length);
   const life = allGames.find((g) => g.kind === "life");
   const firstRoom = allGames.slice(0, room);
-  const games = life && !firstRoom.includes(life) ? [...firstRoom.slice(0, room - 1), life] : firstRoom;
-  return { games, modules: allModules.slice(0, PANEL_MAX - games.length) };
+  return life && !firstRoom.includes(life) ? [...firstRoom.slice(0, room - 1), life] : firstRoom;
+}
+
+let mapPanels: Map<Subdomain, GameItem[]> | null = null;
+
+/**
+ * Every part's games, looked at across the whole map: a game no part shows takes the place of the
+ * last game of its own kind, on the first of its parts, that another part shows as well. So every
+ * run and every life is on the map somewhere, and no game leaves it to make room.
+ */
+function panelsOfMap(): Map<Subdomain, GameItem[]> {
+  if (mapPanels) return mapPanels;
+  const map = new Map(SUBDOMAINS.map((s) => [s.id, panelGames(s.id)] as const));
+  const shownOn = (game: GameItem) => [...map.values()].filter((games) => games.includes(game)).length;
+  for (const game of [...RUN_GAMES, ...LIFE_GAMES]) {
+    if (shownOn(game) > 0) continue;
+    for (const part of subjectOf(game)) {
+      const games = map.get(part) ?? [];
+      const spare = [...games].reverse().find((g) => g.kind === game.kind && shownOn(g) > 1);
+      if (spare) {
+        games[games.indexOf(spare)] = game;
+        break;
+      }
+    }
+  }
+  return (mapPanels = map);
+}
+
+/**
+ * The care map's panel for one part of life (PLAN.md W9): games first, but always room for up to two
+ * modules, so the map leads to both; one character game kept when the part has one; and every game
+ * on some part of the map (panelsOfMap).
+ */
+export function panelFor(subdomain: Subdomain): { games: GameItem[]; modules: StrategyDefinition[] } {
+  const games = panelsOfMap().get(subdomain) ?? [];
+  return { games, modules: modulesFor(subdomain).slice(0, PANEL_MAX - games.length) };
 }
 
 /**

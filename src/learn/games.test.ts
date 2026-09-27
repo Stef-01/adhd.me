@@ -116,9 +116,10 @@ describe("the care map's panel", () => {
     }
   });
 
-  it("shows every one of the eight lives on some part of the map, Leo and Theo included", () => {
-    const shown = new Set(SUBDOMAINS.flatMap((s) => panelFor(s.id).games.filter((g) => g.kind === "life").map((g) => g.id)));
-    for (const life of eachOf(LIFE_GAMES, "the lives")) expect(shown.has(life.id), life.id).toBe(true);
+  it("shows every game on some part of the map: the eight lives, Leo and Theo included, and every run", () => {
+    const shown = new Set(SUBDOMAINS.flatMap((s) => panelFor(s.id).games.map((g) => `${g.kind}:${g.id}`)));
+    for (const life of eachOf(LIFE_GAMES, "the lives")) expect(shown.has(`life:${life.id}`), life.id).toBe(true);
+    for (const run of eachOf(RUN_GAMES, "the runs")) expect(shown.has(`run:${run.id}`), run.id).toBe(true);
   });
 });
 
