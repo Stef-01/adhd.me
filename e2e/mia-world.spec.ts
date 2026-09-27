@@ -80,9 +80,15 @@ test('touch and keyboard rotate the same stable targets without saving health in
   // Enter pressed before hydration reaches a tile with no handler yet (CI, 2026-09-27).
   await page.waitForFunction(()=>Number(document.documentElement.getAttribute('data-hydrated')??'0')>=2,undefined,{timeout:30_000});
   const before=await page.evaluate(()=>JSON.stringify(localStorage));
-  const first=page.locator('.mt-tile').first(); const turn=Number(await first.getAttribute('data-turn'));
-  await first.focus(); await page.keyboard.press('Enter');
-  await expect(first).toHaveAttribute('data-turn',String(turn+1));
+  // The page-wide count above says the layout hydrated, not that the game's tiles have their
+  // handlers yet: a press that lands first does nothing (CI turned 2 into 2, twice). Press until the
+  // tile answers, reading its turn each time, so a late press is never counted twice.
+  const first=page.locator('.mt-tile').first();
+  await expect(async()=>{
+    const turn=Number(await first.getAttribute('data-turn'));
+    await first.focus(); await page.keyboard.press('Enter');
+    await expect(first).toHaveAttribute('data-turn',String(turn+1),{timeout:1_000});
+  }).toPass({timeout:15_000});
   await solve(page,true); await expect(page.getByRole('button',{name:'Next thread'})).toBeVisible();
   expect(await page.evaluate(()=>JSON.stringify(localStorage))).toBe(before); await context.close();
 });
