@@ -8,8 +8,7 @@
 import { useMemo, useState } from "react";
 import { beginGame, CHARACTER_IDS, CHARACTERS, eligible, GAMES, MODULES, recommendStrategies, startSession, STRATEGIES, type CharacterId, type LearningDomain, type ResonanceSignal, type SessionState } from "@/lives";
 import { LEARNING_DOMAINS } from "@/lives";
-import { emptyProfile, writeProfile } from "@/lives";
-import { deviceLearningStorage } from "@/learn/cursor";
+import { deleteDeviceData } from "@/privacy/device-data";
 
 export function LivesLab() {
   const [characters, setCharacters] = useState<CharacterId[]>(["arjun"]);
@@ -86,8 +85,8 @@ export function LivesLab() {
 
       <section className="life-card" aria-labelledby="lab-reset">
         <h2 id="lab-reset">This device</h2>
-        <button type="button" className="lives-choice is-small" onClick={() => { try { writeProfile(deviceLearningStorage, emptyProfile()); setReset(true); } catch { /* denied */ } }}>Reset the Lives profile on this device</button>
-        {reset && <p role="status">Reset.</p>}
+        <button type="button" className="lives-choice is-small" onClick={() => { try { deleteDeviceData([window.localStorage, window.sessionStorage]); setReset(true); } catch { /* denied */ } }}>Delete everything this device holds</button>
+        {reset && <p role="status">Deleted.</p>}
       </section>
     </div>
   );

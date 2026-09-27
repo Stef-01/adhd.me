@@ -405,6 +405,29 @@
   line-height: 1.4rem;
 }
 
+/* Where the record lives, said once under the map. Quiet, and still AA on the page. */
+.map-where {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.3rem;
+}
+
+/* A strategy step is one link: the whole card, 44px and more, with the arrow saying where it goes. */
+.map-step-link {
+  display: grid;
+  gap: var(--sp-md);
+  justify-items: start;
+  min-height: 44px;
+  width: 100%;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 16px;
+}
+.map-step-link > svg { color: var(--accent-deep); }
+.map-step-link:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
+@media (hover: hover) { .map-step-link:hover h2 { color: var(--accent-deep); } }
+
 .map-screen .map-foot{
   margin-top: var(--sp-lg);
   font-size: 0.8125rem;

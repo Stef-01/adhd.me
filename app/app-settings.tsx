@@ -19,11 +19,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { CaretRight, Gear, Trash } from "@phosphor-icons/react";
+import { CaretRight, DownloadSimple, Gear, Trash, UploadSimple } from "@phosphor-icons/react";
 import { deviceLearningStorage } from "@/learn/cursor";
-import { clearCursor } from "@/learn/cursor";
-import { clearProgress } from "@/learn/progress";
-import { clearModel, hasSignals, readModel } from "@/model/store";
+import { copyFileName, deleteDeviceData, hasDeviceData, makeCopy, parseCopy, restoreCopy, type DeviceCopy } from "@/privacy/device-data";
 import { Sheet } from "./sheet";
 
 /** One row of the sheet. A real link, so long-press and open-in-new-tab still work. */
@@ -74,59 +72,130 @@ export function AppSettings({ children, fallback = false }: { children?: React.R
           {/* Deleting everything used to sit at the bottom of My ADHD, under the person's own
               picture of themselves. A destructive control belongs where somebody goes looking for
               it, which is here, beside what the product holds and how to take it back. */}
-          <DeleteEverything />
+          <YourData />
         </div>
       </Sheet>
     </>
   );
 }
 
+/** Both browser stores, or none when storage is blocked. */
+function browserStores(): Storage[] {
+  try {
+    return [window.localStorage, window.sessionStorage];
+  } catch {
+    return [];
+  }
+}
+
 /**
- * The one control that removes everything this device holds. Two taps, and the second one says
- * what it does — there is no undo and nothing is kept anywhere else.
+ * What this browser holds, as three rows: save it to a file, bring a file back, delete it all.
+ * There is no account, so the file is the only way a record moves to another browser. Restore is
+ * always here, because the browser that needs it is the one that holds nothing yet.
  */
-function DeleteEverything() {
+function YourData() {
+  const [present, setPresent] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [gone, setGone] = useState(false);
-  const [present, setPresent] = useState(false);
-  useEffect(() => {
-    try {
-      setPresent(hasSignals(readModel(deviceLearningStorage)));
-    } catch {
-      setPresent(false);
-    }
-  }, []);
-  if (!present) return null;
+  const [incoming, setIncoming] = useState<DeviceCopy | null>(null);
+  const [restore, setRestore] = useState<"idle" | "refused" | "done">("idle");
+  const fileRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => { setPresent(hasDeviceData(browserStores())); }, []);
+
+  const save = () => {
+    const blob = new Blob([JSON.stringify(makeCopy(deviceLearningStorage), null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = copyFileName();
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const pick = async (file: File | undefined) => {
+    if (!file) return;
+    const copy = parseCopy(await file.text());
+    if (fileRef.current) fileRef.current.value = "";
+    setRestore(copy ? "idle" : "refused");
+    setIncoming(copy);
+  };
+
   return (
-    <div className="settings-row is-danger">
-      <span>
-        <strong>Your data</strong>
-        <small>{gone ? "Deleted from this browser." : "Lives in this browser only."}</small>
-      </span>
-      {gone ? null : confirming ? (
-        <span className="settings-danger-actions">
-          <button
-            type="button"
-            className="learn-primary"
-            onClick={() => {
-              clearModel(deviceLearningStorage);
-              clearProgress(deviceLearningStorage);
-              clearCursor(deviceLearningStorage);
-              setGone(true);
-              setConfirming(false);
-            }}
-          >
-            Yes, delete it
-          </button>
-          <button type="button" className="learn-secondary" onClick={() => setConfirming(false)}>
-            Keep it
-          </button>
-        </span>
-      ) : (
-        <button type="button" className="learn-secondary" onClick={() => setConfirming(true)}>
-          <Trash size={15} weight="bold" aria-hidden="true" /> Delete
+    <>
+      {present && (
+        <button type="button" className="settings-row" onClick={save}>
+          <span>
+            <strong>Save a copy</strong>
+            <small>This file holds your answers. Keep it somewhere private.</small>
+          </span>
+          <DownloadSimple size={16} weight="bold" aria-hidden="true" />
         </button>
       )}
-    </div>
+      <div className="settings-row">
+        <span>
+          <strong>Restore a copy</strong>
+          {restore === "refused" && <small role="alert">That file isn&apos;t a copy from here. Nothing changed.</small>}
+          {restore === "done" && <small role="status">Restored.</small>}
+          {incoming && <small>Replace what is on this device?</small>}
+        </span>
+        {incoming ? (
+          <span className="settings-danger-actions">
+            <button
+              type="button"
+              className="learn-primary"
+              onClick={() => {
+                const [local, session] = browserStores();
+                if (local) restoreCopy(local, session ?? null, incoming);
+                setIncoming(null);
+                setRestore("done");
+                setGone(false);
+                setPresent(hasDeviceData(browserStores()));
+              }}
+            >
+              Replace
+            </button>
+            <button type="button" className="learn-secondary" onClick={() => setIncoming(null)}>
+              Keep mine
+            </button>
+          </span>
+        ) : (
+          <button type="button" className="learn-secondary" onClick={() => fileRef.current?.click()}>
+            <UploadSimple size={15} weight="bold" aria-hidden="true" /> Choose file
+          </button>
+        )}
+        <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={(e) => void pick(e.target.files?.[0])} data-testid="restore-file" />
+      </div>
+      {(present || gone) && (
+        <div className="settings-row is-danger">
+          <span>
+            <strong>Your data</strong>
+            <small>{gone ? "Deleted from this browser." : "Lives in this browser only."}</small>
+          </span>
+          {gone ? null : confirming ? (
+            <span className="settings-danger-actions">
+              <button
+                type="button"
+                className="learn-primary"
+                onClick={() => {
+                  deleteDeviceData(browserStores());
+                  setGone(true);
+                  setPresent(false);
+                  setConfirming(false);
+                }}
+              >
+                Yes, delete it
+              </button>
+              <button type="button" className="learn-secondary" onClick={() => setConfirming(false)}>
+                Keep it
+              </button>
+            </span>
+          ) : (
+            <button type="button" className="learn-secondary" onClick={() => setConfirming(true)}>
+              <Trash size={15} weight="bold" aria-hidden="true" /> Delete
+            </button>
+          )}
+        </div>
+      )}
+    </>
   );
 }

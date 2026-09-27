@@ -196,9 +196,20 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="text-lg font-medium text-stone-900">Cookies and local storage</h2>
           <p className="mt-2 text-sm leading-6">
-            The site sets no advertising cookies. One value is kept in your browser&apos;s own
-            storage: a record that you have seen and agreed to this policy, which never leaves
-            your device.
+            The site sets no advertising cookies. Your browser&apos;s own storage holds what you
+            answer in the app: your map in My ADHD, your goals and games in Learn, and your search
+            filters. It stays on this device and is never sent to us. There is no account, so a
+            different browser or a cleared browser starts empty.
+          </p>
+          <p className="mt-2 text-sm leading-6">
+            Settings has three controls for it. Save a copy writes everything to a file on your
+            device, which you can restore in another browser with Restore a copy. Delete removes
+            every answer from this browser. A copy you have saved is a file you hold, outside the
+            app, so Delete cannot reach it; delete the file yourself when you no longer want it.
+          </p>
+          <p className="mt-2 text-sm leading-6">
+            The browser also keeps your display and sound preferences, and a record that you have
+            seen and agreed to this policy. Neither leaves your device.
           </p>
           {/* U13: what this device holds right now, and the way to take the agreement back. */}
           <ConsentChoice />

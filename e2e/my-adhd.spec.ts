@@ -173,10 +173,12 @@ test("the next step says what it is, and opens the module it names", async ({ pa
   // The heading names it, and a second line says the first thing to actually do.
   await expect(step.getByRole("heading", { level: 2 })).toContainText(/Try this/i);
   await expect(step.locator(".map-step-do")).not.toBeEmpty();
-  // The control names where it goes, and goes to the module the strategy came from.
+  // The card is the link, and it goes to the module the strategy came from.
   const link = step.getByRole("link");
-  await expect(link).toHaveText(/module/i);
+  await expect(link).toContainText(/Try this/i);
   await expect(link).toHaveAttribute("href", /^\/approach\?module=/);
+  const box = await link.boundingBox();
+  expect(box!.height, "the card is a real target").toBeGreaterThanOrEqual(44);
 });
 
 test("a question is left as a question, and still opens its module", async ({ page }) => {

@@ -7775,6 +7775,8 @@ select { caret-color: var(--route-strong); }
 }
 
 .settings-row:last-of-type { border-bottom: 0; }
+.settings-danger-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; font: inherit; text-align: left; cursor: pointer; }
 .settings-row > span { display: flex; flex-direction: column; gap: 2px; }
 .settings-row strong { font-size: 0.9375rem; font-weight: 620; }
 .settings-row small { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }

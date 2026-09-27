@@ -28,7 +28,7 @@ import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
 import { axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
 import { isComplete } from "@/model/onboarding";
-import { activeSafety, emptyModel, type ModelRecord } from "@/model/store";
+import { activeSafety, emptyModel, hasSignals, type ModelRecord } from "@/model/store";
 import { LifeHeader } from "./life-shell";
 import { MyAdhdRadar } from "./my-adhd-radar";
 import { MyAdhdSheet } from "./my-adhd-sheet";
@@ -129,6 +129,8 @@ export function MyAdhd() {
             <MyAdhdRadar points={points} baseline={started ? baseline : null} onOpen={openAxis} openAspect={open} />
           )}
 
+          {record && (hasSignals(record) || record.learning) && <p className="map-where">Saved on this device.</p>}
+
           {record && !started && (
             <section className="map-lead map-side">
               <p>Two minutes so this can be about you.</p>
@@ -168,9 +170,19 @@ export function MyAdhd() {
 
               {rec && (
                 <section className="map-step" aria-labelledby="map-step-title" data-action={rec.action}>
-                  <h2 id="map-step-title">{rec.heading}</h2>
-                  {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
-                  <NextStepAction rec={rec} />
+                  {stepModule(rec) ? (
+                    <Link className="map-step-link" href={`/approach?module=${stepModule(rec)}`}>
+                      <h2 id="map-step-title">{rec.heading}</h2>
+                      {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
+                      <ArrowRight size={17} weight="bold" aria-hidden="true" />
+                    </Link>
+                  ) : (
+                    <>
+                      <h2 id="map-step-title">{rec.heading}</h2>
+                      {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
+                      <NextStepAction rec={rec} />
+                    </>
+                  )}
                   <SkillRecommendation />
                 </section>
               )}
@@ -255,6 +267,15 @@ function doLine(rec: Recommendation): string | null {
 }
 
 /**
+ * A strategy step is its own link: the card names the strategy and its first step, so a button
+ * under it saying "See it in the module" only repeated where the card already goes.
+ */
+function stepModule(rec: Recommendation): string | null {
+  const person = rec.action === "EXPLORE_PROVIDER" || rec.action === "DISCUSS_WITH_EXISTING_CLINICIAN";
+  return rec.strategy && rec.moduleId && rec.action !== "URGENT_ESCALATION" && !person ? rec.moduleId : null;
+}
+
+/**
  * The one control under the one next step, and WHERE IT GOES.
  *
  * The old version named three actions and sent the other four to `/approach`, the bare module
@@ -282,9 +303,7 @@ function NextStepAction({ rec }: { rec: Recommendation }) {
       ? "See who helps"
       : rec.action === "DISCUSS_WITH_EXISTING_CLINICIAN"
         ? "Prepare what to say"
-        : rec.strategy
-          ? "See it in the module"
-          : "Open the module";
+        : "Open the module";
   return (
     <Link className="learn-primary" href={href}>
       {label} <ArrowRight size={17} weight="bold" aria-hidden="true" />

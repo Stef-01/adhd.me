@@ -86,6 +86,7 @@ export function Onboarding() {
                 <button type="button" className="learn-secondary" onClick={() => { track("ONBOARDING_STARTED", { supporting: true }); refresh(saveOnboarding(storage, { stage: "supporting" })); go(1); }}>I’m supporting someone else</button>
               </div>
               <p className="learn-card-foot">Ten short questions, under two minutes.</p>
+              <p className="learn-card-foot">Answers stay on this device.</p>
             </div>
           )}
 
