@@ -33,7 +33,9 @@ test("the module URL supports browser Back and invalid IDs recover to the librar
   await page.getByRole("button", { name: /Everyday strategies/ }).click();
   await expect(page).toHaveURL(/module=everyday/);
   await page.goBack();
-  await expect(page.locator(".learning-feature")).toBeVisible();
+  // Back lands on the modules pane as it was left: the shelves still open under "Explore all modules".
+  await expect(page.getByTestId("learn-explore")).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator(".learn-stack").getByRole("button", { name: /Everyday strategies/ })).toBeVisible();
   await page.goto("/approach?module=missing");
   await expect(page.locator(".learning-feature")).toBeVisible();
 });
