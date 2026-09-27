@@ -1,0 +1,53 @@
+{
+  "class": "C3",
+  "input": "honest about drinking",
+  "expect": {
+    "keys": [
+      "care:substance-history",
+      "manner:non_judgmental"
+    ],
+    "source": "llm"
+  },
+  "status": 200,
+  "response": {
+    "id": "resp_cassette_c03",
+    "object": "response",
+    "created_at": 1790000003,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_cassette_c03",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "msg_cassette_c03",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [],
+            "logprobs": [],
+            "text": "{\"care\":[\"substance-history\"],\"manner\":[\"non_judgmental\"],\"prefs\":[],\"languages\":[],\"negated\":[]}"
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 904,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 34,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 938
+    }
+  }
+}

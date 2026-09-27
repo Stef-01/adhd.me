@@ -1,0 +1,56 @@
+{
+  "class": "C6",
+  "input": "I have put off writing this for about three years, so bear with me. I am thirty eight and I live two hours out of Dubbo, and the nearest clinic that knows anything about ADHD is a day trip each way. At school I was the kid who talked too much and lost every jumper I owned. At work I have been moved between teams four times, and every review says the same thing about deadlines and follow through. My sister was diagnosed last year, and when she described her childhood it was like hearing my own read back to me. I smoke weed most nights to switch off, and I need to be able to say that without the whole conversation ending there. Money is tight since the kids came along, so it would have to be bulk billed. Video calls are fine for me, honestly better than the drive. What I want is someone who will assess me properly rather than hand me a questionnaire on the way out.",
+  "expect": {
+    "keys": [
+      "care:adhd-assessment",
+      "care:substance-history",
+      "manner:non_judgmental",
+      "pref:bulk-billing",
+      "pref:telehealth-first"
+    ],
+    "source": "llm"
+  },
+  "status": 200,
+  "response": {
+    "id": "resp_cassette_c06",
+    "object": "response",
+    "created_at": 1790000006,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_cassette_c06",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "msg_cassette_c06",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [],
+            "logprobs": [],
+            "text": "{\"care\":[\"adhd-assessment\",\"substance-history\"],\"manner\":[\"non_judgmental\"],\"prefs\":[\"bulk-billing\",\"telehealth-first\"],\"languages\":[],\"negated\":[]}"
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 1118,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 48,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1166
+    }
+  }
+}

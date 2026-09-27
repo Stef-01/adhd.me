@@ -55,11 +55,11 @@ export function capacityGrade(clinician: Clinician, today: Date = new Date()): C
 /** Exported so the console's audit sort is the SAME order the finder uses, not a re-guess. */
 export const CAPACITY_ORDER: Record<CapacityGrade, number> = { "fresh-open": 0, "stale-open": 1, closed: 2 };
 
-export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians, today: Date = new Date()): Clinician[] {
-  const needs = needsFor(query, roster);
+export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians, today: Date = new Date(), needs?: readonly NeedSignal[]): Clinician[] {
+  const read = needs ?? needsFor(query, roster);
   return [...roster].sort((a, b) => {
-    const aProfile = rankingProfile(a, needs);
-    const bProfile = rankingProfile(b, needs);
+    const aProfile = rankingProfile(a, read);
+    const bProfile = rankingProfile(b, read);
 
     /*
      * ACCESS BEFORE ACCUMULATION (2026-08-22 audit).

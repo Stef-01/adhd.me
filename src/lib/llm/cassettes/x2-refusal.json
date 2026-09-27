@@ -1,0 +1,48 @@
+{
+  "class": "C7",
+  "input": "childhood was rough and it comes up in appointments",
+  "expect": {
+    "keys": [],
+    "source": "lexicon"
+  },
+  "status": 200,
+  "response": {
+    "id": "resp_cassette_x2",
+    "object": "response",
+    "created_at": 1790000012,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_cassette_x2",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "msg_cassette_x2",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "refusal",
+            "refusal": "I'm sorry, but I can't help with that."
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 910,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 14,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 924
+    }
+  }
+}

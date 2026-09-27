@@ -1,0 +1,52 @@
+{
+  "class": "C5",
+  "input": "bulk billed if at all possible",
+  "expect": {
+    "keys": [
+      "pref:bulk-billing"
+    ],
+    "source": "llm"
+  },
+  "status": 200,
+  "response": {
+    "id": "resp_cassette_c05",
+    "object": "response",
+    "created_at": 1790000005,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_cassette_c05",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "msg_cassette_c05",
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [],
+            "logprobs": [],
+            "text": "{\"care\":[],\"manner\":[],\"prefs\":[\"bulk-billing\"],\"languages\":[],\"negated\":[]}"
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 907,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 27,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 934
+    }
+  }
+}

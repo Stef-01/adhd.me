@@ -36,6 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
+import { MATCHABLE_LANGUAGES } from "./languages";
 import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, commaBreaksBefore, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, selfClaimedPatient, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
@@ -856,6 +857,14 @@ export function facetKey(facet: NeedSignal["facet"]): string {
   if (facet.kind === "manner") return `manner:${facet.trait}`;
   if (facet.kind === "language") return `language:${facet.language.toLowerCase()}`;
   return `pref:${facet.preference}`;
+}
+
+/** The signal a facet key stands for, for a reader that returns keys rather than phrases. */
+export function needForKey(key: string, matched: string = key): NeedSignal | null {
+  const language = MATCHABLE_LANGUAGES.find((name) => key === facetKey({ kind: "language", language: name }));
+  if (language) return { facet: { kind: "language", language }, matched, label: `${language}-speaking`, weight: LANGUAGE_WEIGHT };
+  const entry = LEXICON.find((candidate) => facetKey(candidate.facet) === key);
+  return entry ? { facet: entry.facet, matched, label: entry.label, weight: entry.weight } : null;
 }
 
 /**
