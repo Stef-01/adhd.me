@@ -206,11 +206,12 @@ test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kep
 // "Eight lives. Three of yours." is the line the screen opens on, and the cast beside it has to be
 // eight. As a wrapping flex row of 44px beans it needed 380px and had 350 at 390 and 280 at 320,
 // so the eighth sat alone on a second row and the line-up read as seven and a spare. The beans are
-// decorative and aria-hidden, so nothing else would have caught this.
+// decorative and aria-hidden, so nothing else would have caught this. Learn replaced its cast with
+// the game roster in a8ac430, which e2e/game-discovery.spec.ts covers, so only /lives has a cast.
 test("the cast of eight is one row of eight, at both phone widths", async ({ page }) => {
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: 844 });
-    for (const path of ["/lives", "/approach"]) {
+    for (const path of ["/lives"]) {
       await page.goto(path);
       const cast = page.locator(".lives-cast").first();
       await expect(cast).toBeAttached();
