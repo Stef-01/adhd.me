@@ -1,0 +1,14 @@
+{
+  "source": "scripts/build-campaign-identity.py",
+  "construction": "Optically arranged outlined typography, preserving the supplied me/ADHD/red-stop concept; a vector redraw, not an exact raster trace.",
+  "masters": [
+    "mark-colour.svg",
+    "mark-reverse.svg",
+    "mark-mono-ink.svg",
+    "mark-mono-white.svg",
+    "mark-yellow.svg",
+    "mark-ivory.svg",
+    "wordmark-ink.svg",
+    "wordmark-white.svg"
+  ]
+}

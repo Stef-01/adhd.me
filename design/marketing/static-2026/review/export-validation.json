@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-27T13:28:34.680Z",
+  "checkedAt": "2026-09-27T23:40:00.695Z",
   "assets": [
     {
       "id": "social-square",
@@ -159,7 +159,7 @@
       "height": 360,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "af266e74f0aecce877caddec63cb6733c7261fcb6bf6e70eaa16594249a07796"
+      "sha256": "d7421aaf93e4e6aeab6d5f38c5554ca64edc5ae8e3731e32179faf32acad179d"
     },
     {
       "id": "name-badge",

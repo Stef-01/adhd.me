@@ -1,0 +1,77 @@
+{
+  "identity": [
+    {
+      "file": "mark-colour.svg",
+      "outlined": true,
+      "pngSize": [
+        2000,
+        1300
+      ],
+      "cornerAlpha": 0
+    },
+    {
+      "file": "mark-ivory.svg",
+      "outlined": true,
+      "pngSize": [
+        2000,
+        1300
+      ],
+      "cornerAlpha": 255
+    },
+    {
+      "file": "mark-mono-ink.svg",
+      "outlined": true,
+      "pngSize": [
+        2000,
+        1300
+      ],
+      "cornerAlpha": 0
+    },
+    {
+      "file": "mark-mono-white.svg",
+      "outlined": true,
+      "pngSize": [
+        2000,
+        1300
+      ],
+      "cornerAlpha": 0
+    },
+    {
+      "file": "mark-reverse.svg",
+      "outlined": true,
+      "pngSize": [
+        2000,
+        1300
+      ],
+      "cornerAlpha": 0
+    },
+    {
+      "file": "mark-yellow.svg",
+      "outlined": true,
+      "pngSize": [
+        2000,
+        1300
+      ],
+      "cornerAlpha": 255
+    },
+    {
+      "file": "wordmark-ink.svg",
+      "outlined": true,
+      "pngSize": [
+        1326,
+        380
+      ],
+      "cornerAlpha": 0
+    },
+    {
+      "file": "wordmark-white.svg",
+      "outlined": true,
+      "pngSize": [
+        1326,
+        380
+      ],
+      "cornerAlpha": 0
+    }
+  ],
+  "nameBarCornerAlpha": 0
+}
