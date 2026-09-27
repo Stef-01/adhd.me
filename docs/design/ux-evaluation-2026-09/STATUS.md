@@ -31,6 +31,9 @@ a clinician, or real users. Nothing in this tree may answer those on their behal
      sit in a list beside it. Every name is readable; the wheel becomes a picture of the four parts.
   2. *Four quadrants:* under 600px the wheel is four tappable quadrants; a tap opens that quadrant's
      list of parts. Fewer things on screen at once; one more tap to reach a part.
+  Both are drawn at 390, with word counts, under "The care map on a phone: two options" in
+  `qa/ux-2026-09/README.md` (`care-map-phone-option-1.png`, `care-map-phone-option-2.png`,
+  `care-map-phone-option-2-open.png`).
   Until one is chosen the care map stays exempt from the 12px sweep, and the exemption names N8.
 - **Confirm the decisions the plan proceeded on:** D1 to D12 in `PLAN.md` §4. D3, D4 and D7 shipped
   in Phase 1; D8 to D10 shaped the games pane.

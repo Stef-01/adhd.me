@@ -113,6 +113,26 @@ W9: upright labels, no count, games and modules in the panel, two columns on des
 | Before | ![The care map, a part of life open, before, 390](care-map-open-before-390.jpg) | ![The care map, a part of life open, before, 1440](care-map-open-before-1440.jpg) |
 | After | ![The care map, a part of life open, after, 390](care-map-open-after-390.jpg) | ![The care map, a part of life open, after, 1440](care-map-open-after-1440.jpg) |
 
+## The care map on a phone: two options
+
+N8: at 390 the names on the wheel render at about 8px. These are the two ways to fix it, drawn from
+the real parts and palette by `scripts/care-map-phone-proto.mjs`. The shipped map stays as it is until
+one is chosen.
+
+| | Option 1: dots and lists | Option 2: four quadrants |
+| --- | --- | --- |
+| Before a tap | ![Option 1, dots and lists, 390](care-map-phone-option-1.png) | ![Option 2, four quadrants, 390](care-map-phone-option-2.png) |
+| After a tap | ![Option 1, Working memory tapped, 390](care-map-phone-option-1-tapped.png) | ![Option 2, Brain open, 390](care-map-phone-option-2-open.png) |
+| Words | 38, then 58 | 11, then 21 |
+
+Option 1 shows all 25 names at 15px, so any part is one tap away. But the page scrolls
+([the whole page](care-map-phone-option-1-full.png)), and an open part brings it to 58 words, close to the 60 ceiling.
+Option 2 fits on one screen with 11 words, under the 20 floor. But every part takes two taps: its quadrant, then its name.
+
+The words are counted the way the text budget counts them, without the header and tabs (8 more).
+Both options leave out the lines under today's map, "Tap a part of life." and the Wellness Institute
+line (42 words). No text in either is under 12px, and every control is at least 44px.
+
 ## A read module
 
 W10: spacing, no eyebrows.
