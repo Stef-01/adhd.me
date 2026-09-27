@@ -119,11 +119,15 @@ export const READ_CALL = { effort: "low", instructions: INSTRUCTIONS, schema: SC
 export type Reading = { keys: string[]; needs: NeedSignal[]; source: "llm" | "lexicon"; dropped: number; error?: string; unlisted?: string[] };
 
 /**
- * Reads per request, run at once. A key stays only when every read that answered gives it, and a
- * lexicon key goes only when every one refuses it: one read's extra keys are mostly noise (F10),
- * and on the dev set three reads that agree took precision from 81% to 93% (qa/matching/rca.md, R3).
+ * Reads per request, run at once. A key the reads add stays only when every read that answered gives
+ * it: one read's extra keys are mostly noise (F10), and three that agree took precision from 81% to 93%
+ * on the dev set (qa/matching/rca.md, R3). A lexicon key goes when most of them refuse it, which drops
+ * three times the lexicon's traps of every read refusing, for 0.3 points of recall (R7).
  */
 export const READS = 3;
+
+/** The voting rules, for the eval's hash: a change to them starts the ladder again. */
+export const VOTING = { add: "every read", refuse: "most reads", check: "most checks say not asked" } as const;
 
 export async function readRequest(text: string, deps: Deps = {}): Promise<Reading> {
   if (!text.trim()) return { keys: [], needs: [], source: "llm", dropped: 0 };
@@ -140,7 +144,8 @@ export async function readRequest(text: string, deps: Deps = {}): Promise<Readin
   if (!answers.length) return { ...lexiconReading(text), error };
   const agreed = (pick: (answer: Answer) => readonly string[]) => pick(answers[0]!).filter((x) => answers.every((answer) => pick(answer).includes(x)));
   const dropped = answers.reduce((total, answer) => total + answer.dropped, 0);
-  const read = reading(agreed((answer) => answer.keys), new Set(agreed((answer) => answer.refused)), text);
+  const most = (id: string) => answers.filter((answer) => answer.refused.includes(id)).length * 2 > answers.length;
+  const read = reading(agreed((answer) => answer.keys), new Set(answers.flatMap((answer) => answer.refused).filter(most)), text);
   const heard = new Set(lexiconReading(text).keys);
   const added = read.keys.filter((key) => !heard.has(key) && !key.startsWith("language:"));
   const check = added.length ? await checkKeys(text, added, deps) : { refused: new Set<string>() };

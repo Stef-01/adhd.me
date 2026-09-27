@@ -111,3 +111,20 @@ numbers before and after.
   `care:non-medication`; the negation itself was right (no assessment). Whether talk is an ask for
   options besides medication is a label question for the founder, like the two in R2 and R3, and
   six entries cannot tell a real fault from one arguable read. The ladder is not re-run to re-roll it.
+
+## R7 · `mentions` at L1, 2026-09-28 · layer: the vote
+
+- **Entries:** the red team's lexicon traps ("no need to bulk bill me", "my mum thinks I need a woman
+  doctor but honestly I don't care"): the lexicon hears a key nobody asked for, and L1 kept it unless
+  every read refused it. Refusals split across reads, so 12.5% of the dev set's eight were dropped.
+- **Change:** a lexicon key goes when most reads refuse it (two of three). A key the reads add still
+  needs every read. The voting rules are hashed with the prompt, so the ladder starts again.
+- **Measured on three v12 samples (358 dev), without the check:** mentions dropped 12.5% → 37.5%,
+  recall 99.7% → 99.4%, C4 94.9% → 93.2%, precision 91.7% → 92.1%. One refusal of three instead fails
+  C4 (89.8%).
+- **The whole read on the same samples (three reads, most refusals, the check):** precision 92.8%,
+  recall 99.4%, aspires 73.0%, `never` 0%, C4 93.2%, mentions dropped 37.5%, exactly right 95.8%.
+- **Formal ladder** (prompt `7e075939ffb4`): P0 to P2 pass; P3 replays the previous P3's reads from
+  the cache (the calls are unchanged; only the vote is new) and fails the same one C4 entry, "just
+  someone to talk to" read as `non-medication` (R6). Re-running cannot change it, and a prompt tuned
+  to one entry of six would be tuning on the test.

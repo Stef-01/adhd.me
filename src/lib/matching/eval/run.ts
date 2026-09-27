@@ -9,7 +9,7 @@ import { FileCache } from "@/lib/llm/cache";
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
 import { modelOf, type Deps } from "@/lib/llm/client";
 import { appendLedger, BudgetMeter, ledgerSpend, RateGate } from "@/lib/llm/meter";
-import { answerFor, CHECK_CALL, CHECKS, lexiconReading, READ_CALL, READS, readRequest, type Reading } from "../llm-read";
+import { answerFor, CHECK_CALL, CHECKS, lexiconReading, READ_CALL, READS, readRequest, VOTING, type Reading } from "../llm-read";
 import { facetScore, faults, flipRate, mentionsDropped, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
 import { CLASSES, evalEntries, oracleGains, type EvalEntry } from "./sets";
 
@@ -54,7 +54,7 @@ const pct = (value: number | null) => (value === null ? "–" : `${(value * 100)
 
 export function promptHash(level: string, env: Record<string, string | undefined> = process.env): string {
   if (level === "L0") return "lexicon";
-  return createHash("sha256").update(JSON.stringify([modelOf(env), READ_CALL, READS, CHECK_CALL, CHECKS])).digest("hex").slice(0, 12);
+  return createHash("sha256").update(JSON.stringify([modelOf(env), READ_CALL, READS, CHECK_CALL, CHECKS, VOTING])).digest("hex").slice(0, 12);
 }
 
 export async function runEval(options: EvalOptions): Promise<Outcome> {

@@ -164,14 +164,14 @@ describe("readRequest", () => {
     expect(calls).toBe(READS);
   });
 
-  it("drops a key the lexicon hears only when every read refuses it", async () => {
+  it("drops a key the lexicon hears when most reads refuse it, and keeps it when one does", async () => {
     const text = "a woman GP who bulk bills";
-    const refusals = [["bulk-billing"], ["bulk-billing"], []];
-    let n = 0;
-    const split = async () => new Response(JSON.stringify(completed({ ...EMPTY, negated: refusals[n++ % 3]! })));
-    expect((await readRequest(text, { fetch: split, env: ENV })).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
-    const all = async () => new Response(JSON.stringify(completed({ ...EMPTY, negated: ["bulk-billing"] })));
-    expect((await readRequest(text, { fetch: all, env: ENV })).keys).toEqual(["pref:woman-gp"]);
+    const reads = (refusals: string[][]) => {
+      let n = 0;
+      return async () => new Response(JSON.stringify(completed({ ...EMPTY, negated: refusals[n++ % 3]! })));
+    };
+    expect((await readRequest(text, { fetch: reads([["bulk-billing"], ["bulk-billing"], []]), env: ENV })).keys).toEqual(["pref:woman-gp"]);
+    expect((await readRequest(text, { fetch: reads([["bulk-billing"], [], []]), env: ENV })).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
   });
 
   it("lets the reads that answered decide when one fails, and keeps its error", async () => {
