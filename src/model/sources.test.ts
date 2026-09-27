@@ -11,16 +11,48 @@ function memory() {
 describe("where an axis came from", () => {
   it("names each kind of source and counts it in words", () => {
     expect(sourceLine(["onboarding", "starting"])).toBe("From your first answers and one game.");
-    expect(sourceLine(["starting", "ambiguity", "survey:work", "lives:character:nina"])).toBe("From a check-in, two games and a character.");
-    expect(sourceLine(["goal:sleep"])).toBe("From a goal you chose.");
+    expect(sourceLine(["survey:work", "starting", "ambiguity"])).toBe("From a check-in and two games.");
+    expect(sourceLine(["goal:sleep"])).toBe("From a goal.");
+    expect(sourceLine(["goal:sleep", "goal:focus"])).toBe("From two goals.");
+    expect(sourceLine(["lives:character:nina", "goal:sleep"])).toBe("From a character and a goal.");
     expect(sourceLine([])).toBeNull();
     expect(sourceLine(["onboarding", "starting"], true)).toBe("From your first answers.");
+  });
+
+  it("names the first two kinds in order and leaves the rest to the sheet", () => {
+    expect(sourceLine(["starting", "ambiguity", "survey:work", "lives:character:nina"])).toBe("From a check-in and two games.");
+    expect(sourceLine(["onboarding", "goal:q", "goal:r"])).toBe("From your first answers and two goals.");
+    expect(sourceLine(["onboarding", "a", "survey:x", "lives:game:g", "goal:q"])).toBe("From your first answers and a check-in.");
+  });
+
+  it("is seven words at most, whatever is on file", () => {
+    const kinds = [
+      ["onboarding"],
+      ["survey:x", "survey:y", "survey:z"],
+      ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"],
+      ["lives:character:nina", "lives:game:g"],
+      ["goal:q", "goal:r"],
+    ];
+    const lines: string[] = [];
+    // Every combination of the five kinds, each at one source and at many.
+    for (let mask = 1; mask < 1 << kinds.length; mask++) {
+      for (const many of [false, true]) {
+        const sources = kinds.flatMap((k, i) => (mask & (1 << i) ? (many ? k : k.slice(0, 1)) : []));
+        for (const firstOnly of [false, true]) lines.push(sourceLine(sources, firstOnly)!);
+      }
+    }
+    expect(lines.length).toBe(124);
+    for (const line of lines) expect(line.split(/\s+/).length, line).toBeLessThanOrEqual(7);
+    expect(lines).toContain("From your first answers and two goals.");
   });
 
   it("never carries a digit, and reads as the patient rules allow", () => {
     const line = sourceLine(["onboarding", "a", "b", "c", "survey:x", "survey:y", "lives:game:g", "goal:q", "goal:r"])!;
     expect(line).not.toMatch(/\d/);
     expect(lintLandingCopy(line)).toEqual([]);
+    const goals = sourceLine(["goal:q", "goal:r", "goal:s"])!;
+    expect(goals).not.toMatch(/\d/);
+    expect(lintLandingCopy(goals)).toEqual([]);
   });
 });
 
