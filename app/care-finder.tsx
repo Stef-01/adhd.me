@@ -245,8 +245,8 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     return named.length > 0 ? named.map((p) => profession(p).plural).join(" or ") : null;
   }, [matches.length, effectiveFilters, request]);
   // Round 2: sixteen near-identical rows is the "long list" anti-pattern. Five is enough to choose
-  // from, and the rest are one tap away for somebody who wants to read all of them.
-  const [showAll, setShowAll] = useState(false);
+  // from, and "N more" adds five at a time for somebody who wants to read on.
+  const [more, setMore] = useState(0);
   const [heard, setHeard] = useState("");
   /**
    * U10: the sentence over the typing screen's box and whether a retry control stands beside it,
@@ -373,7 +373,6 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     }),
     [matches, request, roster, read, removedLabels, chipWords],
   );
-  const allSignals = useMemo(() => allMatches.map((m) => m.signals), [allMatches]);
   /**
    * ONE PIPELINE RUN PER RENDER (O8 review). These four were each computed inline in the JSX,
    * some more than once, and every call re-runs the full lexicon read over the request — a
@@ -404,7 +403,9 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     const topBand = bands[0];
     return Math.max(5, topBand ? topBand.clinicians.length : 5);
   }, [tieNote, bands]);
-  const shown = showAll ? matches : matches.slice(0, visibleCount);
+  const shown = matches.slice(0, visibleCount + more);
+  /** The signals of the rows the list opens on: one every one of them shares is no reason to pick between them. */
+  const foldSignals = useMemo(() => allMatches.slice(0, visibleCount).map((m) => m.signals), [allMatches, visibleCount]);
 
   const personalizedMatch = useMemo(() => {
     const match = getPersonalizedMatch(clinician, request, roster, read);
@@ -584,7 +585,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     const nextRequest = value.trim() || archetype.request;
     setRequest(nextRequest);
     setMatchIndex(0);
-    setShowAll(false);
+    setMore(0);
     // U10: the typing screen is being left — its banner does not follow the person to results.
     dispatchBanner({ type: "cleared" });
     // Straight to the results. The sort is synchronous and already done; the screen that used to
@@ -616,7 +617,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     // The list re-ranks by derivation the moment the state lands — the stale-state hazard this
     // handler used to work around is gone with the setter.
     setMatchIndex(0);
-    setShowAll(false);
+    setMore(0);
   }
 
   /** RADIANT: one yes/no filter switched from the results chips; written to the device like the profile does. */
@@ -625,7 +626,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     writeFilters(window.localStorage, next);
     setFilters(next);
     setMatchIndex(0);
-    setShowAll(false);
+    setMore(0);
   }
 
   /**
@@ -640,7 +641,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     writeFilters(window.localStorage, next);
     setFilters(next);
     setMatchIndex(0);
-    setShowAll(false);
+    setMore(0);
   }
 
   /** A "What we heard" chip tapped: out of the ranking, or back in. The list re-ranks in place. */
@@ -648,7 +649,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     const keys = removed.has(key) ? [...removed].filter((k) => k !== key) : [...removed, key];
     setRemovedHeard({ request, keys });
     setMatchIndex(0);
-    setShowAll(false);
+    setMore(0);
   }
 
   /** One held filter dropped from the empty screen's way out, written to the device like a chip. */
@@ -656,7 +657,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     writeFilters(window.localStorage, next);
     setFilters(next);
     setMatchIndex(0);
-    setShowAll(false);
+    setMore(0);
   }
 
   /** O234: every narrowing filter off, the place kept — it orders, it never excluded anybody. */
@@ -666,7 +667,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     writeFilters(window.localStorage, next);
     setFilters(next);
     setMatchIndex(0);
-    setShowAll(false);
+    setMore(0);
   }
 
 
@@ -764,7 +765,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
             matches={matches}
             shown={shown}
             personalized={allMatches}
-            allSignals={allSignals}
+            foldSignals={foldSignals}
             request={request}
             reducedMotion={reducedMotion}
             onReset={reset}
@@ -790,7 +791,7 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
             careKinds={careKinds}
             onPickKind={pickKind}
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}
-            onShowAll={() => setShowAll(true)}
+            onShowMore={() => setMore((n) => n + 5)}
             onChoose={chooseClinician}
           />
         )}

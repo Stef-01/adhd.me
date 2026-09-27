@@ -72,7 +72,9 @@
 .platform-shell .results-summary { max-width: 880px; border-radius: 12px; box-shadow: none; background: var(--surface-raised); }
 .platform-shell .results-summary-words { min-height: 60px; padding: 14px 20px; border: 0; border-radius: 12px; }
 .platform-shell .results-summary-text { font-size: 16px; line-height: 1.5; }
-.platform-shell .results-head h1 { max-width: 32ch; margin: 24px 0 4px; font-size: clamp(24px, 3vw, 34px); line-height: 1.25; letter-spacing: -.025em; text-wrap: balance; }
+.platform-shell .results-summary-lines { display: grid; min-width: 0; }
+.platform-shell .results-summary-place { overflow: hidden; color: var(--muted); font-size: 13px; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
+.platform-shell .results-head h1 { max-width: 32ch; margin: 24px 0 4px; font-size: clamp(24px, 3vw, 34px); font-weight: 700; line-height: 1.25; letter-spacing: -.025em; text-wrap: balance; }
 /* What we heard: the strongest facets of the words above, as chips. A tap takes one out (struck
    through, dashed) and a second puts it back, in place, so nothing on the row moves. */
 .heard-row { margin: 12px 0 0; }
@@ -97,23 +99,32 @@
 .platform-shell .results-browser .row-skeleton { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 24px; align-items: center; min-height: 152px; padding: 28px 16px; border-bottom: 1px solid var(--line); }
 .platform-shell .results-browser .row-skeleton::before { content: ""; height: 80px; border-radius: 50%; background: var(--stone); }
 .platform-shell .results-browser .row-skeleton::after { content: ""; width: min(60%, 280px); height: 16px; border-radius: 8px; background: var(--stone); }
-/* The strip: the kind of support first, then every yes/no filter, the Filters door, and Clear at
-   the end. One row that wraps on a desk and scrolls sideways on a phone, so three rows of chips
-   never push the first result under the fold. A pressed filter is the ink pill (DESIGN.md), and
-   the kind pill fills the same way once a kind is picked, because it is a filter that is on. */
+/* The strip: the kind of support first, then each yes/no filter that is on, the Filters door, and
+   Clear at the end. One row that wraps on a desk and scrolls sideways on a phone. */
 .platform-shell .results-screen .filter-strip { display: flex; align-items: center; gap: 8px; margin: 16px 0 0; padding: 0 0 14px; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; overflow: visible; }
-.platform-shell .results-screen .filter-chips { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; gap: 8px; }
+.platform-shell .results-screen .filter-chips { display: flex; flex: 1 1 auto; min-width: 0; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .platform-shell .results-screen .filter-chips > li { flex: none; display: flex; }
-.platform-shell .results-screen .filter-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 10px 16px; font-size: 13px; font-weight: 600; box-shadow: none; background: transparent; border-color: var(--line-strong); color: var(--ink); white-space: nowrap; }
-.platform-shell .results-screen .filter-chip::after { inset: 0; }
-.platform-shell .results-screen .filter-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); box-shadow: none; }
-.platform-shell .results-screen .filter-chip-count { background: var(--accent-tint); color: var(--ink); }
+/* THE ONE FILTER CHIP: the Filters door, the ways out of an empty list, and a filter that is on.
+   A filter that is on wears the heard chip's style (the live token), never an ink fill. */
+.filter-chip {
+  position: relative; flex: none; display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: 999px;
+  background: transparent; color: var(--ink); font: inherit; font-size: 13px; font-weight: 600; line-height: 1.2;
+  text-decoration: none; white-space: nowrap; cursor: pointer; touch-action: manipulation;
+  transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-ui);
+}
+.filter-chip[aria-pressed="true"],
+.platform-shell .finder-profession select[data-on="true"] { border-color: var(--accent-tint); background: var(--accent-soft); color: var(--accent-deep); }
+.filter-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filter-chip:active { transform: scale(0.96); }
+.filter-chip-count { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--accent-tint); color: var(--ink); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (hover: hover) { .filter-chip:hover { border-color: var(--accent-mid); } }
+@media (prefers-reduced-motion: reduce) { .filter-chip { transition: none; } .filter-chip:active { transform: none; } }
 .platform-shell .results-screen .filter-clear { flex: none; margin-left: auto; min-height: 44px; padding: 0 12px; color: var(--ink); font-size: 13px; font-weight: 600; }
 .platform-shell .finder-profession { position: relative; width: auto; }
 .platform-shell .finder-profession select { height: 44px; max-width: min(56vw, 260px); padding: 0 34px 0 16px; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--ink); font: inherit; font-size: 13px; font-weight: 600; line-height: 1; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; transition: border-color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui); }
-.platform-shell .finder-profession select[data-on="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .platform-shell .finder-profession [data-slot="native-select-icon"] { right: 12px; width: 14px; height: 14px; color: var(--muted); }
-.platform-shell .finder-profession select[data-on="true"] + [data-slot="native-select-icon"] { color: var(--paper); }
+.platform-shell .finder-profession select[data-on="true"] + [data-slot="native-select-icon"] { color: var(--accent-deep); }
 .platform-shell .finder-profession select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) { .platform-shell .finder-profession select:not([data-on="true"]):hover { border-color: var(--accent-mid); } }
 /* The empty list: a callout, one hairline and the paper, flush with the strip it answers. The ways
@@ -121,8 +132,6 @@
 .platform-shell .results-empty { margin: 20px 0 0; padding: 22px 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-raised); }
 .platform-shell .results-empty-lead { margin-bottom: 8px; font-size: 17px; }
 .platform-shell .results-empty-ways { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; padding: 0; list-style: none; }
-.platform-shell .results-empty-ways .filter-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 10px 14px; font-size: 13px; font-weight: 600; box-shadow: none; border-color: var(--line-strong); background: transparent; color: var(--ink); }
-.platform-shell .results-empty-ways .filter-chip-count { background: var(--accent-tint); color: var(--ink); }
 .platform-shell .results-empty-detail { margin-bottom: 16px; }
 .platform-shell .results-screen .results-list-head { padding: 24px 0 18px; gap: 16px; align-items: center; flex-wrap: wrap; }
 .platform-shell .results-screen .results-list-head h2 { font-family: inherit; font-size: 24px; font-weight: 700; margin: 0; }
@@ -135,10 +144,11 @@
 .platform-shell .patient-v2 .results-browser .clinician-row:is(:hover,.is-lead) { box-shadow: none; border-color: var(--line); background: transparent; }
 .platform-shell .patient-v2 .results-browser .clinician-row:hover { background: var(--stone); }
 .platform-shell .patient-v2 .results-browser .clinician-row :is(.row-portrait-anchor,img,.clinician-monogram-thumb) { width: 80px; height: 80px; flex-basis: 80px; border-radius: 50%; }
-.platform-shell .patient-v2 .results-browser .clinician-row strong { font-family: inherit; font-size: 21px; font-weight: 650; letter-spacing: -.025em; line-height: 1.3; }
+.platform-shell .patient-v2 .results-browser .clinician-row strong { font-family: inherit; font-size: 21px; font-weight: 600; letter-spacing: -.025em; line-height: 1.3; }
 .platform-shell .patient-v2 .results-browser .row-copy { min-width: 0; display: grid; gap: 7px; }
-/* An invented profile says so beside its name, on the row, before any other fact about it. */
-.platform-shell .patient-v2 .row-example { display: inline-block; vertical-align: 0.2em; margin-left: 8px; padding: 2px 8px; border: 1px solid var(--accent-tint); border-radius: 999px; background: var(--accent-soft); color: var(--accent-deep); font-size: 12px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.4; }
+/* An invented profile says so beside its name, on the row, before any other fact about it: plain
+   muted text, not a pill, because nearly every row carries it. */
+.platform-shell .patient-v2 .row-example { margin-left: 8px; color: var(--muted); font-size: 13px; font-weight: 400; letter-spacing: 0; }
 .platform-shell .patient-v2 .results-browser .row-focus { font-size: 14px; line-height: 1.5; margin: 0; }
 .platform-shell .patient-v2 .results-browser .row-location { margin: 0; font-size: 13px; line-height: 1.5; }
 .platform-shell .patient-v2 .results-browser .row-availability { max-width: 64ch; line-height: 1.5; }
@@ -183,7 +193,7 @@
 .platform-shell .care-preference-fields a { font-size: 14px; line-height: 1.5; text-underline-offset: 3px; }
 .platform-shell .finder-care-summary { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
 .platform-shell .finder-care-summary summary { cursor: pointer; min-height: 28px; }
-.platform-shell .row-cultural-identity, .platform-shell .profile-cultural-identity { color: var(--accent-deep); font-size: 14px; line-height: 1.5; }
+.platform-shell .row-cultural-identity, .platform-shell .profile-cultural-identity { color: var(--muted); font-size: 14px; line-height: 1.5; }
 .platform-shell .profile-care-declaration { margin-block: 12px; font-size: 14px; line-height: 1.6; }
 
 /* Keep profile identity anchored while optional care details expand. */

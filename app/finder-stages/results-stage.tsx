@@ -4,7 +4,7 @@
 // history note, because it explains why this one screen carries so much.
 
 import { CARE_NEEDS, IDENTITY_LABELS, publicIdentity } from "@/support/care-preferences";
-import { ArrowCounterClockwise, CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle, X } from "@phosphor-icons/react";
 import { activeFilterCount, BOOLEAN_FILTER_KEYS, BOOLEAN_FILTER_LABELS, type BooleanFilterKey, type Filters } from "@/finder/filters";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -22,7 +22,6 @@ import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import Link from "next/link";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { NumberTicker } from "@/components/ui/number-ticker";
 import dynamic from "next/dynamic";
 import { Sheet } from "../sheet";
 import { professionOf } from "@/demo/clinicians";
@@ -56,14 +55,14 @@ export function ResultsStage({
   matches,
   shown,
   personalized,
-  allSignals,
+  foldSignals,
   request,
   reducedMotion,
   focusOnArrival,
   onReset,
   onRefine,
   onClarify,
-  onShowAll,
+  onShowMore,
   onChoose,
   filterLabels,
   onClearFilters,
@@ -93,21 +92,23 @@ export function ResultsStage({
   shown: readonly Clinician[];
   /** O222: the one personalized-match pass, computed in care-finder; rows index into it. */
   personalized: readonly { reason: string; signals: string[] }[];
-  allSignals: string[][];
+  /** The signals of the rows the list opens on, which a row's reason is compared against. */
+  foldSignals: string[][];
   request: string;
   reducedMotion: boolean | null;
   focusOnArrival: boolean;
   onReset: () => void;
   onRefine: () => void;
   onClarify: (answer: string) => void;
-  onShowAll: () => void;
+  /** Five more rows. */
+  onShowMore: () => void;
   onChoose: (clinician: Clinician) => void;
   /** O234: the labels of the device's filters that are on — the strip above the list, and the empty state's reason. */
   filterLabels: readonly string[];
   onClearFilters: () => void;
-  /** RADIANT: the suburb the list is measured from, shown as a pill beside the wordmark. */
+  /** The suburb the list is measured from, shown inside the search card. */
   place: string;
-  /** RADIANT: the device's filters, so the quick chips can show which are on and switch them. */
+  /** The device's filters: the ones that are on show as chips that switch them off. */
   filters: Filters;
   onToggleFilter: (key: BooleanFilterKey) => void;
   /** The kinds of care this search reaches, richest first — see `careKinds` in care-finder.tsx. */
@@ -155,14 +156,25 @@ export function ResultsStage({
    * they did not choose from a number; finding the row lets them read it first.
    */
   const list = useRef<HTMLDivElement | null>(null);
-  /** Arrival focus waits for the rows when the read held them back. */
+  /** Arrival focus lands on the list's heading, not a row: a ring on the first row read as a top pick. It waits for the rows when the read held them back. */
+  const listHeading = useRef<HTMLHeadingElement | null>(null);
   const heldArrival = useRef(reading && focusOnArrival);
   useEffect(() => {
     if (reading || !heldArrival.current) return;
     heldArrival.current = false;
     const active = document.activeElement;
-    if (!active || active === document.body || active.matches("h1")) list.current?.querySelector<HTMLElement>(".clinician-row")?.focus({ preventScroll: true });
+    if (!active || active === document.body || active.matches("h1")) listHeading.current?.focus({ preventScroll: true });
   }, [reading]);
+  /** "N more": focus moves to the first row it revealed, so a keyboard carries on from there. */
+  const revealFrom = useRef<number | null>(null);
+  useEffect(() => {
+    const from = revealFrom.current;
+    if (from === null || shown.length <= from) return;
+    revealFrom.current = null;
+    list.current?.querySelectorAll<HTMLElement>(".clinician-row")[from]?.focus({ preventScroll: true });
+  }, [shown.length]);
+  /** A filter switched off leaves the strip, so focus moves to the control after it. */
+  const filtersDoor = useRef<HTMLAnchorElement | null>(null);
   /**
    * O238 (founder-directed, "make map open up with a button, it causes too much clutter … the
    * north star is simplicity"): the map is behind one control on the list's own header, closed by
@@ -183,14 +195,11 @@ export function ResultsStage({
   };
 
   return (
-    <MotionScreen key="results" className="results-screen" focusOnArrival={focusOnArrival} focusTarget=".clinician-row">
+    <MotionScreen key="results" className="results-screen" focusOnArrival={focusOnArrival} focusTarget=".results-list-head h2">
       <StatusLine line={line} nonce={reranks} />
       <header className="minimal-header">
         <span className="header-brand">
           <Wordmark />
-          {/* RADIANT: the suburb the search is measured from, beside the brand — the one fact the
-              header holds that changes from person to person. Absent when no place is set. */}
-          {place && <span className="results-place">{place}</span>}
         </span>
       </header>
 
@@ -213,7 +222,11 @@ export function ResultsStage({
         >
           <button type="button" className="results-summary-words" onClick={onRefine} aria-label="Change what you said">
             <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
-            <span className="results-summary-text">{requestSummary}</span>
+            {/* The suburb the list is measured from sits in the card with the words it goes with. */}
+            <span className="results-summary-lines">
+              <span className="results-summary-text">{requestSummary}</span>
+              {place && <span className="results-summary-place">{place}</span>}
+            </span>
             <PencilSimple size={16} weight="bold" aria-hidden="true" />
           </button>
           {/* Start over sits with the search it restarts, labelled, at every width. A bare icon
@@ -260,16 +273,14 @@ export function ResultsStage({
       {/* O234: the filters the device is holding, said on the screen they narrow. A person who set
           "wheelchair access" on Tuesday must be able to see on Thursday why the list is short —
           and clear it here, without a trip to the profile. Edit goes there; the set lives there. */}
-      {/* RADIANT: the quick filters. Every yes/no filter is a pill the person can switch here,
-          filled when it is on; the filters that are not yes/no (a language, a distance, a way of
-          working) are counted on the Filters pill, which opens the profile where they are set.
-          The group keeps its name and its Clear control: what is narrowing the list is visible
-          here and can be cleared here, exactly as the grey strip promised. */}
+      {/* The strip holds what is narrowing the list: the kind, each yes/no filter that is ON (a
+          tap switches it off), and the Filters door, which counts the rest and is where any filter
+          is switched on. Filters that are off are not shown: they repeated the heard chips above. */}
       <div className="filter-strip" role="group" aria-label="Your filters">
         <ul className="filter-chips">
           {/* The kind of support first: it is the biggest lever on the list, and the only pill that
               is a choice rather than a switch. Its own text is its label; the select is named for
-              a reader. Filled like a pressed chip when a kind is picked, because it is a filter on. */}
+              a reader. Styled like an ON filter once a kind is picked, because it is a filter on. */}
           {careKinds.length > 1 && (
             <li>
               <NativeSelect id="provider-profession" className="finder-profession" aria-label="Provider type"
@@ -282,15 +293,25 @@ export function ResultsStage({
               </NativeSelect>
             </li>
           )}
-          {BOOLEAN_FILTER_KEYS.map((key) => (
+          {BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).map((key) => (
             <li key={key}>
-              <button type="button" className="filter-chip" aria-pressed={filters[key]} onClick={() => onToggleFilter(key)}>
+              <button
+                type="button"
+                className="filter-chip"
+                aria-pressed="true"
+                onClick={(event) => {
+                  const next = event.currentTarget.closest("li")?.nextElementSibling?.querySelector<HTMLElement>("button, a");
+                  onToggleFilter(key);
+                  next?.focus();
+                }}
+              >
                 {BOOLEAN_FILTER_LABELS[key]}
+                <X size={14} weight="bold" aria-hidden="true" />
               </button>
             </li>
           ))}
           <li>
-            <Link className="filter-chip" href="/profile">
+            <Link className="filter-chip" href="/profile" ref={filtersDoor}>
               <FunnelSimple size={14} weight="bold" aria-hidden="true" />
               Filters
               {otherFilterCount > 0 && <span className="filter-chip-count">{otherFilterCount}</span>}
@@ -298,7 +319,7 @@ export function ResultsStage({
           </li>
         </ul>
         {filterLabels.length > 0 && (
-          <button className="filter-clear" type="button" onClick={onClearFilters}>Clear</button>
+          <button className="filter-clear" type="button" onClick={() => { onClearFilters(); filtersDoor.current?.focus(); }}>Clear</button>
         )}
       </div>
 
@@ -357,7 +378,7 @@ export function ResultsStage({
             turns "All listed GPs" into "Matches", the moment the product's claim becomes true. The
             old word leaves upward through a small blur while the new one rises in from below, on
             the tap beat, so the change is seen rather than noticed later. */}
-        <h2 className="t-text-swap-slot">
+        <h2 className="t-text-swap-slot" tabIndex={-1} ref={listHeading}>
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.span
               key={quality === "informed" ? "matches" : pickedKind ?? "all"}
@@ -374,14 +395,7 @@ export function ResultsStage({
           </AnimatePresence>
         </h2>
         <span className="results-list-tools">
-          {/* O226: the count sits with the list it describes, not two groups up the page. */}
-          {matches.length > shown.length && (
-            <span className="results-count">
-              {/* Number pop-in: keyed on the value, so the digits re-enter only when the count
-                  actually changes, a filter narrowing the list, a "show more" widening it. */}
-              <span><span className="sr-only">{shown.length}</span><NumberTicker value={shown.length} aria-hidden="true" className="finder-count-number" /></span> of {matches.length}
-            </span>
-          )}
+          {/* No "5 of 151" here: it read as 151 matches, and "146 more" under the list says it. */}
           {/* O244: one tap opens the questions that would narrow the list; the sheet is the app's
               one modal idiom, so it drags, closes on Escape and returns focus. The button says what
               it does in words, and those words are its name: a sparkle alone told nobody. */}
@@ -475,7 +489,12 @@ export function ResultsStage({
           // `shown` is always a prefix slice of `matches`, so the indices align.
           const itemMatch = personalized[index]!;
           const away = distanceTo(item, origin);
-          const reasons = distinguishingSignals(itemMatch.signals, allSignals);
+          const reasons = distinguishingSignals(itemMatch.signals, foldSignals);
+          // The row's one line: the kind of provider, when it is not a GP, and why this one, when
+          // something sets it apart. Nothing else: the list is names, and the profile holds the
+          // clinician's own focus one tap away.
+          const kind = professionOf(item) !== "gp" ? professionLabel(professionOf(item)) : null;
+          const rowLine = [kind, fitFor?.(item) ?? reasons[0] ?? null].filter(Boolean).join(" · ");
           return (
             <motion.button
               key={item.id}
@@ -534,7 +553,7 @@ export function ResultsStage({
                   deliberate change. `holistic-care.spec.ts` asserts it and was red without it. */}
               <span className="row-copy"><strong>{item.name}{item.synthetic && <span className="row-example">Example</span>}</strong>
                 {publicIdentity(item) && <small className="row-cultural-identity">{publicIdentity(item)!.identities.map(id => IDENTITY_LABELS[id]).join(" · ")}{publicIdentity(item)!.country && <> · {publicIdentity(item)!.country}</>}</small>}
-                <small className="row-focus">{professionOf(item) !== "gp" ? `${professionLabel(professionOf(item))} · ` : ""}{fitFor?.(item) ?? (reasons.slice(0, 1).join(", ") || item.focus)}</small>
+                {rowLine && <small className="row-focus">{rowLine}</small>}
                 {/* O85: every place they consult, one label — a second location is a
                     fact the reader sees, and the distance sentence names which rooms
                     it measured when that matters. */}
@@ -569,7 +588,10 @@ export function ResultsStage({
         <motion.button
           className="show-all"
           type="button"
-          onClick={onShowAll}
+          onClick={() => {
+            revealFrom.current = shown.length;
+            onShowMore();
+          }}
           initial={reducedMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.25, delay: 0.3 }}

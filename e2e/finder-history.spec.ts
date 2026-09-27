@@ -40,9 +40,11 @@ test("Back and Forward walk the stages, and a reload resumes them with the words
   await expect(headline).toContainText(/school/i);
 
   // A real GP's row: an example profile has no booking control by design (O217).
+  // "{n} more" adds five rows a tap: tap until the row is there.
   const showAll = page.getByRole("button", { name: /^\d+ more$/ });
-  if (await showAll.isVisible()) await showAll.click();
-  await page.locator(".clinician-row", { hasText: "Saxena" }).first().click();
+  const saxena = page.locator(".clinician-row", { hasText: "Saxena" }).first();
+  for (let guard = 0; guard < 60 && !(await saxena.isVisible()) && (await showAll.isVisible()); guard++) await showAll.click();
+  await saxena.click();
   await expect(stage(page)).toHaveAttribute("data-stage", "profile");
   await page.getByRole("button", { name: /available times|how to book/i }).first().click();
   await expect(stage(page)).toHaveAttribute("data-stage", "booking");

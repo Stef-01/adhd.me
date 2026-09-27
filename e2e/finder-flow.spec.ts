@@ -289,8 +289,9 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
   // of it against another — so both readings have to be of the whole list, or a row that merely
   // rose past the fold would read as a row the clarifier invented.
   const expandAll = async () => {
+    // "{n} more" adds five rows a tap.
     const more = page.locator(".show-all");
-    if (await more.isVisible().catch(() => false)) await more.click();
+    for (let guard = 0; guard < 60 && (await more.isVisible().catch(() => false)); guard++) await more.click();
     await expect(page.locator(".show-all")).toHaveCount(0);
   };
   const askAgain = async () => {
@@ -448,7 +449,7 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
     // for it; with eleven it read the first five and compared them against all eleven. The
     // claim is about the ORDER the engine produced, so the list is widened to hold it.
     const showAll = page.locator(".show-all");
-    if (await showAll.isVisible().catch(() => false)) await showAll.click();
+    for (let guard = 0; guard < 60 && (await showAll.isVisible().catch(() => false)); guard++) await showAll.click();
     await expect(page.locator(".clinician-row")).toHaveCount(expected[i]!.length);
 
     const rendered = await page.locator(".clinician-row strong").allInnerTexts();

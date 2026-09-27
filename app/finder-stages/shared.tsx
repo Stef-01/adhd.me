@@ -312,15 +312,16 @@ export function WaveformMark({ active = false }: { active?: boolean }) {
  * Every clinician in this directory does ADHD assessment, so "ADHD assessment" appeared on every
  * row and told a reader nothing about which to choose. A signal is only a reason to pick something
  * if the other options lack it, so the shared ones are removed from the ROW and kept on the
- * profile, where there is nothing to compare against.
+ * profile, where there is nothing to compare against. When every signal is shared the row gets
+ * none: a heard chip repeated down the list ("Woman clinician" thirteen times on one screen)
+ * told a reader nothing either.
  */
 export function distinguishingSignals(signals: string[], everyone: string[][]): string[] {
   if (everyone.length < 2) return signals;
   const shared = new Set(
     everyone[0]!.filter((signal) => everyone.every((list) => list.includes(signal))),
   );
-  const kept = signals.filter((signal) => !shared.has(signal));
-  return kept.length > 0 ? kept : signals;
+  return signals.filter((signal) => !shared.has(signal));
 }
 
 /** Initials from a display name, ignoring the title. "Dr Anubhav Saxena" -> "AS". */

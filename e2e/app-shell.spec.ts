@@ -270,8 +270,9 @@ test("the profile's filters narrow the finder, are said on the results, and clea
   expect(await rows.count()).toBeGreaterThan(0);
 
   await strip.getByRole("button", { name: "Clear", exact: true }).click();
-  // RADIANT: the chip row stays — it is where the filters are switched — with nothing on.
+  // Nothing on: no filter chips, and the Filters door stays, where they are switched on again.
   await expect(strip.locator('[aria-pressed="true"]')).toHaveCount(0);
+  await expect(strip.getByRole("link", { name: /Filters/ })).toBeVisible();
   await expect(strip.getByRole("button", { name: "Clear", exact: true })).toHaveCount(0);
   // The place survives a clear — it orders, it never excluded anybody.
   await expect(page.getByRole("button", { name: "Map", exact: true })).toBeVisible();

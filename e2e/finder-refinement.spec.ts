@@ -33,9 +33,9 @@ for (const width of [320, 390, 768, 1440]) {
     await expect(page.locator('.clinician-row').first()).toBeVisible();
     await profession.selectOption('');
     await expect(profession).toHaveValue('');
-    const telehealth = page.getByRole('button', { name: 'Telehealth', exact: true });
-    await telehealth.click(); await expect(telehealth).toHaveAttribute('aria-pressed', 'true');
-    await telehealth.click(); await expect(telehealth).toHaveAttribute('aria-pressed', 'false');
+    // With no filter on, the strip is the kind and the Filters door: no off switches beside them.
+    await expect(page.locator('.filter-strip button.filter-chip')).toHaveCount(0);
+    await expect(page.locator('.filter-strip').getByRole('link', { name: 'Filters' })).toBeVisible();
     await page.getByRole('button', { name: 'Map', exact: true }).click();
     await expect(page.locator('.nearby-map')).toBeVisible();
     const list = await page.locator('.clinician-list').boundingBox();

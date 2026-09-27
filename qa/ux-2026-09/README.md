@@ -268,3 +268,55 @@ A finished run links to the character game on the same subject.
 | --- | --- | --- |
 | Before | ![A learning run, its last card, before, 390](run-last-card-before-390.jpg) | ![A learning run, its last card, before, 1440](run-last-card-before-1440.jpg) |
 | After | ![A learning run, its last card, after, 390](run-last-card-after-390.jpg) | ![A learning run, its last card, after, 1440](run-last-card-after-1440.jpg) |
+
+## Refinement pass, 2026-09-28
+
+Before is `main` at 0e1ef33b, after is each commit below; both captured with the pointer parked
+off the content, so a first-row hover in a before shot is the old capture's, not the screen's.
+
+### Finder results, arrival by keyboard
+
+No "5 of 151", no off filter chips, the place in the search card, "Example" as plain text, one
+accent (the heard chips), weights 400/600/700 and one grey. Focus lands on the list's heading.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Finder results by keyboard, before, 390](finder-arrival-before-390.jpg) | ![Finder results by keyboard, before, 1440](finder-arrival-before-1440.jpg) |
+| After | ![Finder results by keyboard, after, 390](finder-arrival-after-390.jpg) | ![Finder results by keyboard, after, 1440](finder-arrival-after-1440.jpg) |
+
+### Finder results, "A woman doctor"
+
+A row says why it is on the list only when that sets it apart: "Woman clinician" no longer
+repeats down eleven rows. 101/111 → 76/76 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A woman doctor, before, 390](finder-woman-before-390.jpg) | ![A woman doctor, before, 1440](finder-woman-before-1440.jpg) |
+| After | ![A woman doctor, after, 390](finder-woman-after-390.jpg) | ![A woman doctor, after, 1440](finder-woman-after-1440.jpg) |
+
+### Finder results, a filter on
+
+An on filter is a heard-style chip that switches it off; no ink pill.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A filter on, before, 390](finder-filter-on-before-390.jpg) | ![A filter on, before, 1440](finder-filter-on-before-1440.jpg) |
+| After | ![A filter on, after, 390](finder-filter-on-after-390.jpg) | ![A filter on, after, 1440](finder-filter-on-after-1440.jpg) |
+
+### Finder results, a place and the map
+
+The place sits under the words in the search card; the map's caption is 12px.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A place and the map, before, 390](finder-map-before-390.jpg) | ![A place and the map, before, 1440](finder-map-before-1440.jpg) |
+| After | ![A place and the map, after, 390](finder-map-after-390.jpg) | ![A place and the map, after, 1440](finder-map-after-1440.jpg) |
+
+### Finder results, nothing understood
+
+"hello there": 78/88 → 40/40 words. The list is names and places.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Nothing understood, before, 390](finder-unread-before-390.jpg) | ![Nothing understood, before, 1440](finder-unread-before-1440.jpg) |
+| After | ![Nothing understood, after, 390](finder-unread-after-390.jpg) | ![Nothing understood, after, 1440](finder-unread-after-1440.jpg) |

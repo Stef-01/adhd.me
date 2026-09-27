@@ -391,7 +391,6 @@ textarea {
 
 /* Numbers that change or align read as one column, per the taste law's numeric rule. The finder's
    counts, distances and money were relying on the default proportional figures of Inter. */
-.results-count,
 .row-location,
 .booking-practice {
   font-variant-numeric: tabular-nums;
@@ -453,9 +452,11 @@ summary:focus-visible {
 /* U9: a stage's heading takes focus when the stage arrives (`MotionScreen`), so a keyboard user
    sees where they landed. The same ring as a control's, wider so it clears the display serif's
    descenders; a pointer tap shows nothing, as `:focus-visible` intends. */
-.screen h1:focus-visible {
+.screen h1:focus-visible,
+.results-list-head h2:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 6px;
+  border-radius: 4px;
 }
 
 /* ===========================================================================
@@ -4515,7 +4516,7 @@ summary:focus-visible {
   color: var(--ink);
   font: inherit;
   font-size: 0.875rem;
-  font-weight: 560;
+  font-weight: 600;
   cursor: pointer;
 }
 @media (hover: hover) {
@@ -5609,14 +5610,6 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   font-size: 0.8125rem;
   line-height: 1.5;
   text-wrap: pretty;
-}
-
-/* O226: the count describes the LIST, so it sits on the list's own header row — it was a stray
-   grey sentence under the place field, two groups away from the thing it counts. */
-.results-count {
-  color: var(--muted);
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
 }
 
 @media (min-width: 680px) {
@@ -7934,7 +7927,7 @@ button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--lin
   white-space: nowrap;
   color: var(--ink);
   font-size: 0.75rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.005em;
   paint-order: stroke;
   -webkit-text-stroke: 3px var(--surface-raised);
@@ -7971,7 +7964,7 @@ button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--lin
 }
 
 .nearby-caption-main { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
-.nearby-caption-note { color: var(--faint); font-size: 0.75rem; line-height: 1.45; }
+.nearby-caption-note { color: var(--muted); font-size: 0.75rem; line-height: 1.45; }
 
 @media (prefers-reduced-motion: reduce) {
   .nearby-zoom-button { transition: none; }
@@ -8010,38 +8003,6 @@ button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--lin
   background: var(--stone);
 }
 
-.filter-strip-lead {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 650;
-}
-
-.filter-chips {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.filter-chip {
-  padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface-raised);
-  color: var(--ink);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.filter-strip-actions { display: flex; gap: 2px; margin-left: auto; }
-
-.filter-edit,
 .filter-clear {
   display: inline-flex;
   align-items: center;
@@ -8061,11 +8022,9 @@ button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--lin
 }
 
 @media (hover: hover) {
-  .filter-edit:hover,
   .filter-clear:hover { background: var(--surface-raised); }
 }
 
-.filter-edit:focus-visible,
 .filter-clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ── The empty result (AR24: no-results) ───────────────────────────────────────────────── */
@@ -8455,12 +8414,12 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   color: var(--ink);
   font: inherit;
   font-size: 0.8125rem;
-  font-weight: 650;
+  font-weight: 600;
   cursor: pointer;
   transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui);
 }
 
-.map-toggle.is-open { border-color: var(--route-strong); color: var(--route-strong); }
+.map-toggle.is-open { border-color: var(--line-strong); }
 .map-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 @media (hover: hover) {
@@ -8815,12 +8774,12 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   cursor: pointer;
   transition: background var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-spring);
 }
-.clarify-star { width: auto; gap: 8px; padding: 0 16px; color: var(--accent-deep); font: inherit; font-size: 0.875rem; font-weight: 650; white-space: nowrap; }
-.clarify-star > svg { color: var(--accent); }
+.clarify-star { width: auto; gap: 8px; padding: 0 16px; color: var(--ink); font: inherit; font-size: 0.875rem; font-weight: 600; white-space: nowrap; }
+.clarify-star > svg { color: var(--muted); }
 .clarify-star:active { transform: scale(0.94); }
-.clarify-star.is-open { background: var(--accent-soft); }
+.clarify-star.is-open { border-color: var(--line-strong); }
 .clarify-star:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-@media (hover: hover) { .clarify-star:hover { background: var(--accent-soft); } }
+@media (hover: hover) { .clarify-star:hover { background: var(--stone); } }
 
 .clarify { margin: 0; }
 .clarify-sub { margin: 4px 0 12px; color: var(--muted); font-size: 0.9375rem; }
@@ -9046,14 +9005,14 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   border-radius: 999px;
   background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
   color: var(--muted);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 .nearby-map .leaflet-control-attribution { padding: 2px 6px; font-size: 0.5625rem; border-top-left-radius: 6px; background: color-mix(in srgb, var(--surface-raised) 70%, transparent); }
 .nearby-zoom { top: 8px; right: 8px; gap: 6px; }
 .nearby-zoom-button { border: 0; border-radius: 999px; box-shadow: 0 2px 10px color-mix(in srgb, var(--hero-dusk) 18%, transparent); }
 .nearby-marker-pin { min-width: 26px; height: 26px; font-size: 0.75rem; box-shadow: 0 2px 10px color-mix(in srgb, var(--hero-dusk) 30%, transparent); }
-.nearby-marker-label { font-size: 0.6875rem; }
+.nearby-marker-label { font-family: var(--font-ui); font-size: 0.75rem; }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════════════════════════
@@ -9607,22 +9566,10 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   border-radius: 50%;
   background: var(--accent-mid);
 }
-.results-place {
-  flex: none;
-  padding: 2px 10px;
-  border: 1px solid var(--accent-tint);
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1.5;
-  white-space: nowrap;
-}
 .patient-v2 .text-action { color: var(--muted); font-size: 0.75rem; font-weight: 600; }
 @media (hover: hover) { .patient-v2 .text-action:hover { color: var(--accent); } }
 
-/* The search summary: one white card, the magnifier in the accent, the words on one line, and
+/* The search summary: one white card, the words on one line with the place under them, and
    Start over at its end. The words give way first, so the button keeps its label at 320. */
 .results-summary:has(.results-summary-reset) { display: flex; align-items: center; gap: 2px; }
 .results-summary > .results-summary-words { flex: 1 1 auto; min-width: 0; }
@@ -9640,7 +9587,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   color: var(--muted);
   font: inherit;
   font-size: 0.875rem;
-  font-weight: 650;
+  font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -9663,12 +9610,12 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   padding: 10px 12px 10px 16px;
   border-radius: 16px;
 }
-.results-summary-words > svg:first-child { color: var(--accent-mid); }
+.results-summary-words > svg:first-child { color: var(--muted); }
 .results-summary-words > svg:last-child {
   box-sizing: content-box;
   padding: 6px;
   border-radius: 50%;
-  color: var(--faint);
+  color: var(--muted);
   transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
 }
 @media (hover: hover) {
@@ -9677,12 +9624,10 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .results-summary-text {
   -webkit-line-clamp: 1;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 400;
 }
 
-/* The quick filters: one scrolling row of pills, the on ones filled. The row replaces the grey
-   strip; the same group name and the same Clear control stay, because the screen's contract —
-   what is narrowing the list is visible here and can be cleared here — is unchanged. */
+/* The filter strip: one scrolling row. The chips themselves are one rule set, in finder.css. */
 .filter-strip {
   flex-wrap: nowrap;
   gap: 8px;
@@ -9695,57 +9640,9 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 }
 .filter-strip::-webkit-scrollbar { display: none; }
 .filter-chips { flex-wrap: nowrap; gap: 8px; }
-.filter-chip {
-  position: relative;
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 34px;
-  padding: 6px 14px;
-  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
-  border-radius: 999px;
-  background: var(--surface-raised);
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1.2;
-  text-decoration: none;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui);
-}
-/* O14's floor without the mockup's pill growing: the hit area reaches 44px above and below. */
-.filter-chip::after { content: ""; position: absolute; inset: -5px 0; }
-.filter-chip[aria-pressed="true"] {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--on-accent);
-  font-weight: 600;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--accent) 20%, transparent);
-}
-@media (hover: hover) {
-  .filter-chip:not([aria-pressed="true"]):hover { border-color: var(--accent-mid); color: var(--ink); }
-}
-.filter-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.filter-chip-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
 .filter-clear { flex: none; }
 
-/* The list head: the heading in Newsreader, the noun in italic accent, the count and the mark. */
+/* The list head: the heading and its tools. */
 .results-list-head { padding: 12px var(--shell-gutter) 8px; }
 .results-list-head h2 {
   font-size: 1.5rem;
@@ -9754,7 +9651,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   line-height: 1.1;
 }
 .results-list-head h2 em { font-style: italic; font-weight: 400; color: var(--accent-mid); }
-.results-count { color: var(--faint); font-size: 0.75rem; font-weight: 500; }
 
 /* The rows are cards: 64px portrait in a 12px radius, the name in Newsreader, one focus line,
    the place row with its pin, the chevron. The lead card, when the order is informed, carries
@@ -9815,11 +9711,10 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   gap: 4px;
   margin-top: 6px;
   color: var(--muted);
-  font-weight: 500;
+  font-weight: 400;
 }
-.patient-v2 .clinician-row .row-location svg { flex: none; color: var(--faint); }
-.patient-v2 .clinician-row.is-lead .row-location svg { color: var(--accent-mid); }
-.patient-v2 .clinician-row > svg { color: var(--faint); }
+.patient-v2 .clinician-row .row-location svg { flex: none; color: var(--muted); }
+.patient-v2 .clinician-row > svg { color: var(--muted); }
 
 /* The tab bar: the current tab in the accent, its marker in the brighter terracotta. The founder's
    mockups paint it so, and the marker keeps colour from being the only signal. */
@@ -10143,10 +10038,8 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
    is `.me-sticky` — sticky, on a bar that is off-screen for the whole arrival anyway. */
 
 /* Press feedback on every pill, on the tap beat. */
-.filter-chip,
 .me-chip,
 .learn-chip { transition-property: color, background, border-color, transform; transition-duration: var(--dur-tap); transition-timing-function: var(--ease-ui); }
-.filter-chip:active,
 .me-chip:active { transform: scale(0.96); }
 
 /* The segment thumb: one white card that slides between the choices. */
@@ -10165,7 +10058,7 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
 
 /* The learn cards lift under a pointer; the results cards already do. */
 @media (prefers-reduced-motion: reduce) {
-  .filter-chip:active, .me-chip:active { transform: none; }
+  .me-chip:active { transform: none; }
 }
 
 
@@ -10365,9 +10258,6 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
    where the desktop earns it, because the pointer is what desktop has. `@media (hover: hover)`
    keeps every transform off touch, where these fire on tap and read as lag. */
 
-/* `.filter-chip` is deliberately absent: the SMOOTH block above already gives it (and `.me-chip`
-   and `.learn-chip`) a tap-beat transition covering `transform`, which is what the hover lift
-   below needs. Naming it again here would be a second author for one property set. */
 .patient-v2 .clinician-row,
 .show-all {
   transition:
@@ -10385,7 +10275,6 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
      the measurement. The row keeps its colour and shadow hover below, which motion never writes.
      1px, and no more: a chip that lifts further than the gap to the row of chips beside it starts
      reading as an object being picked up rather than one answering a pointer. */
-  .filter-chip:not([aria-pressed="true"]):hover { transform: translateY(-1px); }
   .show-all:hover {
     transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--accent-mid) 55%, var(--line));
@@ -10429,9 +10318,7 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
   /* The row is absent from this list on purpose: its lift and press are motion props gated on
      `reducedMotion`, and `MotionConfig reducedMotion="user"` in `care-finder.tsx` is what switches
      them off. Restating it here would be a second guard on a state this file does not set.
-     The chip's PRESS is likewise SMOOTH's to guard, and it does, above; only the hover lift this
-     section added needs stating. */
-  .filter-chip:hover,
+     */
   .show-all:hover,
   .show-all:active { transform: none; }
   .patient-v2 .care-shell,
