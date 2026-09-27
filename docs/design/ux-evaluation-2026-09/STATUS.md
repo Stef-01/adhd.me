@@ -27,6 +27,19 @@ of that workstream.
 | N14 | Dates on the person's own clock. |
 | Roadmap | Three arcade rounds that taught the wrong thing; the privacy page now says what `/match` sends; opt-in sound for the Chaos Run, never under reduced sensory effects. |
 
+## Finished, 2026-09-28
+
+The refinement pass closed what these were still missing. Captures are in `qa/ux-2026-09/README.md`
+under "Refinement pass, 2026-09-28".
+
+| Item | What changed |
+| --- | --- |
+| W6 | The serif rule, everywhere: the Support and typing questions, "Does this fit?" and a question-shaped step card are serif; the clinician's name, the profile's "About" and "…biggest friction right now." are sans. One `.voice-prompt h1` rule where there were eight, and the Support question is 30px on a phone like every page heading. |
+| W7 | A tick on "All games" once anything is played. "Saved on this device." shows on both Learn panes. |
+| W8 | While the goals question is open it comes before the hero, so a tapped goal changes "For you" on screen at 390 and 1440. |
+| W9 | A tap on a part brings its panel into view unless 160px of it already shows above the tab bar; on a phone the wheel steps down once a quarter is open. Checked at 390, 768, 1024 and 1440. |
+| W2–W4 | On a map not yet started, Start sits under the heading, above the six axes. |
+
 ## Waiting on a choice from the founder
 
 - **Confirm the decisions the plan proceeded on:** D1 to D12 in `PLAN.md` §4. D3, D4 and D7 shipped

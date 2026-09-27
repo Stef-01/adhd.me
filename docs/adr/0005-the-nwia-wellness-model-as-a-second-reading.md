@@ -39,3 +39,9 @@ subdomains). A second, nine-region map would be the clutter the founder said not
   its dimensions page.
 - If the Institute supplies its definitions text, the one-line meanings can be replaced in the
   data file without touching a screen.
+
+## Amended, 2026-09-28
+
+The dimension row on an opened node ("Wellness dimension · Work · Intellectual") is gone from the
+care map's panel: a label row the panel did not need. The paradigm stays once, attributed and
+linked, and the mapping stays in `src/wellness/nwia.ts` for `/my-map`.

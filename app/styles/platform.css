@@ -72,14 +72,12 @@ body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outl
 .platform-shell .me-screen { padding-top: 40px; }
 .platform-shell .minimal-header .wordmark { display: none; }
 .platform-shell .settings-trigger { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; color: var(--muted); width: 44px; height: 44px; }
-.platform-shell main h1,
-.platform-shell .voice-prompt h1 { font-family: inherit; font-size: clamp(30px, 3.3vw, 44px); font-weight: 750; letter-spacing: -.045em; line-height: 1.16; }
+.platform-shell main h1 { font-family: inherit; font-size: clamp(30px, 3.3vw, 44px); font-weight: 750; letter-spacing: -.045em; line-height: 1.16; }
 .platform-shell h1 em { font-family: inherit; font-style: normal; color: var(--accent); }
 .platform-shell .voice-screen .voice-core { margin: 64px auto 28px; width: 100%; }
 /* Left, at every width: the question, the box and the example link keep one left edge on a phone
    as they do on a desk (app-shell.spec holds them to it). Centred over a left-aligned box, the
    second line of the question drifted right of everything under it. */
-.platform-shell .voice-prompt h1 { max-width: 18ch; margin: 0; text-align: left; }
 .platform-shell .voice-actions { width: 100%; max-width: 760px; margin-inline: auto; padding-bottom: 0; }
 .platform-shell .dual-input { border: 1px solid var(--line-strong); border-radius: 20px; background: var(--paper); box-shadow: 0 8px 32px color-mix(in srgb, var(--ink) 3%, transparent); }
 .platform-shell .dual-input textarea { font-size: 17px; line-height: 1.6; min-height: 150px; background: transparent; color: var(--ink); }

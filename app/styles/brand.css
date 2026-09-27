@@ -40,11 +40,6 @@ body { font-family: var(--font-ui); }
    and for a quoted voice; Plus Jakarta Sans for every statement. One class carries it, so a
    heading is serif because of what it says, not because of which page it is on. */
 .platform-shell main .t-question, .t-question, .t-voice { font-family: var(--font-display); font-weight: 460; letter-spacing: -0.025em; }
-.platform-shell .voice-prompt h1 {
-  font-family: var(--font-display); font-weight: 430;
-  font-size: clamp(42px, 5vw, 54px); line-height: .99; letter-spacing: -.035em;
-}
-.platform-shell .voice-prompt h1 em { font-family: inherit; font-style: italic; color: var(--accent); }
 @media (max-width: 767px) { .platform-shell .app-tab.is-current { color: var(--ink); } }
 /* The story page's header pill joins the ink idiom: it was the one primary still on the navy
    `--route-strong` after the landing moved to the yellow scheme. */

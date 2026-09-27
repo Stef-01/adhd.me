@@ -65,7 +65,7 @@ export function TypeStage({
             was the question again in label type, and the flow from listening is continuous only if
             arriving here costs one line to read, not three. The placeholder is the welcome's too,
             for the same reason, one field, one example, whichever screen it is on. */}
-        <h1 tabIndex={-1}>What kind of support are you looking for?</h1>
+        <h1 tabIndex={-1} className="t-question">What kind of support are you looking for?</h1>
         <label className="sr-only" htmlFor="doctor-request">Describe the support you want</label>
         <textarea
           id="doctor-request"

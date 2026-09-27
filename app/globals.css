@@ -746,18 +746,6 @@ summary:focus-visible {
   text-align: center;
 }
 
-.voice-prompt h1 {
-  margin: 13px 0 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-weight: 430;
-  letter-spacing: -0.035em;
-}
-
-.voice-prompt h1 {
-  font-size: clamp(2.625rem, 11vw, 3.375rem);
-  line-height: 0.99;
-}
-
 .voice-prompt .example {
   max-width: 330px;
   margin: 23px auto 0;
@@ -1723,18 +1711,6 @@ summary:focus-visible {
      reads first did not line up. */
   padding: 52px var(--shell-gutter) 24px;
   text-align: left;
-}
-
-.patient-v2 .voice-prompt h1 {
-  /* O233: was clamp(3.125rem, 12vw, 4rem) — display scale, because it used to be a tagline. It is
-     a question now, and the box under it is the subject of the screen; a heading that takes three
-     lines at 4rem makes the box look like a footnote to it. Sized to lead, not to shout. */
-  max-width: 440px;
-  margin-top: 12px;
-  font-size: clamp(1.5rem, 6.2vw, 1.875rem);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
 }
 
 .patient-v2 .voice-prompt .example {
@@ -3037,10 +3013,6 @@ summary:focus-visible {
     padding-bottom: 20px;
   }
 
-  .voice-prompt h1 {
-    font-size: 2.4375rem;
-  }
-
   .voice-actions {
     padding-bottom: 44px;
   }
@@ -3392,17 +3364,6 @@ summary:focus-visible {
   text-align: center;
 }
 
-/* O233: the welcome heading is a QUESTION now, not the tagline this rule was written for, and the
-   box below it is the subject of the screen. At 3.625rem it took three lines and made the box read
-   as a footnote to it. The `span`/`em` block rule went with the two-line tagline it split. */
-.patient-v2 .voice-screen .voice-prompt h1 {
-  max-width: 15ch;
-  margin-top: 0;
-  font-size: clamp(1.5rem, 6.4vw, 1.9375rem);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-}
-
 /* The `span`/`em` pair styled the two halves of the old tagline ("ADHD assessment" /
    "that takes you seriously."). O233 deleted the tagline, so both rules went with it. */
 
@@ -3434,10 +3395,6 @@ summary:focus-visible {
   .patient-v2[data-stage="type"] .minimal-header {
     min-height: 84px;
     border-bottom: 0;
-  }
-
-  .patient-v2 .voice-screen .voice-prompt h1 {
-    font-size: clamp(3.5rem, 5.2vw, 4.125rem);
   }
 
   .patient-v2[data-stage="type"] .type-content {
@@ -6330,17 +6287,6 @@ select { caret-color: var(--route-strong); }
    container-query fix rather than revived: the welcome's edge is the shell gutter every other
    stage sits on, and a second, fluid inset for one screen is the alignment defect that rule was
    written to end.) */
-.patient-v2 .voice-screen .voice-prompt h1 {
-  color: var(--ink);
-  font-size: clamp(1.5rem, 4.4cqw, 1.9375rem);
-  font-weight: 520;
-  line-height: 0.98;
-  letter-spacing: -0.04em;
-}
-.patient-v2 .voice-screen .voice-prompt h1 em {
-  color: var(--ink);
-  font-weight: 440;
-}
 
 .patient-v2 .voice-actions .dual-input {
   min-height: 66px;
@@ -8222,7 +8168,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   text-align: left;
 }
 
-.patient-v2 .voice-screen .voice-prompt h1 { margin: 0; }
 .patient-v2 .voice-core { padding: 24px var(--shell-gutter) 0; }
 .patient-v2 .voice-screen .voice-actions { margin-top: 0; margin-bottom: auto; padding-bottom: 24px; }
 
@@ -10169,25 +10114,6 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
      `background: var(--accent-soft)` that replaced it is dropped — two things drawing one state
      is what made the change snap. */
 
-  /* ── The welcome screen's presence ────────────────────────────────────────────────────────
-     The question was capped at 1.875rem by a `vw` clamp that stopped scaling long before the desk
-     width did, so a 30px heading led a 780px column inside a 1040px window and the screen read as
-     empty rather than calm. The box under it is still the subject; this is the question sized to
-     the room it is asked in. */
-  /* THREE CLASSES, to match `.patient-v2 .voice-screen .voice-prompt h1` in section 15 — a
-     two-class rule here loses to it however late it is declared, and loses SILENTLY: `max-width`
-     applied from the shorter selector while `font-size` did not, so the question kept its 31px
-     inside an 18ch measure computed against a size it never took. The ceiling is what binds, not
-     the `cqw` term: 4.4cqw of a 1040px shell is 45.8px and the clamp cut it to 1.9375rem.
-     (A `@media (min-width: 820px)` block already asks for 4.125rem here. It has been dead since
-     the section-15 rule landed above it — same specificity, later in the file — which is the
-     second time this one heading has been sized by a rule that never applied.) */
-  .patient-v2 .voice-screen .voice-prompt h1 {
-    max-width: 18ch;
-    font-size: clamp(1.875rem, 3.4vw, 2.75rem);
-    line-height: 1.06;
-    letter-spacing: -0.035em;
-  }
   .patient-v2 .voice-prompt { padding-top: 0; }
 
   /* ── The results list ─────────────────────────────────────────────────────────────────────

@@ -493,14 +493,17 @@ test("every care-map node shows its whole label, inside its own disc", async ({ 
   expect(nodes.find((n) => n.label === "Working memory")!.shown.replace(/\s+/g, " ")).toBe("Working memory");
 });
 
-test("NWIA: the paradigm is on the care map once and attributed, a node names its dimension, and My ADHD says the balance honestly", async ({ page }) => {
+test("NWIA: the paradigm is on the care map once and attributed, a part's panel carries no label row, and My ADHD says the balance honestly", async ({ page }) => {
   await page.goto("/approach/map");
   const intro = page.locator(".care-map-nwia");
   await expect(intro).toHaveCount(1);
   await expect(intro).toContainText(/awareness, understanding and active decision-making/);
   await expect(intro.getByRole("link", { name: /National Wellness Institute of Australia/ })).toHaveAttribute("href", /wellnessaustralia\.org/);
   await page.getByRole("button", { name: /^Sleep \(Body\)/ }).click();
-  await expect(page.locator(".care-map-nwia")).toContainText(/Wellness dimension\s*Physical/);
+  // A part's panel is its name, its meaning, the person's line and the ways in: the "Wellness
+  // dimension" row under them was a label the panel did not need (2026-09-28).
+  await expect(page.locator("#care-map-title")).toHaveText("Sleep");
+  await expect(page.locator(".care-map-nwia")).toHaveCount(0);
   await page.goto("/my-adhd");
   await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({
     v: 1, onboarding: { improveFirst: "start-earlier", impact: 7, completedAt: new Date().toISOString() },

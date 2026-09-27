@@ -140,7 +140,7 @@ export function MyAdhdSheet({
               {/* A short question, not the module's whole sentence. The reading it is asking
                   about is the axis a person just opened; restating it here cost fifteen words on
                   a screen whose ceiling is sixty. */}
-              <p>Does this fit?</p>
+              <p className="t-question">Does this fit?</p>
               <div className="resonance-row" role="group" aria-label="Does this fit">
                 {VERDICTS.map((v) => (
                   <button

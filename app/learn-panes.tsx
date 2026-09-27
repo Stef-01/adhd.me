@@ -118,6 +118,16 @@ export interface LearnPanesProps {
 export function LearnPanes({ progress, cursor, completed, hydrated, start }: LearnPanesProps) {
   const params = useSearchParams();
   const reducedMotion = useReducedMotion();
+  const played = usePlayed();
+  const { profile } = useProfile();
+  // Anything either pane has written to this device: a game or module done, a goal, a strategy.
+  const saved = hydrated && (
+    progress.done.length > 0 ||
+    Object.keys(played.at).length > 0 ||
+    (profile?.selectedGoals?.length ?? 0) > 0 ||
+    (profile?.completedModuleIds.length ?? 0) > 0 ||
+    (profile?.saved.length ?? 0) > 0
+  );
   const [pane, setPane] = useState<Pane>("games");
   const [direction, setDirection] = useState<1 | -1>(1);
   const swipe = useDragControls();
@@ -194,6 +204,7 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start }: Lea
           </motion.div>
         </AnimatePresence>
       </div>
+      {saved && <p className="learn-saved">Saved on this device.</p>}
     </section>
   );
 }
@@ -310,6 +321,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
           data-testid="learn-show-all"
         >
           All games
+          {anyPlayed && <Check className="learn-played-tick" size={16} weight="bold" aria-hidden="true" data-testid="learn-played-tick" />}
           <CaretDown size={16} weight="bold" aria-hidden="true" />
         </button>
       </div>
@@ -364,7 +376,6 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
           })}
         </div>
       )}
-      {anyPlayed && <p className="learn-saved">Saved on this device.</p>}
     </div>
   );
 }
@@ -435,11 +446,60 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
   const resume = resumable(cursor, progress.done);
   const continuing = resume ? MODULES.find((m) => m.id === resume.moduleId) : undefined;
 
+  const goalsQuestion = ask && (
+    <section className="learn-goals" aria-labelledby="learn-goals-title">
+      <h2 id="learn-goals-title" className="t-question">What do you want help with?</h2>
+      <div className="lives-chips" role="group" aria-labelledby="learn-goals-title">
+        {GOALS.map((g) => (
+          <button
+            key={g.id}
+            type="button"
+            className="lives-chip"
+            aria-pressed={goals.includes(g.id)}
+            onClick={() => {
+              // The question stays open until "Done", so "For you" changes under it as goals are tapped.
+              setEditing(true);
+              toggle(g.id);
+            }}
+          >
+            {g.label}
+          </button>
+        ))}
+      </div>
+      <button
+        type="button"
+        className="learn-goals-done"
+        onClick={() => {
+          if (goals.length === 0) apply((s) => skipGoals(s));
+          setEditing(false);
+        }}
+      >
+        {goals.length === 0 ? "Skip" : "Done"}
+      </button>
+    </section>
+  );
+  const forYouSection = forYou.length > 0 && (
+    <section className="learn-for-you" aria-labelledby="learn-for-you-title" data-testid="learn-for-you">
+      <div className="learn-for-you-head">
+        <h2 id="learn-for-you-title" className="lives-section-title">For you</h2>
+        {!ask && (
+          <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
+            Change goals
+          </button>
+        )}
+      </div>
+      <p className="learn-for-you-why">{why}</p>
+      <StrategyRows strategies={forYou} done={done} />
+    </section>
+  );
+
   return (
     <>
       <Completion completed={completedRead} start={start} />
       {!explore && (
         <>
+          {goalsQuestion}
+          {ask && forYouSection}
           <div className="learning-feature">
             <div>
               <h2>Get to know ADHD.</h2>
@@ -462,52 +522,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
               </li>
             </ul>
           )}
-          {ask && (
-            <section className="learn-goals" aria-labelledby="learn-goals-title">
-              <h2 id="learn-goals-title" className="t-question">What do you want help with?</h2>
-              <div className="lives-chips" role="group" aria-labelledby="learn-goals-title">
-                {GOALS.map((g) => (
-                  <button
-                key={g.id}
-                type="button"
-                className="lives-chip"
-                aria-pressed={goals.includes(g.id)}
-                onClick={() => {
-                  // The question stays open until "Done", so "For you" changes under it as goals are tapped.
-                  setEditing(true);
-                  toggle(g.id);
-                }}
-              >
-                    {g.label}
-                  </button>
-                ))}
-              </div>
-              <button
-                type="button"
-                className="learn-goals-done"
-                onClick={() => {
-                  if (goals.length === 0) apply((s) => skipGoals(s));
-                  setEditing(false);
-                }}
-              >
-                {goals.length === 0 ? "Skip" : "Done"}
-              </button>
-            </section>
-          )}
-          {forYou.length > 0 && (
-            <section className="learn-for-you" aria-labelledby="learn-for-you-title" data-testid="learn-for-you">
-              <div className="learn-for-you-head">
-                <h2 id="learn-for-you-title" className="lives-section-title">For you</h2>
-                {!ask && (
-                  <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
-                    Change goals
-                  </button>
-                )}
-              </div>
-              <p className="learn-for-you-why">{why}</p>
-              <StrategyRows strategies={forYou} done={done} />
-            </section>
-          )}
+          {!ask && forYouSection}
         </>
       )}
       {toolkit && !explore && (

@@ -202,12 +202,17 @@
 .care-map-modules a { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 8px 12px; border-radius: 10px; background: var(--stone); color: var(--ink); font-size: 0.9375rem; font-weight: 600; text-decoration: none; }
 .care-map-modules a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) { .care-map-modules a:hover { background: var(--accent-soft); } }
-.care-map-you { margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-deep); font-size: 0.875rem; line-height: 1.5; }
+.care-map-detail .care-map-you { color: var(--ink); }
+/* The panel's foot sits clear of the phone's tab bar when it is scrolled into view. */
+.care-map-detail { scroll-margin-bottom: calc(var(--app-tabs-h, 0px) + env(safe-area-inset-bottom) + 16px); }
 /* The phone's care map (N8, founder's pick 2026-09-27): under 768px the wheel is too narrow for a
    node's 8.75-unit name to reach 12px, so it becomes four quarters, each a button, and a tap lists
    that quarter's parts under it. The quarter names render at 14px on a 320px phone, 18px at 390. */
 .care-map-phone { display: none; }
 .care-map-quarters { width: min(420px, 100%); height: auto; display: block; margin: 0 auto; }
+/* Once a quarter is open its parts are what matter: the wheel steps down to the size its labels
+   still read at 12px, so the parts and the panel come up the screen. */
+.care-map-phone:has(.care-map-parts) .care-map-quarters { width: 240px; }
 .care-map-quarter { cursor: pointer; touch-action: manipulation; }
 .care-map-quarter:focus:not(:focus-visible) { outline: none; }
 .care-map-quarter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

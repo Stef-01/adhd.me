@@ -339,3 +339,50 @@ One table, differences first, no uppercase labels; the foot is one line. 57 → 
 | --- | --- | --- |
 | Before | ![Compare, before, 390](compare-before-390.jpg) | ![Compare, before, 1440](compare-before-1440.jpg) |
 | After | ![Compare, after, 390](compare-after-390.jpg) | ![Compare, after, 1440](compare-after-1440.jpg) |
+
+### Support home
+
+The question in the serif of a question, at 30px on a phone like every page heading (it was 24).
+One `.voice-prompt h1` rule where there were eight.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Support home, before, 390](home-question-before-390.jpg) | ![Support home, before, 1440](home-question-before-1440.jpg) |
+| After | ![Support home, after, 390](home-question-after-390.jpg) | ![Support home, after, 1440](home-question-after-1440.jpg) |
+
+### Learn, games played
+
+A tick on "All games" once anything is played. No words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Games played, before, 390](learn-games-tick-before-390.jpg) | ![Games played, before, 1440](learn-games-tick-before-1440.jpg) |
+| After | ![Games played, after, 390](learn-games-tick-after-390.jpg) | ![Games played, after, 1440](learn-games-tick-after-1440.jpg) |
+
+### Learn, a goal tapped
+
+While the goals question is open it comes first, so "For you" changes on screen.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A goal tapped, before, 390](learn-goal-before-390.jpg) | ![A goal tapped, before, 1440](learn-goal-before-1440.jpg) |
+| After | ![A goal tapped, after, 390](learn-goal-after-390.jpg) | ![A goal tapped, after, 1440](learn-goal-after-1440.jpg) |
+
+### The care map, a part tapped
+
+The panel comes into view above the tab bar, the wheel steps down on a phone, the chosen part is
+filled, "For you" is a plain line and the "Wellness dimension" row is gone. Checked at 768 and 1024 too.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A part tapped, before, 390](care-map-part-before-390.jpg) | ![A part tapped, before, 1440](care-map-part-before-1440.jpg) |
+| After | ![A part tapped, after, 390](care-map-part-after-390.jpg) | ![A part tapped, after, 1440](care-map-part-after-1440.jpg) |
+
+### My ADHD, not started
+
+Start sits under the heading, above the six axes it will fill.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Not started, before, 390](my-adhd-start-before-390.jpg) | ![Not started, before, 1440](my-adhd-start-before-1440.jpg) |
+| After | ![Not started, after, 390](my-adhd-start-after-390.jpg) | ![Not started, after, 1440](my-adhd-start-after-1440.jpg) |

@@ -337,7 +337,6 @@
 
 .map-stands-out {
   margin: 0 0 var(--sp-md);
-  font-family: var(--font-display, inherit);
   font-size: 1.125rem;
   line-height: 1.6rem;
   color: var(--ink);
@@ -583,7 +582,7 @@
 
 .map-accuracy p {
   margin: 0 0 var(--sp-sm);
-  font-weight: 600;
+  font-size: 1.0625rem;
 }
 
 .map-sheet-actions {

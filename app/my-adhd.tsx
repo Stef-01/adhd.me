@@ -192,6 +192,16 @@ export function MyAdhd() {
 
           {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
+          {/* Not started: the one thing to do comes first, above the six axes it will fill. */}
+          {record && !started && (
+            <section className="map-lead map-side">
+              <p>Ten quick questions start this map.</p>
+              <Link className="learn-primary" href="/start">
+                Start <ArrowRight size={17} weight="bold" aria-hidden="true" />
+              </Link>
+            </section>
+          )}
+
           {record && (
             <MyAdhdRadar points={points} baseline={baseline} onOpen={openAxis} openAspect={open} caption={thenPill} />
           )}
@@ -203,15 +213,6 @@ export function MyAdhd() {
                 How it fills in
               </button>
             </div>
-          )}
-
-          {record && !started && (
-            <section className="map-lead map-side">
-              <p>Ten quick questions start this map.</p>
-              <Link className="learn-primary" href="/start">
-                Start <ArrowRight size={17} weight="bold" aria-hidden="true" />
-              </Link>
-            </section>
           )}
 
           {record && started && (
@@ -246,13 +247,13 @@ export function MyAdhd() {
                 <section className="map-step" aria-labelledby="map-step-title" data-action={rec.action}>
                   {stepModule(rec) ? (
                     <Link className="map-step-link" href={`/approach?module=${stepModule(rec)}`}>
-                      <h2 id="map-step-title">{rec.heading}</h2>
+                      <h2 id="map-step-title" className={asks(rec.heading)}>{rec.heading}</h2>
                       {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
                       <ArrowRight size={17} weight="bold" aria-hidden="true" />
                     </Link>
                   ) : (
                     <>
-                      <h2 id="map-step-title">{rec.heading}</h2>
+                      <h2 id="map-step-title" className={asks(rec.heading)}>{rec.heading}</h2>
                       {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
                       <NextStepAction rec={rec} />
                     </>
@@ -303,6 +304,9 @@ function FillsSheet({ open, started, onClose, openedBy }: { open: boolean; start
 }
 
 type Recommendation = NonNullable<ReturnType<typeof recommend>>;
+
+/** A heading that asks the person something wears the serif of a question; a statement stays sans. */
+const asks = (heading: string) => (heading.trim().endsWith("?") ? "t-question" : undefined);
 
 /**
  * WHAT THE STEP ACTUALLY IS, IN ONE LINE (founder, 2026-09-20, reading his own screen: "my thing

@@ -23,7 +23,7 @@ import { LAYER_LABELS, LAYERS, SUBDOMAINS, subdomainsOf, type Layer, type Subdom
 import { deriveNeeds } from "@/model/needs";
 import { track } from "@/model/events";
 import { useModel } from "./use-model";
-import { NWIA_LABELS, NWIA_NAME, NWIA_PARADIGM, NWIA_URL, nwiaFor } from "@/wellness/nwia";
+import { NWIA_NAME, NWIA_PARADIGM, NWIA_URL } from "@/wellness/nwia";
 
 /** Each layer's wedge and ink, from the palette (`--layer-*` in globals.css). */
 const COLOURS: Record<Layer, { fill: string; ink: string }> = {
@@ -112,14 +112,20 @@ export function CareMap() {
   const [quarter, setQuarter] = useState<Layer | null>(null);
   const positions = useMemo(nodePositions, []);
   const panel = useRef<HTMLElement>(null);
-  // Under 1200px the panel sits below the wheel: after a tap, bring it into view if it is off the
-  // bottom of the screen (PLAN.md W9). Focus stays on the node; the panel's live region announces.
+  // Under 1200px the panel sits below the wheel: after a tap, bring it into view unless a good
+  // part of it already shows (PLAN.md W9). On a phone the tab bar covers the bottom of the screen,
+  // so what shows ends at the bar's top, not the window's. Focus stays on the node; the panel's
+  // live region announces.
   const open = (id: Subdomain) => {
     setSelected(id);
     track("CARE_MAP_OPENED", { node: id });
     requestAnimationFrame(() => {
       const box = panel.current?.getBoundingClientRect();
-      if (!box || box.top < window.innerHeight - 48) return;
+      if (!box) return;
+      const bar = document.querySelector(".app-tabs")?.getBoundingClientRect();
+      const floor = bar && bar.top > window.innerHeight / 2 ? bar.top : window.innerHeight;
+      const showing = Math.min(box.bottom, floor) - Math.max(box.top, 0);
+      if (showing >= Math.min(160, box.height)) return;
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       panel.current?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
     });
@@ -179,7 +185,7 @@ export function CareMap() {
               onClick={() => open(s.id)}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(s.id); } }}
             >
-              <circle cx={p.x} cy={p.y} r={has ? R_NODE + 2 : R_NODE} style={{ fill: "var(--paper)", stroke: COLOURS[p.layer].ink }} strokeWidth={has ? 3 : 1.5} />
+              <circle cx={p.x} cy={p.y} r={has ? R_NODE + 2 : R_NODE} style={{ fill: selected === s.id ? `color-mix(in srgb, ${COLOURS[p.layer].ink} 16%, var(--paper))` : "var(--paper)", stroke: COLOURS[p.layer].ink }} strokeWidth={has ? 3 : 1.5} />
               <text x={p.x} y={p.y + 3.25} textAnchor="middle" fontSize="8.75" fontWeight="700" style={{ fill: COLOURS[p.layer].ink }}>
                 {labelLines(s.label).map((line, i, all) => (
                   <tspan key={line} x={p.x} dy={i === 0 ? (all.length - 1) * -LABEL_LEADING / 2 : LABEL_LEADING}>{line}</tspan>
@@ -217,7 +223,7 @@ export function CareMap() {
             );
           })}
           <circle cx={CX} cy={CY} r={R_IN - 6} style={{ fill: "var(--paper)" }} />
-          <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central" fontSize="22" fontWeight="700" style={{ fill: "var(--ink)" }}>You</text>
+          <text x={CX} y={CY} textAnchor="middle" dominantBaseline="central" fontSize="25" fontWeight="700" style={{ fill: "var(--ink)" }}>You</text>
         </svg>
         {quarter && (
           <section className="care-map-parts" aria-labelledby="care-map-parts-title" style={{ "--l-bg": COLOURS[quarter].fill, "--l-ink": COLOURS[quarter].ink } as CSSProperties}>
@@ -247,7 +253,6 @@ export function CareMap() {
             <h2 id="care-map-title">{entry.label}</h2>
             <p>{entry.meaning}</p>
             {signal.get(entry.id) && <p className="care-map-you"><strong>For you:</strong> {signal.get(entry.id)}</p>}
-            <p className="care-map-nwia"><span>Wellness dimension</span> {nwiaFor(entry.id).map((d) => NWIA_LABELS[d]).join(" · ")}</p>
             {/* Games about this part of life beside the modules for it (PLAN.md W9), so the map leads
                 to both. A glyph tells them apart, not a label. */}
             {games.length + modules.length > 0 ? (

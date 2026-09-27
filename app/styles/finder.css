@@ -33,6 +33,9 @@
 .platform-shell .patient-v2 .clinician-row strong { font-family: inherit; font-size: 19px; font-weight: 700; }
 .platform-shell .results-summary-words { font-family: inherit; }
 .platform-shell .patient-v2 .voice-screen :is(.voice-core,.voice-actions) { padding-inline: 0; }
+/* The welcome's question, in one rule: a question, so the serif (`t-question`), at the size every
+   page heading takes, on the column's left edge with the box under it (app-shell.spec). */
+.platform-shell .patient-v2 .voice-screen .voice-prompt h1 { max-width: 18ch; margin: 0; color: var(--ink); font-size: clamp(30px, 3.3vw, 44px); line-height: 1.1; text-align: left; text-wrap: balance; }
 .platform-shell .patient-v2 .clinician-row .row-availability { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; white-space: normal; color: var(--accent-deep); font-size: 13px; }
 .platform-shell .patient-v2 .clinician-row .row-focus { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; white-space: normal; color: var(--muted); font-size: 14px; }
 .platform-shell .clinician-card :is(.match-reason,.match-caution,.clinician-availability) { -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; }
@@ -44,7 +47,6 @@
   .platform-shell .voice-screen .voice-core { grid-column: 1; grid-row: 1; margin: 0 0 32px; }
   /* Left-aligned inside the centred column, as the reference sets its hero copy: the question,
      the box and the example link keep one left edge (app-shell.spec holds them to it). */
-  .platform-shell .voice-screen .voice-prompt h1 { text-align: left; max-width: 18ch; margin: 0; }
   .platform-shell .voice-screen .voice-actions { grid-column: 1; grid-row: 2; max-width: none; margin: 0; }
   .platform-shell .voice-screen .finder-context { grid-column: 1; grid-row: 3; margin: 24px 0 0; text-align: left; }
   .platform-shell .finder-getting-started { grid-column: 1; grid-row: 4; }
