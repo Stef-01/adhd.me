@@ -43,7 +43,9 @@ test("the module URL supports browser Back and invalid IDs recover to the librar
 test("the desktop Learn tab returns to the library and step navigation focuses new content", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/approach?module=everyday");
-  await expect(page.locator(".learn-lesson.is-current h2").first()).toBeFocused();
+  // Arrival leaves focus alone (PLAN.md N12); a step puts the reader on the new statement.
+  await expect(page.locator(".learn-module[data-hydrated='true']")).toBeVisible();
+  await expect(page.locator(".learn-lesson.is-current h2").first()).not.toBeFocused();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.locator(".learn-lesson.is-current h2").first()).toBeFocused();
   await page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: "Learn", exact: true }).click();

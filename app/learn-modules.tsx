@@ -60,13 +60,32 @@ function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
   );
 }
 
+/**
+ * Whether the person has pressed or tapped anything since the page loaded. A lesson opened after
+ * that was asked for, so its heading takes focus and a keyboard user keeps their place; a lesson
+ * the page arrives on was not, and a script's focus there draws a ring nobody asked for (N12).
+ */
+let interacted = false;
+if (typeof window !== "undefined") {
+  const mark = () => { interacted = true; };
+  window.addEventListener("pointerdown", mark, { capture: true, once: true });
+  window.addEventListener("keydown", mark, { capture: true, once: true });
+}
+
 function LessonHeading({ active, children, className = "learn-card-heading" }: { active: boolean; children: React.ReactNode; className?: string }) {
   const heading = useRef<HTMLHeadingElement>(null);
+  const mounted = useRef(false);
+  // A step moves focus to the new statement, and a keyboard step shows its ring. Arriving on a
+  // module does not (PLAN.md N12); opening one from the library does.
   useEffect(() => {
     if (!active) return;
-    heading.current?.focus({ preventScroll: true });
+    if (mounted.current || interacted) heading.current?.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [active]);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
   return <h2 ref={heading} tabIndex={-1} className={className}>{children}</h2>;
 }
 
@@ -291,7 +310,6 @@ export function LearnModules() {
                 transition={{ ...SPRING, opacity: { duration: 0.2 } }}
               >
                 <div className="learning-lesson-art"><LearningScene topic={current.id} reaction={answered ? chosen === q.answer ? "correct" : "reflect" : undefined} /></div>
-                <p className="learn-card-eyebrow">{current.kind === "quiz" && current.id === "myth-or-fact" ? "Myth or fact?" : "Which is it?"}</p>
                 <LessonHeading active={i === step}>{q.prompt}</LessonHeading>
                 <ul className="learn-options" aria-label="Answers">
                   {q.options.map((option, o) => {
@@ -353,7 +371,6 @@ export function LearnModules() {
             transition={{ ...SPRING, opacity: { duration: 0.2 } }}
           >
             <div className="learning-lesson-art"><LearningScene topic={current.id} reaction="complete" /></div>
-            <p className="learn-card-eyebrow">{score === questions.length ? "All of them" : score >= questions.length / 2 ? "Nicely done" : "Now you know"}</p>
             <LessonHeading active={done} className="learn-card-heading learn-score-figure">
               <ScoreFigure score={score} outOf={questions.length} />
             </LessonHeading>

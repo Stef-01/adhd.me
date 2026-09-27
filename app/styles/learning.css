@@ -99,10 +99,10 @@
 .platform-shell .learn-card-eyebrow { margin-bottom: 16px; color: var(--lesson-ink-quiet, var(--accent)); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .platform-shell .learn-card-heading { max-width: 25ch; margin: 0 0 24px; font-family: inherit; font-size: clamp(26px, 3vw, 36px); font-weight: 750; line-height: 1.22; letter-spacing: -.035em; }
 /* The step change moves focus here so a reader is put on the new statement, not left at the top
-   of the page. That focus is the script's, and Chrome counts a script's focus after a page load
-   as :focus-visible, so a ring drew round the heading on arrival. A heading is not a control, so
-   it shows no ring either way; every button and link keeps its own. */
-.platform-shell .learn-card-heading:is(:focus, :focus-visible) { outline: none; }
+   of the page. Arriving on a module does not move focus (LessonHeading skips its first mount), so
+   no ring draws on load (PLAN.md N12); a keyboard step does, and the ring shows where focus went. */
+.platform-shell .learn-card-heading:focus { outline: none; }
+.platform-shell .learn-card-heading:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .platform-shell .learn-card-body { max-width: 64ch; margin: 0 0 24px; font-size: 17px; line-height: 1.7; }
 .platform-shell .learn-card-detail { max-width: 64ch; padding-left: 22px; margin: 0 0 24px; display: block; }
 .platform-shell .learn-card-detail li { padding: 5px 0 5px 22px; font-size: 16px; }

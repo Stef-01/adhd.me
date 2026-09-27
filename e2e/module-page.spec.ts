@@ -1,5 +1,5 @@
 // A module page, held to the lead designer's review: room above "All modules", no small text on a
-// strong lesson fill, and no ring drawn round a heading the script focused on arrival.
+// strong lesson fill, no ring round a heading on arrival, and one round it after a keyboard step.
 
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
@@ -39,9 +39,18 @@ test("no text under 14px sits on a strong lesson fill at 390", async ({ page }) 
   }
 });
 
-test("the heading the page focuses on arrival shows no ring", async ({ page }) => {
+test("arriving on a module rings no heading; a keyboard step rings the new one", async ({ page }) => {
   await page.goto("/approach?module=adhd");
   const heading = page.locator(".learn-lesson.is-current .learn-card-heading");
-  await expect(heading).toBeFocused();
+  await expect(page.locator(".learn-module[data-hydrated='true']")).toBeVisible();
+  // Arrival leaves focus alone, so no ring draws round the statement on load (PLAN.md N12).
+  await expect(heading).not.toBeFocused();
   expect(await heading.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("none");
+  // Next by keyboard puts the reader on the new statement, and the ring shows where focus went.
+  const first = await heading.textContent();
+  await page.locator(".learn-controls .learn-primary").focus();
+  await page.keyboard.press("Enter");
+  await expect(heading).not.toHaveText(first ?? "");
+  await expect(heading).toBeFocused();
+  expect(await heading.evaluate((el) => getComputedStyle(el).outlineStyle)).not.toBe("none");
 });
