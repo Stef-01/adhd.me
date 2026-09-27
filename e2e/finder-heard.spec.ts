@@ -41,12 +41,13 @@ test("a heard chip comes out, the list re-ranks with no request, and the chip pu
   const after = topFive((need) => facetKey(need.facet) !== "pref:telehealth-first");
   expect(after, "taking telehealth out changes the first five").not.toEqual(before);
 
-  // Every request from here on. The only ones allowed are the portraits of the people who move
-  // into the first five, which the rows fetch like any row; nothing asks anything about the words.
+  // Every request from here on that could carry the words: the page's own calls (a server
+  // re-render is one) and navigations. Portraits, a link's prefetched chunk and the Web Vitals
+  // beacon (app/web-vitals.tsx, the pathname alone) cannot, and any of them may land in the window.
   const requests: { type: string; url: string }[] = [];
   page.on("request", (request) => requests.push({ type: request.resourceType(), url: request.url() }));
-  const arrived = after.filter((id) => !before.includes(id));
-  const notAPortrait = () => requests.filter((r) => !(r.type === "image" && arrived.some((id) => r.url.includes(`${id}.`))));
+  const CARRIES = new Set(["fetch", "xhr", "document", "eventsource", "websocket"]);
+  const notAPortrait = () => requests.filter((r) => CARRIES.has(r.type) && !new URL(r.url).pathname.startsWith("/api/vitals"));
   const url = page.url();
 
   await heard.getByRole("button", { name: "Remove telehealth", exact: true }).click();

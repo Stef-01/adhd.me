@@ -145,6 +145,18 @@ describe("readRequest", () => {
     expect(reading.keys).toEqual(["pref:bulk-billing"]);
   });
 
+  it("keeps the reads' unlisted asks for the report, once each, never as keys", async () => {
+    const answers = [
+      { ...EMPTY, unlisted: ["after hours"] },
+      { ...EMPTY, unlisted: ["After hours", "a small practice"] },
+      { ...EMPTY, unlisted: [] },
+    ];
+    let n = 0;
+    const fetch = async () => new Response(JSON.stringify(completed(answers[n++ % 3]!)));
+    const reading = await readRequest("after-hours only, I do night shifts at the mine", { fetch, env: ENV });
+    expect(reading).toMatchObject({ keys: [], source: "llm", unlisted: ["after hours", "a small practice"] });
+  });
+
   it("makes no check when the reads add nothing beyond the lexicon", async () => {
     let calls = 0;
     const fetch = async () => (calls += 1, new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] }))));

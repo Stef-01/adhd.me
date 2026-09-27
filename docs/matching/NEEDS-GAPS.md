@@ -79,6 +79,22 @@ clinician declaration on the supply side, and pins in the corpus before the matc
 | Letters for work or study adjustments | `adhd-assessment` | "a formal diagnosis so work will make adjustments" |
 | Transition to adult care | child plus shared care | Row 9 |
 
+Since 2026-09-28 the read also returns `unlisted`: asks no facet covers, in a few words, which never
+reach a person and are listed at the foot of every eval report. On the dev set, two or more of three
+reads named these:
+
+| Unlisted ask | Request | What it points at |
+| --- | --- | --- |
+| takes new patients | "somewhere near Beecroft that takes new patients" | The finder already has this filter and clinicians declare it: the read cannot set it from words |
+| after hours | "after-hours only, I do night shifts at the mine" | The after-hours candidate above |
+| a small practice | "I don't want a big clinic, a woman GP in a small practice please" | A practice attribute nobody declares |
+| mum in the room | "I want my mum in the room for this" | Family involvement; near `culturally_attuned`, not the same |
+| telehealth scripts | "they told me no telehealth scripts are allowed, is that true here" | A prescribing-rules question the finder cannot answer |
+| how the medicine works | "why do the meds work, I want the mechanism" | Near `sense_making` |
+
+The cheapest gap to close is the first: "new patients" and "wheelchair access" are finder filters
+with supply already declared, so a facet for each lets the read set them from what a person says.
+
 ## 4. What the adversarial probes showed
 
 28 probes joined `probes.json` on 2026-09-28: instructions to the model, JSON in the text, decoys,

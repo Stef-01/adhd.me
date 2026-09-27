@@ -97,3 +97,17 @@ numbers before and after.
   read as `unhurried` by every read and upheld by the checks. The decoy and the described states did
   not recur. L1's break point is now a single request with no facet to land on (R4).
 
+
+## R6 · the nearest-key habit, 2026-09-28 · layer: the schema
+
+- **Entries:** asks with no facet were filed under the nearest key: punctuality as `unhurried` (a
+  `never` pin), a sensory-friendly room as `attuned`, women's presentations as `woman-gp`.
+- **Change:** `unlisted`, a list of short phrases for asks no key covers. It never reaches a person
+  and the route never returns it; each eval report lists them, a needs-gap list the read now keeps.
+- **Measured on three v12 samples of the 358 dev requests, with the check:** precision 92.3%, recall
+  99.7%, aspires 73.0%, `never` 0%, C4 94.9%, exactly right 95.8%; punctuality went to `unlisted`.
+- **Formal ladder** (prompt `39cd4f1420d1`): P0 to P2 pass. P3 fails one gate, C4 at 83.3%: five of
+  its six. The one is "I'm not looking for a diagnosis, just someone to talk to", read as
+  `care:non-medication`; the negation itself was right (no assessment). Whether talk is an ask for
+  options besides medication is a label question for the founder, like the two in R2 and R3, and
+  six entries cannot tell a real fault from one arguable read. The ladder is not re-run to re-roll it.

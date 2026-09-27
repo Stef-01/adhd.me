@@ -216,6 +216,12 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
       return [`| ${entry.cls} | ${entry.split} | ${entry.text.replace(/\|/g, "/")} | ${gold(entry).join(", ") || "nothing"}${never} | ${reading.keys.join(", ") || "nothing"} | ${code} |`];
     }),
     "",
+    "Asks no facet covers: the reads' `unlisted` phrases, a needs-gap list that never reaches a person.",
+    "",
+    "| Class | Request | Unlisted |",
+    "| --- | --- | --- |",
+    ...done.filter((d) => d.reading.unlisted?.length).map(({ entry, reading }) => `| ${entry.cls} | ${entry.text.slice(0, 90).replace(/\|/g, "/")} | ${reading.unlisted!.join("; ").replace(/\|/g, "/")} |`),
+    "",
   ];
   mkdirSync(reports, { recursive: true });
   const report = join(reports, `${level}-${phase}-${stamp.replace(/[:.]/g, "-")}.md`);
