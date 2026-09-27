@@ -299,7 +299,11 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
     await page.getByRole("button", { name: "Find support" }).click();
     await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
     await expandAll();
-    await page.getByRole("button", { name: "Improve my matches" }).click();
+    const improve = page.getByRole("button", { name: "Improve my matches" });
+    // The words a person sees are the button's name, and no unlabelled sparkle stands beside it.
+    await expect(improve).toHaveText("Improve my matches");
+    await expect(page.locator(".results-spark")).toHaveCount(0);
+    await improve.click();
     await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
     await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
   };

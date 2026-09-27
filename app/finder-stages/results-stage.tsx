@@ -4,7 +4,7 @@
 // history note, because it explains why this one screen carries so much.
 
 import { CARE_NEEDS, IDENTITY_LABELS, publicIdentity } from "@/support/care-preferences";
-import { CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
 import { activeFilterCount, BOOLEAN_FILTER_KEYS, BOOLEAN_FILTER_LABELS, type BooleanFilterKey, type Filters } from "@/finder/filters";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -168,7 +168,6 @@ export function ResultsStage({
               header holds that changes from person to person. Absent when no place is set. */}
           {place && <span className="results-place">{place}</span>}
         </span>
-        <button className="text-action" type="button" onClick={onReset}>Start over</button>
       </header>
 
       <div className="results-head">
@@ -192,6 +191,12 @@ export function ResultsStage({
             <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
             <span className="results-summary-text">{requestSummary}</span>
             <PencilSimple size={16} weight="bold" aria-hidden="true" />
+          </button>
+          {/* Start over sits with the search it restarts, labelled, at every width. A bare icon
+              here would read as "clear the text" and repeat the unlabelled-icon problem. */}
+          <button type="button" className="results-summary-reset" onClick={onReset}>
+            <ArrowCounterClockwise size={16} weight="bold" aria-hidden="true" />
+            Start over
           </button>
         </motion.div>
 
@@ -343,13 +348,6 @@ export function ResultsStage({
           </AnimatePresence>
         </h2>
         <span className="results-list-tools">
-          {/* RADIANT: the mark beside the count, only when the order was earned — a badge that
-              means "ordered on what you asked for" and is absent when nothing was. */}
-          {quality === "informed" && (
-            <span className="results-spark" role="img" aria-label="Ordered on what you asked for">
-              <Sparkle size={16} weight="fill" aria-hidden="true" />
-            </span>
-          )}
           {/* O226: the count sits with the list it describes, not two groups up the page. */}
           {matches.length > shown.length && (
             <span className="results-count">
@@ -358,18 +356,19 @@ export function ResultsStage({
               <span><span className="sr-only">{shown.length}</span><NumberTicker value={shown.length} aria-hidden="true" className="finder-count-number" /></span> of {matches.length}
             </span>
           )}
-          {/* O244: the star. One tap opens the questions that would narrow the list; the sheet is
-              the app's one modal idiom, so it drags, closes on Escape and returns focus. */}
+          {/* O244: one tap opens the questions that would narrow the list; the sheet is the app's
+              one modal idiom, so it drags, closes on Escape and returns focus. The button says what
+              it does in words, and those words are its name: a sparkle alone told nobody. */}
           {clarifiable && (
             <button
               type="button"
               className={clarifyOpen ? "clarify-star is-open" : "clarify-star"}
-              aria-label="Improve my matches"
               aria-haspopup="dialog"
               aria-expanded={clarifyOpen}
               onClick={() => setClarifyOpen(true)}
             >
               <Sparkle size={18} weight={clarifyOpen ? "fill" : "bold"} aria-hidden="true" />
+              Improve my matches
             </button>
           )}
           {/* O238: the map, behind a control, only when a suburb is known to draw it from. */}
