@@ -96,6 +96,19 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
         <section>
+          <h2 className="text-lg font-medium text-stone-900">The matching request, and what it sends</h2>
+          <p className="mt-2 text-sm leading-6">
+            One page works differently from the finder. If you fill in the matching request at
+            /match, what you write there is sent to ADHD.ME: the name you give, what you are looking
+            for in your own words, your suburb, your age group, how you would like to be seen and
+            how you would like to pay. We use it to suggest up to three GPs and a list of things to
+            bring, and for nothing else. It is kept under a random number that only your browser
+            holds, never in a link or a log line, until you delete it: &ldquo;Delete my
+            request&rdquo; on your results removes it, every match made from it and any feedback
+            you gave.
+          </p>
+        </section>
+        <section>
           <h2 className="text-lg font-medium text-stone-900">What we collect today, the complete list</h2>
           <p className="mt-2 text-sm leading-6">
             For the community interest list: the name, email address and interest options a
@@ -106,8 +119,9 @@ export default function PrivacyPolicyPage() {
           <p className="mt-3 text-sm leading-6">
             If a practice invites you to book through a personal link, the contact choices you
             set on that page, whether we may text you and during which hours, are kept, so
-            they can be honoured. That is the whole of it: no accounts, no profiles, and nothing
-            collected from the finder itself.
+            they can be honoured. If you send a matching request, what it holds is set
+            out above. That is the whole of it: no accounts, no profiles, and nothing collected
+            from the finder itself.
           </p>
         </section>
         <section>
