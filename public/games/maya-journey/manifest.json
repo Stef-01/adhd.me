@@ -1,0 +1,125 @@
+{
+  "generator": "scripts/generate-maya-polish-assets.py",
+  "assets": [
+    {
+      "id": "station-floor",
+      "src": "/games/maya-journey/station-floor.svg",
+      "sha256": "6c2611bb456ff8c6aca482bd87003405b7329b898925ce7092ac2b36fadd8fcb"
+    },
+    {
+      "id": "station-gate",
+      "src": "/games/maya-journey/station-gate.svg",
+      "sha256": "b672ee8b8b22ba8de91bc1bd325b86f4bb782a5689985535f32069c6f73378ea"
+    },
+    {
+      "id": "station-bench",
+      "src": "/games/maya-journey/station-bench.svg",
+      "sha256": "b10a62437ef5885887655140034cb9d8c61975341264c1e7e0f0adde743a2640"
+    },
+    {
+      "id": "library-floor",
+      "src": "/games/maya-journey/library-floor.svg",
+      "sha256": "2abe51bf9d39edd007b6f862c99b6bf9981f2d453f67e87ec8d442c733691a50"
+    },
+    {
+      "id": "library-gate",
+      "src": "/games/maya-journey/library-gate.svg",
+      "sha256": "46131856d92363be88710112e5679cfe5976e6d053c0e258d8bc2c8e257c1087"
+    },
+    {
+      "id": "library-bench",
+      "src": "/games/maya-journey/library-bench.svg",
+      "sha256": "73251bdf1e9308ce9e87642de64972c7d38e78a69ceb8fe84d9bff984f557614"
+    },
+    {
+      "id": "market-floor",
+      "src": "/games/maya-journey/market-floor.svg",
+      "sha256": "476ada287196d7b1f02c4c44f71211c940bbe345306cfbd9bdf2dff7972b1baf"
+    },
+    {
+      "id": "market-gate",
+      "src": "/games/maya-journey/market-gate.svg",
+      "sha256": "902875104e5311b4e0b4bd6ad33af7454903c16d021d475d78f9856d46870e8c"
+    },
+    {
+      "id": "market-bench",
+      "src": "/games/maya-journey/market-bench.svg",
+      "sha256": "23ab80165e1ccfe9f62e2d8792910a99a27ba43837e718cf2621fe27c364a146"
+    },
+    {
+      "id": "crowd-0",
+      "src": "/games/maya-journey/crowd-0.svg",
+      "sha256": "dba9d0aeb1cb0a7497847edd9be5edb4ddf25e8fe5bf9562de26ccc57a46010b"
+    },
+    {
+      "id": "crowd-1",
+      "src": "/games/maya-journey/crowd-1.svg",
+      "sha256": "43a15a6de5be0bdc85ebe3ca8457eac9a60c40318c713ef895112dd78d98b898"
+    },
+    {
+      "id": "crowd-2",
+      "src": "/games/maya-journey/crowd-2.svg",
+      "sha256": "b3e145f83306a8d701a9c142a30c3733ec4673af5be3fd962feb844524c67fba"
+    },
+    {
+      "id": "crowd-3",
+      "src": "/games/maya-journey/crowd-3.svg",
+      "sha256": "382a20b9775fdbd3b668667c8ab1bfdd82b4632d6b9b21606f6b0af147b07cef"
+    },
+    {
+      "id": "crowd-4",
+      "src": "/games/maya-journey/crowd-4.svg",
+      "sha256": "6a05027d713d4fdf6a8122c74b086305a1801c2b18840ef2e43f30db3a455f39"
+    },
+    {
+      "id": "crowd-5",
+      "src": "/games/maya-journey/crowd-5.svg",
+      "sha256": "1a9b6b33c9ad084031949ef9eb4030ba8ee387d3653b4ecbd6b67ebc7524d9a5"
+    },
+    {
+      "id": "clock",
+      "src": "/games/maya-journey/clock.svg",
+      "sha256": "3dbdd7b2489eaba561cd66e387369b5729533ffbfcc83112deadfe14dda45375"
+    },
+    {
+      "id": "phone-on",
+      "src": "/games/maya-journey/phone-on.svg",
+      "sha256": "7d4ed13e1d8f49e4a3dbd02f0243c8b291847843eac15cd832eeb18df48946f1"
+    },
+    {
+      "id": "phone-quiet",
+      "src": "/games/maya-journey/phone-quiet.svg",
+      "sha256": "5fbed2790fcdf0351d35ab64c8485a5892770e472c5e64edf59e0b3b0138eb37"
+    },
+    {
+      "id": "headphones",
+      "src": "/games/maya-journey/headphones.svg",
+      "sha256": "9048440ddf5a59104802381bb3afb4d5558004368557b84385c135b0d7c1334e"
+    },
+    {
+      "id": "quiet-route",
+      "src": "/games/maya-journey/quiet-route.svg",
+      "sha256": "329bae1dddb3811f17fc39dcd07bfc18141089258c21cd13c8c61ed1cb83f732"
+    },
+    {
+      "id": "speaker",
+      "src": "/games/maya-journey/speaker.svg",
+      "sha256": "5f1d01aa4a67ac5fafc35d75614e2f43b42b75f1bc84ffe80b6c7424cf606338"
+    },
+    {
+      "id": "step-marker",
+      "src": "/games/maya-journey/step-marker.svg",
+      "sha256": "0f76962695a92bae0bf13769b56edf27919b4c1c80c31002811b40f2b232cc40"
+    },
+    {
+      "id": "waiting",
+      "src": "/games/maya-journey/waiting.svg",
+      "sha256": "80808aa8961943606ea945c00316c60a04c9ecb7a6d1a0cb7bae448f742e54da"
+    },
+    {
+      "id": "clear-passage",
+      "src": "/games/maya-journey/clear-passage.svg",
+      "sha256": "66d38b7b971b7f0fb4168e58f55c107526163de58a053e47b25e79b9c2f33580"
+    }
+  ]
+}

@@ -48,3 +48,28 @@ test('all twenty quick games can be opened and started from the expanded library
  }
  expect(errors).toEqual([]);
 });
+
+
+test('first visits keep the game controls above the privacy bar', async ({ page }) => {
+ await page.setViewportSize({width:390,height:844});
+ await page.addInitScript(()=>localStorage.removeItem('adhdme-privacy-ack'));
+ for(const id of ['maya','jax','nina','arjun','zoe'] as const){
+  await page.goto(GAME_ENTRY[id].href);
+  const bar=page.getByRole('region',{name:'Privacy'});await expect(bar).toBeVisible();
+  await expect.poll(async()=>{
+   const b=(await bar.boundingBox())!;const stage=(await page.locator('.kit-game').boundingBox())!;
+   return Math.round(stage.y+stage.height)<=Math.round(b.y);
+  }).toBe(true);
+ }
+ await page.setViewportSize({width:320,height:568});
+ await page.goto(GAME_ENTRY.maya.href);
+ await page.getByRole('button',{name:'Wait here'}).click();
+ await page.getByRole('button',{name:'Step forward'}).click();
+ await page.goto(GAME_ENTRY.theo.href);
+ await expect(page.getByRole('region',{name:'Privacy'})).toBeVisible();
+ await expect.poll(async()=>{
+  const bar=(await page.getByRole('region',{name:'Privacy'}).boundingBox())!;
+  const actions=(await page.locator('.tm-actions').boundingBox())!;
+  return Math.round(actions.y+actions.height)<=Math.round(bar.y);
+ }).toBe(true);
+});

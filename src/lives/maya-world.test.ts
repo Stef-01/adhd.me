@@ -131,4 +131,36 @@ describe('Maya: one thing at a time', () => {
     expect(s.scenario).toBe(1);
     expect(s.setup).toEqual({ dnd: false, ease: null, meet: false });
   });
+  it('wait advances the still-mode crowd without moving Maya from a calm row', () => {
+    const s = { ...createMaya(0, true), load: 70 };
+    const next = act(s, { type: 'wait' });
+    expect(next.t).toBe(900);
+    expect(next.maya).toEqual(s.maya);
+    expect(next.load).toBeLessThan(s.load);
+    expect(act({ ...s, paused: true }, { type: 'wait' }).t).toBe(0);
+    expect(act({ ...s, phase: 'setup' }, { type: 'wait' }).t).toBe(0);
+  });
+  it('a bump provides a short recovery window instead of immediate repeated hits', () => {
+    let s = createMaya();
+    const lane = lanesOf(s)[0]!;
+    const x = Array.from({ length: COLS }, (_, x) => x).find(x => crowdAt(s, x, lane.row))!;
+    s = tick({ ...s, maya: { x, y: lane.row } }, 50);
+    expect(s.bump).toBe(1);
+    expect(s.shieldUntil).toBe(s.t + 1200);
+    const protectedState = tick({ ...s, maya: { x, y: lane.row } }, 50);
+    expect(protectedState.bump).toBe(1);
+    expect(protectedState.maya.y).toBe(lane.row);
+  });
+  it('invalid ticks cannot corrupt time and long frames are bounded', () => {
+    const s = createMaya();
+    for (const ms of [NaN, Infinity, -1, 0]) expect(act(s, { type: 'tick', ms })).toBe(s);
+    expect(act(s, { type: 'tick', ms: 60000 }).t).toBe(1000);
+  });
+  it('the path retains only four recent steps and resets between crossings', () => {
+    let s = createMaya();
+    for (let i = 0; i < 8; i++) s = act(s, { type: 'step', dir: i % 2 ? 'right' : 'left' });
+    expect(s.footsteps).toHaveLength(4);
+    expect(act({ ...s, phase: 'arrived' }, { type: 'continue' }).footsteps).toEqual([]);
+  });
+
 });

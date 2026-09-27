@@ -39,13 +39,13 @@ export const FULL = 100, RECOVERED = 55;
 export interface MayaWorld {
   paused: boolean; still: boolean; scenario: number; phase: Phase; crossing: number; t: number;
   maya: { x: number; y: number }; load: number; overwhelmed: boolean; pulseAt: number; pingAt: number; pings: number[]; nextPing: number;
-  bump: number; pulses: number; setup: { dnd: boolean; ease: 'headphones' | 'quiet' | null; meet: boolean }; arrivals: number[];
+  bump: number; shieldUntil: number; footsteps: { x: number; y: number }[]; pulses: number; setup: { dnd: boolean; ease: 'headphones' | 'quiet' | null; meet: boolean }; arrivals: number[];
   message: string; revision: number;
 }
 export type MayaAction =
   | { type: 'tick'; ms: number } | { type: 'pause' } | { type: 'resume' } | { type: 'still'; value: boolean }
   | { type: 'step'; dir: Dir } | { type: 'dismiss'; id: number } | { type: 'continue' }
-  | { type: 'dnd' } | { type: 'ease'; value: 'headphones' | 'quiet' } | { type: 'meet' } | { type: 'restart' };
+  | { type: 'wait' } | { type: 'dnd' } | { type: 'ease'; value: 'headphones' | 'quiet' } | { type: 'meet' } | { type: 'restart' };
 
 export function crossingDef(s: Pick<MayaWorld, 'scenario' | 'crossing'>): Crossing & { queue?: number } { const c = SCENARIOS[s.scenario]!; return s.crossing === 3 ? c.revisit : c.crossings[s.crossing]!; }
 const live = (s: MayaWorld) => s.phase === 'crossing' || s.phase === 'revisit';
@@ -67,12 +67,12 @@ const bench = (s: MayaWorld) => crossingDef(s).benches.some(([x, y]) => x === s.
 const calm = (s: MayaWorld) => !lanesOf(s).some(l => l.row === s.maya.y);
 
 function start(s: MayaWorld, n: number): MayaWorld {
-  const next: MayaWorld = { ...s, crossing: n, phase: n === 3 ? 'revisit' : 'crossing', t: 0, maya: { x: 2, y: ROWS - 1 }, load: 10, overwhelmed: false, pulseAt: PULSE_EVERY, pingAt: 2200, pings: [], revision: s.revision + 1 };
+  const next: MayaWorld = { ...s, crossing: n, phase: n === 3 ? 'revisit' : 'crossing', t: 0, maya: { x: 2, y: ROWS - 1 }, load: 10, overwhelmed: false, pulseAt: PULSE_EVERY, pingAt: 2200, pings: [], pulses: 0, shieldUntil: 0, footsteps: [], revision: s.revision + 1 };
   next.message = n === 3 ? 'The usual gate has a queue.' : n === 0 ? 'Step across. Mind the crowds.' : '';
   return next;
 }
 export function createMaya(scenario = 0, still = false): MayaWorld {
-  return start({ paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'crossing', crossing: 0, t: 0, maya: { x: 2, y: ROWS - 1 }, load: 10, overwhelmed: false, pulseAt: 0, pingAt: 0, pings: [], nextPing: 1, bump: 0, pulses: 0, setup: { dnd: false, ease: null, meet: false }, arrivals: [], message: '', revision: 0 }, 0);
+  return start({ paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'crossing', crossing: 0, t: 0, maya: { x: 2, y: ROWS - 1 }, load: 10, overwhelmed: false, pulseAt: 0, pingAt: 0, pings: [], nextPing: 1, bump: 0, shieldUntil: 0, footsteps: [], pulses: 0, setup: { dnd: false, ease: null, meet: false }, arrivals: [], message: '', revision: 0 }, 0);
 }
 function add(s: MayaWorld, amount: number, message: string): MayaWorld {
   const load = Math.min(FULL, s.load + amount);
@@ -80,9 +80,9 @@ function add(s: MayaWorld, amount: number, message: string): MayaWorld {
 }
 /** A crowd reaching Maya's square nudges her back toward the nearest calm row. */
 function jostle(s: MayaWorld): MayaWorld {
-  if (!crowdAt(s, s.maya.x, s.maya.y)) return s;
+  if (s.t < s.shieldUntil || !crowdAt(s, s.maya.x, s.maya.y)) return s;
   const back = s.maya.y + 1 < ROWS && !blocked(s, s.maya.x, s.maya.y + 1) ? s.maya.y + 1 : s.maya.y;
-  return add({ ...s, maya: { x: s.maya.x, y: back }, bump: s.bump + 1 }, 22, 'Bumped by the crowd.');
+  return add({ ...s, maya: { x: s.maya.x, y: back }, bump: s.bump + 1, shieldUntil: s.t + 1200, footsteps: [] }, 22, 'Bumped by the crowd.');
 }
 function advance(s: MayaWorld, ms: number): MayaWorld {
   let n: MayaWorld = { ...s, t: s.t + ms };
@@ -107,15 +107,26 @@ export function mayaReducer(s: MayaWorld, a: MayaAction): MayaWorld {
   if (a.type === 'still') return a.value === s.still ? s : { ...s, still: a.value };
   if (s.paused) return s;
   if (a.type === 'restart') return s.phase === 'complete' ? createMaya(s.scenario + 1, s.still) : s;
-  if (a.type === 'tick') return live(s) && !s.still ? advance(s, a.ms) : s;
+  if (a.type === 'tick') {
+    if (!live(s) || s.still || !Number.isFinite(a.ms) || a.ms <= 0) return s;
+    let next = s;
+    for (let remaining = Math.min(1000, a.ms); remaining > 0; remaining -= 50) next = advance(next, Math.min(50, remaining));
+    return next;
+  }
   if (live(s)) {
+    if (a.type === 'wait') {
+      if (!s.still) return { ...s, message: 'Let the crowd pass.' };
+      let next = s;
+      for (let n = 0; n < 18; n++) next = advance(next, 50);
+      return { ...next, message: next.overwhelmed ? 'Take another moment.' : 'A little space. Choose your next step.' };
+    }
     if (a.type === 'dismiss') return s.pings.includes(a.id) ? { ...s, pings: s.pings.filter(p => p !== a.id), message: 'Later.' } : s;
     if (a.type === 'step') {
       const dx = a.dir === 'left' ? -1 : a.dir === 'right' ? 1 : 0, dy = a.dir === 'up' ? -1 : a.dir === 'down' ? 1 : 0;
       if (a.dir === 'up' && s.overwhelmed) return { ...s, message: 'Not yet. A calmer spot first.' };
       const x = s.maya.x + dx, y = s.maya.y + dy;
       if (blocked(s, x, y)) return { ...s, message: y === 0 ? 'Not this way. The gate is marked.' : s.crossing === 3 && y === 1 ? 'The queue is here. Another way.' : s.message };
-      let n: MayaWorld = { ...s, maya: { x, y } };
+      let n: MayaWorld = { ...s, maya: { x, y }, footsteps: [...s.footsteps, s.maya].slice(-4) };
       if (y === 0) return { ...n, phase: s.crossing === 3 ? 'complete' : 'arrived', arrivals: [...s.arrivals, s.crossing], pings: [], message: '', revision: s.revision + 1 };
       if (s.still) n = advance(n, STILL_STEP * 900);
       else n = jostle(n);

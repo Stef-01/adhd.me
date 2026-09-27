@@ -3,7 +3,7 @@
   --g-bg: #eef0f4; --g-ink: #2c3140; --g-muted: #5b6072; --g-focus: #3e4f86; --g-accent: #3e4f86; --g-soft: #dfe3ee;
   color: var(--g-ink); background: var(--g-bg); isolation: isolate;
   display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto;
-  height: 100svh; min-height: 320px; width: 100%; overflow: clip;
+  height: calc(100svh - var(--consent-height, 0px)); min-height: 320px; width: 100%; overflow: clip;
   padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); box-sizing: border-box;
   font-family: var(--font-ui), sans-serif;
 }

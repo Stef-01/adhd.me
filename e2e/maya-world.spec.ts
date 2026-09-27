@@ -120,3 +120,39 @@ test('play writes nothing to storage', async ({ page }) => {
   await cross(page, 'setup');
   expect(await page.evaluate(() => Object.keys(localStorage).sort().join())).toBe(before);
 });
+
+
+test('one swipe is one step; waiting leaves Maya on the calm starting row', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(URL);
+  const board = page.locator('.mw-board');
+  const r = (await board.boundingBox())!;
+  await page.mouse.move(r.x + r.width * .5, r.y + r.height * .85);
+  await page.mouse.down();
+  await page.mouse.move(r.x + r.width * .5, r.y + r.height * .85 - 65, { steps: 5 });
+  await page.mouse.up();
+  await expect(game(page)).toHaveAttribute('data-y', '5');
+  await page.getByRole('button', { name: 'Step back' }).click();
+  await page.getByRole('button', { name: 'Wait here' }).click();
+  await expect(game(page)).toHaveAttribute('data-y', '6');
+  await expect(game(page)).toHaveAttribute('data-x', '2');
+  const images = await page.locator('.mw-board img').evaluateAll(async imgs => {
+    await Promise.all(imgs.map(i => (i as HTMLImageElement).decode()));
+    return imgs.every(i => (i as HTMLImageElement).naturalWidth > 0);
+  });
+  expect(images).toBe(true);
+});
+
+test('all three illustrated settings can be completed and replayed', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(URL);
+  for (const theme of ['station', 'library', 'market']) {
+    await expect(game(page)).toHaveAttribute('data-theme', theme);
+    await expect(page.locator('.mw-floor')).toHaveAttribute('src', `/games/maya-journey/${theme}-floor.svg`);
+    await page.screenshot({ path: `qa/_runs/maya-${theme}.png` });
+    await cross(page, 'setup');
+    await setup(page);
+    await cross(page, 'complete');
+    await page.getByRole('button', { name: 'Another place' }).click();
+  }
+});
