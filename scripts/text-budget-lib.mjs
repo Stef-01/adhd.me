@@ -204,7 +204,11 @@ export async function measure(page) {
       const rect = el.getBoundingClientRect();
       if (rect.right <= 0 || rect.bottom <= 0 || rect.left >= window.innerWidth) continue;
       if (rect.width === 0 || rect.height === 0) continue;
-      const chrome = !!el.closest("nav, header.platform-header, .app-tabs, .site-footer, footer, .consent-bar, .privacy-consent");
+      // Chrome is the site's own furniture, named one by one: the header, the tab bar, the site
+      // footer and the story page's copy of it (the same doors), the consent bar. A bare `footer`
+      // sat on this list for the site footer and also swallowed every page's own <footer>: Leo's
+      // game ends inside one, so its last line and its end-screen links were never counted.
+      const chrome = !!el.closest("nav, header.platform-header, .app-tabs, .site-footer, .story-footer, .consent-bar, .privacy-consent");
       const aboveFold = rect.top < vh && rect.bottom > 0;
       rows.push({ text, chrome, aboveFold, tag: el.tagName.toLowerCase() });
     }
