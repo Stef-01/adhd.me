@@ -185,6 +185,26 @@ describe("readRequest", () => {
     expect(reading).toMatchObject({ keys: ["pref:bulk-billing"] });
   });
 
+  it("starts the check once two reads agree, before the third returns, and the third can still take a key away", async () => {
+    const events: string[] = [];
+    let read = 0;
+    const fetch = async (_url: string, init: { body: string }) => {
+      const { input } = JSON.parse(init.body) as { input: string };
+      if (input !== "someone patient") {
+        events.push("check");
+        return new Response(JSON.stringify(completed({ verdicts: [] })));
+      }
+      const at = read++;
+      if (at < 2) return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["unhurried", "attuned"] })));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      events.push("third read");
+      return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["unhurried"] })));
+    };
+    const reading = await readRequest("someone patient", { fetch, env: ENV });
+    expect(events.indexOf("check")).toBeLessThan(events.indexOf("third read"));
+    expect(reading.keys).toEqual(["manner:unhurried"]);
+  });
+
   it("makes no check when the reads add nothing beyond the lexicon", async () => {
     let calls = 0;
     const fetch = async () => (calls += 1, new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] }))));

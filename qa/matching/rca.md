@@ -188,3 +188,8 @@ reading, $0, 1.6 seconds. Two changes came of it.
 - **Evals wait for every call.** Settling a reading early (R8) left a late read's failure uncounted,
   which the malformed-answer breaker needs. Evals now wait for all calls (the answers are the same);
   the finder still stops waiting once the outcome is settled.
+- **The check overlaps the third read** (2026-09-28, later). Once two reads agree on keys beyond the
+  lexicon, their check starts while the third read runs; the third can only take keys away, so every
+  key left has been checked. The same 22 requests, the finder's path: p50 3.0 s → 2.5 s, p90 6.9 s →
+  5.5 s; a request with no check 2.2 s at p50, one with a check 5.5 s. Evals keep the plain order, so
+  their numbers are exact; the finder's check can see one candidate the third read later drops.

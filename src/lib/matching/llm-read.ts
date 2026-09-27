@@ -184,7 +184,18 @@ export async function readRequest(text: string, deps: Deps = {}): Promise<Readin
       .then((result) => answerOf(result.data))
       .catch(failure),
   );
-  const reads = await settleUntil(tasks, (settled, pending) => !deps.waitForAll && readsSettled(settled, pending, heard));
+  // Once two reads agree on keys beyond the lexicon, their check starts while the third read runs:
+  // the third can only take keys away, so every key left has been checked. Evals keep the plain order.
+  let early: { keys: string[]; check: Promise<{ refused: Set<string>; error?: string }> } | null = null;
+  const reads = await settleUntil(tasks, (settled, pending) => {
+    if (deps.waitForAll) return false;
+    const answers = settled.filter((read): read is Answer => !(read instanceof Error));
+    if (!early && pending > 0 && answers.length >= 2) {
+      const keys = answers[0]!.keys.filter((key) => !heard.has(key) && !key.startsWith("language:") && answers.every((answer) => answer.keys.includes(key)));
+      if (keys.length) early = { keys, check: checkKeys(text, keys, deps) };
+    }
+    return readsSettled(settled, pending, heard);
+  });
   const answers = reads.filter((read): read is Answer => !(read instanceof Error));
   const failed = reads.find((read): read is Error => read instanceof Error);
   const error = failed ? `${failed.name}: ${failed.message}` : undefined;
@@ -194,7 +205,8 @@ export async function readRequest(text: string, deps: Deps = {}): Promise<Readin
   const most = (id: string) => answers.filter((answer) => answer.refused.includes(id)).length * 2 > answers.length;
   const read = reading(agreed((answer) => answer.keys), new Set(answers.flatMap((answer) => answer.refused).filter(most)), text);
   const added = read.keys.filter((key) => !heard.has(key) && !key.startsWith("language:"));
-  const check = added.length ? await checkKeys(text, added, deps) : { refused: new Set<string>() };
+  const started = early as { keys: string[]; check: Promise<{ refused: Set<string>; error?: string }> } | null;
+  const check = !added.length ? { refused: new Set<string>() } : started && added.every((key) => started.keys.includes(key)) ? await started.check : await checkKeys(text, added, deps);
   const keys = read.keys.filter((key) => !check.refused.has(key));
   const trouble = error ?? check.error;
   const unlisted: string[] = [];
