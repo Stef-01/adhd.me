@@ -38,11 +38,18 @@ jobs:
     # run near half the wall clock. Add a third before raising any ceiling.
     # 2026-09-27, later: a third, when the axe and sampled-contrast sweeps gained 320 and 768 as
     # well as 390 and 1440 (docs/design/ux-evaluation-2026-09/PLAN.md §8).
+    # 2026-09-27, later again: the four sampled-contrast widths are one file, so they all landed in
+    # shard 1, which took 55 minutes while the other two took 25. They run as a fourth job of their
+    # own now, and the shards filter them out (a filter applies before the shard split).
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
-    name: e2e shard ${{ matrix.shard }} of 3
+        include:
+          - { key: "1", part: "shard 1 of 3", args: "--shard=1/3 --grep-invert 'text axe cannot measure'" }
+          - { key: "2", part: "shard 2 of 3", args: "--shard=2/3 --grep-invert 'text axe cannot measure'" }
+          - { key: "3", part: "shard 3 of 3", args: "--shard=3/3 --grep-invert 'text axe cannot measure'" }
+          - { key: "contrast", part: "contrast sweep", args: "e2e/contrast-sampled.spec.ts" }
+    name: e2e ${{ matrix.part }}
     # The suite measures ~8 minutes locally plus its own `next build`; the ceiling is
     # generous so a slow runner reports a real result rather than a timeout that reads
     # like a product failure.
@@ -79,7 +86,7 @@ jobs:
       # playwright.config.ts owns the server: it runs `next build && next start` on its
       # own port with the env the production build fails closed without. Nothing to
       # start here.
-      - run: pnpm e2e --shard=${{ matrix.shard }}/3
+      - run: pnpm e2e ${{ matrix.args }}
         env:
           CI: "true"
       # A red compliance gate has to be diagnosable from the run that caught it, or the
@@ -87,7 +94,7 @@ jobs:
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ matrix.shard }}
+          name: playwright-report-${{ matrix.key }}
           path: |
             playwright-report/
             test-results/
