@@ -1,8 +1,29 @@
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { CRISIS_CONTACTS, SCHEME_FOR, URGENT_ROWS, contact } from "./crisis-contacts";
 import { SAFETY_RULES, URGENT_SERVICES } from "./safety";
+
+const ROOT = path.resolve(__dirname, "..", "..");
+
+function pageSources(dir: string): string[] {
+  return readdirSync(dir).flatMap((entry) => {
+    const full = path.join(dir, entry);
+    if (statSync(full).isDirectory()) return pageSources(full);
+    return /\.tsx?$/.test(full) ? [full] : [];
+  });
+}
+
+/**
+ * A registry number written out, with or without its spaces: "13 11 14", "131114", "tel:000".
+ * Not "#000", "1,000" or "30_000", which are a colour and figures, not a number to call.
+ */
+function written(said: string): RegExp {
+  const digits = said.split(/\s+/).join("\\s?");
+  return new RegExp(`(?<![\\w#.,])${digits}(?!\\w)`);
+}
 
 describe("crisis contacts", () => {
   it("each link opens the way its row says: a call dials, a text opens messages, a chat opens a page", () => {
@@ -48,6 +69,22 @@ describe("crisis contacts", () => {
       let rest = rule.recommendedAction.replace(/1800RESPECT/g, "");
       for (const n of numbers) rest = rest.split(n).join("");
       expect(rest, rule.id).not.toMatch(/\d/);
+    }
+  });
+
+  it("no page writes a crisis number itself; each one comes from the registry", () => {
+    const files = pageSources(path.join(ROOT, "app"));
+    const rel = files.map((f) => path.relative(ROOT, f).split(path.sep).join("/"));
+    // The scan reaches the pages that quote a number, so it cannot pass by finding nothing.
+    expect(rel).toContain("app/terms/page.tsx");
+    expect(rel).toContain("app/(app)/urgent/page.tsx");
+    const numbers = CRISIS_CONTACTS.filter((c) => /\d/.test(c.said));
+    expect(written("000").test("If you are in danger, call 000.")).toBe(true);
+    expect(written("13 11 14").test('href="tel:131114"')).toBe(true);
+    expect(written("000").test('fill="#000"')).toBe(false);
+    for (const [i, file] of files.entries()) {
+      const text = readFileSync(file, "utf8");
+      for (const c of numbers) expect(written(c.said).test(text), `${rel[i]} writes ${c.said}`).toBe(false);
     }
   });
 

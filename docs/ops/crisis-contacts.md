@@ -2,7 +2,8 @@
 
 Every crisis number and chat link the product shows lives in `src/model/crisis-contacts.ts`: the
 Urgent help rows and the numbers the safety messages quote. Nothing else may hard-code one;
-`src/model/crisis-contacts.test.ts` fails if a safety message quotes a number the registry lacks.
+`src/model/crisis-contacts.test.ts` fails if a safety message quotes a number the registry lacks,
+or if any file under `app/` writes a registry number out instead of reading it with `said()`.
 
 ## When to check
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ChatCircleText, ChatsCircle, Phone } from "@phosphor-icons/react/dist/ssr";
 import { ROBOTS_META } from "@/security/robots";
 import { URGENT_SERVICES } from "@/model/safety";
-import type { ContactMethod } from "@/model/crisis-contacts";
+import { said, type ContactMethod } from "@/model/crisis-contacts";
 
 // Reachable from the header of every patient screen. It asks nothing, reads nothing and records
 // nothing: it names the services that already exist, by voice, text or chat, and gets out of the way.
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/urgent" },
   robots: ROBOTS_META,
   title: "Urgent help",
-  description: "The Australian services to call, text or chat with right now: 000, Lifeline, Kids Helpline and Beyond Blue.",
+  description: `The Australian services to call, text or chat with right now: ${said("emergency")}, Lifeline, Kids Helpline and Beyond Blue.`,
 };
 
 const ICON: Record<ContactMethod, typeof Phone> = { call: Phone, text: ChatCircleText, relay: ChatCircleText, chat: ChatsCircle };
