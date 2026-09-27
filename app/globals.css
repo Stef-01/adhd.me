@@ -1881,9 +1881,8 @@ summary:focus-visible {
    sized compact so both input paths sit on the one panel. */
 /* The written option's submit joins the amber system, so talk / write / find read as one panel.
    Disabled stays the default grey until there is something to search on. */
-/* O234: on the box's left edge, under it, where the question is — not centred under a
-   left-aligned screen. */
-.patient-v2 .voice-actions .scenario-toggle { margin-top: 12px; align-self: flex-start; padding: 0 2px; }
+/* W6b: the example chips, on the box's left edge, under it, where the question is. */
+.patient-v2 .voice-actions .finder-examples { align-self: stretch; }
 
 
 .patient-v2 .listening-screen .voice-actions {
@@ -3431,84 +3430,6 @@ summary:focus-visible {
    "that takes you seriously."). O233 deleted the tagline, so both rules went with it. */
 
 
-/* Demo scenarios live behind one quiet trigger on the welcome; the browser is
-   its own full-screen stage, entered with the same transition as every other
-   step. No overlay, no second material, nothing to layer. */
-.patient-v2 .scenario-toggle {
-  display: inline-flex;
-  min-height: 44px;
-  gap: 6px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 4px;
-  padding: 0 12px;
-  border: 0;
-  color: var(--muted);
-  background: transparent;
-  font-size: 0.75rem;
-  font-weight: 650;
-  cursor: pointer;
-  transition: color var(--dur-tap) var(--ease-ui);
-}
-
-@media (hover: hover) {
-  .patient-v2 .scenario-toggle:hover { color: var(--ink); }
-}
-
-.patient-v2 .scenario-toggle svg {
-  /* O176: was `--accent`, on the icon of a control whose LABEL is `--muted` and whose hover is
-     `--ink`. An icon louder than the words it belongs to is decoration drawing the eye, which is
-     the one thing the founder's motion-and-clutter directive excludes by name. Inheriting makes
-     the icon part of the control instead of a second signal, hover included.
-     Found only because the probe's SVG blind spot was fixed: `className` is an SVGAnimatedString,
-     so `String(el.className)` gave "[object SVGAnimatedString]" and collapsed every SVG into one
-     bogus meaning — the finder read 3 when the truth was 4. */
-  color: inherit;
-}
-
-.patient-v2 .scenario-screen {
-  display: flex;
-  flex-direction: column;
-}
-
-.patient-v2 .scenario-core {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  min-height: 0;
-  padding: 24px 22px;
-  text-align: center;
-}
-
-.patient-v2 .scenario-quote {
-  margin: 0;
-  min-width: 0;
-  padding: 0 4px;
-}
-
-.patient-v2 .scenario-quote q {
-  display: block;
-  max-width: 22ch;
-  margin: 0 auto;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.5rem, 5.6vw, 1.9375rem);
-  font-weight: 420;
-  line-height: 1.32;
-  letter-spacing: -0.02em;
-  quotes: "\201C" "\201D";
-  text-wrap: pretty;
-}
-
-.patient-v2 .scenario-count {
-  margin: 0;
-  color: var(--faint);
-  font-size: 0.6875rem;
-  text-align: center;
-}
-
 .patient-v2 .voice-screen .voice-actions {
   align-items: center;
   margin-top: 34px;
@@ -3533,7 +3454,6 @@ summary:focus-visible {
   }
 
   .patient-v2[data-stage="welcome"] .minimal-header,
-  .patient-v2[data-stage="scenarios"] .minimal-header,
   .patient-v2[data-stage="type"] .minimal-header {
     min-height: 84px;
     border-bottom: 0;
@@ -4609,7 +4529,6 @@ summary:focus-visible {
 
   /* The last four controls sitting between 40px and 42px. Each is a real button somebody taps with
      a thumb, and each was short by a hair rather than by design. */
-  .patient-v2 .scenario-toggle,
   .profile-header button { min-height: 44px; }
 }
 
@@ -6407,7 +6326,6 @@ select { caret-color: var(--route-strong); }
   --stage-progress: 12%;
   background: var(--ink);
 }
-.care-app.patient-v2[data-stage="scenarios"] { --stage-progress: 23%; }
 .care-app.patient-v2[data-stage="listening"] { --stage-progress: 34%; }
 .care-app.patient-v2[data-stage="type"] { --stage-progress: 45%; }
 .care-app.patient-v2[data-stage="results"] { --stage-progress: 61%; }
@@ -6496,21 +6414,10 @@ select { caret-color: var(--route-strong); }
   background: var(--accent);
   box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 24%, transparent);
 }
-.patient-v2 .scenario-toggle,
 .patient-v2 .text-action { color: var(--ink); }
 
 .patient-v2 .finder-context p { color: var(--muted); }
 
-.patient-v2 .scenario-quote {
-  border-color: var(--line-strong);
-  border-radius: 14px;
-  background: var(--accent-soft);
-  /* O233: the tinted panel used to run to the bottom of the stage, because the stage's own
-     bottom padding (the room the tab bar takes) fell INSIDE it — two lines of small print in a
-     block half a screen tall. It sizes to its sentence now and the stage keeps its clearance. */
-  margin: 0 22px;
-  padding: 14px 18px;
-}
 
 /* 2026-09-05, from the finder re-walk: `.booking-content h1` was in this selector, and it made the
    booking screen the one stage whose heading rendered in Inter — 44px sans over a flow whose every

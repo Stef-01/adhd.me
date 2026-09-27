@@ -48,12 +48,6 @@ export async function freshFinder(page: Page) {
   await expectStage(page, "welcome");
 }
 
-/** welcome → scenarios. */
-export async function toScenarios(page: Page, via: Via = "pointer") {
-  await activate(page.locator(".scenario-toggle"), via);
-  await expectStage(page, "scenarios");
-}
-
 /** welcome → listening. Needs the fake recogniser. */
 export async function toListening(page: Page, via: Via = "pointer") {
   await activate(page.getByRole("button", { name: /Talk instead of typing/i }), via);
@@ -109,7 +103,7 @@ export async function toBooking(page: Page, via: Via = "pointer") {
 
 /**
  * Reach a stage from a fresh visit. The caller installs the fake recogniser once per test; every
- * stage past `scenarios` is reached through the microphone.
+ * stage past `welcome` is reached through the microphone.
  */
 /**
  * A stage, open and still: the old screen has finished leaving and the new one has finished
@@ -138,8 +132,7 @@ export async function settled(page: Page) {
 export async function openStage(page: Page, stage: Stage, via: Via = "pointer") {
   await freshFinder(page);
   if (stage === "welcome") return settled(page);
-  if (stage === "scenarios") await toScenarios(page, via);
-  else {
+  {
     await toListening(page, via);
     if (stage === "type") await toType(page, via);
     else if (stage !== "listening") {

@@ -6,6 +6,7 @@
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
+import { DEMO_REQUEST } from "./support/real-roster";
 
 const NARRATIVE =
   "I think I have had ADHD my whole life. I want an adult assessment with someone who will not rush me. I have anxiety too, and telehealth would be easier.";
@@ -159,8 +160,8 @@ test("the finder keeps search as its single entry point", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".app-tabs .t-badge")).toHaveCount(0);
   await expect(page.getByRole("link", { name: /Get matched|Two questions|Start from the problem/ })).toHaveCount(0);
-  await page.getByRole("button", { name: "Try an example search" }).click();
-  await page.getByRole("button", { name: "Search with this" }).click();
+  await page.getByRole("textbox").fill(DEMO_REQUEST);
+  await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible();
   await expect(page.getByRole("link", { name: "Get matched", exact: true })).toHaveCount(0);
 });

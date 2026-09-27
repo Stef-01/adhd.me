@@ -79,14 +79,16 @@ test("every tab clears the touch floor and the bar clears the safe area", async 
   }
   // Nothing the app renders sits under the bar: the last control on the welcome screen is above it.
   const barBox = await page.getByRole("navigation", { name: "Sections" }).boundingBox();
-  const lastControl = await page.getByRole("button", { name: "Try an example search" }).boundingBox();
+  const lastControl = await page.locator(".finder-example").last().boundingBox();
   expect(lastControl!.y + lastControl!.height).toBeLessThanOrEqual(barBox!.y + 1);
 });
 
 test("desktop navigation stays available inside a finder task", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
-  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Adult ADHD assessment" }).click();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
 });
 
@@ -226,7 +228,7 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
   await expect(toggle).not.toBeChecked();
   await page.keyboard.press("Escape");
   // The finder is still operable after a modal detour — the thing a sheet most often breaks.
-  await expect(page.getByRole("button", { name: "Try an example search" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Adult ADHD assessment" })).toBeVisible();
 });
 
 // O234 (founder-directed): the profile's filters, the place it holds, and the map on results.
@@ -373,10 +375,10 @@ test("the consent notice, the bar and the finder are one shell at every width", 
   // the shell's bounds rather than to its width; below, it is still the shell's width.
   expect(bar!.x).toBeGreaterThanOrEqual(shell!.x - 1);
   expect(bar!.x + bar!.width).toBeLessThanOrEqual(shell!.x + shell!.width + 1);
-  // The question, the box and the example link share one left edge.
+  // The question, the box and the example chips share one left edge.
   const h1 = await page.getByRole("heading", { level: 1 }).boundingBox();
   const box = await page.getByRole("textbox").boundingBox();
-  const link = await page.getByRole("button", { name: "Try an example search" }).boundingBox();
+  const link = await page.locator(".finder-example").first().boundingBox();
   expect(Math.abs(h1!.x - box!.x)).toBeLessThanOrEqual(2);
   expect(Math.abs(link!.x - box!.x)).toBeLessThanOrEqual(3);
 });

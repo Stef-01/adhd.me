@@ -16,7 +16,7 @@ import { measured } from "./support/measured";
 import { clinicians, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
 import { searchRoster } from "../src/finder/pipeline";
-import { demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/real-roster";
+import { DEMO_REQUEST, demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/real-roster";
 
 // O226: this file's walks assert REAL-roster facts — named rows above the fold, `rankClinicians`
 // over the real `clinicians` export, "1 of 2 listed GPs" — so the flow enters through the
@@ -26,10 +26,10 @@ async function intoResults(page: Page, place?: string) {
   await demoResultsRealRosterOnly(page, place);
 }
 
-test("a scenario reaches results without a loading screen in between", async ({ page }) => {
+test("a search reaches results without a loading screen in between", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Try an example search" }).click();
-  await page.getByRole("button", { name: "Search with this" }).click();
+  await page.getByRole("textbox").fill(DEMO_REQUEST);
+  await page.keyboard.press("Enter");
 
   // The 4.25s `matching` screen is gone, so results are there immediately. A generous timeout
   // would let it creep back without failing, which is why this one is deliberately tight.
@@ -206,8 +206,8 @@ test("the chosen GP's portrait is one object from row to profile (O67)", async (
 
 test("a profile names what you asked for that this GP has not declared (O51)", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Try an example search" }).click();
-  await page.getByRole("button", { name: "Search with this" }).click();
+  await page.getByRole("textbox").fill(DEMO_REQUEST);
+  await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await page.getByRole("button", { name: /Change what you said/i }).click();
   const box = page.getByRole("textbox");

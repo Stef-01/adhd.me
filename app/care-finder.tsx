@@ -51,7 +51,6 @@ import {
 import { useFinderHistory } from "./finder-history";
 import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
-import { ScenariosStage } from "./finder-stages/scenarios-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { TypeStage } from "./finder-stages/type-stage";
 import { ResultsStage } from "./finder-stages/results-stage";
@@ -77,9 +76,6 @@ const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
 
 export function CareFinder() {
-  const [archetypeIndex, setArchetypeIndex] = useState(0);
-  // The scenario browser rotates on its own until the visitor takes over.
-  const [autoCycle, setAutoCycle] = useState(true);
   const reducedMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
@@ -106,7 +102,6 @@ export function CareFinder() {
   const withRequestCare = useCallback((held: Filters): Filters => ({ ...held, ...combineCarePreferences(held, requestCare) }), [requestCare]);
   const effectiveFilters = useMemo(() => withRequestCare(filters), [filters, withRequestCare]);
   const [matchIndex, setMatchIndex] = useState(0);
-  const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
   // is the only reliable signal to somebody that the microphone is actually working.
   // Where the person says they are. A typed suburb or postcode, never the device's location: no
@@ -261,7 +256,9 @@ export function CareFinder() {
   const arrivalStage = useRef<Stage>("welcome");
   const moved = useRef(false);
 
-  const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
+  // The request the finder falls back to when a search is empty; the scenarios stage that cycled
+  // through the others is gone (PLAN.md W6b), and /examples keeps the long archetypes.
+  const archetype = defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
 
   const focusOnArrival = moved.current || stage !== arrivalStage.current;
@@ -307,31 +304,6 @@ export function CareFinder() {
     remember({ request, draft, matchId: clinician.id });
   }, [remember, request, draft, clinician.id]);
 
-  /**
-   * O95 audit fix: this interval used to run four sibling setState calls INSIDE the
-   * setArchetypeIndex updater. Updaters must be pure — StrictMode replays them, and React
-   * is free to call them more than once — so the interval now only advances the index,
-   * and the effect below derives the scenario's request/matches from wherever the index
-   * lands. Same rendered output on every path; the side effects just live where React
-   * expects them.
-   */
-  useEffect(() => {
-    if (stage !== "scenarios" || !autoCycle || reducedMotion) return;
-    const timer = window.setInterval(() => {
-      setArchetypeIndex((current) => (current + 1) % careArchetypes.length);
-    }, 5500);
-    return () => window.clearInterval(timer);
-  }, [stage, autoCycle, reducedMotion]);
-
-  // The auto-cycle's side effects, out of the updater. Auto only: a manual cycle sets
-  // autoCycle false first and carries its own direction, so this never fights it.
-  useEffect(() => {
-    if (stage !== "scenarios" || !autoCycle) return;
-    const current = careArchetypes[archetypeIndex] ?? defaultArchetype;
-    setRequest(current.request);
-    setMatchIndex(0);
-    setMatchDirection(1);
-  }, [stage, autoCycle, archetypeIndex]);
 
   const requestSummary = useMemo(() => {
     const cleaned = request.trim().replace(/[.!?]+$/, "");
@@ -575,7 +547,6 @@ export function CareFinder() {
     setDraft("");
     setRequest(archetype.request);
     setMatchIndex(0);
-    setMatchDirection(1);
     dispatchBanner({ type: "cleared" });
   }
 
@@ -634,15 +605,6 @@ export function CareFinder() {
     setShowAll(false);
   }
 
-  function cycleArchetype(direction: 1 | -1) {
-    const nextIndex = (archetypeIndex + direction + careArchetypes.length) % careArchetypes.length;
-    const nextArchetype = careArchetypes[nextIndex] ?? defaultArchetype;
-    setArchetypeIndex(nextIndex);
-    setRequest(nextArchetype.request);
-    setDraft("");
-    setMatchIndex(0);
-    setMatchDirection(direction);
-  }
 
   /**
    * O230: the tab bar belongs to the app's ROOT surfaces, and a native push hides it — the same
@@ -685,28 +647,9 @@ export function CareFinder() {
             includeSynthetic={includeSynthetic}
             onToggleSynthetic={toggleSynthetic}
             onTalk={() => startListening()}
-            onScenarios={() => {
-              setAutoCycle(true);
-              goTo("scenarios");
-            }}
           />
         )}
 
-        {stage === "scenarios" && (
-          <ScenariosStage
-            key="scenarios"
-            focusOnArrival={focusOnArrival}
-            archetype={archetype}
-            archetypeIndex={archetypeIndex}
-            matchDirection={matchDirection}
-            onBack={() => backTo("welcome")}
-            onCycle={(direction) => {
-              setAutoCycle(false);
-              cycleArchetype(direction);
-            }}
-            onTry={() => findMatches(archetype.request)}
-          />
-        )}
 
         {stage === "listening" && (
           <ListeningStage

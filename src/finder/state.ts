@@ -25,7 +25,7 @@
 // this module's. `state.test.ts` plants a sentence and proves it reaches storage and nowhere else.
 
 /** The finder's screens, in no particular order; the trail records the order a person walked. */
-export const STAGES = ["welcome", "scenarios", "listening", "type", "results", "profile", "compare", "booking"] as const;
+export const STAGES = ["welcome", "listening", "type", "results", "profile", "compare", "booking"] as const;
 export type Stage = (typeof STAGES)[number];
 
 export function isStage(value: unknown): value is Stage {
@@ -33,7 +33,7 @@ export function isStage(value: unknown): value is Stage {
 }
 
 /** Bumped when `FinderRecord` or `FinderEntry` changes shape; an older record is ignored, not migrated. */
-export const STATE_VERSION = 1;
+export const STATE_VERSION = 2;
 /** The sessionStorage key. Versioned in the name too, so two shapes never share one slot. */
 export const STORAGE_KEY = `adhdme.finder.v${STATE_VERSION}`;
 
