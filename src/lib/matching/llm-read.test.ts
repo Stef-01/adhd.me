@@ -6,7 +6,7 @@ import { BudgetMeter } from "@/lib/llm/meter";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, LEXICON_CUES, needForKey, readNeeds } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
-import { fromModel, INSTRUCTIONS, lexiconReading, MEANINGS, readRequest, SCHEMA, VOCABULARY } from "./llm-read";
+import { answerFor, fromModel, INSTRUCTIONS, lexiconReading, MEANINGS, readRequest, SCHEMA, VOCABULARY } from "./llm-read";
 
 const ENV = { OPENAI_API_KEY: "k" };
 const TODAY = new Date("2026-09-27T00:00:00Z");
@@ -73,6 +73,11 @@ describe("fromModel", () => {
     expect(reading.keys).toEqual(["care:titration", "manner:attuned", "pref:woman-gp", "language:urdu"]);
     expect(reading.dropped).toBe(2);
     expect(reading.needs.map((need) => need.label)).toContain("Urdu-speaking");
+  });
+
+  it("reads answerFor(keys) back as exactly those keys", () => {
+    expect(fromModel(answerFor(schemaKeys())).keys).toEqual(schemaKeys());
+    expect(fromModel(answerFor([])).keys).toEqual([]);
   });
 });
 

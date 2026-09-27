@@ -76,16 +76,15 @@ export const SCHEMA = {
   },
 };
 
+/** Everything in an L1 call but the request. The eval's prompt hash is taken over this. */
+export const READ_CALL = { effort: "minimal", instructions: INSTRUCTIONS, schema: SCHEMA, maxOutputTokens: 400 } as const;
+
 export type Reading = { keys: string[]; needs: NeedSignal[]; source: "llm" | "lexicon"; dropped: number; error?: string };
 
 export async function readRequest(text: string, deps: Deps = {}): Promise<Reading> {
   if (!text.trim()) return { keys: [], needs: [], source: "llm", dropped: 0 };
   try {
-    const { data } = await callJson<unknown>(
-      { effort: "minimal", instructions: INSTRUCTIONS, input: text, schema: SCHEMA, maxOutputTokens: 400 },
-      deps,
-    );
-    return fromModel(data);
+    return fromModel((await callJson<unknown>({ ...READ_CALL, input: text }, deps)).data);
   } catch (error) {
     return { ...lexiconReading(text), error: error instanceof Error ? `${error.name}: ${error.message}` : String(error) };
   }
@@ -117,4 +116,13 @@ export function fromModel(data: unknown): Reading {
   }
   const needs = keys.flatMap((key) => needForKey(key) ?? []);
   return { keys, needs, source: "llm", dropped };
+}
+
+/** The answer that reads as exactly `keys`: `fromModel`'s inverse, for dry runs. */
+export function answerFor(keys: readonly string[]): Record<string, string[]> {
+  const answer: Record<string, string[]> = {};
+  for (const field of FIELDS) {
+    answer[field] = keys.filter((key) => key.startsWith(`${VOCABULARY[field].prefix}:`)).map((key) => key.slice(key.indexOf(":") + 1));
+  }
+  return { ...answer, negated: [] };
 }
