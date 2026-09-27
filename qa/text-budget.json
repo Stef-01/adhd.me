@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T05:58:18.334Z",
-  "base": "http://localhost:3317",
+  "measuredAt": "2026-09-27T07:08:56.808Z",
+  "base": "http://localhost:3200",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "01:01 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -422,12 +422,17 @@
       "path": "/lives/lab/leo-room",
       "name": "/lives/lab/leo-room",
       "state": null,
-      "total": 32,
-      "fold": 32,
-      "chrome": 7,
-      "ratio": 0.8,
+      "total": 39,
+      "fold": 39,
+      "chrome": 0,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
+        {
+          "w": 7,
+          "text": "Catch what’s here. Stop what comes next.",
+          "tag": "p"
+        },
         {
           "w": 6,
           "text": "Catch the buzz. Change the room.",
@@ -437,11 +442,6 @@
           "w": 3,
           "text": "One tiny sound.",
           "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Room to settle",
-          "tag": "span"
         }
       ]
     },
@@ -449,21 +449,21 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 9,
-      "fold": 9,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
+          "w": 2,
+          "text": "LOCK IN!",
+          "tag": "p"
         },
         {
           "w": 2,
-          "text": "DELETE DRAFTS!",
-          "tag": "p"
+          "text": "revenue chart",
+          "tag": "span"
         },
         {
           "w": 1,
@@ -503,26 +503,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 11,
-      "fold": 11,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "text": "ONLY THE LIST!",
+          "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 2,
-          "text": "Straight through",
-          "tag": "button"
+          "w": 1,
+          "text": "milk",
+          "tag": "span"
         }
       ]
     },
@@ -584,10 +584,10 @@
       "path": "/lives/play/leo-mosquito",
       "name": "/lives/play/leo-mosquito",
       "state": null,
-      "total": 23,
-      "fold": 23,
-      "chrome": 5,
-      "ratio": 0.6,
+      "total": 28,
+      "fold": 28,
+      "chrome": 0,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -596,14 +596,14 @@
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "One tiny sound.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Three rounds. Catch the mosquitoes.",
+          "tag": "p"
         },
         {
           "w": 3,
-          "text": "Room to settle",
-          "tag": "span"
+          "text": "One tiny sound.",
+          "tag": "h1"
         }
       ]
     },
@@ -692,10 +692,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "/lives/play/theo-out-the-door",
       "state": null,
-      "total": 39,
-      "fold": 39,
+      "total": 35,
+      "fold": 35,
       "chrome": 4,
-      "ratio": 1,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -709,8 +709,8 @@
           "tag": "h1"
         },
         {
-          "w": 4,
-          "text": "A morning with Theo",
+          "w": 2,
+          "text": "Planning time",
           "tag": "span"
         }
       ]
@@ -2064,10 +2064,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, competing demands",
       "state": "theo-busy",
-      "total": 36,
-      "fold": 36,
+      "total": 32,
+      "fold": 32,
       "chrome": 4,
-      "ratio": 0.9,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
@@ -2076,14 +2076,14 @@
           "tag": "h1"
         },
         {
-          "w": 4,
-          "text": "A morning with Theo",
-          "tag": "span"
-        },
-        {
           "w": 3,
           "text": "Park for later",
           "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "Planning time",
+          "tag": "span"
         }
       ]
     },
@@ -2091,10 +2091,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, pause",
       "state": "theo-pause",
-      "total": 27,
-      "fold": 27,
+      "total": 23,
+      "fold": 23,
       "chrome": 4,
-      "ratio": 0.7,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -2104,13 +2104,13 @@
         },
         {
           "w": 4,
-          "text": "A morning with Theo",
-          "tag": "span"
-        },
-        {
-          "w": 4,
           "text": "The world can wait.",
           "tag": "h2"
+        },
+        {
+          "w": 3,
+          "text": "Your pace · on",
+          "tag": "button"
         }
       ]
     },
@@ -2118,10 +2118,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, departure",
       "state": "theo-departure",
-      "total": 24,
-      "fold": 24,
+      "total": 20,
+      "fold": 20,
       "chrome": 4,
-      "ratio": 0.6,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -2130,14 +2130,14 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A morning with Theo",
-          "tag": "span"
-        },
-        {
           "w": 3,
           "text": "Made it out.",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "9 trips · 50s",
+          "tag": "span"
         }
       ]
     },
@@ -2253,12 +2253,17 @@
       "path": "/lives/play/leo-mosquito",
       "name": "Leo, reading",
       "state": "bedroom-wind-down",
-      "total": 33,
-      "fold": 33,
-      "chrome": 9,
-      "ratio": 0.8,
-      "verdict": "target",
+      "total": 42,
+      "fold": 42,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
       "longest": [
+        {
+          "w": 9,
+          "text": "A place to return to. Even if you’re interrupted.",
+          "tag": "p"
+        },
         {
           "w": 7,
           "text": "A page or two. At your pace.",
@@ -2268,11 +2273,6 @@
           "w": 5,
           "text": "A little room to settle.",
           "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Room to settle",
-          "tag": "span"
         }
       ]
     },
@@ -2280,10 +2280,10 @@
       "path": "/lives/play/leo-mosquito",
       "name": "Leo, rest",
       "state": "bedroom-rest",
-      "total": 27,
-      "fold": 27,
-      "chrome": 6,
-      "ratio": 0.7,
+      "total": 33,
+      "fold": 33,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
@@ -2297,9 +2297,9 @@
           "tag": "h1"
         },
         {
-          "w": 3,
-          "text": "Room to settle",
-          "tag": "span"
+          "w": 4,
+          "text": "The room is ready.",
+          "tag": "p"
         }
       ]
     },
@@ -2307,12 +2307,17 @@
       "path": "/lives/play/leo-mosquito",
       "name": "Leo, next evening",
       "state": "bedroom-revisit",
-      "total": 33,
-      "fold": 33,
-      "chrome": 8,
-      "ratio": 0.8,
-      "verdict": "target",
+      "total": 41,
+      "fold": 41,
+      "chrome": 0,
+      "ratio": 1,
+      "verdict": "ceiling",
       "longest": [
+        {
+          "w": 8,
+          "text": "Window shut. Phone away. One was hiding inside.",
+          "tag": "p"
+        },
         {
           "w": 6,
           "text": "Keep the routine. Find your place.",
@@ -2322,11 +2327,6 @@
           "w": 3,
           "text": "The next evening.",
           "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Room to settle",
-          "tag": "span"
         }
       ]
     },
@@ -2334,26 +2334,26 @@
       "path": "/lives/play/leo-mosquito",
       "name": "Leo, complete",
       "state": "bedroom-complete",
-      "total": 27,
-      "fold": 27,
-      "chrome": 21,
-      "ratio": 0.7,
-      "verdict": "target",
+      "total": 48,
+      "fold": 48,
+      "chrome": 0,
+      "ratio": 1.2,
+      "verdict": "ceiling",
       "longest": [
+        {
+          "w": 9,
+          "text": "You kept the changes. Leo found his place again.",
+          "tag": "p"
+        },
         {
           "w": 5,
           "text": "Same room. A different evening.",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "You changed the room.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Room to settle",
-          "tag": "span"
+          "w": 5,
+          "text": "Bring it into your day",
+          "tag": "a"
         }
       ]
     },
@@ -2842,10 +2842,10 @@
       "path": "/approach?pane=games",
       "name": "Learn, all games, the largest group",
       "state": "games-all-open",
-      "total": 37,
-      "fold": 37,
+      "total": 39,
+      "fold": 39,
       "chrome": 4,
-      "ratio": 0.9,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
         {
@@ -2869,7 +2869,7 @@
       "path": "/approach/map",
       "name": "The care map, a part of life open",
       "state": "care-map-tap",
-      "total": 97,
+      "total": 95,
       "fold": 82,
       "chrome": 6,
       "ratio": 2.4,
@@ -2904,7 +2904,7 @@
       "longest": [
         {
           "w": 2,
-          "text": "LOCK IN!",
+          "text": "POP IT!",
           "tag": "p"
         },
         {
@@ -2914,8 +2914,8 @@
         },
         {
           "w": 1,
-          "text": "slides",
-          "tag": "span"
+          "text": "pale",
+          "tag": "button"
         }
       ]
     },
@@ -3112,10 +3112,10 @@
       "path": "/my-adhd",
       "name": "My ADHD, an axis open",
       "state": "sheet-open",
-      "total": 58,
+      "total": 54,
       "fold": 27,
       "chrome": 0,
-      "ratio": 1.5,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
