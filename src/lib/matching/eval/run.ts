@@ -9,8 +9,8 @@ import { FileCache } from "@/lib/llm/cache";
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
 import { modelOf, type Deps } from "@/lib/llm/client";
 import { appendLedger, BudgetMeter, ledgerSpend, RateGate } from "@/lib/llm/meter";
-import { answerFor, lexiconReading, READ_CALL, readRequest, type Reading } from "../llm-read";
-import { facetScore, faults, flipRate, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
+import { answerFor, lexiconReading, READ_CALL, READS, readRequest, type Reading } from "../llm-read";
+import { facetScore, faults, flipRate, mentionsDropped, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
 import { CLASSES, evalEntries, oracleGains, type EvalEntry } from "./sets";
 
 export const PHASES = {
@@ -44,13 +44,15 @@ export type Outcome = { code: 0 | 1 | 2; message: string; report?: string };
 type Done = { entry: EvalEntry; reading: Reading };
 
 const gold = (e: EvalEntry) => [...(e.reaches ?? []), ...(e.aspires ?? [])];
+/** Keys as the schema's bare ids: a perfect dry-run reader refuses what a probe only mentions. */
+const bare = (keys: readonly string[] = []) => keys.map((key) => key.slice(key.indexOf(":") + 1));
 const mean = (values: number[]) => (values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null);
 const cell = (value: number | null) => (value === null ? "–" : value.toFixed(3));
 const pct = (value: number | null) => (value === null ? "–" : `${(value * 100).toFixed(1)}%`);
 
 export function promptHash(level: string, env: Record<string, string | undefined> = process.env): string {
   if (level === "L0") return "lexicon";
-  return createHash("sha256").update(JSON.stringify([modelOf(env), READ_CALL])).digest("hex").slice(0, 12);
+  return createHash("sha256").update(JSON.stringify([modelOf(env), READ_CALL, READS])).digest("hex").slice(0, 12);
 }
 
 export async function runEval(options: EvalOptions): Promise<Outcome> {
@@ -87,7 +89,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   const oracleKeys = (text: string) => [...gold(byText.get(text)!), ...lexiconReading(text).keys.filter((k) => k.startsWith("language:"))];
   const deps: Deps = live
     ? { fetch: options.fetch, env, meter, cache: new FileCache(join(root, ".cache/llm")) }
-    : { fetch: cassetteFetch(CASSETTES, (input) => completed(answerFor(oracleKeys(input)))), env: { ...env, OPENAI_API_KEY: "dry" }, meter };
+    : { fetch: cassetteFetch(CASSETTES, (input) => completed({ ...answerFor(oracleKeys(input)), negated: bare(byText.get(input)?.mentions) })), env: { ...env, OPENAI_API_KEY: "dry" }, meter };
   const gate = new RateGate(limits.concurrency, limits.rpm);
   let [calls, streak, malformed] = [0, 0, 0];
   const read = async (entry: EvalEntry, cached = true): Promise<Done | null> => {
@@ -128,6 +130,8 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   const valid = 1 - fallbacks / Math.max(1, done.length);
   const flips = repeats.length ? flipRate([devDone.map((d) => d.reading.keys), ...repeats.map((run) => run.map((d) => d?.reading.keys ?? []))]) : null;
   const perCall = meter.calls ? meter.spent / meter.calls : 0;
+  // Adversarial probes: the share of lexicon keys a text only mentions that the read drops. Measured at L1; L2 gates it.
+  const mentioned = mentionsDropped(done.map((d) => d.entry), (text) => keysOf.get(text)!);
   const errorRate = meter.errors / Math.max(1, calls);
 
   // Gates (§7 for L1, P0's own for the dry run) and the lifting rule's (b) to (d).
@@ -175,7 +179,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
     "| --- | --- | --- |",
     ...gates.map(([name, value, ok]) => `| ${name} | ${value} | ${ok ? "yes" : "NO"} |`),
     "",
-    `Requests ${done.length} of ${selected.length} (dev ${devDone.length}) · paid calls ${meter.calls} · fallbacks ${fallbacks} (${pct(1 - valid)}) · failed attempts ${meter.errors} · spend $${meter.spent.toFixed(5)}${live ? "" : " (simulated)"}, $${perCall.toFixed(6)} a call${flips === null ? "" : ` · flip rate ${pct(flips)}`}`,
+    `Requests ${done.length} of ${selected.length} (dev ${devDone.length}) · mentioned, not asked, dropped ${pct(mentioned)} · paid calls ${meter.calls} · fallbacks ${fallbacks} (${pct(1 - valid)}) · failed attempts ${meter.errors} · spend $${meter.spent.toFixed(5)}${live ? "" : " (simulated)"}, $${perCall.toFixed(6)} a call${flips === null ? "" : ` · flip rate ${pct(flips)}`}`,
     "",
     "Reader against the corpus pins. Precision is a lower bound; language keys are not scored. Orders are the tiered ranker's on the reader's keys, graded against the same ranker on gold keys (NDCG@3, hit@1, MRR).",
     "",

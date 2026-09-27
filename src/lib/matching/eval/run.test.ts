@@ -6,6 +6,7 @@ import { clinicians } from "@/demo/clinicians";
 import { completed } from "@/lib/llm/cassettes";
 import { appendLedger, ledgerSpend } from "@/lib/llm/meter";
 import { syntheticRoster } from "@/matching/scale-fixture";
+import { READS } from "../llm-read";
 import { promptHash, runEval } from "./run";
 
 const ENV = { OPENAI_API_KEY: "k" };
@@ -84,7 +85,7 @@ describe("the ladder", () => {
     const fetch = api(() => ({ body: completed(EMPTY) }));
     await runEval({ level: "L1", phase: "P2", live: true, root, env: ENV, fetch });
     const ledger = join(root, "qa/matching/ledger.jsonl");
-    expect(readFileSync(ledger, "utf8").trim().split("\n")).toHaveLength(10);
+    expect(readFileSync(ledger, "utf8").trim().split("\n")).toHaveLength(10 * READS);
     appendLedger(ledger, { level: "L1", phase: "P2", model: "gpt-5-nano", usage: USAGE, costUsd: 8 - ledgerSpend(ledger) });
     const outcome = await runEval({ level: "L1", phase: "P2", live: true, root, env: ENV, fetch });
     expect(outcome).toMatchObject({ code: 2, message: expect.stringMatching(/programme's \$8 cap/) });

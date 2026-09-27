@@ -98,3 +98,9 @@ export function flipRate(runs: ReadonlyArray<ReadonlyArray<readonly string[]>>):
   for (let i = 0; i < items; i += 1) if (new Set(runs.map((run) => [...run[i]!].sort().join())).size > 1) flips += 1;
   return items === 0 ? 0 : flips / items;
 }
+
+/** The share of `mentions` keys a reading leaves out: 0 for the lexicon by construction. Null with none pinned. */
+export function mentionsDropped(entries: readonly { text: string; mentions?: readonly string[] }[], read: (text: string) => readonly string[]): number | null {
+  const pinned = entries.flatMap((entry) => (entry.mentions ?? []).map((key) => [entry.text, key] as const));
+  return pinned.length ? pinned.filter(([text, key]) => !read(text).includes(key)).length / pinned.length : null;
+}

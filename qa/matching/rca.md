@@ -41,3 +41,38 @@ numbers before and after.
 - **Open:** long narratives (C6) still carry most of the extra keys, and several of their extras
   are defensible reads the probes do not pin ("someone who lets me get to the end of a sentence"
   as `attuned`). A label change is the founder's call, not the tuner's.
+
+## R3 · F6 and F10 at L1 P4, 2026-09-28 · layer: READ · cause: tuned on the sample, and one read is noisy
+
+- **Entries:** P4's 338 dev requests (`reports/L1-P4-2026-09-27T14-26-58-954Z.md`): precision 80.9%,
+  `never` 5.5%, against 91.9% and 0% on the 59 the prompt was tuned on.
+- **Hand check** (by a model of another family, as F19 asks): of about 85 extra keys, 8 are asks the
+  corpus does not pin, 15 are borderline and about 55 are wrong. The gap is the read's, not the labels'.
+- **Changes, each measured on all 338:**
+
+  | Run | Change | Precision | Never | Kept? |
+  | --- | --- | --- | --- | --- |
+  | replay | a list longer than half its field is a failed read (seen: all twelve care areas) | 83.4% | 5.5% | yes |
+  | v8 | "an ask gates every key" | 78.5% | 9.1% | no |
+  | mini | the ladder's next rung, gpt-5-mini at "minimal" | 67.6% | 12.7% | no: the ladder is spent |
+  | 3 reads | the same prompt read three times; single reads ranged 80.6% to 83.4% | – | – | – |
+  | 3 of 3 | keep a key only when all three reads give it | 92.8% | 3.6% | yes |
+  | v10, 3 of 3 | time with the clinician is not punctuality; anxiety named, not inferred; `negated` also takes what is only mentioned | 94.2% | 3.6% | yes |
+
+- **After:** v10 with three reads passes P0 to P3 under prompt `fc7d605b0fd2` (P3: precision 98.8%,
+  `never` 0%, C4 100%). Three reads cost about $0.0004 a request and no extra time (they run at once).
+
+## R4 · `never` at L1, 2026-09-28 · layer: the vocabulary and a policy, not the model
+
+- **Entries:** requests every read gets wrong the same way, so voting cannot remove them. The
+  formal P4 (`reports/L1-P4-2026-09-27T15-17-56-774Z.md`) met two: punctuality, below, and a
+  red-team decoy, "the GP in the ad was a woman" → `pref:woman-gp`. The RCA samples met a third:
+  - "flat for months, everything is heavy" → `care:depression`. The corpus forbids reading a
+    condition from a state someone describes until the founder's G7 decision. A code rule that
+    required an ask before any inferred condition removed it, but cost 13.5 points of `aspires`,
+    because the corpus pins some named states as asks ("rejection hits me like a truck"). The line
+    is naming, not asking, and it is the founder's to draw. Not adopted.
+  - "I need appointments that start on time, waiting destroys me" → `manner:unhurried`. Punctuality
+    has no facet, and the model takes the nearest one even when the meaning line excludes it.
+- **Decision needed:** G7, and whether punctuality and the other candidates in
+  `docs/matching/NEEDS-GAPS.md` §3 become facets. Until then these two are L1's break point (§14).

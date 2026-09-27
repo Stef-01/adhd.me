@@ -6,7 +6,7 @@ import { BudgetMeter } from "@/lib/llm/meter";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, LEXICON_CUES, needForKey, readNeeds } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
-import { answerFor, fromModel, INSTRUCTIONS, lexiconReading, MEANINGS, readRequest, SCHEMA, VOCABULARY } from "./llm-read";
+import { answerFor, fromModel, INSTRUCTIONS, lexiconReading, MEANINGS, READS, readRequest, SCHEMA, VOCABULARY } from "./llm-read";
 
 const ENV = { OPENAI_API_KEY: "k" };
 const TODAY = new Date("2026-09-27T00:00:00Z");
@@ -75,9 +75,18 @@ describe("fromModel", () => {
     expect(reading.needs.map((need) => need.label)).toContain("Urdu-speaking");
   });
 
-  it("reads answerFor(keys) back as exactly those keys", () => {
-    expect(fromModel(answerFor(schemaKeys())).keys).toEqual(schemaKeys());
+  it("reads answerFor(keys) back as exactly those keys, four at a time", () => {
+    const keys = schemaKeys();
+    for (let at = 0; at < keys.length; at += 4) expect(fromModel(answerFor(keys.slice(at, at + 4))).keys).toEqual(keys.slice(at, at + 4));
     expect(fromModel(answerFor([])).keys).toEqual([]);
+  });
+
+  it("treats a recited list as a malformed answer, and allows any four preferences", () => {
+    const care = VOCABULARY.care.ids;
+    expect(() => fromModel({ ...answerFor([]), care: care.slice(0, 7) })).toThrow(/care recites 7 keys/);
+    expect(() => fromModel({ ...answerFor([]), languages: VOCABULARY.languages.ids })).toThrow(/languages recites/);
+    expect(fromModel({ ...answerFor([]), care: care.slice(0, 3) }).keys).toHaveLength(3);
+    expect(fromModel({ ...answerFor([]), prefs: VOCABULARY.prefs.ids }).keys).toHaveLength(4);
   });
 
   it("keeps every key the lexicon hears in the request, unless the model marked it refused", () => {
@@ -100,6 +109,37 @@ describe("readRequest", () => {
     expect(reading).toMatchObject({ keys: ["pref:woman-gp"], source: "llm" });
     expect(bodies[0]).toMatchObject({ instructions: INSTRUCTIONS, input: "a woman GP", reasoning: { effort: "low" }, max_output_tokens: 1600 });
     expect(bodies[0]!.max_output_tokens).toBeGreaterThanOrEqual(400);
+  });
+
+  it(`reads ${READS} times at once, and keeps a key only when every read gives it`, async () => {
+    const answers = [
+      { ...EMPTY, prefs: ["woman-gp"], manner: ["attuned", "unhurried"] },
+      { ...EMPTY, prefs: ["woman-gp"], manner: ["unhurried"] },
+      { ...EMPTY, prefs: ["woman-gp"], manner: ["unhurried", "steadying"] },
+    ];
+    let n = 0;
+    const fetch = async () => new Response(JSON.stringify(completed(answers[n++ % answers.length]!)));
+    const reading = await readRequest("someone patient", { fetch, env: ENV });
+    expect(n).toBe(READS);
+    expect(reading).toMatchObject({ keys: ["manner:unhurried", "pref:woman-gp"], source: "llm" });
+  });
+
+  it("drops a key the lexicon hears only when every read refuses it", async () => {
+    const text = "a woman GP who bulk bills";
+    const refusals = [["bulk-billing"], ["bulk-billing"], []];
+    let n = 0;
+    const split = async () => new Response(JSON.stringify(completed({ ...EMPTY, negated: refusals[n++ % 3]! })));
+    expect((await readRequest(text, { fetch: split, env: ENV })).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
+    const all = async () => new Response(JSON.stringify(completed({ ...EMPTY, negated: ["bulk-billing"] })));
+    expect((await readRequest(text, { fetch: all, env: ENV })).keys).toEqual(["pref:woman-gp"]);
+  });
+
+  it("lets the reads that answered decide when one fails, and keeps its error", async () => {
+    let n = 0;
+    const fetch = async () =>
+      new Response(JSON.stringify(n++ === 0 ? completed({ ...EMPTY, care: VOCABULARY.care.ids }) : completed({ ...EMPTY, care: ["titration"] })));
+    const reading = await readRequest("my dose wears off", { fetch, env: ENV });
+    expect(reading).toMatchObject({ keys: expect.arrayContaining(["care:titration"]), source: "llm", error: expect.stringMatching(/^SchemaError: care recites/) });
   });
 
   it("makes no call for empty or whitespace text", async () => {

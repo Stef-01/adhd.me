@@ -619,6 +619,30 @@ lose from it: recall on `reaches` is 1.000 by construction. `ESTIMATE_USD` is $0
 $0.000136 to $0.000147; the prompt now passes the 1,024-token caching threshold). P0 to P3 pass under
 prompt `beaa55762425`.
 
+## 16c. L1, third pass, 2026-09-28: three reads, a guard and a red team
+
+The second pass's P4 failed on all 338 dev requests (precision 80.9%, `never` 5.5%): its prompt had
+been tuned on P3's 59 (`qa/matching/rca.md`, R3). What changed:
+
+- **A recited list is a failed read.** A list longer than half its field (seen: all twelve care
+  areas) throws a `SchemaError`, so the read counts as malformed and the lexicon answers.
+- **Three reads, run at once.** A key stays only when every read that answered gives it; a lexicon
+  key goes only when every one refuses it. Single reads of one prompt ranged 80.6% to 83.4% in
+  precision; three that agree reached 92.8%. About $0.0004 a request, no added wait.
+- **The ladder is spent.** gpt-5-mini at "minimal" read worse (67.6%), so L1 stays on gpt-5-nano at
+  "low" with the v10 meaning lines (`llm-read.ts`).
+- **A red team.** 28 adversarial probes and a new pin, `mentions`: a key the lexicon hears that the
+  text only mentions ("no need to bulk bill me", "my partner has depression"). L1 keeps every
+  lexicon key the model does not refuse, so it inherits these; the report measures the share
+  dropped.
+
+Result under prompt `fc7d605b0fd2`: P0 to P3 pass (P3 precision 98.8%). P4 on 358 dev requests:
+precision 92.6%, recall 99.1%, aspires 75.7%, C4 93.2%, `never` 3.3% (fails), mentions dropped 25%,
+$0.000133 a call. The break point (§14) is two requests every read gets wrong the same way: a
+decoy ("the GP in the ad was a woman") and punctuality read as `unhurried` (R4). The finder stays
+at level 0. The next piece of complexity is a check: one more question, "does this person ask for
+each of these for themselves?", asked of the few keys a read returns.
+
 ## 17. Sources
 
 - OpenAI pricing and model facts (gpt-5-nano $0.05 / $0.005 cached / $0.40 per million tokens,

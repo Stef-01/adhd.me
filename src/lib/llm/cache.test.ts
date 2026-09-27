@@ -33,7 +33,7 @@ describe("the cache", () => {
     expect(again).toEqual({ data: first.data, usage: first.usage, costUsd: 0, fromCache: true });
   });
 
-  it("changes its key with the model, effort, instructions, schema or input", () => {
+  it("changes its key with the model, effort, instructions, schema, input or read, and read 0 keeps the old key", () => {
     const base = cacheKey(CALL);
     const variants: CallJson[] = [
       { ...CALL, model: "gpt-5-mini" },
@@ -41,9 +41,11 @@ describe("the cache", () => {
       { ...CALL, instructions: "Read it." },
       { ...CALL, schema: { name: "facets", schema: { type: "array" } } },
       { ...CALL, input: "a woman doctor" },
+      { ...CALL, sample: 1 },
     ];
     for (const variant of variants) expect(cacheKey(variant)).not.toBe(base);
     expect(cacheKey({ ...CALL })).toBe(base);
+    expect(cacheKey({ ...CALL, sample: 0 })).toBe(base);
   });
 
   it("is read only when passed: without one, every call fetches", async () => {

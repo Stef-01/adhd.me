@@ -1,5 +1,5 @@
 // Evals replay paid calls from here for free. The key covers everything that can change an
-// answer: model, effort, instructions, schema and input. The route never passes a cache.
+// answer: model, effort, instructions, schema and input, and which read of the input it is. The route never passes a cache.
 
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -7,7 +7,8 @@ import { join } from "node:path";
 import type { Cached, CallJson } from "./client";
 
 export function cacheKey(call: CallJson): string {
-  return createHash("sha256").update(JSON.stringify([call.model, call.effort, call.instructions, call.schema, call.input])).digest("hex");
+  const sample = call.sample ? [call.sample] : [];
+  return createHash("sha256").update(JSON.stringify([call.model, call.effort, call.instructions, call.schema, call.input, ...sample])).digest("hex");
 }
 
 export class FileCache {

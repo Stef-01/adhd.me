@@ -60,6 +60,11 @@ describe("classify", () => {
       for (const key of [...(probe.reaches ?? []), ...(probe.never ?? []), ...(probe.aspires ?? [])]) expect(valid, probe.text).toContain(key);
       for (const key of probe.reaches ?? []) expect(heard, probe.text).toContain(key);
       for (const key of [...(probe.never ?? []), ...(probe.aspires ?? [])]) expect(heard, probe.text).not.toContain(key);
+      for (const key of probe.mentions ?? []) {
+        expect(valid, probe.text).toContain(key);
+        expect(heard, `${probe.text}: a mention is a key the lexicon hears`).toContain(key);
+        expect([...(probe.reaches ?? []), ...(probe.aspires ?? []), ...(probe.never ?? [])], probe.text).not.toContain(key);
+      }
     }
   });
 });

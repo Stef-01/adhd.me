@@ -11,6 +11,7 @@ export type CallJson = {
   input: string;
   schema: { name: string; schema: object };
   maxOutputTokens: number; // at least 400, so reasoning cannot starve the answer
+  sample?: number; // which of several reads of one input this is, so each caches apart; never sent
 };
 export type Usage = { input: number; cached: number; output: number; reasoning: number };
 export type CallResult<T> = { data: T; usage: Usage; costUsd: number; fromCache: boolean };

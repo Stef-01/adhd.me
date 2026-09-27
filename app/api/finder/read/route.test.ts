@@ -3,7 +3,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CASSETTES, cassetteFetch } from "@/lib/llm/cassettes";
-import { lexiconReading } from "@/lib/matching/llm-read";
+import { lexiconReading, READS } from "@/lib/matching/llm-read";
 import { resetRateLimits } from "@/lib/rate-limit";
 import { POST } from "./route";
 
@@ -45,14 +45,14 @@ describe("POST /api/finder/read", () => {
     expect(network).not.toHaveBeenCalled();
   });
 
-  it("at level 1 returns the model's keys, one call, uncached", async () => {
+  it("at level 1 returns the model's keys, three reads a request, uncached", async () => {
     vi.stubEnv("ADHDME_LLM_LEVEL", "1");
     vi.stubEnv("OPENAI_API_KEY", "k");
     const { input, expect: want } = cassette("C7");
     expect(want.keys).not.toEqual(lexiconReading(input).keys);
     expect((await read(input)).body).toEqual(want);
     expect((await read(input)).body).toEqual(want);
-    expect(network).toHaveBeenCalledTimes(2);
+    expect(network).toHaveBeenCalledTimes(2 * READS);
   });
 
   it("answers a model failure with the lexicon's keys and source lexicon", async () => {
@@ -79,7 +79,7 @@ describe("POST /api/finder/read", () => {
     expect((await read("a".repeat(2001))).status).toBe(400);
     expect((await read(42)).status).toBe(400);
     expect((await read("a".repeat(2000))).status).toBe(200);
-    expect(network).toHaveBeenCalledTimes(1);
+    expect(network).toHaveBeenCalledTimes(READS);
   });
 
   it("stops paying after 20 reads a minute from one caller, and answers with the lexicon", async () => {
@@ -88,6 +88,6 @@ describe("POST /api/finder/read", () => {
     const { input } = cassette("C7");
     for (let i = 0; i < 20; i += 1) expect((await read(input)).body.source).toBe("llm");
     expect((await read(input)).body.source).toBe("lexicon");
-    expect(network).toHaveBeenCalledTimes(20);
+    expect(network).toHaveBeenCalledTimes(20 * READS);
   });
 });

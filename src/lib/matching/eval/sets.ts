@@ -8,8 +8,15 @@ import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { needForKey } from "@/matching/needs";
 import PROBE_ENTRIES from "./probes.json";
 
-/** C6 (150+ words), C8 (instructions in the text) and C10 (one word, emoji): the corpus has none. */
-export const PROBES: readonly CorpusEntry[] = PROBE_ENTRIES;
+/**
+ * A probe may also pin `mentions`: keys the lexicon hears that the text names without asking for
+ * them (someone else's condition, a question, a refusal the lexicon misses). The lexicon keeps
+ * them by construction, so they measure whether the model can overrule it.
+ */
+export type ProbeEntry = CorpusEntry & { mentions?: readonly string[] };
+
+/** C6 (150+ words), C8 (instructions in the text), C10 (one word, emoji) and adversarial asks the corpus lacks. */
+export const PROBES: readonly ProbeEntry[] = PROBE_ENTRIES;
 
 export const CLASSES = ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"] as const;
 export type ComplexityClass = (typeof CLASSES)[number];
@@ -46,7 +53,7 @@ export function classify(entry: CorpusEntry): ComplexityClass {
   return own.some((word) => text.toLowerCase().includes(word.slice(0, 5))) ? "C1" : "C2";
 }
 
-export type EvalEntry = CorpusEntry & { split: "dev" | "holdout"; cls: ComplexityClass };
+export type EvalEntry = ProbeEntry & { split: "dev" | "holdout"; cls: ComplexityClass };
 
 /** Every entry, in class order and then corpus order, so a run meets the classes in order. */
 export function evalEntries(): EvalEntry[] {
