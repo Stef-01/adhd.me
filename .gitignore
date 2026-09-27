@@ -43,3 +43,6 @@ qa/polish/r2-after/
 .firecrawl/
 qa/screens/
 qa/games/
+
+# Paid model answers replayed by the matching evals (src/lib/llm/cache.ts).
+.cache/llm/
