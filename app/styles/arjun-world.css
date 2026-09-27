@@ -15,7 +15,7 @@
 .aw-card[data-off="true"] small { margin-left: auto; text-decoration: none; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 99px; background: #fff; flex-shrink: 0; }
 @keyframes aw-shake { 25% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
 
-.aw-table { position: relative; flex: 1; min-height: 260px; border-radius: 30px; overflow: hidden; background: #dfe3f6; box-shadow: 0 2px 0 #c6cbe6; }
+.aw-table { position: relative; flex: 1; min-height: 0; border-radius: 30px; overflow: hidden; background: #dfe3f6; box-shadow: 0 2px 0 #c6cbe6; }
 .aw-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; }
 .aw-seats { position: absolute; left: 0; right: 0; top: 34%; height: 26%; pointer-events: none; }
 .aw-seat { position: absolute; bottom: 0; left: calc(var(--x) * 100%); height: 100%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; justify-content: end; padding: 0; border: 0; background: none; }
@@ -96,10 +96,11 @@ button.aw-seat[aria-pressed="true"] > span { background: #4a5bb0; color: #fff; b
   .aw-stream { inset: 0 0 40% 0; }
   .aw-bubble { --bw: calc(50% - 12px); --bh: 54px; font-size: 13px; min-height: var(--bh); padding-right: 8px; left: 6px; top: calc(100% - var(--bh) - var(--p) * 100%); }
   .aw-bubble[data-lane="1"] { left: auto; right: 6px; }
-  .aw-game[data-still="true"] .aw-stream { flex-direction: column; }
+  .aw-game[data-still="true"] .aw-stream { flex-direction: column; gap: 6px; }
+  .aw-bubble[data-still="true"] { min-height: 44px; padding-block: 4px; }
   .aw-prop { padding: 4px 12px 4px 6px; font-size: 12px; min-height: 48px; }
   .aw-prop > img { width: 30px; height: 30px; }
   .aw-overlay { inset: auto 0 10% 0; }
 }
 @media (max-height: 620px) { .aw-seats img { max-height: 70px; } }
-@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .aw-room { gap: 6px; } .aw-card { min-height: 46px; padding: 4px 10px; font-size: 13px; } .aw-board { padding: 6px; } .aw-table { min-height: 0; } .aw-bubble { min-height: 46px; } .aw-seats { top: 30%; height: 22%; } }
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .aw-room { gap: 6px; } .aw-card { min-height: 46px; padding: 4px 10px; font-size: 13px; } .aw-board { padding: 6px; } .aw-bubble { min-height: 46px; } .aw-seats { top: 30%; height: 22%; } }
