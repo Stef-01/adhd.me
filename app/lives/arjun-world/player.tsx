@@ -10,6 +10,7 @@ import { SCORES, sound } from "../sounds";
 import { MeetingRoom, TableTop } from "./art";
 import { CastBean } from "../kit/cast";
 import type { Mood } from "@/learn/interactive";
+import { usePlayedWhen } from "../played-hook";
 
 const SEATS: Speaker[] = ["noor", "sam", "rae"];
 const SEAT_X: Record<Speaker, number> = { noor: .16, sam: .5, rae: .84, arjun: .5 };
@@ -36,6 +37,7 @@ function objective(s: ArjunWorld) {
 
 export function ArjunWorldGame() {
   const { state: s, dispatch } = useLoop(arjunReducer, () => createArjun(), running);
+  usePlayedWhen("arjun", s.phase === "complete");
   const stream = useRef<HTMLDivElement>(null);
   const all = lines(s);
   const pinnedCount = s.board.filter(p => p && !p.stale && isRelevant(s, p.line)).length;

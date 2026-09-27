@@ -10,6 +10,7 @@ import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Blot, Desk, Nib } from "./art";
+import { usePlayedWhen } from "../played-hook";
 
 type Emotion = "stuck" | "hover" | "typing" | "kept";
 const MOOD: Record<Emotion, Mood> = { stuck: "frustrated", hover: "anxious", typing: "engaged", kept: "pleased" };
@@ -29,6 +30,7 @@ const where = (s: NinaWorld, x: number, y: number) => {
 
 export function NinaWorldGame() {
   const { state: s, dispatch } = useLoop(ninaReducer, () => createNina(), running);
+  usePlayedWhen("nina", s.phase === "complete");
   const live = s.phase === "writing" || s.phase === "revisit";
   const c = SCENARIOS[s.scenario]!;
   const want = wanted(s);

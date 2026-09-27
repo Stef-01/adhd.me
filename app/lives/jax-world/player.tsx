@@ -10,6 +10,7 @@ import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Aisle, Kitchen, Product, Trolley } from "./art";
+import { usePlayedWhen } from "../played-hook";
 
 type Emotion = "steady" | "tempted" | "firm" | "done";
 const MOOD: Record<Emotion, Mood> = { steady: "neutral", tempted: "anxious", firm: "engaged", done: "pleased" };
@@ -31,6 +32,7 @@ function objective(s: JaxWorld) {
 
 export function JaxWorldGame() {
   const { state: s, dispatch } = useLoop(jaxReducer, () => createJax(), running);
+  usePlayedWhen("jax", s.phase === "complete");
   const live = s.phase === "aisle" || s.phase === "revisit";
   const till = s.phase === "till" || s.phase === "revisit-till";
   const t = trip(s);

@@ -10,6 +10,7 @@ import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Bench, Crowd, Gate, Queue, Speaker } from "./art";
+import { usePlayedWhen } from "../played-hook";
 
 type Emotion = "braced" | "startled" | "walking" | "settled";
 const MOOD: Record<Emotion, Mood> = { braced: "anxious", startled: "overwhelmed", walking: "engaged", settled: "relieved" };
@@ -24,6 +25,7 @@ function heading(s: MayaWorld) {
 
 export function MayaWorldGame() {
   const { state: s, dispatch } = useLoop(mayaReducer, () => createMaya(), running);
+  usePlayedWhen("maya", s.phase === "complete");
   const live = s.phase === "crossing" || s.phase === "revisit";
   const c = crossingDef(s);
   const [startled, setStartled] = useState(false);

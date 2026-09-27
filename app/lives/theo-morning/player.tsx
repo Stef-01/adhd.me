@@ -6,10 +6,12 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowRight, Check, Pause, Play, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { createMorning, morningReducer, ESSENTIALS, ROOMS, ROOM_NAMES, ITEM_NAMES, POINTS, carrying, packed, commandLabel, isMorning, position, type Command, type Essential, type Room } from "@/lives/theo-morning";
 import { Prop, RoomArt, TheoAvatar } from "./art";
+import { usePlayedWhen } from "../played-hook";
 
 export function TheoMorningGame() {
   const reduced = useReducedMotion();
   const [state, dispatch] = useReducer(morningReducer, undefined, () => createMorning());
+  usePlayedWhen("theo", state.phase === "complete");
   const [ready, setReady] = useState(false), [selected, setSelected] = useState<Essential>("keys");
   const title = useRef<HTMLHeadingElement>(null), lastPhase = useRef(state.phase);
   const active = isMorning(state), evening = state.phase === "evening", result = state.phase === "departure" || state.phase === "complete";

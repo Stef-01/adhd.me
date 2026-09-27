@@ -20,6 +20,7 @@ import { MODEL_VERSION, emptyModel, readModel, writeModel, type ModelRecord } fr
 import { emptyProfile, readProfile, writeProfile } from "@/lives/profile";
 import type { LearningProfile } from "@/lives/types";
 import { PROGRESS_KEY, PROGRESS_VERSION, readProgress, type Progress } from "@/learn/progress";
+import { PLAYED_KEY, parsePlayed, readPlayed, type Played } from "@/learn/played";
 
 /** Preferences about how the app looks, sounds and moves. None of them holds an answer. */
 export const KEPT_PREFERENCES: readonly string[] = [
@@ -79,6 +80,8 @@ export interface DeviceCopy {
   model: Omit<ModelRecord, "learning">;
   lives: LearningProfile;
   learn: Progress;
+  /** Which character games reached their end (PLAN.md W7). Absent in a copy saved before it existed. */
+  played?: Played;
 }
 
 export function copyFileName(now = new Date()): string {
@@ -87,7 +90,7 @@ export function copyFileName(now = new Date()): string {
 
 export function makeCopy(storage: Pick<Storage, "getItem">, now = new Date()): DeviceCopy {
   const { learning: _learning, ...model } = readModel(storage);
-  return { schema: COPY_SCHEMA, savedOn: now.toISOString(), model, lives: readProfile(storage), learn: readProgress(storage) };
+  return { schema: COPY_SCHEMA, savedOn: now.toISOString(), model, lives: readProfile(storage), learn: readProgress(storage), played: readPlayed(storage) };
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> => Boolean(v) && typeof v === "object" && !Array.isArray(v);
@@ -175,7 +178,8 @@ const validLives = (v: unknown): v is LearningProfile =>
   isNumber(v.highScore) &&
   recordOf(isNumber)(v.completedAt);
 
-const validLearn = (v: unknown): v is Progress => isObject(v) && v.v === PROGRESS_VERSION && arrayOf(isString)(v.done);
+const validLearn = (v: unknown): v is Progress =>
+  isObject(v) && v.v === PROGRESS_VERSION && arrayOf(isString)(v.done) && optional(v.at, recordOf((d) => isString(d) && /^\d{4}-\d{2}-\d{2}$/.test(d)));
 
 /** The copy, or null when any part of it is not exactly what this app writes. */
 export function parseCopy(text: string): DeviceCopy | null {
@@ -187,7 +191,9 @@ export function parseCopy(text: string): DeviceCopy | null {
   }
   if (!isObject(parsed) || parsed.schema !== COPY_SCHEMA || !isTime(parsed.savedOn)) return null;
   if (!validModel(parsed.model) || !validLives(parsed.lives) || !validLearn(parsed.learn)) return null;
-  return { schema: COPY_SCHEMA, savedOn: parsed.savedOn, model: parsed.model, lives: parsed.lives, learn: parsed.learn };
+  const played = parsed.played === undefined ? undefined : parsePlayed(parsed.played);
+  if (played === null) return null;
+  return { schema: COPY_SCHEMA, savedOn: parsed.savedOn, model: parsed.model, lives: parsed.lives, learn: parsed.learn, ...(played ? { played } : {}) };
 }
 
 /** Replaces this browser's answers with the copy's. Clears first, so nothing from before survives. */
@@ -198,6 +204,7 @@ export function restoreCopy(local: Listable & Pick<Storage, "setItem">, session:
   if (JSON.stringify(copy.lives) !== JSON.stringify(emptyProfile())) writeProfile(local, copy.lives);
   try {
     if (copy.learn.done.length) local.setItem(PROGRESS_KEY, JSON.stringify(copy.learn));
+    if (copy.played && Object.keys(copy.played.at).length) local.setItem(PLAYED_KEY, JSON.stringify(copy.played));
   } catch {
     // Storage refused: the map and profile are back; the Learn ticks are not.
   }

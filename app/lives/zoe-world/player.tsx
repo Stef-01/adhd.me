@@ -9,6 +9,7 @@ import { GameShell } from "../kit/shell";
 import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
+import { usePlayedWhen } from "../played-hook";
 
 type Emotion = "steady" | "itch" | "sent" | "sorry" | "repaired";
 const MOOD: Record<Emotion, Mood> = { steady: "neutral", itch: "frustrated", sent: "pleased", sorry: "embarrassed", repaired: "relieved" };
@@ -24,6 +25,7 @@ function heading(s: ZoeWorld) {
 
 export function ZoeWorldGame() {
   const { state: s, dispatch } = useLoop(zoeReducer, () => createZoe(), running);
+  usePlayedWhen("zoe", s.phase === "complete");
   const live = s.phase === "typing" || s.phase === "revisit";
   const b = beatDef(s);
   const w = words(s);

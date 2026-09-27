@@ -1,0 +1,80 @@
+import { afterEach, describe, expect, it } from "vitest";
+import { eachOf } from "@/quality/non-vacuous";
+import { lintLandingCopy } from "@/compliance/landing";
+import { CHARACTER_IDS } from "@/lives/types";
+import { GAME_GROUPS, GAME_HINTS, LIFE_GAMES, RUN_GAMES, matchesGoal, tryFirst, type GameItem } from "./games";
+import { markPlayed, parsePlayed, readPlayed } from "./played";
+import { markDone, readProgress } from "./progress";
+
+function memory() {
+  const m = new Map<string, string>();
+  return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => { m.set(k, v); }, removeItem: (k: string) => { m.delete(k); } };
+}
+const none = () => false;
+const tz = process.env.TZ;
+afterEach(() => { process.env.TZ = tz; });
+
+describe("the games list", () => {
+  it("holds the eight lives and the twenty runs, each once, and every group is one of them", () => {
+    expect(LIFE_GAMES.map((g) => g.id).sort()).toEqual([...CHARACTER_IDS].sort());
+    expect(RUN_GAMES).toHaveLength(20);
+    const grouped = GAME_GROUPS.flatMap((g) => g.games.map((x) => `${x.kind}:${x.id}`));
+    expect(new Set(grouped).size).toBe(grouped.length);
+    expect(grouped).toHaveLength(28);
+    expect(GAME_GROUPS[0]!.title).toBe("The eight lives");
+  });
+
+  it("every game has a hook of four words or fewer that the patient rules allow", () => {
+    for (const g of eachOf([...LIFE_GAMES, ...RUN_GAMES], "the games")) {
+      const hint = GAME_HINTS[g.id];
+      expect(hint, g.id).toBeTruthy();
+      expect(hint!.split(/\s+/).length, g.id).toBeLessThanOrEqual(4);
+      expect(`${g.title} ${hint}`.split(/\s+/).length, g.id).toBeLessThanOrEqual(8);
+      expect(lintLandingCopy(`${g.title}. ${hint}.`), g.id).toEqual([]);
+    }
+  });
+});
+
+describe("try these first", () => {
+  it("with no goals, starts with Maya, two runs about ADHD, then Leo", () => {
+    expect(tryFirst([], none).map((g) => g.id)).toEqual(["maya", "context", "more-than-attention"]);
+    expect(tryFirst([], none, 4).map((g) => g.id)).toEqual(["maya", "context", "more-than-attention", "leo"]);
+  });
+
+  it("puts games that match a goal first, keeping list order among them", () => {
+    const sleep = tryFirst(["sleep"], none);
+    expect(sleep.every((g) => matchesGoal(g, ["sleep"]))).toBe(true);
+    // Maya's journey ends on lowering the sensory floor, a sleep strategy too.
+    expect(sleep.map((g) => g.id)).toEqual(["maya", "sleep", "gut"]);
+  });
+
+  it("leaves out anything already played", () => {
+    const played = (g: GameItem) => g.id === "maya" || g.id === "context";
+    expect(tryFirst([], played).map((g) => g.id)).toEqual(["more-than-attention", "leo", "starting"]);
+  });
+
+  it("Leo and Theo have no journey, so no goal matches them", () => {
+    const leo = LIFE_GAMES.find((g) => g.id === "leo")!;
+    expect(matchesGoal(leo, ["sleep", "sensory_management"])).toBe(false);
+  });
+});
+
+describe("played", () => {
+  it("a finished run keeps the local day it was finished", () => {
+    process.env.TZ = "Australia/Sydney";
+    const s = memory();
+    markDone(s, "context");
+    const at = readProgress(s).at?.context;
+    const d = new Date();
+    expect(at).toBe(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
+  });
+
+  it("a character game is marked once, keeps its first day, and stores no score", () => {
+    const s = memory();
+    markPlayed(s, "leo", "2026-09-01");
+    markPlayed(s, "leo", "2026-09-20");
+    expect(readPlayed(s)).toEqual({ v: 1, at: { leo: "2026-09-01" } });
+    expect(parsePlayed({ v: 1, at: { leo: "2026-09-01", score: 9 } })).toBeNull();
+    expect(parsePlayed({ v: 1, at: { nobody: "2026-09-01" } })).toBeNull();
+  });
+});

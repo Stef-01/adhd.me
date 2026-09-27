@@ -386,7 +386,7 @@ test("the consent notice, the bar and the finder are one shell at every width", 
 test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
   await page.goto("/approach");
   await openModuleShelves(page);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/A little more understanding/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Learn about ADHD.");
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
   for (let i = 0; i < total; i += 1) {
@@ -421,7 +421,7 @@ test("library and playable games retain live glass with a tap-bubble fallback", 
   await page.waitForTimeout(600);
   expect(await page.evaluate(() => ({ scope: document.querySelector("[data-liquid]") !== null, liquid: document.documentElement.classList.contains("has-liquid") }))).toEqual({ scope: false, liquid: false });
   await page.goto("/approach");
-  await expect(page.locator("[data-liquid] .learn-stack .learn-card").first()).toBeVisible();
+  await expect(page.locator("[data-liquid] .learn-try-tile").first()).toBeVisible();
   await page.waitForTimeout(600);
   const state = await page.evaluate(() => {
     const c = document.createElement("canvas");
@@ -438,7 +438,7 @@ test("library and playable games retain live glass with a tap-bubble fallback", 
   // The layer is decoration: hidden from assistive tech, and present exactly when the engine can draw it.
   expect(state.canvas).toBe("true");
   expect(state.liquid).toBe(state.able);
-  const card = page.locator("[data-liquid] .learn-card").first();
+  const card = page.locator("[data-liquid] .learn-try-tile").first();
   const box = (await card.boundingBox())!;
   await card.dispatchEvent("pointerdown", { pointerId: 1, clientX: box.x + 24, clientY: box.y + 24, button: 0 });
   await expect(card).toHaveAttribute("data-tap", "");

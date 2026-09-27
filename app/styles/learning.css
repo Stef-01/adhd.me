@@ -7,7 +7,7 @@
 .platform-shell .learn-thesis { margin: 0 0 12px; color: var(--ink); font-size: 38px; font-weight: 750; letter-spacing: -.045em; }
 .learn-reset { margin: -8px 0 24px; min-height: 44px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; font-size: 13px; }
 .platform-shell .learning-intro { margin-bottom: 28px; color: var(--muted); font-size: 16px; }
-.platform-shell .learn-screen:has(.learn-module) :is(.learn-thesis, .learning-intro) { display: none; }
+.platform-shell .learn-screen:has(.learn-module) :is(.learn-thesis, .learning-intro, .learn-care-map) { display: none; }
 .platform-shell .me-screen.learn-screen { padding-top: 40px; }
 /* The hero is a LITE glass surface (app/styles/glass.css) and takes its fill from there. A
    palette wash was tried here and is deliberately not kept: glass.css loads after this file and
@@ -46,14 +46,14 @@
 .platform-shell .learn-panes .learning-feature { min-height: 200px; padding: 24px 28px; }
 .platform-shell .learn-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 32px; }
 /* Each cover names its three values once; the card rule below is what spends them. */
-.platform-shell .learn-card.is-amber   { --cover: var(--learn-amber);   --cover-ink: var(--learn-amber-ink);   --cover-sub: var(--learn-amber-sub); }
-.platform-shell .learn-card.is-saffron { --cover: var(--learn-saffron); --cover-ink: var(--learn-saffron-ink); --cover-sub: var(--learn-saffron-sub); }
-.platform-shell .learn-card.is-coral   { --cover: var(--learn-coral);   --cover-ink: var(--learn-coral-ink);   --cover-sub: var(--learn-coral-sub); }
-.platform-shell .learn-card.is-oat     { --cover: var(--learn-oat);     --cover-ink: var(--learn-oat-ink);     --cover-sub: var(--learn-oat-sub); }
-.platform-shell .learn-card.is-lilac   { --cover: var(--learn-lilac);   --cover-ink: var(--learn-lilac-ink);   --cover-sub: var(--learn-lilac-sub); }
-.platform-shell .learn-card.is-forest  { --cover: var(--learn-forest);  --cover-ink: var(--learn-forest-ink);  --cover-sub: var(--learn-forest-sub); }
-.platform-shell .learn-card.is-slate   { --cover: var(--learn-slate);   --cover-ink: var(--learn-slate-ink);   --cover-sub: var(--learn-slate-sub); }
-.platform-shell .learn-card.is-night   { --cover: var(--learn-night);   --cover-ink: var(--learn-night-ink);   --cover-sub: var(--learn-night-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-amber   { --cover: var(--learn-amber);   --cover-ink: var(--learn-amber-ink);   --cover-sub: var(--learn-amber-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-saffron { --cover: var(--learn-saffron); --cover-ink: var(--learn-saffron-ink); --cover-sub: var(--learn-saffron-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-coral   { --cover: var(--learn-coral);   --cover-ink: var(--learn-coral-ink);   --cover-sub: var(--learn-coral-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-oat     { --cover: var(--learn-oat);     --cover-ink: var(--learn-oat-ink);     --cover-sub: var(--learn-oat-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-lilac   { --cover: var(--learn-lilac);   --cover-ink: var(--learn-lilac-ink);   --cover-sub: var(--learn-lilac-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-forest  { --cover: var(--learn-forest);  --cover-ink: var(--learn-forest-ink);  --cover-sub: var(--learn-forest-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-slate   { --cover: var(--learn-slate);   --cover-ink: var(--learn-slate-ink);   --cover-sub: var(--learn-slate-sub); }
+.platform-shell :is(.learn-card, .learn-try-tile).is-night   { --cover: var(--learn-night);   --cover-ink: var(--learn-night-ink);   --cover-sub: var(--learn-night-sub); }
 .platform-shell .learn-stack .learn-card {
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(64px, 34%); align-items: center; gap: 12px;
   width: 100%; min-height: 184px; height: 100%; padding: 28px; border: 0; border-radius: 32px;
@@ -166,15 +166,36 @@
 .learn-game-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:4px 0 18px; }
 .learn-game-toolbar a { display:inline-flex; gap:8px; align-items:center; min-height:48px; font-size:13px; color:var(--ink); text-decoration:none; }
 .learn-game-toolbar .learn-mix-link { background:var(--ink); color:var(--paper); border-radius:99px; padding:12px 20px; }
-.learn-game-roster { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; padding:0; margin:0 0 26px; list-style:none; }
-.learn-game-roster li { min-width:0; }
-.learn-game-roster a { display:flex; align-items:center; gap:12px; min-height:112px; padding:20px 14px; background:var(--game-colour); color:#26323c; border-radius:24px; text-decoration:none; transition:transform 180ms,background 180ms; }
-.learn-game-roster a>span { min-width:0; display:flex; flex-direction:column; gap:5px; }
-.learn-game-roster strong { font-size:17px; }
-.learn-game-roster small { font-size:12px; }
-.learn-game-roster a>svg:last-child { margin-left:auto; flex-shrink:0; }
-.learn-game-roster a:focus-visible { outline:3px solid var(--ink); outline-offset:4px; }
-@media(hover:hover) { .learn-game-roster a:hover { transform:translateY(-3px); } }
-@media(max-width:1100px) { .learn-game-roster { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media(max-width:460px) { .learn-game-roster { gap:10px; } .learn-game-roster a { gap:8px; padding:16px 10px; min-height:104px; border-radius:20px; } .learn-game-roster a>svg:last-child { display:none; } .learn-game-roster a>svg:first-child { width:42px; flex-shrink:0; } .learn-game-roster strong { font-size:15px; } .learn-game-roster small { font-size:12px; } }
-@media(prefers-reduced-motion:reduce) { .learn-game-roster a { transition:none; } .learn-game-roster a:hover { transform:none; } }
+
+/* ── The games pane, rebuilt (docs/design/ux-evaluation-2026-09/PLAN.md W7) ─────────────────── */
+/* The care map's one door: a full-width row above both panes, 56px and more. */
+.platform-shell .learn-care-map { display: flex; align-items: center; gap: 14px; min-height: 56px; margin: 0 0 20px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); color: var(--ink); text-decoration: none; }
+.platform-shell .learn-care-map > span { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.platform-shell .learn-care-map strong { font-size: 1rem; font-weight: 700; }
+.platform-shell .learn-care-map small { color: var(--muted); font-size: 0.875rem; }
+.platform-shell .learn-care-map > svg:first-child { color: var(--accent-deep); flex: none; }
+.platform-shell .learn-care-map:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) { .platform-shell .learn-care-map:hover { border-color: var(--accent); } }
+.platform-shell .learn-pane-line { margin: 0 0 16px; color: var(--muted); font-size: 1rem; }
+.platform-shell .learn-try-title { margin: 24px 0 12px; font-size: 1.25rem; font-weight: 700; }
+.platform-shell .learn-try { display: grid; gap: 10px; margin: 0 0 16px; padding: 0; list-style: none; }
+@media (min-width: 768px) { .platform-shell .learn-try { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.platform-shell .learn-try-tile { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 76px; padding: 12px 16px; border: 0; border-radius: 20px; background: var(--game-colour, var(--cover, var(--stone))); color: var(--cover-ink, var(--ink)); font: inherit; text-align: left; text-decoration: none; cursor: pointer; touch-action: manipulation; }
+.platform-shell .learn-try-tile > span { display: grid; gap: 3px; flex: 1; min-width: 0; }
+.platform-shell .learn-try-tile strong { font-size: 1.0625rem; font-weight: 700; }
+.platform-shell .learn-try-tile small { color: inherit; font-size: 0.875rem; }
+.platform-shell .learn-try-tile > svg:last-child { flex: none; }
+.platform-shell .learn-try-tile:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.platform-shell .learn-all-games { gap: 8px; margin: 0; }
+.platform-shell .learn-all-games[aria-expanded="true"] { margin-top: 24px; }
+.platform-shell .learn-all-games[aria-expanded="true"] svg { transform: rotate(180deg); }
+.platform-shell .learn-game-groups { display: grid; gap: 8px; margin: 12px 0 0; }
+.platform-shell .learn-group-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; padding: 0 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); font: inherit; font-weight: 650; cursor: pointer; touch-action: manipulation; }
+.platform-shell .learn-group-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.platform-shell .learn-group-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.platform-shell .learn-game-names { display: grid; gap: 2px; margin: 6px 0 4px; padding: 0; list-style: none; }
+.platform-shell .learn-game-names :is(a, button) { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: transparent; color: var(--ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; }
+.platform-shell .learn-game-names svg { color: var(--accent-deep); }
+@media (hover: hover) { .platform-shell .learn-game-names :is(a, button):hover { background: var(--stone); } }
+.platform-shell .learn-saved { margin: 20px 0 0; color: var(--muted); font-size: 0.875rem; }
+

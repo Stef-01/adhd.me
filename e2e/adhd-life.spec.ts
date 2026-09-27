@@ -342,10 +342,10 @@ test("the finder reads a named profession out of the sentence, and every kind is
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("adhdme.filters.v1") ?? "{}").professions)).toEqual(["psychologist"]);
 });
 
-test("the care map opens from the Learn page's map icon, and a node explains itself", async ({ page }) => {
+test("the care map opens from the Learn page's care map row, and a node explains itself", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/approach");
-  await page.getByRole("link", { name: "Open the care map" }).first().click();
+  await page.getByRole("link", { name: /^The care map/ }).click();
   await expect(page).toHaveURL(/\/approach\/map$/);
   await expect(page.getByRole("heading", { name: "Tap a part of life." })).toBeVisible();
   await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
@@ -519,16 +519,26 @@ test("NWIA: the paradigm is on the care map once and attributed, a node names it
   await expect(page.locator(".map-open")).toContainText("Nothing yet. Not a gap, unasked.");
 });
 
-test("§14 Calm: the shelf is a line, a button and the tiles; a finished run is a tick on its tile, never a count", async ({ page }) => {
+test("§14 Calm: the shelf is a line, a button and the tiles; a finished run is a tick in All games, never a count", async ({ page }) => {
   await page.goto("/approach");
   await expect(page.locator(".learn-chips")).toHaveCount(0);
   await expect(page.locator(".learn-progress")).toHaveCount(0);
   await expect(page.locator(".play-cast")).toHaveCount(0);
   await expect(page.locator(".learning-overline")).toHaveCount(0);
-  await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["starting", "sleep"] })));
+  await expect(page.locator(".learn-saved")).toHaveCount(0);
+  await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["context", "sleep"] })));
   await page.reload();
-  await expect(page.locator(".learn-card.is-done")).toHaveCount(2);
-  await expect(page.locator(".learn-card.is-done").first()).toContainText("Done");
+  // A played game leaves "Try these first" (PLAN.md W7).
+  await expect(page.getByTestId("learn-try")).not.toContainText("Same brain, five scenes");
+  await page.getByTestId("learn-show-all").click();
+  await page.getByRole("button", { name: "Understand ADHD" }).click();
+  await expect(page.locator(".learn-game-names [data-played]")).toHaveCount(1);
+  await expect(page.locator(".learn-game-names").getByRole("button", { name: "Same brain, five scenes, played" })).toBeVisible();
+  await page.getByRole("button", { name: "Sleep & Body" }).click();
+  await expect(page.locator(".learn-game-names [data-played]")).toHaveCount(1);
+  // Where it is kept, once, and never how many.
+  await expect(page.locator(".learn-saved")).toHaveText("Saved on this device.");
+  await expect(page.locator("main")).not.toContainText(/\d+ (of|out of) \d+|played \d|Done/);
 });
 
 test("§14 Calm: the tutorial shows once per device, three sentences and a button, then never again", async ({ page }) => {

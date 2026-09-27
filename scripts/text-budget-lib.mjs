@@ -101,6 +101,10 @@ export const EXTRA = [
   { path: "/approach?module=adhd", name: "A read module, the ADHD card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
   { path: "/approach?pane=modules", name: "Learn, the modules pane" },
+  // The games pane with "All games" open (PLAN.md W7): on the eight lives, where it opens, and on
+  // the largest group. One game of each kind is played, so the ticks and the page foot show.
+  { path: "/approach?pane=games", state: "games-all", name: "Learn, all games" },
+  { path: "/approach?pane=games", state: "games-all-open", name: "Learn, all games, the largest group" },
   { path: "/approach/map", state: "care-map-tap", name: "The care map, a part of life open" },
   { path: "/lives/play", state: "lives-run", name: "The Chaos Run, first round" },
   { path: "/match/results", state: "intake", name: "Match results" },
@@ -363,6 +367,16 @@ export async function reach(page, route, base) {
     await page.reload({ waitUntil: "networkidle" });
     await page.getByRole("button", { name: "How it fills in" }).click({ timeout: 8000 });
     await page.locator(".map-fills-list").waitFor({ timeout: 8000 });
+  }
+  if (route.state === "games-all" || route.state === "games-all-open") {
+    await page.evaluate(() => {
+      localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["context"], at: { context: "2026-09-01" } }));
+      localStorage.setItem("adhdme.played.v1", JSON.stringify({ v: 1, at: { maya: "2026-09-01" } }));
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByTestId("learn-show-all").click({ timeout: 8000 });
+    if (route.state === "games-all-open") await page.getByRole("button", { name: "Understand ADHD" }).click({ timeout: 8000 });
+    await page.locator(".learn-game-names").waitFor({ timeout: 8000 });
   }
   const lead = /^lead-(.+)$/.exec(route.state ?? "")?.[1];
   if (lead) {

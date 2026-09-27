@@ -4,9 +4,11 @@ import { useEffect, useReducer, useRef } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { ArrowLeft, Pause, Play, ArrowRight, PushPin, PaperPlaneTilt } from '@phosphor-icons/react';
 import { createMia, miaReducer, INTENTIONS, THOUGHTS, ports } from '@/lives/mia-world';
+import { usePlayedWhen } from "../played-hook";
 const ART = '/games/next-three/mia/';
 export function MiaWorldGame() {
   const [s, dispatch] = useReducer(miaReducer, undefined, () => createMia());
+  usePlayedWhen("mia", s.phase === "complete");
   const reduced = useReducedMotion();
   const heading = useRef<HTMLHeadingElement>(null);
   const previous = useRef(s.phase);

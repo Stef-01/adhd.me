@@ -9,6 +9,7 @@ import { insectOffset, manageable, PERCHES, ROOM_DURATION, roomMood, type Bedroo
 import { BedroomBackdrop, BedAndLeo, RoomBook, RoomHeadphones, RoomLamp, RoomMosquito, RoomPhone, RoomWindow } from "./art";
 import { BedroomAudio } from "./audio";
 import { useBedroom } from "./use-bedroom";
+import { usePlayedWhen } from "../played-hook";
 
 const HEADINGS: Record<BedroomState["mode"], string> = {
   challenge: "One tiny sound.", recovery: "The room can change.", "wind-down": "A little room to settle.",
@@ -65,6 +66,7 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
   const pauseButton = useRef<HTMLButtonElement>(null);
   const challengeOnly = Boolean(s.rounds && s.mode === "challenge");
   const ended = s.mode === "rest" || s.mode === "complete";
+  usePlayedWhen("leo", ended);
   useEffect(() => { setSoundNotice(""); }, [s.revision]);
   const ids = s.insects.map(i => i.id).join(",");
   const calm = Math.round((1 - s.activation) * 100);

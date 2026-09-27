@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { seoMetadata } from "@/seo/pages";
 import Link from "next/link";
-import { MapTrifold } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, MapTrifold } from "@phosphor-icons/react/dist/ssr";
 import { AppSettings } from "../../app-settings";
 import { LearnModules } from "../../learn-modules";
 
@@ -26,20 +26,21 @@ export default function ApproachPage() {
     <main id="main-content" className="me-screen learn-screen app-page-with-tabs">
       <div className="minimal-header has-settings me-chrome learn-chrome">
         <Link className="wordmark finder-wordmark" href="/" aria-label="ADHD.ME, back to the finder" translate="no">ADHD.ME</Link>
-        <Link className="map-trigger" href="/approach/map" aria-label="Open the care map">
-          <MapTrifold size={21} weight="regular" aria-hidden="true" />
-        </Link>
         <AppSettings />
       </div>
       {/* The page's one heading — the working-truth sentence this route has carried since it existed.
           Visually it is the small line under the field; the field's own title leads the eye. */}
       {/* §14 Calm: the heading is the page; no lede under it. */}
-      <h1 className="learn-thesis">A little more understanding.</h1>
-      {/* The care map's door, visible at every width: the header icon above is the phone's; on the
-          desktop the page header is the platform's, so the map needs a door in the page itself. */}
-      <Link className="learn-map-link" href="/approach/map" aria-label="Open the care map">
-        <MapTrifold size={18} weight="bold" aria-hidden="true" />
-        The care map
+      <h1 className="learn-thesis">Learn about ADHD.</h1>
+      {/* The care map's one door (PLAN.md W7): a full-width row above both panes, always in the
+          same place, where a 14px pill and a hidden header icon used to be. */}
+      <Link className="learn-care-map" href="/approach/map">
+        <MapTrifold size={24} weight="duotone" aria-hidden="true" />
+        <span>
+          <strong>The care map</strong>
+          <small>See the whole picture</small>
+        </span>
+        <ArrowRight size={18} weight="bold" aria-hidden="true" />
       </Link>
       <Suspense fallback={<p role="status">Loading learning modules…</p>}><LearnModules /></Suspense>
     </main>

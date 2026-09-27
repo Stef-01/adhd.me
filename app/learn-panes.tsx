@@ -22,9 +22,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ArrowRight, Check, Play } from "@phosphor-icons/react";
+import { ArrowRight, CaretDown, Check, Play } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useDragControls, useReducedMotion, type PanInfo } from "motion/react";
-import { CHARACTERS, recentlyCompleted, recommendStrategies, selectGoals, STRATEGIES, strategy, type LearningDomain, type StrategyDefinition } from "@/lives";
+import { recentlyCompleted, recommendStrategies, selectGoals, STRATEGIES, strategy, type LearningDomain, type StrategyDefinition } from "@/lives";
 import { MODULES, type LearnModule } from "@/learn/scenes";
 import type { Progress } from "@/learn/progress";
 import type { LearnCursor } from "@/learn/cursor";
@@ -33,6 +33,8 @@ import { LearningCoverArt, LearningScene } from "./learning-scene";
 import { LifeBean } from "./lives/bean";
 import { GAME_ENTRY } from "@/lives/entry-points";
 import { useProfile } from "./lives/profile-hook";
+import { usePlayed } from "./lives/played-hook";
+import { GAME_GROUPS, LIFE_GAMES, RUN_GAMES, tryFirst, type GameItem } from "@/learn/games";
 import { Bean } from "./play/beans";
 
 export type Pane = "games" | "modules";
@@ -113,7 +115,7 @@ export interface LearnPanesProps {
   finished: number;
 }
 
-export function LearnPanes({ progress, cursor, completed, hydrated, start, reset, finished }: LearnPanesProps) {
+export function LearnPanes({ progress, cursor, completed, hydrated, start }: LearnPanesProps) {
   const params = useSearchParams();
   const reducedMotion = useReducedMotion();
   const [pane, setPane] = useState<Pane>("games");
@@ -192,11 +194,6 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
           </motion.div>
         </AnimatePresence>
       </div>
-      {(finished > 0 || cursor) && (
-        <button className="learn-reset" type="button" onClick={reset}>
-          Reset learning progress on this device
-        </button>
-      )}
     </section>
   );
 }
@@ -273,36 +270,115 @@ function Completion({ completed, start }: { completed: string | null; start: (id
   );
 }
 
-const FIRST_TILES = 8;
-
-function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { progress: Progress; completed: string | null; hydrated: boolean; start: (id: string) => void; reducedMotion: boolean }) {
-  const [showAll, setShowAll] = useState(false);
-  const allRuns = MODULES.filter((m) => m.kind === "run");
-  const runs = showAll ? allRuns : allRuns.filter((m, i) => i < FIRST_TILES || progress.done.includes(m.id));
+/**
+ * The games pane (PLAN.md W7): one line that says what these are, the one primary, three to try
+ * first, and every game one tap away under "All games", ticked when played. "All games" takes the
+ * three's place and opens on the eight lives, so the open list stays one screen. No date and no
+ * result on any tile (D2); the page foot says where that is kept.
+ */
+function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduced }: { progress: Progress; completed: string | null; hydrated: boolean; start: (id: string) => void; reducedMotion: boolean }) {
+  const { profile } = useProfile();
+  const played = usePlayed();
+  const [all, setAll] = useState(false);
+  const [group, setGroup] = useState<string | null>(null);
+  const goals = hydrated ? profile?.selectedGoals ?? [] : [];
+  const isPlayed = (g: GameItem) => (g.kind === "run" ? progress.done.includes(g.id) : Boolean(played.at[g.id]));
+  const first = tryFirst(goals, hydrated ? isPlayed : () => false);
+  const anyPlayed = hydrated && [...LIFE_GAMES, ...RUN_GAMES].some(isPlayed);
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
     <div className="learn-games-scope" data-liquid>
       <Completion completed={completedRun} start={start} />
+      <p className="learn-pane-line">Short scenes from everyday life.</p>
       <div className="learn-game-toolbar">
-        <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true"/>Play mix</Link>
-        <Link href="/lives/characters">The eight lives <ArrowRight size={16} aria-hidden="true"/></Link>
+        <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true" />Play mix</Link>
       </div>
-      <ul className="learn-game-roster" aria-label="All eight character games">
-        {CHARACTERS.map(c=>{const entry=GAME_ENTRY[c.id];return <li key={c.id}><Link href={entry.href} aria-label={`Play ${c.name}`} style={{'--game-colour':entry.colour} as React.CSSProperties}>
-          <LifeBean who={c.id} mood="engaged" size={58}/><span><strong>{c.name}</strong><small>{entry.label}</small></span><ArrowRight size={18} aria-hidden="true"/>
-        </Link></li>})}
-      </ul>
-      <ol className="learn-stack" data-testid="learn-games">
-        {runs.map((module, index) => (
-          <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
-        ))}
-      </ol>
-      {!showAll && allRuns.length > FIRST_TILES && (
-        <button type="button" className="learn-secondary learn-show-all" onClick={() => setShowAll(true)} data-testid="learn-show-all">
-          All {allRuns.length} games
-        </button>
+      {!all && (
+        <>
+          <h2 className="learn-try-title">Try these first.</h2>
+          <ol className="learn-try" data-testid="learn-try">
+            {first.map((g) => (
+              <li key={`${g.kind}:${g.id}`}>
+                <GameTile game={g} start={start} />
+              </li>
+            ))}
+          </ol>
+        </>
       )}
+      <button
+        type="button"
+        className="learn-secondary learn-show-all learn-all-games"
+        aria-expanded={all}
+        onClick={() => {
+          setAll(!all);
+          setGroup(all ? null : GAME_GROUPS[0]!.title);
+        }}
+        data-testid="learn-show-all"
+      >
+        All games
+        <CaretDown size={16} weight="bold" aria-hidden="true" />
+      </button>
+      {all && (
+        <div className="learn-game-groups">
+          {GAME_GROUPS.map((gr) => {
+            const open = group === gr.title;
+            return (
+              <section key={gr.title} className="learn-game-group">
+                <button type="button" className="learn-group-toggle" aria-expanded={open} onClick={() => setGroup(open ? null : gr.title)}>
+                  {gr.title}
+                  <CaretDown size={16} weight="bold" aria-hidden="true" />
+                </button>
+                {open && (
+                  <ul className="learn-game-names">
+                    {gr.games.map((g) => {
+                      const done = isPlayed(g);
+                      const inner = (
+                        <>
+                          {g.title}
+                          {done && <Check size={16} weight="bold" aria-hidden="true" />}
+                          {done && <span className="sr-only">, played</span>}
+                        </>
+                      );
+                      return (
+                        <li key={`${g.kind}:${g.id}`} data-played={done || undefined}>
+                          {g.kind === "life" ? <Link href={g.href}>{inner}</Link> : <button type="button" onClick={() => start(g.id)}>{inner}</button>}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </section>
+            );
+          })}
+        </div>
+      )}
+      {anyPlayed && <p className="learn-saved">Saved on this device.</p>}
     </div>
+  );
+}
+
+/** One of the three: the game's face, its name and its four-word hook. The long tagline is its description. */
+function GameTile({ game, start }: { game: GameItem; start: (id: string) => void }) {
+  if (game.kind === "life") {
+    return (
+      <Link className="learn-try-tile" href={game.href} style={{ "--game-colour": GAME_ENTRY[game.id].colour } as React.CSSProperties}>
+        <LifeBean who={game.id} mood="engaged" size={52} />
+        <span><strong>{game.title}</strong><small>{game.hint}</small></span>
+        <ArrowRight size={18} aria-hidden="true" />
+      </Link>
+    );
+  }
+  const module = MODULES.find((m) => m.id === game.id);
+  return (
+    <button type="button" className={`learn-try-tile is-${module ? coverOf(module) : "sky"}`} onClick={() => start(game.id)}>
+      {module?.run && <Bean who={module.run.bean} mood="engaged" size={52} />}
+      <span>
+        <strong>{game.title}</strong>
+        <small>{game.hint}</small>
+        {module && <span className="sr-only">{`. ${module.subtitle}.`}</span>}
+      </span>
+      <ArrowRight size={18} aria-hidden="true" />
+    </button>
   );
 }
 
