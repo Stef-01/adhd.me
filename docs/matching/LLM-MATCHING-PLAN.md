@@ -675,6 +675,15 @@ A formal run is one sample, and the small gates fail on single requests: P3's C4
 one arguable read of one of them ("just someone to talk to") stops the ladder (R6). The ledger holds
 10,746 paid calls and $1.42 of the $8 cap.
 
+What a search costs and how long it takes, along the finder's own path (standard tier, 22 requests,
+`qa/matching/rca.md` R8 to R10): $0.000465 a search (about 2,150 to the dollar), 80% of input
+served from OpenAI's cache; a wait of 2.5 s at p50 and 5.5 s at p90 (2.2 s with no check). Evals run
+on the flex tier at half price and wait for every call. Guards around the key: a daily budget
+(`ADHDME_LLM_DAILY_USD`), 20 paid reads a minute a caller, a ten-minute pause after a refused or
+empty key, no retry on an account out of credit, a free key check before any paid eval phase, no
+part of a key in any error, and a test that fails the build if a key is ever committed. The project's
+own ceilings (5,000 requests and 4M tokens a minute) are far above all of these.
+
 The decisions the loop cannot make:
 
 1. **G7.** May the read take a condition from a state someone describes ("flat for months" as
