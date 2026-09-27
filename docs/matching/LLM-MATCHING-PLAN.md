@@ -667,11 +667,13 @@ the ledger is the record).
 
 ## 16d. Where L1 stands, 2026-09-28, and what only the founder can decide
 
-The read is three reads that must agree, the lexicon's keys kept unless all three refuse them, a
-check of what the reads add, and an `unlisted` list for asks no facet covers (`llm-read.ts`). On
-three samples of the 358 dev requests it passes every L1 gate (precision 92.3%, recall 99.7%,
-aspires 73.0%, `never` 0%, C4 94.9%). A formal run is one sample, and the small gates fail on single
-requests: P3's C4 has six entries. The ledger holds 10,743 paid calls and $1.42 of the $8 cap.
+The read is three reads that must agree on what they add, the lexicon's keys kept unless most of
+them refuse, a check of what the reads add, and an `unlisted` list for asks no facet covers
+(`llm-read.ts`). On three samples of the 358 dev requests it passes every L1 gate: precision 92.8%,
+recall 99.4%, aspires 73.0%, `never` 0%, C4 93.2%, and 37.5% of the red team's lexicon traps dropped.
+A formal run is one sample, and the small gates fail on single requests: P3's C4 has six entries, and
+one arguable read of one of them ("just someone to talk to") stops the ladder (R6). The ledger holds
+10,746 paid calls and $1.42 of the $8 cap.
 
 The decisions the loop cannot make:
 
