@@ -101,9 +101,11 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
 .platform-shell :is(button, a, input, textarea):focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 /* The settings sheet on a desk: a phone's bottom sheet stretched to the window's full width put
    its rows on a 1400px line. It is a panel now, sized to a reading measure and lifted off the
-   bottom edge, with every corner rounded; on a phone it stays the sheet it was. */
+   bottom edge, with every corner rounded; on a phone it stays the sheet it was. A panel is as tall
+   as what it holds, up to the window: app/sheet.tsx drops the detents and the handle here. */
 @media (min-width: 768px) {
-  body:has(.platform-shell) .sheet { width: min(600px, calc(100% - 48px)); bottom: 24px; border-radius: 22px; }
+  body:has(.platform-shell) .sheet { width: min(600px, calc(100% - 48px)); max-height: calc(100svh - 48px); bottom: 24px; border-radius: 22px; }
+  body:has(.platform-shell) .sheet-header:first-child { padding-top: 18px; }
 }
 @media (min-width: 768px) and (max-width: 1199px) {
   .platform-header { gap: 16px; padding-inline: 24px; }
