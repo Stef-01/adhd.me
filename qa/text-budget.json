@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-26T23:11:40.567Z",
+  "measuredAt": "2026-09-27T00:05:26.109Z",
   "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
@@ -120,10 +120,10 @@
       "path": "/approach/map",
       "name": "/approach/map",
       "state": null,
-      "total": 82,
-      "fold": 82,
+      "total": 80,
+      "fold": 80,
       "chrome": 6,
-      "ratio": 2.1,
+      "ratio": 2,
       "verdict": "long-form",
       "longest": [
         {
@@ -147,7 +147,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -164,9 +164,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "03:05 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -390,7 +390,7 @@
       "path": "/lives/lab",
       "name": "/lives/lab",
       "state": null,
-      "total": 516,
+      "total": 514,
       "fold": 53,
       "chrome": 6,
       "ratio": 12.9,
@@ -444,26 +444,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "WRITE THE LINE!",
+          "text": "ONLY THE LIST!",
           "tag": "p"
         },
         {
           "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "text": "a second kayak",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -505,19 +505,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Round the right",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "CLEAR ONE!",
-          "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "text": "Straight through",
+          "tag": "button"
         }
       ]
     },
@@ -1033,10 +1033,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1233,
+      "total": 1347,
       "fold": 219,
       "chrome": 22,
-      "ratio": 30.8,
+      "ratio": 33.7,
       "verdict": "long-form",
       "longest": [
         {
@@ -1141,10 +1141,10 @@
       "path": "/start",
       "name": "/start",
       "state": null,
-      "total": 17,
-      "fold": 17,
+      "total": 22,
+      "fold": 22,
       "chrome": 6,
-      "ratio": 0.4,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -1158,9 +1158,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "I’m supporting someone else",
-          "tag": "button"
+          "w": 5,
+          "text": "Answers stay on this device.",
+          "tag": "p"
         }
       ]
     },
@@ -2626,10 +2626,10 @@
       "path": "/approach?module=everyday",
       "name": "A read module, first card",
       "state": null,
-      "total": 58,
-      "fold": 44,
+      "total": 57,
+      "fold": 43,
       "chrome": 2,
-      "ratio": 1.5,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2646,6 +2646,33 @@
           "w": 5,
           "text": "Put memory outside your head.",
           "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/approach?module=adhd",
+      "name": "A read module, the ADHD card",
+      "state": null,
+      "total": 58,
+      "fold": 48,
+      "chrome": 2,
+      "ratio": 1.5,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 16,
+          "text": "Attention is there. It goes where interest is, locks on hard, and skips the five",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Attention that runs on interest, not importance.",
+          "tag": "h2"
+        },
+        {
+          "w": 6,
+          "text": "Restlessness can be a restless mind",
+          "tag": "li"
         }
       ]
     },
@@ -2672,28 +2699,82 @@
       ]
     },
     {
+      "path": "/approach?pane=modules",
+      "name": "Learn, the modules pane",
+      "state": null,
+      "total": 49,
+      "fold": 22,
+      "chrome": 6,
+      "ratio": 1.2,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 6,
+          "text": "Reset learning progress on this device",
+          "tag": "button"
+        },
+        {
+          "w": 4,
+          "text": "A little more understanding.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Get to know ADHD.",
+          "tag": "h2"
+        }
+      ]
+    },
+    {
+      "path": "/approach/map",
+      "name": "The care map, a part of life open",
+      "state": "care-map-tap",
+      "total": 107,
+      "fold": 92,
+      "chrome": 6,
+      "ratio": 2.7,
+      "verdict": "long-form",
+      "longest": [
+        {
+          "w": 24,
+          "text": "Getting going on something you already know how to do. Often the hardest step, e",
+          "tag": "p"
+        },
+        {
+          "w": 13,
+          "text": "Starting work before deadline pressure takes over, you said it costs a lot.",
+          "tag": "p"
+        },
+        {
+          "w": 10,
+          "text": "Why ADHD can look completely different depending on the situation",
+          "tag": "a"
+        }
+      ]
+    },
+    {
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "GET OUT!",
+          "text": "DON’T SCROLL!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "shoes",
+          "w": 2,
+          "text": "ONE MORE",
           "tag": "span"
         }
       ]
@@ -2837,7 +2918,7 @@
       "path": "/my-adhd",
       "name": "My ADHD, lived in",
       "state": "model-lived",
-      "total": 55,
+      "total": 54,
       "fold": 21,
       "chrome": 6,
       "ratio": 1.4,
@@ -2864,7 +2945,7 @@
       "path": "/my-adhd",
       "name": "My ADHD, a step proposed",
       "state": "model-learning",
-      "total": 60,
+      "total": 59,
       "fold": 21,
       "chrome": 6,
       "ratio": 1.5,

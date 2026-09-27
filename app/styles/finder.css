@@ -124,7 +124,7 @@
 .platform-shell .patient-v2 .results-browser .clinician-row strong { font-family: inherit; font-size: 21px; font-weight: 650; letter-spacing: -.025em; line-height: 1.3; }
 .platform-shell .patient-v2 .results-browser .row-copy { min-width: 0; display: grid; gap: 7px; }
 /* An invented profile says so beside its name, on the row, before any other fact about it. */
-.platform-shell .patient-v2 .row-example { display: inline-block; vertical-align: 0.2em; margin-left: 8px; padding: 2px 8px; border: 1px solid var(--accent-tint); border-radius: 999px; background: var(--accent-soft); color: var(--accent-deep); font-size: 11px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.4; }
+.platform-shell .patient-v2 .row-example { display: inline-block; vertical-align: 0.2em; margin-left: 8px; padding: 2px 8px; border: 1px solid var(--accent-tint); border-radius: 999px; background: var(--accent-soft); color: var(--accent-deep); font-size: 12px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.4; }
 .platform-shell .patient-v2 .results-browser .row-focus { font-size: 14px; line-height: 1.5; margin: 0; }
 .platform-shell .patient-v2 .results-browser .row-location { margin: 0; font-size: 13px; line-height: 1.5; }
 .platform-shell .patient-v2 .results-browser .row-availability { max-width: 64ch; line-height: 1.5; }

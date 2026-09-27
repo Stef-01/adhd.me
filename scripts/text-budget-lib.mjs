@@ -98,7 +98,10 @@ export const EXTRA = [
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
   { path: "/approach?module=everyday", name: "A read module, first card" },
+  { path: "/approach?module=adhd", name: "A read module, the ADHD card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
+  { path: "/approach?pane=modules", name: "Learn, the modules pane" },
+  { path: "/approach/map", state: "care-map-tap", name: "The care map, a part of life open" },
   { path: "/lives/play", state: "lives-run", name: "The Chaos Run, first round" },
   { path: "/match/results", state: "intake", name: "Match results" },
   // The two questions (app/first-step.tsx). The walk reaches the first one on its own; the second
@@ -293,6 +296,12 @@ export async function reach(page, route, base) {
       await page.locator(".clinician-row").first().click();
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
+  }
+  if (route.state === "care-map-tap") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
+    await page.locator("#care-map-title", { hasText: "Starting" }).waitFor({ timeout: 8000 });
   }
   if (route.state === "map-lived" || route.state === "model-lived") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));

@@ -287,7 +287,7 @@
 /* The temptation: a drawn thing and its word, loud on purpose, still one button. */
 .lives-world .lives-thing.is-temptation { background: transparent; border: 0; box-shadow: none; color: #172033; font-size: 1rem; }
 .lives-world .lives-thing.is-temptation .lives-sprite { width: 82%; }
-.lives-temptation-word { padding: 4px 12px; border-radius: 999px; background: #e0616f; color: #fff; font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 4px 0 #a33d4a; }
+.lives-temptation-word { padding: 4px 12px; border-radius: 999px; background: #c43d4c; color: #fff; font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 4px 0 #8f2a37; }
 
 /* The world's text sits on paper pills so it reads over any drawing. */
 .lives-world :is(.lives-cue, .lives-sort-count, .lives-taunt) { padding: 6px 14px; border-radius: 999px; background: rgb(255 255 255 / 0.92); box-shadow: 0 2px 8px rgb(23 32 51 / 0.14); }

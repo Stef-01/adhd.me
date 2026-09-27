@@ -145,6 +145,7 @@ Found by the audit and the review round:
 | N12 | A focus ring on the module heading on load | `learn-modules.tsx:68` focuses it by script | P2 | W10 |
 | N13 | The care-map panel shows a number about the person: "you put the cost at N/10" | `care-map.tsx`, the `signal.set` line | P1 | W9 |
 | N14 | Dates are UTC: before about 10am in Australia "today" is yesterday | `store.ts` `today()` | P1 | W3, W7 |
+| N15 | Text under 12px at 390 outside the reviewed screens: Theo's room names at 8px, Leo's prop labels, the game shell's toolbar, Nina's chunks, Jax's tags, Mia's pocket count, and /story's route stops and pins. Found by W11's sweep in Phase 1 | `e2e/contrast-sampled.spec.ts` `LEDGER` names each | P2 | W12 |
 
 ## 6. Workstreams
 
@@ -609,6 +610,8 @@ a future change from failing.
   `SKILL.md` (D1, and N2's reading of `{#layout.calm}`).
 - Every changed screen: a before and after capture in `qa/` and an entry in `docs/DESIGN-QA.md`
   (`{#honesty.qa-capture}`).
+- N15: raise each game's small labels to 12px or redraw them, one game per commit, and delete its
+  line from the sweep's `LEDGER` in the same commit. The sweep logs a ledger line it no longer sees.
 
 ## 7. Order of work
 
