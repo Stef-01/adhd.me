@@ -74,7 +74,9 @@ describe("the ladder", () => {
     const fetch = api(() => ({ body: completed(EMPTY) }));
     const same = await runEval({ level: "L1", phase: "P3", live: true, root: workspace({ phase: "P2" }), env: ENV, fetch });
     expect(same.code).toBe(1);
-    expect(readFileSync(same.report!, "utf8")).toMatch(/\| recall on reaches within 0.02 of L0's \| .* \| NO \|/);
+    // An empty answer keeps every key the lexicon hears, so recall holds and the aspires gate fails.
+    expect(readFileSync(same.report!, "utf8")).toMatch(/\| recall on reaches within 0.02 of L0's \| .* \| yes \|/);
+    expect(readFileSync(same.report!, "utf8")).toMatch(/\| aspires reached \| .* \| NO \|/);
   });
 
   it("writes every paid call to the ledger, and refuses to start once it holds $8", async () => {
@@ -113,7 +115,7 @@ describe("circuit breakers", () => {
   });
 
   it("stops when one call costs over 5x the estimate", async () => {
-    const runaway = { body: completed(EMPTY, { input_tokens: 900, output_tokens: 1_000 }) };
+    const runaway = { body: completed(EMPTY, { input_tokens: 900, output_tokens: 3_000 }) };
     expect(await breaks("P2", () => runaway)).toMatch(/over 5x the estimate/);
   });
 });

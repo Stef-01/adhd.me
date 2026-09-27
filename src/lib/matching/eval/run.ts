@@ -23,8 +23,8 @@ export const PHASES = {
 };
 type Phase = keyof typeof PHASES;
 
-/** Per L1 call (§5), until P2 measures one. */
-export const ESTIMATE_USD = 0.00007;
+/** Per L1 call at effort "low" (§5): $0.000136 to $0.000147 measured on the P3 set, 2026-09-28. */
+export const ESTIMATE_USD = 0.00015;
 const PROGRAMME_CAP_USD = 8;
 const TODAY = new Date("2026-09-27T00:00:00Z");
 const FLAWS: Record<string, string> = { IncompleteError: "F1", SchemaError: "F2", HttpError: "F12/F22", TimeoutError: "F13", BudgetError: "F11" };

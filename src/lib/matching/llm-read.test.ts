@@ -79,10 +79,18 @@ describe("fromModel", () => {
     expect(fromModel(answerFor(schemaKeys())).keys).toEqual(schemaKeys());
     expect(fromModel(answerFor([])).keys).toEqual([]);
   });
+
+  it("keeps every key the lexicon hears in the request, unless the model marked it refused", () => {
+    const text = "a woman GP who bulk bills";
+    expect(lexiconReading(text).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
+    expect(fromModel(answerFor([]), text).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
+    expect(fromModel(answerFor(["manner:unhurried", "pref:woman-gp"]), text).keys).toEqual(["manner:unhurried", "pref:woman-gp", "pref:bulk-billing"]);
+    expect(fromModel({ ...answerFor([]), negated: ["bulk-billing"] }, text).keys).toEqual(["pref:woman-gp"]);
+  });
 });
 
 describe("readRequest", () => {
-  it("sends the static instructions and the request as input, at minimal effort", async () => {
+  it("sends the static instructions and the request as input, at low effort with room to reason", async () => {
     const bodies: { instructions: string; input: string; reasoning: object; max_output_tokens: number }[] = [];
     const fetch = async (_url: string, init: { body: string }) => {
       bodies.push(JSON.parse(init.body));
@@ -90,7 +98,7 @@ describe("readRequest", () => {
     };
     const reading = await readRequest("a woman GP", { fetch, env: ENV });
     expect(reading).toMatchObject({ keys: ["pref:woman-gp"], source: "llm" });
-    expect(bodies[0]).toMatchObject({ instructions: INSTRUCTIONS, input: "a woman GP", reasoning: { effort: "minimal" } });
+    expect(bodies[0]).toMatchObject({ instructions: INSTRUCTIONS, input: "a woman GP", reasoning: { effort: "low" }, max_output_tokens: 1600 });
     expect(bodies[0]!.max_output_tokens).toBeGreaterThanOrEqual(400);
   });
 

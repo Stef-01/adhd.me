@@ -606,6 +606,19 @@ the list moves down by that row as they arrive.
 one build carries one level: the served page gets `readLevel: 1`, and the route's own handler,
 run in the test at level 1 in cassette mode, answers `/api/finder/read`.
 
+## 16b. L1, second pass, 2026-09-28
+
+The first live P3 failed on over-reading, and the root cause analysis (`qa/matching/rca.md`, R2)
+named capability at "minimal": the model spent no reasoning and filled the lists. L1 now runs one
+rung up the escalation ladder (§5): `gpt-5-nano` at effort "low", with `max_output_tokens` 1,600,
+because reasoning is billed from the output budget and 400 left reads incomplete (F1). Two more
+changes came out of the loop. The meaning lines say what a person asks for or names, with a rule
+per field (a manner key only for the clinician they want next). And `fromModel` keeps every key the
+lexicon hears unless the model marked it refused, so L1 adds to the lexicon's reading and cannot
+lose from it: recall on `reaches` is 1.000 by construction. `ESTIMATE_USD` is $0.00015 (measured
+$0.000136 to $0.000147; the prompt now passes the 1,024-token caching threshold). P0 to P3 pass under
+prompt `beaa55762425`.
+
 ## 17. Sources
 
 - OpenAI pricing and model facts (gpt-5-nano $0.05 / $0.005 cached / $0.40 per million tokens,
