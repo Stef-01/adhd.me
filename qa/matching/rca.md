@@ -170,3 +170,21 @@ reading, $0, 1.6 seconds. Two changes came of it.
   which the client used to retry twice with backoff. A 429 whose code is `insufficient_quota` is no
   longer retried, and after a 401, a 403 or an out-of-credit answer the finder's route pauses model
   reads for ten minutes (`src/lib/llm/key-pause.ts`) and reads with the lexicon without a call.
+
+## R10 · the project's ceilings, the wait's parts, and a free key check, 2026-09-28
+
+- **Ceilings.** The project's headers for gpt-5-nano: 5,000 requests and 4,000,000 tokens a minute.
+  A search is up to six calls of about 1,500 tokens, so OpenAI's limits allow roughly 800 to 2,000
+  searches a minute; the finder's own (20 reads a minute a caller, $1 a day) and the ladder's (P5,
+  400 a minute) sit far below them.
+- **Where a call's time goes**, over 39 calls in one process: wall p50 3.0 s, OpenAI's processing p50
+  2.2 s, network overhead p50 0.34 s (p90 1.1 s). The first request's calls pay 0.7 to 1.5 s for new
+  connections; a server keeps them. The wait is the model's reasoning, which R2 showed is needed.
+- **The 24-hour retention is best effort**, as OpenAI says: after about an hour idle a read found 0
+  of 1,376 tokens cached. Within a session the prefix stays warm.
+- **A free key check.** A live eval phase now looks the model up first (no tokens): a refused key or a
+  model the project may not use stops the phase with a sentence, before a paid call or a report.
+  Tested live: a wrong key is refused in 2.4 seconds; the real one passes P1.
+- **Evals wait for every call.** Settling a reading early (R8) left a late read's failure uncounted,
+  which the malformed-answer breaker needs. Evals now wait for all calls (the answers are the same);
+  the finder still stops waiting once the outcome is settled.

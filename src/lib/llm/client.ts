@@ -31,6 +31,8 @@ export type Deps = {
   cache?: { get(call: CallJson): Cached | undefined; set(call: CallJson, value: Cached): void };
   /** Evals only: "flex" is billed at Batch rates (half) and may be slower or briefly unavailable (a 429). */
   tier?: "flex";
+  /** Evals only: wait for every call even once the outcome is settled, so every failure is counted. */
+  waitForAll?: boolean;
 };
 
 /** USD per million tokens, standard tier (the pricing page, 2026-09-28). Reasoning tokens are billed as output. */
@@ -72,6 +74,30 @@ type Body = {
   output?: { type: string; content?: { type: string; text?: string; refusal?: string }[] }[];
   usage?: { input_tokens?: number; input_tokens_details?: { cached_tokens?: number }; output_tokens?: number; output_tokens_details?: { reasoning_tokens?: number } };
 };
+
+/**
+ * Whether the key can reach the model, for free: a model lookup, no tokens. A sentence to show when it
+ * cannot (a refused key, a model the project may not use); null when it can, or when the network is
+ * the problem (the paid run will say so itself).
+ */
+export async function keyProblem(env: Record<string, string | undefined>, fetchFn: Deps["fetch"] = (url, init) => fetch(url, init)): Promise<string | null> {
+  const key = env.OPENAI_API_KEY;
+  if (!key) return "OPENAI_API_KEY is not set: put it in .env.local";
+  const model = modelOf(env);
+  try {
+    const reply = await fetchFn!(`${(env.ADHDME_LLM_BASE ?? "https://api.openai.com").replace(/\/$/, "")}/v1/models/${model}`, {
+      method: "GET",
+      headers: { authorization: `Bearer ${key}` },
+      body: undefined as unknown as string,
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+    if (reply.status === 401 || reply.status === 403) return `the API refused the key (${reply.status}): check OPENAI_API_KEY in .env.local`;
+    if (reply.status === 404) return `this key's project cannot use ${model}`;
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 export async function callJson<T>(request: CallJson, deps: Deps = {}): Promise<CallResult<T>> {
   const env = deps.env ?? process.env;

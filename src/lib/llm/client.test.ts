@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { callJson, costOf, HttpError, IncompleteError, RefusalError, SchemaError, TimeoutError, type CallJson } from "./client";
+import { callJson, costOf, HttpError, IncompleteError, keyProblem, RefusalError, SchemaError, TimeoutError, type CallJson } from "./client";
 import { BudgetError, BudgetMeter } from "./meter";
 
 const ENV = { OPENAI_API_KEY: "k" };
@@ -176,6 +176,23 @@ describe("a key that fails", () => {
     const { fetch } = recording(() => reply({ error: { message: "You exceeded your current quota", code: "insufficient_quota" } }, 429));
     await expect(callJson(CALL, { fetch, env: ENV })).rejects.toThrow(/^429 insufficient_quota You exceeded/);
     expect(fetch).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("the free key check", () => {
+  const answering = (status: number) => vi.fn(async () => new Response("{}", { status }));
+  it("says what is wrong with a key before anything is spent, and nothing when the key works", async () => {
+    expect(await keyProblem({})).toMatch(/not set/);
+    expect(await keyProblem(ENV, answering(401))).toMatch(/refused the key \(401\)/);
+    expect(await keyProblem(ENV, answering(404))).toMatch(/cannot use gpt-5-nano/);
+    expect(await keyProblem(ENV, answering(200))).toBeNull();
+    expect(await keyProblem(ENV, vi.fn(async () => Promise.reject(new Error("offline"))))).toBeNull();
+  });
+
+  it("asks for the model with a GET and no body, which costs nothing", async () => {
+    const fetch = answering(200);
+    await keyProblem({ ...ENV, ADHDME_LLM_MODEL: "gpt-5-mini" }, fetch);
+    expect(fetch).toHaveBeenCalledWith("https://api.openai.com/v1/models/gpt-5-mini", expect.objectContaining({ method: "GET", body: undefined }));
   });
 });
 

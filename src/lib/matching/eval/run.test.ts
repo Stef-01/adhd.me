@@ -26,7 +26,8 @@ function workspace(passing?: { phase: string; prompt?: string }): string {
 /** A fake API: `answer(n)` gives the nth call's body and status. */
 function api(answer: (n: number) => { body: object; status?: number }) {
   let n = 0;
-  return async () => {
+  return async (_url: string, init?: { method?: string }) => {
+    if (init?.method === "GET") return new Response("{}", { status: 200 }); // the free key check
     const { body, status } = answer((n += 1));
     return new Response(JSON.stringify(body), { status: status ?? 200 });
   };
@@ -78,6 +79,15 @@ describe("the ladder", () => {
     // An empty answer keeps every key the lexicon hears, so recall holds and the aspires gate fails.
     expect(readFileSync(same.report!, "utf8")).toMatch(/\| recall on reaches within 0.02 of L0's \| .* \| yes \|/);
     expect(readFileSync(same.report!, "utf8")).toMatch(/\| aspires reached \| .* \| NO \|/);
+  });
+
+  it("refuses a live phase when the API refuses the key, before any paid call or report", async () => {
+    const root = workspace({ phase: "P1" });
+    const refused = async () => new Response(JSON.stringify({ error: { message: "Incorrect API key provided" } }), { status: 401 });
+    const outcome = await runEval({ level: "L1", phase: "P2", live: true, root, env: ENV, fetch: refused });
+    expect(outcome).toMatchObject({ code: 2, message: expect.stringMatching(/refused: the API refused the key \(401\)/) });
+    expect(outcome.report).toBeUndefined();
+    expect(ledgerSpend(join(root, "qa/matching/ledger.jsonl"))).toBe(0);
   });
 
   it("writes every paid call to the ledger, and refuses to start once it holds $8", async () => {

@@ -184,7 +184,7 @@ export async function readRequest(text: string, deps: Deps = {}): Promise<Readin
       .then((result) => answerOf(result.data))
       .catch(failure),
   );
-  const reads = await settleUntil(tasks, (settled, pending) => readsSettled(settled, pending, heard));
+  const reads = await settleUntil(tasks, (settled, pending) => !deps.waitForAll && readsSettled(settled, pending, heard));
   const answers = reads.filter((read): read is Answer => !(read instanceof Error));
   const failed = reads.find((read): read is Error => read instanceof Error);
   const error = failed ? `${failed.name}: ${failed.message}` : undefined;
@@ -268,7 +268,7 @@ async function checkKeys(text: string, keys: readonly string[], deps: Deps): Pro
   );
   const noes = (settled: readonly (Set<string> | Error)[], key: string) => settled.filter((said) => !(said instanceof Error) && said.has(key)).length;
   // A key is settled once most checks said no, or once too few are left to make it so.
-  const settled = await settleUntil(tasks, (done, pending) => keys.every((key) => noes(done, key) * 2 > CHECKS || (noes(done, key) + pending) * 2 <= CHECKS));
+  const settled = await settleUntil(tasks, (done, pending) => !deps.waitForAll && keys.every((key) => noes(done, key) * 2 > CHECKS || (noes(done, key) + pending) * 2 <= CHECKS));
   const failed = settled.find((said): said is Error => said instanceof Error);
   return { refused: new Set(keys.filter((key) => noes(settled, key) * 2 > CHECKS)), ...(failed ? { error: `${failed.name}: ${failed.message}` } : {}) };
 }

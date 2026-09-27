@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { clinicians, rankClinicians, type Clinician } from "@/demo/clinicians";
 import { FileCache } from "@/lib/llm/cache";
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
-import { modelOf, type Deps } from "@/lib/llm/client";
+import { keyProblem, modelOf, type Deps } from "@/lib/llm/client";
 import { appendLedger, BudgetMeter, ledgerSpend, RateGate } from "@/lib/llm/meter";
 import { answerFor, CHECK_CALL, CHECKS, lexiconReading, READ_CALL, READS, readRequest, VOTING, type Reading } from "../llm-read";
 import { facetScore, faults, flipRate, mentionsDropped, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
@@ -74,6 +74,9 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
     : spentBefore >= PROGRAMME_CAP_USD ? `the ledger holds $${spentBefore.toFixed(2)}, at the programme's $${PROGRAMME_CAP_USD} cap`
     : null;
   if (refusal) return { code: 2, message: `refused: ${refusal}` };
+  // A refused key is found for free, before a paid call or a report: the rotation case.
+  const problem = live ? await keyProblem(env, options.fetch) : null;
+  if (problem) return { code: 2, message: `refused: ${problem}` };
 
   const limits = PHASES[phase];
   const entries = evalEntries();
@@ -90,8 +93,8 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   // The corpus pins no languages, so the oracle also takes any language the text names.
   const oracleKeys = (text: string) => [...gold(byText.get(text)!), ...lexiconReading(text).keys.filter((k) => k.startsWith("language:"))];
   const deps: Deps = live
-    ? { fetch: options.fetch, env, meter, cache: new FileCache(join(root, ".cache/llm")), tier: "flex" } // nobody is waiting: half price
-    : { fetch: cassetteFetch(CASSETTES, (input) => completed(isCheck(input) ? { verdicts: [] } : { ...answerFor(oracleKeys(input)), negated: bare(byText.get(input)?.mentions) })), env: { ...env, OPENAI_API_KEY: "dry" }, meter };
+    ? { fetch: options.fetch, env, meter, cache: new FileCache(join(root, ".cache/llm")), tier: "flex", waitForAll: true } // nobody is waiting: half price, every failure counted
+    : { fetch: cassetteFetch(CASSETTES, (input) => completed(isCheck(input) ? { verdicts: [] } : { ...answerFor(oracleKeys(input)), negated: bare(byText.get(input)?.mentions) })), env: { ...env, OPENAI_API_KEY: "dry" }, meter, waitForAll: true };
   const gate = new RateGate(limits.concurrency, limits.rpm);
   let [calls, streak, malformed] = [0, 0, 0];
   const read = async (entry: EvalEntry, cached = true): Promise<Done | null> => {
