@@ -531,7 +531,8 @@ test("§14 Calm: the shelf is a line, a button and the tiles; a finished run is 
   await expect(page.locator(".learn-saved")).toHaveCount(0);
   await page.evaluate(() => localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["context", "sleep"] })));
   await page.reload();
-  // A played game leaves "Try these first" (PLAN.md W7).
+  // A played game leaves "Try these first" (PLAN.md W7). The three render once the device is read.
+  await expect(page.getByTestId("learn-try").locator(".learn-try-tile")).toHaveCount(3);
   await expect(page.getByTestId("learn-try")).not.toContainText("Same brain, five scenes");
   await page.getByTestId("learn-show-all").click();
   await page.getByRole("button", { name: "Understand ADHD" }).click();

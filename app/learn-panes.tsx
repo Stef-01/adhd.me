@@ -272,18 +272,22 @@ function Completion({ completed, start }: { completed: string | null; start: (id
 
 /**
  * The games pane (PLAN.md W7): one line that says what these are, the one primary, three to try
- * first, and every game one tap away under "All games", ticked when played. "All games" takes the
- * three's place and opens on the eight lives, so the open list stays one screen. No date and no
- * result on any tile (D2); the page foot says where that is kept.
+ * first, and every game one tap away under "All games", ticked when played. "All games" sits beside
+ * the primary and takes the three's place below it, opening on the eight lives, so the button stays
+ * put and the open list stays one screen. No date and no result on any tile (D2); the page foot
+ * says where that is kept.
  */
 function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduced }: { progress: Progress; completed: string | null; hydrated: boolean; start: (id: string) => void; reducedMotion: boolean }) {
   const { profile } = useProfile();
   const played = usePlayed();
   const [all, setAll] = useState(false);
   const [group, setGroup] = useState<string | null>(null);
-  const goals = hydrated ? profile?.selectedGoals ?? [] : [];
+  // The three depend on the goals and on what has been played, both read from the device after
+  // mount. Until then the list holds its space empty, so three tiles never show and then swap.
+  const ready = hydrated && profile !== null;
+  const goals = ready ? profile.selectedGoals ?? [] : [];
   const isPlayed = (g: GameItem) => (g.kind === "run" ? progress.done.includes(g.id) : Boolean(played.at[g.id]));
-  const first = tryFirst(goals, hydrated ? isPlayed : () => false);
+  const first = ready ? tryFirst(goals, isPlayed) : [];
   const anyPlayed = hydrated && [...LIFE_GAMES, ...RUN_GAMES].some(isPlayed);
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
@@ -292,8 +296,21 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
       <p className="learn-pane-line">Short scenes from everyday life.</p>
       <div className="learn-game-toolbar">
         <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true" />Play mix</Link>
+        <button
+          type="button"
+          className="learn-secondary learn-show-all learn-all-games"
+          aria-expanded={all}
+          onClick={() => {
+            setAll(!all);
+            setGroup(all ? null : GAME_GROUPS[0]!.title);
+          }}
+          data-testid="learn-show-all"
+        >
+          All games
+          <CaretDown size={16} weight="bold" aria-hidden="true" />
+        </button>
       </div>
-      {!all && first.length > 0 && (
+      {!all && (!ready || first.length > 0) && (
         <>
           <h2 className="learn-try-title">Try these first.</h2>
           <ol className="learn-try" data-testid="learn-try">
@@ -305,19 +322,6 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
           </ol>
         </>
       )}
-      <button
-        type="button"
-        className="learn-secondary learn-show-all learn-all-games"
-        aria-expanded={all}
-        onClick={() => {
-          setAll(!all);
-          setGroup(all ? null : GAME_GROUPS[0]!.title);
-        }}
-        data-testid="learn-show-all"
-      >
-        All games
-        <CaretDown size={16} weight="bold" aria-hidden="true" />
-      </button>
       {all && (
         <div className="learn-game-groups">
           {GAME_GROUPS.map((gr) => {

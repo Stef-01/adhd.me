@@ -37,7 +37,7 @@ export const GAME_HINTS: Readonly<Record<string, string>> = {
   interruption: "The cost of returning",
   perfectionism: "The stalling standard",
   "not-listening": "Two sides, one conversation",
-  "forgotten-commitments": "Remembering isn’t caring",
+  "forgotten-commitments": "Forgot, still care",
   conflict: "Quick to flare",
   household: "Who holds the list",
   sleep: "Why nights get later",

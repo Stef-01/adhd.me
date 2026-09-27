@@ -489,7 +489,8 @@
   background: var(--stone);
   font-size: 0.9375rem;
 }
-.map-fills-again { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-deep); font-weight: 650; }
+/* Accent is for live values; a text link is ink, and the underline says it goes somewhere. */
+.map-fills-again { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-weight: 650; text-decoration: underline; text-underline-offset: 4px; }
 .map-fills-never { margin: 14px 0 0; color: var(--muted); font-size: 0.9375rem; }
 .map-sheet-from { margin: 0; color: var(--muted); font-size: 0.875rem; }
 

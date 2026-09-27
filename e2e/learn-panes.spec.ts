@@ -9,9 +9,15 @@ test("games and modules are two panes, remembered, and a game returns to Games",
   // Three to try first (PLAN.md W7), and they are the glass scope; the modules are not.
   await expect(page.getByTestId("learn-try").locator(".learn-try-tile")).toHaveCount(3);
   await expect(page.locator("[data-liquid] [data-testid='learn-try']")).toHaveCount(1);
-  // "All games" takes their place and opens on the eight lives; groups open one at a time.
-  await page.getByTestId("learn-show-all").click();
+  // "All games" sits beside "Play mix", takes the three's place below it and opens on the eight
+  // lives; the button itself does not move. Groups open one at a time.
+  const toggle = page.getByTestId("learn-show-all");
+  const top = () => toggle.evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
+  const before = await top();
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
   await expect(page.getByTestId("learn-try")).toHaveCount(0);
+  expect(Math.abs((await top()) - before), "opening All games moves its button").toBeLessThanOrEqual(1);
   await expect(page.locator(".learn-game-names")).toHaveCount(1);
   await expect(page.locator(".learn-game-names li")).toHaveCount(8);
   await page.getByRole("button", { name: "Understand ADHD" }).click();
@@ -51,6 +57,8 @@ test("learning cards stay separated at phone, tablet and desktop widths", async 
         await page.getByText("The basics", { exact: true }).click();
       }
       await expect(stack).toBeVisible();
+      // The three render once the device is read; measure them, not the space held for them.
+      if (pane === "games") await expect(stack.locator(".learn-try-tile")).toHaveCount(3);
       const violations = await stack.evaluate(el => {
         const cards = [...el.querySelectorAll(".learn-card, .learn-try-tile")];
         const failures: string[] = [];
