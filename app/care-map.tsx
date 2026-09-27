@@ -90,6 +90,14 @@ function nodePositions(): Map<Subdomain, { x: number; y: number; layer: Layer }>
   return out;
 }
 
+/** The cost a person gave, said back in words. The map never prints a number about somebody. */
+function costWords(cost: number): string {
+  return cost >= 7 ? "a lot" : cost >= 4 ? "some" : "a little";
+}
+
+/** Body and environment sit on the bottom half, where a clockwise arc would draw letters upside down. */
+const BOTTOM: ReadonlySet<Layer> = new Set(["body", "environment"]);
+
 export function CareMap() {
   const { record } = useModel();
   const [selected, setSelected] = useState<Subdomain | null>(null);
@@ -97,7 +105,7 @@ export function CareMap() {
   const needs = record ? deriveNeeds(record) : [];
   const signal = new Map<Subdomain, string>();
   for (const n of needs) {
-    signal.set(n.subdomain, `${n.label}${n.functionalCost ? `, you put the cost at ${n.functionalCost}/10` : ""}.`);
+    signal.set(n.subdomain, `${n.label}${n.costMeasured ? `, you said it costs ${costWords(n.functionalCost)}` : ""}.`);
     for (const c of n.contributors) if (!signal.has(c.subdomain)) signal.set(c.subdomain, `${c.note}.`);
   }
   const entry = selected ? SUBDOMAINS.find((s) => s.id === selected) : null;
@@ -109,22 +117,25 @@ export function CareMap() {
         {LAYERS.map((layer) => {
           const [a, b] = WEDGE[layer];
           // The label sits on the wedge's outer arc, following it, so a long word never runs off the disc.
-          const [x1, y1] = polar(a + 4, R_OUT - 11);
-          const [x2, y2] = polar(b - 4, R_OUT - 11);
+          // On the bottom half the arc runs the other way, so the letters stand upright; a reversed arc
+          // puts them on its inner side, so its baseline moves out by the cap height to keep the band.
+          const bottom = BOTTOM.has(layer);
+          const r = bottom ? R_OUT - 3 : R_OUT - 11;
+          const [x1, y1] = polar(bottom ? b - 4 : a + 4, r);
+          const [x2, y2] = polar(bottom ? a + 4 : b - 4, r);
           const arcId = `care-map-arc-${layer}`;
           return (
             <g key={layer}>
               <path d={wedgePath(layer)} fill={COLOURS[layer].fill} stroke="#fff" strokeWidth="4" />
-              <defs><path id={arcId} d={`M${x1} ${y1}A${R_OUT - 11} ${R_OUT - 11} 0 0 1 ${x2} ${y2}`} /></defs>
-              <text fontSize="11" fontWeight="800" letterSpacing="1.5" fill={COLOURS[layer].ink}>
+              <defs><path id={arcId} d={`M${x1} ${y1}A${r} ${r} 0 0 ${bottom ? 0 : 1} ${x2} ${y2}`} /></defs>
+              <text className="care-map-layer" fontSize="11" fontWeight="800" letterSpacing="1.5" fill={COLOURS[layer].ink}>
                 <textPath href={`#${arcId}`} startOffset="50%" textAnchor="middle">{LAYER_LABELS[layer].toUpperCase()}</textPath>
               </text>
             </g>
           );
         })}
         <circle cx={CX} cy={CY} r={R_IN - 6} fill="#fff" />
-        <text x={CX} y={CY - 4} textAnchor="middle" fontSize="13" fontWeight="700" fill="#221a16">You</text>
-        <text x={CX} y={CY + 14} textAnchor="middle" fontSize="10" fill="#7a655d">{needs.length ? `${needs.length} in the picture` : "nothing yet"}</text>
+        <text x={CX} y={CY + 5} textAnchor="middle" fontSize="13" fontWeight="700" fill="#221a16">You</text>
         {SUBDOMAINS.map((s) => {
           const p = positions.get(s.id)!;
           const has = signal.has(s.id);
