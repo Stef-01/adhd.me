@@ -26,7 +26,6 @@ const NOT_PATIENT = new Set(["/clinicians"]);
  * fixes it. Anything under 12px outside this list fails. When a game is redrawn, its line goes.
  */
 const LEDGER: ReadonlyArray<{ match: RegExp; what: string }> = [
-  { match: /\btm-/, what: "Theo's morning: room names at 8px, pocket, time and object labels at 9 to 11px (PLAN.md N15)" },
   { match: /\bbedroom-/, what: "Leo's evening: prop labels, counts, toolbar and footer at 8 to 11px (PLAN.md N15)" },
   { match: /\bkit-(toolbar|meter)\b/, what: "the shared game shell's toolbar and meter at 10 to 11px, in Arjun's, Jax's, Maya's, Nina's and Zoe's games (PLAN.md N15)" },
   { match: /\bnw-chunk\b/, what: "Nina's letter chunks at 11px (PLAN.md N15)" },
