@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T09:04:32.610Z",
-  "base": "http://localhost:3307",
+  "measuredAt": "2026-09-27T09:15:36.145Z",
+  "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "04:36 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -462,7 +462,7 @@
         },
         {
           "w": 2,
-          "text": "CATCH IT!",
+          "text": "DELETE DRAFTS!",
           "tag": "p"
         },
         {
@@ -503,12 +503,17 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 2,
-      "fold": 2,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
+        {
+          "w": 2,
+          "text": "GET OUT!",
+          "tag": "p"
+        },
         {
           "w": 1,
           "text": "0",
@@ -516,8 +521,8 @@
         },
         {
           "w": 1,
-          "text": "PIGEONS!",
-          "tag": "p"
+          "text": "shoes",
+          "tag": "span"
         }
       ]
     },
@@ -1929,10 +1934,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 28,
-      "fold": 28,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -1941,14 +1946,14 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Whatever. Sure. Guess work wins.",
-          "tag": "p"
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         },
         {
-          "w": 5,
-          "text": "Ouch. I did say sorry.",
-          "tag": "p"
+          "w": 4,
+          "text": "That came out sharp.",
+          "tag": "h1"
         }
       ]
     },
@@ -2896,26 +2901,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 12,
+      "fold": 12,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
+          "w": 4,
+          "text": "write the perfect email",
+          "tag": "span"
+        },
+        {
+          "w": 3,
+          "text": "reorganise the notes",
+          "tag": "span"
+        },
+        {
           "w": 2,
-          "text": "LOCK IN!",
+          "text": "START SMALL!",
           "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "roadmap",
-          "tag": "span"
         }
       ]
     },

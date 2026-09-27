@@ -187,7 +187,7 @@ export function bedroomReducer(s: BedroomState, action: BedroomAction): BedroomS
         } else {
           next.mode = "recovery";
           next.events = [];
-          next.line = "The rounds are over. Help Leo settle.";
+          next.line = "The rounds are over.";
         }
         return reconcile(next);
       }
