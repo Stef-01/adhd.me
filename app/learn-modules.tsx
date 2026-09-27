@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { hasInteracted, returnedByHistory } from "@/lib/interaction";
 import { ArrowLeft, ArrowRight, Check, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearProgress, markDone, readProgress, type Progress } from "@/learn/progress";
@@ -60,27 +61,6 @@ function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
   );
 }
 
-/**
- * Whether the person has pressed or tapped anything since the page loaded. A lesson opened after
- * that was asked for, so its heading takes focus and a keyboard user keeps their place; a lesson
- * the page arrives on was not, and a script's focus there draws a ring nobody asked for (N12).
- */
-let interacted = false;
-/**
- * The address the browser's Back or Forward last arrived at, until a press or a key starts
- * something else. A finished run reopens on its last card only then (openingStep).
- */
-let returnedTo: string | null = null;
-if (typeof window !== "undefined") {
-  const mark = () => { interacted = true; };
-  window.addEventListener("pointerdown", mark, { capture: true, once: true });
-  window.addEventListener("keydown", mark, { capture: true, once: true });
-  const forget = () => { returnedTo = null; };
-  window.addEventListener("pointerdown", forget, { capture: true });
-  window.addEventListener("keydown", forget, { capture: true });
-  window.addEventListener("popstate", () => { returnedTo = window.location.href; });
-}
-
 function LessonHeading({ active, children, className = "learn-card-heading" }: { active: boolean; children: React.ReactNode; className?: string }) {
   const heading = useRef<HTMLHeadingElement>(null);
   const mounted = useRef(false);
@@ -88,7 +68,9 @@ function LessonHeading({ active, children, className = "learn-card-heading" }: {
   // module does not (PLAN.md N12); opening one from the library does.
   useEffect(() => {
     if (!active) return;
-    if (mounted.current || interacted) heading.current?.focus({ preventScroll: true });
+    // A lesson opened after a press was asked for, so its heading takes focus and a keyboard user
+    // keeps their place; one the page arrives on was not (src/lib/interaction.ts).
+    if (mounted.current || hasInteracted()) heading.current?.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [active]);
   useEffect(() => {
@@ -130,7 +112,7 @@ export function LearnModules() {
     const saved = readCursor(deviceLearningStorage);
     if (module) writePane(module.kind === "run" ? "games" : "modules");
     setOpen(module?.id ?? null);
-    setStep(module ? openingStep(module.id, saved, readProgress(deviceLearningStorage).done, returnedTo === window.location.href) : 0);
+    setStep(module ? openingStep(module.id, saved, readProgress(deviceLearningStorage).done, returnedByHistory()) : 0);
     setPicks([]);
   }, [moduleId]);
 

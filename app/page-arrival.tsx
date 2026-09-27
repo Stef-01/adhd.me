@@ -4,6 +4,8 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { animate, useReducedMotion } from "motion/react";
+// Counts the first press on any app route, so a heading focused later knows it was asked for.
+import "@/lib/interaction";
 
 export function PageArrival({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
