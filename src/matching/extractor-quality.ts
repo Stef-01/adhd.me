@@ -69,11 +69,14 @@ export interface ExtractionResult {
   correctlyParsed: boolean;
 }
 
-/** One entry's extraction, graded against its own `reaches` pin. */
-export function gradeExtraction(entry: CorpusEntry): ExtractionResult {
+/** One entry's extraction, graded against its own `reaches` pin. `read` is the lexicon unless given. */
+export function gradeExtraction(
+  entry: CorpusEntry,
+  read: (text: string) => readonly string[] = (text) => readNeeds(text).map((need) => facetKey(need.facet)),
+): ExtractionResult {
   const gold = entry.reaches ?? [];
   const goldSet = new Set(gold);
-  const extracted = readNeeds(entry.text).map((need) => facetKey(need.facet));
+  const extracted = read(entry.text);
   const extractedSet = new Set(extracted);
   const hits = gold.filter((facet) => extractedSet.has(facet));
   const misses = gold.filter((facet) => !extractedSet.has(facet));
@@ -105,7 +108,7 @@ export interface ExtractorReport {
 
 /** The parser's own number, computed once, apart from any ranking outcome. */
 export function extractorReport(entries: readonly CorpusEntry[] = gradedEntries()): ExtractorReport {
-  const results = withGold(entries).map(gradeExtraction);
+  const results = withGold(entries).map((entry) => gradeExtraction(entry));
   const goldFacetCount = results.reduce((sum, r) => sum + r.gold.length, 0);
   const hitCount = results.reduce((sum, r) => sum + r.hits.length, 0);
   const extractedCount = results.reduce((sum, r) => sum + r.extracted.length, 0);
