@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T07:08:56.808Z",
-  "base": "http://localhost:3200",
+  "measuredAt": "2026-09-27T07:35:44.727Z",
+  "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -170,7 +170,7 @@
         },
         {
           "w": 5,
-          "text": "01:01 left in this session",
+          "text": "03:17 left in this session",
           "tag": "small"
         }
       ]
@@ -179,10 +179,10 @@
       "path": "/clinicians",
       "name": "/clinicians",
       "state": null,
-      "total": 64,
-      "fold": 64,
-      "chrome": 3,
-      "ratio": 1.6,
+      "total": 67,
+      "fold": 67,
+      "chrome": 0,
+      "ratio": 1.7,
       "verdict": "long-form",
       "longest": [
         {
@@ -206,10 +206,10 @@
       "path": "/clinicians/join",
       "name": "/clinicians/join",
       "state": null,
-      "total": 30,
-      "fold": 30,
-      "chrome": 26,
-      "ratio": 0.8,
+      "total": 34,
+      "fold": 34,
+      "chrome": 22,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -260,10 +260,10 @@
       "path": "/examples",
       "name": "/examples",
       "state": null,
-      "total": 121,
-      "fold": 121,
-      "chrome": 25,
-      "ratio": 3,
+      "total": 124,
+      "fold": 124,
+      "chrome": 22,
+      "ratio": 3.1,
       "verdict": "long-form",
       "longest": [
         {
@@ -287,9 +287,9 @@
       "path": "/faq",
       "name": "/faq",
       "state": null,
-      "total": 431,
-      "fold": 163,
-      "chrome": 24,
+      "total": 433,
+      "fold": 165,
+      "chrome": 22,
       "ratio": 10.8,
       "verdict": "long-form",
       "longest": [
@@ -456,19 +456,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LOCK IN!",
-          "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "revenue chart",
-          "tag": "span"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "POP!",
+          "tag": "p"
         }
       ]
     },
@@ -503,25 +503,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "ONLY THE LIST!",
+          "w": 5,
+          "text": "Mia, why are you here?",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "WHY ARE YOU HERE?",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "milk",
           "tag": "span"
         }
       ]
@@ -638,10 +638,10 @@
       "path": "/lives/play/mia-remember-why",
       "name": "/lives/play/mia-remember-why",
       "state": null,
-      "total": 17,
-      "fold": 17,
-      "chrome": 3,
-      "ratio": 0.4,
+      "total": 20,
+      "fold": 20,
+      "chrome": 0,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -656,8 +656,8 @@
         },
         {
           "w": 3,
-          "text": "Keep the thread.",
-          "tag": "h1"
+          "text": "Mia · Remember why",
+          "tag": "span"
         }
       ]
     },
@@ -692,10 +692,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "/lives/play/theo-out-the-door",
       "state": null,
-      "total": 35,
-      "fold": 35,
-      "chrome": 4,
-      "ratio": 0.9,
+      "total": 39,
+      "fold": 39,
+      "chrome": 0,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
         {
@@ -709,8 +709,8 @@
           "tag": "h1"
         },
         {
-          "w": 2,
-          "text": "Planning time",
+          "w": 4,
+          "text": "Theo · Out the door",
           "tag": "span"
         }
       ]
@@ -746,10 +746,10 @@
       "path": "/lives/toolkit",
       "name": "/lives/toolkit",
       "state": null,
-      "total": 10,
-      "fold": 10,
-      "chrome": 11,
-      "ratio": 0.3,
+      "total": 15,
+      "fold": 15,
+      "chrome": 6,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
@@ -761,6 +761,11 @@
           "w": 2,
           "text": "My Toolkit",
           "tag": "h1"
+        },
+        {
+          "w": 2,
+          "text": "All strategies",
+          "tag": "a"
         }
       ]
     },
@@ -1065,10 +1070,10 @@
       "path": "/privacy/automated-decisions",
       "name": "/privacy/automated-decisions",
       "state": null,
-      "total": 1548,
-      "fold": 126,
-      "chrome": 26,
-      "ratio": 38.7,
+      "total": 1552,
+      "fold": 130,
+      "chrome": 22,
+      "ratio": 38.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -1092,10 +1097,10 @@
       "path": "/privacy/counsel-review",
       "name": "/privacy/counsel-review",
       "state": null,
-      "total": 323,
-      "fold": 174,
-      "chrome": 26,
-      "ratio": 8.1,
+      "total": 327,
+      "fold": 178,
+      "chrome": 22,
+      "ratio": 8.2,
       "verdict": "long-form",
       "longest": [
         {
@@ -1254,10 +1259,10 @@
       "path": "/terms",
       "name": "/terms",
       "state": null,
-      "total": 697,
-      "fold": 166,
-      "chrome": 24,
-      "ratio": 17.4,
+      "total": 699,
+      "fold": 168,
+      "chrome": 22,
+      "ratio": 17.5,
       "verdict": "long-form",
       "longest": [
         {
@@ -1281,10 +1286,10 @@
       "path": "/thanks",
       "name": "/thanks",
       "state": null,
-      "total": 24,
-      "fold": 24,
-      "chrome": 24,
-      "ratio": 0.6,
+      "total": 26,
+      "fold": 26,
+      "chrome": 22,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1794,10 +1799,10 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, interruption",
       "state": "mia-interruption",
-      "total": 19,
-      "fold": 19,
-      "chrome": 3,
-      "ratio": 0.5,
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -1812,8 +1817,8 @@
         },
         {
           "w": 3,
-          "text": "Keep the thread.",
-          "tag": "h1"
+          "text": "Mia · Remember why",
+          "tag": "span"
         }
       ]
     },
@@ -1821,9 +1826,9 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, setup",
       "state": "mia-setup",
-      "total": 22,
-      "fold": 22,
-      "chrome": 3,
+      "total": 25,
+      "fold": 25,
+      "chrome": 0,
       "ratio": 0.6,
       "verdict": "target",
       "longest": [
@@ -1848,10 +1853,10 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, cue",
       "state": "mia-cue",
-      "total": 19,
-      "fold": 19,
-      "chrome": 3,
-      "ratio": 0.5,
+      "total": 22,
+      "fold": 22,
+      "chrome": 0,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -1875,10 +1880,10 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, revisit",
       "state": "mia-revisit",
-      "total": 20,
-      "fold": 20,
-      "chrome": 3,
-      "ratio": 0.5,
+      "total": 23,
+      "fold": 23,
+      "chrome": 0,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -1893,8 +1898,8 @@
         },
         {
           "w": 3,
-          "text": "Keep the thread.",
-          "tag": "h1"
+          "text": "Mia · Remember why",
+          "tag": "span"
         }
       ]
     },
@@ -1902,11 +1907,11 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia, complete",
       "state": "mia-complete",
-      "total": 40,
-      "fold": 40,
-      "chrome": 3,
-      "ratio": 1,
-      "verdict": "target",
+      "total": 43,
+      "fold": 43,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
       "longest": [
         {
           "w": 8,
@@ -1929,10 +1934,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 28,
-      "fold": 28,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -1941,14 +1946,14 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Whatever. Sure. Guess work wins.",
-          "tag": "p"
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         },
         {
-          "w": 5,
-          "text": "Ouch. I did say sorry.",
-          "tag": "p"
+          "w": 4,
+          "text": "That came out sharp.",
+          "tag": "h1"
         }
       ]
     },
@@ -2064,37 +2069,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, competing demands",
       "state": "theo-busy",
-      "total": 32,
-      "fold": 32,
-      "chrome": 4,
-      "ratio": 0.8,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 5,
-          "text": "One train. One busy brain.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "Park for later",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "Planning time",
-          "tag": "span"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/theo-out-the-door",
-      "name": "Theo, pause",
-      "state": "theo-pause",
-      "total": 23,
-      "fold": 23,
-      "chrome": 4,
-      "ratio": 0.6,
+      "total": 36,
+      "fold": 36,
+      "chrome": 0,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
@@ -2104,13 +2082,40 @@
         },
         {
           "w": 4,
-          "text": "The world can wait.",
-          "tag": "h2"
+          "text": "Theo · Out the door",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "Your pace · on",
+          "text": "Park for later",
           "tag": "button"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/theo-out-the-door",
+      "name": "Theo, pause",
+      "state": "theo-pause",
+      "total": 27,
+      "fold": 27,
+      "chrome": 0,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 5,
+          "text": "One train. One busy brain.",
+          "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Theo · Out the door",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "The world can wait.",
+          "tag": "h2"
         }
       ]
     },
@@ -2118,10 +2123,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, departure",
       "state": "theo-departure",
-      "total": 20,
-      "fold": 20,
-      "chrome": 4,
-      "ratio": 0.5,
+      "total": 24,
+      "fold": 24,
+      "chrome": 0,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
         {
@@ -2130,14 +2135,14 @@
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Made it out.",
-          "tag": "h1"
+          "w": 4,
+          "text": "Theo · Out the door",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "9 trips · 50s",
-          "tag": "span"
+          "text": "Made it out.",
+          "tag": "h1"
         }
       ]
     },
@@ -2145,26 +2150,26 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, evening arrangement",
       "state": "theo-evening",
-      "total": 29,
-      "fold": 29,
-      "chrome": 4,
-      "ratio": 0.7,
+      "total": 33,
+      "fold": 33,
+      "chrome": 0,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "Make room for tomorrow.",
+          "w": 6,
+          "text": "That evening, make room for tomorrow.",
           "tag": "h1"
+        },
+        {
+          "w": 4,
+          "text": "Theo · Out the door",
+          "tag": "span"
         },
         {
           "w": 4,
           "text": "Filled, ready for tomorrow.",
           "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "That evening",
-          "tag": "span"
         }
       ]
     },
@@ -2172,12 +2177,17 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, rainy revisit",
       "state": "theo-revisit",
-      "total": 37,
-      "fold": 37,
-      "chrome": 4,
-      "ratio": 0.9,
+      "total": 40,
+      "fold": 40,
+      "chrome": 0,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
+        {
+          "w": 6,
+          "text": "Next morning. You’ve been here before.",
+          "tag": "h1"
+        },
         {
           "w": 6,
           "text": "Same house. Your setup. And… rain.",
@@ -2185,12 +2195,7 @@
         },
         {
           "w": 4,
-          "text": "You’ve been here before.",
-          "tag": "h1"
-        },
-        {
-          "w": 3,
-          "text": "The next morning",
+          "text": "Theo · Out the door",
           "tag": "span"
         }
       ]
@@ -2199,9 +2204,9 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, complete",
       "state": "theo-complete",
-      "total": 36,
-      "fold": 34,
-      "chrome": 4,
+      "total": 37,
+      "fold": 37,
+      "chrome": 0,
       "ratio": 0.9,
       "verdict": "target",
       "longest": [
@@ -2415,10 +2420,10 @@
       "path": "/lives/play/mia-remember-why",
       "name": "Mia: remember why",
       "state": null,
-      "total": 17,
-      "fold": 17,
-      "chrome": 3,
-      "ratio": 0.4,
+      "total": 20,
+      "fold": 20,
+      "chrome": 0,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -2433,8 +2438,8 @@
         },
         {
           "w": 3,
-          "text": "Keep the thread.",
-          "tag": "h1"
+          "text": "Mia · Remember why",
+          "tag": "span"
         }
       ]
     },
@@ -2869,7 +2874,7 @@
       "path": "/approach/map",
       "name": "The care map, a part of life open",
       "state": "care-map-tap",
-      "total": 95,
+      "total": 94,
       "fold": 82,
       "chrome": 6,
       "ratio": 2.4,
@@ -2896,25 +2901,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
+        },
+        {
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "POP IT!",
-          "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "pale",
+          "text": "Straight through",
           "tag": "button"
         }
       ]
@@ -2923,8 +2928,8 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 50,
-      "fold": 33,
+      "total": 51,
+      "fold": 34,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",

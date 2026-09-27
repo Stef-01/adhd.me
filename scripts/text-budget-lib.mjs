@@ -204,11 +204,12 @@ export async function measure(page) {
       const rect = el.getBoundingClientRect();
       if (rect.right <= 0 || rect.bottom <= 0 || rect.left >= window.innerWidth) continue;
       if (rect.width === 0 || rect.height === 0) continue;
-      // Chrome is the site's own furniture, named one by one: the header, the tab bar, the site
-      // footer and the story page's copy of it (the same doors), the consent bar. A bare `footer`
-      // sat on this list for the site footer and also swallowed every page's own <footer>: Leo's
-      // game ends inside one, so its last line and its end-screen links were never counted.
-      const chrome = !!el.closest("nav, header.platform-header, .app-tabs, .site-footer, .story-footer, .consent-bar, .privacy-consent");
+      // Chrome is the site's own furniture, named one by one: the header, the tab bar, the public
+      // header's links and the story page's, the site footer and the story page's copy of it (the
+      // same doors), the consent bar. A page's own <footer> and <nav> are its words: Leo's game
+      // ends inside a <footer>, and the games, the toolkit, the clinician steps and the breadcrumbs
+      // each carry a <nav>, so neither is on this list bare.
+      const chrome = !!el.closest("header.platform-header, .app-tabs, .site-nav-links, .story-nav, .site-footer, .story-footer, .consent-bar, .privacy-consent");
       const aboveFold = rect.top < vh && rect.bottom > 0;
       rows.push({ text, chrome, aboveFold, tag: el.tagName.toLowerCase() });
     }
