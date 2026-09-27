@@ -7,7 +7,7 @@ test("games and modules are two panes, remembered, and a game returns to Games",
   await expect(page.getByTestId("learn-tab-games")).toHaveAttribute("aria-selected", "true");
   await expect(page.getByTestId("learn-play")).toBeVisible();
   // Three to try first (PLAN.md W7), and they are the glass scope; the modules are not.
-  await expect(page.getByTestId("learn-try").locator(".learn-try-tile")).toHaveCount(3);
+  await expect(page.locator("[data-testid=learn-try][data-ready] .learn-try-tile")).toHaveCount(3);
   await expect(page.locator("[data-liquid] [data-testid='learn-try']")).toHaveCount(1);
   // "All games" sits beside "Play mix", takes the three's place below it and opens on the eight
   // lives; the button itself does not move. Groups open one at a time.
@@ -24,7 +24,7 @@ test("games and modules are two panes, remembered, and a game returns to Games",
   await expect(page.locator(".learn-game-names")).toHaveCount(1);
   await expect(page.locator(".learn-game-names li")).toHaveCount(6);
   await page.getByTestId("learn-show-all").click();
-  await expect(page.getByTestId("learn-try").locator(".learn-try-tile")).toHaveCount(3);
+  await expect(page.locator("[data-testid=learn-try][data-ready] .learn-try-tile")).toHaveCount(3);
   await page.getByTestId("learn-tab-modules").click();
   await expect(page.getByTestId("learn-tab-modules")).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("[data-liquid]")).toHaveCount(0);
@@ -58,7 +58,7 @@ test("learning cards stay separated at phone, tablet and desktop widths", async 
       }
       await expect(stack).toBeVisible();
       // The three render once the device is read; measure them, not the space held for them.
-      if (pane === "games") await expect(stack.locator(".learn-try-tile")).toHaveCount(3);
+      if (pane === "games") await expect(stack).toHaveAttribute("data-ready", "true");
       const violations = await stack.evaluate(el => {
         const cards = [...el.querySelectorAll(".learn-card, .learn-try-tile")];
         const failures: string[] = [];
