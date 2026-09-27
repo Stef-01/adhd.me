@@ -14,7 +14,7 @@ import type { LearningProfile } from "@/lives/types";
 
 import type { Layer, Subdomain } from "./layers";
 import { isProfession } from "@/support/professions";
-import type { OnboardingAnswers } from "./onboarding";
+import { isComplete, type OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
 import type { Checkpoint, CheckpointAnswer, CheckpointMonths } from "./checkpoint";
 import { emptyCarePlan, PLAN_MAX, sanitisePlan, type CarePlan } from "./care-plan";
@@ -269,6 +269,21 @@ export function answerAgain(storage: ModelStorage): ModelRecord {
     const { completedAt: _done, ...answers } = r.onboarding ?? {};
     return { ...r, onboardingDraft: answers };
   });
+}
+
+/**
+ * Where the Start questions open, given the record and whether "Answer again" sent the person.
+ *   again:   a finished set and ?again, so a new draft starts from the first question.
+ *   resume:  a draft on file is a reload or a return part way through, so the questions resume.
+ *            The end would read a half-finished draft as if it were the answer.
+ *   end:     a finished set and no draft.
+ *   welcome: anything else.
+ */
+export type OnboardingArrival = "again" | "resume" | "end" | "welcome";
+export function onboardingArrival(record: ModelRecord, again: boolean): OnboardingArrival {
+  if (again && isComplete(record.onboarding)) return "again";
+  if (record.onboardingDraft) return "resume";
+  return isComplete(record.onboarding) ? "end" : "welcome";
 }
 
 export function recordResonance(storage: ModelStorage, moduleId: string, patch: Omit<Resonance, "at">): ModelRecord {

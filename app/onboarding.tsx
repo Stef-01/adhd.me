@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { improveOption, improveOptions, isComplete, QUESTIONS, type OnboardingAnswers } from "@/model/onboarding";
-import { answerAgain, completeOnboarding, saveOnboarding } from "@/model/store";
+import { improveOption, improveOptions, QUESTIONS, type OnboardingAnswers } from "@/model/onboarding";
+import { answerAgain, completeOnboarding, onboardingArrival, saveOnboarding } from "@/model/store";
 import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
 import { track } from "@/model/events";
@@ -32,18 +32,18 @@ export function Onboarding() {
   // While answering again, the questions show and change the draft; the map keeps the old answers.
   const answers: OnboardingAnswers = record?.onboardingDraft ?? record?.onboarding ?? {};
 
-  // "Answer again" from My ADHD arrives as ?again=1: start a draft from the answers on file.
+  // "Answer again" from My ADHD arrives as ?again=1: start a draft from the answers on file. A
+  // draft already on file means a reload part way through, so the questions resume on it.
   const [arrived, setArrived] = useState(false);
   useEffect(() => {
     if (!record || arrived) return;
     setArrived(true);
-    if (new URLSearchParams(window.location.search).has("again") && isComplete(record.onboarding)) {
-      window.history.replaceState(null, "", window.location.pathname);
-      refresh(answerAgain(storage));
-      setIndex(0);
-      return;
-    }
-    if (isComplete(record.onboarding)) setIndex(10);
+    const again = new URLSearchParams(window.location.search).has("again");
+    if (again) window.history.replaceState(null, "", window.location.pathname);
+    const arrival = onboardingArrival(record, again);
+    if (arrival === "again") refresh(answerAgain(storage));
+    if (arrival === "again" || arrival === "resume") setIndex(0);
+    if (arrival === "end") setIndex(10);
   }, [record, arrived, refresh, storage]);
 
   const question = QUESTIONS[index];
@@ -157,7 +157,7 @@ export function Onboarding() {
 
           {index === 10 && record && (
             <StartHere
-              answers={answers}
+              answers={record.onboarding ?? {}}
               onStart={(id) => router.push(`/approach?module=${id}`)}
               onAgain={() => { refresh(answerAgain(storage)); go(0); }}
             />
@@ -168,6 +168,7 @@ export function Onboarding() {
   );
 }
 
+/** The end reads the answers on the map, the same ones `recommend()` reads, never a draft. */
 function StartHere({ answers, onStart, onAgain }: { answers: OnboardingAnswers; onStart: (moduleId: string) => void; onAgain: () => void }) {
   const { record } = useModel();
   const goal = improveOption(answers.improveFirst);
