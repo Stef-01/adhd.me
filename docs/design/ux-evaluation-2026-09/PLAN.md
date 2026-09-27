@@ -9,6 +9,9 @@ Revision 2 applies an adversarial review of revision 1 (§9). It found a second 
 well" bug, four wrong budget sums, an infeasible contrast target, a snapshot design that would have
 lost data, and a phase order that left two P0 items to last. All are corrected below.
 
+Where the build differs from this plan, a note headed "As built, 2026-09-27" at the end of the
+workstream says what was built instead and why. The plan's own text is left as it was reviewed.
+
 Read in this order: §1 what was checked, §2 what changed since the review, §3 the rules every fix
 must pass, §4 the decisions only the founder can make, §5 the register of findings, §6 the
 workstreams, §7 the order of work, §8 the definition of done, §9 the audit log.
@@ -196,6 +199,11 @@ present; every row ≥44px; no horizontal scroll at 320. Keep `src/model/model.t
 **Acceptance:** a person who cannot speak reaches Lifeline Text in two taps from any screen (the
 header's "Urgent help", then the row). Every contact matches its official source on release day.
 
+**As built, 2026-09-27.** After review, `/terms` (000 and 13 11 14) and the `/urgent` page
+description (000) stopped writing the numbers out and read them from the registry with `said()`.
+`src/model/crisis-contacts.test.ts` now fails if any file under `app/` writes a registry number
+itself, so a page cannot drift from the registry.
+
 ### W2. No measure, no "Working well" (N1) · P0 · Phase 1
 
 **Change**
@@ -277,6 +285,28 @@ New text-budget state `model-compare` with a fixed clock.
 **Acceptance:** a person who used the app a month ago sees the shape they had then under the shape
 they have now, and which month "then" is, without reading a sentence.
 
+**As built, 2026-09-27.**
+- The pill is a caption slot in the radar. On a phone it sits directly under the chart, above the
+  six axis cards; after the cards it was below the fold, and the outline had no name where it was
+  drawn. From 768px the axis seats sit around the chart inside its card, so the pill sits just
+  under the card.
+- Snapshots start the first time the map draws anything: Start, a rated game, a character or a
+  goal. Someone who plays before answering Start still gets a day one. A blank map is never day one.
+- Months are named by calendar year: "August" this year, "August last year", "The September before
+  last" (two calendar years back but under two years), then "Two years ago". Counting months, as
+  planned, named a month from last year without "last year" while it was under a year old, so it
+  read as this year's.
+- The pill follows the radio pattern: only the checked option is in the tab order, and the arrow
+  keys, Home and End move the choice and the focus.
+- The screen-reader sentence names rung changes as well as status changes ("Starting: Named in
+  August, Kept now."). The outline is drawn from rungs, so a rung-only change used to read as no
+  change.
+- The hub shows one contributor and the axis sheet the next two. The practitioner card is in the
+  axis sheet (D11) only when the sheet has no "Who helps here"; the two together said the same thing.
+- `model-compare` and the compare e2e are dated from today, not on a fixed clock, so no later screen
+  in the text-budget walk inherits a frozen clock. From 1 January to about 9 February the month
+  reads "December last year" (or "November last year"), two words more.
+
 ### W4. My ADHD: say what fills the map; redo the start (7.02, 7.03, N6, D12) · P1 · Phase 2
 
 **What fills each axis** (traced, `needs.ts:148-287`, `matrix.ts:295-303`):
@@ -325,6 +355,16 @@ line for a seeded record. Unit: sources → words. Update `e2e/my-adhd.spec.ts:3
 
 **Acceptance:** a first-time person can answer from the screen alone "what builds this" and "how do I
 change my answers"; nobody loses their old answers by starting again.
+
+**As built, 2026-09-27.**
+- The source line names at most two kinds of source, in the order first answers, check-ins, games,
+  characters, goals, and says "a goal" or "two goals" rather than "a goal you chose". The planned
+  phrases ran past seven words ("From your first answers and a goal you chose." is nine). The
+  longest line is now "From your first answers and two goals.", and a unit test holds every
+  combination to seven words.
+- After "Answer again", a reload part way through resumes the questions on the draft. The end
+  screen reads the answers on the map, never the draft. Before this, the reload landed on the end
+  screen, whose sentence read the half-finished draft while its recommendation read the old answers.
 
 ### W5. Where progress lives: disclose, back up, one delete (5.04, N4, N9, D3, D7) · P0 · Phase 1
 
@@ -405,6 +445,11 @@ screen that shows their record says where it lives; one delete removes all of it
 - **Tests to migrate:** `finder-flow.spec.ts:31-32,209-210`, `matching.spec.ts:162-163`,
   `matching-verification.spec.ts:20-21`, `support/real-roster.ts:36-37`, `support/finder-stages.ts:53,141`,
   `app-shell.spec.ts:82-83`. New: each chip's request yields "Matches".
+
+**As built, 2026-09-27.** The medication chip fills the box with "An ADHD medication review". "A review
+of my ADHD medication" said the person takes ADHD medication, which is a story they did not tell. A
+tap focuses the box in the tap itself, so a key pressed straight after lands in the box; only the
+cursor placement waits a frame.
 
 **W6c. Label the refine control; one sparkle (2.01, N3) · P1 · Phase 1**
 - The clarify button shows **"Improve my matches"** (3) beside its sparkle. The visible text is the
@@ -494,6 +539,17 @@ screen that shows their record says where it lives; one delete removes all of it
 and passes the patient-surface lint (`src/learn/progress.test.ts:66`); the selector (goal-matched first,
 played excluded, ties stable); `at` read and written with a local date.
 
+**As built, 2026-09-27.**
+- "All games" sits beside "Play mix". When open it takes the three tiles' place and opens on the
+  eight lives, so the button stays where the finger left it and the open list stays one screen.
+- "Try these first" takes goal matches, then the starters, then every other unplayed game. The
+  planned order ended with the runs, so Theo, Zoe and Jax, which match no Learn goal, could never be
+  offered, and once the starters were played the heading sat over an empty list. The heading and
+  list now render only when there is a tile.
+- The tiles render once the Lives profile has loaded, into space held for them, so three tiles
+  never show and then swap.
+- Leo counts as played when the second evening ends, the end of the game, not after the first.
+
 ### W8. Learn: the modules pane (5.01, 5.02, 5.03) · P1 · Phase 3
 
 **Goals first (5.03)**
@@ -534,6 +590,11 @@ played excluded, ties stable); `at` read and written with a local date.
 reason line). Unit (`src/lives/lives.test.ts:310-321`): reasons name their goal and character; the
 reason sentence builder; `goalsSkipped` sanitised.
 
+**As built, 2026-09-27.** "Explore all modules" takes the hero's and "For you"'s place while it is
+open, as "All games" does on the games pane. "Change goals" sits beside the "For you" heading.
+After a skip with nothing else to go on there is no "For you", so "Choose goals" sits beside
+"Explore all modules" as the way back to the question.
+
 ### W9. The care map (4.01 to 4.03, N8, N13, 3.03) · P1 · Phase 1 (labels, centre, number) and Phase 3 (layout)
 
 **Phase 1**
@@ -565,6 +626,17 @@ reason sentence builder; `goalsSkipped` sanitised.
 
 **Budget:** `/approach/map` is long-form (82); the centre loses 3 or 4 words.
 
+**As built, 2026-09-27.**
+- The wheel is `min(690px, 100%)`, and the two columns start at 1200px, not 1024px. At 690px a
+  node's 8.75-unit name renders at 12px, so the names reach 12px on a desktop (`e2e/care-map.spec.ts`
+  checks it at 1440). Under 1200px the panel beside a full wheel would be too narrow to read, so it
+  sits below, and a tap brings it into view.
+- The panel lists at most five rows, games first and modules after, instead of three of each.
+- N8, the phone design: two prototypes, dots with lists and four quadrants, are drawn from the real
+  parts and palette by `scripts/care-map-phone-proto.mjs` and captured at 390 with word counts under
+  "The care map on a phone: two options" in `qa/ux-2026-09/README.md`. They wait on the founder. The
+  shipped map is unchanged on a phone and its labels stay exempt from the 12px sweep until one is built.
+
 ### W10. The module page (6.01, 6.02, N2, N12) · P2 · Phase 1
 
 - **Room above "All modules" (6.01):** scope the fix to `.me-screen.learn-screen:has(.learn-module-bar)`
@@ -589,6 +661,19 @@ reason sentence builder; `goalsSkipped` sanitised.
   the spacing test; no text node under 14px on `.composition-0` at 390; `e2e/learning-play.spec.ts:23-30`
   green.
 
+**As built, 2026-09-27.**
+- N12: arriving on a module no longer moves focus, so no ring draws on load. The heading takes
+  focus after a step, or when a module is opened after the person has pressed or tapped something,
+  and a keyboard step shows the ring. The first build hid the ring on the heading altogether, which
+  also hid where focus went after a keyboard step.
+- N2, after review: the quiz eyebrows ("Myth or fact?", "Which is it?") and the score eyebrows ("All
+  of them", "Nicely done", "Now you know") are gone, as is "Recommended first module" on the Start
+  end screen. "Question N of 10" stays as progress, now 13px sentence case instead of an 11px
+  uppercase eyebrow.
+- Back closes a module even straight after opening it. A Back that landed before the URL showed the
+  new module left it open under the library's URL; the browser's `popstate` now closes it whenever
+  the URL it returns to names no module.
+
 ### W11. Gates that see everything (6.02, N7, N8) · P1 · built in Phase 1, extended each phase
 
 Axe returned zero violations on every reviewed screen and could not measure 9 (Learn), 33 (care map)
@@ -604,6 +689,12 @@ a future change from failing.
   each later phase adds its states (`model-compare`, `fills-open`, `games-all`, `games-all-open`,
   `modules-empty`, `modules-goals`) in the same commit that builds them.
 
+**As built, 2026-09-27.** The sampled-contrast and 12px sweep runs at 320, 390, 768 and 1440. The
+axe sweep of the public routes runs at 320, 390 and 768 and at Playwright's default desktop size,
+1280×720. The ledger of small game text (N15) is empty, so anything under 12px fails at every
+width; the care map's SVG labels stay exempt until N8 is built. CI runs the e2e suite in three
+shards instead of two, to carry the extra widths.
+
 ### W12. Housekeeping · P2 · Phase 3
 
 - N11: build `src/design/taste-register.ts` and its test as `SKILL.md` describes, since this plan edits
@@ -612,6 +703,12 @@ a future change from failing.
   (`{#honesty.qa-capture}`).
 - N15: raise each game's small labels to 12px or redraw them, one game per commit, and delete its
   line from the sweep's `LEDGER` in the same commit. The sweep logs a ledger line it no longer sees.
+
+**As built, 2026-09-27.** The before and after captures are in `qa/ux-2026-09/` at 390 and 1440, each
+paired with its workstream in `qa/ux-2026-09/README.md`. There is no `docs/DESIGN-QA.md` entry: that
+file was retired with the other registers on 2026-09-03 (d83dabfc). The `honesty.qa-capture` entry
+in `src/design/taste-register.ts` says so and names the README as the current record. The taste
+skill's own text (`.claude/skills/adhdme-taste/SKILL.md`) still names `docs/DESIGN-QA.md`.
 
 ## 7. Order of work
 

@@ -4,23 +4,26 @@ What the plan in `PLAN.md` asked engineering to build is built, except the phone
 map, which waits on a choice. Everything below the first section needs a person: the founder, counsel,
 a clinician, or real users. Nothing in this tree may answer those on their behalf.
 
+Where the build differs from the plan, `PLAN.md` has a note headed "As built, 2026-09-27" at the end
+of that workstream.
+
 ## Built
 
 | Item | What changed |
 | --- | --- |
-| W1 | Urgent help: text and chat rows beside the call rows. |
+| W1 | Urgent help: text and chat rows beside the call rows, and a text route to 000. Every crisis number a page shows, `/terms` included, comes from the registry, and a test fails if a page writes one out. |
 | W2 | No measure and no "Working well" on the map. |
-| W3 | My ADHD keeps dated snapshots; the dashed shape is day one or a month ago, named in a pill. The hub shows one contributor; the axis lists up to three. |
-| W4 | "How it fills in", "Answer again" (the old answers stay on the map until the last question), a source line and "What you tried" on each axis. |
+| W3 | My ADHD keeps dated snapshots from the first time the map draws anything, Start or not. The dashed shape is day one or a month at least four weeks back, named in a pill directly under the chart on a phone and just under the card from 768px. Months are named by calendar year ("August", "August last year", "The September before last", "Two years ago"). The pill works as radio buttons, and the screen-reader sentence names rung changes too. The hub shows one contributor; the axis sheet shows the next two. |
+| W4 | "How it fills in", "Answer again" (the old answers stay on the map until the last question; a reload part way resumes the questions; the end screen reads the answers on the map), a source line of at most seven words naming at most two kinds ("From your first answers and two goals."), and "What you tried" on each axis. |
 | W5 | Where progress lives, Save and Restore a copy, one delete. |
-| W6 | The serif rule (a question or a quoted voice), example searches under the finder box, the scenarios stage removed, the refine label, Start over in the bar. |
-| W7 | Learn games: "Try these first" (three, goal-matched, played ones left out), "All games" in groups with ticks, the care map as a full-width row, "Saved on this device." |
-| W8 | Learn modules: the goals question first, "For you" under it with a line that says where the picks came from, the rest behind "Explore all modules". |
-| W9 | Care map: labels upright, no count in the centre, no number in the panel, two columns from 1024px with the panel beside the wheel, the panel scrolled into view on a phone, games and modules for each part of life, palette tokens. |
-| W10 | Module page spacing, no category eyebrows, small text off strong fills, no ring on a heading focused by script. |
-| W11 | Contrast sampled where axe cannot measure, at 390 and at 1440; nothing under 12px at either width; every new state in the sweep. |
+| W6 | The serif rule (a question or a quoted voice), example searches under the finder box (neutral requests; a tap focuses the box), the scenarios stage removed, the refine label, Start over in the bar. |
+| W7 | Learn games: "All games" beside "Play mix", taking the three tiles' place when open and opening on the eight lives, in groups with ticks. "Try these first": three, goal-matched first, then the starters, then any unplayed game, shown once the profile has loaded. Leo counts as played when its second evening ends. The care map as a full-width row, "Saved on this device." |
+| W8 | Learn modules: the goals question first, "For you" under it with a line that says where the picks came from, "Change goals" beside it ("Choose goals" after a skip), and the rest behind "Explore all modules", which takes the hero's and "For you"'s place while open. |
+| W9 | Care map: labels upright, no count in the centre, no number in the panel. The wheel is up to 690px, so names reach 12px on a desktop; two columns from 1200px with the panel beside the wheel; below that the panel is scrolled into view after a tap. Up to five games and modules for each part of life, games first. Palette tokens. |
+| W10 | Module page spacing, no category or quiz eyebrows, small text off strong fills. Arriving on a module moves no focus and draws no ring; a keyboard step rings the new heading. Back closes a module even straight after opening it. |
+| W11 | Contrast sampled where axe cannot measure, and nothing under 12px, at 320, 390, 768 and 1440. Axe on the public routes at 320, 390, 768 and the default desktop size (1280). Every new state in the sweep. The e2e suite runs in three CI shards. |
 | N15 | Every game's and `/story`'s small text raised to 12px, one commit per game; the sweep's ledger is empty. |
-| W12 | The taste register (`src/design/taste-register.ts`) and its twin test. Before and after captures of every changed screen at 390 and 1440 in `qa/ux-2026-09/`. `docs/DESIGN-QA.md` was removed with the other registers on 2026-09-03, so the record sits beside the captures; the taste skill's `{#honesty.qa-capture}` still names that file. |
+| W12 | The taste register (`src/design/taste-register.ts`) and its twin test. Before and after captures of every changed screen at 390 and 1440 in `qa/ux-2026-09/`, listed in its `README.md`. `docs/DESIGN-QA.md` was retired with the other registers on 2026-09-03, so the record sits beside the captures; the register's `honesty.qa-capture` entry says so, while the taste skill's own text still names that file. |
 | N14 | Dates on the person's own clock. |
 | Roadmap | Three arcade rounds that taught the wrong thing; the privacy page now says what `/match` sends; opt-in sound for the Chaos Run, never under reduced sensory effects. |
 

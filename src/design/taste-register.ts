@@ -38,7 +38,7 @@ export const TASTE_REGISTER: readonly TasteRule[] = [
   { id: "honesty.claim-earned", rule: "A claim renders only when it is earned.", checkedBy: ["e2e/finder-flow.spec.ts", "e2e/finder-personalisation.spec.ts", "src/lives/lives.test.ts"] },
   { id: "honesty.no-testimonials", rule: "No testimonials, ratings or \"specialist\" where a patient reads.", checkedBy: ["src/directory/profile.test.ts"] },
   { id: "honesty.clinician-declaration", rule: "Copy about a clinician is their declaration.", checkedBy: ["src/matching/provenance.test.ts"] },
-  { id: "honesty.qa-capture", rule: "Every changed screen ships with a capture and a DESIGN-QA entry.", checkedBy: "review" },
+  { id: "honesty.qa-capture", rule: "Every changed screen ships with a before and after capture in qa/ and a line saying what changed (docs/DESIGN-QA.md was retired on 2026-09-03; qa/ux-2026-09/README.md is the current record).", checkedBy: "review" },
   { id: "review.screenshot-both-viewports", rule: "Screenshot at 390x844 and desktop.", checkedBy: "review" },
   { id: "review.walk-fix-smallest", rule: "Walk the checklists; fix in place, smallest diff.", checkedBy: "review" },
   { id: "review.recapture-record", rule: "Re-capture and record the before and after.", checkedBy: "review" },
