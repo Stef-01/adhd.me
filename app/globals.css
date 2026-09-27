@@ -6166,6 +6166,9 @@ select { caret-color: var(--route-strong); }
 /* The portrait map draws smaller than the results one, so its pin names are set larger to read at
    12px on a phone (PLAN.md N15). */
 .story-portrait .coverage-pin-label { font-size: 0.33rem; }
+/* At that size a name set right of its pin ran past the drawing at every width ("South-east QL"),
+   so on the story page the names sit left of the pins, on the land. */
+.story-portrait .coverage-pin-label { text-anchor: end; transform: translateX(-9.2px); }
 /* The map scales with the screen, so 0.33rem comes to 12px only from about 387px wide (9.4px at
    320, 11.7px at 380); below 390 the names take the larger size. */
 @media (max-width: 389px) { .story-portrait .coverage-pin-label { font-size: 0.43rem; } }
