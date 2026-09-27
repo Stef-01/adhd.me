@@ -650,6 +650,21 @@ precision 92.7%, recall 99.4%, aspires 64.9%, C4 94.9%, `never` 1.6%. Every gate
 that one is a single request, punctuality, with no facet to land on. A punctuality facet (or the
 founder's call on it, `docs/matching/NEEDS-GAPS.md` §3) is what stands between L1 and its P5.
 
+What the read does for the order, on the same 358 dev requests and the 11 real clinicians (the tiered
+ranker on each reading, graded against the oracle order; L0 from `qa/_runs/l0dev.mjs`):
+
+| Class | hit@1, L0 → L1 | NDCG@3, L0 → L1 |
+| --- | --- | --- |
+| C7, asks the lexicon cannot hear | 0.158 → 0.632 | 0.393 → 0.715 |
+| C6, long narratives | 0.750 → 0.875 | 0.791 → 0.920 |
+| C8, instructions in the text | 0.714 → 1.000 | 0.838 → 1.000 |
+| C4, negation | 0.949 → 0.974 | 0.971 → 0.983 |
+| C1 and C2, one facet | 1.000 → 0.986 and 0.976 | 1.000 → 0.993 and 0.973 |
+| All dev | 0.921 → 0.957 | 0.945 → 0.966 |
+
+The ledger held 8,526 paid calls and $1.17 at this point (the commit that built the check said $1.49;
+the ledger is the record).
+
 ## 17. Sources
 
 - OpenAI pricing and model facts (gpt-5-nano $0.05 / $0.005 cached / $0.40 per million tokens,
