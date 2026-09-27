@@ -79,7 +79,7 @@ export function MayaWorldGame() {
   </> : undefined;
   const cell = (x: number, y: number) => ({ "--cx": x / COLS, "--cy": y / ROWS } as CSSProperties);
 
-  return <GameShell name="mw-game" label="Maya’s crossing" eyebrow="Maya · One thing at a time" heading={heading(s)} objective={s.phase === "crossing" && s.crossing === 0 ? "Step across. Mind the crowds." : undefined}
+  return <GameShell name="mw-game" label="Maya’s crossing" eyebrow="Maya · One thing at a time" heading={heading(s)}
     hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
     phaseKey={`${s.phase}-${s.crossing}`} data={{ phase: s.phase, crossing: s.crossing, scenario: s.scenario, emotion, overwhelmed: s.overwhelmed }}
     score={SCORES.maya} playing={live} intensity={Math.min(1, .25 + s.load / 110)}>
