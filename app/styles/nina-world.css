@@ -17,6 +17,8 @@
 .nw-page { position: relative; height: 100%; max-width: 100%; aspect-ratio: 5 / 7; border-radius: 6px; background: #fffdf6; background-image: repeating-linear-gradient(transparent 0 calc(100% / 7 - 1px), #e9e1c8 calc(100% / 7 - 1px) calc(100% / 7)); box-shadow: 0 16px 40px #2b213f55; touch-action: none; cursor: pointer; }
 .nw-page > * { position: absolute; left: calc(var(--cx) * 100%); top: calc(var(--cy) * 100%); transform: translate(-50%, -50%); }
 .nw-chunk { width: calc(100% / 5 - 6px); min-height: calc(100% / 7 - 8px); display: grid; place-items: center; padding: 4px; border-radius: 8px; background: #fbe7a8; color: #4a3b1c; font-size: 12px; font-weight: 650; line-height: 1.15; text-align: center; box-shadow: 0 2px 0 #d9b75a; pointer-events: none; }
+/* A long word breaks at a hyphen rather than running past its tile (PLAN.md N15: 12px at 390). */
+.nw-chunk { hyphens: auto; overflow-wrap: break-word; text-align: center; }
 .nw-chunk[data-tab="true"] { background: #e3e6f2; color: #4e5670; box-shadow: 0 2px 0 #b9bfd6; border-radius: 8px 8px 2px 2px; }
 .nw-chunk[data-needed="false"][data-tab="false"] { opacity: .45; text-decoration: line-through; }
 .nw-blot { width: calc(100% / 5 - 10px); aspect-ratio: 1; pointer-events: none; animation: nw-splat .35s cubic-bezier(.3, 1.6, .5, 1) both; }
@@ -58,7 +60,7 @@
   .nw-scene { width: calc(100% - 16px); bottom: 4px; border-radius: 20px; }
   .nw-sheet { top: 2%; width: 94%; gap: 8px; }
   .nw-line span { font-size: 14px; }
-  .nw-chunk { font-size: 11px; }
+  .nw-chunk { font-size: 12px; }
   .nw-pad { grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(2, 48px); }
 }
 @media (max-height: 560px) and (min-aspect-ratio: 1/1) {
@@ -69,5 +71,5 @@
   .nw-pad { grid-column: 2; grid-row: 2; align-self: center; }
   .nw-sheet.is-draft { display: flex; flex-direction: row; align-items: start; }
   .nw-nina { display: none; }
-  .nw-chunk { font-size: 9.5px; padding: 2px; line-height: 1.05; }
+  .nw-chunk { font-size: 12px; padding: 2px; line-height: 1.05; }
 }

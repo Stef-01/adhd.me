@@ -27,7 +27,6 @@ const NOT_PATIENT = new Set(["/clinicians"]);
  */
 const LEDGER: ReadonlyArray<{ match: RegExp; what: string }> = [
   { match: /\bbedroom-/, what: "Leo's evening: prop labels, counts, toolbar and footer at 8 to 11px (PLAN.md N15)" },
-  { match: /\bnw-chunk\b/, what: "Nina's letter chunks at 11px (PLAN.md N15)" },
   { match: /\bjw-tag\b/, what: "Jax's price tags at 11px (PLAN.md N15)" },
   { match: /\bmt-pocket\b/, what: "Mia's pocket count at 11px (PLAN.md N15)" },
   { match: /\b(story-route-stop|story-stats-note|coverage-pin-label)\b/, what: "/story's route stops, map pins and figures note at 9.6 to 11px (PLAN.md N15)" },
