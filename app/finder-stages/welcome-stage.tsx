@@ -150,11 +150,11 @@ export function WelcomeStage({
                 className="finder-example"
                 onClick={() => {
                   setDraft(example.request);
+                  // Focus now, so a key pressed straight after the tap lands in the box. The
+                  // cursor waits a frame, until the box holds the new words.
+                  box.current?.focus();
                   requestAnimationFrame(() => {
-                    const el = box.current;
-                    if (!el) return;
-                    el.focus();
-                    el.setSelectionRange(example.request.length, example.request.length);
+                    box.current?.setSelectionRange(example.request.length, example.request.length);
                   });
                 }}
               >

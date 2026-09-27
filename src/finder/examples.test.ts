@@ -20,7 +20,7 @@ describe("the finder's example chips", () => {
   it("each is short, neutral and passes the patient rules", () => {
     for (const example of eachOf(EXAMPLE_SEARCHES, "the examples")) {
       expect(example.label.split(" ").length, example.label).toBeLessThanOrEqual(3);
-      expect(example.request, example.label).not.toMatch(/\b(I|I'm|me)\b/);
+      expect(example.request, example.label).not.toMatch(/\b(I|I'm|I've|me|my|mine)\b/i);
       expect(lintLandingCopy(`${example.label}. ${example.request}.`), example.label).toEqual([]);
     }
   });

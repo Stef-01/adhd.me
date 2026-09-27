@@ -87,6 +87,7 @@ test("desktop navigation stays available inside a finder task", async ({ page })
   await page.goto("/");
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
   await page.getByRole("button", { name: "Adult ADHD assessment" }).click();
+  await expect(page.getByRole("textbox")).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
