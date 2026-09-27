@@ -30,10 +30,9 @@ function heading(s: ArjunWorld) {
 function objective(s: ArjunWorld) {
   if (s.phase === "setup") return "Pin it, keep the idea, share the follow-up.";
   if (s.phase === "complete") return "Same people. Your saved idea decided it.";
-  if (s.phase === "decided") return undefined;
   if (s.phase === "recap") return "Nothing is lost. Pin what you missed.";
   if (s.phase === "revisit") return s.constraint ? "Something changed. Your pocket can help." : "Pinned questions show what matters.";
-  return s.round === 0 ? "Tap what answers it. Park Arjun’s own ideas." : undefined;
+  return undefined;
 }
 
 export function ArjunWorldGame() {
