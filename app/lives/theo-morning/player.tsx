@@ -6,10 +6,13 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowRight, Check, Pause, Play, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { createMorning, morningReducer, ESSENTIALS, ROOMS, ROOM_NAMES, ITEM_NAMES, POINTS, carrying, packed, commandLabel, isMorning, position, type Command, type Essential, type Room } from "@/lives/theo-morning";
 import { Prop, RoomArt, TheoAvatar } from "./art";
+import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 export function TheoMorningGame() {
   const reduced = useReducedMotion();
   const [state, dispatch] = useReducer(morningReducer, undefined, () => createMorning());
+  usePlayedWhen("theo", state.phase === "complete");
   const [ready, setReady] = useState(false), [selected, setSelected] = useState<Essential>("keys");
   const title = useRef<HTMLHeadingElement>(null), lastPhase = useRef(state.phase);
   const active = isMorning(state), evening = state.phase === "evening", result = state.phase === "departure" || state.phase === "complete";
@@ -34,7 +37,8 @@ export function TheoMorningGame() {
   const left = Math.max(0, Math.ceil(state.deadline - state.elapsed));
   const action = state.work?.command ?? state.intent;
   const progress = state.work ? state.work.elapsed / state.work.duration : 0;
-  const titleText = evening ? "Make room for tomorrow." : state.phase === "complete" ? "A little less to carry." : state.phase === "departure" ? state.first?.caught ? "Made it out." : "A different train." : state.phase === "revisit" ? "You’ve been here before." : "One train. One busy brain.";
+  // A heading says when the scene is where the story moves in time; no kicker above it ({#layout.calm}).
+  const titleText = evening ? "That evening, make room for tomorrow." : state.phase === "complete" ? "A little less to carry." : state.phase === "departure" ? state.first?.caught ? "Made it out." : "A different train." : state.phase === "revisit" ? "Next morning. You’ve been here before." : "One train. One busy brain.";
   const chooseHome = (room: Room) => {
     dispatch({ type: "home", item: selected, room });
     const next = ESSENTIALS.find(k => k !== selected && !state.homes[k]); if (next) setSelected(next);
@@ -49,7 +53,7 @@ export function TheoMorningGame() {
   }
   return <section className="tm-game lives-run" data-phase={state.phase} data-paused={state.paused} data-still={state.still} data-packed={inBag.length} data-node={state.node} data-trips={state.trips} data-intent={state.intent ?? ""} data-hands={hand.join(",")} data-ready={ready} aria-labelledby="tm-title">
     <nav className="tm-nav" aria-label="Game navigation"><Link href="/approach?pane=games" aria-label="Back to games"><ArrowLeft size={21}/></Link><span>Theo · Out the door</span>{active ? <button aria-label={state.paused ? "Resume game" : "Pause game"} onClick={() => dispatch({ type: "pause", paused: !state.paused })}>{state.paused ? <Play size={20}/> : <Pause size={20}/>}</button> : <span/>}</nav>
-    <header className="tm-header"><div><span className="tm-kicker">{evening ? "That evening" : state.phase === "revisit" || state.phase === "complete" ? "The next morning" : "A morning with Theo"}</span><h1 id="tm-title" ref={title} tabIndex={-1}>{titleText}</h1></div>{active && <div className="tm-time" data-urgent={left < 16}><span>{state.still ? "Planning time" : state.updated ? "Next train" : "Train leaves"}</span><strong role="timer" aria-label="Time until train">{left ? `${left}s` : "Departed"}</strong></div>}</header>
+    <header className="tm-header"><div><h1 id="tm-title" ref={title} tabIndex={-1}>{titleText}</h1></div>{active && <div className="tm-time" data-urgent={left < 16}><span>{state.still ? "Planning time" : state.updated ? "Next train" : "Train leaves"}</span><strong role="timer" aria-label="Time until train">{left ? `${left}s` : "Departed"}</strong></div>}</header>
     {active && <div className="tm-pocket" aria-label="Bag contents"><span className="tm-pocket-label">Bag</span>{ESSENTIALS.map(item => <span key={item} data-packed={state.items[item] === "bag"} data-carried={state.items[item] === "hand"}><Prop kind={item}/><span>{ITEM_NAMES[item]}</span>{state.items[item] === "bag" && <Check size={13} aria-label="packed"/>}</span>)}<span className="tm-hands">{hand.length}/2 hands</span></div>}
     {evening && <div className="tm-setup-items" role="group" aria-label="Choose an essential to give a home">{ESSENTIALS.map(item => <button key={item} aria-pressed={selected === item} onClick={() => setSelected(item)}><Prop kind={item}/>{ITEM_NAMES[item]}{state.homes[item] && <Check size={15}/>}</button>)}</div>}
     <div className="tm-theatre" data-evening={evening} data-rain={state.phase === "revisit" || state.phase === "complete"}>
@@ -73,7 +77,7 @@ export function TheoMorningGame() {
       {active && <div className="tm-demands"><div className="tm-demands-list"><AnimatePresence initial={false}>{state.demands.map(d => <motion.button key={d} initial={state.still ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: .18 }} disabled={state.paused} aria-pressed={state.intent === d} onClick={() => select(d)}><Prop kind={d}/>{commandLabel(state, d)}</motion.button>)}</AnimatePresence></div>{state.demands.length > 0 && <button className="tm-later" disabled={state.paused} onClick={() => select("later")} aria-pressed={state.intent === "later"}>Park for later</button>}</div>}
       {active && <div className="tm-actions"><div>{!state.updated && <button className="tm-quiet" disabled={state.paused} onClick={() => select("message")}>Update Ari</button>}{state.load > 50 && <button className="tm-quiet" disabled={state.paused} onClick={() => select("breathe")}>Take a breath</button>}</div><button className="tm-primary" disabled={state.paused || !ready} onClick={() => select("door")}>Leave <ArrowRight size={18}/></button></div>}
       {evening && <div className="tm-actions"><span className="tm-setup-count">{Object.keys(state.homes).length}/3 homes</span><button className="tm-primary" disabled={ESSENTIALS.some(k => !state.homes[k])} onClick={() => dispatch({ type: "tomorrow" })}>Tomorrow <ArrowRight size={18}/></button></div>}
-      {result && <div className="tm-ending"><span className="tm-result-stat">{state.phase === "complete" ? `${state.first?.trips} → ${state.trips} trips` : `${state.trips} trips · ${Math.round(state.elapsed)}s`}</span>{state.phase === "departure" ? <button className="tm-primary" onClick={() => dispatch({ type: "evening" })}>Later that evening <ArrowRight size={18}/></button> : <><button className="tm-primary" onClick={() => { setSelected("keys"); dispatch({ type: "restart" }); }}><ArrowCounterClockwise size={18}/>Another morning</button><Link href="/lives/learn?module=launch_pad_v1">Make your own launch pad <ArrowRight size={17}/></Link></>}</div>}
+      {result && <div className="tm-ending"><span className="tm-result-stat">{state.phase === "complete" ? `${state.first?.trips} → ${state.trips} trips` : `${state.trips} trips · ${Math.round(state.elapsed)}s`}</span>{state.phase === "departure" ? <button className="tm-primary" onClick={() => dispatch({ type: "evening" })}>Later that evening <ArrowRight size={18}/></button> : <><button className="tm-primary" onClick={() => { setSelected("keys"); dispatch({ type: "restart" }); }}><ArrowCounterClockwise size={18}/>Another morning</button><Link href="/lives/learn?module=launch_pad_v1">Make your own launch pad <ArrowRight size={17}/></Link><RelatedRun who="theo" arrow={17}/></>}</div>}
     </div>
     {state.phase === "complete" && <SkillRecommendation context="time" />}
   </section>;

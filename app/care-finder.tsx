@@ -27,6 +27,9 @@ import { readModel } from "@/model/store";
 import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
+import { facetKey, needForKey, shortLabel, type NeedSignal } from "@/matching/needs";
+import { heardChips } from "@/finder/heard";
+import { FINDER_COPY } from "./finder-copy";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import {
   DEFAULT_SPEECH_LANGUAGE,
@@ -51,7 +54,6 @@ import {
 import { useFinderHistory } from "./finder-history";
 import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
-import { ScenariosStage } from "./finder-stages/scenarios-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { TypeStage } from "./finder-stages/type-stage";
 import { ResultsStage } from "./finder-stages/results-stage";
@@ -75,11 +77,11 @@ import { BookingStage } from "./finder-stages/booking-stage";
 
 const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
+/** At level 1, how long the results wait for the read before ranking on the finder's own. */
+const READ_TIMEOUT_MS = 12_000;
 
-export function CareFinder() {
-  const [archetypeIndex, setArchetypeIndex] = useState(0);
-  // The scenario browser rotates on its own until the visitor takes over.
-  const [autoCycle, setAutoCycle] = useState(true);
+/** @param readLevel `ADHDME_LLM_LEVEL` in effect (LLM-MATCHING-PLAN §15): at 0 the finder reads the words itself and asks nothing. */
+export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
   const reducedMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
@@ -106,7 +108,6 @@ export function CareFinder() {
   const withRequestCare = useCallback((held: Filters): Filters => ({ ...held, ...combineCarePreferences(held, requestCare) }), [requestCare]);
   const effectiveFilters = useMemo(() => withRequestCare(filters), [filters, withRequestCare]);
   const [matchIndex, setMatchIndex] = useState(0);
-  const [matchDirection, setMatchDirection] = useState<1 | -1>(1);
   // Speech state. `heard` is the live transcript, so the screen shows words as they arrive; that
   // is the only reliable signal to somebody that the microphone is actually working.
   // Where the person says they are. A typed suburb or postcode, never the device's location: no
@@ -180,7 +181,49 @@ export function CareFinder() {
    */
   const [need, setNeed] = useState<Need | null>(null);
   useEffect(() => { setNeed(topNeed(readModel(deviceLearningStorage))); }, []);
-  const matches = useMemo(() => orderByProblemFit(rankCliniciansNear(request, origin, roster), need), [request, origin, roster, need]);
+  /**
+   * "What we heard" (LLM-MATCHING-PLAN §15): the read the ranking runs on, its strongest facets as
+   * chips, and the ones the person took out, which last until the words change. With none taken
+   * out the list is exactly the one it always was; with some, `rankClinicians` ranks on the rest,
+   * in the browser, without a request.
+   */
+  const [removedHeard, setRemovedHeard] = useState<{ request: string; keys: readonly string[] }>({ request: "", keys: [] });
+  const removed = useMemo(() => new Set(removedHeard.request === request ? removedHeard.keys : []), [removedHeard, request]);
+  /**
+   * Level 1: the results ask `/api/finder/read` once for each new set of words and wait for it.
+   * Its keys are the read everything below runs on; with no answer, or the lexicon's, it is the
+   * finder's own read, exactly the level 0 list.
+   */
+  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
+  const reading = readLevel >= 1 && (routeRead.request !== request || !routeRead.done);
+  useEffect(() => {
+    if (readLevel < 1 || stage !== "results" || routeRead.request === request) return;
+    setRouteRead({ request, done: false });
+    const body = JSON.stringify({ text: request });
+    fetch("/api/finder/read", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
+      .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string }>) : null))
+      .catch(() => null)
+      .then((answer) => setRouteRead((held) => held.request !== request ? held : {
+        request,
+        done: true,
+        needs: answer?.source === "llm" ? answer.keys.flatMap((key) => needForKey(key) ?? []) : undefined,
+      }));
+  }, [readLevel, stage, request, routeRead.request]);
+  const modelNeeds = routeRead.request === request ? routeRead.needs : undefined;
+  const read = useMemo(() => modelNeeds ?? needsFor(request, roster), [modelNeeds, request, roster]);
+  const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
+  const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
+  /** A removed facet is no reason for a row or a profile either. */
+  const removedLabels = useMemo(() => {
+    const keptLabels = new Set(kept.map((n) => n.label));
+    return new Set(read.filter((n) => removed.has(facetKey(n.facet)) && !keptLabels.has(n.label)).map((n) => n.label));
+  }, [read, removed, kept]);
+  /** Undefined is the lexicon's own path, with its weighting, when nothing is taken out. */
+  const rankNeeds = removed.size === 0 && !modelNeeds ? undefined : kept;
+  const matches = useMemo(
+    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds), need),
+    [request, origin, roster, need, rankNeeds],
+  );
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // The matched tags, in the taxonomy's own order, capped at the three Calm Clarity allows in a
   // row. These are the person's own map read back to them.
@@ -261,7 +304,9 @@ export function CareFinder() {
   const arrivalStage = useRef<Stage>("welcome");
   const moved = useRef(false);
 
-  const archetype = careArchetypes[archetypeIndex] ?? defaultArchetype;
+  // The request the finder falls back to when a search is empty; the scenarios stage that cycled
+  // through the others is gone (PLAN.md W6b), and /examples keeps the long archetypes.
+  const archetype = defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
 
   const focusOnArrival = moved.current || stage !== arrivalStage.current;
@@ -307,31 +352,6 @@ export function CareFinder() {
     remember({ request, draft, matchId: clinician.id });
   }, [remember, request, draft, clinician.id]);
 
-  /**
-   * O95 audit fix: this interval used to run four sibling setState calls INSIDE the
-   * setArchetypeIndex updater. Updaters must be pure — StrictMode replays them, and React
-   * is free to call them more than once — so the interval now only advances the index,
-   * and the effect below derives the scenario's request/matches from wherever the index
-   * lands. Same rendered output on every path; the side effects just live where React
-   * expects them.
-   */
-  useEffect(() => {
-    if (stage !== "scenarios" || !autoCycle || reducedMotion) return;
-    const timer = window.setInterval(() => {
-      setArchetypeIndex((current) => (current + 1) % careArchetypes.length);
-    }, 5500);
-    return () => window.clearInterval(timer);
-  }, [stage, autoCycle, reducedMotion]);
-
-  // The auto-cycle's side effects, out of the updater. Auto only: a manual cycle sets
-  // autoCycle false first and carries its own direction, so this never fights it.
-  useEffect(() => {
-    if (stage !== "scenarios" || !autoCycle) return;
-    const current = careArchetypes[archetypeIndex] ?? defaultArchetype;
-    setRequest(current.request);
-    setMatchIndex(0);
-    setMatchDirection(1);
-  }, [stage, autoCycle, archetypeIndex]);
 
   const requestSummary = useMemo(() => {
     const cleaned = request.trim().replace(/[.!?]+$/, "");
@@ -342,11 +362,16 @@ export function CareFinder() {
     () => request.trim() === archetype.request ? archetype.headline : getRequestHeadline(request, requestSummary),
     [archetype.headline, archetype.request, request, requestSummary],
   );
+  /** A row names a facet in its chip's words: one fact, said the same way across one screen. */
+  const chipWords = useMemo(() => new Map(read.map((n) => [n.label, shortLabel(n)])), [read]);
   /** O222: ONE pass — the rows index into this instead of re-running the lexicon per row,
    * and the roster threads through so the printed reasons derive from the ranked roster. */
   const allMatches = useMemo(
-    () => matches.map((item) => getPersonalizedMatch(item, request, roster)),
-    [matches, request, roster],
+    () => matches.map((item) => {
+      const match = getPersonalizedMatch(item, request, roster, read);
+      return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s)).map((s) => chipWords.get(s) ?? s) };
+    }),
+    [matches, request, roster, read, removedLabels, chipWords],
   );
   const allSignals = useMemo(() => allMatches.map((m) => m.signals), [allMatches]);
   /**
@@ -354,7 +379,7 @@ export function CareFinder() {
    * some more than once, and every call re-runs the full lexicon read over the request — a
    * dozen redundant scans per keystroke once the geo field re-renders the results stage.
    */
-  const quality = useMemo(() => matchQuality(request, roster), [request, roster]);
+  const quality = useMemo(() => matchQuality(request, roster, rankNeeds), [request, roster, rankNeeds]);
   const tieNote = useMemo(() => topTieNote(request, roster), [request, roster]);
   /** Read only when a tie exists — unconditional, this would ADD a rankBands run to the common
    * no-tie render; conditional, it matches the old cost exactly with the derivation named. */
@@ -381,7 +406,10 @@ export function CareFinder() {
   }, [tieNote, bands]);
   const shown = showAll ? matches : matches.slice(0, visibleCount);
 
-  const personalizedMatch = useMemo(() => getPersonalizedMatch(clinician, request, roster), [clinician, request, roster]);
+  const personalizedMatch = useMemo(() => {
+    const match = getPersonalizedMatch(clinician, request, roster, read);
+    return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s)) };
+  }, [clinician, request, roster, read, removedLabels]);
   /**
    * The evidence behind the pills, with provenance (O21). `matchEvidence` already carries the
    * phrase from the reader's OWN words that reached each facet (`matched`) — the ranking has
@@ -393,7 +421,7 @@ export function CareFinder() {
   // evidence and its "does not answer" list ran over the 2-entry real roster while the ranking
   // ran over 22 — exactly what the comment on `roster` above promises cannot happen. The
   // call-site pin in engine-seam.test.ts now refuses a defaulted roster read in this file.
-  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster), [clinician, request, roster]);
+  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster, read).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
   /**
    * The asks this clinician does NOT answer (O51) — the same needsFor read as the evidence
    * with the filter inverted, so the two lists partition what the reader asked and cannot
@@ -401,7 +429,7 @@ export function CareFinder() {
    * reader to assume the rest were hits too, which is the quiet dishonesty the console's
    * "Missed" column was built to prevent — for staff. The reader gets the same truth.
    */
-  const profileMissed = useMemo(() => missedAsks(clinician, request, roster), [clinician, request, roster]);
+  const profileMissed = useMemo(() => missedAsks(clinician, request, roster, read).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
 
   /**
    * O102: the other GP to hold this one against, and the table that compares them.
@@ -427,18 +455,18 @@ export function CareFinder() {
   const compareRows: readonly CompareRow[] = useMemo(() => {
     if (!compareWith) return [];
     const declaredBy = (item: Clinician) =>
-      new Set(matchEvidence(item, request, roster).map((need) => need.label));
+      new Set(matchEvidence(item, request, roster, read).map((need) => need.label));
     const left = declaredBy(clinician);
     const right = declaredBy(compareWith);
     const seen = new Set<string>();
     const rows: CompareRow[] = [];
-    for (const ask of needsFor(request, roster)) {
+    for (const ask of kept) {
       if (seen.has(ask.label)) continue;
       seen.add(ask.label);
       rows.push({ label: ask.label, left: left.has(ask.label), right: right.has(ask.label) });
     }
     return rows;
-  }, [clinician, compareWith, request, roster]);
+  }, [clinician, compareWith, request, roster, read, kept]);
 
   /** @param restarted U9: a language change on the listening screen, which the live region names. */
   function startListening(language = speechLang, restarted = false) {
@@ -575,7 +603,6 @@ export function CareFinder() {
     setDraft("");
     setRequest(archetype.request);
     setMatchIndex(0);
-    setMatchDirection(1);
     dispatchBanner({ type: "cleared" });
   }
 
@@ -616,6 +643,14 @@ export function CareFinder() {
     setShowAll(false);
   }
 
+  /** A "What we heard" chip tapped: out of the ranking, or back in. The list re-ranks in place. */
+  function toggleHeard(key: string) {
+    const keys = removed.has(key) ? [...removed].filter((k) => k !== key) : [...removed, key];
+    setRemovedHeard({ request, keys });
+    setMatchIndex(0);
+    setShowAll(false);
+  }
+
   /** One held filter dropped from the empty screen's way out, written to the device like a chip. */
   function relaxFilters(next: Filters) {
     writeFilters(window.localStorage, next);
@@ -634,15 +669,6 @@ export function CareFinder() {
     setShowAll(false);
   }
 
-  function cycleArchetype(direction: 1 | -1) {
-    const nextIndex = (archetypeIndex + direction + careArchetypes.length) % careArchetypes.length;
-    const nextArchetype = careArchetypes[nextIndex] ?? defaultArchetype;
-    setArchetypeIndex(nextIndex);
-    setRequest(nextArchetype.request);
-    setDraft("");
-    setMatchIndex(0);
-    setMatchDirection(direction);
-  }
 
   /**
    * O230: the tab bar belongs to the app's ROOT surfaces, and a native push hides it — the same
@@ -685,28 +711,9 @@ export function CareFinder() {
             includeSynthetic={includeSynthetic}
             onToggleSynthetic={toggleSynthetic}
             onTalk={() => startListening()}
-            onScenarios={() => {
-              setAutoCycle(true);
-              goTo("scenarios");
-            }}
           />
         )}
 
-        {stage === "scenarios" && (
-          <ScenariosStage
-            key="scenarios"
-            focusOnArrival={focusOnArrival}
-            archetype={archetype}
-            archetypeIndex={archetypeIndex}
-            matchDirection={matchDirection}
-            onBack={() => backTo("welcome")}
-            onCycle={(direction) => {
-              setAutoCycle(false);
-              cycleArchetype(direction);
-            }}
-            onTry={() => findMatches(archetype.request)}
-          />
-        )}
 
         {stage === "listening" && (
           <ListeningStage
@@ -773,6 +780,10 @@ export function CareFinder() {
             waysOut={ways}
             onRelax={relaxFilters}
             emptyKind={emptyKind}
+            heard={heardFacets}
+            removedHeard={removed}
+            onToggleHeard={toggleHeard}
+            reading={reading}
             place={place}
             filters={effectiveFilters}
             onToggleFilter={toggleFilter}

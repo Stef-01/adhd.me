@@ -111,6 +111,15 @@ test('every size fits, the exit is reachable, and each phase passes accessibilit
   await expectNoViolations(page, 'Arjun completion');
 });
 
+test('on the smallest phone every control down to the end can be tapped', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto(URL);
+  await meet(page, 'setup');
+  await setup(page);
+  await meet(page, 'complete');
+});
+
 test('play writes nothing to storage beyond the sound preference', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(URL);

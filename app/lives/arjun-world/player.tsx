@@ -10,6 +10,8 @@ import { SCORES, sound } from "../sounds";
 import { MeetingRoom, TableTop } from "./art";
 import { CastBean } from "../kit/cast";
 import type { Mood } from "@/learn/interactive";
+import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 const SEATS: Speaker[] = ["noor", "sam", "rae"];
 const SEAT_X: Record<Speaker, number> = { noor: .16, sam: .5, rae: .84, arjun: .5 };
@@ -28,14 +30,14 @@ function heading(s: ArjunWorld) {
 function objective(s: ArjunWorld) {
   if (s.phase === "setup") return "Pin it, keep the idea, share the follow-up.";
   if (s.phase === "complete") return "Same people. Your saved idea decided it.";
-  if (s.phase === "decided") return undefined;
   if (s.phase === "recap") return "Nothing is lost. Pin what you missed.";
   if (s.phase === "revisit") return s.constraint ? "Something changed. Your pocket can help." : "Pinned questions show what matters.";
-  return s.round === 0 ? "Tap what answers it. Park Arjun’s own ideas." : undefined;
+  return undefined;
 }
 
 export function ArjunWorldGame() {
   const { state: s, dispatch } = useLoop(arjunReducer, () => createArjun(), running);
+  usePlayedWhen("arjun", s.phase === "complete");
   const stream = useRef<HTMLDivElement>(null);
   const all = lines(s);
   const pinnedCount = s.board.filter(p => p && !p.stale && isRelevant(s, p.line)).length;
@@ -143,6 +145,7 @@ export function ArjunWorldGame() {
         {s.phase === "complete" && <div className="aw-overlay is-final">
           <span className="kit-stamp"><Check size={18} weight="bold" /> {name(s.owner ?? "rae")} follows up {s.when}</span>
           <Link className="kit-primary" href="/lives/learn?module=meeting_anchor_v1">Try a meeting anchor <ArrowRight size={19} /></Link>
+          <RelatedRun who="arjun" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another meeting</button>
         </div>}
       </div>

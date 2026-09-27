@@ -10,6 +10,8 @@ import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Queue } from "./art";
+import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 const art = (name: string, className?: string) => <img className={className} src={`/games/maya-journey/${name}.svg`} alt="" draggable={false} />;
 const THEMES = ["station", "library", "market"];
@@ -27,6 +29,7 @@ function heading(s: MayaWorld) {
 
 export function MayaWorldGame() {
   const { state: s, dispatch } = useLoop(mayaReducer, () => createMaya(), running);
+  usePlayedWhen("maya", s.phase === "complete");
   const live = s.phase === "crossing" || s.phase === "revisit";
   const c = crossingDef(s);
   const theme = THEMES[s.scenario % THEMES.length];
@@ -93,7 +96,7 @@ export function MayaWorldGame() {
   </> : undefined;
   const cell = (x: number, y: number) => ({ "--cx": x / COLS, "--cy": y / ROWS } as CSSProperties);
 
-  return <GameShell name="mw-game" label="Maya’s crossing" eyebrow="Maya · One thing at a time" heading={heading(s)} objective={s.phase === "crossing" && s.crossing === 0 ? "Step across. Mind the crowds." : undefined}
+  return <GameShell name="mw-game" label="Maya’s crossing" eyebrow="Maya · One thing at a time" heading={heading(s)}
     hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
     phaseKey={`${s.phase}-${s.crossing}`} data={{ phase: s.phase, crossing: s.crossing, scenario: s.scenario, emotion, overwhelmed: s.overwhelmed, x: s.maya.x, y: s.maya.y, theme }}
     score={SCORES.maya} playing={live} intensity={Math.min(1, .25 + s.load / 110)}>
@@ -134,6 +137,7 @@ export function MayaWorldGame() {
         </div> : <div className="mw-choices">
           <span className="kit-stamp"><Check size={18} weight="bold" /> Ari found you</span>
           <Link className="kit-primary" href="/lives/learn?module=lower_sensory_floor_v1">Lower the sensory floor <ArrowRight size={18} /></Link>
+          <RelatedRun who="maya" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another place</button>
         </div>}
       </div>}

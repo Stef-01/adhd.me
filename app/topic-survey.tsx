@@ -82,7 +82,7 @@ export function TopicSurveyScreen() {
               {questions.map((q, i) => <li key={q.id} className={i < index ? "is-done" : i === index ? "is-current" : ""} />)}
             </ol>
             <p className="life-eyebrow">{survey.title} · {index + 1} of {questions.length}</p>
-            {question && <h1 tabIndex={-1}>{question.prompt}</h1>}
+            {question && <h1 tabIndex={-1} className="t-question">{question.prompt}</h1>}
             {question?.note && <p className="onboarding-note">{question.note}</p>}
             {question?.kind === "scale" ? (
               <label className="onboarding-scale">

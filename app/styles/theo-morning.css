@@ -10,11 +10,10 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-nav > a, .tm-nav > button, .tm-nav > span:last-child { width: 44px; height: 44px; }
 .tm-nav > a, .tm-nav > button { display: grid; place-items: center; border: 0; background: #fff6dc70; border-radius: 50%; color: inherit; }
 .tm-header { width: min(100%, 1100px); display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 16px 0; }
-.tm-kicker { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; }
 .tm-game .tm-header h1 { font-family: "Newsreader Variable", Georgia, serif; font-weight: 550; font-size: clamp(30px, 3.5vw, 48px); line-height: 1.06; letter-spacing: -.035em; margin: 6px 0 0; color: var(--tm-ink); }
 .tm-header h1:focus { outline: none; }
 .tm-time { display: flex; flex-direction: column; text-align: right; flex-shrink: 0; min-width: 95px; }
-.tm-time > span { font-size: 11px; font-weight: 550; }
+.tm-time > span { font-size: 12px; font-weight: 550; }
 .tm-time strong { font-size: 32px; line-height: 1.15; font-weight: 650; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
 .tm-time[data-urgent="true"] { color: #8a3727; }
 /* Both rows are pill-shaped items that cannot shrink below their own content (min-width: auto on a
@@ -24,7 +23,7 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
    language, so it wraps. At 320 the three essentials take two rows, which is the honest outcome:
    the alternative was shrinking a drawn prop to 20px to force one line, and the games standard
    asks for pieces that read as things rather than pieces that fit. */
-.tm-pocket, .tm-setup-items { width: min(100%, 1100px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px; min-height: 44px; margin-bottom: 10px; font-size: 11px; }
+.tm-pocket, .tm-setup-items { width: min(100%, 1100px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px; min-height: 44px; margin-bottom: 10px; font-size: 12px; }
 .tm-pocket > span:not(.tm-pocket-label, .tm-hands) { display: flex; align-items: center; gap: 4px; opacity: 1; }
 .tm-pocket > span[data-carried="true"] { opacity: 1; }
 .tm-pocket > span[data-packed="true"] { opacity: 1; font-weight: 750; }
@@ -46,7 +45,7 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-room-living { left: 0; bottom: 0; background: #ecd5a5; }
 .tm-room-door { right: 0; bottom: 0; background: #e5bd83; }
 .tm-furniture { width: 100%; height: 85%; display: block; opacity: .84; }
-.tm-room-name { position: absolute; left: 15px; top: 12px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; opacity: 1; }
+.tm-room-name { position: absolute; left: 15px; top: 12px; font-size: 13px; font-weight: 700; opacity: 1; }
 .tm-corridor { position: absolute; background: #f4d49b; }
 .tm-corridor-x { left: 0; top: 43%; width: 100%; height: 14%; }
 .tm-corridor-y { left: 44%; top: 0; width: 12%; height: 100%; }
@@ -59,7 +58,7 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-object[data-active="true"] { background: #e6efcd; box-shadow: 0 0 0 2px #456e59, 0 4px 0 #456e5930; }
 .tm-object-art { display: block; position: relative; width: 46px; height: 46px; }
 .tm-object-art > svg { width: 100%; height: 100%; pointer-events: none; }
-.tm-object > span:nth-child(2) { font-size: 10px; font-weight: 700; line-height: 1.2; }
+.tm-object > span:nth-child(2) { font-size: 12px; font-weight: 700; line-height: 1.2; }
 .tm-object-progress, .tm-charge { position: absolute; left: 10px; right: 10px; bottom: 3px; height: 3px; border-radius: 3px; background: #284b4020; overflow: hidden; }
 .tm-object-progress i, .tm-charge i { width: 100%; height: 100%; display: block; background: #456e59; transform-origin: left; }
 .tm-charge { bottom: 15px; left: 17px; right: 17px; height: 16px; border-radius: 2px; background: #b1cdbf; }
@@ -87,13 +86,13 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-message p { font: 550 12px/1.4 var(--font-ui, "Plus Jakarta Sans Variable"), sans-serif; margin: 0; color: #1A1C1C; }
 .tm-mood { width: 9px; height: 9px; flex-shrink: 0; border-radius: 50%; background: #4c826a; }
 .tm-mood[data-upset="true"] { background: #a94f36; }
-.tm-busy { margin-left: auto; color: #415749; font-size: 11px; text-align: right; }
+.tm-busy { margin-left: auto; color: #415749; font-size: 12px; text-align: right; }
 .tm-demands { display: flex; align-items: center; gap: 8px; min-height: 0; }
 .tm-demands-list { display: flex; flex-wrap: wrap; gap: 5px; }
-.tm-demands-list button { display: flex; align-items: center; gap: 4px; border: 0; min-height: 44px; padding: 4px 10px 4px 5px; background: #f6e4b9; border-radius: 10px; font-size: 11px; }
+.tm-demands-list button { display: flex; align-items: center; gap: 4px; border: 0; min-height: 44px; padding: 4px 10px 4px 5px; background: #f6e4b9; border-radius: 10px; font-size: 12px; }
 .tm-demands-list button[aria-pressed="true"] { box-shadow: inset 0 0 0 2px #456e59; }
 .tm-demands-list svg { width: 27px; height: 30px; }
-.tm-later { border: 0; border-bottom: 1px solid #819061; background: transparent; min-height: 44px; font-size: 11px !important; white-space: nowrap; padding: 5px; margin-left: auto; }
+.tm-later { border: 0; border-bottom: 1px solid #819061; background: transparent; min-height: 44px; font-size: 12px !important; white-space: nowrap; padding: 5px; margin-left: auto; }
 .tm-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
 /* On screens too short for the whole house, Leave stays in reach while the train counts down. */
 @media (max-height: 700px) { .tm-game { padding-bottom: 96px; } .tm-actions { position: fixed; left: 0; right: 0; bottom: var(--consent-height, 0px); z-index: 30; margin: 0; padding: 18px clamp(14px, 4vw, 64px) max(10px, env(safe-area-inset-bottom)); background: linear-gradient(#fafaf700, var(--paper, #FAFAF7) 40%); } }
@@ -113,11 +112,11 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
 .tm-theatre[data-evening="true"] .tm-room { background: #c7cbb8; }
 .tm-theatre[data-evening="true"] .tm-room-bedroom { background: #cac1b2; }
 .tm-theatre[data-evening="true"] .tm-corridor { background: #a9b3a8; }
-.tm-home { position: absolute; z-index: 5; transform: translate(-50%, -10%); min-width: 88px; min-height: 74px; border: 1px dashed #476c5a; border-radius: 14px; padding: 6px 12px; background: #fff6dce8; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px !important; }
+.tm-home { position: absolute; z-index: 5; transform: translate(-50%, -10%); min-width: 88px; min-height: 74px; border: 1px dashed #476c5a; border-radius: 14px; padding: 6px 12px; background: #fff6dce8; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12px !important; }
 .tm-home-props { display: flex; align-items: center; justify-content: center; min-height: 30px; }
 .tm-home-props > svg { width: 30px; height: 30px; }
 .tm-home-props > span { font-size: 25px; line-height: 30px; font-weight: 300; }
-.tm-night-cue, .tm-night-note { display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; width: 80px; min-height: 64px; border: 0; border-radius: 13px; background: #fff6dce8; z-index: 5; font-size: 10px !important; padding: 4px; }
+.tm-night-cue, .tm-night-note { display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; width: 80px; min-height: 64px; border: 0; border-radius: 13px; background: #fff6dce8; z-index: 5; font-size: 12px !important; padding: 4px; }
 .tm-night-cue { left: 50%; top: 6%; transform: translateX(-50%); }
 .tm-night-note { left: 50%; top: 81%; transform: translateX(-50%); }
 .tm-night-cue > svg, .tm-night-note > svg { width: 36px; height: 36px; }
@@ -134,16 +133,15 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
   .tm-game { padding: 8px 12px 22px; }
   .tm-header { margin: 12px 0 10px; gap: 10px; }
   .tm-game .tm-header h1 { font-size: 29px; max-width: 250px; }
-  .tm-kicker { font-size: 8px; letter-spacing: .12em; }
   .tm-time { min-width: 72px; }
   .tm-time strong { font-size: 25px; }
-  .tm-time > span { font-size: 9px; }
-  .tm-pocket { gap: 6px; font-size: 9px; margin-bottom: 2px; }
+  .tm-time > span { font-size: 12px; }
+  .tm-pocket { gap: 4px 8px; font-size: 12px; margin-bottom: 2px; }
   .tm-pocket svg { width: 21px; height: 25px; }
   .tm-pocket > span:not(.tm-pocket-label, .tm-hands) { gap: 2px; }
   .tm-house { height: 452px; border-width: 5px; border-radius: 17px; }
   .tm-room { border-radius: 8px; }
-  .tm-room-name { top: 8px; left: 8px; font-size: 8px; letter-spacing: .04em; }
+  .tm-room-name { top: 6px; left: 8px; font-size: 12px; }
   .tm-furniture { margin-top: 23px; height: 56%; }
   .tm-object { width: 52px; min-height: 68px; border-radius: 12px; padding: 2px 3px 7px; }
   .tm-object-art { width: 39px; height: 39px; }
@@ -153,24 +151,24 @@ body:has(.tm-game) { background: var(--paper, #FAFAF7); }
   .tm-worn-bag { width: 25px; height: 28px; }
   .tm-bag-position { top: 59%; }
   .tm-message { min-height: 46px; gap: 7px; }
-  .tm-message p { font-size: 11px; }
+  .tm-message p { font-size: 12px; }
   .tm-busy { display: none; }
   .tm-demands { flex-wrap: wrap; gap: 3px; }
   .tm-demands-list { gap: 4px; }
-  .tm-demands-list button { font-size: 10px; padding-right: 7px; }
+  .tm-demands-list button { font-size: 12px; padding-right: 7px; }
   .tm-demands-list svg { width: 21px; height: 24px; }
   .tm-later { margin-left: 0; }
   .tm-actions { gap: 5px; }
   .tm-actions > div { gap: 4px; }
-  .tm-quiet { font-size: 10px !important; padding: 8px 10px; }
+  .tm-quiet { font-size: 12px !important; padding: 8px 10px; }
   .tm-primary { min-height: 46px; padding: 12px 18px; font-size: 12px !important; gap: 8px; }
-  .tm-home { min-width: 74px; min-height: 68px; padding: 4px 6px; font-size: 10px !important; }
+  .tm-home { min-width: 74px; min-height: 68px; padding: 4px 6px; font-size: 12px !important; }
   .tm-home-props > svg { width: 25px; height: 29px; }
   .tm-night-cue, .tm-night-note { width: 68px; min-height: 62px; }
   .tm-ending { gap: 8px; }
   .tm-ending > a { width: 100%; justify-content: flex-end; }
 }
-@media (max-width: 359px) { .tm-game .tm-header h1 { font-size: 25px; } .tm-hands { font-size: 8px; } .tm-pocket { gap: 4px; } .tm-house { height: clamp(330px, calc(100svh - 250px), 442px); } }
+@media (max-width: 359px) { .tm-game .tm-header h1 { font-size: 25px; } .tm-hands { font-size: 12px; } .tm-pocket { gap: 4px; } .tm-house { height: clamp(330px, calc(100svh - 250px), 442px); } }
 @media (max-height: 500px) and (min-width: 600px) { .tm-house { height: max(250px, calc(100svh - 175px)); } .tm-game { padding-inline: 30px; padding-top: 6px; } .tm-header { margin: 4px 0; } .tm-game .tm-header h1 { font-size: 22px; } }
 @media (prefers-reduced-motion: reduce) { .tm-game *, .tm-game *::before, .tm-game *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 .tm-game[data-paused="true"] *, .tm-game[data-still="true"] * { animation-play-state: paused !important; }

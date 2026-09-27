@@ -9,6 +9,8 @@ import { insectOffset, manageable, PERCHES, ROOM_DURATION, roomMood, type Bedroo
 import { BedroomBackdrop, BedAndLeo, RoomBook, RoomHeadphones, RoomLamp, RoomMosquito, RoomPhone, RoomWindow } from "./art";
 import { BedroomAudio } from "./audio";
 import { useBedroom } from "./use-bedroom";
+import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 const HEADINGS: Record<BedroomState["mode"], string> = {
   challenge: "One tiny sound.", recovery: "The room can change.", "wind-down": "A little room to settle.",
@@ -65,6 +67,8 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
   const pauseButton = useRef<HTMLButtonElement>(null);
   const challengeOnly = Boolean(s.rounds && s.mode === "challenge");
   const ended = s.mode === "rest" || s.mode === "complete";
+  // "rest" is the end of the first evening; the game is played only once the second one is done.
+  usePlayedWhen("leo", s.mode === "complete");
   useEffect(() => { setSoundNotice(""); }, [s.revision]);
   const ids = s.insects.map(i => i.id).join(",");
   const calm = Math.round((1 - s.activation) * 100);
@@ -117,21 +121,21 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
     });
   }
   const objective = ended ? s.mode === "complete" ? "Same room. A different evening." : "Leave it ready for tomorrow." :
-    challengeOnly ? "Catch the mosquitoes. Then help Leo settle." : s.rounds && s.mode === "recovery" ? "Choose what helps Leo settle." : manageable(s) ? pageReady ? "Keep your place. Lower the light." : "A page or two. At your pace." :
+    challengeOnly ? undefined : s.rounds && s.mode === "recovery" ? "Choose what helps Leo settle." : manageable(s) ? pageReady ? "Keep your place. Lower the light." : "A page or two. At your pace." :
     s.mode === "revisit" ? "Keep the routine. Find your place." : "Catch the buzz. Change the room.";
 
   return <section className="bedroom-game lives-run" aria-label="Leo’s evening" data-mode={s.mode} data-still={s.still}
     data-round={s.rounds ? s.round : undefined} data-challenge-only={challengeOnly} data-ready={ready} data-paused={s.paused} data-scenario={s.scenario} data-page={s.book.page}>
     <header className="bedroom-toolbar">
       <Link href="/approach?pane=games" aria-label="Back to learning" className="bedroom-icon"><ArrowLeft size={21} /></Link>
-      <span>LEO’S EVENING</span>
+      <span>Leo’s evening</span>
       <div><button className="bedroom-icon" onClick={toggleSound} aria-label={sound ? "Mute room sounds" : "Enable room sounds"} aria-pressed={sound}>
         {sound ? <SpeakerHigh size={21} /> : <SpeakerSlash size={21} />}
       </button><button className="bedroom-icon" ref={pauseButton} onClick={() => dispatch({ type: "pause" })} aria-label="Pause game"><Pause size={21} /></button></div>
     </header>
     <div className="bedroom-caption">
       <h1 tabIndex={-1} ref={heading}>{HEADINGS[s.mode]}</h1>
-      <p>{objective}</p>
+      {objective && <p>{objective}</p>}
       <div className="bedroom-hud">
         <div className="bedroom-regulation"><span>Room to settle</span><div role="meter" aria-label="Leo’s regulation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={calm} aria-valuetext={`${calm} out of 100`}>
           <span style={{ transform: `scaleX(${1 - s.activation})` }} />
@@ -163,17 +167,17 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
         </motion.div>
       </Prop>
       <AnimatePresence initial={false}>{s.insects.map(insect => <Mosquito key={insect.id} insect={insect} clock={clock} still={s.still || s.paused} catchIt={keyboard => catchInsect(insect.id, keyboard)} />)}</AnimatePresence>
-      {s.mode === "revisit" && <span className="bedroom-night-label">ONE EVENING LATER</span>}
+      {s.mode === "revisit" && <span className="bedroom-night-label">One evening later</span>}
     </div>
     <footer className="bedroom-footer">
       <p role="status" aria-live="polite" aria-atomic="true">{soundNotice || s.line}</p>
       {s.mode === "rest" && <button className="bedroom-next" onClick={() => dispatch({ type: "next-evening" })}>Tomorrow evening <ArrowRight size={19} /></button>}
-      {s.mode === "complete" && <div className="bedroom-finish"><button onClick={() => dispatch({ type: "restart" })}>Another evening</button><Link href="/lives/learn?module=lower_sensory_floor_v1">Bring it into your day <ArrowRight size={18} /></Link></div>}
+      {s.mode === "complete" && <div className="bedroom-finish"><button onClick={() => dispatch({ type: "restart" })}>Another evening</button><Link href="/lives/learn?module=lower_sensory_floor_v1">Bring it into your day <ArrowRight size={18} /></Link><RelatedRun who="leo" className="bedroom-related" /></div>}
       {s.mode === "complete" && <SkillRecommendation context="sleep" />}
     </footer>
     <dialog className="bedroom-pause" aria-labelledby="bedroom-pause-title" ref={dialog} onCancel={event => { event.preventDefault(); dispatch({ type: "resume" }); }}>
       <button className="bedroom-icon bedroom-pause-close" aria-label="Close pause menu" onClick={() => dispatch({ type: "resume" })}><X size={20} /></button>
-      <span className="bedroom-pause-eyebrow">A LITTLE SPACE</span><h2 id="bedroom-pause-title">Nothing to keep up with.</h2>
+      <h2 id="bedroom-pause-title">Nothing to keep up with.</h2>
       <button className="bedroom-next" autoFocus onClick={() => dispatch({ type: "resume" })}>Resume <ArrowRight size={19} /></button>
       <button className="bedroom-pace" aria-pressed={s.still} onClick={() => dispatch({ type: "still", value: !s.still })}><span>Play at my pace</span><span className="bedroom-switch" aria-hidden="true" data-on={s.still}><span /></span></button>
       {!ended && s.mode !== "revisit" && <button className="bedroom-pause-quiet" onClick={() => { dispatch({ type: "resume" }); dispatch({ type: "recover" }); }}>Continue without countdown</button>}

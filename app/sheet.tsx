@@ -27,12 +27,24 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { createPortal } from "react-dom";
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from "react";
 import { X } from "@phosphor-icons/react";
 
 /** The heights a sheet rests at, as a share of the viewport. */
 const DETENT = { half: 0.55, full: 0.92 } as const;
 type Detent = keyof typeof DETENT;
+
+/**
+ * From this width platform.css makes the sheet a panel in the middle of the window, and a panel is
+ * as tall as what it holds, up to the window. Detents are a phone's: at half height a desk panel
+ * cut Settings off above "Your data" with half the screen free.
+ */
+const PANEL = "(min-width: 768px)";
+const onPanelChange = (fn: () => void) => {
+  const query = matchMedia(PANEL);
+  query.addEventListener("change", fn);
+  return () => query.removeEventListener("change", fn);
+};
 
 /** A release whose PROJECTED rest is below this fraction of the sheet's height dismisses. */
 const DISMISS_OFFSET = 0.35;
@@ -84,6 +96,7 @@ export function Sheet({
   const opener = useRef<HTMLElement | null>(null);
   const [detent, setDetent] = useState<Detent>("half");
   const reducedMotion = useReducedMotion();
+  const panelled = useSyncExternalStore(onPanelChange, () => matchMedia(PANEL).matches, () => false);
 
   /**
    * THE PAGE BEHIND A DIALOG IS NOT PART OF IT. Focus was already trapped, but the shell stayed
@@ -154,7 +167,7 @@ export function Sheet({
 
   const cycleDetent = useCallback(() => setDetent((d) => (d === "half" ? "full" : "half")), []);
   // O249: the height is animated, not set — a detent change is a move, with the sheet's own spring.
-  const height = `${DETENT[detent] * 100}svh`;
+  const height = panelled ? "auto" : `${DETENT[detent] * 100}svh`;
 
   // Mounted only on the client, so the portal below never runs during the server render.
   const [mounted, setMounted] = useState(false);
@@ -213,16 +226,18 @@ export function Sheet({
           >
             {/* The grabber. A button, not an ornament: click or Enter cycles the detents, which is
                 the whole of the drag's function for anybody who cannot perform one. */}
-            <button
-              type="button"
-              className="sheet-handle"
-              onClick={cycleDetent}
-              aria-expanded={detent === "full"}
-              aria-controls={titleId}
-            >
-              <span className="sheet-handle-bar" aria-hidden="true" />
-              <span className="sr-only">{detent === "full" ? `Shrink ${title}` : `Expand ${title}`}</span>
-            </button>
+            {!panelled && (
+              <button
+                type="button"
+                className="sheet-handle"
+                onClick={cycleDetent}
+                aria-expanded={detent === "full"}
+                aria-controls={titleId}
+              >
+                <span className="sheet-handle-bar" aria-hidden="true" />
+                <span className="sr-only">{detent === "full" ? `Shrink ${title}` : `Expand ${title}`}</span>
+              </button>
+            )}
 
             <header className="sheet-header">
               <h2 id={titleId} tabIndex={-1} data-sheet-initial-focus>{title}</h2>

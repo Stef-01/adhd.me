@@ -10,7 +10,7 @@ export default defineConfig({
   // render app/error.tsx and its siblings to markup, so use the automatic runtime here.
   esbuild: { jsx: "automatic" },
   test: {
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "app/**/*.test.ts"],
     environment: "node",
     // Vitest's 5s default is a poor fit for this suite. Several tests build the full
     // 12k-patient sim, which takes 1–4s idle and more on a loaded box, so they sit right

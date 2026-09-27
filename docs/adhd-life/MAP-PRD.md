@@ -109,9 +109,12 @@ Contrast measured 2026-09-20 against `--paper #fafaf7` unless stated.
 Four tokens are added to `:root`. Each has a role nothing existing can fill.
 
 ```css
-/* The radar polygon. One object, one colour; never a status, never a word. (C4) */
---map-poly:        rgba(242, 106, 79, 0.58);  /* fill   */
---map-poly-line:   #e05338;                   /* stroke, 1.5px, 3.68:1 on paper */
+/* The radar polygon. One object, one colour; never a status, never a word. (C4)
+   2026-09-21: the founder's second comp draws it forest sage, so the shape reads as ground gained
+   rather than heat, and adds day one as a dashed slate outline under it. The coral is retired. */
+--map-poly:        rgba(45, 90, 76, 0.35);    /* fill   */
+--map-poly-line:   #2d5a4c;                   /* stroke, 2.5px, 6.9:1 on paper */
+--map-then:        #64748b;                   /* day one, dashed, 2px          */
 --map-guide:       rgba(31, 41, 55, 0.16);    /* concentric guides and spokes  */
 
 /* Strength chips. Sage is the only green in the product and says one thing: this works. */

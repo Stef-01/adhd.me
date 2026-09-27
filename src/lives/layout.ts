@@ -39,7 +39,7 @@ export interface Route { readonly id: string; readonly label: string; readonly p
 export interface TimingPlan { readonly marks: readonly string[]; readonly hitIndex: number; readonly window: { readonly start: number; readonly end: number } }
 
 /** Hold/release: the cue arrives at `cueAt` (fraction of active time); release inside the window. */
-export interface HoldPlan { readonly verb: string; readonly releaseAt: string; readonly cueAt: number; readonly windowEnd: number }
+export interface HoldPlan { readonly verb: string; readonly releaseAt: string; readonly release?: string; readonly cueAt: number; readonly windowEnd: number }
 
 export interface GameScene {
   readonly gameId: string;
@@ -54,6 +54,8 @@ export interface GameScene {
   readonly routes?: readonly Route[];
   /** Inhibition: what the temptation does, in order, as the clock runs. */
   readonly taunts?: readonly string[];
+  /** Inhibition: the temptation keeps its size instead of growing toward the player. */
+  readonly still?: boolean;
   /** Object search (§52): the line shown before the instruction, when the game reminds you. */
   readonly remind?: string;
   /** Rapid sorting. */
@@ -139,9 +141,9 @@ function tracePath(config: Extract<GameConfig, { kind: "trace_path" }>, d: Diffi
   return { entities, start, goal, pathWidth, routes };
 }
 
-function inhibition(config: Extract<GameConfig, { kind: "inhibition" }>, d: DifficultyParameters): Pick<GameScene, "entities" | "taunts"> {
+function inhibition(config: Extract<GameConfig, { kind: "inhibition" }>, d: DifficultyParameters): Pick<GameScene, "entities" | "taunts" | "still"> {
   const r = Math.round(80 + 30 * (d.targetSpeed - 1));
-  return { entities: [{ id: "temptation", label: config.temptation, role: "distractor", x: 195, y: 300, r, vx: 0, vy: 0 }], taunts: config.taunts };
+  return { entities: [{ id: "temptation", label: config.temptation, role: "distractor", x: 195, y: 300, r, vx: 0, vy: 0 }], taunts: config.taunts, ...(config.still ? { still: true } : {}) };
 }
 
 function objectSearch(config: Extract<GameConfig, { kind: "object_search" }>, d: DifficultyParameters, rng: Rng): Pick<GameScene, "entities" | "remind"> {
@@ -173,7 +175,7 @@ function goalProtection(config: Extract<GameConfig, { kind: "goal_protection" }>
 function holdRelease(config: Extract<GameConfig, { kind: "hold_release" }>, d: DifficultyParameters, rng: Rng): Pick<GameScene, "entities" | "hold"> {
   const cueAt = Math.round((0.5 + rng.next() * 0.25) * 100) / 100;
   const window = Math.max(0.12, 0.25 * d.hitRadiusMultiplier);
-  return { entities: [{ id: "hold", label: config.verb, role: "target", x: 195, y: 330, r: 80, vx: 0, vy: 0 }], hold: { verb: config.verb, releaseAt: config.releaseAt, cueAt, windowEnd: Math.min(0.98, Math.round((cueAt + window) * 100) / 100) } };
+  return { entities: [{ id: "hold", label: config.verb, role: "target", x: 195, y: 330, r: 80, vx: 0, vy: 0 }], hold: { verb: config.verb, releaseAt: config.releaseAt, ...(config.release ? { release: config.release } : {}), cueAt, windowEnd: Math.min(0.98, Math.round((cueAt + window) * 100) / 100) } };
 }
 
 function rapidSorting(config: Extract<GameConfig, { kind: "rapid_sorting" }>, d: DifficultyParameters, rng: Rng): Pick<GameScene, "entities" | "bins"> {

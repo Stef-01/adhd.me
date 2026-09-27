@@ -79,14 +79,17 @@ test("every tab clears the touch floor and the bar clears the safe area", async 
   }
   // Nothing the app renders sits under the bar: the last control on the welcome screen is above it.
   const barBox = await page.getByRole("navigation", { name: "Sections" }).boundingBox();
-  const lastControl = await page.getByRole("button", { name: "Try an example search" }).boundingBox();
+  const lastControl = await page.locator(".finder-example").last().boundingBox();
   expect(lastControl!.y + lastControl!.height).toBeLessThanOrEqual(barBox!.y + 1);
 });
 
 test("desktop navigation stays available inside a finder task", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
-  await page.getByRole("button", { name: "Try an example search" }).click();
+  await page.getByRole("button", { name: "Adult ADHD assessment" }).click();
+  await expect(page.getByRole("textbox")).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await expect(page.getByRole("navigation", { name: "Sections" })).toBeVisible();
 });
 
@@ -226,7 +229,7 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
   await expect(toggle).not.toBeChecked();
   await page.keyboard.press("Escape");
   // The finder is still operable after a modal detour — the thing a sheet most often breaks.
-  await expect(page.getByRole("button", { name: "Try an example search" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Adult ADHD assessment" })).toBeVisible();
 });
 
 // O234 (founder-directed): the profile's filters, the place it holds, and the map on results.
@@ -373,10 +376,10 @@ test("the consent notice, the bar and the finder are one shell at every width", 
   // the shell's bounds rather than to its width; below, it is still the shell's width.
   expect(bar!.x).toBeGreaterThanOrEqual(shell!.x - 1);
   expect(bar!.x + bar!.width).toBeLessThanOrEqual(shell!.x + shell!.width + 1);
-  // The question, the box and the example link share one left edge.
+  // The question, the box and the example chips share one left edge.
   const h1 = await page.getByRole("heading", { level: 1 }).boundingBox();
   const box = await page.getByRole("textbox").boundingBox();
-  const link = await page.getByRole("button", { name: "Try an example search" }).boundingBox();
+  const link = await page.locator(".finder-example").first().boundingBox();
   expect(Math.abs(h1!.x - box!.x)).toBeLessThanOrEqual(2);
   expect(Math.abs(link!.x - box!.x)).toBeLessThanOrEqual(3);
 });
@@ -384,7 +387,7 @@ test("the consent notice, the bar and the finder are one shell at every width", 
 test("O244: a Learn quiz can be played through, is never about the reader, and remembers being finished", async ({ page }) => {
   await page.goto("/approach");
   await openModuleShelves(page);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/A little more understanding/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Learn about ADHD.");
   await page.getByRole("button", { name: /Myth or fact\?/ }).click();
   const total = 6;
   for (let i = 0; i < total; i += 1) {
@@ -419,7 +422,7 @@ test("library and playable games retain live glass with a tap-bubble fallback", 
   await page.waitForTimeout(600);
   expect(await page.evaluate(() => ({ scope: document.querySelector("[data-liquid]") !== null, liquid: document.documentElement.classList.contains("has-liquid") }))).toEqual({ scope: false, liquid: false });
   await page.goto("/approach");
-  await expect(page.locator("[data-liquid] .learn-stack .learn-card").first()).toBeVisible();
+  await expect(page.locator("[data-liquid] .learn-try-tile").first()).toBeVisible();
   await page.waitForTimeout(600);
   const state = await page.evaluate(() => {
     const c = document.createElement("canvas");
@@ -436,7 +439,7 @@ test("library and playable games retain live glass with a tap-bubble fallback", 
   // The layer is decoration: hidden from assistive tech, and present exactly when the engine can draw it.
   expect(state.canvas).toBe("true");
   expect(state.liquid).toBe(state.able);
-  const card = page.locator("[data-liquid] .learn-card").first();
+  const card = page.locator("[data-liquid] .learn-try-tile").first();
   const box = (await card.boundingBox())!;
   await card.dispatchEvent("pointerdown", { pointerId: 1, clientX: box.x + 24, clientY: box.y + 24, button: 0 });
   await expect(card).toHaveAttribute("data-tap", "");

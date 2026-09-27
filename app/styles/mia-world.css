@@ -44,18 +44,21 @@
 .mt-primary svg { width: 20px; height: 20px; }
 .mt-distraction { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: min(100%,380px); padding: 8px 8px 8px 18px; border-radius: 18px; background: #614b49; color: #ffdfbc; font-size: 12px; }
 .mt-distraction button { display: flex; align-items: center; gap: 8px; border: 0; background: #ffe0b9; color: #493623; border-radius: 12px; min-height: 48px; padding: 8px 12px; }
-.mt-pocket { color: #c6bedc; font-size: 11px; }
+.mt-pocket { color: #c6bedc; font-size: 12px; }
 .mt-cues { display: flex; gap: 16px; }
 .mt-cues button { display: flex; align-items: center; gap: 10px; padding: 12px 18px; background: #594c6b; color: #fff5df; border: 0; border-radius: 18px; min-height: 64px; font-size: 13px; }
 .mt-cues img { width: 44px; height: 44px; }
 .mt-hint { margin: 0; font-size: 14px; color: #f7d37a; }
 .mt-ending { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .mt-secondary { background: transparent; color: #e2d7f4; min-height: 48px; padding: 12px; border: 0; }
+a.mt-secondary { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+@media (hover: hover) { a.mt-secondary:hover { text-decoration: underline; text-underline-offset: 4px; } }
 .mt-pause { min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
 @media (max-width:600px) { .mt-heading { margin: 28px auto 22px; } .mt-game h1 { font-size: 28px; } .mt-intention { font-size: 12px; } .mt-board { gap: 3px; padding: 4px; border-radius: 18px; } .mt-tile { border-radius: 12px; } .mt-channel { stroke-width: 19; } .mt-current { stroke-width: 10; } .mt-target svg { width: 17px; height: 17px; } .mt-controls { margin-top: 22px; } .mt-status { max-width: 280px; font-size: 13px; } .mt-cues { gap: 8px; } .mt-cues button { padding: 10px; gap: 6px; font-size: 12px; } .mt-cues img { width: 30px; height: 30px; } .mt-pin { right: 2px; bottom: 2px; width: 19px; height: 19px; padding: 3px; } }
 /* Short screens: the board sizes from the height so the thread never scrolls away. */
 @media (max-height: 560px) { .mt-heading { margin: 4px auto 8px; } .mt-game h1 { font-size: 22px; margin: 4px 0; } .mt-intention { font-size: 12px; } .mt-board { width: min(78%, calc(100svh - 240px)); gap: 3px; padding: 4px; border-radius: 16px; } .mt-tile { border-radius: 10px; } .mt-controls { margin-top: 8px; } .mt-game { padding-bottom: 8px; } }
-@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .mt-controls { position: fixed; right: 16px; bottom: 12px; margin: 0; z-index: 30; } .mt-status { display: none; } }
+/* Short landscape: the controls sit in the corner. The ending stacks there, at most 280px wide, so a landscape phone keeps the finished board in view. */
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .mt-controls { position: fixed; right: 16px; bottom: 12px; margin: 0; z-index: 30; } .mt-status { display: none; } .mt-controls:has(.mt-ending) { align-items: flex-end; max-width: 280px; } .mt-ending { flex-direction: column; align-items: flex-end; gap: 4px; } .mt-saved { text-align: right; } .mt-saved ul { justify-content: flex-end; } }
 @media (prefers-reduced-motion:reduce) { .mt-game * { transition: none!important; animation: none!important; } }
 
 .mt-saved { text-align:center; font-size:12px; color:#c6bedc; } .mt-saved ul { display:flex; flex-wrap:wrap; justify-content:center; list-style:none; gap:8px; padding:0; margin:10px 0 0; } .mt-saved li { padding:8px 12px; border-radius:12px; background:#534355; color:#ffdfbc; }

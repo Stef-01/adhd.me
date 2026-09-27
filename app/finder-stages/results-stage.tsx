@@ -4,7 +4,7 @@
 // history note, because it explains why this one screen carries so much.
 
 import { CARE_NEEDS, IDENTITY_LABELS, publicIdentity } from "@/support/care-preferences";
-import { CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, CaretRight, FunnelSimple, MagnifyingGlass, MapPin, MapTrifold, PencilSimple, Sparkle } from "@phosphor-icons/react";
 import { activeFilterCount, BOOLEAN_FILTER_KEYS, BOOLEAN_FILTER_LABELS, type BooleanFilterKey, type Filters } from "@/finder/filters";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -16,6 +16,7 @@ import {
   type MatchQuality,
 } from "@/demo/clinicians";
 import { type Clarifier } from "@/matching/clarify";
+import { type HeardChip } from "@/finder/heard";
 import { type WayOut } from "@/finder/pipeline";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
@@ -33,6 +34,8 @@ const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap),
   loading: () => <div className="nearby-map nearby-map-loading" aria-hidden="true" />,
 });
 import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, PRESS_SPRING, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
+import { HeardRow, ReadingLine } from "./heard-row";
+import { FINDER_COPY } from "../finder-copy";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -73,6 +76,10 @@ export function ResultsStage({
   waysOut,
   onRelax,
   emptyKind,
+  heard,
+  removedHeard,
+  onToggleHeard,
+  reading = false,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -113,6 +120,12 @@ export function ResultsStage({
   onRelax: (next: Filters) => void;
   /** With no filter on, the kind the sentence named and the listing lacks ("dietitians"), or null. */
   emptyKind: string | null;
+  /** What the request was read as asking for, strongest first, and the ones taken out. */
+  heard: readonly HeardChip[];
+  removedHeard: ReadonlySet<string>;
+  onToggleHeard: (key: string) => void;
+  /** The read route is still reading the words: the chips' place says so and three blank rows hold the list's. */
+  reading?: boolean;
 }) {
   /** The filters the strip cannot show — a language, a distance, a way of working — as a count on the Filters pill. The kind has its own pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length - (filters.professions.length > 0 ? 1 : 0);
@@ -124,13 +137,16 @@ export function ResultsStage({
   // the place, and "Re-ranked:" once the list is not the one the screen arrived with — `matches`
   // is derived from (request, origin, roster), so a new identity IS a re-rank, and the counter
   // re-announces a re-rank that repeats the same count.
-  const arrivalMatches = useRef(matches);
+  // The list arrives when the read does, so a list ranked while the read ran is no arrival.
+  const arrivalMatches = useRef<readonly Clinician[] | null>(null);
   const [reranks, setReranks] = useState(0);
   useEffect(() => {
+    if (reading) return;
+    arrivalMatches.current ??= matches;
     if (matches === arrivalMatches.current) return;
     setReranks((n) => n + 1);
-  }, [matches]);
-  const line = resultsAnnouncement({ count: matches.length, suburb: origin?.suburb ?? null, reranked: reranks > 0 });
+  }, [matches, reading]);
+  const line = reading ? FINDER_COPY.reading.text : resultsAnnouncement({ count: matches.length, suburb: origin?.suburb ?? null, reranked: reranks > 0 });
 
   /**
    * O234: a stop on the map, tapped. The row is brought into view and given FOCUS — the ring is
@@ -139,6 +155,14 @@ export function ResultsStage({
    * they did not choose from a number; finding the row lets them read it first.
    */
   const list = useRef<HTMLDivElement | null>(null);
+  /** Arrival focus waits for the rows when the read held them back. */
+  const heldArrival = useRef(reading && focusOnArrival);
+  useEffect(() => {
+    if (reading || !heldArrival.current) return;
+    heldArrival.current = false;
+    const active = document.activeElement;
+    if (!active || active === document.body || active.matches("h1")) list.current?.querySelector<HTMLElement>(".clinician-row")?.focus({ preventScroll: true });
+  }, [reading]);
   /**
    * O238 (founder-directed, "make map open up with a button, it causes too much clutter … the
    * north star is simplicity"): the map is behind one control on the list's own header, closed by
@@ -168,7 +192,6 @@ export function ResultsStage({
               header holds that changes from person to person. Absent when no place is set. */}
           {place && <span className="results-place">{place}</span>}
         </span>
-        <button className="text-action" type="button" onClick={onReset}>Start over</button>
       </header>
 
       <div className="results-head">
@@ -193,6 +216,12 @@ export function ResultsStage({
             <span className="results-summary-text">{requestSummary}</span>
             <PencilSimple size={16} weight="bold" aria-hidden="true" />
           </button>
+          {/* Start over sits with the search it restarts, labelled, at every width. A bare icon
+              here would read as "clear the text" and repeat the unlabelled-icon problem. */}
+          <button type="button" className="results-summary-reset" onClick={onReset}>
+            <ArrowCounterClockwise size={16} weight="bold" aria-hidden="true" />
+            Start over
+          </button>
         </motion.div>
 
         {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46): the headline renders only
@@ -201,6 +230,7 @@ export function ResultsStage({
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
+        {!empty && (reading ? <ReadingLine /> : <HeardRow chips={heard} removed={removedHeard} onToggle={onToggleHeard} />)}
       </div>
 
       {/* O244: the questions, in the sheet. Tapping one appends the answer in the reader's own
@@ -318,6 +348,7 @@ export function ResultsStage({
       <>
       <motion.div
         className="results-list-head"
+        style={reading ? { visibility: "hidden" } : undefined}
         initial={reducedMotion ? false : { opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
@@ -343,13 +374,6 @@ export function ResultsStage({
           </AnimatePresence>
         </h2>
         <span className="results-list-tools">
-          {/* RADIANT: the mark beside the count, only when the order was earned — a badge that
-              means "ordered on what you asked for" and is absent when nothing was. */}
-          {quality === "informed" && (
-            <span className="results-spark" role="img" aria-label="Ordered on what you asked for">
-              <Sparkle size={16} weight="fill" aria-hidden="true" />
-            </span>
-          )}
           {/* O226: the count sits with the list it describes, not two groups up the page. */}
           {matches.length > shown.length && (
             <span className="results-count">
@@ -358,18 +382,19 @@ export function ResultsStage({
               <span><span className="sr-only">{shown.length}</span><NumberTicker value={shown.length} aria-hidden="true" className="finder-count-number" /></span> of {matches.length}
             </span>
           )}
-          {/* O244: the star. One tap opens the questions that would narrow the list; the sheet is
-              the app's one modal idiom, so it drags, closes on Escape and returns focus. */}
+          {/* O244: one tap opens the questions that would narrow the list; the sheet is the app's
+              one modal idiom, so it drags, closes on Escape and returns focus. The button says what
+              it does in words, and those words are its name: a sparkle alone told nobody. */}
           {clarifiable && (
             <button
               type="button"
               className={clarifyOpen ? "clarify-star is-open" : "clarify-star"}
-              aria-label="Improve my matches"
               aria-haspopup="dialog"
               aria-expanded={clarifyOpen}
               onClick={() => setClarifyOpen(true)}
             >
               <Sparkle size={18} weight={clarifyOpen ? "fill" : "bold"} aria-hidden="true" />
+              Improve my matches
             </button>
           )}
           {/* O238: the map, behind a control, only when a suburb is known to draw it from. */}
@@ -445,7 +470,8 @@ export function ResultsStage({
             physiologists left an occupational therapist standing at the top of the list of
             exercise physiologists, reproduced one run in three. A wrong row on screen for
             good is worse than a missing 160ms fade, so the rows carry no exit. */}
-        {shown.map((item, index) => {
+        {reading && [0, 1, 2].map((n) => <div key={n} className="row-skeleton" aria-hidden="true" />)}
+        {!reading && shown.map((item, index) => {
           // `shown` is always a prefix slice of `matches`, so the indices align.
           const itemMatch = personalized[index]!;
           const away = distanceTo(item, origin);
@@ -539,7 +565,7 @@ export function ResultsStage({
       </div>
 
       </div>
-      {matches.length > shown.length && (
+      {!reading && matches.length > shown.length && (
         <motion.button
           className="show-all"
           type="button"

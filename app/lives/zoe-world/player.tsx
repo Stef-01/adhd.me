@@ -9,6 +9,8 @@ import { GameShell } from "../kit/shell";
 import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
+import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 type Emotion = "steady" | "itch" | "sent" | "sorry" | "repaired";
 const MOOD: Record<Emotion, Mood> = { steady: "neutral", itch: "frustrated", sent: "pleased", sorry: "embarrassed", repaired: "relieved" };
@@ -24,6 +26,7 @@ function heading(s: ZoeWorld) {
 
 export function ZoeWorldGame() {
   const { state: s, dispatch } = useLoop(zoeReducer, () => createZoe(), running);
+  usePlayedWhen("zoe", s.phase === "complete");
   const live = s.phase === "typing" || s.phase === "revisit";
   const b = beatDef(s);
   const w = words(s);
@@ -48,7 +51,7 @@ export function ZoeWorldGame() {
   </> : undefined;
   const typedAll = s.typed >= b.zoe.length;
 
-  return <GameShell name="zw-game" label="Zoe’s phone" eyebrow="Zoe · Before you send" heading={heading(s)} objective={s.phase === "typing" && s.beat === 0 ? "Tap the sharp words before it sends." : undefined}
+  return <GameShell name="zw-game" label="Zoe’s phone" eyebrow="Zoe · Before you send" heading={heading(s)}
     hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
     phaseKey={`${s.phase}-${s.beat}`} data={{ phase: s.phase, beat: s.beat, scenario: s.scenario, emotion, holding }}
     score={SCORES.zoe} playing={live && !holding} intensity={.3 + fuse * .6 * (hotLeft(s) > 0 ? 1 : .4)}>
@@ -101,6 +104,7 @@ export function ZoeWorldGame() {
           {s.phase === "complete" && <div className="zw-actions">
             <span className="kit-stamp"><Check size={18} weight="bold" /> {dayName(s.day)} at 7</span>
             <Link className="kit-primary" href="/lives/learn?module=pause_before_send_v1">Pause before send <ArrowRight size={18} /></Link>
+            <RelatedRun who="zoe" className="kit-next" arrow={17} />
             <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another conversation</button>
           </div>}
         </div>

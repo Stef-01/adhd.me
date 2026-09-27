@@ -14,6 +14,8 @@
 // The five areas of a life are rows here rather than screens of their own — this is the matrix
 // read one column at a time, which is why the tab has one kind of click-through and not two.
 
+import { sourceLine } from "@/model/sources";
+import { SkillRecommendation } from "./skill-recommendation";
 import Link from "next/link";
 import { useMemo } from "react";
 import { ArrowRight, Sparkle } from "@phosphor-icons/react";
@@ -26,6 +28,7 @@ import {
   STATUS_LABEL,
   areaOf,
   aspectView,
+  currentFocus,
   modulesOnAspect,
   type Aspect,
 } from "@/model/matrix";
@@ -70,6 +73,12 @@ export function MyAdhdSheet({
   }, [aspect]);
 
   const top = view?.top ?? null;
+  const contributing = useMemo(() => {
+    if (!top || !aspect) return [];
+    const notes = [...new Set(top.contributors.map((c) => c.note))];
+    const lead = currentFocus(record, 1)[0];
+    return (lead?.aspect === aspect && lead.need.contributors[0]?.note === notes[0] ? notes.slice(1) : notes).slice(0, 2);
+  }, [top, aspect, record]);
   // What to offer here: the area's survey, then its deeper set, then the next module. `offerSurvey`
   // owns the rule and the fatigue gate; this only decides where the link points.
   const offer = offerSurvey(record);
@@ -80,12 +89,16 @@ export function MyAdhdSheet({
   const nextModule = aspect
     ? modulesOnAspect(aspect).find((m) => !record.completed.includes(m.id)) ?? null
     : null;
+  // Where this axis came from, in words, and whether anything here has been tried.
+  const tried = aspect ? record.experiments.some((e) => modulesOnAspect(aspect).some((m) => m.id === e.moduleId)) : false;
+  const from = view ? sourceLine(view.cells.flatMap((c) => c.needs.flatMap((n) => n.sources)), tried) : null;
 
   return (
     <Sheet open={Boolean(aspect)} title={aspect ? ASPECT_LABELS[aspect] : ""} onClose={onClose}>
       {view && aspect && (
         <div className="map-sheet">
           <p className="map-sheet-meaning">{ASPECT_MEANINGS[aspect]}</p>
+          {from && <p className="map-sheet-from">{from}</p>}
 
           <ul className="map-rows">
             {view.cells.map((cell) => (
@@ -97,6 +110,18 @@ export function MyAdhdSheet({
               </li>
             ))}
           </ul>
+
+          {/* What may be contributing (PLAN.md W3): the hub shows the lead axis's top one, so its
+              sheet lists the next two; any other axis lists its top two. */}
+          {contributing.length > 0 && (
+            <ul className="map-chips" aria-label="What may be contributing">
+              {contributing.map((note) => (
+                <li key={note}>
+                  <span className="map-chip">{note}</span>
+                </li>
+              ))}
+            </ul>
+          )}
 
           {view.helps.length > 0 && (
             <ul className="map-chips is-strength" aria-label="What helps">
@@ -132,6 +157,11 @@ export function MyAdhdSheet({
             </div>
           )}
 
+          {/* The practitioner whose declared skill answers this axis (D11: moved here from the hub,
+              where it repeated what "Who helps here" already offers). Only when the sheet does not
+              offer "Who helps here" itself: the two together said the same thing twice. */}
+          {top && !eligible && <SkillRecommendation context={top.subdomain} />}
+
           <div className="map-sheet-actions">
             {survey && !done ? (
               <Link className="learn-primary" href={`/survey?id=${survey.id}${offered?.deeper ? "&deeper=1" : ""}`}>
@@ -149,6 +179,11 @@ export function MyAdhdSheet({
               </Link>
             )}
           </div>
+          {tried && (
+            <p className="map-foot is-onward">
+              <Link href="/my-adhd/history">What you tried</Link>
+            </p>
+          )}
         </div>
       )}
     </Sheet>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Check, Sparkle, HandTap, ArrowCounterClockwise } from "@phosphor-icons/react";
+import { ArrowRight, Check, Sparkle, ArrowCounterClockwise } from "@phosphor-icons/react";
 
 const DISCOVERIES = [
   { title: "Attention", detail: "Attention can shift with interest, context and the task. Difficulty directing it is different from having none.", glyph: "◎" },
@@ -27,7 +27,7 @@ export function LearningActivity({ topic, step }: { topic: string; step: number 
   if (topic === "everyday" && step > 0) {
     const tasks = ["Open the document", "Write a rough title", "Add one bullet"];
     return <aside className="activity activity-sequence" aria-label="Build a first step">
-      <div className="activity-heading"><span className="activity-label"><HandTap size={17} /> TRY IT OUT</span><span>{ordered.length} / 3 placed</span></div>
+      <div className="activity-heading"><span>{ordered.length} / 3 placed</span></div>
       <h3>Put these in a helpful order.</h3><p>Put this example into a helpful order. Choose the next small action.</p>
       <div className="sequence-track">{tasks.map((_, i) => <motion.div key={i} layout className={ordered[i] !== undefined ? "sequence-slot is-filled" : "sequence-slot"}><span>{i + 1}</span>{ordered[i] !== undefined ? tasks[ordered[i]!] : "Next small action"}</motion.div>)}</div>
       <div className="sequence-options">{[2, 0, 1].map(i => <motion.button key={i} whileTap={press} disabled={ordered.includes(i)} onClick={() => {
@@ -39,7 +39,7 @@ export function LearningActivity({ topic, step }: { topic: string; step: number 
     </aside>;
   }
   if (topic === "cost") return <aside className="activity activity-checklist" aria-label="Collect questions for a practice">
-    <div className="activity-heading"><span className="activity-label"><Sparkle size={17} /> QUESTION KIT</span><span>{revealed.length} / {QUESTIONS.length} collected</span></div>
+    <div className="activity-heading"><span>{revealed.length} / {QUESTIONS.length} collected</span></div>
     <h3>Know what to ask.</h3><p>Collect the questions you would include in this example conversation.</p>
     <div className="question-kit">{QUESTIONS.map((q, i) => <motion.button key={q} whileTap={press} aria-pressed={revealed.includes(i)} onClick={() => setRevealed(revealed.includes(i) ? revealed.filter(n => n !== i) : [...revealed, i])}><span className="kit-check">{revealed.includes(i) ? <Check size={18} weight="bold" /> : "+"}</span>{q}</motion.button>)}</div>
     <p role="status" className="activity-feedback">{revealed.length === QUESTIONS.length ? "Your example question kit is ready. Clear answers make the next decision easier to understand." : "Selections stay in this activity only."}</p>
@@ -53,9 +53,8 @@ export function LearningActivity({ topic, step }: { topic: string; step: number 
   if (topic !== "adhd" && topic !== "finding") return null;
   const cards = topic === "adhd" ? DISCOVERIES : CARE;
   return <aside className={`activity ${topic === "adhd" ? "activity-discovery" : "activity-route"}`} aria-label={topic === "adhd" ? "Explore three ideas" : "Explore the care conversation"}>
-    <div className="activity-heading"><span className="activity-label"><HandTap size={17} /> {topic === "adhd" ? "TURN AN IDEA OVER" : "FOLLOW THE CONVERSATION"}</span><span>{revealed.length} / 3 explored</span></div>
-    <h3>{topic === "adhd" ? "A different way to look at it." : "A name is just the beginning."}</h3>
-    <div className="discovery-grid">{cards.map((card, i) => <motion.button key={card.title} whileHover={reduced ? undefined : { y: -5, rotate: i === 1 ? 1 : -1 }} whileTap={press} aria-pressed={selected === i} onClick={() => { setSelected(i); setRevealed([...new Set([...revealed, i])]); }}><motion.span className="discovery-glyph" animate={{ rotate: selected === i && !reduced ? 8 : 0 }}>{revealed.includes(i) ? <Check size={30} /> : card.glyph}</motion.span><strong>{card.title}</strong><span>{selected === i ? "Exploring" : "Reveal idea"} <ArrowRight size={16} /></span></motion.button>)}</div>
+    <div className="activity-heading"><span>{revealed.length} / 3 explored</span></div>
+    <div className="discovery-grid">{cards.map((card, i) => <motion.button key={card.title} whileHover={reduced ? undefined : { y: -5, rotate: i === 1 ? 1 : -1 }} whileTap={press} aria-pressed={selected === i} onClick={() => { setSelected(i); setRevealed([...new Set([...revealed, i])]); }}><motion.span className="discovery-glyph" animate={{ rotate: selected === i && !reduced ? 8 : 0 }}>{revealed.includes(i) ? <Check size={30} /> : card.glyph}</motion.span><strong>{card.title}</strong><ArrowRight size={16} aria-hidden="true" /></motion.button>)}</div>
     <AnimatePresence mode="wait" initial={false}>{selected !== null && <motion.p key={selected} initial={enter} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0 }} className="activity-feedback" role="status">{cards[selected]?.detail}</motion.p>}</AnimatePresence>
     {revealed.length === 3 && <motion.p initial={enter} animate={{ opacity: 1, y: 0, scale: 1 }} className="discovery-earned"><Sparkle size={19} weight="fill" /> Three ideas explored. Take the one that sticks.</motion.p>}
   </aside>;

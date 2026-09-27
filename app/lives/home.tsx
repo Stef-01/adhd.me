@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Play } from "@phosphor-icons/react";
 import { CHARACTERS, selectGoals, strategy, type LearningDomain } from "@/lives";
 import { LifeBean } from "./bean";
-import { LIVES_HAPTICS_KEY, LIVES_LARGE_KEY, LIVES_REDUCED_FLASHING_KEY, LIVES_REDUCED_SENSORY_KEY, LIVES_RELAXED_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
+import { LIVES_HAPTICS_KEY, LIVES_LARGE_KEY, LIVES_REDUCED_FLASHING_KEY, LIVES_REDUCED_SENSORY_KEY, LIVES_RELAXED_KEY, LIVES_SOUND_KEY, readFlag, useProfile, writeFlag } from "./profile-hook";
 
 const GOALS: ReadonlyArray<{ id: LearningDomain; label: string }> = [
   { id: "sleep", label: "Sleep" },
@@ -27,21 +27,22 @@ export function LivesHome() {
   const tools = profile?.personalStrategies.filter((p) => p.status !== "saved").length ?? 0;
   const goals = profile?.selectedGoals ?? [];
   const toggle = (id: LearningDomain) => apply((s) => selectGoals(s, goals.includes(id) ? goals.filter((g) => g !== id) : [...goals, id].slice(0, 3)));
-  // §93: the five play settings, on this device, read after mount so the server and the client agree.
+  // §93: the play settings, on this device, read after mount so the server and the client agree.
   const [relaxed, setRelaxed] = useState(false);
   const [large, setLarge] = useState(false);
   const [reducedFlashing, setReducedFlashing] = useState(false);
   const [reducedSensory, setReducedSensory] = useState(false);
   const [haptics, setHaptics] = useState(false);
+  const [sound, setSound] = useState(false);
   useEffect(() => {
     setRelaxed(readFlag(LIVES_RELAXED_KEY)); setLarge(readFlag(LIVES_LARGE_KEY));
     setReducedFlashing(readFlag(LIVES_REDUCED_FLASHING_KEY)); setReducedSensory(readFlag(LIVES_REDUCED_SENSORY_KEY)); setHaptics(readFlag(LIVES_HAPTICS_KEY));
+    setSound(readFlag(LIVES_SOUND_KEY));
   }, []);
   const flip = (key: string, on: boolean, set: (v: boolean) => void) => { writeFlag(key, !on); set(!on); };
   return (
     <div className="me-screen learn-screen lives-screen lives-home" data-liquid>
       <header className="life-head lives-home-head">
-        <span className="life-eyebrow">ADHD Lives</span>
         <div className="lives-cast" aria-hidden="true">{CHARACTERS.map((c) => <LifeBean key={c.id} who={c.id} mood="engaged" size={44} />)}</div>
         <h1 className="life-title">Eight lives. Three of yours.</h1>
         <Link className="play-tempt is-go lives-play" href="/lives/play"><Play size={20} weight="fill" aria-hidden="true" /> Play</Link>
@@ -72,6 +73,7 @@ export function LivesHome() {
           <button type="button" className="lives-chip" aria-pressed={reducedFlashing} onClick={() => flip(LIVES_REDUCED_FLASHING_KEY, reducedFlashing, setReducedFlashing)}>Reduced flashing</button>
           <button type="button" className="lives-chip" aria-pressed={reducedSensory} onClick={() => flip(LIVES_REDUCED_SENSORY_KEY, reducedSensory, setReducedSensory)}>Reduced sensory effects</button>
           <button type="button" className="lives-chip" aria-pressed={haptics} onClick={() => flip(LIVES_HAPTICS_KEY, haptics, setHaptics)}>Haptics</button>
+          <button type="button" className="lives-chip" aria-pressed={sound} onClick={() => flip(LIVES_SOUND_KEY, sound, setSound)}>Sound</button>
         </div>
       </details>
     </div>

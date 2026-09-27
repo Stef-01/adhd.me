@@ -1,0 +1,34 @@
+name: crisis-contacts
+# Monthly, not on pull requests: an old check date is a job for a person, and it should never
+# turn an unrelated pull request red. Opens one issue when any contact is older than 90 days.
+on:
+  schedule:
+    - cron: "17 22 1 * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  age:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc }
+      - id: age
+        run: node --no-warnings scripts/crisis-contacts-age.mjs
+      - if: steps.age.outputs.stale != ''
+        uses: actions/github-script@v7
+        env:
+          STALE: ${{ steps.age.outputs.stale }}
+        with:
+          script: |
+            const title = "Re-check the crisis contacts";
+            const open = await github.rest.issues.listForRepo({ owner: context.repo.owner, repo: context.repo.repo, state: "open", per_page: 100 });
+            if (open.data.some((i) => i.title === title)) return;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body: `These contacts were last checked more than 90 days ago: ${process.env.STALE.split(",").join(", ")}.\n\nFollow docs/ops/crisis-contacts.md, then update verifiedOn in src/model/crisis-contacts.ts.`,
+            });

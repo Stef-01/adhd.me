@@ -6,6 +6,7 @@
 // nudge, because the module teaches how the product works and a person who has read it is done.
 
 import { MODULES } from "./scenes";
+import { localDay } from "@/lib/dates";
 
 export const PROGRESS_VERSION = 1;
 export const PROGRESS_KEY = `adhdme.learn.v${PROGRESS_VERSION}`;
@@ -14,6 +15,11 @@ export interface Progress {
   v: typeof PROGRESS_VERSION;
   /** Module ids finished on this device, in the order they were finished. */
   done: string[];
+  /**
+   * The local day each was finished (PLAN.md W7). Optional so an older record needs no version
+   * bump, which would empty every tick. Shown as a tick, never as a date (D2).
+   */
+  at?: Record<string, string>;
 }
 
 const KNOWN = new Set(MODULES.map((m) => m.id));
@@ -37,7 +43,11 @@ export function readProgress(storage: Pick<Storage, "getItem">): Progress {
     const r = parsed as Partial<Progress>;
     if (r.v !== PROGRESS_VERSION || !Array.isArray(r.done)) return emptyProgress();
     // A module that no longer exists is dropped rather than kept as a ghost tick.
-    return { v: PROGRESS_VERSION, done: r.done.filter((id): id is string => typeof id === "string" && KNOWN.has(id)) };
+    const done = r.done.filter((id): id is string => typeof id === "string" && KNOWN.has(id));
+    const at = r.at && typeof r.at === "object" && !Array.isArray(r.at)
+      ? Object.fromEntries(Object.entries(r.at).filter(([id, day]) => done.includes(id) && typeof day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(day)))
+      : {};
+    return Object.keys(at).length ? { v: PROGRESS_VERSION, done, at } : { v: PROGRESS_VERSION, done };
   } catch {
     return emptyProgress();
   }
@@ -46,7 +56,7 @@ export function readProgress(storage: Pick<Storage, "getItem">): Progress {
 export function markDone(storage: Pick<Storage, "getItem" | "setItem" | "removeItem">, id: string): Progress {
   const current = readProgress(storage);
   if (!KNOWN.has(id) || current.done.includes(id)) return current;
-  const next: Progress = { v: PROGRESS_VERSION, done: [...current.done, id] };
+  const next: Progress = { v: PROGRESS_VERSION, done: [...current.done, id], at: { ...(current.at ?? {}), [id]: localDay() } };
   try {
     storage.setItem(PROGRESS_KEY, JSON.stringify(next));
   } catch {

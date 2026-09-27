@@ -217,8 +217,11 @@ export function statusFor(needs: readonly Need[], touchedByContributor: boolean)
   if (!best) return touchedByContributor ? "still-learning" : "unexplored";
   if (best.confidence === "low") return "still-learning";
   if (best.userPriority === "no") return "working-well";
-  if (best.functionalCost <= COST_LOW) return "working-well";
-  if (best.strengths.length > 0 && best.functionalCost < STRENGTH_COST_CEILING) return "working-well";
+  // A goal or a "this is me" names a need without saying what it costs. Its cost reads 0, and 0 is
+  // not "going well": with nothing measured and no strategy tried, the map is still learning.
+  if (!best.costMeasured && !best.strategies.some((st) => st.outcome !== "pending")) return "still-learning";
+  if (best.costMeasured && best.functionalCost <= COST_LOW) return "working-well";
+  if (best.costMeasured && best.strengths.length > 0 && best.functionalCost < STRENGTH_COST_CEILING) return "working-well";
   // Worked at and still costly is the strongest care-navigation signal the product has, so it
   // outranks "you have it handled" rather than being softened by it.
   if (best.functionalCost >= COST_HIGH && best.userPriority === "yes") return "needs-support";

@@ -125,6 +125,22 @@ test('every size fits, the exit is reachable, and each phase passes accessibilit
   await expectNoViolations(page, 'Jax complete');
 });
 
+test('on the smallest phone the till puts things back and a far item takes its own tap', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto(URL);
+  // Knock nothing away on the first trip, so something crept in has to go back at the till.
+  for (let i = 0; i < 40 && await game(page).getAttribute('data-phase') === 'aisle'; i++) await page.getByRole('button', { name: 'Roll on' }).click();
+  // Measured before the click: the scene hides its overflow, and a click would scroll it where no finger can.
+  const back = page.locator('.jw-back').first();
+  await expect(back).toBeVisible();
+  expect(await back.evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); })).toBe(true);
+  await back.click();
+  await page.getByRole('button', { name: 'Pay' }).click();
+  await shop(page, 'setup');
+  await setup(page);
+});
+
 test('play writes nothing to storage', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(URL);

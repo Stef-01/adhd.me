@@ -122,7 +122,7 @@ export function MatchFeedback() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <h1 tabIndex={-1}>How did it go?</h1>
+        <h1 tabIndex={-1} className="t-question">How did it go?</h1>
         <p className="match-lede">Three questions about the fit.</p>
       </header>
 

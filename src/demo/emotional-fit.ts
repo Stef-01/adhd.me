@@ -60,6 +60,8 @@ export type EIQuality =
 interface EIQualityDef {
   /** Short, reader-facing label. Used as a match signal. No clinical claim. */
   label: string;
+  /** The label in two words or fewer, for a chip; absent when the label already is. */
+  short?: string;
   /** The reason fragment when it matches, addressed to the reader. */
   matchLine: string;
   /** Words that EXPRESS a preference for this quality. Preference, never a diagnosis of the reader. */
@@ -69,6 +71,7 @@ interface EIQualityDef {
 export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   attuned: {
     label: "Listens and takes you seriously",
+    short: "Taken seriously",
     matchLine: "listens and takes you seriously",
     cues: [
       /* O123: this facet's cues are all CARE-EXPERIENCE — "feel heard", "dismissed", "brushed
@@ -124,6 +127,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   },
   steadying: {
     label: "Calm and steadying",
+    short: "Calm",
     matchLine: "has a calm, steadying manner",
     cues: [
       /* O128: "interrogated" as well as O125's "interrogation" — stem() takes them to
@@ -137,6 +141,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   },
   sense_making: {
     label: "Helps it make sense",
+    short: "Making sense",
     matchLine: "helps you make sense of what is going on",
     cues: [
       /* O139 WROTE "what adhd actually is" HERE AND THE PINS REVERSED IT — SPAN THEFT, the third
@@ -182,6 +187,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   },
   unhurried: {
     label: "Unhurried first appointment",
+    short: "Unhurried",
     matchLine: "gives you an unhurried first appointment",
     cues: [
       /* O116: the clock, and the full appointment as opposed to the doorway version. */
@@ -258,6 +264,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   },
   collaborative: {
     label: "Explains and decides with you",
+    short: "Shared decisions",
     matchLine: "explains the options and decides them with you",
     // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
     cues: [
@@ -288,6 +295,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   },
   culturally_attuned: {
     label: "Understands your background",
+    short: "Your background",
     matchLine: "understands your background and family",
     // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
     cues: [
@@ -337,6 +345,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   },
   structured: {
     label: "A structured, measured approach",
+    short: "Structured",
     matchLine: "works to a documented baseline and follows up on a schedule",
     // O13: "methodical" is the plain word for this way of working and missed (kept through the
     // merge alongside main's continuity family below).

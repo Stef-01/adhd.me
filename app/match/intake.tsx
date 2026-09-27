@@ -98,7 +98,7 @@ export function MatchIntake() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <h1 tabIndex={-1}>What are you looking for?</h1>
+        <h1 tabIndex={-1} className="t-question">What are you looking for?</h1>
       </header>
 
       <form className="match-form" onSubmit={submit}>

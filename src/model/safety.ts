@@ -8,7 +8,9 @@
 // a crisis disposition — the message says who to contact, and that is the whole of what it does.
 //
 // Jurisdiction: Australia. The numbers are the national services; nothing here is a clinical
-// judgement about the person, and the copy says so.
+// judgement about the person, and the copy says so. Every number comes from `crisis-contacts.ts`.
+
+import { URGENT_ROWS, contact, said, type CrisisContact } from "./crisis-contacts";
 
 export type SafetyRuleId =
   | "self-harm"
@@ -34,7 +36,8 @@ export interface SafetyRule {
   readonly suppressStandardRecommendations: true;
 }
 
-const EMERGENCY = "If you are in immediate danger, call 000 now.";
+const EMERGENCY = `If you are in immediate danger, call ${said("emergency")} now.`;
+const LIFELINE = `Lifeline is on ${said("lifeline")}, any hour, or text ${said("lifeline-text")}`;
 
 export const SAFETY_RULES: readonly SafetyRule[] = [
   {
@@ -42,7 +45,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(kill myself|end my life|suicid\w*|hurt(ing)? myself|self[- ]?harm\w*|want to die|don'?t want to (be here|live|wake up)|better off dead|not be here any ?more)\b/i,
     severity: "emergency",
     message: "What you wrote matters, and it is more than an app should hold on its own. You deserve a person right now.",
-    recommendedAction: `${EMERGENCY} Otherwise Lifeline is on 13 11 14, any hour, and the Suicide Call Back Service is on 1300 659 467.`,
+    recommendedAction: `${EMERGENCY} Otherwise ${LIFELINE}, and the Suicide Call Back Service is on ${said("suicide-call-back")}.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -51,7 +54,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(no point (in )?(going on|anything|living)|can'?t go on|nothing matters any ?more|everyone would be better without me|no way out)\b/i,
     severity: "urgent-support",
     message: "It sounds like things feel very heavy right now. That is worth saying to a person, not a screen.",
-    recommendedAction: "Lifeline is on 13 11 14, any hour. Beyond Blue is on 1300 22 4636. If it becomes an emergency, call 000.",
+    recommendedAction: `${LIFELINE}. Beyond Blue is on ${said("beyond-blue")}. If it becomes an emergency, call ${said("emergency")}.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -60,7 +63,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(hearing voices|voices (are )?telling me|people are (following|watching|after) me|they are reading my (mind|thoughts)|not real any ?more)\b/i,
     severity: "urgent-support",
     message: "What you are describing is worth talking through with a clinician soon, rather than working out alone.",
-    recommendedAction: "Contact your GP or the mental health line in your state today. If you or somebody else is in danger, call 000.",
+    recommendedAction: `Contact your GP or the mental health line in your state today. If you or somebody else is in danger, call ${said("emergency")}.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -69,7 +72,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(haven'?t slept (in|for) (days|a week)|don'?t need (to )?sleep|can'?t stop talking|racing (thoughts|mind)|spent (all|thousands))\b/i,
     severity: "urgent-support",
     message: "Several days without sleep, or a mind that will not slow down, is something to raise with a clinician promptly.",
-    recommendedAction: "Contact your GP or prescriber today. If it becomes an emergency, call 000.",
+    recommendedAction: `Contact your GP or prescriber today. If it becomes an emergency, call ${said("emergency")}.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -78,7 +81,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(stopped eating|not eating (at all|for days)|purg\w*|making myself (sick|throw up)|starv\w*)\b/i,
     severity: "urgent-support",
     message: "Eating that has stopped, or a pattern you cannot stop, deserves a person's help, not a strategy.",
-    recommendedAction: "The Butterfly Foundation is on 1800 33 4673. Your GP can also help. If you feel faint or unwell, call 000.",
+    recommendedAction: `${contact("butterfly").service} is on ${said("butterfly")}. Your GP can also help. If you feel faint or unwell, call ${said("emergency")}.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -87,7 +90,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(can'?t stop (drinking|using)|withdraw\w*|overdos\w*|blackout\w*|drinking every (day|night))\b/i,
     severity: "support",
     message: "Alcohol or drug use that has got away from you is common alongside ADHD, and it is something a clinician can help with without judgement.",
-    recommendedAction: "The National Alcohol and Other Drug Hotline is on 1800 250 015. Your GP is also a safe place to start. If somebody has overdosed, call 000.",
+    recommendedAction: `${contact("alcohol-drug").service} is on ${said("alcohol-drug")}. Your GP is also a safe place to start. If somebody has overdosed, call ${said("emergency")}.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -96,7 +99,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(hits? me|hit me|scared of (my|him|her|them)|threaten\w* me|not safe at home|abus\w*|violen\w*)\b/i,
     severity: "urgent-support",
     message: "If you are not safe at home, that comes before anything this app can offer.",
-    recommendedAction: `${EMERGENCY} 1800RESPECT is on 1800 737 732, any hour, for support and a plan.`,
+    recommendedAction: `${EMERGENCY} ${contact("respect").service} is on ${said("respect")}, any hour, for support and a plan.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -105,7 +108,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
     trigger: /\b(chest (pain|tight\w*)|heart (is )?(racing|pounding)|palpitat\w*|can'?t breathe|fainted)\b/i,
     severity: "emergency",
     message: "Chest pain, a racing heart or trouble breathing, particularly on stimulant medication, needs a clinician now, not later.",
-    recommendedAction: "Call 000 if it is happening now. Otherwise contact your prescriber or GP today and tell them what you noticed.",
+    recommendedAction: `Call ${said("emergency")} if it is happening now. Otherwise contact your prescriber or GP today and tell them what you noticed.`,
     jurisdiction: "AU",
     suppressStandardRecommendations: true,
   },
@@ -138,29 +141,8 @@ export function safetyRule(id: SafetyRuleId): SafetyRule {
 
 /**
  * The urgent routes out of this app, reachable at any moment without having written anything
- * (Charmaine Bernie, occupational therapist and service-access researcher, 2026-09-11: the
- * existing health system already has good crisis pathways, separate from any neurodiversity
- * waitlist, so the app's job is to point at them rather than build a parallel one — and given
- * comorbidity and the suicide risk in the 16–25 cohort this product serves, she called
- * always-visible signposting non-negotiable).
- *
- * The rules above quote these same services inside a message about something a person wrote.
- * This is the list for the person who has written nothing and needs it now. Jurisdiction: AU.
- * Numbers are the national services and are not a clinical judgement about anybody.
+ * (Charmaine Bernie, occupational therapist and service-access researcher, 2026-09-11: always-visible
+ * signposting is non-negotiable given comorbidity and the suicide risk in the 16-25 cohort). By
+ * voice, by text and by chat, because a person who cannot safely speak still needs a way in.
  */
-export interface UrgentService {
-  readonly name: string;
-  /** What `tel:` dials. Digits only, as the scheme wants them. */
-  readonly tel: string;
-  /** The number as a person reads it aloud. */
-  readonly said: string;
-  /** Who it is for, or when — three words at most. */
-  readonly when: string;
-}
-
-export const URGENT_SERVICES: readonly UrgentService[] = [
-  { name: "Emergency", tel: "000", said: "000", when: "In danger now" },
-  { name: "Lifeline", tel: "131114", said: "13 11 14", when: "Any hour" },
-  { name: "Kids Helpline", tel: "1800551800", said: "1800 55 1800", when: "Up to 25" },
-  { name: "Beyond Blue", tel: "1300224636", said: "1300 22 4636", when: "Any hour" },
-];
+export const URGENT_SERVICES: readonly CrisisContact[] = URGENT_ROWS.map(contact);

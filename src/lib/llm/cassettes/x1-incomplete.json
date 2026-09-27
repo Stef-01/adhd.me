@@ -1,0 +1,40 @@
+{
+  "class": "C1",
+  "input": "I think I have ADHD and I want to find out for real",
+  "expect": {
+    "keys": [
+      "care:adhd-assessment"
+    ],
+    "source": "lexicon"
+  },
+  "status": 200,
+  "response": {
+    "id": "resp_cassette_x1",
+    "object": "response",
+    "created_at": 1790000011,
+    "status": "incomplete",
+    "error": null,
+    "incomplete_details": {
+      "reason": "max_output_tokens"
+    },
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_cassette_x1",
+        "type": "reasoning",
+        "summary": []
+      }
+    ],
+    "usage": {
+      "input_tokens": 912,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 400,
+      "output_tokens_details": {
+        "reasoning_tokens": 400
+      },
+      "total_tokens": 1312
+    }
+  }
+}

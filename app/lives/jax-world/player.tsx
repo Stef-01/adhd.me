@@ -10,6 +10,8 @@ import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Aisle, Kitchen, Product, Trolley } from "./art";
+import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 type Emotion = "steady" | "tempted" | "firm" | "done";
 const MOOD: Record<Emotion, Mood> = { steady: "neutral", tempted: "anxious", firm: "engaged", done: "pleased" };
@@ -25,12 +27,12 @@ function objective(s: JaxWorld) {
   if (s.phase === "till" || s.phase === "revisit-till") return spent(s) > budget(s) ? "Over budget. Put something back." : undefined;
   if (s.phase === "setup") return "Leave the next shop easier.";
   if (s.phase === "complete") return "Same list. The wish was your call.";
-  if (s.trip === 0) return "Steer into the list. Tap the lures away.";
   return undefined;
 }
 
 export function JaxWorldGame() {
   const { state: s, dispatch } = useLoop(jaxReducer, () => createJax(), running);
+  usePlayedWhen("jax", s.phase === "complete");
   const live = s.phase === "aisle" || s.phase === "revisit";
   const till = s.phase === "till" || s.phase === "revisit-till";
   const t = trip(s);
@@ -91,7 +93,7 @@ export function JaxWorldGame() {
           const sold = t.soldOut?.key === item.key;
           const z = item.z;
           return <button key={item.id} className="jw-item" data-lane={item.lane} data-kind={p.kind} data-need={need} data-lure={item.lure} data-sold={sold}
-            style={{ "--x": 50 + (item.lane - 1) * (7 + 27 * z), "--y": 38 + 44 * z ** 1.25, "--s": .32 + .78 * z, zIndex: Math.round(z * 100) } as CSSProperties}
+            style={{ "--x": 50 + (item.lane - 1) * (7 + 27 * z), "--y": 38 + 44 * z ** 1.25, "--s": .32 + .78 * z, "--z": 1 + Math.round(z * 100) } as CSSProperties}
             aria-label={need ? `Steer to the ${p.name.toLowerCase()}` : sold ? `${p.name}, sold out` : p.kind === "wish" ? s.trip < 3 ? `Save the ${p.name.toLowerCase()} for later` : `Steer to the ${p.name.toLowerCase()}, on sale` : `Knock ${p.name.toLowerCase()} away`}
             onClick={() => dispatch(need || (p.kind === "wish" && s.trip === 3) ? { type: "steer", lane: item.lane } : { type: "flick", id: item.id })}>
             <Product id={item.key} />
@@ -143,6 +145,7 @@ export function JaxWorldGame() {
         : <div className="jw-end">
           <span className="kit-stamp"><Check size={18} weight="bold" /> {s.receipts.at(-1)?.items.includes(t.wish) ? `${PRODUCTS[t.wish]!.name}, on sale` : "Wish still saved"}</span>
           <Link className="kit-primary" href="/lives/learn?module=park_the_idea_v1">Park the new idea <ArrowRight size={18} /></Link>
+          <RelatedRun who="jax" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another shop</button>
         </div>}
     </div>}

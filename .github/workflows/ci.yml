@@ -4,18 +4,12 @@ on:
     branches: [main]
   pull_request:
 jobs:
-  # U5: this job runs `pnpm verify` — the one script — and nothing of its own. Until U5 it
-  # restated four of verify's six steps by hand and had silently fallen behind: `perf:gate`
-  # (route budgets) and `gate:accounting` (the ledger's green must account for every e2e
-  # test) ran on a developer's machine and never here. A list that is copied drifts; a list
-  # that is called cannot. src/quality/ci-parity.test.ts holds the two together in both
-  # directions, so a step added to verify without reaching CI, or a step run here that
-  # verify does not know, is a failing test rather than a quiet gap.
+  # This job runs `pnpm verify` — the one script — and nothing of its own. A list that is
+  # copied drifts; a list that is called cannot.
   #
   # The toolchain is read from the tree's pins, not restated: pnpm/action-setup takes the
   # version from package.json's `packageManager` (giving it a `version` here as well is an
-  # error in that action, by design), and setup-node reads `.nvmrc`. Bumping either pin is
-  # one edit, and the same test checks the pins agree with `engines`.
+  # error in that action, by design), and setup-node reads `.nvmrc`.
   verify:
     runs-on: ubuntu-latest
     steps:
@@ -26,19 +20,36 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm verify
 
-  # O98 (standing debt 11). Until this job existed, NOTHING ran `pnpm e2e` — not
-  # `verify`, not CI — so every browser-level sweep guarded only whatever a person
-  # remembered to run. That is how O97 happened: `party-to-care.spec.ts`, which reads
-  # every rendered page for ADHD.ME holding itself out as a carer, sat red on /privacy
-  # with nobody watching. "Compliance is code" is this tree's law, and code with no gate
-  # is a comment.
+  # Until this job existed nothing ran `pnpm e2e` — not `verify`, not CI — so every
+  # browser-level sweep guarded only whatever a person remembered to run, and a compliance
+  # spec sat red for days with nobody watching. Code with no gate is a comment.
   #
   # It is a SEPARATE job on purpose. The suite drives its own production build and takes
   # minutes; hanging that off the fast gate would tempt somebody to trim the fast gate.
   # Two jobs means a failure in either is visible on its own, and `verify` still answers
   # in the time it always did.
-  e2e:
+  e2e-shard:
     runs-on: ubuntu-latest
+    # 2026-09-27: SHARDED, as the note below said to do next time. The suite reached about 66
+    # minutes of the 75 once the sampled-contrast sweep joined it. Each shard is its own job with
+    # its own `next build` and its own server, so the process-global mock stores that pin
+    # `workers: 1` are never shared between shards; every spec that needs the console seeds or
+    # resets it itself (`POST /api/mock/console`, e2e/support/fixtures.ts). Two shards put each
+    # run near half the wall clock. Add a third before raising any ceiling.
+    # 2026-09-27, later: a third, when the axe and sampled-contrast sweeps gained 320 and 768 as
+    # well as 390 and 1440 (docs/design/ux-evaluation-2026-09/PLAN.md §8).
+    # 2026-09-27, later again: the four sampled-contrast widths are one file, so they all landed in
+    # shard 1, which took 55 minutes while the other two took 25. They run as a fourth job of their
+    # own now, and the shards filter them out (a filter applies before the shard split).
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { key: "1", part: "shard 1 of 3", args: "--shard=1/3 --grep-invert 'text axe cannot measure'" }
+          - { key: "2", part: "shard 2 of 3", args: "--shard=2/3 --grep-invert 'text axe cannot measure'" }
+          - { key: "3", part: "shard 3 of 3", args: "--shard=3/3 --grep-invert 'text axe cannot measure'" }
+          - { key: "contrast", part: "contrast sweep", args: "e2e/contrast-sampled.spec.ts" }
+    name: e2e ${{ matrix.part }}
     # The suite measures ~8 minutes locally plus its own `next build`; the ceiling is
     # generous so a slow runner reports a real result rather than a timeout that reads
     # like a product failure.
@@ -55,7 +66,13 @@ jobs:
     # jobs would buy more, and is the real answer if it outgrows this too — but not for free:
     # playwright.config.ts pins `workers: 1` because the mock rail, console and audit stores are
     # process-global singletons, so splitting the suite is a correctness change, not a config one.
-    timeout-minutes: 45
+    #
+    # 2026-09-22: it happened again. Three sweeps landed in one day (reduced motion, focus rings,
+    # axe over the stateful screens), the suite reached 44.4 minutes with every test passing, and
+    # the last three pushes to main and this branch's own run were all cancelled at 45 with
+    # nothing failed. 75 puts about half an hour back. The next time this number is the reason
+    # a run is red, shard the suite rather than raise it again.
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -69,7 +86,7 @@ jobs:
       # playwright.config.ts owns the server: it runs `next build && next start` on its
       # own port with the env the production build fails closed without. Nothing to
       # start here.
-      - run: pnpm e2e
+      - run: pnpm e2e ${{ matrix.args }}
         env:
           CI: "true"
       # A red compliance gate has to be diagnosable from the run that caught it, or the
@@ -77,8 +94,17 @@ jobs:
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.key }}
           path: |
             playwright-report/
             test-results/
           retention-days: 7
+
+  # One check named "e2e", as before sharding, so anything that requires it by name still sees
+  # one verdict: green only when every shard is.
+  e2e:
+    needs: e2e-shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.e2e-shard.result }}" = "success"

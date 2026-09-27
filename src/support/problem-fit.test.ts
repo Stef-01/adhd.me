@@ -63,7 +63,7 @@ describe("problem fit (§42)", () => {
 describe("strengths in the match", () => {
   const aNeed = (over: Partial<Need> = {}): Need => ({
     id: "activation", domain: "work-study", subdomain: "activation",
-    label: "Starting work", signalStrength: 1, functionalCost: 8, userPriority: "yes",
+    label: "Starting work", signalStrength: 1, functionalCost: 8, costMeasured: true, userPriority: "yes",
     confidence: "high", contributors: [], strengths: [], context: [], strategies: [],
     sources: ["starting"], persistence: 2, ...over,
   });

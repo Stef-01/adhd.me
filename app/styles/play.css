@@ -11,7 +11,8 @@ body:has(.play-run) { overflow-x: clip; }
 .play-x { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 44px; height: 44px; border: 1px solid var(--play-line); border-radius: 999px; background: var(--play-paper); color: var(--play-ink); cursor: pointer; box-shadow: 0 3px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
 .play-x:focus-visible { outline: 3px solid var(--play-blue); outline-offset: 3px; }
 .play-hut { display: flex; align-items: center; gap: 12px; flex: 1; max-width: 560px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--play-line); border-radius: 999px; background: var(--play-paper); }
-.play-dots { flex: 1; margin: 0; }
+/* The lesson page's dots carry a 28px foot (learning.css); in the housing it made the hut 51px, not 44, and pushed the dots to its top. */
+.play-hut .play-dots { flex: 1; margin: 0; }
 .play-run .play-dots li.is-done { background: color-mix(in srgb, var(--play-blue) 55%, var(--play-line)); }
 .play-run .play-dots li.is-current { background: var(--play-blue); }
 .play-count { flex: 0 0 auto; color: var(--muted); font-size: 0.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -19,7 +20,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: 100svh; padding: 76px 16px 32px; border-radius: 0; background: var(--play-soft); text-align: center; overflow: hidden; }
 .play-card > * { width: 100%; max-width: 640px; }
 .play-card > .play-clock { max-width: none; }
-.play-card.is-title { background: color-mix(in srgb, var(--play-blue-2) 22%, var(--play-paper)); padding-top: 34px; }
+.play-card.is-title { background: color-mix(in srgb, var(--play-blue-2) 22%, var(--play-paper)); }
 .play-card.is-round { background: var(--play-soft); gap: 12px; }
 .play-card.is-round.is-hit { background: color-mix(in srgb, var(--play-go) 16%, var(--play-paper)); }
 .play-card.is-round.is-miss { background: color-mix(in srgb, var(--play-alert) 14%, var(--play-paper)); }
@@ -243,7 +244,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-scale li:last-child { transform: translateX(-100%); text-align: right; }
 .play-scale li.is-last { color: var(--play-go); }
 .play-share { display: grid; gap: 6px; justify-items: center; margin-top: 4px; }
-.play-share .play-choice { width: auto; min-height: 44px; }
+.play-share .play-choice { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; min-height: 44px; }
 .play-share-note { margin: 0; color: var(--muted); font-size: 0.8125rem; }
 .play-rule { margin: 0; max-width: 34ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.4; }
 /* Recall: the list as objects on a table; the interruption covers it; the cover lifts. */
@@ -397,4 +398,8 @@ body:has(.play-run) { overflow-x: clip; }
 /* The line on a run's last card that names the axes it just moved (app/play/run-player.tsx).
    A link in a sentence is a 20px target; this one is its own row, so it gets the tree's 44. */
 .play-map-moved { margin: 2px 0 0; font-size: 0.875rem; color: var(--play-ink); }
-.play-map-moved a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--play-blue, var(--accent-deep)); font-weight: 700; text-underline-offset: 3px; }
+/* The run's blue alone is 4.1:1 on the title card's lavender; mixed toward the ink it clears AA with room for the gradient. */
+.play-map-moved a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: color-mix(in srgb, var(--play-blue) 70%, var(--play-ink)); font-weight: 700; text-underline-offset: 3px; }
+/* The character game on the same subject, beside the last card's way out: its name and an arrow. */
+.play-related { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+@media (hover: hover) { .play-related:hover { border-color: var(--play-blue); } }

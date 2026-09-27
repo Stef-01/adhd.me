@@ -190,7 +190,7 @@ function advance(s: ArjunWorld, ms: number): ArjunWorld {
   }
   if (!n.still && n.t >= MEETING[n.round]! && n.phase === 'round') {
     const stream = missing({ ...n, stream: [] });
-    let recap: ArjunWorld = { ...n, phase: 'recap', stream: [], queue: [], message: 'Time’s up. Catch up on what you missed.', revision: n.revision + 1 };
+    let recap: ArjunWorld = { ...n, phase: 'recap', stream: [], queue: [], message: 'Time’s up.', revision: n.revision + 1 };
     for (const line of stream) recap = spawn(recap, line);
     n = recap;
   }

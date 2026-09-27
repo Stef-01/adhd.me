@@ -22,17 +22,19 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ArrowRight, Check, Play } from "@phosphor-icons/react";
+import { ArrowRight, CaretDown, Check, Play } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useDragControls, useReducedMotion, type PanInfo } from "motion/react";
-import { CHARACTERS, recentlyCompleted, recommendStrategies, selectGoals, STRATEGIES, strategy, type LearningDomain, type StrategyDefinition } from "@/lives";
+import { reasonLine, recentlyCompleted, recommendStrategies, selectGoals, skipGoals, STRATEGIES, strategy, type LearningDomain, type StrategyDefinition } from "@/lives";
 import { MODULES, type LearnModule } from "@/learn/scenes";
 import type { Progress } from "@/learn/progress";
 import type { LearnCursor } from "@/learn/cursor";
-import { deviceLearningStorage } from "@/learn/cursor";
+import { deviceLearningStorage, resumable } from "@/learn/cursor";
 import { LearningCoverArt, LearningScene } from "./learning-scene";
 import { LifeBean } from "./lives/bean";
 import { GAME_ENTRY } from "@/lives/entry-points";
 import { useProfile } from "./lives/profile-hook";
+import { usePlayed } from "./lives/played-hook";
+import { GAME_GROUPS, LIFE_GAMES, RUN_GAMES, tryFirst, type GameItem } from "@/learn/games";
 import { Bean } from "./play/beans";
 
 export type Pane = "games" | "modules";
@@ -113,7 +115,7 @@ export interface LearnPanesProps {
   finished: number;
 }
 
-export function LearnPanes({ progress, cursor, completed, hydrated, start, reset, finished }: LearnPanesProps) {
+export function LearnPanes({ progress, cursor, completed, hydrated, start }: LearnPanesProps) {
   const params = useSearchParams();
   const reducedMotion = useReducedMotion();
   const [pane, setPane] = useState<Pane>("games");
@@ -192,11 +194,6 @@ export function LearnPanes({ progress, cursor, completed, hydrated, start, reset
           </motion.div>
         </AnimatePresence>
       </div>
-      {(finished > 0 || cursor) && (
-        <button className="learn-reset" type="button" onClick={reset}>
-          Reset learning progress on this device
-        </button>
-      )}
     </section>
   );
 }
@@ -273,47 +270,146 @@ function Completion({ completed, start }: { completed: string | null; start: (id
   );
 }
 
-const FIRST_TILES = 8;
-
-function GamesPane({ progress, completed, hydrated, start, reducedMotion }: { progress: Progress; completed: string | null; hydrated: boolean; start: (id: string) => void; reducedMotion: boolean }) {
-  const [showAll, setShowAll] = useState(false);
-  const allRuns = MODULES.filter((m) => m.kind === "run");
-  const runs = showAll ? allRuns : allRuns.filter((m, i) => i < FIRST_TILES || progress.done.includes(m.id));
+/**
+ * The games pane (PLAN.md W7): one line that says what these are, the one primary, three to try
+ * first, and every game one tap away under "All games", ticked when played. "All games" sits beside
+ * the primary and takes the three's place below it, opening on the eight lives, so the button stays
+ * put and the open list stays one screen. No date and no result on any tile (D2); the page foot
+ * says where that is kept.
+ */
+function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduced }: { progress: Progress; completed: string | null; hydrated: boolean; start: (id: string) => void; reducedMotion: boolean }) {
+  const { profile } = useProfile();
+  const played = usePlayed();
+  const [all, setAll] = useState(false);
+  const [group, setGroup] = useState<string | null>(null);
+  // The three depend on the goals and on what has been played, both read from the device after
+  // mount. Until then the list holds its space empty, so three tiles never show and then swap.
+  const ready = hydrated && profile !== null;
+  const goals = ready ? profile.selectedGoals ?? [] : [];
+  const isPlayed = (g: GameItem) => (g.kind === "run" ? progress.done.includes(g.id) : Boolean(played.at[g.id]));
+  const first = ready ? tryFirst(goals, isPlayed) : [];
+  // Until the device has been read, the default three stand in, hidden, so the space they hold is
+  // the real tiles' own height and nothing below moves when the real three arrive.
+  const shown = ready ? first : tryFirst([], () => false);
+  const anyPlayed = hydrated && [...LIFE_GAMES, ...RUN_GAMES].some(isPlayed);
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
     <div className="learn-games-scope" data-liquid>
       <Completion completed={completedRun} start={start} />
+      <p className="learn-pane-line">Short scenes from everyday life.</p>
       <div className="learn-game-toolbar">
-        <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true"/>Play mix</Link>
-        <Link href="/lives/characters">The eight lives <ArrowRight size={16} aria-hidden="true"/></Link>
-      </div>
-      <ul className="learn-game-roster" aria-label="All eight character games">
-        {CHARACTERS.map(c=>{const entry=GAME_ENTRY[c.id];return <li key={c.id}><Link href={entry.href} aria-label={`Play ${c.name}`} style={{'--game-colour':entry.colour} as React.CSSProperties}>
-          <LifeBean who={c.id} mood="engaged" size={58}/><span><strong>{c.name}</strong><small>{entry.label}</small></span><ArrowRight size={18} aria-hidden="true"/>
-        </Link></li>})}
-      </ul>
-      <ol className="learn-stack" data-testid="learn-games">
-        {runs.map((module, index) => (
-          <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
-        ))}
-      </ol>
-      {!showAll && allRuns.length > FIRST_TILES && (
-        <button type="button" className="learn-secondary learn-show-all" onClick={() => setShowAll(true)} data-testid="learn-show-all">
-          All {allRuns.length} games
+        <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true" />Play mix</Link>
+        <button
+          type="button"
+          className="learn-secondary learn-show-all learn-all-games"
+          aria-expanded={all}
+          onClick={() => {
+            setAll(!all);
+            setGroup(all ? null : GAME_GROUPS[0]!.title);
+          }}
+          data-testid="learn-show-all"
+        >
+          All games
+          <CaretDown size={16} weight="bold" aria-hidden="true" />
         </button>
+      </div>
+      {!all && (!ready || first.length > 0) && (
+        <>
+          <h2 className="learn-try-title">Try these first.</h2>
+          <ol className="learn-try" data-testid="learn-try" data-ready={ready || undefined} aria-hidden={ready ? undefined : true}>
+            {shown.map((g) => (
+              <li key={`${g.kind}:${g.id}`}>
+                <GameTile game={g} start={start} />
+              </li>
+            ))}
+          </ol>
+        </>
       )}
+      {all && (
+        <div className="learn-game-groups">
+          {GAME_GROUPS.map((gr) => {
+            const open = group === gr.title;
+            return (
+              <section key={gr.title} className="learn-game-group">
+                <button type="button" className="learn-group-toggle" aria-expanded={open} onClick={() => setGroup(open ? null : gr.title)}>
+                  {gr.title}
+                  <CaretDown size={16} weight="bold" aria-hidden="true" />
+                </button>
+                {open && (
+                  <ul className="learn-game-names">
+                    {gr.games.map((g) => {
+                      const done = isPlayed(g);
+                      const inner = (
+                        <>
+                          {g.title}
+                          {done && <Check size={16} weight="bold" aria-hidden="true" />}
+                        </>
+                      );
+                      // The tick is a picture; the name says it in one phrase.
+                      const name = done ? `${g.title}, played` : undefined;
+                      return (
+                        <li key={`${g.kind}:${g.id}`} data-played={done || undefined}>
+                          {g.kind === "life" ? (
+                            <Link href={g.href} aria-label={name}>{inner}</Link>
+                          ) : (
+                            <button type="button" aria-label={name} onClick={() => start(g.id)}>{inner}</button>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </section>
+            );
+          })}
+        </div>
+      )}
+      {anyPlayed && <p className="learn-saved">Saved on this device.</p>}
     </div>
   );
 }
 
+/** One of the three: the game's face, its name and its four-word hook. The long tagline is its description. */
+function GameTile({ game, start }: { game: GameItem; start: (id: string) => void }) {
+  if (game.kind === "life") {
+    return (
+      <Link className="learn-try-tile" href={game.href} style={{ "--game-colour": GAME_ENTRY[game.id].colour } as React.CSSProperties}>
+        <LifeBean who={game.id} mood="engaged" size={52} />
+        <span><strong>{game.title}</strong><small>{game.hint}</small></span>
+        <ArrowRight size={18} aria-hidden="true" />
+      </Link>
+    );
+  }
+  const module = MODULES.find((m) => m.id === game.id);
+  return (
+    <button type="button" className={`learn-try-tile is-${module ? coverOf(module) : "sky"}`} onClick={() => start(game.id)}>
+      {module?.run && <Bean who={module.run.bean} mood="engaged" size={52} />}
+      <span>
+        <strong>{game.title}</strong>
+        <small>{game.hint}</small>
+        {module && <span className="sr-only">{`. ${module.subtitle}.`}</span>}
+      </span>
+      <ArrowRight size={18} aria-hidden="true" />
+    </button>
+  );
+}
+
+/**
+ * The modules pane (PLAN.md W8): the hero, then the goals question until it is answered or skipped,
+ * then "For you" directly under it with one line that says what the picks came from, so a tap on a
+ * goal shows its effect in the same glance. Everything else is one tap away under "Explore all
+ * modules", which takes their place while it is open, as "All games" does on the games pane.
+ */
 function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMotion }: { progress: Progress; cursor: LearnCursor | null; completed: string | null; hydrated: boolean; start: (id: string, resume?: boolean) => void; reducedMotion: boolean }) {
   const { profile, apply } = useProfile();
+  const [editing, setEditing] = useState(false);
+  const [explore, setExplore] = useState(false);
   const reads = MODULES.filter((m) => m.kind !== "run");
   const completedRead = completed && MODULES.find((m) => m.id === completed)?.kind !== "run" ? completed : null;
   const done = profile?.completedModuleIds ?? [];
   const goals = profile?.selectedGoals ?? [];
   const toggle = (id: LearningDomain) => apply((s) => selectGoals(s, goals.includes(id) ? goals.filter((g) => g !== id) : [...goals, id].slice(0, 3)));
-  const forYou = useMemo(() => {
+  const picks = useMemo(() => {
     if (!profile) return [];
     return recommendStrategies(
       {
@@ -327,82 +423,146 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
         selectedGoals: profile.selectedGoals,
       },
       STRATEGIES,
-    )
-      .filter((r) => r.score > 0)
-      .map((r) => r.strategy);
+    ).filter((r) => r.score > 0);
   }, [profile]);
+  const why = reasonLine(picks, (g) => GOALS.find((x) => x.id === g)?.label ?? g);
+  const forYou = why ? picks.map((r) => r.strategy) : [];
+  const ask = hydrated && profile !== null && (editing || (goals.length === 0 && !profile.goalsSkipped));
   const started = profile?.saved.find((s) => s.status === "started");
+  const toolkit = (profile?.personalStrategies.length ?? 0) > 0;
   const quick = STRATEGIES.filter((s) => s.estimatedMinutes <= 2);
-  const continuing = cursor ? MODULES.find((m) => m.id === cursor.moduleId) : undefined;
+  // A finished run's last card is kept for Back, not offered as Continue (resumable).
+  const resume = resumable(cursor, progress.done);
+  const continuing = resume ? MODULES.find((m) => m.id === resume.moduleId) : undefined;
 
   return (
     <>
       <Completion completed={completedRead} start={start} />
-      <div className="learning-feature">
-        <div>
-          <h2>Get to know ADHD.</h2>
-          <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "adhd", Boolean(cursor))}>
-            {continuing ? `Continue ${continuing.title}` : "Start here"} <ArrowRight size={18} aria-hidden="true" />
-          </button>
-        </div>
-        <LearningScene />
-      </div>
-      {started && (
+      {!explore && (
+        <>
+          <div className="learning-feature">
+            <div>
+              <h2>Get to know ADHD.</h2>
+              <button className="learn-primary" type="button" onClick={() => start(resume?.moduleId ?? "adhd", Boolean(resume))}>
+                {continuing ? `Continue ${continuing.title}` : "Start"} <ArrowRight size={18} aria-hidden="true" />
+              </button>
+            </div>
+            <LearningScene />
+          </div>
+          {started && (
+            <ul className="lives-rows">
+              <li>
+                <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(strategy(started.strategyId).moduleId)}`}>
+                  <span className="lives-row-text">
+                    <strong>Continue {strategy(started.strategyId).title}</strong>
+                    <span>{strategy(started.strategyId).estimatedMinutes} min</span>
+                  </span>
+                  <ArrowRight size={16} weight="bold" aria-hidden="true" />
+                </Link>
+              </li>
+            </ul>
+          )}
+          {ask && (
+            <section className="learn-goals" aria-labelledby="learn-goals-title">
+              <h2 id="learn-goals-title" className="t-question">What do you want help with?</h2>
+              <div className="lives-chips" role="group" aria-labelledby="learn-goals-title">
+                {GOALS.map((g) => (
+                  <button
+                key={g.id}
+                type="button"
+                className="lives-chip"
+                aria-pressed={goals.includes(g.id)}
+                onClick={() => {
+                  // The question stays open until "Done", so "For you" changes under it as goals are tapped.
+                  setEditing(true);
+                  toggle(g.id);
+                }}
+              >
+                    {g.label}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="learn-goals-done"
+                onClick={() => {
+                  if (goals.length === 0) apply((s) => skipGoals(s));
+                  setEditing(false);
+                }}
+              >
+                {goals.length === 0 ? "Skip" : "Done"}
+              </button>
+            </section>
+          )}
+          {forYou.length > 0 && (
+            <section className="learn-for-you" aria-labelledby="learn-for-you-title" data-testid="learn-for-you">
+              <div className="learn-for-you-head">
+                <h2 id="learn-for-you-title" className="lives-section-title">For you</h2>
+                {!ask && (
+                  <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
+                    Change goals
+                  </button>
+                )}
+              </div>
+              <p className="learn-for-you-why">{why}</p>
+              <StrategyRows strategies={forYou} done={done} />
+            </section>
+          )}
+        </>
+      )}
+      {toolkit && !explore && (
         <ul className="lives-rows">
           <li>
-            <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(strategy(started.strategyId).moduleId)}`}>
+            <Link className="lives-row" href="/lives/toolkit">
               <span className="lives-row-text">
-                <strong>Continue {strategy(started.strategyId).title}</strong>
-                <span>{strategy(started.strategyId).estimatedMinutes} min</span>
+                <strong>Your Toolkit</strong>
               </span>
               <ArrowRight size={16} weight="bold" aria-hidden="true" />
             </Link>
           </li>
         </ul>
       )}
-      {forYou.length > 0 && <Shelf title="For you" strategies={forYou} done={done} open />}
-      <details className="lives-shelf learn-shelf" data-shelf="reads">
-        <summary className="lives-section-title">Understand ADHD</summary>
-      <ol className="learn-stack" data-testid="learn-reads">
-        {reads.map((module, index) => (
-          <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
-        ))}
-      </ol>
-      </details>
-      <Shelf title="Two-minute tools" strategies={quick} done={done} />
-      {STRATEGY_SHELVES.map((shelf) => {
-        const rows = STRATEGIES.filter((s) => s.domains.some((d) => shelf.domains.includes(d)) && !quick.includes(s));
-        return rows.length ? <Shelf key={shelf.title} title={shelf.title} strategies={rows} done={done} /> : null;
-      })}
-      <ul className="lives-rows learn-more-rows">
-        <li>
-          <Link className="lives-row" href="/lives/toolkit">
-            <span className="lives-row-text">
-              <strong>Your Toolkit</strong>
-            </span>
-            <ArrowRight size={16} weight="bold" aria-hidden="true" />
-          </Link>
-        </li>
-        <li>
-          <Link className="lives-row" href="/approach/meditate">
-            <span className="lives-row-text">
-              <strong>A quiet moment</strong>
-              <span>5 min</span>
-            </span>
-            <ArrowRight size={16} weight="bold" aria-hidden="true" />
-          </Link>
-        </li>
-      </ul>
-      <details className="life-why lives-goals">
-        <summary>Your goals</summary>
-        <div className="lives-chips" role="group" aria-label="Goals">
-          {GOALS.map((g) => (
-            <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>
-              {g.label}
-            </button>
-          ))}
+      <div className="learn-explore-row">
+        <button type="button" className="learn-secondary learn-explore" aria-expanded={explore} onClick={() => setExplore(!explore)} data-testid="learn-explore">
+          Explore all modules
+          <CaretDown size={16} weight="bold" aria-hidden="true" />
+        </button>
+        {/* After a skip with nothing else to go on there is no "For you" to sit beside, so the way
+            back to the question sits here. */}
+        {hydrated && !ask && !explore && forYou.length === 0 && (
+          <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
+            Choose goals
+          </button>
+        )}
+      </div>
+      {explore && (
+        <div className="learn-explore-all">
+          <details className="lives-shelf learn-shelf" data-shelf="reads">
+            <summary className="lives-section-title">The basics</summary>
+            <ol className="learn-stack" data-testid="learn-reads">
+              {reads.map((module, index) => (
+                <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
+              ))}
+            </ol>
+          </details>
+          <Shelf title="Two-minute tools" strategies={quick} done={done} />
+          {STRATEGY_SHELVES.map((shelf) => {
+            const rows = STRATEGIES.filter((s) => s.domains.some((d) => shelf.domains.includes(d)) && !quick.includes(s));
+            return rows.length ? <Shelf key={shelf.title} title={shelf.title} strategies={rows} done={done} /> : null;
+          })}
+          <ul className="lives-rows learn-more-rows">
+            <li>
+              <Link className="lives-row" href="/approach/meditate">
+                <span className="lives-row-text">
+                  <strong>A quiet moment</strong>
+                  <span>5 min</span>
+                </span>
+                <ArrowRight size={16} weight="bold" aria-hidden="true" />
+              </Link>
+            </li>
+          </ul>
         </div>
-      </details>
+      )}
     </>
   );
 }
@@ -414,23 +574,27 @@ function Shelf({ title, strategies, done, open = false }: { title: string; strat
       <summary className="lives-section-title" id={id}>
         {title}
       </summary>
-      <ul className="lives-rows">
-        {strategies.map((s) => (
-          <li key={s.id}>
-            <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(s.moduleId)}`} data-strategy={s.id}>
-              <span className="lives-row-text">
-                <strong>{s.title}</strong>
-                <span>
-                  {s.estimatedMinutes} min{done.includes(s.moduleId) ? " · done" : ""}
-                </span>
-              </span>
-              <ArrowRight size={16} weight="bold" aria-hidden="true" />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <StrategyRows strategies={strategies} done={done} />
     </details>
   );
 }
 
-export { deviceLearningStorage };
+function StrategyRows({ strategies, done }: { strategies: readonly StrategyDefinition[]; done: readonly string[] }) {
+  return (
+    <ul className="lives-rows">
+      {strategies.map((s) => (
+        <li key={s.id}>
+          <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(s.moduleId)}`} data-strategy={s.id}>
+            <span className="lives-row-text">
+              <strong>{s.title}</strong>
+              <span>
+                {s.estimatedMinutes} min{done.includes(s.moduleId) ? " · done" : ""}
+              </span>
+            </span>
+            <ArrowRight size={16} weight="bold" aria-hidden="true" />
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}

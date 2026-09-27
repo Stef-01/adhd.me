@@ -68,7 +68,7 @@ export function ShareSheet({
 
   return (
     <Sheet open={open} title={audience ? "For your GP" : "Take this to…"} onClose={close} openedBy={openedBy}>
-      <div className="map-sheet map-share">
+      <div className="map-sheet">
         {!audience ? (
           <ul className="map-audiences">
             {AUDIENCES.map((id) => (

@@ -11,25 +11,31 @@ import { describe, expect, it } from "vitest";
 import {
   CLAIMABLE,
   claimable,
+  done,
   emptyCarePlan,
+  GOALS_MAX,
   hasPlan,
   lapses,
   PLAN_MAX,
   remaining,
+  sanitisePlan,
   spent,
+  STEPS,
   suggestFor,
+  teamFor,
+  TEAM_MAX,
   type CarePlan,
 } from "./care-plan";
 import * as carePlan from "./care-plan";
 import { PROFESSIONS } from "@/support/professions";
-import { emptyModel, MODEL_KEY, saveCarePlan, clearCarePlan, readModel, saveOnboarding, recordResonance, type ModelRecord } from "./store";
+import { emptyModel, MODEL_KEY, saveCarePlan, savePlanDetails, clearCarePlan, readModel, saveOnboarding, recordResonance, type ModelRecord } from "./store";
 import { deriveNeeds } from "./needs";
 
 const THIS_YEAR = 2026;
 const TODAY = new Date(`${THIS_YEAR}-09-20T00:00:00Z`);
 
 function plan(over: Partial<CarePlan> = {}): CarePlan {
-  return { allows: 5, used: 2, year: THIS_YEAR, confirmedOn: `${THIS_YEAR}-09-01T00:00:00Z`, ...over };
+  return { ...emptyCarePlan(), allows: 5, used: 2, year: THIS_YEAR, confirmedOn: `${THIS_YEAR}-09-01T00:00:00Z`, ...over };
 }
 
 /** A record with enough in it to produce needs, so the suggestion tests are not vacuous. */
@@ -196,6 +202,104 @@ describe("the plan on the record", () => {
     delete before.carePlan;
     s.setItem(MODEL_KEY, JSON.stringify(before));
     expect(hasPlan(readModel(s).carePlan)).toBe(false);
+  });
+});
+
+describe("the helper: five things, each answered or not", () => {
+  it("starts with nothing answered, and a written plan answers only the numbers", () => {
+    for (const step of STEPS) expect(done(emptyCarePlan(), step), step).toBe(false);
+    const numbers = plan();
+    expect(STEPS.filter((step) => done(numbers, step))).toEqual(["services"]);
+  });
+
+  it("counts a not-yet, a nobody and an empty team as answers, because they are", () => {
+    expect(done(plan({ sixMonths: false }), "duration")).toBe(true);
+    expect(done(plan({ goals: [] }), "goals")).toBe(true);
+    expect(done(plan({ providers: [] }), "providers")).toBe(true);
+    expect(done(plan({ team: [] }), "team")).toBe(true);
+  });
+
+  it("asks the four before the visit first, and the numbers only a written plan can give last", () => {
+    expect(STEPS[STEPS.length - 1]).toBe("services");
+  });
+
+  it("reads an old record as not asked yet rather than as answered nothing", () => {
+    const old = sanitisePlan({ allows: 5, used: 2, year: THIS_YEAR, confirmedOn: "2026-09-01T00:00:00Z" });
+    expect(old).toMatchObject({ allows: 5, used: 2, sixMonths: null, goals: null, providers: null, team: null, goalNote: "", providerNote: "" });
+    expect(sanitisePlan(null)).toEqual(emptyCarePlan());
+    expect(sanitisePlan("plan")).toEqual(emptyCarePlan());
+    expect(sanitisePlan([])).toEqual(emptyCarePlan());
+  });
+
+  it("holds each answer to its own shape: known kinds, known axes, at most three goals, no duplicates", () => {
+    const messy = sanitisePlan({
+      sixMonths: "yes",
+      goals: ["starting", "starting", "money", "focus", "sleep-energy", "organisation"],
+      goalNote: 42,
+      providers: ["psychologist", "wizard", "psychologist"],
+      team: ["psychologist", "adhd-coach", "gp", "dietitian"],
+    });
+    expect(messy.sixMonths).toBeNull();
+    expect(messy.goals).toEqual(["starting", "focus", "sleep-energy"]);
+    expect(messy.goals!.length).toBe(GOALS_MAX);
+    expect(messy.goalNote).toBe("");
+    expect(messy.providers).toEqual(["psychologist"]);
+    // A plan can never pay for a coach and a GP writes it, so neither can be on the team it reads.
+    expect(messy.team).toEqual(["psychologist", "dietitian"]);
+  });
+
+  it("keeps the person's own words byte for byte", () => {
+    const words = "  Get out the door on time.  ";
+    expect(sanitisePlan({ goalNote: words }).goalNote).toBe(words);
+  });
+});
+
+describe("the map's proposal for a plan that may not exist yet", () => {
+  it("proposes from the map alone, never a GP, at most four covered and one uncovered", () => {
+    const rows = teamFor(livedRecord());
+    expect(rows.length).toBeGreaterThan(1);
+    expect(rows.map((r) => r.kind)).not.toContain("gp");
+    expect(rows.filter((r) => r.covered).length).toBeLessThanOrEqual(TEAM_MAX);
+    expect(rows.filter((r) => !r.covered).length).toBeLessThanOrEqual(1);
+    for (const r of rows) expect(r.covered).toBe(claimable(r.kind));
+  });
+
+  it("is what a plan spends, so the two agree wherever both exist", () => {
+    const rec = livedRecord();
+    expect(suggestFor(rec, plan({ allows: 5, used: 0 }), TODAY)).toEqual(teamFor(rec, 5));
+    expect(teamFor(rec, 1).filter((r) => r.covered)).toHaveLength(1);
+    expect(teamFor(rec, 0)).toEqual([]);
+  });
+
+  it("proposes nothing for a map with nothing on it", () => {
+    expect(teamFor(emptyModel())).toEqual([]);
+  });
+});
+
+describe("the helper on the record", () => {
+  function storage() {
+    const store = new Map<string, string>();
+    return {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => void store.set(k, v),
+      removeItem: (k: string) => void store.delete(k),
+    };
+  }
+
+  it("keeps each answer, and the numbers do not overwrite the answers or the answers the numbers", () => {
+    const s = storage();
+    savePlanDetails(s, { sixMonths: true, goals: ["starting"], goalNote: "Mornings." });
+    saveCarePlan(s, 5, 2, THIS_YEAR);
+    savePlanDetails(s, { providers: [], team: ["psychologist"] });
+    const read = readModel(s).carePlan;
+    expect(read).toMatchObject({ allows: 5, used: 2, sixMonths: true, goals: ["starting"], goalNote: "Mornings.", providers: [], team: ["psychologist"] });
+    expect(STEPS.every((step) => done(read, step))).toBe(true);
+  });
+
+  it("forgets the answers with the plan", () => {
+    const s = storage();
+    savePlanDetails(s, { sixMonths: true, goals: ["starting"] });
+    expect(clearCarePlan(s).carePlan).toEqual(emptyCarePlan());
   });
 });
 

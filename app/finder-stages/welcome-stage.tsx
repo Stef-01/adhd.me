@@ -3,9 +3,11 @@
 // O95: the welcome screen, verbatim from care-finder.tsx. State and handlers live in the
 // orchestrator; this renders them.
 
-import { ArrowRight, CaretRight, Microphone } from "@phosphor-icons/react";
+import { useRef } from "react";
+import { ArrowRight, Microphone } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
+import { EXAMPLE_SEARCHES } from "@/finder/examples";
 import { AppSettings } from "../app-settings";
 import { EASE_OUT, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
@@ -16,7 +18,6 @@ export function WelcomeStage({
   focusOnArrival,
   onSearch,
   onTalk,
-  onScenarios,
   includeSynthetic,
   onToggleSynthetic,
 }: {
@@ -27,13 +28,13 @@ export function WelcomeStage({
   focusOnArrival: boolean;
   onSearch: (value: string) => void;
   onTalk: () => void;
-  onScenarios: () => void;
   /** O226: the example-roster switch lives HERE now, folded away — configuration belongs at the
    * door, not between a reader and their results (founder-directed; the harmony review agreed:
    * the toggle card was the loudest block on a screen whose one job is the list). */
   includeSynthetic: boolean;
   onToggleSynthetic: (next: boolean) => void;
 }) {
+  const box = useRef<HTMLTextAreaElement | null>(null);
   return (
     <MotionScreen key="welcome" className="voice-screen" focusOnArrival={focusOnArrival}>
       {focusOnArrival && <StatusLine line={FINDER_ANNOUNCEMENTS.welcome} />}
@@ -100,6 +101,7 @@ export function WelcomeStage({
               further, because a box that reflows the screen under a typing hand is worse than one
               that scrolls. */}
           <textarea
+            ref={box}
             id="welcome-request"
             className="dual-input-field"
             rows={3}
@@ -138,17 +140,29 @@ export function WelcomeStage({
           </Pressable>
         </div>
 
-        <motion.button
-          className="scenario-toggle"
-          type="button"
-          onClick={onScenarios}
-          initial={reducedMotion ? undefined : { opacity: 0, y: 8 }}
-          animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ ...STAGE_SPRING, delay: 0.38, opacity: { duration: 0.25, delay: 0.38 } }}
-        >
-          Try an example search
-          <CaretRight size={14} weight="bold" aria-hidden="true" />
-        </motion.button>
+        {/* W6b: four requests a person can see and tap. Each fills the box and puts the cursor at
+            its end, so the mic becomes the search arrow and the words can still be changed. */}
+        <ul className="finder-examples" aria-label="Examples">
+          {EXAMPLE_SEARCHES.map((example) => (
+            <li key={example.label}>
+              <button
+                type="button"
+                className="finder-example"
+                onClick={() => {
+                  setDraft(example.request);
+                  // Focus now, so a key pressed straight after the tap lands in the box. The
+                  // cursor waits a frame, until the box holds the new words.
+                  box.current?.focus();
+                  requestAnimationFrame(() => {
+                    box.current?.setSelectionRange(example.request.length, example.request.length);
+                  });
+                }}
+              >
+                {example.label}
+              </button>
+            </li>
+          ))}
+        </ul>
 
         {/* O233: the testing options moved into the settings sheet (see the header above), so
             the app has one place a person changes anything. */}

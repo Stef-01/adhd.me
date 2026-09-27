@@ -16,6 +16,8 @@ import { STAGES, openStage } from "./support/finder-stages";
 import { MANAGER_EMAIL, signIn, signInAndOnboard } from "./support/session";
 
 const PHONE = { width: 390, height: 844 };
+/** The narrowest phone and a tablet, so every public route is scanned at the four widths PLAN.md §8 names (the default is desktop). */
+const WIDTHS = [null, PHONE, { width: 320, height: 568 }, { width: 768, height: 1024 }] as const;
 
 test.describe("public routes", () => {
   test.beforeEach(async ({ page }) => {
@@ -24,14 +26,14 @@ test.describe("public routes", () => {
     await page.emulateMedia({ reducedMotion: "reduce" });
   });
 
-  for (const viewport of [null, PHONE] as const) {
-    test(`pass WCAG 2.1 AA${viewport ? " at a phone width" : ""}`, async ({ page }) => {
+  for (const viewport of WIDTHS) {
+    test(`pass WCAG 2.1 AA${viewport ? (viewport === PHONE ? " at a phone width" : ` at ${viewport.width}`) : ""}`, async ({ page }) => {
       test.setTimeout(240_000);
       if (viewport) await page.setViewportSize(viewport);
       expect(PUBLIC_ROUTES.length, "the derived public list collapsed").toBeGreaterThan(8);
       for (const path of PUBLIC_ROUTES) {
         await page.goto(path);
-        await expectNoViolations(page, `${path}${viewport ? " @390" : ""}`);
+        await expectNoViolations(page, `${path}${viewport ? ` @${viewport.width}` : ""}`);
       }
     });
   }

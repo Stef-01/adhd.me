@@ -46,6 +46,8 @@ export interface Need {
   readonly signalStrength: number;
   /** 0–10, from resonance where given, from onboarding impact otherwise. */
   readonly functionalCost: number;
+  /** False when nothing asked what this costs: a goal or a "this is me" names a need but not its cost. */
+  readonly costMeasured: boolean;
   readonly userPriority: "yes" | "maybe" | "no" | "unknown";
   readonly confidence: Confidence;
   readonly contributors: readonly Contributor[];
@@ -273,6 +275,7 @@ export function deriveNeeds(record: ModelRecord): Need[] {
       label: needLabel(d.subdomain),
       signalStrength: Math.min(1, d.sources.size / 3),
       functionalCost: cost,
+      costMeasured: d.costs.length > 0,
       userPriority: priority,
       confidence,
       contributors: [...d.contributors.values()],

@@ -140,7 +140,11 @@ test("more shows everyone, and Start over keeps the device's filters for the nex
   await expect(page.locator(".clinician-row")).toHaveCount(expected);
   await expect(page.locator(".show-all")).toHaveCount(0);
   for (const rowId of await rowIds(page)) expect(byId.get(rowId)!.wheelchairAccessible).toBe(true);
-  await page.getByRole("button", { name: "Start over" }).click();
+  // Start over sits in the search bar it restarts, not in a corner of the header.
+  const startOver = page.getByRole("group", { name: "Your search" }).getByRole("button", { name: "Start over" });
+  await expect(startOver).toBeVisible();
+  await expect(page.locator("header.minimal-header").getByRole("button", { name: "Start over" })).toHaveCount(0);
+  await startOver.click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText("What kind of support");
   await page.getByRole("textbox").fill("a psychologist for anxiety");
   await page.keyboard.press("Enter");

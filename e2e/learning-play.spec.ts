@@ -1,6 +1,10 @@
 import { expect } from "@playwright/test";
 import { hydratedUnderFakeClock, test } from "./support/test";
 import { expectNoViolations } from "./support/a11y";
+import { CURSOR_KEY } from "../src/learn/cursor";
+import { runStepCount } from "../src/learn/play";
+import { RUNS } from "../src/learn/runs";
+import { GAME_ENTRY } from "../src/lives/entry-points";
 
 test("all three navigation labels and header controls fit phone, tablet and desktop widths", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -126,4 +130,25 @@ test("colourful activities and the meditation player remain accessible on a phon
   const finish = await page.getByRole("button", { name: "Finish early" }).boundingBox();
   expect(finish!.y + finish!.height).toBeLessThanOrEqual(844);
   await expectNoViolations(page, "meditation player");
+});
+
+test("a run's last card leads to the character game on the same subject, and the run counts as played", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  // Resume Out the door on its last card through the device's cursor.
+  const last = runStepCount(RUNS.find((r) => r.id === "mornings")!) - 1;
+  await page.goto("/approach");
+  await page.evaluate(([k, step]) => localStorage.setItem(k as string, JSON.stringify({ v: 1, moduleId: "mornings", step })), [CURSOR_KEY, last] as const);
+  await page.goto("/approach?module=mornings");
+  const theo = page.getByRole("link", { name: "Theo, a game", exact: true });
+  await expect(theo).toHaveAttribute("href", GAME_ENTRY.theo.href);
+  expect((await theo.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await theo.click();
+  await expect(page).toHaveURL(new RegExp(`${GAME_ENTRY.theo.href}$`));
+  await expect(page.getByRole("heading", { name: "One train. One busy brain." })).toBeVisible();
+  const done = await page.evaluate(() => JSON.parse(localStorage.getItem("adhdme.learn.v1") ?? "{}").done);
+  expect(done).toContain("mornings");
+  // Back returns to the last card the person left, not the run's title.
+  await page.goBack();
+  await expect(page.locator('.play-run[data-phase="next"]')).toBeVisible();
+  await expect(page.getByRole("link", { name: "Theo, a game", exact: true })).toBeVisible();
 });

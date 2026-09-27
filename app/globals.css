@@ -158,13 +158,30 @@
      The sage is the only green in the product and says one thing: this works. 6.49:1 on its own
      fill. Its fill is 1.05:1 against paper, so a chip in it always carries its own text — colour
      is never the only thing saying what a chip means. */
-  --map-poly: rgba(242, 106, 79, 0.58);
-  --map-poly-line: #e05338;
+  /* The radar polygon, one object one colour: the founder's 2026-09-21 comp draws it forest
+     sage, so the shape reads as ground gained rather than heat. 6.9:1 on paper as a stroke. */
+  --map-poly: rgba(45, 90, 76, 0.35);
+  --map-poly-line: #2d5a4c;
   --map-guide: rgba(31, 41, 55, 0.16);
+  --map-ambient: rgba(45, 90, 76, 0.06);
+  /* Day one's polygon: slate, dashed, under the shape. The one comparison the hub draws. */
+  --map-then: #64748b;
+  /* The six axis discs, the comp's tints: each axis wears one, and it never carries a status. */
+  --disc-warm-bg: #ffdad6;  --disc-warm-ink: #aa3620;
+  --disc-sky-bg: #e0f2fe;   --disc-sky-ink: #0369a1;
+  --disc-stone-bg: #eeeeee; --disc-stone-ink: #4b5563;
+  --disc-cool-bg: #d9e3f6;  --disc-cool-ink: #555f6f;
+  --disc-gold-bg: #ffdea6;  --disc-gold-ink: #7c5800;
+  --disc-sage-bg: #dcfce7;  --disc-sage-ink: #166534;
   --chip-strength-bg: #dcfce7;
   --chip-strength-ink: #166534;
   --chip-held-bg: #e0f2fe;
   --chip-held-ink: #0369a1;
+  /* The care map's four layers (app/care-map.tsx): each wedge's fill and the ink that reads on it. */
+  --layer-brain-bg: #dcedfa;       --layer-brain-ink: #24487a;
+  --layer-body-bg: #fff8e6;        --layer-body-ink: #785a00;
+  --layer-environment-bg: #dcefe4; --layer-environment-ink: #0e6b3a;
+  --layer-people-bg: #ebe0f7;      --layer-people-ink: #5b3a8a;
 
   /* The primary button: dark pill, light label. */
   /* O197 (founder-directed, Emil-weighted): ONE curve for interface motion, named rather than
@@ -1869,9 +1886,8 @@ summary:focus-visible {
    sized compact so both input paths sit on the one panel. */
 /* The written option's submit joins the amber system, so talk / write / find read as one panel.
    Disabled stays the default grey until there is something to search on. */
-/* O234: on the box's left edge, under it, where the question is — not centred under a
-   left-aligned screen. */
-.patient-v2 .voice-actions .scenario-toggle { margin-top: 12px; align-self: flex-start; padding: 0 2px; }
+/* W6b: the example chips, on the box's left edge, under it, where the question is. */
+.patient-v2 .voice-actions .finder-examples { align-self: stretch; }
 
 
 .patient-v2 .listening-screen .voice-actions {
@@ -2031,7 +2047,6 @@ summary:focus-visible {
      rule for headings; O166 applied it to the profile name and this one sat a screen away.
      Found by running the whole checklist rather than the rules I remembered. */
   text-wrap: balance;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: clamp(1.625rem, 7vw, 2.25rem);
   font-weight: 430;
   line-height: 1.12;
@@ -3420,84 +3435,6 @@ summary:focus-visible {
    "that takes you seriously."). O233 deleted the tagline, so both rules went with it. */
 
 
-/* Demo scenarios live behind one quiet trigger on the welcome; the browser is
-   its own full-screen stage, entered with the same transition as every other
-   step. No overlay, no second material, nothing to layer. */
-.patient-v2 .scenario-toggle {
-  display: inline-flex;
-  min-height: 44px;
-  gap: 6px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 4px;
-  padding: 0 12px;
-  border: 0;
-  color: var(--muted);
-  background: transparent;
-  font-size: 0.75rem;
-  font-weight: 650;
-  cursor: pointer;
-  transition: color var(--dur-tap) var(--ease-ui);
-}
-
-@media (hover: hover) {
-  .patient-v2 .scenario-toggle:hover { color: var(--ink); }
-}
-
-.patient-v2 .scenario-toggle svg {
-  /* O176: was `--accent`, on the icon of a control whose LABEL is `--muted` and whose hover is
-     `--ink`. An icon louder than the words it belongs to is decoration drawing the eye, which is
-     the one thing the founder's motion-and-clutter directive excludes by name. Inheriting makes
-     the icon part of the control instead of a second signal, hover included.
-     Found only because the probe's SVG blind spot was fixed: `className` is an SVGAnimatedString,
-     so `String(el.className)` gave "[object SVGAnimatedString]" and collapsed every SVG into one
-     bogus meaning — the finder read 3 when the truth was 4. */
-  color: inherit;
-}
-
-.patient-v2 .scenario-screen {
-  display: flex;
-  flex-direction: column;
-}
-
-.patient-v2 .scenario-core {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  min-height: 0;
-  padding: 24px 22px;
-  text-align: center;
-}
-
-.patient-v2 .scenario-quote {
-  margin: 0;
-  min-width: 0;
-  padding: 0 4px;
-}
-
-.patient-v2 .scenario-quote q {
-  display: block;
-  max-width: 22ch;
-  margin: 0 auto;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.5rem, 5.6vw, 1.9375rem);
-  font-weight: 420;
-  line-height: 1.32;
-  letter-spacing: -0.02em;
-  quotes: "\201C" "\201D";
-  text-wrap: pretty;
-}
-
-.patient-v2 .scenario-count {
-  margin: 0;
-  color: var(--faint);
-  font-size: 0.6875rem;
-  text-align: center;
-}
-
 .patient-v2 .voice-screen .voice-actions {
   align-items: center;
   margin-top: 34px;
@@ -3522,7 +3459,6 @@ summary:focus-visible {
   }
 
   .patient-v2[data-stage="welcome"] .minimal-header,
-  .patient-v2[data-stage="scenarios"] .minimal-header,
   .patient-v2[data-stage="type"] .minimal-header {
     min-height: 84px;
     border-bottom: 0;
@@ -3953,7 +3889,7 @@ summary:focus-visible {
 .story-stats dd { max-width: 32ch; margin: 9px 0 0; color: var(--s-muted); font-size: 0.90625rem; line-height: 1.5; }
 /* The figures above are indicative and unsourced (see src/compliance/landing-copy.ts). The note
    is not fine print hidden at the foot of the page — it sits under the rail it qualifies. */
-.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 0.6875rem; line-height: 1.55; }
+.story-stats-note { max-width: 42ch; margin: 18px 0 0; color: var(--s-muted); font-size: 0.75rem; line-height: 1.55; }
 
 /* Pull-line. Italic display, short measure, no quotation marks — it is the page's own voice. */
 /* The one dark beat. The accent cannot carry text here (2.6:1 on --s-dark), so the emphasis
@@ -4598,7 +4534,6 @@ summary:focus-visible {
 
   /* The last four controls sitting between 40px and 42px. Each is a real button somebody taps with
      a thumb, and each was short by a hair rather than by design. */
-  .patient-v2 .scenario-toggle,
   .profile-header button { min-height: 44px; }
 }
 
@@ -6187,7 +6122,7 @@ select { caret-color: var(--route-strong); }
   border-radius: 50%;
   color: var(--on-ground);
   background: var(--ink);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -6228,6 +6163,15 @@ select { caret-color: var(--route-strong); }
 .story-portrait .coverage-pin-halo { fill: color-mix(in srgb, var(--hero-orange) 26%, transparent); }
 .story-portrait .coverage-pin-label,
 .story-portrait .coverage-count { color: var(--on-ground); fill: var(--on-ground); }
+/* The portrait map draws smaller than the results one, so its pin names are set larger to read at
+   12px on a phone (PLAN.md N15). */
+.story-portrait .coverage-pin-label { font-size: 0.33rem; }
+/* At that size a name set right of its pin ran past the drawing at every width ("South-east QL"),
+   so on the story page the names sit left of the pins, on the land. */
+.story-portrait .coverage-pin-label { text-anchor: end; transform: translateX(-9.2px); }
+/* The map scales with the screen, so 0.33rem comes to 12px only from about 387px wide (9.4px at
+   320, 11.7px at 380); below 390 the names take the larger size. */
+@media (max-width: 389px) { .story-portrait .coverage-pin-label { font-size: 0.43rem; } }
 .story-portrait .coverage-names {
   color: color-mix(in srgb, var(--on-ground) 70%, var(--ink));
   font-size: 0.8125rem;
@@ -6396,7 +6340,6 @@ select { caret-color: var(--route-strong); }
   --stage-progress: 12%;
   background: var(--ink);
 }
-.care-app.patient-v2[data-stage="scenarios"] { --stage-progress: 23%; }
 .care-app.patient-v2[data-stage="listening"] { --stage-progress: 34%; }
 .care-app.patient-v2[data-stage="type"] { --stage-progress: 45%; }
 .care-app.patient-v2[data-stage="results"] { --stage-progress: 61%; }
@@ -6485,21 +6428,10 @@ select { caret-color: var(--route-strong); }
   background: var(--accent);
   box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 24%, transparent);
 }
-.patient-v2 .scenario-toggle,
 .patient-v2 .text-action { color: var(--ink); }
 
 .patient-v2 .finder-context p { color: var(--muted); }
 
-.patient-v2 .scenario-quote {
-  border-color: var(--line-strong);
-  border-radius: 14px;
-  background: var(--accent-soft);
-  /* O233: the tinted panel used to run to the bottom of the stage, because the stage's own
-     bottom padding (the room the tab bar takes) fell INSIDE it — two lines of small print in a
-     block half a screen tall. It sizes to its sentence now and the stage keeps its clearance. */
-  margin: 0 22px;
-  padding: 14px 18px;
-}
 
 /* 2026-09-05, from the finder re-walk: `.booking-content h1` was in this selector, and it made the
    booking screen the one stage whose heading rendered in Inter — 44px sans over a flow whose every
@@ -7763,6 +7695,8 @@ select { caret-color: var(--route-strong); }
 }
 
 .settings-row:last-of-type { border-bottom: 0; }
+.settings-danger-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; font: inherit; text-align: left; cursor: pointer; }
 .settings-row > span { display: flex; flex-direction: column; gap: 2px; }
 .settings-row strong { font-size: 0.9375rem; font-weight: 620; }
 .settings-row small { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
@@ -8881,6 +8815,8 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   cursor: pointer;
   transition: background var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-spring);
 }
+.clarify-star { width: auto; gap: 8px; padding: 0 16px; color: var(--accent-deep); font: inherit; font-size: 0.875rem; font-weight: 650; white-space: nowrap; }
+.clarify-star > svg { color: var(--accent); }
 .clarify-star:active { transform: scale(0.94); }
 .clarify-star.is-open { background: var(--accent-soft); }
 .clarify-star:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -9686,7 +9622,30 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .patient-v2 .text-action { color: var(--muted); font-size: 0.75rem; font-weight: 600; }
 @media (hover: hover) { .patient-v2 .text-action:hover { color: var(--accent); } }
 
-/* The search summary: one white card, the magnifier in the accent, the words on one line. */
+/* The search summary: one white card, the magnifier in the accent, the words on one line, and
+   Start over at its end. The words give way first, so the button keeps its label at 320. */
+.results-summary:has(.results-summary-reset) { display: flex; align-items: center; gap: 2px; }
+.results-summary > .results-summary-words { flex: 1 1 auto; min-width: 0; }
+.results-summary-reset {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-right: 6px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.results-summary-reset:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+@media (hover: hover) { .results-summary-reset:hover { background: var(--stone); color: var(--accent-deep); } }
 .results-summary {
   padding: 0;
   border: 1px solid var(--line);
@@ -9789,7 +9748,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 /* The list head: the heading in Newsreader, the noun in italic accent, the count and the mark. */
 .results-list-head { padding: 12px var(--shell-gutter) 8px; }
 .results-list-head h2 {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -9797,17 +9755,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 }
 .results-list-head h2 em { font-style: italic; font-weight: 400; color: var(--accent-mid); }
 .results-count { color: var(--faint); font-size: 0.75rem; font-weight: 500; }
-.results-spark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--accent-tint);
-  color: var(--accent-deep);
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--hero-dusk) 5%, transparent);
-}
 
 /* The rows are cards: 64px portrait in a 12px radius, the name in Newsreader, one focus line,
    the place row with its pin, the chevron. The lead card, when the order is informed, carries
@@ -9908,7 +9855,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .me-head-lead { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; }
 .me-head-title h1 {
   margin: 0;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -10110,7 +10056,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
    sans, one leading. Sizes stay each page's own; family, weight, tracking and leading are one
    law. Unlayered, so the rule outranks a page's utility classes whatever they say. */
 main:not(.console-main) h1 {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
   font-weight: 500;
   letter-spacing: -0.025em;
   line-height: 1.06;

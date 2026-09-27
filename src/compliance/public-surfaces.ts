@@ -167,7 +167,7 @@ export const PUBLIC_SURFACES: readonly PublicSurface[] = [
   {
     path: "/urgent",
     audience: "patient",
-    why: "The urgent routes out of the app — 000, Lifeline, Kids Helpline, Beyond Blue — reachable from the header of every patient screen (Charmaine Bernie, 2026-09-11: always-visible crisis signposting, given comorbidity and the risk in the 16–25 cohort). It collects nothing, reads nothing and judges nobody; it names services that already exist. The most consequential page in the product to get wrong, so every word answers to the patient rules.",
+    why: "The urgent routes out of the app — 000, Lifeline, Kids Helpline, Beyond Blue, by voice, text or chat — reachable from the header of every patient screen (Charmaine Bernie, 2026-09-11: always-visible crisis signposting, given comorbidity and the risk in the 16–25 cohort). It collects nothing, reads nothing and judges nobody; it names services that already exist. The most consequential page in the product to get wrong, so every word answers to the patient rules.",
   },
   {
     path: "/today",

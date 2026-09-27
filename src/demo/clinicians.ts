@@ -55,11 +55,11 @@ export function capacityGrade(clinician: Clinician, today: Date = new Date()): C
 /** Exported so the console's audit sort is the SAME order the finder uses, not a re-guess. */
 export const CAPACITY_ORDER: Record<CapacityGrade, number> = { "fresh-open": 0, "stale-open": 1, closed: 2 };
 
-export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians, today: Date = new Date()): Clinician[] {
-  const needs = needsFor(query, roster);
+export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians, today: Date = new Date(), needs?: readonly NeedSignal[]): Clinician[] {
+  const read = needs ?? needsFor(query, roster);
   return [...roster].sort((a, b) => {
-    const aProfile = rankingProfile(a, needs);
-    const bProfile = rankingProfile(b, needs);
+    const aProfile = rankingProfile(a, read);
+    const bProfile = rankingProfile(b, read);
 
     /*
      * ACCESS BEFORE ACCUMULATION (2026-08-22 audit).
@@ -529,8 +529,7 @@ export function separationRatio(query: string, roster: readonly Clinician[] = cl
   return separationRatioForNeeds(needsFor(query, roster), roster);
 }
 
-export function matchQuality(query: string, roster: readonly Clinician[] = clinicians): MatchQuality {
-  const needs = needsFor(query, roster);
+export function matchQuality(query: string, roster: readonly Clinician[] = clinicians, needs: readonly NeedSignal[] = needsFor(query, roster)): MatchQuality {
   if (needs.length === 0) return "unmatched";
   const profiles = roster.map((clinician) => rankingProfile(clinician, needs));
   const scores = profiles.map((profile) => profile.weightedScore);
@@ -947,8 +946,9 @@ export function matchEvidence(
   clinician: Clinician,
   query: string,
   roster: readonly Clinician[] = clinicians,
+  needs: readonly NeedSignal[] = needsFor(query, roster),
 ): NeedSignal[] {
-  return needsFor(query, roster)
+  return needs
     .filter((need) => answers(clinician, need))
     // The weight the card's evidence carries is the weight this clinician's answer actually
     // earned - halved where they declared "sometimes" - so the audit and the unity test can
@@ -972,8 +972,9 @@ export function missedAsks(
   clinician: Clinician,
   query: string,
   roster: readonly Clinician[] = clinicians,
+  needs: readonly NeedSignal[] = needsFor(query, roster),
 ): NeedSignal[] {
-  return needsFor(query, roster).filter((need) => !answers(clinician, need));
+  return needs.filter((need) => !answers(clinician, need));
 }
 
 export type RequestFitSummary = {
@@ -1046,11 +1047,12 @@ export function rankCliniciansNear(
   origin: SuburbPoint | null,
   roster: readonly Clinician[] = clinicians,
   today: Date = new Date(),
+  needs?: readonly NeedSignal[],
 ): Clinician[] {
-  const byFit = rankClinicians(query, roster, today);
+  const byFit = rankClinicians(query, roster, today, needs);
   if (!origin) return byFit;
 
-  const needs = needsFor(query, roster);
+  const read = needs ?? needsFor(query, roster);
   // O85: the distance a clinician sorts on is the nearest of their consulting locations —
   // somebody with Hornsby rooms IS near a Hornsby reader, whatever their primary suburb says.
   const km = (c: Clinician) => nearestLocation(c, origin)?.km ?? null;
@@ -1070,7 +1072,7 @@ export function rankCliniciansNear(
    */
   const out = [...byFit];
   const tieKey = (c: Clinician) => {
-    const profile = rankingProfile(c, needs);
+    const profile = rankingProfile(c, read);
     return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.weightedScore}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}`;
   };
   let start = 0;
@@ -1215,7 +1217,7 @@ function asList(items: readonly string[]): string {
   return LIST_FORMAT.format(items);
 }
 
-export function getPersonalizedMatch(clinician: Clinician, query: string, roster: readonly Clinician[] = clinicians) {
+export function getPersonalizedMatch(clinician: Clinician, query: string, roster: readonly Clinician[] = clinicians, needs?: readonly NeedSignal[]) {
   /**
    * DERIVED, NOT RE-DERIVED. This used to be a second lexicon: a forty-line if-chain testing its
    * own phrase lists against the same care areas the ranker tested against different ones. Two
@@ -1226,7 +1228,7 @@ export function getPersonalizedMatch(clinician: Clinician, query: string, roster
    */
   // O222: `roster` threads through — the evidence weights and the language vocabulary derive
   // from the roster the RANKING ran over, so the explanation can never describe a different one.
-  const evidence = matchEvidence(clinician, query, roster);
+  const evidence = matchEvidence(clinician, query, roster, needs);
   const signals = evidence.map((need) => need.label);
 
   /**

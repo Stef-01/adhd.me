@@ -31,6 +31,7 @@ export const BARE_HEADINGS: Readonly<Record<string, string>> = {
   "Eight lives": "The name of a surface — the cast page, and the count is the title.",
   "Search Filters": "The name of a surface.",
   "Everyday strategies": "The name of a learning module, shown as the card's own title.",
+  "What ADHD is": "The name of a learning module, shown as the module page's own title.",
 
   // A person. Never punctuated, on any screen.
   "Dr Mei Chao": "A person's name.",

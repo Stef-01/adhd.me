@@ -21,7 +21,23 @@
 // Routes come off the filesystem, so a new page is measured by existing. Writes
 // qa/text-budget.json and prints every screen with its verdict.
 
-import { readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, statSync } from "node:fs";
+
+/**
+ * The browser the CLIs launch. Playwright's own discovery first; when the pinned revision is
+ * absent and the machine pre-provisions Chromium (CI, the remote harness), that binary. The
+ * config for the e2e suite carries the same fallback; without it the scripts fail at launch with
+ * "Executable doesn't exist", which reads as a broken script rather than a missing download.
+ */
+export function launchOptions(chromium) {
+  if (process.env.PW_CHROMIUM_PATH) return { executablePath: process.env.PW_CHROMIUM_PATH };
+  let pinned;
+  try { pinned = chromium.executablePath(); } catch { pinned = undefined; }
+  if (pinned && existsSync(pinned)) return {};
+  return existsSync(PREINSTALLED_CHROMIUM) ? { executablePath: PREINSTALLED_CHROMIUM } : {};
+}
+const PREINSTALLED_CHROMIUM = "/opt/pw-browsers/chromium";
+
 import { join } from "node:path";
 
 export const BENCHMARK = { headspaceHome: 38, headspaceDetail: 26, headspaceList: 60, finchHome: 19 };
@@ -82,7 +98,19 @@ export const EXTRA = [
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
   { path: "/approach?module=everyday", name: "A read module, first card" },
+  { path: "/approach?module=adhd", name: "A read module, the ADHD card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
+  { path: "/approach?module=starting", state: "run-last", name: "A game run, last card" },
+  { path: "/approach?pane=modules", name: "Learn, the modules pane" },
+  // The modules pane with three goals chosen (PLAN.md W8): "For you" and its longest reason line.
+  // And with every shelf one tap away, opened.
+  { path: "/approach?pane=modules", state: "modules-goals", name: "Learn, modules with goals" },
+  { path: "/approach?pane=modules", state: "modules-explore", name: "Learn, all modules" },
+  // The games pane with "All games" open (PLAN.md W7): on the eight lives, where it opens, and on
+  // the largest group. One game of each kind is played, so the ticks and the page foot show.
+  { path: "/approach?pane=games", state: "games-all", name: "Learn, all games" },
+  { path: "/approach?pane=games", state: "games-all-open", name: "Learn, all games, the largest group" },
+  { path: "/approach/map", state: "care-map-tap", name: "The care map, a part of life open" },
   { path: "/lives/play", state: "lives-run", name: "The Chaos Run, first round" },
   { path: "/match/results", state: "intake", name: "Match results" },
   // The two questions (app/first-step.tsx). The walk reaches the first one on its own; the second
@@ -99,6 +127,15 @@ export const EXTRA = [
   { path: "/my-adhd", state: "model-lived", name: "My ADHD, lived in" },
   { path: "/my-adhd", state: "model-learning", name: "My ADHD, a step proposed" },
   { path: "/my-adhd", state: "sheet-open", name: "My ADHD, an axis open" },
+  // The map then and now (PLAN.md W3): day one and a snapshot about six weeks old both on file.
+  { path: "/my-adhd", state: "model-compare", name: "My ADHD, then and now" },
+  { path: "/my-adhd", state: "fills-open", name: "My ADHD, how it fills in" },
+  // The hub's lead sentence differs by axis (7 to 10 words), so each axis that can lead is measured
+  // leading. Relationships cannot lead from a run alone; its sentence is shorter than the longest.
+  { path: "/my-adhd", state: "lead-focus", name: "My ADHD, focus leads" },
+  { path: "/my-adhd", state: "lead-organisation", name: "My ADHD, organisation leads" },
+  { path: "/my-adhd", state: "lead-emotional-regulation", name: "My ADHD, feelings lead" },
+  { path: "/my-adhd", state: "lead-sleep-energy", name: "My ADHD, sleep leads" },
   { path: "/my-adhd", state: "share-open", name: "My ADHD, the summary open" },
   { path: "/my-adhd/history", state: "model-lived", name: "History, lived in" },
   { path: "/today", state: "model-lived", name: "Today, lived in" },
@@ -106,6 +143,13 @@ export const EXTRA = [
   // without a plan is what everybody meets first and would otherwise never be counted.
   { path: "/today", state: "model-no-plan", name: "Today, before a care plan" },
   { path: "/today", state: "plan-open", name: "Today, the care plan open" },
+  // Each step of the helper is its own screen: the shell behind an open sheet is inert, so the
+  // instrument measures the step alone, and each has to hold the ceiling on its own.
+  { path: "/today", state: "plan-duration", name: "Today, the care plan: six months" },
+  { path: "/today", state: "plan-goals", name: "Today, the care plan: goals" },
+  { path: "/today", state: "plan-providers", name: "Today, the care plan: who I see" },
+  { path: "/today", state: "plan-team", name: "Today, the care plan: my team" },
+  { path: "/today", state: "plan-services", name: "Today, the care plan: services" },
   { path: "/support", state: "model-lived", name: "Support, lived in" },
   { path: "/manual", state: "model-lived", name: "My manual, lived in" },
   { path: "/adjustments", state: "model-lived", name: "Adjustments, lived in" },
@@ -160,7 +204,12 @@ export async function measure(page) {
       const rect = el.getBoundingClientRect();
       if (rect.right <= 0 || rect.bottom <= 0 || rect.left >= window.innerWidth) continue;
       if (rect.width === 0 || rect.height === 0) continue;
-      const chrome = !!el.closest("nav, header.platform-header, .app-tabs, .site-footer, footer, .consent-bar, .privacy-consent");
+      // Chrome is the site's own furniture, named one by one: the header, the tab bar, the public
+      // header's links and the story page's, the site footer and the story page's copy of it (the
+      // same doors), the consent bar. A page's own <footer> and <nav> are its words: Leo's game
+      // ends inside a <footer>, and the games, the toolkit, the clinician steps and the breadcrumbs
+      // each carry a <nav>, so neither is on this list bare.
+      const chrome = !!el.closest("header.platform-header, .app-tabs, .site-nav-links, .story-nav, .site-footer, .story-footer, .consent-bar, .privacy-consent");
       const aboveFold = rect.top < vh && rect.bottom > 0;
       rows.push({ text, chrome, aboveFold, tag: el.tagName.toLowerCase() });
     }
@@ -223,8 +272,55 @@ export const LIVED_RECORD = {
   // A care plan with services left, because the hub's card has two shapes and the instrument had
   // only ever measured the one without a plan — the same hole §13.1 found for the lived-in hub.
   // Five allowed, two spent, so the dot row is mixed and three suggestions render.
-  carePlan: { allows: 5, used: 2, year: 2026, confirmedOn: "2026-09-05T00:00:00Z" },
+  carePlan: {
+    allows: 5, used: 2, year: 2026, confirmedOn: "2026-09-05T00:00:00Z",
+    // The helper, part way through: two goals and one provider named, the team not yet chosen.
+    sixMonths: true, goals: ["starting", "sleep-energy"], goalNote: "", providers: ["psychologist"], providerNote: "", team: null,
+  },
 };
+
+const SNAP_ASPECTS = ["starting", "focus", "organisation", "emotional-regulation", "relationships", "sleep-energy"];
+const snapshot = (on, statuses, rungs) => ({
+  on,
+  statuses: Object.fromEntries(SNAP_ASPECTS.map((a) => [a, statuses[a] ?? "unexplored"])),
+  rungs: Object.fromEntries(SNAP_ASPECTS.map((a) => [a, rungs[a] ?? "unmapped"])),
+});
+
+const daysAgo = (n) => {
+  const d = new Date(Date.now() - n * 86_400_000);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+
+/**
+ * The lived-in person with a day one about three months ago and a snapshot about six weeks ago, for
+ * the compare pill. Dated from today rather than on a fixed clock, so no later screen in the walk
+ * inherits a frozen clock. The month is one word for most of the year, but from 1 January to about
+ * 9 February six weeks back is last year, and the month reads "December last year" (or "November
+ * last year"), two words more.
+ */
+export function compareRecord() {
+  return {
+    ...LIVED_RECORD,
+    snapshots: [
+      snapshot(daysAgo(100), { starting: "still-learning" }, { starting: "named" }),
+      snapshot(daysAgo(40), { starting: "needs-support", "sleep-energy": "worth-improving" }, { starting: "explored", "sleep-energy": "named" }),
+    ],
+  };
+}
+
+/** The lived-in person with one axis leading: its run costs the most, the others little. */
+const LEAD_RUN = { focus: "context", organisation: "deadlines", "emotional-regulation": "conflict", "sleep-energy": "sleep" };
+export function leadRecord(aspect) {
+  const calm = { frequency: "sometimes", cost: 3, priority: "maybe", at: "2026-09-01T00:00:00.000Z" };
+  return {
+    ...LIVED_RECORD,
+    resonance: {
+      ...LIVED_RECORD.resonance,
+      starting: calm, ambiguity: calm, "working-memory": calm, sleep: calm,
+      [LEAD_RUN[aspect]]: { frequency: "often", cost: 10, priority: "yes", at: "2026-09-08T00:00:00.000Z" },
+    },
+  };
+}
 
 /**
  * THE SAME PERSON, ONE STEP EARLIER — the hub's action card in its OTHER shape (O253).
@@ -267,6 +363,50 @@ export async function reach(page, route, base) {
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
   }
+  if (route.state === "care-map-tap") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    // On a phone the wheel is four quarters: the part is one tap further in (N8).
+    const quarter = page.locator(".care-map-quarter[aria-label='Brain']");
+    if (await quarter.isVisible()) await quarter.click();
+    await page.getByRole("button", { name: /^Starting \(Brain\)/ }).click();
+    await page.locator("#care-map-title", { hasText: "Starting" }).waitFor({ timeout: 8000 });
+  }
+  if (route.state === "model-compare") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(compareRecord()));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator(".map-then-pill").waitFor({ timeout: 8000 });
+  }
+  if (route.state === "fills-open") {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "How it fills in" }).click({ timeout: 8000 });
+    await page.locator(".map-fills-list").waitFor({ timeout: 8000 });
+  }
+  if (route.state === "modules-goals" || route.state === "modules-explore") {
+    await page.evaluate(() => localStorage.setItem("adhdme.lives.v1", JSON.stringify({ v: 1, selectedGoals: ["task_initiation", "working_memory", "sleep"] })));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByTestId("learn-for-you").waitFor({ timeout: 8000 });
+    if (route.state === "modules-explore") {
+      await page.getByTestId("learn-explore").click({ timeout: 8000 });
+      await page.getByTestId("learn-reads").waitFor({ state: "attached", timeout: 8000 });
+    }
+  }
+  if (route.state === "games-all" || route.state === "games-all-open") {
+    await page.evaluate(() => {
+      localStorage.setItem("adhdme.learn.v1", JSON.stringify({ v: 1, done: ["context"], at: { context: "2026-09-01" } }));
+      localStorage.setItem("adhdme.played.v1", JSON.stringify({ v: 1, at: { maya: "2026-09-01" } }));
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByTestId("learn-show-all").click({ timeout: 8000 });
+    if (route.state === "games-all-open") await page.getByRole("button", { name: "Understand ADHD" }).click({ timeout: 8000 });
+    await page.locator(".learn-game-names").waitFor({ timeout: 8000 });
+  }
+  const lead = /^lead-(.+)$/.exec(route.state ?? "")?.[1];
+  if (lead) {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(leadRecord(lead)));
+    await page.reload({ waitUntil: "networkidle" });
+  }
   if (route.state === "map-lived" || route.state === "model-lived") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
     await page.reload({ waitUntil: "networkidle" });
@@ -285,6 +425,14 @@ export async function reach(page, route, base) {
     await page.reload({ waitUntil: "networkidle" });
     await page.locator(".plan-card").click();
     await page.locator(".plan-sheet").waitFor({ timeout: 8000 });
+  }
+  const step = /^plan-(duration|goals|providers|team|services)$/.exec(route.state ?? "")?.[1];
+  if (step) {
+    await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator(".plan-card").click();
+    await page.locator(`.plan-step[data-step="${step}"]`).click();
+    await page.locator(`.plan-sheet[data-view="${step}"]`).waitFor({ timeout: 8000 });
   }
   if (route.state === "sheet-open") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
@@ -508,6 +656,15 @@ export async function reach(page, route, base) {
         }
       }
     }
+  }
+  if (route.state === "run-last") {
+    // The run's last card, resumed through the device's cursor: the dots count the run's cards.
+    await page.locator(".play-dots li").first().waitFor({ state: "attached", timeout: 8000 });
+    const last = (await page.locator(".play-dots li").count()) - 1;
+    const id = new URL(route.path, base).searchParams.get("module");
+    await page.evaluate(([moduleId, step]) => localStorage.setItem("adhdme.learn.cursor.v1", JSON.stringify({ v: 1, moduleId, step })), [id, last]);
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator('.play-run[data-phase="next"]').waitFor({ timeout: 8000 });
   }
   if (route.state === "lives-run") {
     await page.waitForTimeout(1200);

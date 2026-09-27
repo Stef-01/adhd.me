@@ -130,7 +130,12 @@ test("E2E Lives 3: the eight lives, Learn's shelves and the lab all stand on the
   await mia.locator("summary").click();
   await mia.getByRole("button", { name: "Sometimes" }).click();
   await page.goto("/approach?pane=modules");
-  await expect(page.locator("summary", { hasText: "For you" })).toBeVisible();
+  // "Sometimes" is a pick: For you shows, says where it came from, and the goals question stays above it (PLAN.md W8).
+  const forYou = page.getByTestId("learn-for-you");
+  await expect(forYou.getByRole("heading", { name: "For you" })).toBeVisible();
+  await expect(forYou).toContainText("From the characters you said are like you.");
+  await expect(page.getByRole("heading", { name: "What do you want help with?" })).toBeVisible();
+  await page.getByTestId("learn-explore").click();
   await expect(page.locator("summary", { hasText: "Two-minute tools" })).toBeVisible();
   await page.goto("/lives/lab");
   await expect(page.getByRole("heading", { name: "Ranking" })).toBeVisible();
@@ -203,14 +208,51 @@ test("E2E Lives 5: reduced flashing, reduced sensory effects and haptics are kep
   expect(page.url()).not.toMatch(/flash|sensory|haptic/);
 });
 
+test("E2E Lives 6: sound is off until switched on, sounds on a hit, and never under reduced sensory effects", async ({ page }) => {
+  // A browser that can make tones, and a count of every tone it was asked for.
+  await page.addInitScript(() => {
+    const w = window as unknown as { __tones: number; AudioContext: unknown };
+    w.__tones = 0;
+    const param = { setValueAtTime: () => undefined, linearRampToValueAtTime: () => undefined };
+    w.AudioContext = class {
+      currentTime = 0; destination = {}; state = "running";
+      resume() { return Promise.resolve(); }
+      createOscillator() { return { type: "sine", frequency: param, connect: (n: unknown) => n, start: () => { w.__tones += 1; }, stop: () => undefined }; }
+      createGain() { return { gain: param, connect: (n: unknown) => n }; }
+    };
+  });
+  const tones = () => page.evaluate(() => (window as unknown as { __tones: number }).__tones);
+  await page.goto("/lives/play?seed=quiet");
+  await expect(page.locator(".lives-run:not([data-sound])")).toBeVisible();
+  await drive(page, "hit", async () => (await page.locator(".lives-result[data-hit='true']").count()) > 0);
+  expect(await tones()).toBe(0);
+  await page.goto("/lives");
+  await page.locator(".lives-settings summary").click();
+  const chip = page.getByRole("button", { name: "Sound", exact: true });
+  expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await chip.click();
+  await expect(chip).toHaveAttribute("aria-pressed", "true");
+  await page.goto("/lives/play?seed=quiet");
+  await expect(page.locator(".lives-run[data-sound='true']")).toBeVisible();
+  await drive(page, "hit", async () => (await page.locator(".lives-result[data-hit='true']").count()) > 0);
+  await expect.poll(tones).toBeGreaterThan(0);
+  // Reduced sensory effects wins: the run carries no sound at all.
+  await page.goto("/lives");
+  await page.locator(".lives-settings summary").click();
+  await page.getByRole("button", { name: "Reduced sensory effects", exact: true }).click();
+  await page.goto("/lives/play?seed=quiet");
+  await expect(page.locator(".lives-run[data-reduced-sensory='true']:not([data-sound])")).toBeVisible();
+});
+
 // "Eight lives. Three of yours." is the line the screen opens on, and the cast beside it has to be
 // eight. As a wrapping flex row of 44px beans it needed 380px and had 350 at 390 and 280 at 320,
 // so the eighth sat alone on a second row and the line-up read as seven and a spare. The beans are
-// decorative and aria-hidden, so nothing else would have caught this.
+// decorative and aria-hidden, so nothing else would have caught this. Learn replaced its cast with
+// the game roster in a8ac430, which e2e/game-discovery.spec.ts covers, so only /lives has a cast.
 test("the cast of eight is one row of eight, at both phone widths", async ({ page }) => {
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: 844 });
-    for (const path of ["/lives", "/approach"]) {
+    for (const path of ["/lives"]) {
       await page.goto(path);
       const cast = page.locator(".lives-cast").first();
       await expect(cast).toBeAttached();

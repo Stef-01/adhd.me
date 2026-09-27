@@ -24,7 +24,6 @@ import { runFor, runStepCount, type Run } from "./runs-index";
 
 export type Scene = {
   readonly n: string;
-  readonly eyebrow: string;
   readonly heading: string;
   readonly body: string;
   /** The nuance — the specific things that actually go wrong, or the steps. */
@@ -36,7 +35,6 @@ export type Scene = {
 export const SCENES: readonly Scene[] = [
   {
     n: "01",
-    eyebrow: "Where it starts",
     heading: "You search, and no GP comes back.",
     body:
       "Search “ADHD GP near me” and you get directories, ads and waiting lists. Almost no GP near you.",
@@ -44,7 +42,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "02",
-    eyebrow: "So you go looking",
     heading: "Then you read the doctors one at a time.",
     body:
       "You read a practice page one GP at a time. The word is not there.",
@@ -52,7 +49,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "03",
-    eyebrow: "The part nobody answers",
     heading: "None of it answers what you want to ask.",
     body:
       "Even a plausible name says nothing about whether this GP is right for you.",
@@ -60,7 +56,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "04",
-    eyebrow: "Money, time, distance",
     heading: "How far, how long, how much.",
     body:
       "The questions that decide whether you go are the ones nobody publishes.",
@@ -68,7 +63,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "05",
-    eyebrow: "What the old route cost",
     heading: "The wait was never the care.",
     body:
       "The old route was a queue with no end and a bill nobody could plan for. Waiting made care later, not better.",
@@ -80,7 +74,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "06",
-    eyebrow: "What changed",
     heading: "The rule is changing in NSW and QLD.",
     body:
       "GPs can now carry the whole pathway rather than only refer it " +
@@ -91,7 +84,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "07",
-    eyebrow: "What ADHD.ME is",
     heading: "How it works, end to end.",
     body:
       "The permission changed. Acting on it was the missing part. Three steps.",
@@ -99,7 +91,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "08",
-    eyebrow: "The one action",
     heading: "One GP, from the first appointment to the follow-up.",
     body:
       "Nobody should have to tell their story twice to get through a door. One clinician holds the " +
@@ -113,7 +104,6 @@ export const SCENES: readonly Scene[] = [
   // ── O244: what ADHD is, in general terms ────────────────────────────────────────────────
   {
     n: "09",
-    eyebrow: "The word",
     heading: "Attention that runs on interest, not importance.",
     body:
       "Attention is there. It goes where interest is, locks on hard, and skips the five-minute form.",
@@ -121,7 +111,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "10",
-    eyebrow: "Adults too",
     heading: "It does not stop at eighteen.",
     body:
       "Many people are assessed first as adults, often after a child is. The pattern is older than the label.",
@@ -129,7 +118,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "11",
-    eyebrow: "Who gets overlooked",
     heading: "It can look quieter in women and girls.",
     body:
       "The loud, fidgeting picture gets noticed at school. Daydreaming, inner restlessness and masking are overlooked, and are more often the shape in women and girls.",
@@ -137,7 +125,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "12",
-    eyebrow: "What assessment is",
     heading: "A conversation with history, not a single test.",
     body:
       "A structured conversation: your history, how life goes in each part of it, what else could explain the pattern. Questionnaires organise it, never decide it.",
@@ -148,7 +135,6 @@ export const SCENES: readonly Scene[] = [
   // ── O244: everyday strategies people find useful ───────────────────────────────────────
   {
     n: "13",
-    eyebrow: "Everyday",
     heading: "Put memory outside your head.",
     body:
       "A small scratchpad. Stop remembering: one list, one place, always open.",
@@ -156,7 +142,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "14",
-    eyebrow: "Everyday",
     heading: "One thing, in view.",
     body:
       "Time is hard to feel, so make it visible. One timer, one task, a start too small to refuse.",
@@ -164,7 +149,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "15",
-    eyebrow: "Everyday",
     heading: "Borrow someone’s presence.",
     body:
       "A dull task beside another person, in the room or on a call, is easier to start and finish. Body doubling.",
@@ -172,7 +156,6 @@ export const SCENES: readonly Scene[] = [
   },
   {
     n: "16",
-    eyebrow: "Before the appointment",
     heading: "Write down what you want to say.",
     body:
       "The appointment is short, the story is long. Write the three things the GP should know and bring them.",

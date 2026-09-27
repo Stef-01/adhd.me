@@ -36,6 +36,7 @@
 
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
+import { MATCHABLE_LANGUAGES } from "./languages";
 import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, commaBreaksBefore, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, selfClaimedPatient, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
@@ -858,6 +859,14 @@ export function facetKey(facet: NeedSignal["facet"]): string {
   return `pref:${facet.preference}`;
 }
 
+/** The signal a facet key stands for, for a reader that returns keys rather than phrases. */
+export function needForKey(key: string, matched: string = key): NeedSignal | null {
+  const language = MATCHABLE_LANGUAGES.find((name) => key === facetKey({ kind: "language", language: name }));
+  if (language) return { facet: { kind: "language", language }, matched, label: `${language}-speaking`, weight: LANGUAGE_WEIGHT };
+  const entry = LEXICON.find((candidate) => facetKey(candidate.facet) === key);
+  return entry ? { facet: entry.facet, matched, label: entry.label, weight: entry.weight } : null;
+}
+
 /**
  * A language the reader asked for, read against the languages the roster actually declares.
  *
@@ -908,6 +917,35 @@ const LANGUAGE_WEIGHT = 30;
 
 /** Every label a surface may say back, for the test that pins the vocabulary closed. */
 export const NEED_LABELS: readonly string[] = LEXICON.map((entry) => entry.label);
+
+/**
+ * A label in two words or fewer, for a chip. Only labels longer than that carry one here; a
+ * manner's sits beside its label in `EI_QUALITIES`. Same facet, same voice: a care preference,
+ * never a finding about the reader.
+ */
+const SHORT_LABELS: Readonly<Record<string, string>> = {
+  "care:child-adolescent-adhd": "Children, teens",
+  "care:titration": "Dose review",
+  "care:shared-care": "Shared care",
+  "care:depression": "Low mood",
+  "care:complex-mental-health": "Complex care",
+  "care:autism-adhd": "Autism",
+  "care:substance-history": "Substances, safely",
+  "pref:woman-gp": "Woman clinician",
+  "pref:telehealth-first": "Telehealth",
+  "pref:longer-appointment": "Longer appointment",
+};
+
+export function shortLabel(need: Pick<NeedSignal, "facet" | "label">): string {
+  if (need.facet.kind === "manner") return EI_QUALITIES[need.facet.trait].short ?? need.label;
+  return SHORT_LABELS[facetKey(need.facet)] ?? need.label;
+}
+
+/** Every lexicon label with its chip words, for the test that holds each chip to its cap. */
+export const NEED_SHORT_LABELS: ReadonlyArray<{ label: string; short: string }> = LEXICON.map((entry) => ({
+  label: entry.label,
+  short: shortLabel(entry),
+}));
 
 /**
  * Every phrase in the lexicon with the facet it belongs to, for the self-reachability pin

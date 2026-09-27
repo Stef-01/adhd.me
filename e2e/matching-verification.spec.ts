@@ -9,16 +9,17 @@
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { clinicians } from "../src/demo/clinicians";
+import { EI_QUALITIES } from "../src/demo/emotional-fit";
 import { clarifiers } from "../src/matching/clarify";
-import { gotoFinderRealRosterOnly } from "./support/real-roster";
+import { DEMO_REQUEST, gotoFinderRealRosterOnly } from "./support/real-roster";
 
 const shot = (name: string) => ({ path: `qa/_runs/matching-o10/${name}.png`, fullPage: true as const });
 
 async function searchFor(page: Page, query: string, place?: string) {
   // O226: these are REAL-roster ranking laws, so the examples are switched off at the door.
   await gotoFinderRealRosterOnly(page, place);
-  await page.getByRole("button", { name: "Try an example search" }).click();
-  await page.getByRole("button", { name: "Search with this" }).click();
+  await page.getByRole("textbox").fill(DEMO_REQUEST);
+  await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   await page.getByRole("button", { name: /Change what you said/i }).click();
   const box = page.getByRole("textbox");
@@ -113,7 +114,8 @@ test("a psychographic ask ranks, explains, and shows its provenance on screen (O
   // the provenance — the O21 "from your words" line — for a phrase added in O30.
   await searchFor(page, "explain things in plain language and someone who respects my faith");
   const rows = page.locator(".clinician-row");
-  await expect(rows.first().getByText("Helps it make sense").or(rows.first().getByText("Understands your background"))).toBeVisible();
+  // A row says a facet in its "What we heard" chip's words.
+  await expect(rows.first().getByText(EI_QUALITIES.sense_making.short!).or(rows.first().getByText(EI_QUALITIES.culturally_attuned.short!))).toBeVisible();
   await page.screenshot({ path: "qa/_runs/matching-o30/01-psychographic-ask-ranked.png", fullPage: true });
 
   await rows.first().click();

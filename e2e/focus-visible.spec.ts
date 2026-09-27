@@ -52,7 +52,10 @@ test("every keyboard stop on a patient screen shows a focus ring", async ({ brow
     const seen = new Set<string>();
     for (let i = 0; i < STOPS_PER_SCREEN; i++) {
       await page.keyboard.press("Tab");
-      const stop = await page.evaluate(() => {
+      const stop = await page.evaluate(async () => {
+        // Under reduced motion every property transitions for 0.01ms (globals.css), the ring's
+        // width included; read it once two frames have drawn, as a person would see it.
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
         const el = document.activeElement as HTMLElement | null;
         if (!el || el === document.body) return null;
         const s = getComputedStyle(el);

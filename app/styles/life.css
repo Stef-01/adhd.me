@@ -7,13 +7,7 @@
 .minimal-header.has-settings.learn-chrome > :first-child { grid-column: 1; }
 .minimal-header.has-settings.learn-chrome > :nth-child(2) { grid-column: 2; }
 .minimal-header.has-settings.learn-chrome > :last-child { grid-column: 3; }
-.map-trigger {
-  display: flex; align-items: center; justify-content: center;
-  width: 44px; height: 44px; border-radius: 999px; color: var(--muted);
-  transition: color var(--dur-tap) var(--ease-ui), background var(--dur-tap) var(--ease-ui);
-}
-@media (hover: hover) { .map-trigger:hover { color: var(--ink); background: var(--stone); } }
-.map-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 
 /* ── The player ───────────────────────────────────────────────────────────────────────────── */
 .character-scene { background: var(--route-soft); border-radius: 20px; }
@@ -70,7 +64,7 @@
 .sim-cell:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sim-cell:disabled { cursor: default; }
 
-.next-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.next-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
 .next-actions .learn-primary { text-decoration: none; }
 
 .safety-screen { max-width: 640px; margin: 24px auto 48px; padding: clamp(24px, 4vw, 40px); border: 2px solid var(--accent); border-radius: 24px; background: var(--surface-raised); }
@@ -117,12 +111,6 @@
 .life-empty { padding: 28px 22px; border: 1px dashed var(--line); border-radius: 18px; text-align: center; }
 .life-empty h2 { margin: 0 0 8px; font-size: 1.125rem; }
 .life-empty p { margin: 0 0 16px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
-.layer-pill { display: inline-flex; align-items: center; gap: 6px; margin: 0 8px 8px 0; padding: 6px 12px; border-radius: 999px; font-size: 0.8125rem; font-weight: 620; background: var(--stone); color: var(--ink); }
-.layer-pill::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--layer-colour, var(--route)); }
-.layer-pill[data-layer="brain"] { --layer-colour: #3b8fd3; }
-.layer-pill[data-layer="body"] { --layer-colour: #f1bc31; }
-.layer-pill[data-layer="environment"] { --layer-colour: #0e8345; }
-.layer-pill[data-layer="people"] { --layer-colour: #b18fd8; }
 .insight-card { display: grid; gap: 6px; padding: 16px 18px; border-radius: 16px; background: var(--route-soft); }
 .insight-card strong { font-size: 1rem; }
 .insight-card small { color: var(--muted); }
@@ -136,6 +124,8 @@
 .onboarding-progress li { flex: 1; height: 4px; border-radius: 999px; background: var(--line); }
 .onboarding-progress li.is-done, .onboarding-progress li.is-current { background: var(--accent); }
 .onboarding-question { flex: 1; }
+/* "Question N of 10" is progress, not a label (PLAN.md W10): it stays, quiet, in sentence case. */
+.onboarding-count { margin: 0 0 6px; color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
 .onboarding-question h1 {
   margin: 0 0 8px; color: var(--ink);
   font-size: clamp(1.75rem, 7vw, 2.25rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
@@ -150,6 +140,10 @@
 .onboarding-welcome { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; }
 .onboarding-welcome h1 { margin: 0; font-size: clamp(2rem, 8vw, 2.75rem); font-weight: 440; letter-spacing: -0.03em; line-height: 1.05; text-wrap: balance; }
 .onboarding-welcome p { margin: 0; color: var(--muted); font-size: 1.0625rem; line-height: 1.55; max-width: 34ch; }
+/* "Answer again" on the end screen is a way back, not a second primary: plain text at the left. */
+.onboarding-again { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 650; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; touch-action: manipulation; }
+.onboarding-again:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+@media (hover: hover) { .onboarding-again:hover { text-decoration-thickness: 2px; } }
 .onboarding-cast { display: flex; gap: 6px; margin: 8px 0 12px; }
 .onboarding-cast .character-mark { width: 48px; height: 50px; }
 
@@ -181,39 +175,67 @@
 
 /* ── Care map ─────────────────────────────────────────────────────────────────────────────── */
 .care-map { display: grid; gap: 16px; }
-.care-map-svg { width: 100%; height: auto; display: block; }
+.care-map-svg { width: min(690px, 100%); height: auto; display: block; margin: 0 auto; }
+/* Two columns from 1200px (PLAN.md W9): the wheel capped at 690px, where a node's 8.75-unit name
+   renders at 12px, and the panel beside it and sticky, so a tap changes the words next to the wheel
+   rather than below the fold. Under 1200px the panel would be too narrow to read, so it sits below. */
+@media (min-width: 1200px) {
+  .care-map { grid-template-columns: minmax(0, 690px) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .care-map-svg { margin: 0; }
+  .care-map-detail { position: sticky; top: 96px; }
+}
 .care-map-node { cursor: pointer; }
+/* A tap focuses the node too, and Chrome draws its own square outline round an SVG group on any
+   focus; the ring is for a keyboard step, so a pointer's focus draws none. */
+.care-map-node:focus:not(:focus-visible) { outline: none; }
 .care-map-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 999px; }
 .care-map-node circle { transition: r var(--dur-tap) var(--ease-ui), stroke-width var(--dur-tap) var(--ease-ui); }
 .care-map-node[aria-pressed="true"] circle { stroke: var(--ink); stroke-width: 3; }
 .care-map-node.is-signal circle { stroke: var(--accent); stroke-width: 3; }
 @media (hover: hover) { .care-map-node:hover circle { stroke-width: 3; } }
-.care-map-legend { display: flex; flex-wrap: wrap; gap: 4px 0; margin: 0; padding: 0; list-style: none; }
 .care-map-detail { padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface-raised); }
 .care-map-detail h2 { margin: 0 0 6px; font-size: 1.25rem; font-weight: 680; }
 .care-map-detail p { margin: 0 0 10px; color: var(--muted); font-size: 0.9375rem; line-height: 1.55; }
 .care-map-modules { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.care-map-modules a > span { flex: 1; min-width: 0; }
+.care-map-modules a > svg:first-child { color: var(--muted); flex: none; }
 .care-map-modules a { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 8px 12px; border-radius: 10px; background: var(--stone); color: var(--ink); font-size: 0.9375rem; font-weight: 600; text-decoration: none; }
 .care-map-modules a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) { .care-map-modules a:hover { background: var(--accent-soft); } }
 .care-map-you { margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-deep); font-size: 0.875rem; line-height: 1.5; }
+/* The phone's care map (N8, founder's pick 2026-09-27): under 768px the wheel is too narrow for a
+   node's 8.75-unit name to reach 12px, so it becomes four quarters, each a button, and a tap lists
+   that quarter's parts under it. The quarter names render at 14px on a 320px phone, 18px at 390. */
+.care-map-phone { display: none; }
+.care-map-quarters { width: min(420px, 100%); height: auto; display: block; margin: 0 auto; }
+.care-map-quarter { cursor: pointer; touch-action: manipulation; }
+.care-map-quarter:focus:not(:focus-visible) { outline: none; }
+.care-map-quarter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.care-map-parts h2 { margin: 0 0 12px; font-size: 1.0625rem; font-weight: 700; }
+.care-map-parts ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.care-map-parts button { min-height: 44px; padding: 0 14px; border: 1.5px solid var(--l-ink); border-radius: 999px; background: var(--paper); color: var(--l-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; touch-action: manipulation; }
+.care-map-parts button.is-signal { border-color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.care-map-parts button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); background: var(--l-bg); }
+.care-map-parts button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) { .care-map-parts button:hover { background: var(--l-bg); } }
+@media (max-width: 767.98px) {
+  .care-map-svg { display: none; }
+  .care-map-phone { display: grid; gap: 20px; }
+  /* Before a part is chosen the panel has nothing to say on a phone; the quarters are the invitation. */
+  .care-map-detail.is-empty { display: none; }
+}
 
 @media (max-width: 767px) {
   .perspective-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sim-grid { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .map-trigger, .perspective-card, .care-map-node circle { transition: none; }
+  .perspective-card, .care-map-node circle { transition: none; }
 }
 
 /* ── Finder: the allied providers' "Best for" line (PRD §41) ─────────────────────────────── */
 .profile-best-for { margin: 4px 0 0; color: var(--ink); font-size: 0.875rem; line-height: 1.5; }
 .profile-best-for span { margin-right: 6px; color: var(--muted); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.learn-map-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: -12px 0 24px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font-size: 0.875rem; font-weight: 640; text-decoration: none; }
-.learn-map-link svg { color: var(--route-strong); }
-@media (hover: hover) { .learn-map-link:hover { border-color: var(--accent); color: var(--accent); } }
-.learn-map-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.platform-shell .learn-screen:has(.learn-module) .learn-map-link { display: none; }
 .voice-reflection { display: grid; gap: 8px; margin-top: 10px; }
 .voice-reflection .learn-secondary { justify-self: start; }
 .voice-reflection-live { margin: 0; color: var(--muted); font-size: 0.9375rem; font-style: italic; }
@@ -221,7 +243,7 @@
 .app-tab-label { white-space: nowrap; }
 /* The NWIA line on the care map and a node: one sentence, muted, attributed. */
 .care-map-nwia { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; line-height: 1.55; }
-.care-map-nwia span { margin-right: 6px; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.care-map-nwia span { margin-right: 6px; font-size: 0.75rem; font-weight: 700; }
 .care-map-nwia a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
 /* Adjustments on paper (PRD §45) */

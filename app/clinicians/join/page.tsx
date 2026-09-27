@@ -31,23 +31,15 @@ export default function JoinPage() {
             on the page and in the BreadcrumbList the same component emits. */}
         <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "For GPs", href: "/clinicians" }, { label: "Join", href: "/clinicians/join" }]} />
         <header className="join-header">
-          <p className="eyebrow">Join the directory</p>
           <h1>Be findable by the people already looking.</h1>
-          <p className="join-lead">
-            One email, who you are and where you practise, and a person replies. No forms.
-          </p>
+          <p className="join-lead">One email, and a person replies. No forms.</p>
         </header>
         <section className="join-email" aria-labelledby="join-start">
-          {/* The funnel phrase, end to end: /clinicians' final stage says it, and this is where
-              it lands. */}
-          <h2 id="join-start" className="join-email-heading">Start your journey today.</h2>
+          <h2 id="join-start" className="join-email-heading">Write to us.</h2>
           <a className="join-email-cta" href={`mailto:${JOIN_EMAIL}?subject=Joining%20the%20directory`}>
             {JOIN_EMAIL}
           </a>
-          <p className="join-email-note">
-            Tell us your name, your practice and what your week actually looks like. Everything
-            else, registration details included, we sort out together afterwards.
-          </p>
+          <p className="join-email-note">Your name, your practice, what your week looks like.</p>
         </section>
       </div>
     </main>

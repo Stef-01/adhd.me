@@ -10,6 +10,8 @@ import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
 import { SCORES, sound } from "../sounds";
 import { Blot, Desk, Nib } from "./art";
+import { usePlayedWhen } from "../played-hook";
+import { RelatedRun } from "../related-run";
 
 type Emotion = "stuck" | "hover" | "typing" | "kept";
 const MOOD: Record<Emotion, Mood> = { stuck: "frustrated", hover: "anxious", typing: "engaged", kept: "pleased" };
@@ -29,6 +31,7 @@ const where = (s: NinaWorld, x: number, y: number) => {
 
 export function NinaWorldGame() {
   const { state: s, dispatch } = useLoop(ninaReducer, () => createNina(), running);
+  usePlayedWhen("nina", s.phase === "complete");
   const live = s.phase === "writing" || s.phase === "revisit";
   const c = SCENARIOS[s.scenario]!;
   const want = wanted(s);
@@ -76,7 +79,7 @@ export function NinaWorldGame() {
   const cell = (x: number, y: number) => ({ "--cx": (x + .5) / COLS, "--cy": (y + .5) / ROWS } as CSSProperties);
   const line = (words: (string | null)[], cls = "") => <p className={`nw-line ${cls}`}>{words.map((w, i) => <span key={i} data-empty={!w}>{w ?? "···"}</span>)}</p>;
 
-  return <GameShell name="nw-game" label="Nina’s desk" eyebrow="Nina · The first line" heading={heading(s)} objective={s.phase === "writing" && s.line === 0 ? "Steer the pen through the words." : undefined}
+  return <GameShell name="nw-game" label="Nina’s desk" eyebrow="Nina · The first line" heading={heading(s)}
     hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
     phaseKey={`${s.phase}-${s.line}`} data={{ phase: s.phase, line: s.line, scenario: s.scenario, emotion }}
     score={SCORES.nina} playing={live} intensity={.3 + s.filled.filter(Boolean).length * .18 + s.draft.length * .05}>
@@ -114,6 +117,7 @@ export function NinaWorldGame() {
         </div> : <div className="nw-setup">
           <span className="kit-stamp"><Check size={18} weight="bold" /> Next: {s.next?.toLowerCase()}</span>
           <Link className="kit-primary" href="/lives/learn?module=sixty_second_start_v1">Try a 60-second start <ArrowRight size={18} /></Link>
+          <RelatedRun who="nina" className="kit-next" arrow={17} />
           <button className="kit-quiet" onClick={() => dispatch({ type: "restart" })}>Another draft</button>
         </div>}
       </div>}

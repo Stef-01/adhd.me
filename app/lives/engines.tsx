@@ -197,7 +197,7 @@ function Inhibition({ game, scene, live, reducedMotion, reducedSensory, progress
   const finish = useOnce(onResult);
   const e = scene.entities[0]!;
   const taunt = tauntAt(progress, scene.taunts ?? []);
-  const grow = 1 + progress * 0.6;
+  const grow = scene.still ? 1 : 1 + progress * 0.6;
   return (
     <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} stake={progress} className="lives-inhibit" label="The scene">
       <Thing e={{ ...e, r: e.r * grow }} className={`is-temptation${taunt ? ` taunt-${(scene.taunts ?? []).indexOf(taunt)}` : ""}`} data-outcome="miss" disabled={!live} onClick={() => finish({ outcome: "failure", mistakes: 1, line: "Sent." })} aria-label={`${e.label}: do not press`}>
@@ -266,6 +266,8 @@ function GoalProtection({ game, scene, live, reducedMotion, reducedSensory, prog
 /** What the hand holds, per game: the lid, the tissue, the word, the thread. */
 const HOLD_KIND: Record<string, string> = { rogue_blender: "lid", sneeze: "cloud", zoe_keyword: "thought", arjun_hold_thread: "thread" };
 
+const capital = (s: string) => `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+
 /** 7. Hold/release (§17): hold the word; let go when it is your turn, not before. */
 function HoldRelease({ game, scene, live, reducedMotion, reducedSensory, progress, onResult, outcome }: EngineProps) {
   const finish = useOnce(onResult);
@@ -281,10 +283,10 @@ function HoldRelease({ game, scene, live, reducedMotion, reducedSensory, progres
   if (reducedMotion) {
     return (
       <Stage game={game} live={live} reducedMotion={reducedMotion} reducedSensory={reducedSensory} outcome={outcome} className="lives-hold" label="The conversation">
-        <p className="lives-cue">{plan.verb}. Then, at {plan.releaseAt}, say it.</p>
+        <p className="lives-cue">{plan.verb}. Then, at {plan.releaseAt}, {plan.release ?? "say it"}.</p>
         <div className="lives-choices" role="group" aria-label="What do you do">
           <button type="button" className="lives-choice" data-outcome="hit" disabled={!live} onClick={() => finish({ outcome: "success", mistakes: 0 })}>Wait for {plan.releaseAt}</button>
-          <button type="button" className="lives-choice" data-outcome="miss" disabled={!live} onClick={() => finish({ outcome: "failure", mistakes: 1, line: "Out it came." })}>Say it now</button>
+          <button type="button" className="lives-choice" data-outcome="miss" disabled={!live} onClick={() => finish({ outcome: "failure", mistakes: 1, line: "Out it came." })}>{capital(plan.release ?? "say it")} now</button>
         </div>
       </Stage>
     );

@@ -38,7 +38,6 @@ export function LearnHome() {
   return (
     <div className="me-screen learn-screen lives-screen">
       <header className="life-head">
-        <span className="life-eyebrow">ADHD Lives</span>
         <h1 className="life-title">Learn</h1>
       </header>
       {forYou.length > 0 && <Shelf title="For you" strategies={forYou.map((r) => r.strategy)} done={profile?.completedModuleIds ?? []} />}

@@ -12,6 +12,7 @@ import { seoMetadata } from "@/seo/pages";
 import { Breadcrumbs } from "../breadcrumbs";
 import { SiteFooter } from "../site-footer";
 import { RESPONSIBILITY_STATEMENT } from "@/compliance/party-to-care";
+import { said } from "@/model/crisis-contacts";
 import { PublicHeader } from "../public-header";
 
 export const metadata = seoMetadata("/terms");
@@ -53,8 +54,8 @@ export default function TermsPage() {
           </p>
           <p className="mt-2 text-sm leading-6">
             The service is not for emergencies. If you or someone else is in immediate danger,
-            call 000. If you want to talk to someone about how you are feeling, at any hour,
-            Lifeline is 13 11 14.
+            call {said("emergency")}. If you want to talk to someone about how you are feeling, at
+            any hour, Lifeline is {said("lifeline")}.
           </p>
         </section>
         <section>

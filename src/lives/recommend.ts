@@ -1,6 +1,6 @@
 // §31–§34, §108: the deterministic recommendation engine. Weighted matching over explicit
 // resonance, goals, encounters and history; at most three; every row explains itself (§107).
-import type { RecommendationContext, StrategyDefinition } from "./types";
+import type { LearningDomain, RecommendationContext, StrategyDefinition } from "./types";
 
 export const WEIGHTS = {
   thisIsMe: 10,
@@ -27,11 +27,14 @@ function baseScore(strategy: StrategyDefinition, context: RecommendationContext)
   for (const signal of context.resonanceSignals) {
     const matches = (signal.sourceType === "game" && strategy.relatedGameIds.includes(signal.sourceId)) || (signal.sourceType === "character" && strategy.characterIds.includes(signal.sourceId as never)) || (signal.sourceType === "moment" && strategy.characterIds.includes(signal.sourceId as never));
     if (!matches) continue;
-    if (signal.response === "this_is_me") { score += WEIGHTS.thisIsMe; reasons.push(`this is me: ${signal.sourceId}`); }
-    else if (signal.response === "sometimes") { score += WEIGHTS.sometimes; reasons.push(`sometimes: ${signal.sourceId}`); }
+    // A reason names what it came from (PLAN.md W8): `game:zoe_dont_send`, `character:mia`.
+    const like = `${signal.sourceType === "game" ? "game" : "character"}:${signal.sourceId}`;
+    if (signal.response === "this_is_me") { score += WEIGHTS.thisIsMe; reasons.push(like); }
+    else if (signal.response === "sometimes") { score += WEIGHTS.sometimes; reasons.push(like); }
     else { score -= WEIGHTS.thisIsMe; reasons.push(`not me: ${signal.sourceId}`); }
   }
-  if (strategy.domains.some((d) => context.selectedGoals.includes(d))) { score += WEIGHTS.goalMatch; reasons.push("matches a chosen goal"); }
+  const goals = strategy.domains.filter((d) => context.selectedGoals.includes(d));
+  if (goals.length) { score += WEIGHTS.goalMatch; reasons.push(...goals.map((d) => `goal:${d}`)); }
   if (strategy.relatedGameIds.some((g) => context.encounteredGameIds.includes(g))) { score += WEIGHTS.encounteredGame; reasons.push("a related game came up this run"); }
   if (strategy.characterIds.some((c) => context.encounteredCharacterIds.includes(c))) { score += WEIGHTS.encounteredCharacter; reasons.push("a related character came up this run"); }
   if (context.savedStrategyIds.includes(strategy.id)) { score += WEIGHTS.savedPreviously; reasons.push("already saved"); }
@@ -59,4 +62,19 @@ export function recommendStrategies(context: RecommendationContext, strategies: 
     candidate.strategy.domains.forEach((d) => shownDomains.add(d));
   }
   return out.sort((a, b) => b.score - a.score);
+}
+
+/**
+ * The line under "For you" (PLAN.md W8, `{#honesty.claim-earned}`): what the picks came from, said
+ * once for all of them. Null when nothing the person chose is behind them, and then there is no
+ * "For you". "Sometimes" counts as like you: the person picked it.
+ */
+export function reasonLine(picks: readonly Recommendation[], goalLabel: (goal: LearningDomain) => string): string | null {
+  const reasons = picks.flatMap((p) => p.reasons);
+  const goals = [...new Set(reasons.filter((r) => r.startsWith("goal:")).map((r) => r.slice("goal:".length) as LearningDomain))];
+  const like = reasons.some((r) => r.startsWith("character:") || r.startsWith("game:"));
+  if (goals.length && like) return "From your goals and characters like you.";
+  if (goals.length) return `From your goals: ${goals.map(goalLabel).join(", ")}.`;
+  if (like) return "From the characters you said are like you.";
+  return null;
 }

@@ -7,3 +7,12 @@ export function isoDaysFrom(anchor: string, days: number): string {
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().slice(0, 10);
 }
+
+/**
+ * The calendar day on this device's clock, as YYYY-MM-DD. `toISOString()` gives the UTC day, which
+ * in Australia is yesterday until about 10am, so a person's own "today" must come from here.
+ */
+export function localDay(d: Date = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}

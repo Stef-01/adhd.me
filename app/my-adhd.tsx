@@ -1,5 +1,4 @@
 "use client";
-import { SkillRecommendation } from "./skill-recommendation";
 
 // My ADHD: one picture of a person, and three things they can do from it.
 //
@@ -26,19 +25,23 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkle } from "@phosphor-icons/react";
 import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
-import { axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
+import { ASPECT_LABELS, axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
+import { compareFor, compareSentence, pointsOf, snapshotOf, snapshotsToWrite, storedOrMigrated, type MapSnapshot } from "@/model/snapshots";
+import { localDay } from "@/lib/dates";
 import { isComplete } from "@/model/onboarding";
-import { activeSafety } from "@/model/store";
+import { activeSafety, hasSignals, updateModel } from "@/model/store";
 import { LifeHeader } from "./life-shell";
 import { MyAdhdRadar } from "./my-adhd-radar";
 import { MyAdhdSheet } from "./my-adhd-sheet";
 import { ShareSheet } from "./my-adhd-share";
+import { Sheet } from "./sheet";
 import { SafetyScreen } from "./safety-screen";
 import { acknowledgeSafety } from "@/model/store";
 import { useModel } from "./use-model";
 
 /**
- * O253: two contributor chips, not three.
+ * One contributor chip (PLAN.md W3). The compare pill needed the words, and the axis sheet lists
+ * the top three one tap away. Before that, O253: two contributor chips, not three.
  *
  * The action card grew the line that says what the step actually IS — the founder read "Try
  * this: one capture place." and it meant nothing to him — and the screen went to 62 words
@@ -50,7 +53,7 @@ import { useModel } from "./use-model";
  * belong to, one tap away, which is the screen built to hold them. What could not move is the
  * step: a next action nobody can read is not a next action.
  */
-const MAX_FOCUS = 2;
+const MAX_FOCUS = 1;
 const MAX_STRENGTHS = 1;
 
 export function MyAdhd() {
@@ -59,6 +62,8 @@ export function MyAdhd() {
   const [open, setOpen] = useState<Aspect | null>(null);
   const [sharing, setSharing] = useState(false);
   const shareRef = useRef<HTMLButtonElement | null>(null);
+  const [fills, setFills] = useState(false);
+  const fillsRef = useRef<HTMLButtonElement | null>(null);
 
   /**
    * `?share=1` opens the GP summary on arrival, so anything that promises "take this to my GP"
@@ -76,6 +81,35 @@ export function MyAdhd() {
   }, []);
 
   const points = useMemo(() => axes(record), [record]);
+  const started = isComplete(record?.onboarding ?? null);
+
+  // THE MAP THEN AND NOW (PLAN.md W3). A snapshot is taken when the hub opens on a map that has
+  // changed, whatever changed it: Start, a rated game, a character or a goal. Day one is the first
+  // and is never replaced, and a blank map is never day one. Writing fires the model event, the
+  // hub re-reads, the map now equals the latest snapshot, and nothing is written again.
+  const now = useMemo(() => (record ? snapshotOf(record, localDay()) : null), [record]);
+  const snapshots = useMemo(() => (record ? storedOrMigrated(record) : []), [record]);
+  useEffect(() => {
+    if (!record || !now) return;
+    const next = snapshotsToWrite(record, now);
+    if (next) refresh(updateModel(storage, (r) => ({ ...r, snapshots: [...next] })));
+  }, [record, now, storage, refresh]);
+  const compare = useMemo(() => (now ? compareFor(snapshots, now, new Date()) : null), [snapshots, now]);
+  const options = useMemo(() => {
+    const out: Array<{ id: string; name: string; snapshot: MapSnapshot }> = [];
+    if (compare?.dayOne) out.push({ id: "day-one", name: "Day one", snapshot: compare.dayOne });
+    if (compare?.month) out.push({ id: "month", name: compare.month.name, snapshot: compare.month.snapshot });
+    return out;
+  }, [compare]);
+  // The month is the default when there is one: "then" is most useful as a month ago.
+  const [picked, setPicked] = useState<string | null>(null);
+  const thenRadios = useRef<HTMLSpanElement | null>(null);
+  const then = options.find((o) => o.id === picked) ?? options[options.length - 1] ?? null;
+  const baseline = useMemo(() => (then ? pointsOf(then.snapshot) : null), [then]);
+  const thenText = useMemo(
+    () => (then && now ? compareSentence(then.snapshot, then.name, now, (a) => ASPECT_LABELS[a]) : []),
+    [then, now],
+  );
   // What may be contributing, as the comp has it: at most three short phrases from the leading
   // need's own contributors. Repeating the axis names here would say nothing the radar has not.
   const focus = useMemo(() => {
@@ -86,9 +120,49 @@ export function MyAdhd() {
       .map((c) => ({ note: c.note, aspect: lead.aspect }));
   }, [record]);
   const line = useMemo(() => standsOut(record), [record]);
+  // The radio pattern: only the checked one is in the tab order, and the arrows move the choice
+  // and the focus together, wrapping at either end.
+  const pickByKey = (event: React.KeyboardEvent<HTMLButtonElement>, at: number) => {
+    const last = options.length - 1;
+    const to =
+      event.key === "ArrowRight" || event.key === "ArrowDown" ? (at === last ? 0 : at + 1)
+      : event.key === "ArrowLeft" || event.key === "ArrowUp" ? (at === 0 ? last : at - 1)
+      : event.key === "Home" ? 0
+      : event.key === "End" ? last
+      : null;
+    if (to === null) return;
+    event.preventDefault();
+    setPicked(options[to]!.id);
+    thenRadios.current?.querySelectorAll<HTMLButtonElement>('[role="radio"]')[to]?.focus();
+  };
+  // The name of the dashed shape, right under the chart and above the axes it is drawn across.
+  const thenPill = then && (
+    <div className="map-then-pill">
+      <span className="map-then-swatch" aria-hidden="true" />
+      {options.length > 1 ? (
+        <span ref={thenRadios} className="map-then-options" role="radiogroup" aria-label="Compare with">
+          {options.map((o, i) => (
+            <button
+              key={o.id}
+              type="button"
+              role="radio"
+              aria-checked={o.id === then.id}
+              tabIndex={o.id === then.id ? 0 : -1}
+              onClick={() => setPicked(o.id)}
+              onKeyDown={(event) => pickByKey(event, i)}
+            >
+              {o.name}
+            </button>
+          ))}
+        </span>
+      ) : (
+        <span className="map-then-name">{then.name}</span>
+      )}
+      {thenText.length > 0 && <span className="sr-only">{thenText.join(" ")}</span>}
+    </div>
+  );
   const rec = useMemo(() => (record ? recommend(record) : null), [record]);
   const safety = record ? activeSafety(record) : null;
-  const started = isComplete(record?.onboarding ?? null);
 
   // What is working, from the axes that name a strength. One, because two is a list and this
   // screen has one job.
@@ -119,12 +193,21 @@ export function MyAdhd() {
           {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
           {record && (
-            <MyAdhdRadar points={points} onOpen={openAxis} openAspect={open} />
+            <MyAdhdRadar points={points} baseline={baseline} onOpen={openAxis} openAspect={open} caption={thenPill} />
+          )}
+
+          {record && (
+            <div className="map-meta">
+              {(hasSignals(record) || record.learning) && <p className="map-where">Saved on this device.</p>}
+              <button ref={fillsRef} type="button" className="map-fills" onClick={() => setFills(true)}>
+                How it fills in
+              </button>
+            </div>
           )}
 
           {record && !started && (
             <section className="map-lead map-side">
-              <p>Two minutes so this can be about you.</p>
+              <p>Ten quick questions start this map.</p>
               <Link className="learn-primary" href="/start">
                 Start <ArrowRight size={17} weight="bold" aria-hidden="true" />
               </Link>
@@ -161,10 +244,19 @@ export function MyAdhd() {
 
               {rec && (
                 <section className="map-step" aria-labelledby="map-step-title" data-action={rec.action}>
-                  <h2 id="map-step-title">{rec.heading}</h2>
-                  {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
-                  <NextStepAction rec={rec} />
-                  <SkillRecommendation />
+                  {stepModule(rec) ? (
+                    <Link className="map-step-link" href={`/approach?module=${stepModule(rec)}`}>
+                      <h2 id="map-step-title">{rec.heading}</h2>
+                      {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
+                      <ArrowRight size={17} weight="bold" aria-hidden="true" />
+                    </Link>
+                  ) : (
+                    <>
+                      <h2 id="map-step-title">{rec.heading}</h2>
+                      {doLine(rec) && <p className="map-step-do">{doLine(rec)}</p>}
+                      <NextStepAction rec={rec} />
+                    </>
+                  )}
                 </section>
               )}
             </div>
@@ -184,7 +276,29 @@ export function MyAdhd() {
       {record && (
         <ShareSheet open={sharing} record={record} onClose={() => setSharing(false)} openedBy={shareRef} />
       )}
+      <FillsSheet open={fills} started={started} onClose={() => setFills(false)} openedBy={fillsRef} />
     </main>
+  );
+}
+
+/**
+ * What builds the map (PLAN.md W4, D12): the four things that can move an axis, and the one thing
+ * that never does. Four short rows behind a labelled button, not a paragraph on the hub.
+ */
+function FillsSheet({ open, started, onClose, openedBy }: { open: boolean; started: boolean; onClose: () => void; openedBy: React.RefObject<HTMLButtonElement | null> }) {
+  return (
+    <Sheet open={open} title="How it fills in." onClose={onClose} openedBy={openedBy}>
+      <ul className="map-fills-list">
+        <li>
+          Your ten starting questions
+          {started && <Link className="map-fills-again" href="/start?again=1">Answer again</Link>}
+        </li>
+        <li>A short check on any part</li>
+        <li>What you rate in the games</li>
+        <li>Characters you say are like you</li>
+      </ul>
+      <p className="map-fills-never">Scores never change your map.</p>
+    </Sheet>
   );
 }
 
@@ -243,6 +357,15 @@ function doLine(rec: Recommendation): string | null {
 }
 
 /**
+ * A strategy step is its own link: the card names the strategy and its first step, so a button
+ * under it saying "See it in the module" only repeated where the card already goes.
+ */
+function stepModule(rec: Recommendation): string | null {
+  const person = rec.action === "EXPLORE_PROVIDER" || rec.action === "DISCUSS_WITH_EXISTING_CLINICIAN";
+  return rec.strategy && rec.moduleId && rec.action !== "URGENT_ESCALATION" && !person ? rec.moduleId : null;
+}
+
+/**
  * The one control under the one next step, and WHERE IT GOES.
  *
  * The old version named three actions and sent the other four to `/approach`, the bare module
@@ -270,9 +393,7 @@ function NextStepAction({ rec }: { rec: Recommendation }) {
       ? "See who helps"
       : rec.action === "DISCUSS_WITH_EXISTING_CLINICIAN"
         ? "Prepare what to say"
-        : rec.strategy
-          ? "See it in the module"
-          : "Open the module";
+        : "Open the module";
   return (
     <Link className="learn-primary" href={href}>
       {label} <ArrowRight size={17} weight="bold" aria-hidden="true" />

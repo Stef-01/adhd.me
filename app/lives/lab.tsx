@@ -8,8 +8,7 @@
 import { useMemo, useState } from "react";
 import { beginGame, CHARACTER_IDS, CHARACTERS, eligible, GAMES, MODULES, recommendStrategies, startSession, STRATEGIES, type CharacterId, type LearningDomain, type ResonanceSignal, type SessionState } from "@/lives";
 import { LEARNING_DOMAINS } from "@/lives";
-import { emptyProfile, writeProfile } from "@/lives";
-import { deviceLearningStorage } from "@/learn/cursor";
+import { deleteDeviceData } from "@/privacy/device-data";
 
 export function LivesLab() {
   const [characters, setCharacters] = useState<CharacterId[]>(["arjun"]);
@@ -40,7 +39,6 @@ export function LivesLab() {
   return (
     <div className="me-screen learn-screen lives-screen lives-lab">
       <header className="life-head">
-        <span className="life-eyebrow">ADHD Lives</span>
         <h1 className="life-title">The lab</h1>
         <p className="life-lede">Why the engine suggests what it suggests, and why the director picked what it picked. Nothing here is about a person.</p>
       </header>
@@ -87,8 +85,8 @@ export function LivesLab() {
 
       <section className="life-card" aria-labelledby="lab-reset">
         <h2 id="lab-reset">This device</h2>
-        <button type="button" className="lives-choice is-small" onClick={() => { try { writeProfile(deviceLearningStorage, emptyProfile()); setReset(true); } catch { /* denied */ } }}>Reset the Lives profile on this device</button>
-        {reset && <p role="status">Reset.</p>}
+        <button type="button" className="lives-choice is-small" onClick={() => { try { deleteDeviceData([window.localStorage, window.sessionStorage]); setReset(true); } catch { /* denied */ } }}>Delete everything this device holds</button>
+        {reset && <p role="status">Deleted.</p>}
       </section>
     </div>
   );

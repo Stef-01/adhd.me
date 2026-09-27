@@ -53,7 +53,7 @@ export type Step =
   | { readonly kind: "scene"; readonly stage: "hook" | "experience"; readonly who: Character; readonly mood: Mood; readonly prop: Prop; readonly eyebrow?: string; readonly heading: string; readonly body: string }
   | { readonly kind: "choice"; readonly who: Character; readonly mood: Mood; readonly prop: Prop; readonly heading: string; readonly body?: string; readonly options: ReadonlyArray<Option & { readonly response: string }> }
   | { readonly kind: "resonance"; readonly heading: string }
-  | { readonly kind: "explain"; readonly eyebrow: string; readonly heading: string; readonly body: string; readonly detail?: readonly string[]; readonly who?: Character; readonly mood?: Mood; readonly prop?: Prop }
+  | { readonly kind: "explain"; readonly eyebrow?: string; readonly heading: string; readonly body: string; readonly detail?: readonly string[]; readonly who?: Character; readonly mood?: Mood; readonly prop?: Prop }
   | { readonly kind: "personalise"; readonly questions: ReadonlyArray<{ readonly id: string; readonly prompt: string; readonly options: readonly Option[]; readonly multi?: boolean }> }
   | { readonly kind: "strategy"; readonly heading: string; readonly body: string; readonly strategies: readonly Strategy[] }
   | { readonly kind: "reflect"; readonly prompts: readonly string[]; readonly suggestions: readonly string[] }
@@ -114,7 +114,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "unsure", label: "Not sure", response: "Fair. The next screen is the whole answer, and it is shorter than you would think." },
       ] },
       resonance(),
-      { kind: "explain", eyebrow: "The idea", heading: "ADHD is not a fixed amount of attention.", body: "How hard something is can depend on the structure of the task, how soon it is due, how interesting it is, what the environment demands, and who is around. Change the conditions and the same person performs differently, not because they tried harder, but because the situation changed.", detail: ["Interest and immediacy switch attention on", "Vague, far-off tasks switch it off", "Structure and company can stand in for both"] },
+      { kind: "explain", heading: "ADHD is not a fixed amount of attention.", body: "How hard something is can depend on the structure of the task, how soon it is due, how interesting it is, what the environment demands, and who is around. Change the conditions and the same person performs differently, not because they tried harder, but because the situation changed.", detail: ["Interest and immediacy switch attention on", "Vague, far-off tasks switch it off", "Structure and company can stand in for both"] },
       { kind: "personalise", questions: [
         { id: "where", prompt: "Where does the difference show up most for you?", options: [{ id: "work", label: "Work" }, { id: "study", label: "Study" }, { id: "home", label: "Home and admin" }, { id: "relationships", label: "With people" }] },
         { id: "switch", prompt: "What most reliably switches you on?", options: [{ id: "deadline", label: "A deadline that is close" }, { id: "interest", label: "Being interested" }, { id: "company", label: "Somebody working beside me" }, { id: "clear", label: "A very clear task" }], multi: true },
@@ -137,7 +137,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     characters: ["maya"],
     professions: ["gp", "psychologist"],
     steps: [
-      { kind: "scene", stage: "hook", who: "maya", mood: "frustrated", prop: "desk", eyebrow: "A performance review", heading: "“You just need to focus more.”", body: "Maya’s manager means well. But Maya focused for nine hours yesterday. The report was late because she forgot the brief existed, misjudged how long the data would take, and then could not face opening it after a sharp email." },
+      { kind: "scene", stage: "hook", who: "maya", mood: "frustrated", prop: "desk", heading: "“You just need to focus more.”", body: "Maya’s manager means well. But Maya focused for nine hours yesterday. The report was late because she forgot the brief existed, misjudged how long the data would take, and then could not face opening it after a sharp email." },
       { kind: "choice", who: "maya", mood: "thinking", prop: "desk", heading: "Which of those was an attention problem?", options: [
         { id: "forgot", label: "Forgetting the brief", response: "That is working memory, holding something in mind while doing other things. Attention was on the other things." },
         { id: "time", label: "Misjudging the time", response: "That is time sense. People with ADHD often feel two settings: now, and not now." },
@@ -145,7 +145,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "none", label: "None of them, really", response: "Right. Three different things, none of them ‘focus’, all of them ADHD." },
       ] },
       resonance(),
-      { kind: "explain", eyebrow: "The idea", heading: "Attention is the headline. It is not the story.", body: "ADHD affects a set of brain functions that manage everything else: starting, holding things in mind, sensing time, switching, and settling emotion. Most of what makes life hard is one of those, wearing attention’s name.", detail: ["Starting, knowing what to do and not being able to begin", "Working memory, the brief that vanished", "Time, everything is now or not now", "Emotion, fast in, slow out"] },
+      { kind: "explain", heading: "Attention is the headline. It is not the story.", body: "ADHD affects a set of brain functions that manage everything else: starting, holding things in mind, sensing time, switching, and settling emotion. Most of what makes life hard is one of those, wearing attention’s name.", detail: ["Starting, knowing what to do and not being able to begin", "Working memory, the brief that vanished", "Time, everything is now or not now", "Emotion, fast in, slow out"] },
       { kind: "personalise", questions: [
         { id: "hardest-part", prompt: "Which of these costs you most?", options: [{ id: "starting", label: "Starting" }, { id: "memory", label: "Remembering" }, { id: "time", label: "Time" }, { id: "emotion", label: "Emotion" }] },
         { id: "noticed", prompt: "Has anyone put it down to effort or attitude?", options: [{ id: "often", label: "Often" }, { id: "sometimes", label: "Sometimes" }, { id: "no", label: "Not really" }] },
@@ -176,7 +176,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "someone", label: "Sit next to somebody", response: "Often works. Company lowers the threshold in a way willpower does not." },
       ] },
       resonance(),
-      { kind: "explain", eyebrow: "The idea", heading: "Starting is its own function.", body: "Doing a task and beginning a task use different machinery. Beginning needs a push, interest, urgency, novelty, or a person, and ADHD brains need more push than most. The gap between knowing and starting is not a knowledge problem, so more knowing does not close it.", detail: ["The threshold is highest for vague, large, far-off tasks", "It drops when the first action is physical and small", "It drops again when somebody else is in the room"] },
+      { kind: "explain", heading: "Starting is its own function.", body: "Doing a task and beginning a task use different machinery. Beginning needs a push, interest, urgency, novelty, or a person, and ADHD brains need more push than most. The gap between knowing and starting is not a knowledge problem, so more knowing does not close it.", detail: ["The threshold is highest for vague, large, far-off tasks", "It drops when the first action is physical and small", "It drops again when somebody else is in the room"] },
       { kind: "personalise", questions: [
         { id: "hardest-to-start", prompt: "What kind of task is hardest to start?", options: [{ id: "vague", label: "Vague ones" }, { id: "big", label: "Big ones" }, { id: "boring", label: "Boring ones" }, { id: "judged", label: "Ones somebody will judge" }], multi: true },
         { id: "what-helps-start", prompt: "What has ever helped you start?", options: [{ id: "deadline", label: "A deadline" }, { id: "person", label: "Another person" }, { id: "small", label: "Making it tiny" }, { id: "nothing", label: "Nothing reliably" }], multi: true },
@@ -209,7 +209,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "fear", label: "Fear of failing", response: "Some of it. But fear three weeks out did nothing. It only worked when the deadline entered ‘now’." },
       ] },
       resonance(),
-      { kind: "explain", eyebrow: "The idea", heading: "Far-off deadlines do not register as real.", body: "Many people with ADHD experience time as now and not-now. A deadline in not-now cannot supply activation, no matter how much it matters. When it crosses into now, everything switches on at once, which is why the work is often good and the cost is often high.", detail: ["This is time sense, not attitude", "The switch is real and can be used deliberately", "Artificial milestones bring ‘now’ forward"] },
+      { kind: "explain", heading: "Far-off deadlines do not register as real.", body: "Many people with ADHD experience time as now and not-now. A deadline in not-now cannot supply activation, no matter how much it matters. When it crosses into now, everything switches on at once, which is why the work is often good and the cost is often high.", detail: ["This is time sense, not attitude", "The switch is real and can be used deliberately", "Artificial milestones bring ‘now’ forward"] },
       { kind: "personalise", questions: [
         { id: "horizon", prompt: "How close does a deadline need to be before it feels real?", options: [{ id: "day", label: "The day before" }, { id: "days", label: "A few days" }, { id: "week", label: "About a week" }, { id: "varies", label: "It varies" }] },
         { id: "cost", prompt: "What does the last-minute version usually cost?", options: [{ id: "sleep", label: "Sleep" }, { id: "quality", label: "Quality" }, { id: "other-things", label: "Other commitments" }, { id: "stress", label: "A lot of stress" }], multi: true },
@@ -235,7 +235,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
       { kind: "scene", stage: "hook", who: "jordan", mood: "neutral", prop: "kitchen", eyebrow: "Saturday morning", heading: "“Can you grab four things on the way?”", body: "Milk, the parcel, stamps, and Sam’s prescription. Jordan says yes, means yes, and walks out the door holding all four in mind. A phone buzzes on the way." },
       { kind: "simulation", sim: "working-memory" },
       resonance("Does this happen to you, things falling out of your head after an interruption?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Working memory is a small table.", body: "It holds a few things at once while you use them. In ADHD the table is smaller and easier to knock. An interruption does not just pause the list, it clears part of it, and you may not notice which part until later. Forgetting is not the same as not caring.", detail: ["The table is smallest under stress and after poor sleep", "Writing something down moves it off the table", "So does saying it to somebody"] },
+      { kind: "explain", heading: "Working memory is a small table.", body: "It holds a few things at once while you use them. In ADHD the table is smaller and easier to knock. An interruption does not just pause the list, it clears part of it, and you may not notice which part until later. Forgetting is not the same as not caring.", detail: ["The table is smallest under stress and after poor sleep", "Writing something down moves it off the table", "So does saying it to somebody"] },
       { kind: "personalise", questions: [
         { id: "knocks", prompt: "What most often knocks things off the table?", options: [{ id: "phone", label: "My phone" }, { id: "people", label: "People talking to me" }, { id: "own-thoughts", label: "My own thoughts" }, { id: "tired", label: "Being tired" }], multi: true },
         { id: "capture", prompt: "Do you have anywhere you reliably write things down?", options: [{ id: "yes", label: "Yes, one place" }, { id: "several", label: "Several places" }, { id: "no", label: "Not really" }] },
@@ -265,7 +265,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "both", label: "Both", response: "That is the honest answer. It is a strength with poor steering." },
       ] },
       resonance(),
-      { kind: "explain", eyebrow: "The idea", heading: "ADHD attention is not weak. It is hard to steer.", body: "When interest catches, attention can lock on for hours and time disappears. That is the same mechanism that makes boring tasks impossible, it goes where the pull is strongest, not where you point it. The skill is not to stop hyperfocus but to choose its target and set its edges." },
+      { kind: "explain", heading: "ADHD attention is not weak. It is hard to steer.", body: "When interest catches, attention can lock on for hours and time disappears. That is the same mechanism that makes boring tasks impossible, it goes where the pull is strongest, not where you point it. The skill is not to stop hyperfocus but to choose its target and set its edges." },
       { kind: "personalise", questions: [
         { id: "lands-on", prompt: "What does your hyperfocus usually land on?", options: [{ id: "work", label: "The right work" }, { id: "side", label: "A side task" }, { id: "hobby", label: "A hobby or game" }, { id: "research", label: "Researching something" }], multi: true },
         { id: "cost", prompt: "What does it usually cost?", options: [{ id: "meals", label: "Meals" }, { id: "sleep", label: "Sleep" }, { id: "people", label: "People waiting on me" }, { id: "the-real-task", label: "The task I meant to do" }], multi: true },
@@ -289,10 +289,10 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     characters: ["maya"],
     professions: ["occupational-therapist", "adhd-coach"],
     steps: [
-      { kind: "scene", stage: "hook", who: "maya", mood: "overwhelmed", prop: "desk", eyebrow: "A message from the manager", heading: "“Can you improve the presentation before Thursday?”", body: "Improve how? Which part? To what standard? Maya opens it, scrolls, closes it. Every slide could be better, so none of them gets touched." },
+      { kind: "scene", stage: "hook", who: "maya", mood: "overwhelmed", prop: "desk", heading: "“Can you improve the presentation before Thursday?”", body: "Improve how? Which part? To what standard? Maya opens it, scrolls, closes it. Every slide could be better, so none of them gets touched." },
       { kind: "simulation", sim: "ambiguity" },
       resonance("Does this happen to you, vague tasks staying untouched while clear ones get done?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Ambiguity raises the threshold.", body: "A task with no clear first step has to be designed before it can be started, and designing it is a second task nobody assigned. ADHD brains stall at exactly that step. The work is not too hard. It is too undefined.", detail: ["The fix is upstream: define, then start", "A question to the person who set the task is not weakness", "‘Done’ needs a shape before you begin"] },
+      { kind: "explain", heading: "Ambiguity raises the threshold.", body: "A task with no clear first step has to be designed before it can be started, and designing it is a second task nobody assigned. ADHD brains stall at exactly that step. The work is not too hard. It is too undefined.", detail: ["The fix is upstream: define, then start", "A question to the person who set the task is not weakness", "‘Done’ needs a shape before you begin"] },
       { kind: "personalise", questions: [
         { id: "source", prompt: "Where do your vaguest tasks come from?", options: [{ id: "manager", label: "A manager" }, { id: "self", label: "Myself" }, { id: "course", label: "A course or lecturer" }, { id: "clients", label: "Clients or customers" }], multi: true },
         { id: "asks", prompt: "Do you ask what ‘done’ looks like?", options: [{ id: "usually", label: "Usually" }, { id: "sometimes", label: "Sometimes" }, { id: "rarely", label: "Rarely, I should know" }] },
@@ -318,7 +318,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
       { kind: "scene", stage: "hook", who: "maya", mood: "engaged", prop: "desk", eyebrow: "2:15pm", heading: "Maya is finally inside the report.", body: "Twenty minutes of real work. Then a message: “Quick one, can you check this?” It takes three minutes. Getting back into the report takes forty, and she never quite does." },
       { kind: "simulation", sim: "interruption" },
       resonance("Does this happen to you, small interruptions costing far more than their size?"),
-      { kind: "explain", eyebrow: "The idea", heading: "The cost is not the interruption. It is the return.", body: "Switching tasks means rebuilding the whole picture in working memory, where you were, what came next, why. For many people with ADHD that rebuild is slow and fragile, so a three-minute question costs half an hour. Fewer interruptions help. A faster way back helps more.", detail: ["Leave a breadcrumb before you switch", "Batch the small things", "Protect one block a day"] },
+      { kind: "explain", heading: "The cost is not the interruption. It is the return.", body: "Switching tasks means rebuilding the whole picture in working memory, where you were, what came next, why. For many people with ADHD that rebuild is slow and fragile, so a three-minute question costs half an hour. Fewer interruptions help. A faster way back helps more.", detail: ["Leave a breadcrumb before you switch", "Batch the small things", "Protect one block a day"] },
       { kind: "personalise", questions: [
         { id: "source", prompt: "What interrupts you most?", options: [{ id: "messages", label: "Messages" }, { id: "people", label: "People at the desk" }, { id: "own", label: "My own thoughts" }, { id: "noise", label: "Noise around me" }], multi: true },
         { id: "return", prompt: "How long does it take to get back in?", options: [{ id: "minutes", label: "A few minutes" }, { id: "long", label: "Much longer than it should" }, { id: "never", label: "Often I do not" }] },
@@ -349,7 +349,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "unsure", label: "Not sure", response: "The next screen is the answer: the standard was the barrier." },
       ] },
       resonance(),
-      { kind: "explain", eyebrow: "The idea", heading: "A high standard at the start is a wall.", body: "Perfectionism often grows around ADHD as a way of coping with years of things going wrong. It works, until the standard for starting becomes so high that nothing starts. The standard belongs at the end, on the edit. The start needs permission to be rough.", detail: ["First drafts are allowed to be bad", "Editing is where the standard lives", "Uncertainty about the expected standard makes this worse"] },
+      { kind: "explain", heading: "A high standard at the start is a wall.", body: "Perfectionism often grows around ADHD as a way of coping with years of things going wrong. It works, until the standard for starting becomes so high that nothing starts. The standard belongs at the end, on the edit. The start needs permission to be rough.", detail: ["First drafts are allowed to be bad", "Editing is where the standard lives", "Uncertainty about the expected standard makes this worse"] },
       { kind: "personalise", questions: [
         { id: "standard", prompt: "Do you usually know what standard is expected?", options: [{ id: "yes", label: "Yes" }, { id: "guess", label: "I guess, and aim high" }, { id: "no", label: "Rarely" }] },
         { id: "worse", prompt: "What makes it worse?", options: [{ id: "judged", label: "Being judged" }, { id: "past", label: "Past criticism" }, { id: "comparison", label: "Comparing myself" }, { id: "stakes", label: "High stakes" }], multi: true },
@@ -381,7 +381,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { who: "sam", mood: "frustrated", label: "Sam", thought: "I told them yesterday. I am telling them again. If it mattered, they would remember it. Why does everything I say slide off?" },
       ], teaching: "Two experiences can both be genuine. Jordan’s attention drifted without consent; Sam read the drift as not caring. Neither is lying, and neither is wrong about how it felt." },
       resonance("Does this happen in your relationships?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Attention drift reads as indifference.", body: "From the outside, an attention lapse and a lack of care look identical. From the inside they are nothing alike. Most conflict in ADHD relationships starts in that gap, and it closes faster when both people can name it.", detail: ["Drift is involuntary; it is not a verdict on the speaker", "Repeating something calmly works better than repeating it louder", "Writing it down is not an insult to either person"] },
+      { kind: "explain", heading: "Attention drift reads as indifference.", body: "From the outside, an attention lapse and a lack of care look identical. From the inside they are nothing alike. Most conflict in ADHD relationships starts in that gap, and it closes faster when both people can name it.", detail: ["Drift is involuntary; it is not a verdict on the speaker", "Repeating something calmly works better than repeating it louder", "Writing it down is not an insult to either person"] },
       { kind: "personalise", questions: [
         { id: "who", prompt: "Who most often feels unheard?", options: [{ id: "partner", label: "A partner" }, { id: "family", label: "Family" }, { id: "friends", label: "Friends" }, { id: "me", label: "Me, I feel unheard too" }], multi: true },
         { id: "when", prompt: "When does the drift happen most?", options: [{ id: "tired", label: "When I am tired" }, { id: "busy", label: "When something else is on my mind" }, { id: "long", label: "During long explanations" }, { id: "phone", label: "When a phone is near" }], multi: true },
@@ -410,7 +410,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { who: "sam", mood: "frustrated", label: "Sam", thought: "I have to hold everything. If I do not follow up, it does not happen. It feels like I am the only one keeping this going." },
       ], teaching: "A commitment that vanishes from working memory was never declined, but the person carrying the follow-up cannot tell the difference. Both are tired of it." },
       resonance("Does this happen to you, commitments you meant, disappearing?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Remembering is not the same as caring.", body: "A promise made in conversation is stored in the smallest, most fragile memory there is. It falls out. When it does, the person waiting reads the gap as indifference, and the person who forgot reads the accusation as unfair. Both are right about their half.", detail: ["Verbal commitments are the ones most often lost", "The fix is capture, not effort", "Sharing the system beats policing it"] },
+      { kind: "explain", heading: "Remembering is not the same as caring.", body: "A promise made in conversation is stored in the smallest, most fragile memory there is. It falls out. When it does, the person waiting reads the gap as indifference, and the person who forgot reads the accusation as unfair. Both are right about their half.", detail: ["Verbal commitments are the ones most often lost", "The fix is capture, not effort", "Sharing the system beats policing it"] },
       { kind: "personalise", questions: [
         { id: "kind", prompt: "What kind of commitment slips most?", options: [{ id: "bookings", label: "Bookings and errands" }, { id: "dates", label: "Dates and events" }, { id: "chores", label: "Household jobs" }, { id: "calls", label: "Calling somebody back" }], multi: true },
         { id: "carries", prompt: "Who ends up carrying the follow-up?", options: [{ id: "partner", label: "A partner" }, { id: "family", label: "Family" }, { id: "me", label: "Me, eventually" }, { id: "nobody", label: "Nobody, it drops" }] },
@@ -433,13 +433,13 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     characters: ["jordan", "sam"],
     professions: ["relationship-counsellor", "psychologist", "counsellor"],
     steps: [
-      { kind: "scene", stage: "hook", who: "jordan", mood: "frustrated", prop: "kitchen", eyebrow: "A small thing", heading: "It started about the dishes.", body: "Sam mentioned them. Jordan heard a verdict. The heat arrived faster than the thought, and within a minute it was about everything. Twenty minutes later Jordan cannot remember what the dishes had to do with it." },
+      { kind: "scene", stage: "hook", who: "jordan", mood: "frustrated", prop: "kitchen", heading: "It started about the dishes.", body: "Sam mentioned them. Jordan heard a verdict. The heat arrived faster than the thought, and within a minute it was about everything. Twenty minutes later Jordan cannot remember what the dishes had to do with it." },
       { kind: "perspective", heading: "Tap each of them.", body: "Both of them wanted this to go differently.", sides: [
         { who: "jordan", mood: "overwhelmed", label: "Jordan", thought: "It felt like an attack before I had a chance to think. I know it was not. By the time I could think, I had already said things." },
         { who: "sam", mood: "anxious", label: "Sam", thought: "I said one thing about the dishes. I do not understand how we got here. I am scared to raise anything now." },
       ], teaching: "In ADHD, emotion often arrives before thought and takes longer to settle. The other person experiences a small remark producing a large reaction, and starts editing what they say. Both lose something." },
       resonance("Does this happen to you, small things becoming big ones fast?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Fast in, slow out.", body: "Emotional regulation is one of the functions ADHD affects. Feelings arrive at full strength and take longer to come down, so a remark can become a fight before either person chose it. The pause is the whole skill, and it can be built, mostly in advance.", detail: ["The pause has to be agreed before the heat, not during", "Leaving the room is not losing", "Repair afterwards matters as much as the pause"] },
+      { kind: "explain", heading: "Fast in, slow out.", body: "Emotional regulation is one of the functions ADHD affects. Feelings arrive at full strength and take longer to come down, so a remark can become a fight before either person chose it. The pause is the whole skill, and it can be built, mostly in advance.", detail: ["The pause has to be agreed before the heat, not during", "Leaving the room is not losing", "Repair afterwards matters as much as the pause"] },
       { kind: "personalise", questions: [
         { id: "trigger", prompt: "What most often lights it?", options: [{ id: "criticism", label: "Anything that sounds like criticism" }, { id: "tired", label: "Being tired or hungry" }, { id: "interrupted", label: "Being interrupted" }, { id: "unfair", label: "Feeling unfairly judged" }], multi: true },
         { id: "after", prompt: "What happens afterwards?", options: [{ id: "repair", label: "We repair it" }, { id: "silence", label: "Silence for a while" }, { id: "shame", label: "I feel ashamed" }, { id: "repeat", label: "It repeats" }], multi: true },
@@ -471,7 +471,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "system", label: "No system", response: "Partly. A system is a way of getting the remembering out of Jordan’s head and into the flat." },
       ] },
       resonance(),
-      { kind: "explain", eyebrow: "The idea", heading: "A household runs on executive function.", body: "Every job, washing, bins, bills, is a chain of remembering: when, what, and whether it is done. That chain lives in working memory and time sense, which is exactly where ADHD costs most. Living with somebody, the chain often ends up in the other person’s head, silently.", detail: ["Routines fixed to a time and a place carry the remembering", "Visible states beat hidden ones, a basket, not a drawer", "Sharing the list out loud is fairer than one person holding it"] },
+      { kind: "explain", heading: "A household runs on executive function.", body: "Every job, washing, bins, bills, is a chain of remembering: when, what, and whether it is done. That chain lives in working memory and time sense, which is exactly where ADHD costs most. Living with somebody, the chain often ends up in the other person’s head, silently.", detail: ["Routines fixed to a time and a place carry the remembering", "Visible states beat hidden ones, a basket, not a drawer", "Sharing the list out loud is fairer than one person holding it"] },
       { kind: "personalise", questions: [
         { id: "worst", prompt: "Which job goes wrong most?", options: [{ id: "washing", label: "Washing" }, { id: "bills", label: "Bills and admin" }, { id: "food", label: "Food and shopping" }, { id: "tidying", label: "Tidying" }], multi: true },
         { id: "holds", prompt: "Who holds the household list?", options: [{ id: "me", label: "Me" }, { id: "partner", label: "A partner or flatmate" }, { id: "nobody", label: "Nobody, it is chaos" }, { id: "shared", label: "It is shared" }] },
@@ -502,7 +502,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "avoiding", label: "Avoiding tomorrow", response: "Sometimes. Going to bed means the day is over, and an unfinished day is hard to close." },
       ] },
       resonance("Does this happen to you, the night stretching, and the next day paying for it?"),
-      { kind: "explain", eyebrow: "The idea", heading: "A short night makes every ADHD difficulty larger.", body: "Working memory shrinks, the start threshold rises, emotion arrives faster. Many people with ADHD also run late by body clock, and find the quiet of the night the only time attention is not pulled. Both are real, and neither is a moral failing. The next day still pays.", detail: ["The problem is often the wind-down, not the falling asleep", "Light and screens hold the clock late", "A fixed wake time moves the clock more than a fixed bedtime"] },
+      { kind: "explain", heading: "A short night makes every ADHD difficulty larger.", body: "Working memory shrinks, the start threshold rises, emotion arrives faster. Many people with ADHD also run late by body clock, and find the quiet of the night the only time attention is not pulled. Both are real, and neither is a moral failing. The next day still pays.", detail: ["The problem is often the wind-down, not the falling asleep", "Light and screens hold the clock late", "A fixed wake time moves the clock more than a fixed bedtime"] },
       { kind: "personalise", questions: [
         { id: "late", prompt: "What keeps the night going?", options: [{ id: "work", label: "Finally getting work done" }, { id: "screens", label: "Screens" }, { id: "quiet", label: "The quiet" }, { id: "cannot-stop", label: "I cannot stop whatever I am doing" }], multi: true },
         { id: "next-day", prompt: "What does a short night cost you most?", options: [{ id: "attention", label: "Attention" }, { id: "mood", label: "Mood" }, { id: "starting", label: "Starting anything" }, { id: "memory", label: "Memory" }], multi: true },
@@ -532,7 +532,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "boring", label: "It gets boring", response: "Often. Interest fades, and with it the activation. Company and variety put it back." },
       ] },
       resonance("Does this happen to you, knowing movement helps, and struggling to keep it up?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Movement steadies the same functions ADHD affects.", body: "Many people find that regular exercise improves attention, settles emotion faster and helps sleep. The difficulty is not knowing that. It is that a routine is a start threshold met daily, and the ADHD brain needs the same help with it as with any other task.", detail: ["Fixed time and place carry the starting", "Company makes it activate", "Enjoyment matters more than optimal"] },
+      { kind: "explain", heading: "Movement steadies the same functions ADHD affects.", body: "Many people find that regular exercise improves attention, settles emotion faster and helps sleep. The difficulty is not knowing that. It is that a routine is a start threshold met daily, and the ADHD brain needs the same help with it as with any other task.", detail: ["Fixed time and place carry the starting", "Company makes it activate", "Enjoyment matters more than optimal"] },
       { kind: "personalise", questions: [
         { id: "kind", prompt: "What kind of movement do you actually enjoy?", options: [{ id: "team", label: "Team sport" }, { id: "solo", label: "Running, swimming, cycling" }, { id: "gym", label: "The gym" }, { id: "walking", label: "Walking" }], multi: true },
         { id: "stops", prompt: "What stops it?", options: [{ id: "starting", label: "Getting out the door" }, { id: "time", label: "Time" }, { id: "alone", label: "Doing it alone" }, { id: "boredom", label: "Boredom" }], multi: true },
@@ -563,7 +563,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "medication", label: "Her morning medication", response: "For some people, medication takes the edge off appetite during the day. Worth describing to whoever manages it, and planning food around." },
       ] },
       resonance("Does this happen to you, a whole day without eating, then a crash?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Hunger is a quiet signal for you. The plan has to live outside your body.", body: "Noticing what the body is saying is often muted with ADHD, and hyperfocus mutes it further. Waiting to feel hungry means eating at 3pm, shaky, or at 9pm, all at once. Regular food is a structure job, not a willpower job.", detail: ["Something with protein early steadies the day for many people.", "Food that needs no cooking is the food that gets eaten.", "A labelled alarm, ‘eat something’, beats a vague intention."] },
+      { kind: "explain", heading: "Hunger is a quiet signal for you. The plan has to live outside your body.", body: "Noticing what the body is saying is often muted with ADHD, and hyperfocus mutes it further. Waiting to feel hungry means eating at 3pm, shaky, or at 9pm, all at once. Regular food is a structure job, not a willpower job.", detail: ["Something with protein early steadies the day for many people.", "Food that needs no cooking is the food that gets eaten.", "A labelled alarm, ‘eat something’, beats a vague intention."] },
       { kind: "personalise", questions: [
         { id: "misses", prompt: "When do meals go missing?", options: [{ id: "morning", label: "Mornings" }, { id: "deep-work", label: "When I am deep in something" }, { id: "medication", label: "On medication days" }, { id: "evening", label: "They do not, evenings are the problem" }], multi: true },
         { id: "reach", prompt: "What could you actually eat with no cooking?", options: [{ id: "yoghurt", label: "Yoghurt" }, { id: "eggs", label: "Boiled eggs" }, { id: "leftovers", label: "Leftovers" }, { id: "nuts", label: "Nuts and fruit" }], multi: true },
@@ -594,7 +594,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "both", label: "A two-way lane", response: "Closest. Gut and brain talk both ways, and the routine that helps one end tends to help the other." },
       ] },
       resonance("Does this happen to you, the stomach going first on a hard week?"),
-      { kind: "explain", eyebrow: "The idea", heading: "The gut and the brain talk both ways. The routine helps both ends.", body: "Research links the gut to mood, sleep and stress through a two-way pathway, but it is early: there is no ADHD gut signature, and no supplement shown to change the core ADHD difficulties. What is steady in the research is plain: regular meals, fibre, water, movement and sleep. All of which are the things ADHD makes hard.", detail: ["Regular meals, not perfect ones.", "Fibre from things you already like: oats, beans, fruit, bread that is not white.", "Water within reach; a walk after eating."] },
+      { kind: "explain", heading: "The gut and the brain talk both ways. The routine helps both ends.", body: "Research links the gut to mood, sleep and stress through a two-way pathway, but it is early: there is no ADHD gut signature, and no supplement shown to change the core ADHD difficulties. What is steady in the research is plain: regular meals, fibre, water, movement and sleep. All of which are the things ADHD makes hard.", detail: ["Regular meals, not perfect ones.", "Fibre from things you already like: oats, beans, fruit, bread that is not white.", "Water within reach; a walk after eating."] },
       { kind: "personalise", questions: [
         { id: "pattern", prompt: "What does a hard week do to your gut?", options: [{ id: "knots", label: "Knots and nausea" }, { id: "skips", label: "Meals vanish" }, { id: "takeaway", label: "Takeaway every night" }, { id: "water", label: "I forget to drink" }], multi: true },
         { id: "regular", prompt: "How regular are meals on an ordinary week?", options: [{ id: "regular", label: "Fairly regular" }, { id: "chaotic", label: "Chaotic" }, { id: "depends", label: "Depends on the week" }] },
@@ -617,14 +617,14 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
     characters: ["alex", "sam"],
     professions: ["adhd-coach", "occupational-therapist"],
     steps: [
-      { kind: "scene", stage: "hook", who: "alex", mood: "embarrassed", prop: "phone", eyebrow: "The statement", heading: "Alex is paying for three things Alex forgot existed.", body: "Two streaming services, a gym in another suburb, and a late fee on a bill that lived in a drawer. None of it was decided. All of it is charged." },
+      { kind: "scene", stage: "hook", who: "alex", mood: "embarrassed", prop: "phone", heading: "Alex is paying for three things Alex forgot existed.", body: "Two streaming services, a gym in another suburb, and a late fee on a bill that lived in a drawer. None of it was decided. All of it is charged." },
       { kind: "choice", who: "alex", mood: "thinking", prop: "phone", heading: "What is the ADHD part of this?", options: [
         { id: "careless", label: "Being careless with money", response: "That is the story from outside. From inside, each of these was a small decision that never came back around." },
         { id: "impulse", label: "The gap before ‘buy’", response: "Part of it. The pause between wanting and tapping is short, and shops are built for short pauses." },
         { id: "invisible", label: "Things out of sight", response: "The larger part. A subscription and a bill in a drawer are invisible, and invisible things do not get handled." },
       ] },
       resonance("Does this happen to you, money going to things you did not decide?"),
-      { kind: "explain", eyebrow: "The idea", heading: "Money leaks through the same gaps: a short pause, and things out of sight.", body: "Impulse spending is the pause between wanting and tapping, which shops design to be short. Subscriptions and bills leak because they are invisible, and working memory does not bring them back. Neither is about caring. Both respond to structure: a longer pause, and money that handles itself." },
+      { kind: "explain", heading: "Money leaks through the same gaps: a short pause, and things out of sight.", body: "Impulse spending is the pause between wanting and tapping, which shops design to be short. Subscriptions and bills leak because they are invisible, and working memory does not bring them back. Neither is about caring. Both respond to structure: a longer pause, and money that handles itself." },
       { kind: "personalise", questions: [
         { id: "leak", prompt: "Where does yours leak?", options: [{ id: "impulse", label: "Late-night buying" }, { id: "subs", label: "Subscriptions I forgot" }, { id: "fees", label: "Late fees" }, { id: "cash", label: "Small things, many times" }], multi: true },
         { id: "pause", prompt: "Do you have any pause before buying?", options: [{ id: "none", label: "None" }, { id: "sometimes", label: "Sometimes" }, { id: "rule", label: "A rule I mostly keep" }] },
@@ -655,7 +655,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "time", label: "The time vanished", response: "Also true. Twenty minutes of getting ready feels like five. Time sense, not laziness." },
       ] },
       resonance("Does this happen to you, the door, and something always missing?"),
-      { kind: "explain", eyebrow: "The idea", heading: "The morning is a working-memory test at the worst time of day.", body: "Every thing you need is a separate item to hold, and they all come due at the door. Move the deciding to the night before, put the things in one place, and the morning stops being a test. The launchpad, a spot by the door, is the whole strategy." },
+      { kind: "explain", heading: "The morning is a working-memory test at the worst time of day.", body: "Every thing you need is a separate item to hold, and they all come due at the door. Move the deciding to the night before, put the things in one place, and the morning stops being a test. The launchpad, a spot by the door, is the whole strategy." },
       { kind: "personalise", questions: [
         { id: "missing", prompt: "What is most often missing at the door?", options: [{ id: "keys", label: "Keys" }, { id: "phone", label: "Phone or charger" }, { id: "papers", label: "A paper or a form" }, { id: "food", label: "Lunch" }], multi: true },
         { id: "leave", prompt: "How do you know when to leave?", options: [{ id: "alarm", label: "An alarm" }, { id: "feel", label: "I feel it, late" }, { id: "someone", label: "Someone tells me" }] },
@@ -685,7 +685,7 @@ export const INTERACTIVE_MODULES: readonly InteractiveModule[] = [
         { id: "quiet", label: "It is the only quiet time", response: "Often true. After a day of pulling, midnight is the first time nobody wants anything. That deserves a better use than the feed." },
       ] },
       resonance("Does this happen to you, the scroll, and the night going with it?"),
-      { kind: "explain", eyebrow: "The idea", heading: "The feed is designed for a short pause. Put distance where the pause should be.", body: "Each clip ends where the next begins, so there is never a moment to stop. Distance restores the moment: a phone in another room needs a decision to fetch, and a decision is where you win. The quiet at midnight is real; give it something that ends." },
+      { kind: "explain", heading: "The feed is designed for a short pause. Put distance where the pause should be.", body: "Each clip ends where the next begins, so there is never a moment to stop. Distance restores the moment: a phone in another room needs a decision to fetch, and a decision is where you win. The quiet at midnight is real; give it something that ends." },
       { kind: "personalise", questions: [
         { id: "pull", prompt: "What pulls hardest at night?", options: [{ id: "video", label: "Short video" }, { id: "games", label: "Games" }, { id: "chat", label: "Messages and chat" }, { id: "reading", label: "Reading everything" }], multi: true },
         { id: "where", prompt: "Where does the phone sleep?", options: [{ id: "bed", label: "In the bed" }, { id: "beside", label: "Beside the bed" }, { id: "away", label: "In another room" }] },
@@ -725,7 +725,7 @@ export function moduleText(module: InteractiveModule): string[] {
       case "scene": out.push(step.heading, step.body, step.eyebrow ?? ""); break;
       case "choice": out.push(step.heading, step.body ?? "", ...step.options.flatMap((o) => [o.label, o.response])); break;
       case "resonance": out.push(step.heading); break;
-      case "explain": out.push(step.eyebrow, step.heading, step.body, ...(step.detail ?? [])); break;
+      case "explain": out.push(step.eyebrow ?? "", step.heading, step.body, ...(step.detail ?? [])); break;
       case "personalise": out.push(...step.questions.flatMap((q) => [q.prompt, ...q.options.map((o) => o.label)])); break;
       case "strategy": out.push(step.heading, step.body, ...step.strategies.flatMap((s) => [s.title, ...s.steps])); break;
       case "reflect": out.push(...step.prompts, ...step.suggestions); break;

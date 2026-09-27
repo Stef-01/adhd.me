@@ -534,7 +534,7 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
   },
   {
     module: "src/matching/needs.ts",
-    operatorCopy: ["NEED_LABELS"],
+    operatorCopy: ["NEED_LABELS", "NEED_SHORT_LABELS"],
     notCopy:
       "The remaining exports are the facet unions, the reader and the key helper. `NEED_LABELS` is the closed vocabulary a match reason is composed from — the phrases a PATIENT reads back as why this GP was shown. Every one is written as a description of CARE rather than a finding about a person, which is the distinction this file exists to hold: \"a substance history held safely\" is a way of working, where \"substance use\" would be a clinical statement about somebody. The lexicon that reaches these labels reads a preference about care and never classifies a symptom, so the finder stays on the clinician-attribute side of G7.",
   },

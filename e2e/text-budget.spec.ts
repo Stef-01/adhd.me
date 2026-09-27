@@ -20,7 +20,8 @@ type Route = { path: string; name: string; state?: string };
 type Result = { path: string; name: string; total: number; verdict: string; longest: { w: number; tag: string; text: string }[] };
 
 test("every app screen holds under the 60-word ceiling", async ({ browser, baseURL }) => {
-  test.setTimeout(240_000);
+  // 124 screens at about two seconds each, measured 2026-09-27; four minutes ran out on the last three.
+  test.setTimeout(360_000);
   const base = baseURL!;
   const options = contextFor(base) as Parameters<typeof browser.newContext>[0];
   let context = await browser.newContext(options);

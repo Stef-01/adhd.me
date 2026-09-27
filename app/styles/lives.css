@@ -282,12 +282,14 @@
 @media (hover: hover) { .lives-world .lives-thing:not(:disabled):hover .lives-sprite { transform: scale(1.07); } }
 .lives-world .lives-thing:not(:disabled):active .lives-sprite { transform: scale(0.92); }
 .lives-trace-label { position: absolute; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; }
-.lives-trace-label.is-goal { background: #0e8345; color: #fff; }
+/* Dark on light: at 320 the round card's heading scrim reaches the goal and lays about 20% paper
+   over it, which took white on green to 3.4:1; dark green on white keeps 8:1 under it. */
+.lives-trace-label.is-goal { background: #fff; color: #0b5a31; box-shadow: inset 0 0 0 2px #0e8345, 0 2px 6px rgb(23 32 51 / 0.16); }
 
 /* The temptation: a drawn thing and its word, loud on purpose, still one button. */
 .lives-world .lives-thing.is-temptation { background: transparent; border: 0; box-shadow: none; color: #172033; font-size: 1rem; }
 .lives-world .lives-thing.is-temptation .lives-sprite { width: 82%; }
-.lives-temptation-word { padding: 4px 12px; border-radius: 999px; background: #e0616f; color: #fff; font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 4px 0 #a33d4a; }
+.lives-temptation-word { padding: 4px 12px; border-radius: 999px; background: #c43d4c; color: #fff; font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 4px 0 #8f2a37; }
 
 /* The world's text sits on paper pills so it reads over any drawing. */
 .lives-world :is(.lives-cue, .lives-sort-count, .lives-taunt) { padding: 6px 14px; border-radius: 999px; background: rgb(255 255 255 / 0.92); box-shadow: 0 2px 8px rgb(23 32 51 / 0.14); }

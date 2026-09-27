@@ -1,7 +1,7 @@
 /* Phase M (ADR 0007): the matching surfaces. Cards are 16px, controls are pills or 12px, the
    tokens are the site's; nothing here introduces a colour or a family. */
 .match-screen { max-width: 720px; margin-inline: auto; padding: 12px 0 96px; }
-.match-screen h1 { font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-weight: 430; letter-spacing: -0.035em; line-height: 1.05; font-size: clamp(1.75rem, 6.2vw, 2.5rem); margin: 8px 0 12px; }
+.match-screen h1 { font-weight: 430; letter-spacing: -0.035em; line-height: 1.05; font-size: clamp(1.75rem, 6.2vw, 2.5rem); margin: 8px 0 12px; }
 .match-screen h2 { font-size: 1.0625rem; font-weight: 680; margin: 0 0 8px; }
 .match-lede { margin: 0 0 20px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; max-width: 60ch; }
 .match-form { display: grid; gap: 18px; }
@@ -23,7 +23,6 @@
 .match-portrait img { width: 100%; height: 100%; object-fit: cover; }
 .match-card-head strong { display: block; font-size: 1.1875rem; font-weight: 700; padding-right: 64px; }
 .match-card-head small { display: block; color: var(--muted); font-size: 0.875rem; margin-top: 2px; }
-.match-position { position: absolute; top: 16px; right: 18px; font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .match-headline { margin: 14px 0 6px; font-size: 1.0625rem; font-weight: 650; line-height: 1.35; }
 .match-points { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; display: grid; gap: 4px; }
 .match-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; padding: 0; list-style: none; }

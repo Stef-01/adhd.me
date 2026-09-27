@@ -6,10 +6,11 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { hasInteracted, returnedByHistory } from "@/lib/interaction";
 import { ArrowLeft, ArrowRight, Check, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearProgress, markDone, readProgress, type Progress } from "@/learn/progress";
-import { clearCursor, deviceLearningStorage, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
+import { clearCursor, deviceLearningStorage, openingStep, readCursor, writeCursor, type LearnCursor } from "@/learn/cursor";
 import { MODULES, scenesOf, type LearnModule, type Question } from "@/learn/scenes";
 import { LearningScene, LearningExplorer, CarePathExplorer } from "./learning-scene";
 import { LearnPanes, writePane } from "./learn-panes";
@@ -62,11 +63,20 @@ function ScoreFigure({ score, outOf }: { score: number; outOf: number }) {
 
 function LessonHeading({ active, children, className = "learn-card-heading" }: { active: boolean; children: React.ReactNode; className?: string }) {
   const heading = useRef<HTMLHeadingElement>(null);
+  const mounted = useRef(false);
+  // A step moves focus to the new statement, and a keyboard step shows its ring. Arriving on a
+  // module does not (PLAN.md N12); opening one from the library does.
   useEffect(() => {
     if (!active) return;
-    heading.current?.focus({ preventScroll: true });
+    // A lesson opened after a press was asked for, so its heading takes focus and a keyboard user
+    // keeps their place; one the page arrives on was not (src/lib/interaction.ts).
+    if (mounted.current || hasInteracted()) heading.current?.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [active]);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
   return <h2 ref={heading} tabIndex={-1} className={className}>{children}</h2>;
 }
 
@@ -102,9 +112,24 @@ export function LearnModules() {
     const saved = readCursor(deviceLearningStorage);
     if (module) writePane(module.kind === "run" ? "games" : "modules");
     setOpen(module?.id ?? null);
-    setStep(module && saved?.moduleId === module.id ? saved.step : 0);
+    setStep(module ? openingStep(module.id, saved, readProgress(deviceLearningStorage).done, returnedByHistory()) : 0);
     setPicks([]);
   }, [moduleId]);
+
+  // Back straight after opening a module can land before the search params ever showed the new
+  // id, so the effect above never runs and the module stays open under a library URL. The
+  // browser's own event closes it whenever the URL it returns to names no module.
+  useEffect(() => {
+    const onPop = () => {
+      if (new URLSearchParams(window.location.search).get("module")) return;
+      internalRoute.current = undefined;
+      setOpen(null);
+      setStep(0);
+      setPicks([]);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   useEffect(() => {
     if (!hydrated || !open) return;
@@ -216,7 +241,6 @@ export function LearnModules() {
               transition={{ ...SPRING, opacity: { duration: 0.2 } }}
             >
               <motion.div className="learning-lesson-art" key={`art-${card.n}-${i === step}`} initial={reducedMotion || i !== step ? false : { opacity: .5, y: 18, rotate: -3 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ ...SPRING, delay: .08 }}><LearningScene topic={current.id} variant={i} /></motion.div>
-              <p className="learn-card-eyebrow">{card.eyebrow}</p>
               <LessonHeading active={i === step}>{card.heading}</LessonHeading>
               <p className="learn-card-body">{card.body}</p>
               {card.detail && (
@@ -277,7 +301,6 @@ export function LearnModules() {
                 transition={{ ...SPRING, opacity: { duration: 0.2 } }}
               >
                 <div className="learning-lesson-art"><LearningScene topic={current.id} reaction={answered ? chosen === q.answer ? "correct" : "reflect" : undefined} /></div>
-                <p className="learn-card-eyebrow">{current.kind === "quiz" && current.id === "myth-or-fact" ? "Myth or fact?" : "Which is it?"}</p>
                 <LessonHeading active={i === step}>{q.prompt}</LessonHeading>
                 <ul className="learn-options" aria-label="Answers">
                   {q.options.map((option, o) => {
@@ -339,7 +362,6 @@ export function LearnModules() {
             transition={{ ...SPRING, opacity: { duration: 0.2 } }}
           >
             <div className="learning-lesson-art"><LearningScene topic={current.id} reaction="complete" /></div>
-            <p className="learn-card-eyebrow">{score === questions.length ? "All of them" : score >= questions.length / 2 ? "Nicely done" : "Now you know"}</p>
             <LessonHeading active={done} className="learn-card-heading learn-score-figure">
               <ScoreFigure score={score} outOf={questions.length} />
             </LessonHeading>
