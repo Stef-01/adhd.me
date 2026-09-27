@@ -199,3 +199,17 @@
 @media (hover: hover) { .platform-shell .learn-game-names :is(a, button):hover { background: var(--stone); } }
 .platform-shell .learn-saved { margin: 20px 0 0; color: var(--muted); font-size: 0.875rem; }
 
+/* The modules pane (PLAN.md W8): the goals question, then "For you" with its reason, then one tap
+   to everything else. */
+.platform-shell .learn-goals { display: grid; gap: 14px; margin: 24px 0 8px; }
+.platform-shell .learn-goals h2 { margin: 0; font-size: 1.375rem; line-height: 1.25; }
+.platform-shell .learn-goals-done, .platform-shell .learn-change-goals { justify-self: start; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--accent-deep); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; touch-action: manipulation; }
+.platform-shell :is(.learn-goals-done, .learn-change-goals):focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+@media (hover: hover) { .platform-shell :is(.learn-goals-done, .learn-change-goals):hover { text-decoration: underline; } }
+.platform-shell .learn-for-you { margin: 24px 0 8px; }
+.platform-shell .learn-for-you-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.platform-shell .learn-panes .learn-for-you-head .lives-section-title { margin: 0; }
+.platform-shell .learn-for-you-why { margin: 4px 0 12px; color: var(--muted); font-size: 0.9375rem; }
+.platform-shell .learn-explore-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 24px 0 0; }
+.platform-shell .learn-explore[aria-expanded="true"] svg { transform: rotate(180deg); }
+.platform-shell .learn-explore-all { margin-top: 16px; }

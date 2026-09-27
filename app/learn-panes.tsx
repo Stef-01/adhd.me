@@ -24,7 +24,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, CaretDown, Check, Play } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useDragControls, useReducedMotion, type PanInfo } from "motion/react";
-import { recentlyCompleted, recommendStrategies, selectGoals, STRATEGIES, strategy, type LearningDomain, type StrategyDefinition } from "@/lives";
+import { reasonLine, recentlyCompleted, recommendStrategies, selectGoals, skipGoals, STRATEGIES, strategy, type LearningDomain, type StrategyDefinition } from "@/lives";
 import { MODULES, type LearnModule } from "@/learn/scenes";
 import type { Progress } from "@/learn/progress";
 import type { LearnCursor } from "@/learn/cursor";
@@ -382,14 +382,22 @@ function GameTile({ game, start }: { game: GameItem; start: (id: string) => void
   );
 }
 
+/**
+ * The modules pane (PLAN.md W8): the hero, then the goals question until it is answered or skipped,
+ * then "For you" directly under it with one line that says what the picks came from, so a tap on a
+ * goal shows its effect in the same glance. Everything else is one tap away under "Explore all
+ * modules", which takes their place while it is open, as "All games" does on the games pane.
+ */
 function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMotion }: { progress: Progress; cursor: LearnCursor | null; completed: string | null; hydrated: boolean; start: (id: string, resume?: boolean) => void; reducedMotion: boolean }) {
   const { profile, apply } = useProfile();
+  const [editing, setEditing] = useState(false);
+  const [explore, setExplore] = useState(false);
   const reads = MODULES.filter((m) => m.kind !== "run");
   const completedRead = completed && MODULES.find((m) => m.id === completed)?.kind !== "run" ? completed : null;
   const done = profile?.completedModuleIds ?? [];
   const goals = profile?.selectedGoals ?? [];
   const toggle = (id: LearningDomain) => apply((s) => selectGoals(s, goals.includes(id) ? goals.filter((g) => g !== id) : [...goals, id].slice(0, 3)));
-  const forYou = useMemo(() => {
+  const picks = useMemo(() => {
     if (!profile) return [];
     return recommendStrategies(
       {
@@ -403,82 +411,144 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
         selectedGoals: profile.selectedGoals,
       },
       STRATEGIES,
-    )
-      .filter((r) => r.score > 0)
-      .map((r) => r.strategy);
+    ).filter((r) => r.score > 0);
   }, [profile]);
+  const why = reasonLine(picks, (g) => GOALS.find((x) => x.id === g)?.label ?? g);
+  const forYou = why ? picks.map((r) => r.strategy) : [];
+  const ask = hydrated && profile !== null && (editing || (goals.length === 0 && !profile.goalsSkipped));
   const started = profile?.saved.find((s) => s.status === "started");
+  const toolkit = (profile?.personalStrategies.length ?? 0) > 0;
   const quick = STRATEGIES.filter((s) => s.estimatedMinutes <= 2);
   const continuing = cursor ? MODULES.find((m) => m.id === cursor.moduleId) : undefined;
 
   return (
     <>
       <Completion completed={completedRead} start={start} />
-      <div className="learning-feature">
-        <div>
-          <h2>Get to know ADHD.</h2>
-          <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "adhd", Boolean(cursor))}>
-            {continuing ? `Continue ${continuing.title}` : "Start here"} <ArrowRight size={18} aria-hidden="true" />
-          </button>
-        </div>
-        <LearningScene />
-      </div>
-      {started && (
+      {!explore && (
+        <>
+          <div className="learning-feature">
+            <div>
+              <h2>Get to know ADHD.</h2>
+              <button className="learn-primary" type="button" onClick={() => start(cursor?.moduleId ?? "adhd", Boolean(cursor))}>
+                {continuing ? `Continue ${continuing.title}` : "Start"} <ArrowRight size={18} aria-hidden="true" />
+              </button>
+            </div>
+            <LearningScene />
+          </div>
+          {started && (
+            <ul className="lives-rows">
+              <li>
+                <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(strategy(started.strategyId).moduleId)}`}>
+                  <span className="lives-row-text">
+                    <strong>Continue {strategy(started.strategyId).title}</strong>
+                    <span>{strategy(started.strategyId).estimatedMinutes} min</span>
+                  </span>
+                  <ArrowRight size={16} weight="bold" aria-hidden="true" />
+                </Link>
+              </li>
+            </ul>
+          )}
+          {ask && (
+            <section className="learn-goals" aria-labelledby="learn-goals-title">
+              <h2 id="learn-goals-title" className="t-question">What do you want help with?</h2>
+              <div className="lives-chips" role="group" aria-labelledby="learn-goals-title">
+                {GOALS.map((g) => (
+                  <button
+                key={g.id}
+                type="button"
+                className="lives-chip"
+                aria-pressed={goals.includes(g.id)}
+                onClick={() => {
+                  // The question stays open until "Done", so "For you" changes under it as goals are tapped.
+                  setEditing(true);
+                  toggle(g.id);
+                }}
+              >
+                    {g.label}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="learn-goals-done"
+                onClick={() => {
+                  if (goals.length === 0) apply((s) => skipGoals(s));
+                  setEditing(false);
+                }}
+              >
+                {goals.length === 0 ? "Skip" : "Done"}
+              </button>
+            </section>
+          )}
+          {forYou.length > 0 && (
+            <section className="learn-for-you" aria-labelledby="learn-for-you-title" data-testid="learn-for-you">
+              <div className="learn-for-you-head">
+                <h2 id="learn-for-you-title" className="lives-section-title">For you</h2>
+                {!ask && (
+                  <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
+                    Change goals
+                  </button>
+                )}
+              </div>
+              <p className="learn-for-you-why">{why}</p>
+              <StrategyRows strategies={forYou} done={done} />
+            </section>
+          )}
+        </>
+      )}
+      {toolkit && !explore && (
         <ul className="lives-rows">
           <li>
-            <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(strategy(started.strategyId).moduleId)}`}>
+            <Link className="lives-row" href="/lives/toolkit">
               <span className="lives-row-text">
-                <strong>Continue {strategy(started.strategyId).title}</strong>
-                <span>{strategy(started.strategyId).estimatedMinutes} min</span>
+                <strong>Your Toolkit</strong>
               </span>
               <ArrowRight size={16} weight="bold" aria-hidden="true" />
             </Link>
           </li>
         </ul>
       )}
-      {forYou.length > 0 && <Shelf title="For you" strategies={forYou} done={done} open />}
-      <details className="lives-shelf learn-shelf" data-shelf="reads">
-        <summary className="lives-section-title">Understand ADHD</summary>
-      <ol className="learn-stack" data-testid="learn-reads">
-        {reads.map((module, index) => (
-          <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
-        ))}
-      </ol>
-      </details>
-      <Shelf title="Two-minute tools" strategies={quick} done={done} />
-      {STRATEGY_SHELVES.map((shelf) => {
-        const rows = STRATEGIES.filter((s) => s.domains.some((d) => shelf.domains.includes(d)) && !quick.includes(s));
-        return rows.length ? <Shelf key={shelf.title} title={shelf.title} strategies={rows} done={done} /> : null;
-      })}
-      <ul className="lives-rows learn-more-rows">
-        <li>
-          <Link className="lives-row" href="/lives/toolkit">
-            <span className="lives-row-text">
-              <strong>Your Toolkit</strong>
-            </span>
-            <ArrowRight size={16} weight="bold" aria-hidden="true" />
-          </Link>
-        </li>
-        <li>
-          <Link className="lives-row" href="/approach/meditate">
-            <span className="lives-row-text">
-              <strong>A quiet moment</strong>
-              <span>5 min</span>
-            </span>
-            <ArrowRight size={16} weight="bold" aria-hidden="true" />
-          </Link>
-        </li>
-      </ul>
-      <details className="life-why lives-goals">
-        <summary>Your goals</summary>
-        <div className="lives-chips" role="group" aria-label="Goals">
-          {GOALS.map((g) => (
-            <button key={g.id} type="button" className="lives-chip" aria-pressed={goals.includes(g.id)} onClick={() => toggle(g.id)}>
-              {g.label}
-            </button>
-          ))}
+      <div className="learn-explore-row">
+        <button type="button" className="learn-secondary learn-explore" aria-expanded={explore} onClick={() => setExplore(!explore)} data-testid="learn-explore">
+          Explore all modules
+          <CaretDown size={16} weight="bold" aria-hidden="true" />
+        </button>
+        {/* After a skip with nothing else to go on there is no "For you" to sit beside, so the way
+            back to the question sits here. */}
+        {hydrated && !ask && !explore && forYou.length === 0 && (
+          <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
+            Choose goals
+          </button>
+        )}
+      </div>
+      {explore && (
+        <div className="learn-explore-all">
+          <details className="lives-shelf learn-shelf" data-shelf="reads">
+            <summary className="lives-section-title">The basics</summary>
+            <ol className="learn-stack" data-testid="learn-reads">
+              {reads.map((module, index) => (
+                <Tile key={module.id} module={module} done={progress.done.includes(module.id)} hydrated={hydrated} index={index} start={start} reducedMotion={reducedMotion} />
+              ))}
+            </ol>
+          </details>
+          <Shelf title="Two-minute tools" strategies={quick} done={done} />
+          {STRATEGY_SHELVES.map((shelf) => {
+            const rows = STRATEGIES.filter((s) => s.domains.some((d) => shelf.domains.includes(d)) && !quick.includes(s));
+            return rows.length ? <Shelf key={shelf.title} title={shelf.title} strategies={rows} done={done} /> : null;
+          })}
+          <ul className="lives-rows learn-more-rows">
+            <li>
+              <Link className="lives-row" href="/approach/meditate">
+                <span className="lives-row-text">
+                  <strong>A quiet moment</strong>
+                  <span>5 min</span>
+                </span>
+                <ArrowRight size={16} weight="bold" aria-hidden="true" />
+              </Link>
+            </li>
+          </ul>
         </div>
-      </details>
+      )}
     </>
   );
 }
@@ -490,23 +560,27 @@ function Shelf({ title, strategies, done, open = false }: { title: string; strat
       <summary className="lives-section-title" id={id}>
         {title}
       </summary>
-      <ul className="lives-rows">
-        {strategies.map((s) => (
-          <li key={s.id}>
-            <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(s.moduleId)}`} data-strategy={s.id}>
-              <span className="lives-row-text">
-                <strong>{s.title}</strong>
-                <span>
-                  {s.estimatedMinutes} min{done.includes(s.moduleId) ? " · done" : ""}
-                </span>
-              </span>
-              <ArrowRight size={16} weight="bold" aria-hidden="true" />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <StrategyRows strategies={strategies} done={done} />
     </details>
   );
 }
 
-export { deviceLearningStorage };
+function StrategyRows({ strategies, done }: { strategies: readonly StrategyDefinition[]; done: readonly string[] }) {
+  return (
+    <ul className="lives-rows">
+      {strategies.map((s) => (
+        <li key={s.id}>
+          <Link className="lives-row" href={`/lives/learn?module=${encodeURIComponent(s.moduleId)}`} data-strategy={s.id}>
+            <span className="lives-row-text">
+              <strong>{s.title}</strong>
+              <span>
+                {s.estimatedMinutes} min{done.includes(s.moduleId) ? " · done" : ""}
+              </span>
+            </span>
+            <ArrowRight size={16} weight="bold" aria-hidden="true" />
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}

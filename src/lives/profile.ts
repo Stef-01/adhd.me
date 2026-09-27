@@ -29,6 +29,7 @@ export function readProfile(storage: Pick<Storage, "getItem">): LearningProfile 
       saved: Array.isArray(parsed.saved) ? (parsed.saved.filter(isObject) as unknown as SavedLearningItem[]) : e.saved,
       highScore: typeof parsed.highScore === "number" ? parsed.highScore : 0,
       completedAt: isObject(parsed.completedAt) ? (parsed.completedAt as Record<string, number>) : {},
+      ...(parsed.goalsSkipped === true ? { goalsSkipped: true as const } : {}),
     };
   } catch {
     return emptyProfile();
@@ -56,6 +57,11 @@ export function recordResonance(storage: ProfileStorage, signal: Omit<ResonanceS
 
 export function selectGoals(storage: ProfileStorage, goals: readonly LearningDomain[]): LearningProfile {
   return update(storage, (p) => ({ ...p, selectedGoals: goals.slice(0, 3) }));
+}
+
+/** Learn's goals question, answered with "Skip" (PLAN.md W8): it stops asking. */
+export function skipGoals(storage: ProfileStorage): LearningProfile {
+  return update(storage, (p) => ({ ...p, goalsSkipped: true }));
 }
 
 /** §7 SAVE: into the Learn Later queue and the Toolkit as "saved". */

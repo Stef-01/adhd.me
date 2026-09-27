@@ -101,6 +101,10 @@ export const EXTRA = [
   { path: "/approach?module=adhd", name: "A read module, the ADHD card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
   { path: "/approach?pane=modules", name: "Learn, the modules pane" },
+  // The modules pane with three goals chosen (PLAN.md W8): "For you" and its longest reason line.
+  // And with every shelf one tap away, opened.
+  { path: "/approach?pane=modules", state: "modules-goals", name: "Learn, modules with goals" },
+  { path: "/approach?pane=modules", state: "modules-explore", name: "Learn, all modules" },
   // The games pane with "All games" open (PLAN.md W7): on the eight lives, where it opens, and on
   // the largest group. One game of each kind is played, so the ticks and the page foot show.
   { path: "/approach?pane=games", state: "games-all", name: "Learn, all games" },
@@ -367,6 +371,15 @@ export async function reach(page, route, base) {
     await page.reload({ waitUntil: "networkidle" });
     await page.getByRole("button", { name: "How it fills in" }).click({ timeout: 8000 });
     await page.locator(".map-fills-list").waitFor({ timeout: 8000 });
+  }
+  if (route.state === "modules-goals" || route.state === "modules-explore") {
+    await page.evaluate(() => localStorage.setItem("adhdme.lives.v1", JSON.stringify({ v: 1, selectedGoals: ["task_initiation", "working_memory", "sleep"] })));
+    await page.reload({ waitUntil: "networkidle" });
+    await page.getByTestId("learn-for-you").waitFor({ timeout: 8000 });
+    if (route.state === "modules-explore") {
+      await page.getByTestId("learn-explore").click({ timeout: 8000 });
+      await page.getByTestId("learn-reads").waitFor({ state: "attached", timeout: 8000 });
+    }
   }
   if (route.state === "games-all" || route.state === "games-all-open") {
     await page.evaluate(() => {

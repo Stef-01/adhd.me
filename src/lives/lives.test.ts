@@ -9,9 +9,9 @@ import { difficultyFor, MAX_DIFFICULTY } from "./difficulty";
 import { eligible, FUN_SHARE, nextGame } from "./director";
 import { GAMES, VERTICAL_SLICE_GAME_IDS } from "./games";
 import { MODULES } from "./modules";
-import { completeModule, dismissStrategy, emptyProfile, PROFILE_KEY, readProfile, recentlyCompleted, recordHighScore, recordResonance, removeFromToolkit, saveStrategy, selectGoals, startModule } from "./profile";
+import { completeModule, dismissStrategy, emptyProfile, PROFILE_KEY, readProfile, recentlyCompleted, recordHighScore, recordResonance, removeFromToolkit, saveStrategy, selectGoals, skipGoals, startModule } from "./profile";
 import { gameSeed, hashSeed, seededRng } from "./random";
-import { MAX_RECOMMENDATIONS, recommendStrategies, WEIGHTS } from "./recommend";
+import { MAX_RECOMMENDATIONS, reasonLine, recommendStrategies, WEIGHTS } from "./recommend";
 import { fasterAfter, fasterWord, scoreFor, STARTING_LIVES } from "./score";
 import { allowedMs, beginGame, resolveGame, startSession } from "./session";
 import { STRATEGIES, strategy, VERTICAL_SLICE_STRATEGY_IDS } from "./strategies";
@@ -317,7 +317,7 @@ describe("recommendation engine (§31–§35, §108)", () => {
     const me = recommendStrategies({ ...base, resonanceSignals: [{ sourceType: "game", sourceId: "zoe_dont_send", response: "this_is_me", createdAt: 0 }] }, STRATEGIES);
     expect(me[0]!.strategy.id).toBe("pause_before_send");
     expect(me[0]!.score).toBe(WEIGHTS.thisIsMe);
-    expect(me[0]!.reasons).toContain("this is me: zoe_dont_send");
+    expect(me[0]!.reasons).toContain("game:zoe_dont_send");
     const not = recommendStrategies({ ...base, encounteredGameIds: ["zoe_dont_send"], resonanceSignals: [{ sourceType: "game", sourceId: "zoe_dont_send", response: "not_me", createdAt: 0 }] }, STRATEGIES);
     expect(not.map((r) => r.strategy.id)).not.toContain("pause_before_send");
   });
@@ -327,9 +327,34 @@ describe("recommendation engine (§31–§35, §108)", () => {
     expect(WEIGHTS.encounteredGame).toBeGreaterThan(WEIGHTS.encounteredCharacter);
     const goal = recommendStrategies({ ...base, selectedGoals: ["task_initiation"] }, STRATEGIES);
     expect(goal[0]!.strategy.domains).toContain("task_initiation");
-    expect(goal[0]!.reasons).toContain("matches a chosen goal");
+    expect(goal[0]!.reasons).toContain("goal:task_initiation");
     const sometimes = recommendStrategies({ ...base, resonanceSignals: [{ sourceType: "character", sourceId: "nina", response: "sometimes", createdAt: 0 }] }, STRATEGIES);
     expect(sometimes[0]!.score).toBe(WEIGHTS.sometimes);
+    expect(sometimes[0]!.reasons).toContain("character:nina");
+  });
+
+  it("says in one line what the picks came from, naming the goals, and nothing when nobody chose anything (W8)", () => {
+    const label = (g: string) => ({ task_initiation: "Getting started", working_memory: "Remembering things", sleep: "Sleep" })[g] ?? g;
+    const goals = recommendStrategies({ ...base, selectedGoals: ["task_initiation", "working_memory", "sleep"] }, STRATEGIES);
+    const line = reasonLine(goals, label)!;
+    expect(line).toMatch(/^From your goals: .+\.$/);
+    expect(line.split(/\s+/).length).toBeLessThanOrEqual(8);
+    const like = recommendStrategies({ ...base, resonanceSignals: [{ sourceType: "character", sourceId: "mia", response: "sometimes", createdAt: 0 }] }, STRATEGIES);
+    expect(reasonLine(like, label)).toBe("From the characters you said are like you.");
+    const both = recommendStrategies({ ...base, selectedGoals: ["sleep"], resonanceSignals: [{ sourceType: "game", sourceId: "zoe_dont_send", response: "this_is_me", createdAt: 0 }] }, STRATEGIES);
+    expect(reasonLine(both, label)).toBe("From your goals and characters like you.");
+    expect(reasonLine(recommendStrategies(base, STRATEGIES).filter((r) => r.score > 0), label)).toBeNull();
+    for (const l of [line, reasonLine(like, label)!, reasonLine(both, label)!]) expect(lintLandingCopy(l), l).toEqual([]);
+  });
+
+  it("a skipped goals question stays skipped, and nothing else can set the flag", () => {
+    const m = new Map<string, string>();
+    const s = { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => { m.set(k, v); }, removeItem: (k: string) => { m.delete(k); } };
+    expect(readProfile(s).goalsSkipped).toBeUndefined();
+    skipGoals(s);
+    expect(readProfile(s).goalsSkipped).toBe(true);
+    m.set(PROFILE_KEY, JSON.stringify({ ...emptyProfile(), goalsSkipped: "yes" }));
+    expect(readProfile(s).goalsSkipped).toBeUndefined();
   });
 
   it("dismissed strategies never return; saved and recently completed sink", () => {

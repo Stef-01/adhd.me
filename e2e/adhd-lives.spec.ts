@@ -130,7 +130,12 @@ test("E2E Lives 3: the eight lives, Learn's shelves and the lab all stand on the
   await mia.locator("summary").click();
   await mia.getByRole("button", { name: "Sometimes" }).click();
   await page.goto("/approach?pane=modules");
-  await expect(page.locator("summary", { hasText: "For you" })).toBeVisible();
+  // "Sometimes" is a pick: For you shows, says where it came from, and the goals question stays above it (PLAN.md W8).
+  const forYou = page.getByTestId("learn-for-you");
+  await expect(forYou.getByRole("heading", { name: "For you" })).toBeVisible();
+  await expect(forYou).toContainText("From the characters you said are like you.");
+  await expect(page.getByRole("heading", { name: "What do you want help with?" })).toBeVisible();
+  await page.getByTestId("learn-explore").click();
   await expect(page.locator("summary", { hasText: "Two-minute tools" })).toBeVisible();
   await page.goto("/lives/lab");
   await expect(page.getByRole("heading", { name: "Ranking" })).toBeVisible();

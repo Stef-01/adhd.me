@@ -186,6 +186,8 @@ export interface LearningProfile {
   readonly highScore: number;
   /** Module ids completed with a timestamp, for §34's "completed recently". */
   readonly completedAt: Readonly<Record<string, number>>;
+  /** Learn's goals question was skipped (PLAN.md W8): it stops asking. Absent until then. */
+  readonly goalsSkipped?: true;
 }
 
 /** §31. */

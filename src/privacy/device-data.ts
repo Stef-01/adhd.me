@@ -176,7 +176,8 @@ const validLives = (v: unknown): v is LearningProfile =>
   arrayOf((p) => isObject(p) && isString(p.strategyId) && isNumber(p.addedAt) && oneOf(["saved", "trying", "useful", "not_useful"])(p.status) && optional(p.customNote, isString) && optional(p.personalConfig, isObject))(v.personalStrategies) &&
   arrayOf((s) => isObject(s) && isString(s.strategyId) && isNumber(s.savedAt) && oneOf(["score_screen", "character", "learn", "module"])(s.source) && oneOf(["saved", "started", "completed", "dismissed"])(s.status) && optional(s.relatedCharacterId, isString) && optional(s.relatedGameId, isString))(v.saved) &&
   isNumber(v.highScore) &&
-  recordOf(isNumber)(v.completedAt);
+  recordOf(isNumber)(v.completedAt) &&
+  optional(v.goalsSkipped, (x) => x === true);
 
 const validLearn = (v: unknown): v is Progress =>
   isObject(v) && v.v === PROGRESS_VERSION && arrayOf(isString)(v.done) && optional(v.at, recordOf((d) => isString(d) && /^\d{4}-\d{2}-\d{2}$/.test(d)));
