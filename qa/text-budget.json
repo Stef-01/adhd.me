@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T09:29:43.216Z",
-  "base": "http://localhost:3100",
+  "measuredAt": "2026-09-27T10:10:10.619Z",
+  "base": "http://localhost:3310",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -449,26 +449,21 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 9,
-      "fold": 9,
+      "total": 2,
+      "fold": 2,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
-        {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "DELETE DRAFTS!",
-          "tag": "p"
-        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "PIGEONS!",
+          "tag": "p"
         }
       ]
     },
@@ -503,25 +498,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 20,
+      "fold": 20,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
+          "w": 3,
+          "text": "let it out",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Let it out",
           "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "SWAT!",
+          "w": 2,
+          "text": "TISSUE UP!",
           "tag": "p"
         }
       ]
@@ -1961,12 +1956,17 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, reply",
       "state": "zoe-reply",
-      "total": 18,
-      "fold": 18,
+      "total": 30,
+      "fold": 30,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Oh, that’s a shame. Sure. Is Friday free?",
+          "tag": "p"
+        },
         {
           "w": 7,
           "text": "Can we move dinner? Work ran late.",
@@ -1976,11 +1976,6 @@
           "w": 4,
           "text": "Zoe · Before you send",
           "tag": "span"
-        },
-        {
-          "w": 4,
-          "text": "Said what you meant.",
-          "tag": "h1"
         }
       ]
     },
@@ -2901,16 +2896,16 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 10,
-      "fold": 10,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DUCK OR GOOSE!",
-          "tag": "p"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
           "w": 1,
@@ -2919,7 +2914,7 @@
         },
         {
           "w": 1,
-          "text": "quack",
+          "text": "POP!",
           "tag": "p"
         }
       ]

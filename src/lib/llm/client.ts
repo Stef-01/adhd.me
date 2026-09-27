@@ -34,6 +34,9 @@ export const PRICES: Record<string, { input: number; cached: number; output: num
 };
 export const TIMEOUT_MS = 20_000;
 export const modelOf = (env: Record<string, string | undefined>) => env.ADHDME_LLM_MODEL ?? "gpt-5-nano";
+/** `ADHDME_LLM_LEVEL` in effect: 0 unless there is a key, or the e2e cassettes stand in for one. */
+export const levelOf = (env: Record<string, string | undefined>) =>
+  env.OPENAI_API_KEY || env.ADHDME_LLM_CASSETTES === "1" ? Number(env.ADHDME_LLM_LEVEL) || 0 : 0;
 
 export class IncompleteError extends Error { name = "IncompleteError"; }
 export class RefusalError extends Error { name = "RefusalError"; }

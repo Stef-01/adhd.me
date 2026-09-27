@@ -34,7 +34,8 @@ const NearbyMap = dynamic(() => import("./nearby-map").then((m) => m.NearbyMap),
   loading: () => <div className="nearby-map nearby-map-loading" aria-hidden="true" />,
 });
 import { ClinicianPortrait, distinguishingSignals, EASE_OUT, MotionScreen, PRESS_SPRING, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
-import { HeardRow } from "./heard-row";
+import { HeardRow, ReadingLine } from "./heard-row";
+import { FINDER_COPY } from "../finder-copy";
 
 /* ROUND 1 OF THE MINIMALISM PASS COLLAPSED FOUR SCREENS INTO THIS ONE.
    Gone: `review` (read your own words back, then press continue), `matching` (a 4.25s
@@ -78,6 +79,7 @@ export function ResultsStage({
   heard,
   removedHeard,
   onToggleHeard,
+  reading = false,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -122,6 +124,8 @@ export function ResultsStage({
   heard: readonly HeardChip[];
   removedHeard: ReadonlySet<string>;
   onToggleHeard: (key: string) => void;
+  /** The read route is still reading the words: the chips' place says so and three blank rows hold the list's. */
+  reading?: boolean;
 }) {
   /** The filters the strip cannot show — a language, a distance, a way of working — as a count on the Filters pill. The kind has its own pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length - (filters.professions.length > 0 ? 1 : 0);
@@ -133,13 +137,16 @@ export function ResultsStage({
   // the place, and "Re-ranked:" once the list is not the one the screen arrived with — `matches`
   // is derived from (request, origin, roster), so a new identity IS a re-rank, and the counter
   // re-announces a re-rank that repeats the same count.
-  const arrivalMatches = useRef(matches);
+  // The list arrives when the read does, so a list ranked while the read ran is no arrival.
+  const arrivalMatches = useRef<readonly Clinician[] | null>(null);
   const [reranks, setReranks] = useState(0);
   useEffect(() => {
+    if (reading) return;
+    arrivalMatches.current ??= matches;
     if (matches === arrivalMatches.current) return;
     setReranks((n) => n + 1);
-  }, [matches]);
-  const line = resultsAnnouncement({ count: matches.length, suburb: origin?.suburb ?? null, reranked: reranks > 0 });
+  }, [matches, reading]);
+  const line = reading ? FINDER_COPY.reading.text : resultsAnnouncement({ count: matches.length, suburb: origin?.suburb ?? null, reranked: reranks > 0 });
 
   /**
    * O234: a stop on the map, tapped. The row is brought into view and given FOCUS — the ring is
@@ -148,6 +155,14 @@ export function ResultsStage({
    * they did not choose from a number; finding the row lets them read it first.
    */
   const list = useRef<HTMLDivElement | null>(null);
+  /** Arrival focus waits for the rows when the read held them back. */
+  const heldArrival = useRef(reading && focusOnArrival);
+  useEffect(() => {
+    if (reading || !heldArrival.current) return;
+    heldArrival.current = false;
+    const active = document.activeElement;
+    if (!active || active === document.body || active.matches("h1")) list.current?.querySelector<HTMLElement>(".clinician-row")?.focus({ preventScroll: true });
+  }, [reading]);
   /**
    * O238 (founder-directed, "make map open up with a button, it causes too much clutter … the
    * north star is simplicity"): the map is behind one control on the list's own header, closed by
@@ -215,7 +230,7 @@ export function ResultsStage({
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
-        {!empty && <HeardRow chips={heard} removed={removedHeard} onToggle={onToggleHeard} />}
+        {!empty && (reading ? <ReadingLine /> : <HeardRow chips={heard} removed={removedHeard} onToggle={onToggleHeard} />)}
       </div>
 
       {/* O244: the questions, in the sheet. Tapping one appends the answer in the reader's own
@@ -333,6 +348,7 @@ export function ResultsStage({
       <>
       <motion.div
         className="results-list-head"
+        style={reading ? { visibility: "hidden" } : undefined}
         initial={reducedMotion ? false : { opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
@@ -454,7 +470,8 @@ export function ResultsStage({
             physiologists left an occupational therapist standing at the top of the list of
             exercise physiologists, reproduced one run in three. A wrong row on screen for
             good is worse than a missing 160ms fade, so the rows carry no exit. */}
-        {shown.map((item, index) => {
+        {reading && [0, 1, 2].map((n) => <div key={n} className="row-skeleton" aria-hidden="true" />)}
+        {!reading && shown.map((item, index) => {
           // `shown` is always a prefix slice of `matches`, so the indices align.
           const itemMatch = personalized[index]!;
           const away = distanceTo(item, origin);
@@ -548,7 +565,7 @@ export function ResultsStage({
       </div>
 
       </div>
-      {matches.length > shown.length && (
+      {!reading && matches.length > shown.length && (
         <motion.button
           className="show-all"
           type="button"

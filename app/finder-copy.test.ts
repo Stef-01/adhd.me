@@ -26,7 +26,15 @@ const chips: { label: string; short: string; spoken: string }[] = [
 
 describe("FINDER_COPY", () => {
   it("keeps every fixed string within its cap", () => {
-    expect(words(FINDER_COPY.heardRow.text)).toBeLessThanOrEqual(FINDER_COPY.heardRow.cap);
+    for (const copy of [FINDER_COPY.heardRow, FINDER_COPY.reading, FINDER_COPY.readingLate]) {
+      expect(words(copy.text), copy.text).toBeLessThanOrEqual(copy.cap);
+    }
+  });
+
+  it("says at most 4 words while the read runs, and at most 6 more after 6 seconds, as §15 caps them", () => {
+    expect(FINDER_COPY.reading.cap).toBeLessThanOrEqual(4);
+    expect(FINDER_COPY.readingLate.cap).toBeLessThanOrEqual(6);
+    expect(FINDER_COPY.readingLate.afterMs).toBe(6000);
   });
 
   it("shows at most four chips of at most two words, as LLM-MATCHING-PLAN §15 caps them", () => {

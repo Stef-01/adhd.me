@@ -535,7 +535,7 @@ server-side setting (`ADHDME_LLM_LEVEL=0..5`); at 0 the finder is exactly today'
 | 6 | L5 shuffles and reason line, UI reason slot | ~$1.00 | L5 gates; copy caps pass |
 | 7 | L6 scale with Batch | ~$1.50 | Break-point map complete |
 
-## 16a. As built, 2026-09-27 (step 0 and the L1 reader)
+## 16a. As built, 2026-09-27 (step 0, the L1 reader, step 2)
 
 Built: `src/lib/llm/client.ts` (128 lines), `meter.ts` (75), `cache.ts` (27);
 `src/lib/matching/llm-read.ts` (128, with the key meaning lines); `eval/metrics.ts` (104),
@@ -577,6 +577,34 @@ The weak classes are exactly where the lexicon cannot hear: C7 (NDCG@3 0.467, hi
 **The founder's first live run:** put `OPENAI_API_KEY` in `.env.local`, leave
 `ADHDME_LLM_MODEL` unset so the prompt hash matches the committed P0 report, then run
 `pnpm match:eval --level L1 --phase P1 --live`, and P2 after it passes.
+
+**Step 2 as built.** `app/api/finder/read/route.ts` (30 lines): POST `{ text }` returns
+`{ keys, source }`. `levelOf` in `client.ts` reads `ADHDME_LLM_LEVEL` and gives 0 with no
+`OPENAI_API_KEY`, so level 1 without a key is level 0: the lexicon, no network. At 1 the route calls
+`readRequest` with no cache, and any failure answers with the lexicon's keys and `source: "lexicon"`.
+Text over 2,000 characters (the /match narrative's cap; the finder had none) gets a 400. After 20
+paid reads a minute from one caller it answers with the lexicon (in memory, per server instance).
+`ADHDME_LLM_CASSETTES=1` answers from the committed cassettes, and other words with the answer that
+reads as the lexicon does; the cassettes are imported now, not read from their folder, so a server
+build carries them.
+
+The finder takes the level as a prop of the prerendered `/`, so it is fixed at build: `/` stays
+static, and on Vercel an env change takes a redeploy anyway. The route checks the level again on
+every request, so a page built at 1 over a route at 0 gets the lexicon's answer, which the finder
+treats as level 0. At 1 the results post the words once per new request and hold the list: "Reading
+what you asked" where the chips go, three blank rows at a row's height, "A few more seconds" under
+the line at 6 seconds, and the finder's own read at 12. The model's keys become signals through
+`needForKey`, unweighted as in the eval: the lexicon path's rarity and clarifier weighting do not
+apply to them. A lexicon answer, or none, leaves exactly the level 0 list. The same read feeds the
+row reasons, the profile's evidence and missed asks and the compare table (`matchEvidence`,
+`missedAsks` and `getPersonalizedMatch` take an optional `needs`). Chip removal makes no request.
+Still on the lexicon's read at level 1: the tie note, the rank bands, the order note and the
+clarifiers, as they already were with a chip out. On a phone, when the chips wrap to a second row,
+the list moves down by that row as they arrive.
+
+`e2e/finder-read.spec.ts` runs level 0 on the suite's server and level 1 by interception, because
+one build carries one level: the served page gets `readLevel: 1`, and the route's own handler,
+run in the test at level 1 in cassette mode, answers `/api/finder/read`.
 
 ## 17. Sources
 

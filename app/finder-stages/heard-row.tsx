@@ -1,8 +1,24 @@
 "use client";
 
 import { Plus, X } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
 import { type HeardChip } from "@/finder/heard";
 import { FINDER_COPY } from "../finder-copy";
+
+/** The row's place while the read runs: one line, and a second after six seconds, in the chips' height. */
+export function ReadingLine() {
+  const [late, setLate] = useState(false);
+  useEffect(() => {
+    const timer = window.setTimeout(() => setLate(true), FINDER_COPY.readingLate.afterMs);
+    return () => window.clearTimeout(timer);
+  }, []);
+  return (
+    <p className="reading-line">
+      <span>{FINDER_COPY.reading.text}</span>
+      {late && <span>{FINDER_COPY.readingLate.text}</span>}
+    </p>
+  );
+}
 
 /**
  * What the request was read as asking for. A tap takes a facet out of the ranking and the list

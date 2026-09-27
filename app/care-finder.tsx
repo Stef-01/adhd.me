@@ -27,7 +27,7 @@ import { readModel } from "@/model/store";
 import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
-import { facetKey, shortLabel } from "@/matching/needs";
+import { facetKey, needForKey, shortLabel, type NeedSignal } from "@/matching/needs";
 import { heardChips } from "@/finder/heard";
 import { FINDER_COPY } from "./finder-copy";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
@@ -77,8 +77,11 @@ import { BookingStage } from "./finder-stages/booking-stage";
 
 const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
+/** At level 1, how long the results wait for the read before ranking on the finder's own. */
+const READ_TIMEOUT_MS = 12_000;
 
-export function CareFinder() {
+/** @param readLevel `ADHDME_LLM_LEVEL` in effect (LLM-MATCHING-PLAN §15): at 0 the finder reads the words itself and asks nothing. */
+export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
   const reducedMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
@@ -186,7 +189,28 @@ export function CareFinder() {
    */
   const [removedHeard, setRemovedHeard] = useState<{ request: string; keys: readonly string[] }>({ request: "", keys: [] });
   const removed = useMemo(() => new Set(removedHeard.request === request ? removedHeard.keys : []), [removedHeard, request]);
-  const read = useMemo(() => needsFor(request, roster), [request, roster]);
+  /**
+   * Level 1: the results ask `/api/finder/read` once for each new set of words and wait for it.
+   * Its keys are the read everything below runs on; with no answer, or the lexicon's, it is the
+   * finder's own read, exactly the level 0 list.
+   */
+  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
+  const reading = readLevel >= 1 && (routeRead.request !== request || !routeRead.done);
+  useEffect(() => {
+    if (readLevel < 1 || stage !== "results" || routeRead.request === request) return;
+    setRouteRead({ request, done: false });
+    const body = JSON.stringify({ text: request });
+    fetch("/api/finder/read", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
+      .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string }>) : null))
+      .catch(() => null)
+      .then((answer) => setRouteRead((held) => held.request !== request ? held : {
+        request,
+        done: true,
+        needs: answer?.source === "llm" ? answer.keys.flatMap((key) => needForKey(key) ?? []) : undefined,
+      }));
+  }, [readLevel, stage, request, routeRead.request]);
+  const modelNeeds = routeRead.request === request ? routeRead.needs : undefined;
+  const read = useMemo(() => modelNeeds ?? needsFor(request, roster), [modelNeeds, request, roster]);
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
   const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
   /** A removed facet is no reason for a row or a profile either. */
@@ -194,9 +218,11 @@ export function CareFinder() {
     const keptLabels = new Set(kept.map((n) => n.label));
     return new Set(read.filter((n) => removed.has(facetKey(n.facet)) && !keptLabels.has(n.label)).map((n) => n.label));
   }, [read, removed, kept]);
+  /** Undefined is the lexicon's own path, with its weighting, when nothing is taken out. */
+  const rankNeeds = removed.size === 0 && !modelNeeds ? undefined : kept;
   const matches = useMemo(
-    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, removed.size === 0 ? undefined : kept), need),
-    [request, origin, roster, need, removed, kept],
+    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds), need),
+    [request, origin, roster, need, rankNeeds],
   );
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // The matched tags, in the taxonomy's own order, capped at the three Calm Clarity allows in a
@@ -342,10 +368,10 @@ export function CareFinder() {
    * and the roster threads through so the printed reasons derive from the ranked roster. */
   const allMatches = useMemo(
     () => matches.map((item) => {
-      const match = getPersonalizedMatch(item, request, roster);
+      const match = getPersonalizedMatch(item, request, roster, read);
       return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s)).map((s) => chipWords.get(s) ?? s) };
     }),
-    [matches, request, roster, removedLabels, chipWords],
+    [matches, request, roster, read, removedLabels, chipWords],
   );
   const allSignals = useMemo(() => allMatches.map((m) => m.signals), [allMatches]);
   /**
@@ -353,7 +379,7 @@ export function CareFinder() {
    * some more than once, and every call re-runs the full lexicon read over the request — a
    * dozen redundant scans per keystroke once the geo field re-renders the results stage.
    */
-  const quality = useMemo(() => matchQuality(request, roster, removed.size === 0 ? undefined : kept), [request, roster, removed, kept]);
+  const quality = useMemo(() => matchQuality(request, roster, rankNeeds), [request, roster, rankNeeds]);
   const tieNote = useMemo(() => topTieNote(request, roster), [request, roster]);
   /** Read only when a tie exists — unconditional, this would ADD a rankBands run to the common
    * no-tie render; conditional, it matches the old cost exactly with the derivation named. */
@@ -381,9 +407,9 @@ export function CareFinder() {
   const shown = showAll ? matches : matches.slice(0, visibleCount);
 
   const personalizedMatch = useMemo(() => {
-    const match = getPersonalizedMatch(clinician, request, roster);
+    const match = getPersonalizedMatch(clinician, request, roster, read);
     return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s)) };
-  }, [clinician, request, roster, removedLabels]);
+  }, [clinician, request, roster, read, removedLabels]);
   /**
    * The evidence behind the pills, with provenance (O21). `matchEvidence` already carries the
    * phrase from the reader's OWN words that reached each facet (`matched`) — the ranking has
@@ -395,7 +421,7 @@ export function CareFinder() {
   // evidence and its "does not answer" list ran over the 2-entry real roster while the ranking
   // ran over 22 — exactly what the comment on `roster` above promises cannot happen. The
   // call-site pin in engine-seam.test.ts now refuses a defaulted roster read in this file.
-  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, removed]);
+  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster, read).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
   /**
    * The asks this clinician does NOT answer (O51) — the same needsFor read as the evidence
    * with the filter inverted, so the two lists partition what the reader asked and cannot
@@ -403,7 +429,7 @@ export function CareFinder() {
    * reader to assume the rest were hits too, which is the quiet dishonesty the console's
    * "Missed" column was built to prevent — for staff. The reader gets the same truth.
    */
-  const profileMissed = useMemo(() => missedAsks(clinician, request, roster).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, removed]);
+  const profileMissed = useMemo(() => missedAsks(clinician, request, roster, read).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
 
   /**
    * O102: the other GP to hold this one against, and the table that compares them.
@@ -429,7 +455,7 @@ export function CareFinder() {
   const compareRows: readonly CompareRow[] = useMemo(() => {
     if (!compareWith) return [];
     const declaredBy = (item: Clinician) =>
-      new Set(matchEvidence(item, request, roster).map((need) => need.label));
+      new Set(matchEvidence(item, request, roster, read).map((need) => need.label));
     const left = declaredBy(clinician);
     const right = declaredBy(compareWith);
     const seen = new Set<string>();
@@ -440,7 +466,7 @@ export function CareFinder() {
       rows.push({ label: ask.label, left: left.has(ask.label), right: right.has(ask.label) });
     }
     return rows;
-  }, [clinician, compareWith, request, roster, kept]);
+  }, [clinician, compareWith, request, roster, read, kept]);
 
   /** @param restarted U9: a language change on the listening screen, which the live region names. */
   function startListening(language = speechLang, restarted = false) {
@@ -757,6 +783,7 @@ export function CareFinder() {
             heard={heardFacets}
             removedHeard={removed}
             onToggleHeard={toggleHeard}
+            reading={reading}
             place={place}
             filters={effectiveFilters}
             onToggleFilter={toggleFilter}

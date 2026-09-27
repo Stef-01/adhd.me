@@ -946,8 +946,9 @@ export function matchEvidence(
   clinician: Clinician,
   query: string,
   roster: readonly Clinician[] = clinicians,
+  needs: readonly NeedSignal[] = needsFor(query, roster),
 ): NeedSignal[] {
-  return needsFor(query, roster)
+  return needs
     .filter((need) => answers(clinician, need))
     // The weight the card's evidence carries is the weight this clinician's answer actually
     // earned - halved where they declared "sometimes" - so the audit and the unity test can
@@ -971,8 +972,9 @@ export function missedAsks(
   clinician: Clinician,
   query: string,
   roster: readonly Clinician[] = clinicians,
+  needs: readonly NeedSignal[] = needsFor(query, roster),
 ): NeedSignal[] {
-  return needsFor(query, roster).filter((need) => !answers(clinician, need));
+  return needs.filter((need) => !answers(clinician, need));
 }
 
 export type RequestFitSummary = {
@@ -1215,7 +1217,7 @@ function asList(items: readonly string[]): string {
   return LIST_FORMAT.format(items);
 }
 
-export function getPersonalizedMatch(clinician: Clinician, query: string, roster: readonly Clinician[] = clinicians) {
+export function getPersonalizedMatch(clinician: Clinician, query: string, roster: readonly Clinician[] = clinicians, needs?: readonly NeedSignal[]) {
   /**
    * DERIVED, NOT RE-DERIVED. This used to be a second lexicon: a forty-line if-chain testing its
    * own phrase lists against the same care areas the ranker tested against different ones. Two
@@ -1226,7 +1228,7 @@ export function getPersonalizedMatch(clinician: Clinician, query: string, roster
    */
   // O222: `roster` threads through — the evidence weights and the language vocabulary derive
   // from the roster the RANKING ran over, so the explanation can never describe a different one.
-  const evidence = matchEvidence(clinician, query, roster);
+  const evidence = matchEvidence(clinician, query, roster, needs);
   const signals = evidence.map((need) => need.label);
 
   /**

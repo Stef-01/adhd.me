@@ -41,6 +41,7 @@ and the list re-ranks in the browser; the chip stays, struck through, and a seco
 | --- | --- | --- |
 | Read | ![What we heard, 390](finder-heard-390.jpg) | ![What we heard, 1440](finder-heard-1440.jpg) |
 | Telehealth taken out | ![Telehealth taken out, 390](finder-heard-removed-390.jpg) | ![Telehealth taken out, 1440](finder-heard-removed-1440.jpg) |
+| Level 1, reading, at 6 seconds | ![Reading, 390](finder-reading-390.jpg) | ![Reading, 1440](finder-reading-1440.jpg) |
 
 ## Settings, your data
 

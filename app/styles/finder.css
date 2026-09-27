@@ -91,6 +91,12 @@
   .heard-chip { transition: none; }
   .heard-chip:active { transform: none; }
 }
+/* While the read runs: its line in the chips' 44px, and blank rows at a row's height, so the
+   list lands where they were. */
+.platform-shell .results-head .reading-line { display: grid; align-content: start; min-height: 44px; margin: 12px 0 0; padding-top: 2px; color: var(--muted); font-size: 14px; line-height: 20px; }
+.platform-shell .results-browser .row-skeleton { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 24px; align-items: center; min-height: 152px; padding: 28px 16px; border-bottom: 1px solid var(--line); }
+.platform-shell .results-browser .row-skeleton::before { content: ""; height: 80px; border-radius: 50%; background: var(--stone); }
+.platform-shell .results-browser .row-skeleton::after { content: ""; width: min(60%, 280px); height: 16px; border-radius: 8px; background: var(--stone); }
 /* The strip: the kind of support first, then every yes/no filter, the Filters door, and Clear at
    the end. One row that wraps on a desk and scrolls sideways on a phone, so three rows of chips
    never push the first result under the fold. A pressed filter is the ink pill (DESIGN.md), and
@@ -161,6 +167,8 @@
   .platform-shell .patient-v2 .results-browser .clinician-row :is(.row-portrait-anchor,img,.clinician-monogram-thumb) { width: 56px; height: 56px; flex-basis: 56px; }
   .platform-shell .patient-v2 .results-browser .clinician-row strong { font-size: 18px; }
   .platform-shell .patient-v2 .results-browser .row-focus { font-size: 13px; }
+  .platform-shell .results-browser .row-skeleton { grid-template-columns: 56px minmax(0, 1fr); gap: 14px; min-height: 124px; padding: 22px 0; }
+  .platform-shell .results-browser .row-skeleton::before { height: 56px; }
 }
 .platform-shell .finder-count-number { color: inherit; letter-spacing: inherit; }
 .platform-shell .results-summary-text { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", sans-serif; }
