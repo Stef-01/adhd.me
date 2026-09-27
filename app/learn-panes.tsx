@@ -288,6 +288,9 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
   const goals = ready ? profile.selectedGoals ?? [] : [];
   const isPlayed = (g: GameItem) => (g.kind === "run" ? progress.done.includes(g.id) : Boolean(played.at[g.id]));
   const first = ready ? tryFirst(goals, isPlayed) : [];
+  // Until the device has been read, the default three stand in, hidden, so the space they hold is
+  // the real tiles' own height and nothing below moves when the real three arrive.
+  const shown = ready ? first : tryFirst([], () => false);
   const anyPlayed = hydrated && [...LIFE_GAMES, ...RUN_GAMES].some(isPlayed);
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
@@ -313,8 +316,8 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
       {!all && (!ready || first.length > 0) && (
         <>
           <h2 className="learn-try-title">Try these first.</h2>
-          <ol className="learn-try" data-testid="learn-try">
-            {first.map((g) => (
+          <ol className="learn-try" data-testid="learn-try" data-ready={ready || undefined} aria-hidden={ready ? undefined : true}>
+            {shown.map((g) => (
               <li key={`${g.kind}:${g.id}`}>
                 <GameTile game={g} start={start} />
               </li>
