@@ -1475,10 +1475,10 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax, till",
       "state": "jax-till",
-      "total": 10,
-      "fold": 10,
+      "total": 14,
+      "fold": 14,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {

@@ -94,7 +94,7 @@ export function JaxWorldGame() {
           const sold = t.soldOut?.key === item.key;
           const z = item.z;
           return <button key={item.id} className="jw-item" data-lane={item.lane} data-kind={p.kind} data-need={need} data-lure={item.lure} data-sold={sold}
-            style={{ "--x": 50 + (item.lane - 1) * (7 + 27 * z), "--y": 38 + 44 * z ** 1.25, "--s": .32 + .78 * z, zIndex: Math.round(z * 100) } as CSSProperties}
+            style={{ "--x": 50 + (item.lane - 1) * (7 + 27 * z), "--y": 38 + 44 * z ** 1.25, "--s": .32 + .78 * z, "--z": 1 + Math.round(z * 100) } as CSSProperties}
             aria-label={need ? `Steer to the ${p.name.toLowerCase()}` : sold ? `${p.name}, sold out` : p.kind === "wish" ? s.trip < 3 ? `Save the ${p.name.toLowerCase()} for later` : `Steer to the ${p.name.toLowerCase()}, on sale` : `Knock ${p.name.toLowerCase()} away`}
             onClick={() => dispatch(need || (p.kind === "wish" && s.trip === 3) ? { type: "steer", lane: item.lane } : { type: "flick", id: item.id })}>
             <Product id={item.key} />
