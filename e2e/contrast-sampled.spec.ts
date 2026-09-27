@@ -3,9 +3,10 @@
 // walks every screen the text budget walks, takes each incomplete node, hides its text, samples
 // the pixels behind it, and holds the text colour to 4.5:1 (3:1 when large) against the median.
 //
-// It also holds a floor on size: no visible patient text under 12px at 390. The care map's SVG
-// labels are exempt until the phone redesign in PLAN.md W9 phase 3 replaces them. Text drawn into
-// decorative artwork (an aria-hidden SVG) and the logotype are pictures, not reading text.
+// It also holds a floor on size: no visible patient text under 12px, at a phone's width and at a
+// desktop's (PLAN.md W11). The care map's SVG labels are exempt until the phone design in PLAN.md
+// W9 (N8) is chosen and built. Text drawn into decorative artwork (an aria-hidden SVG) and the
+// logotype are pictures, not reading text.
 
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page } from "@playwright/test";
@@ -20,13 +21,6 @@ const PER_ROUTE = 60;
 const SMALL_EXEMPT = ".care-map-svg, svg[aria-hidden='true'], .brand-mark";
 /** Staff and clinician pages: their text is held by the console's own checks, not this patient floor. */
 const NOT_PATIENT = new Set(["/clinicians"]);
-
-/**
- * Small text that shipped before this gate existed, named by where it is and the plan item that
- * fixes it. Anything under 12px outside this list fails. When a game is redrawn, its line goes.
- */
-const LEDGER: ReadonlyArray<{ match: RegExp; what: string }> = [
-];
 
 /** Text colour, size and box for one node, with its text made invisible so the pixels behind show. */
 async function probe(page: Page, selector: string) {
@@ -124,16 +118,17 @@ async function smallText(page: Page): Promise<Array<{ key: string; line: string 
   }, SMALL_EXEMPT);
 }
 
-test("text axe cannot measure still clears AA, and nothing reads under 12px at 390", async ({ browser, baseURL }) => {
+// The games' small labels were raised in N15, one game at a time, and the ledger that named them
+// is gone: anything under 12px now fails at either width.
+for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) test(`text axe cannot measure still clears AA, and nothing reads under 12px at ${viewport.width}`, async ({ browser, baseURL }) => {
   test.setTimeout(900_000);
   const base = baseURL!;
-  const options = contextFor(base) as Parameters<typeof browser.newContext>[0];
+  const options = { ...contextFor(base), viewport } as Parameters<typeof browser.newContext>[0];
   let context = await browser.newContext(options);
   let page: Page = await context.newPage();
   const scratch = await (await browser.newContext()).newPage();
   const failures: string[] = [];
   const small: string[] = [];
-  const seen = new Set<string>();
   let sampled = 0;
   for (const route of routes() as Route[]) {
     try {
@@ -148,11 +143,7 @@ test("text axe cannot measure still clears AA, and nothing reads under 12px at 3
       continue; // The text-budget gate names a screen it cannot reach; this one measures what it can.
     }
     if (!NOT_PATIENT.has(route.path)) {
-      for (const { key, line } of await smallText(page)) {
-        const known = LEDGER.find((l) => l.match.test(key));
-        if (known) seen.add(known.what);
-        else small.push(`${route.name}: ${line}`);
-      }
+      for (const { line } of await smallText(page)) small.push(`${route.name}: ${line}`);
     }
     const scan = await new AxeBuilder({ page }).withRules(["color-contrast"]).analyze();
     const nodes = scan.incomplete.find((r) => r.id === "color-contrast")?.nodes ?? [];
@@ -177,9 +168,8 @@ test("text axe cannot measure still clears AA, and nothing reads under 12px at 3
   }
   await context.close();
   await scratch.context().close();
-  console.log(`contrast-sampled: ${sampled} nodes axe could not measure, sampled; ${failures.length} under AA; ${small.length} under 12px outside the ledger`);
-  for (const l of LEDGER) if (!seen.has(l.what)) console.log(`ledger line not seen this run, remove it if it is fixed: ${l.what}`);
+  console.log(`contrast-sampled at ${viewport.width}: ${sampled} nodes axe could not measure, sampled; ${failures.length} under AA; ${small.length} under 12px`);
   expect(sampled, "the sweep sampled something, so a green run means something").toBeGreaterThan(0);
   expect(failures, "text on gradients, images and SVG must clear AA").toEqual([]);
-  expect(small, "no visible text under 12px at 390").toEqual([]);
+  expect(small, `no visible text under 12px at ${viewport.width}`).toEqual([]);
 });
