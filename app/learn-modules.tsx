@@ -106,6 +106,21 @@ export function LearnModules() {
     setPicks([]);
   }, [moduleId]);
 
+  // Back straight after opening a module can land before the search params ever showed the new
+  // id, so the effect above never runs and the module stays open under a library URL. The
+  // browser's own event closes it whenever the URL it returns to names no module.
+  useEffect(() => {
+    const onPop = () => {
+      if (new URLSearchParams(window.location.search).get("module")) return;
+      internalRoute.current = undefined;
+      setOpen(null);
+      setStep(0);
+      setPicks([]);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
   useEffect(() => {
     if (!hydrated || !open) return;
     writeCursor(deviceLearningStorage, open, step);
