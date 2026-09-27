@@ -3,7 +3,7 @@ import { clinicians, rankClinicians } from "@/demo/clinicians";
 import { CASSETTES } from "@/lib/llm/cassettes";
 import { REACH_CORPUS } from "@/matching/corpus";
 import { needForKey } from "@/matching/needs";
-import { lexiconReading } from "../llm-read";
+import { lexiconReading, VOCABULARY } from "../llm-read";
 import { classify, CLASSES, evalEntries, oracleGains, PROBES, splitOf } from "./sets";
 
 const TODAY = new Date("2026-09-27T00:00:00Z");
@@ -53,11 +53,13 @@ describe("classify", () => {
     }
   });
 
-  it("probes pin as the corpus does: reaches are heard by the lexicon, aspires are not", () => {
+  it("probes pin as the corpus does: valid keys, reaches heard by the lexicon, never and aspires not", () => {
+    const valid = new Set(Object.values(VOCABULARY).filter((v) => v.prefix !== "language").flatMap(({ prefix, ids }) => ids.map((id) => `${prefix}:${id}`)));
     for (const probe of PROBES) {
       const heard = lexiconReading(probe.text).keys;
+      for (const key of [...(probe.reaches ?? []), ...(probe.never ?? []), ...(probe.aspires ?? [])]) expect(valid, probe.text).toContain(key);
       for (const key of probe.reaches ?? []) expect(heard, probe.text).toContain(key);
-      for (const key of probe.aspires ?? []) expect(heard, probe.text).not.toContain(key);
+      for (const key of [...(probe.never ?? []), ...(probe.aspires ?? [])]) expect(heard, probe.text).not.toContain(key);
     }
   });
 });
