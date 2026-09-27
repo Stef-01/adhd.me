@@ -66,7 +66,8 @@ export function LeoBedroom({ rounds = false }: { rounds?: boolean }) {
   const pauseButton = useRef<HTMLButtonElement>(null);
   const challengeOnly = Boolean(s.rounds && s.mode === "challenge");
   const ended = s.mode === "rest" || s.mode === "complete";
-  usePlayedWhen("leo", ended);
+  // "rest" is the end of the first evening; the game is played only once the second one is done.
+  usePlayedWhen("leo", s.mode === "complete");
   useEffect(() => { setSoundNotice(""); }, [s.revision]);
   const ids = s.insects.map(i => i.id).join(",");
   const calm = Math.round((1 - s.activation) * 100);

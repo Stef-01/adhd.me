@@ -95,12 +95,13 @@ const STARTERS: readonly GameItem[] = [lifeItem("maya"), runItem("context"), run
 const key = (g: GameItem) => `${g.kind}:${g.id}`;
 
 /**
- * The three to try first: games matching the person's goals, then the starters, never one already
- * played. Ties keep list order.
+ * The three to try first: games matching the person's goals, then the starters, then every other
+ * game, never one already played. Theo, Zoe and Jax match no goal and are not starters, so the
+ * last part is what lets them surface. Ties keep list order.
  */
 export function tryFirst(goals: readonly LearningDomain[], played: (game: GameItem) => boolean, count = 3): GameItem[] {
   const all = [...LIFE_GAMES, ...RUN_GAMES];
-  const ordered = [...all.filter((g) => matchesGoal(g, goals)), ...STARTERS];
+  const ordered = [...all.filter((g) => matchesGoal(g, goals)), ...STARTERS, ...all];
   const seen = new Set<string>();
   const out: GameItem[] = [];
   for (const g of ordered) {

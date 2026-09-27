@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
 import { CHARACTER_IDS } from "@/lives/types";
@@ -13,7 +13,11 @@ function memory() {
 }
 const none = () => false;
 const tz = process.env.TZ;
-afterEach(() => { process.env.TZ = tz; });
+afterEach(() => {
+  vi.useRealTimers();
+  if (tz === undefined) delete process.env.TZ;
+  else process.env.TZ = tz;
+});
 
 describe("the games list", () => {
   it("holds the eight lives and the twenty runs, each once, and every group is one of them", () => {
@@ -58,16 +62,24 @@ describe("try these first", () => {
     const leo = LIFE_GAMES.find((g) => g.id === "leo")!;
     expect(matchesGoal(leo, ["sleep", "sensory_management"])).toBe(false);
   });
+
+  it("offers any game not yet played, and nothing once every game is played", () => {
+    const allButZoe = (g: GameItem) => !(g.kind === "life" && g.id === "zoe");
+    expect(tryFirst([], allButZoe).map((g) => g.id)).toEqual(["zoe"]);
+    expect(tryFirst(["sleep"], allButZoe).map((g) => g.id)).toEqual(["zoe"]);
+    expect(tryFirst([], () => true)).toEqual([]);
+  });
 });
 
 describe("played", () => {
   it("a finished run keeps the local day it was finished", () => {
     process.env.TZ = "Australia/Sydney";
+    vi.useFakeTimers();
+    // 8am on the 27th in Sydney is still the 26th in UTC, so a UTC day would fail here.
+    vi.setSystemTime(new Date("2026-09-26T22:00:00Z"));
     const s = memory();
     markDone(s, "context");
-    const at = readProgress(s).at?.context;
-    const d = new Date();
-    expect(at).toBe(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
+    expect(readProgress(s).at?.context).toBe("2026-09-27");
   });
 
   it("a character game is marked once, keeps its first day, and stores no score", () => {

@@ -293,7 +293,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
       <div className="learn-game-toolbar">
         <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true" />Play mix</Link>
       </div>
-      {!all && (
+      {!all && first.length > 0 && (
         <>
           <h2 className="learn-try-title">Try these first.</h2>
           <ol className="learn-try" data-testid="learn-try">
