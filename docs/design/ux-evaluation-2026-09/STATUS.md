@@ -40,6 +40,21 @@ under "Refinement pass, 2026-09-28".
 | W9 | A tap on a part brings its panel into view unless 160px of it already shows above the tab bar; on a phone the wheel steps down once a quarter is open. Checked at 390, 768, 1024 and 1440. |
 | W2–W4 | On a map not yet started, Start sits under the heading, above the six axes. |
 
+## Finished, pass two, 2026-09-28
+
+The evaluation walked again at 390 and 1440 on a production build. Captures are in
+`qa/ux-2026-09/README.md` under "Refinement pass two".
+
+| Item | What changed |
+| --- | --- |
+| Profile | One section open at a time: the first sentence folds to "About" while another is open and comes back when the last one closes. "Why matched" open, 75 → 47 words. "Best for" at its line's own size. |
+| Settings | The rows are names, 99 → 42 words, and the open sheet is measured. |
+| Finder | The "A woman doctor" example orders its list ("A woman GP for ADHD, not rushed"), 76 → 46 words. Row portraits are fetched at the size a row draws them. |
+| W4 | On a map not yet started, "How it fills in" sits beside Start, read before the chart. |
+| W10 | Small text on a bright fill takes the reading ink, 6.5:1 at least; a card's arrow ends its row on a phone; the first card has no dead Back. |
+| Start | The end screen's module is the first on the person's own priority they have not met. |
+| W11 | The text budget skips text inside a fold that is itself folded, and measures the two new states. |
+
 ## Waiting on a choice from the founder
 
 - **Confirm the decisions the plan proceeded on:** D1 to D12 in `PLAN.md` §4. D3, D4 and D7 shipped

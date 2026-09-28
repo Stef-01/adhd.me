@@ -113,6 +113,10 @@
 .platform-shell .learn-primary { background: var(--accent); color: var(--paper); border: 1px solid var(--accent); }
 .platform-shell :is(.learn-secondary, .learn-back) { background: var(--paper); color: var(--ink); border: 1px solid var(--line-strong); }
 .platform-shell :is(.learn-primary, .learn-secondary):disabled { opacity: .5; cursor: not-allowed; }
+/* A bordered button lines up with the card under it; the -6px was for the old text link. */
+.platform-shell .learn-back { margin-left: 0; }
+/* The first card has nowhere to go back to: no dead Back beside Next, and Next keeps its place. */
+.platform-shell .learn-controls .learn-secondary:disabled { visibility: hidden; }
 .platform-shell .learn-options { display: grid; gap: 12px; padding: 0; margin: 24px 0; list-style: none; max-width: 760px; }
 .platform-shell .learn-option { display: flex; gap: 12px; align-items: center; width: 100%; min-height: 60px; text-align: left; padding: 16px 20px; background: var(--paper); color: var(--ink); border: 1px solid var(--line-strong); border-radius: 14px; font-size: 16px; }
 .platform-shell .learn-option.is-right { border-color: var(--hero-blue-night); background: var(--stone); }

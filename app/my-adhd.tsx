@@ -192,13 +192,19 @@ export function MyAdhd() {
 
           {!record && <p role="status" className="life-card">Reading what this device holds…</p>}
 
-          {/* Not started: the one thing to do comes first, above the six axes it will fill. */}
+          {/* Not started: the one thing to do comes first, above the six axes it will fill, and
+              what fills them sits beside it, so it is read before the chart rather than after. */}
           {record && !started && (
             <section className="map-lead map-side">
               <p>Ten quick questions start this map.</p>
-              <Link className="learn-primary" href="/start">
-                Start <ArrowRight size={17} weight="bold" aria-hidden="true" />
-              </Link>
+              <div className="map-lead-actions">
+                <Link className="learn-primary" href="/start">
+                  Start <ArrowRight size={17} weight="bold" aria-hidden="true" />
+                </Link>
+                <button ref={fillsRef} type="button" className="map-fills" onClick={() => setFills(true)}>
+                  How it fills in
+                </button>
+              </div>
             </section>
           )}
 
@@ -206,12 +212,14 @@ export function MyAdhd() {
             <MyAdhdRadar points={points} baseline={baseline} onOpen={openAxis} openAspect={open} caption={thenPill} />
           )}
 
-          {record && (
+          {record && (started || hasSignals(record) || record.learning) && (
             <div className="map-meta">
               {(hasSignals(record) || record.learning) && <p className="map-where">Saved on this device.</p>}
-              <button ref={fillsRef} type="button" className="map-fills" onClick={() => setFills(true)}>
-                How it fills in
-              </button>
+              {started && (
+                <button ref={fillsRef} type="button" className="map-fills" onClick={() => setFills(true)}>
+                  How it fills in
+                </button>
+              )}
             </div>
           )}
 

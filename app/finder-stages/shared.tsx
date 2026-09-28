@@ -374,7 +374,8 @@ export function ClinicianPortrait({
       // on the largest screen the profile is ever seen on. The three regimes below are the
       // shell's own: fluid under 520, then the two `--shell-w` steps, each less the 18px inset.
       ? <Image src={clinician.image} alt={alt} fill sizes="(max-width: 519px) calc(100vw - 36px), (max-width: 819px) 484px, 604px" priority />
-      : <Image src={clinician.image} alt="" width={60} height={60} loading={eager ? "eager" : "lazy"} />;
+      // 80, the largest a row draws it (the desktop list), so the 1x and 2x sources are never upscaled.
+      : <Image src={clinician.image} alt="" width={80} height={80} loading={eager ? "eager" : "lazy"} />;
   }
 
   return (

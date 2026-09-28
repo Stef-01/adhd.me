@@ -26,13 +26,12 @@ import { deviceLearningStorage } from "@/learn/cursor";
 import { copyFileName, deleteDeviceData, hasDeviceData, makeCopy, parseCopy, restoreCopy, type DeviceCopy } from "@/privacy/device-data";
 import { Sheet } from "./sheet";
 
-/** One row of the sheet. A real link, so long-press and open-in-new-tab still work. */
-function SettingsLink({ href, title, detail }: { href: string; title: string; detail: string }) {
+/** One row of the sheet: a name. A real link, so long-press and open-in-new-tab still work. */
+function SettingsLink({ href, title }: { href: string; title: string }) {
   return (
     <Link className="settings-row" href={href}>
       <span>
         <strong>{title}</strong>
-        <small>{detail}</small>
       </span>
       <CaretRight size={16} weight="bold" aria-hidden="true" />
     </Link>
@@ -63,11 +62,11 @@ export function AppSettings({ children, fallback = false }: { children?: React.R
       {fallback && overridden ? null : mount ? createPortal(trigger, mount) : trigger}
       <Sheet open={open} title="Settings" onClose={() => setOpen(false)} openedBy={triggerRef}>
         <div className="settings-list">
-          <SettingsLink href="/profile" title="Search filters" detail="Where you are, the kind of support, and the declared facts a provider must have." />
-          <SettingsLink href="/story" title="About ADHD.ME" detail="Why the product exists and what the route through assessment costs today." />
-          <SettingsLink href="/faq" title="Help & answers" detail="Using ADHD.ME, costs, and common questions." />
-          <SettingsLink href="/examples" title="Worked examples" detail="The same matching run over written requests, with the reasons printed." />
-          <SettingsLink href="/privacy" title="Privacy" detail="What this device holds, what leaves it, and how to take it back." />
+          <SettingsLink href="/profile" title="Search filters" />
+          <SettingsLink href="/story" title="About ADHD.ME" />
+          <SettingsLink href="/faq" title="Help & answers" />
+          <SettingsLink href="/examples" title="Worked examples" />
+          <SettingsLink href="/privacy" title="Privacy" />
           {/* The finder passes its own testing options in, so one sheet holds everything a person
               can change rather than two sheets that look identical and hold different things. */}
           {children}

@@ -474,3 +474,92 @@ The questions are outline chips, not amber ones, and "One answer would narrow it
 | --- | --- | --- |
 | Before | ![Improve my matches, before, 390](finder-clarify-before-390.jpg) | ![Improve my matches, before, 1440](finder-clarify-before-1440.jpg) |
 | After | ![Improve my matches, after, 390](finder-clarify-after-390.jpg) | ![Improve my matches, after, 1440](finder-clarify-after-1440.jpg) |
+
+## Refinement pass two, 2026-09-28
+
+The evaluation walked again, pin by pin, on a production build at 390×844 and 1440×900. Before is
+`main` at 833205b3, after is this pass. Words are `measure()` from `scripts/text-budget-lib.mjs`, the
+same at both widths on every screen here.
+
+### A profile, "Why matched" open
+
+One section open at a time. The clinician's first sentence folds to an "About" row while "Why
+matched" is open, one tap from coming back, and closing the last open section brings it back.
+Nothing is deleted. 75 → 47 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Why matched open, before, 390](profile-fold-before-390.jpg) | ![Why matched open, before, 1440](profile-fold-before-1440.jpg) |
+| After | ![Why matched open, after, 390](profile-fold-after-390.jpg) | ![Why matched open, after, 1440](profile-fold-after-1440.jpg) |
+
+### A profile, arriving
+
+The bio leads as before. "Best for" is its line's own size and case, not an 11px uppercase label.
+57 → 57 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A profile, before, 390](profile-best-for-before-390.jpg) | ![A profile, before, 1440](profile-best-for-before-1440.jpg) |
+| After | ![A profile, after, 390](profile-best-for-after-390.jpg) | ![A profile, after, 1440](profile-best-for-after-1440.jpg) |
+
+### Settings
+
+Rows are names. The three lines a person needs stay: example profiles are fictional, a copy holds
+your answers, where your data lives. 99 → 42 words, and the sheet is now measured.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Settings, before, 390](settings-names-before-390.jpg) | ![Settings, before, 1440](settings-names-before-1440.jpg) |
+| After | ![Settings, after, 390](settings-names-after-390.jpg) | ![Settings, after, 1440](settings-names-after-1440.jpg) |
+
+### Finder, "A woman doctor"
+
+The chip fills "A woman GP for ADHD, not rushed". "A woman GP for ADHD" tied eleven women, and the
+fold, which never cuts a tie, opened on all eleven. A second ask orders them: five, then "24 more".
+76 → 46 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A woman doctor, before, 390](finder-woman-chip-before-390.jpg) | ![A woman doctor, before, 1440](finder-woman-chip-before-1440.jpg) |
+| After | ![A woman doctor, after, 390](finder-woman-chip-after-390.jpg) | ![A woman doctor, after, 1440](finder-woman-chip-after-1440.jpg) |
+
+### My ADHD, not started
+
+"How it fills in" sits beside Start, in the card above the chart, so what fills the map is read
+before the chart (7.03). 27 → 27 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Not started, before, 390](my-adhd-fills-first-before-390.jpg) | ![Not started, before, 1440](my-adhd-fills-first-before-1440.jpg) |
+| After | ![Not started, after, 390](my-adhd-fills-first-after-390.jpg) | ![Not started, after, 1440](my-adhd-fills-first-after-1440.jpg) |
+
+### My ADHD, lived in
+
+The step's arrow ends its row instead of standing alone under the question. 53 → 53 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Lived in, before, 390](my-adhd-step-before-390.jpg) | ![Lived in, before, 1440](my-adhd-step-before-1440.jpg) |
+| After | ![Lived in, after, 390](my-adhd-step-after-390.jpg) | ![Lived in, after, 1440](my-adhd-step-after-1440.jpg) |
+
+### A read module
+
+Small text on a bright fill takes the reading ink: the count was 4.65:1 on amber, and the floor on
+every tone is now 6.5:1 (6.02). "All modules" lines up with the card (6.01), the first card has no
+dead Back, and on a phone a card's arrow ends its row. 58 → 57 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A read module, before, 390](module-fill-before-390.jpg) | ![A read module, before, 1440](module-fill-before-1440.jpg) |
+| After | ![A read module, after, 390](module-fill-after-390.jpg) | ![A read module, after, 1440](module-fill-after-1440.jpg) |
+
+### Start, the end screen
+
+The one module follows from the one sentence: the first on the person's own priority they have not
+met. Under "Start assignments and work earlier" it offered "Working memory", the module of a pending
+experiment, with no line left to say why. 28 → 25 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Start end screen, before, 390](start-end-module-before-390.jpg) | ![Start end screen, before, 1440](start-end-module-before-1440.jpg) |
+| After | ![Start end screen, after, 390](start-end-module-after-390.jpg) | ![Start end screen, after, 1440](start-end-module-after-1440.jpg) |

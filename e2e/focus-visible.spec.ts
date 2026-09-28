@@ -39,7 +39,7 @@ test("every keyboard stop on a patient screen shows a focus ring", async ({ brow
     // The console is staff tooling; this is the patient law.
     if (route.path.startsWith("/console")) continue;
     try {
-      if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice") {
+      if (route.state?.startsWith("finder-")) {
         await context.close();
         context = await browser.newContext(options);
         page = await context.newPage();

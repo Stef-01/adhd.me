@@ -97,6 +97,10 @@ export const EXTRA = [
   { path: "/go/anubhav-saxena", skip: "a redirect" },
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
+  // The profile with its reasons open: the bio folds while they show (2026-09-28, was 75 words).
+  { path: "/", state: "finder-profile-why", name: "Finder profile, why matched open" },
+  // The settings sheet, from the header on every app screen: it was never measured, and read 99.
+  { path: "/", state: "finder-settings", name: "Settings, open (on the finder, where it holds the most)" },
   { path: "/", state: "finder-voice", name: "Finder voice (the orb, one question)" },
   { path: "/", state: "finder-rate", name: "Finder home, a visit to rate" },
   { path: "/approach?module=everyday", name: "A read module, first card" },
@@ -201,8 +205,13 @@ export async function measure(page) {
       const style = getComputedStyle(el);
       if (style.visibility === "hidden" || style.display === "none" || style.opacity === "0") continue;
       if (el.closest("[aria-hidden='true'], .sr-only, script, style, noscript, template")) continue;
-      const closed = el.closest("details:not([open])");
-      if (closed && !el.closest("summary")) continue;
+      // A closed fold shows its own summary and nothing else, however deep: a summary inside a
+      // fold that is itself folded away is not on the screen.
+      let folded = false;
+      for (let fold = el.closest("details:not([open])"); fold && !folded; fold = fold.parentElement?.closest("details:not([open])") ?? null) {
+        if (!fold.querySelector(":scope > summary")?.contains(el)) folded = true;
+      }
+      if (folded) continue;
       const rect = el.getBoundingClientRect();
       if (rect.right <= 0 || rect.bottom <= 0 || rect.left >= window.innerWidth) continue;
       if (rect.width === 0 || rect.height === 0) continue;
@@ -367,14 +376,22 @@ export async function reach(page, route, base) {
     await page.getByRole("button", { name: "Talk instead of typing" }).click();
     await page.locator(".voice-orb").waitFor({ timeout: 10000 });
   }
-  if (route.state === "finder-results" || route.state === "finder-profile") {
+  if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-profile-why") {
     await page.getByRole("textbox").fill("an adult ADHD assessment, telehealth, not rushed");
     await page.keyboard.press("Enter");
     await page.locator(".clinician-list").waitFor({ timeout: 20000 });
-    if (route.state === "finder-profile") {
+    if (route.state !== "finder-results") {
       await page.locator(".clinician-row").first().click();
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
+    if (route.state === "finder-profile-why") {
+      await page.locator(".profile-disclosure", { hasText: "Why matched" }).locator("summary").click();
+      await page.locator(".profile-disclosure[open] .profile-disclosure-body").waitFor({ timeout: 8000 });
+    }
+  }
+  if (route.state === "finder-settings") {
+    await page.getByRole("button", { name: "Settings" }).first().click();
+    await page.locator(".settings-list").waitFor({ timeout: 8000 });
   }
   if (route.state === "care-map-tap") {
     await page.evaluate((rec) => localStorage.setItem("adhdme.model.v1", rec), JSON.stringify(LIVED_RECORD));
