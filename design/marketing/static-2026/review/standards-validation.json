@@ -1,8 +1,8 @@
 {
   "passed": true,
-  "layoutCount": 44,
-  "transparentProductionCount": 16,
-  "inventoryCount": 73,
+  "layoutCount": 73,
+  "transparentProductionCount": 36,
+  "inventoryCount": 130,
   "checks": [
     {
       "file": "exports/social-square.png",
@@ -12,7 +12,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 794928
+      "bytes": 793688
     },
     {
       "file": "exports/social-portrait.png",
@@ -22,7 +22,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 886078
+      "bytes": 884858
     },
     {
       "file": "exports/story-static.png",
@@ -32,7 +32,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 1224285
+      "bytes": 1222700
     },
     {
       "file": "exports/social-conversation.png",
@@ -42,7 +42,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 864666
+      "bytes": 863488
     },
     {
       "file": "exports/carousel-01.png",
@@ -52,7 +52,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 30799
+      "bytes": 29732
     },
     {
       "file": "exports/carousel-02.png",
@@ -62,7 +62,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 42418
+      "bytes": 41347
     },
     {
       "file": "exports/carousel-03.png",
@@ -72,7 +72,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 45357
+      "bytes": 44265
     },
     {
       "file": "exports/newsletter-header.png",
@@ -82,7 +82,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 544145
+      "bytes": 543171
     },
     {
       "file": "exports/newsletter-feature.png",
@@ -92,7 +92,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 357990
+      "bytes": 357093
     },
     {
       "file": "exports/editorial-cover.png",
@@ -102,7 +102,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 1599489
+      "bytes": 1597624
     },
     {
       "file": "exports/article-banner.png",
@@ -112,7 +112,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 977542
+      "bytes": 975764
     },
     {
       "file": "exports/presentation-cover.png",
@@ -122,7 +122,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 877067
+      "bytes": 874962
     },
     {
       "file": "exports/presentation-divider.png",
@@ -132,7 +132,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 59713
+      "bytes": 57813
     },
     {
       "file": "exports/presentation-framework.png",
@@ -142,7 +142,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 76584
+      "bytes": 74625
     },
     {
       "file": "exports/program-cover.png",
@@ -152,7 +152,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 1367870
+      "bytes": 1366142
     },
     {
       "file": "exports/reflection-worksheet.png",
@@ -162,7 +162,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 60611
+      "bytes": 59230
     },
     {
       "file": "exports/poster-a-series.png",
@@ -172,7 +172,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 50540
+      "bytes": 49211
     },
     {
       "file": "exports/info-sheet.png",
@@ -182,7 +182,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 99617
+      "bytes": 97498
     },
     {
       "file": "exports/speaker-card.png",
@@ -192,7 +192,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 33089
+      "bytes": 31373
     },
     {
       "file": "exports/name-bar.png",
@@ -212,7 +212,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 23414
+      "bytes": 22263
     },
     {
       "file": "exports/pamphlet-outside.png",
@@ -222,7 +222,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 403960
+      "bytes": 403152
     },
     {
       "file": "exports/pamphlet-inside.png",
@@ -242,7 +242,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 566928
+      "bytes": 565978
     },
     {
       "file": "exports/linkedin-landscape-627.png",
@@ -252,7 +252,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 566106
+      "bytes": 565150
     },
     {
       "file": "exports/linkedin-square.png",
@@ -262,7 +262,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 932483
+      "bytes": 931599
     },
     {
       "file": "exports/linkedin-portrait.png",
@@ -272,7 +272,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 465620
+      "bytes": 464987
     },
     {
       "file": "exports/newsletter-header-1320.png",
@@ -282,7 +282,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 638393
+      "bytes": 637216
     },
     {
       "file": "exports/newsletter-feature-1320.png",
@@ -292,7 +292,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 418908
+      "bytes": 417809
     },
     {
       "file": "exports/accent-arrow-ink.png",
@@ -392,7 +392,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 3879063
+      "bytes": 3874730
     },
     {
       "file": "exports/reflection-worksheet-a4-300ppi.png",
@@ -402,7 +402,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 143907
+      "bytes": 140845
     },
     {
       "file": "exports/poster-a-series-a4-300ppi.png",
@@ -412,7 +412,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 113127
+      "bytes": 110306
     },
     {
       "file": "exports/info-sheet-a4-300ppi.png",
@@ -422,7 +422,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 241499
+      "bytes": 235958
     },
     {
       "file": "exports/pamphlet-outside-a4-300ppi.png",
@@ -432,7 +432,7 @@
       "alphaMin": 255,
       "alphaMax": 255,
       "transparentPercent": 0.0,
-      "bytes": 1312844
+      "bytes": 1310573
     },
     {
       "file": "exports/pamphlet-inside-a4-300ppi.png",
@@ -443,6 +443,296 @@
       "alphaMax": 255,
       "transparentPercent": 0.0,
       "bytes": 2575070
+    },
+    {
+      "file": "exports/au-eucalyptus.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 90.08,
+      "bytes": 14571
+    },
+    {
+      "file": "exports/au-wattle.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 93.72,
+      "bytes": 13867
+    },
+    {
+      "file": "exports/au-gum-leaf.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 74.82,
+      "bytes": 16070
+    },
+    {
+      "file": "exports/au-banksia.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 90.6,
+      "bytes": 14713
+    },
+    {
+      "file": "exports/au-coastal-sun.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 87.9,
+      "bytes": 16236
+    },
+    {
+      "file": "exports/au-sandstone-ridge.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 75.47,
+      "bytes": 9812
+    },
+    {
+      "file": "exports/au-seed-pod.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 90.71,
+      "bytes": 6961
+    },
+    {
+      "file": "exports/au-coastal-walk.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 87.14,
+      "bytes": 13456
+    },
+    {
+      "file": "exports/au-notebook-cue.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 64.07,
+      "bytes": 3907
+    },
+    {
+      "file": "exports/au-quiet-headphones.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 89.64,
+      "bytes": 9656
+    },
+    {
+      "file": "exports/au-breathing-space.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 90.49,
+      "bytes": 25645
+    },
+    {
+      "file": "exports/au-tea-pause.png",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 86.1,
+      "bytes": 8795
+    },
+    {
+      "file": "exports/abstract-coastal-ribbons.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 85.78,
+      "bytes": 67560
+    },
+    {
+      "file": "exports/slide-coastal-ribbons.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 56542
+    },
+    {
+      "file": "exports/abstract-sun-disc.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 73.91,
+      "bytes": 27286
+    },
+    {
+      "file": "exports/slide-sun-disc.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 22525
+    },
+    {
+      "file": "exports/abstract-folded-path.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 89.42,
+      "bytes": 34295
+    },
+    {
+      "file": "exports/slide-folded-path.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 27801
+    },
+    {
+      "file": "exports/abstract-sandstone-arches.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 84.33,
+      "bytes": 31015
+    },
+    {
+      "file": "exports/slide-sandstone-arches.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 26745
+    },
+    {
+      "file": "exports/abstract-focus-orbits.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 93.44,
+      "bytes": 73242
+    },
+    {
+      "file": "exports/slide-focus-orbits.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 62593
+    },
+    {
+      "file": "exports/abstract-paper-shapes.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 81.52,
+      "bytes": 29663
+    },
+    {
+      "file": "exports/slide-paper-shapes.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 24770
+    },
+    {
+      "file": "exports/pamphlet-wattle-edge.png",
+      "width": 1240,
+      "height": 1754,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 97.64,
+      "bytes": 36791
+    },
+    {
+      "file": "exports/pamphlet-coastal-edge.png",
+      "width": 1240,
+      "height": 1754,
+      "mode": "RGBA",
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPercent": 89.91,
+      "bytes": 48833
+    },
+    {
+      "file": "exports/social-australian-pause.png",
+      "width": 1080,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 857578
+    },
+    {
+      "file": "exports/newsletter-australian-pause.png",
+      "width": 1200,
+      "height": 600,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 610327
+    },
+    {
+      "file": "exports/presentation-australian-pause.png",
+      "width": 1920,
+      "height": 1080,
+      "mode": "RGB",
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPercent": 0.0,
+      "bytes": 1459275
     },
     {
       "file": "identity/mark-colour-2x.png",

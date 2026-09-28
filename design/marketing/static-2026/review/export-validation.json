@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-27T23:45:33.502Z",
+  "checkedAt": "2026-09-28T00:22:16.231Z",
   "assets": [
     {
       "id": "social-square",
@@ -7,7 +7,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "f07177a0cf703078f6dc6d469ead3699340ab0d934a07f4ea0afb2b67506966e"
+      "sha256": "a72928f315b9850db6d3bcce2538803be1776649e4b25f3cbe6f727b97661c76"
     },
     {
       "id": "social-portrait",
@@ -15,7 +15,7 @@
       "height": 1350,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "3fcfdf658e2a7dfca9164077ed70dc138714485da61212f54a09935228345488"
+      "sha256": "0fb1175684a2e4531bf9ec127cfdf40984fd28d7cb56a598f7d081d9ab7c5804"
     },
     {
       "id": "story-static",
@@ -23,7 +23,7 @@
       "height": 1920,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "4ebeda9e976959f14172c8871c749934d5e92e85e3ebb485696f8ed5e81eaef6"
+      "sha256": "0ef00c9adb1ec81037b30e798c0c6d4e6a27331d499e9d71eff62a09bb5336cb"
     },
     {
       "id": "social-conversation",
@@ -31,7 +31,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "89288af629dcb9a8cc20e3db49586de99eebba264dd56f660a2982ce5d63cf40"
+      "sha256": "ea1cd799c18821e49025b259434b28aee9eead8614fb6aa1267f25df81b15741"
     },
     {
       "id": "carousel-01",
@@ -39,7 +39,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "2c7f94418e4915f26e4f03a7ef226b030a7cb9b0307830ac6e40a74942ae827e"
+      "sha256": "380a134d3d5e3761867bd228f558075e9b003f3517900077f7e3f20c4947f292"
     },
     {
       "id": "carousel-02",
@@ -47,7 +47,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "39b64e2705f44b6bab367fcca63c3a7424ce465ae49de0668c3c822b865de6d9"
+      "sha256": "c9d82a530379ea47b354e232921ef8c5924cb90e922e1d700f3b50a0a394566a"
     },
     {
       "id": "carousel-03",
@@ -55,7 +55,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "4899cc9931b57b0084fbd32836a0f91a13a9b3b7616d1d9d474e849f61462a7a"
+      "sha256": "2e6b6d3cbc61cda64d75359bcd7eb0beba45fedd2c8cf5a5998f5b9234d3dd00"
     },
     {
       "id": "newsletter-header",
@@ -63,7 +63,7 @@
       "height": 600,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "ae602a9f9dd7f5859dea0d1aa715b4274a0c2dea99dca97cece6043d20fb8562"
+      "sha256": "95bf4183c6a6709877b1b39929e8d378561e299721169272d12c31d16e714a51"
     },
     {
       "id": "newsletter-feature",
@@ -71,7 +71,7 @@
       "height": 600,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "cd8d0ddec409ff71830874a375c2c2d03fe39f7c9ded8123482d2bf845bb07ef"
+      "sha256": "a7360629017f8e173e299c2421d89f67d5d654df4b5b2fbaa66405677824c0b2"
     },
     {
       "id": "editorial-cover",
@@ -79,7 +79,7 @@
       "height": 2000,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "ecbaed8d921ee9a8740ee8138c3bdf3d3ce4bd666a763a6cf8db11f5eabc04e0"
+      "sha256": "b021cce4e7292f97ce5c67e8133ad0087473cea3b9bc4e74efa62f85045e8c2f"
     },
     {
       "id": "article-banner",
@@ -87,7 +87,7 @@
       "height": 900,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "bd8ac9e2b6f6b1dd2391069ad493c23560df248253cb6cdb5243c2347b33dc92"
+      "sha256": "3ddbdda94e205af867a414636c20a1398f34a2bb405073d4111a4f3cb7553705"
     },
     {
       "id": "presentation-cover",
@@ -95,7 +95,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "a1e8860e2622b51fa064daee6872f49c3137de959f2a0897015fe9888314afaa"
+      "sha256": "6a1262e4bbc4102be2a5b042a3048131158ed714704f27402f0d66777deb324b"
     },
     {
       "id": "presentation-divider",
@@ -103,7 +103,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "6bcf6492364a33c909c9e9816b9c3bede3e7c25ae773cf6eb28eac66dfd2c7bf"
+      "sha256": "2b81c4e17f4cf974551c68d1c93fa389c83fbdc5693e9a9bb62d1aba6c43e8e6"
     },
     {
       "id": "presentation-framework",
@@ -111,7 +111,7 @@
       "height": 1080,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "a7fbd428056fa671125fde3d0550dee29d93cc2168fdf79d824ef59afe210c1e"
+      "sha256": "223b31f1bf9362b9bfe82b65618fe58b946f47ba5d3c1720181fae0ecf21d64e"
     },
     {
       "id": "program-cover",
@@ -119,7 +119,7 @@
       "height": 1754,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "f5ab72315453585a314431c133be4d3c067ac19524650fad82f8894ce69013e7"
+      "sha256": "f9e33f3cb1d2b2ef879b4da74607708f97619697cc159b336631ffd0b5ba6e60"
     },
     {
       "id": "reflection-worksheet",
@@ -127,7 +127,7 @@
       "height": 1754,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "c724c75d7551538a311891315a0f0eb686bbc339e2c0a6148b75e865b2cdf513"
+      "sha256": "f3bab7a5f1f867847c2405571fbdf5558e41a130722844b3a167a2d67da994fa"
     },
     {
       "id": "poster-a-series",
@@ -135,7 +135,7 @@
       "height": 1754,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "eea76f589bcefc6611185a9edd926922a253d51cdf747cbba9bc7139a39326ea"
+      "sha256": "e1b8393e3d603beebfe65367de22e00f2d0a76c1e08e6feb23cbeebb287b858c"
     },
     {
       "id": "info-sheet",
@@ -143,7 +143,7 @@
       "height": 1754,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "3aa9ec1772c0ce08bf20bc25a3634524f18f0e9a6c39f47210a43abbf622b3ba"
+      "sha256": "f734464b21baf932f501e09b713b3830a067700a80d9592648800015eb1ade34"
     },
     {
       "id": "speaker-card",
@@ -151,7 +151,7 @@
       "height": 900,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "a68b768c6bae81f86eb91181cdc213e26ab6c4ffe2b435b0c7ef0f0e65b90501"
+      "sha256": "61f51a1907857648ec1b174b9283fc9096440aa3100ede57e6ae6e71ac563c5c"
     },
     {
       "id": "name-bar",
@@ -167,7 +167,7 @@
       "height": 591,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "b135f8fecbfb4ca79690d774ed229f38e05daa0c405dbbe26aa8f28c43ae6fb4"
+      "sha256": "af15bc85411b5e6843aeda6c17511cd241ed7f416d6ae405662c131bc6e2b37b"
     },
     {
       "id": "pamphlet-outside",
@@ -175,7 +175,7 @@
       "height": 1240,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "814d77754e767da267fbbceca46bf01e7759e901a6296131e97f1f2540895299"
+      "sha256": "1991710e08c89f18d1c2d3f9eb2ff320b3334e848d6fef9f9fecc61d4659bf30"
     },
     {
       "id": "pamphlet-inside",
@@ -191,7 +191,7 @@
       "height": 628,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "564cdafa11093d35a40e8fa4b59761fe0e174ff94722fcc043b84ce97c08779c"
+      "sha256": "dde168b1ef4768bc8b8fafd449d229830a2e34158b83e777292f202fc8b6e19e"
     },
     {
       "id": "linkedin-landscape-627",
@@ -199,7 +199,7 @@
       "height": 627,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "3646908d21350cabf2e80ff36add477b7ee69e273b3335e6df673cdb0fc80ab0"
+      "sha256": "0281603117f81fe755aeb015b19472f87e0bf73495102b560092df5bf0ed6aca"
     },
     {
       "id": "linkedin-square",
@@ -207,7 +207,7 @@
       "height": 1200,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "b346b2482895b0c46e5bca507fd523fa7f5e79276e95ac2f78724e7664d8c009"
+      "sha256": "4cab649452edd4d3a492a5768e705d27057ab15a77c56a2157481f695e05b76d"
     },
     {
       "id": "linkedin-portrait",
@@ -215,7 +215,7 @@
       "height": 900,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "7a5fed7a58088f7a305e0b5186bc5d6febad5c6cd25b4659af210476419ab93c"
+      "sha256": "02a2c18e4c35ed529413e8b5aefd82f54c2e53d2bbf8257be5b3bc69fd1c5d7e"
     },
     {
       "id": "newsletter-header-1320",
@@ -223,7 +223,7 @@
       "height": 660,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "47c3f9fa5828a9a97164dd75b68d4cdc73832b5d8e25a288174c5cf230f102c6"
+      "sha256": "a79b2402651fe5e48761555c38c51baa89bfed8b847cd54012902fb26b9d121e"
     },
     {
       "id": "newsletter-feature-1320",
@@ -231,7 +231,7 @@
       "height": 660,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "042103424eb0b76a020a39f9af1a0d5bfa6c8cbd76db38b355fe34234b95a0e6"
+      "sha256": "49a0c22c389d9d98669ef9425859a2702f468d1987d66be492d5baa9ca95e249"
     },
     {
       "id": "accent-arrow-ink",
@@ -311,7 +311,7 @@
       "height": 3508,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "f615f74cbb450d2d37ac74fc96b2d59d8556c53afbb71da749a8e1d78bb5b7f6"
+      "sha256": "09255dad80cc5bf3754c1bbf6df44e599ef9e8bdf358673e52450f9275e65903"
     },
     {
       "id": "reflection-worksheet-a4-300ppi",
@@ -319,7 +319,7 @@
       "height": 3508,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "d8b5cea8a8ac950790994f8ca028d38e245659dad1c0bfbefe9e9c334a90abef"
+      "sha256": "cc7796bf410d45662e30c15d43f305ae37950cea00f003f4bc048c54f6fb20bd"
     },
     {
       "id": "poster-a-series-a4-300ppi",
@@ -327,7 +327,7 @@
       "height": 3508,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "8d792b40a2dcebc0c853c641dd9ec6b157c61c39367bd607de98ae84aca530af"
+      "sha256": "d4396e1fbc2e3363adce0b39b00d3f0b6dbb707c4d9c9bb05ccd7504d67cbbe8"
     },
     {
       "id": "info-sheet-a4-300ppi",
@@ -335,7 +335,7 @@
       "height": 3508,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "73b4bf6b1614920bf100f99a9ad033cb22a6f36fabf75651d08ed8f417403eed"
+      "sha256": "af69ae4c11d3e7616476077300f1fb7415a342517758ca6eeea0fa99aab2971b"
     },
     {
       "id": "pamphlet-outside-a4-300ppi",
@@ -343,7 +343,7 @@
       "height": 2480,
       "textBounds": "pass",
       "imagesDecoded": true,
-      "sha256": "8d99a8f6d3f16f7c3037d5f70dc235c2e81b845fd31db3240c8c06590210dc80"
+      "sha256": "3dfb98c35569feda1ebeced6dff089521856980ea39aeaa4326bb61c718276f8"
     },
     {
       "id": "pamphlet-inside-a4-300ppi",
@@ -352,6 +352,238 @@
       "textBounds": "pass",
       "imagesDecoded": true,
       "sha256": "ee9a91124178d509bdaa8435640a73d9decb893e2bcc4c22299d0dedfd599bcb"
+    },
+    {
+      "id": "au-eucalyptus",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "22cd1d01e151d94a47e584800d6d664e0f72d7475aa53da7f9924167ac0a3b8b"
+    },
+    {
+      "id": "au-wattle",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "65b72cb5b92c2360de17180ea478dbe1885b371ce845d06e156b36e450540a90"
+    },
+    {
+      "id": "au-gum-leaf",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "21bd94937e3de950920826763a964aaa594296725efeda4877075541834ca1df"
+    },
+    {
+      "id": "au-banksia",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "15156f3a1e3c1fef3456218f087069c5dc5b9f9d31e32d05780d04104db452d2"
+    },
+    {
+      "id": "au-coastal-sun",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "26a49b853631c868e84527dfc247c205f381f3a4e6c84eef449112c044e137a6"
+    },
+    {
+      "id": "au-sandstone-ridge",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "8dcf0b4a544bab5695161a7902a653142fcbe22791cc99430cb7791d33bcd634"
+    },
+    {
+      "id": "au-seed-pod",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "297350f7ae5a48dc31356944624258a8341dd3dcaf6858c6cfce401b93598b55"
+    },
+    {
+      "id": "au-coastal-walk",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "6818332b5ee535b8fa275e2aab03e836fee5af695618649d477506802ce1d1ff"
+    },
+    {
+      "id": "au-notebook-cue",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "9ece9b67e7c8b593bacb60de374571a457b43e4d8a7228e9204453877b03f349"
+    },
+    {
+      "id": "au-quiet-headphones",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "2889de290bfad596824b71c5078e94377d6c8c9ce5a63d41a89108372ac0e5c0"
+    },
+    {
+      "id": "au-breathing-space",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "c111fa6f7e60dac4fe08e8b953f41d652752ccd89b7fe6711bcf40eb662d47f9"
+    },
+    {
+      "id": "au-tea-pause",
+      "width": 512,
+      "height": 512,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "a044cf31234d3379d35af272f9554a70767c5337e3d13013f8e8a7d4fd0211cf"
+    },
+    {
+      "id": "abstract-coastal-ribbons",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "22d4022d98e16a6941b6584149d878af1e1d86b8eefc186301b470787d30a0ee"
+    },
+    {
+      "id": "slide-coastal-ribbons",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "78e1f83155acba2a6a22e08c018ce28326360f908ea0aa8bcfecfb74988a9c92"
+    },
+    {
+      "id": "abstract-sun-disc",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "0ca3f76ebba93c6388d6d3ed2f5c1ea263ae49b7bfc62e5ef16ea0f3c9621ac0"
+    },
+    {
+      "id": "slide-sun-disc",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "9f8c79a1a15cd40ce294d3de74d00edc95e9fb988da4775e6142340efecb8194"
+    },
+    {
+      "id": "abstract-folded-path",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "5d1d9d60c4ee9c47cafbad9f9da7a3afb1bdfa333b3c503d88ed36c0877ec140"
+    },
+    {
+      "id": "slide-folded-path",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "49a24b6dbfe6c09f9e24646d245eb8b6b4855c05130d1d655664b014ab9779e2"
+    },
+    {
+      "id": "abstract-sandstone-arches",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "8e7cea53dea896e2251ca8f431a9a4c43ce176e71c509c13fbfa79eec0754e7b"
+    },
+    {
+      "id": "slide-sandstone-arches",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "972aa74643bc76385f825375d5b9858306afdf38765c86a20ed8a90d5873a35d"
+    },
+    {
+      "id": "abstract-focus-orbits",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "420093ca8dece4e785014d5905dd2503451ae9d464901c3a1cd9754c27b44874"
+    },
+    {
+      "id": "slide-focus-orbits",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "cb62caa60d7809ac50454d917ba92eb1c5614658289367f91f5c146c1ef51082"
+    },
+    {
+      "id": "abstract-paper-shapes",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "cce72fdc24a9ea7142a84e4c16124dae97586ae7898a085299eeadf0055dbf2f"
+    },
+    {
+      "id": "slide-paper-shapes",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "74e1ddb60779d0df8087d26e5e9f9a68b538dc4186821b87d606cb5bfbfb53e4"
+    },
+    {
+      "id": "pamphlet-wattle-edge",
+      "width": 1240,
+      "height": 1754,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "9cec7dd996deeadcc1b37d2c4d64cbb2e9bca7bfe6a01c9ad5d61730b921f805"
+    },
+    {
+      "id": "pamphlet-coastal-edge",
+      "width": 1240,
+      "height": 1754,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "b8ebf45f4e1fce1745ff03bddb4119ddfa35aff7efa9c9db1d48734f474a3172"
+    },
+    {
+      "id": "social-australian-pause",
+      "width": 1080,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "a24707317b80e9aa659c5f1701d0cc07e2af3493f292712cbbcce18d90cda660"
+    },
+    {
+      "id": "newsletter-australian-pause",
+      "width": 1200,
+      "height": 600,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "8fd3e94714de11fc5a63b88aa34e370d1494e50c23781dc33a2a9f767469a2f5"
+    },
+    {
+      "id": "presentation-australian-pause",
+      "width": 1920,
+      "height": 1080,
+      "textBounds": "pass",
+      "imagesDecoded": true,
+      "sha256": "766c53fa94c16a8be6e9245eb7bde824b2088ae5eaebaafb62b79d1eaa0a8d70"
     }
   ]
 }

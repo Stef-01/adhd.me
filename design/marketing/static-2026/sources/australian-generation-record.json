@@ -1,0 +1,15 @@
+{
+  "method": "built-in image_gen",
+  "promptBriefs": [
+    {
+      "file": "photography/australian-morning-still-life.png",
+      "brief": "Premium editorial still-life photograph for Australian ADHD.ME wellbeing brand, wide 3:2. No people, faces, words or logos. Warm sandstone tabletop in Australian morning sunlight, eucalyptus branch and organic shadows, sunflower yellow ceramic mug, closed ivory notebook and terracotta pencil. Minimal arrangement to right and lower right, spacious warm ivory left side for slide text. Tactile real materials, natural shadows, contemporary magazine photography, no clinical objects or clutter.",
+      "sha256": "73ea526fc759146a7a8f05979341069d588d9fa501f87f333c4f3d1f04b7e067"
+    },
+    {
+      "file": "graphics/coastal-paper-art.png",
+      "brief": "Premium abstract editorial artwork for Australian wellbeing brand ADHD.ME, wide 3:2. No text, logos, people or faces. Tactile cut-paper and painted gouache composition evoking coastal dunes, ochre sandstone curve, eucalyptus-green leaf silhouettes, ivory negative space, sunflower-yellow sun disc and tiny vermilion square. Contemporary Australian editorial graphic art, restrained asymmetry, material grain, natural depth. Clustered right two-thirds with clear upper-left space, no frames or mockup.",
+      "sha256": "1da1e734f38d21a207d57e9e5cbe1d538036a5df4b22fe35716495abce1395d9"
+    }
+  ]
+}

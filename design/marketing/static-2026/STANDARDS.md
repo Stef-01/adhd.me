@@ -33,8 +33,8 @@ Researched 27 September 2026. No universal standard defines every file in a mark
 
 - 8 outlined SVG identity masters and 8 high-resolution PNG equivalents, plus the 2 original raster logo rerenders.
 - 4 original AI-generated photographic masters, with fictional-model provenance.
-- 44 rendered layout/utility PNGs and editable HTML sources: social, carousel, newsletter, editorial, presentation, training, poster, information sheet, pamphlet, speaker/name assets and transparent utility graphics.
-- 7 editable native-SVG utility graphics: ink/white arrows, red stop, yellow quotation mark, editorial rule, widescreen corner frame and portrait photo frame.
+- 73 rendered layout/utility PNGs and editable HTML sources: social, carousel, newsletter, editorial, presentation, training, poster, information sheet, pamphlet, speaker/name assets and transparent utility graphics.
+- 33 editable native-SVG graphics, including 26 Australian-inspired icons, abstract slide compositions and pamphlet edges, plus the original 7 utilities: ink/white arrows, red stop, yellow quotation mark, editorial rule, widescreen corner frame and portrait photo frame.
 - Font licences, colour/clearspace guidance, research, image-generation record, manifest, validation report and an exact machine-readable inventory.
 
 ## Transparent files

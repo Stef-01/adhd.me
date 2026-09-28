@@ -4,11 +4,11 @@ Open `review/index.html` for the contact sheet. Click a preview to open its edit
 
 ## Included in this release
 
-44 static layouts and utility exports, including the original core set: four social/story assets; three carousel cards; two newsletter headers; editorial cover and article banner; three presentation graphics; training cover and reflection worksheet; poster, information sheet and two-sided six-panel pamphlet; speaker card, name bar and badge. Each has an HTML source with real editable text and a PNG export. Four original generated photographs and two generated logo masters accompany them.
+73 static layouts and utility exports, including the original core set: four social/story assets; three carousel cards; two newsletter headers; editorial cover and article banner; three presentation graphics; training cover and reflection worksheet; poster, information sheet and two-sided six-panel pamphlet; speaker card, name bar and badge. Each has an HTML source with real editable text and a PNG export. Four original generated photographs and two generated logo masters accompany them.
 
 Names and roles on speaker/name templates are editable fields. Replace them with authorised details; no fictional practitioner biographies or testimonial claims have been invented. All four photographed scenes use AI-generated fictional people. See `sources/RESEARCH.md` and `sources/generation-record.json` for reference and provenance notes.
 
-16 reusable transparent PNGs are collected in `transparent-png/`, with previews on light and dark backgrounds. `inventory.csv` lists 73 canonical PNG/SVG files (convenience copies excluded). See `STANDARDS.md` for researched channel requirements and exact sizing.
+36 reusable transparent PNGs are collected in `transparent-png/`, with previews on light and dark backgrounds. `inventory.csv` lists 130 canonical PNG/SVG files (convenience copies excluded). See `STANDARDS.md` for researched channel requirements and exact sizing.
 
 The additions include four LinkedIn formats, two 1320px newsletter exports, seven transparent utility graphics, two wide name bars, and six A4 proofs at nominal 300ppi.
 
@@ -33,3 +33,7 @@ No video, motion or B-roll is part of this brief. These materials are kept outsi
 ## Rebuild and verify
 
 Run `python scripts/standardize-static-campaign.py`, `node scripts/export-static-campaign.mjs`, `node scripts/validate-static-campaign.mjs`, then `python scripts/validate-campaign-deliverables.py`. The last step checks PNG dimensions, alpha and channel byte limits, rebuilds the transparent collection and exact inventory, and writes `review/standards-validation.json`.
+
+## Australian-inspired expansion
+
+See `review/australian-library.html` and `AU-ASSETS.md`: 26 new SVG/PNG illustrations and slide/pamphlet elements, one faceless still-life photograph, one textured coastal artwork, and three faceless campaign layouts. The library now has 73 HTML/PNG layouts and 36 reusable transparent PNGs. All marketing URLs use **adhdme.au**; the browser validator rejects deployment-domain text.
