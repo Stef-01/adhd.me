@@ -25,7 +25,7 @@
 // this module's. `state.test.ts` plants a sentence and proves it reaches storage and nowhere else.
 
 /** The finder's screens, in no particular order; the trail records the order a person walked. */
-export const STAGES = ["welcome", "listening", "type", "results", "profile", "compare", "booking"] as const;
+export const STAGES = ["welcome", "listening", "voice", "type", "results", "profile", "compare", "booking"] as const;
 export type Stage = (typeof STAGES)[number];
 
 export function isStage(value: unknown): value is Stage {
@@ -160,12 +160,13 @@ function stateFor(entry: FinderEntry): { finder: FinderEntry } {
 
 /**
  * The stage a person lands on when an entry is REVISITED — by Back, Forward or a reload — rather
- * than reached. `listening` is the one stage that cannot be resumed: the microphone starts only
- * from a tap (WebKit's rule, O48), so revisiting it lands on the typing screen with the draft
- * intact, one tap from the microphone. Every other stage is its own destination.
+ * than reached. `listening` and `voice` cannot be resumed: the microphone starts only from a tap
+ * (WebKit's rule, O48), and a voice call is paid for, so revisiting either lands on the typing
+ * screen with the draft intact, one tap from the microphone. Every other stage is its own
+ * destination.
  */
 export function stageOnRevisit(stage: Stage): Stage {
-  return stage === "listening" ? "type" : stage;
+  return stage === "listening" || stage === "voice" ? "type" : stage;
 }
 
 /** Where a person is after arriving: the position, the place, and the record to resume from. */

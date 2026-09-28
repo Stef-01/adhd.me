@@ -33,6 +33,15 @@ const ALLOWED = ["src/messaging/", "src/sim/"];
 
 /** Constructing an adapter, or calling send on something. Both are "wired". */
 const WIRED = /new\s+(?:Twilio|Mock)SmsAdapter\b|:\s*SmsAdapter\b|\.send\s*\(/;
+const ADAPTER = /new\s+(?:Twilio|Mock)SmsAdapter\b|:\s*SmsAdapter\b/;
+
+/**
+ * Files whose `.send(` is not a message to a person, each with what it sends and to where. Only the
+ * `.send(` is excused: an SMS adapter appearing in one of them is still the finding.
+ */
+const NOT_A_MESSAGE: Readonly<Record<string, string>> = {
+  "src/voice/link.ts": "RTCDataChannel.send: the voice finder's realtime API events, to OpenAI over WebRTC",
+};
 
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((entry) => {
@@ -49,7 +58,7 @@ function wiredOutsideTheSimulator(): string[] {
   return [...sourceFiles(path.join(ROOT, "src")), ...sourceFiles(path.join(ROOT, "app"))]
     .map(rel)
     .filter((file) => !ALLOWED.some((prefix) => file.startsWith(prefix)))
-    .filter((file) => WIRED.test(readFileSync(path.join(ROOT, file), "utf8")))
+    .filter((file) => (file in NOT_A_MESSAGE ? ADAPTER : WIRED).test(readFileSync(path.join(ROOT, file), "utf8")))
     .sort();
 }
 
@@ -60,6 +69,13 @@ describe("W182 nothing outside the simulator can send", () => {
       wired,
       `these modules can now send, which makes docs/GATE-DOSSIER-Q14.md wrong: ${wired.join(", ")}`,
     ).toEqual([]);
+  });
+
+  it("excuses only files that exist and still call a send, each with its reason", () => {
+    for (const [file, reason] of Object.entries(NOT_A_MESSAGE)) {
+      expect(reason.length, file).toBeGreaterThan(20);
+      expect(readFileSync(path.join(ROOT, file), "utf8"), `${file} no longer sends: drop its excuse`).toMatch(/\.send\s*\(/);
+    }
   });
 
   it("the scan reaches the tree it claims to", () => {

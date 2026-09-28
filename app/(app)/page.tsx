@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { levelOf } from "@/lib/llm/client";
+import { voiceOn } from "@/voice/interviewer";
 import { seoMetadata } from "@/seo/pages";
 import { CareFinder } from "../care-finder";
 
@@ -29,8 +30,8 @@ import { CareFinder } from "../care-finder";
 // should. `(app)` is not in any URL; it scopes the boundary to the route that actually streams.
 export const metadata: Metadata = seoMetadata("/");
 
-// The read level is taken when this page is prerendered, at build: on Vercel an env change takes a
-// redeploy anyway, and the read route checks the level again on every request.
+// The read level and voice are taken when this page is prerendered, at build: on Vercel an env change
+// takes a redeploy anyway, and the read and voice routes check again on every request.
 export default function AppHome() {
-  return <CareFinder readLevel={levelOf(process.env)} />;
+  return <CareFinder readLevel={levelOf(process.env)} voice={voiceOn(process.env)} />;
 }

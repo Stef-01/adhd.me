@@ -97,6 +97,7 @@ export const EXTRA = [
   { path: "/go/anubhav-saxena", skip: "a redirect" },
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
+  { path: "/", state: "finder-voice", name: "Finder voice (the orb, one question)" },
   { path: "/approach?module=everyday", name: "A read module, first card" },
   { path: "/approach?module=adhd", name: "A read module, the ADHD card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
@@ -353,7 +354,12 @@ export async function reach(page, route, base) {
     await page.goto(`${base}${route.path}`, { waitUntil: "networkidle" });
     return;
   }
+  if (route.state === "finder-voice") await page.addInitScript(() => { window.__adhdmeVoiceFake = true; });
   await page.goto(`${base}${route.path}`, { waitUntil: "networkidle" });
+  if (route.state === "finder-voice") {
+    await page.getByRole("button", { name: "Talk instead of typing" }).click();
+    await page.locator(".voice-orb").waitFor({ timeout: 10000 });
+  }
   if (route.state === "finder-results" || route.state === "finder-profile") {
     await page.getByRole("textbox").fill("an adult ADHD assessment, telehealth, not rushed");
     await page.keyboard.press("Enter");

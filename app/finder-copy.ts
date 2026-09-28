@@ -16,4 +16,17 @@ export const FINDER_COPY = {
   reading: { text: "Reading what you asked", cap: 4 },
   /** Under it after `afterMs`. The finder stops waiting at 12 seconds and lists on its own read. */
   readingLate: { text: "A few more seconds", cap: 6, afterMs: 6000 },
+  /** The voice finder's own words; everything else is the orb, and the question being said. */
+  voice: {
+    /** The one line when a call cannot start, and the way out beside it. */
+    failed: {
+      mic: { text: "The microphone is blocked.", cap: 4 },
+      busy: { text: "Voice is busy now.", cap: 4 },
+      unavailable: { text: "Voice isn’t available now.", cap: 4 },
+    },
+    typeInstead: { text: "Type instead", cap: 2 },
+    urgent: { text: "Urgent help", cap: 2 },
+    /** The stop button's name for a screen reader; the screen shows its glyph. */
+    end: { text: "End voice", cap: 2 },
+  },
 } as const;

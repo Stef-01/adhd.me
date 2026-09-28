@@ -37,7 +37,7 @@ let unreached = 0;
 for (const route of routes()) {
   const slug = route.name.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase() || "home";
   try {
-    if (route.state === "finder-results" || route.state === "finder-profile") {
+    if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice") {
       await context.close();
       context = await browser.newContext(CONTEXT);
       page = await context.newPage();

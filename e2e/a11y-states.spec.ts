@@ -37,7 +37,7 @@ test("every stateful patient screen passes WCAG 2.1 AA", async ({ browser, baseU
   let swept = 0;
   for (const route of stateful) {
     try {
-      if (route.state === "finder-results" || route.state === "finder-profile") {
+      if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice") {
         await context.close();
         context = await browser.newContext(options);
         page = await context.newPage();

@@ -8,6 +8,7 @@ import { ArrowRight, Microphone } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { EXAMPLE_SEARCHES } from "@/finder/examples";
+import { OPENING_QUESTION } from "@/voice/interviewer";
 import { AppSettings } from "../app-settings";
 import { EASE_OUT, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
@@ -76,7 +77,7 @@ export function WelcomeStage({
           it is now the question the box answers, at a size that leads without shouting. */}
       <motion.div className="voice-core" variants={reducedMotion ? undefined : introStagger}>
         <motion.div className="voice-prompt" variants={reducedMotion ? undefined : introItem}>
-          <h1 tabIndex={-1} className="t-question">What kind of support are you looking for?</h1>
+          <h1 tabIndex={-1} className="t-question">{OPENING_QUESTION}</h1>
         </motion.div>
       </motion.div>
 

@@ -36,6 +36,13 @@ export const FINDER_ANNOUNCEMENTS = {
   noMatches: "No matches.",
   /** The results were re-ordered after a refine or a place change. */
   reranked: "Re-ranked:",
+  /** Voice mode: the call is starting, then it is open. */
+  voiceConnecting: "Connecting.",
+  voiceLive: "Voice on.",
+  /** The person muted the microphone. */
+  voiceMuted: "Microphone muted.",
+  /** The last answer is in; the matches are next. */
+  voiceRevealing: "Finding your matches.",
 } as const;
 
 /** A language restart on the listening screen: the label is the language's own name. */

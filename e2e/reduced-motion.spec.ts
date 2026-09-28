@@ -36,7 +36,7 @@ test("nothing moves on a patient screen under reduced motion", async ({ browser,
     // The console is staff tooling on a desktop; this is the patient law.
     if (route.path.startsWith("/console")) continue;
     try {
-      if (route.state === "finder-results" || route.state === "finder-profile") {
+      if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice") {
         await context.close();
         context = await browser.newContext(options);
         page = await context.newPage();

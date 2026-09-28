@@ -55,6 +55,9 @@ import { useFinderHistory } from "./finder-history";
 import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
+import { VoiceStage } from "./finder-stages/voice-stage";
+import { fakeVoice } from "@/voice/link";
+import type { Reveal } from "@/voice/conversation";
 import { TypeStage } from "./finder-stages/type-stage";
 import { ResultsStage } from "./finder-stages/results-stage";
 import { ProfileStage } from "./finder-stages/profile-stage";
@@ -80,8 +83,11 @@ const exampleRequest = defaultArchetype.request;
 /** At level 1, how long the results wait for the read before ranking on the finder's own. */
 const READ_TIMEOUT_MS = 12_000;
 
-/** @param readLevel `ADHDME_LLM_LEVEL` in effect (LLM-MATCHING-PLAN §15): at 0 the finder reads the words itself and asks nothing. */
-export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
+/**
+ * @param readLevel `ADHDME_LLM_LEVEL` in effect (LLM-MATCHING-PLAN §15): at 0 the finder reads the words itself and asks nothing.
+ * @param voice `ADHDME_VOICE` in effect: the microphone opens the voice finder (src/voice) rather than dictation.
+ */
+export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: number; voice?: boolean }) {
   const reducedMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
@@ -593,6 +599,16 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
     goTo("results");
   }
 
+  /** The voice finder's last answer: its sentence is the request, its suburb the place. */
+  function revealVoice({ request: words, place: spoken }: Reveal) {
+    if (spoken && resolvePlace(spoken)) {
+      setPlace(spoken);
+      rememberPlace(spoken);
+    }
+    setDraft(words);
+    findMatches(words);
+  }
+
   function chooseClinician(selected: Clinician) {
     const index = matches.findIndex((item) => item.id === selected.id);
     if (index >= 0) setMatchIndex(index);
@@ -711,7 +727,24 @@ export function CareFinder({ readLevel = 0 }: { readLevel?: number }) {
             onSearch={findMatches}
             includeSynthetic={includeSynthetic}
             onToggleSynthetic={toggleSynthetic}
-            onTalk={() => startListening()}
+            onTalk={() => (voice || fakeVoice() ? goTo("voice") : startListening())}
+          />
+        )}
+
+        {stage === "voice" && (
+          <VoiceStage
+            key="voice"
+            focusOnArrival={focusOnArrival}
+            reducedMotion={reducedMotion}
+            onReveal={revealVoice}
+            onLeave={(words) => {
+              setDraft(words);
+              backTo("welcome");
+            }}
+            onType={(words) => {
+              setDraft(words);
+              goTo("type");
+            }}
           />
         )}
 

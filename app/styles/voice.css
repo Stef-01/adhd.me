@@ -1,0 +1,108 @@
+/* The voice finder (app/finder-stages/voice-stage.tsx), after Javi0108/VoiceChatGpt-Prototype
+   (founder, 2026-09-28: "make it exactly like this"): a plain screen, the orb at its centre, a
+   quarter of its height, and one red button a tenth of the way up from the foot that ends the
+   call. The finder is plain paper, so the orb is the one colour here, and the stop the one red. */
+
+:root {
+  /* The prototype's two orb colours; its shader ramps black, these two, then white. */
+  --orb-deep: #4ab7ff;
+  --orb-light: #d3f4fa;
+  /* The prototype's stop button, and its hover and press. White on it is 4:1. */
+  --voice-stop: #ff0000;
+  --voice-stop-hover: #e14747;
+  --voice-stop-press: #a00000;
+  --on-voice-stop: #ffffff;
+}
+
+/* The call is the whole screen under the header: the tab bar steps away while it runs. The header
+   stays, and Urgent help in it (platform-header.tsx: always visible, on every patient screen). */
+body:has(.care-app[data-stage="voice"]) .app-tabs { display: none; }
+.platform-shell:has(.voice-mode) { padding-bottom: 0; }
+.platform-shell .patient-v2 .care-shell:has(.voice-mode) { min-height: 0; padding-bottom: 0; }
+
+.platform-shell .patient-v2 .screen.voice-mode {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - 69px);
+  padding: 0 0 calc(var(--safe-bottom) + var(--consent-height, 0px));
+}
+@media (min-width: 768px) {
+  .platform-shell .patient-v2 .screen.voice-mode { min-height: calc(100svh - 80px); }
+}
+
+.voice-mode-stage {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+/* ── The orb ─────────────────────────────────────────────────────────────────────────────────── */
+
+.voice-orb {
+  width: clamp(180px, 26svh, 280px);
+  aspect-ratio: 1;
+  transition:
+    transform 540ms var(--ease-ui),
+    opacity 540ms var(--ease-ui),
+    filter 420ms var(--ease-ui);
+}
+.voice-orb-canvas,
+.voice-orb-still {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+/* Without WebGL2: a still disc in the same two colours. */
+.voice-orb-still {
+  background: radial-gradient(circle at 50% 42%, var(--orb-light) 0%, var(--orb-deep) 78%);
+}
+.voice-orb[data-phase="failed"] { opacity: 0.5; filter: saturate(0.2); }
+/* The matches are next: the orb goes, and the list arrives where it was. */
+.voice-orb[data-phase="revealing"] { transform: scale(0.5); opacity: 0; }
+
+.patient-v2 .voice-mode .voice-mode-failed {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+/* ── The one control ─────────────────────────────────────────────────────────────────────────── */
+
+.voice-mode-foot {
+  display: flex;
+  justify-content: center;
+  padding: 16px var(--shell-gutter) max(10svh, 32px);
+}
+
+.voice-stop {
+  display: grid;
+  place-items: center;
+  width: 86px;
+  height: 80px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 50px;
+  background: var(--voice-stop);
+  color: var(--on-voice-stop);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 300ms ease;
+}
+.voice-stop svg { width: 56px; height: 56px; }
+@media (hover: hover) {
+  .voice-stop:hover { background: var(--voice-stop-hover); }
+}
+.voice-stop:active { background: var(--voice-stop-press); }
+.platform-shell .voice-mode .voice-stop:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+
+.patient-v2 .voice-mode .voice-mode-type { width: auto; min-width: 200px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-orb { transition: none; }
+}

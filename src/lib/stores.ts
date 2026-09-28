@@ -30,6 +30,7 @@ import { resetPathwayRegistry } from "@/pathways/registry";
 import { resetPrivacy } from "@/privacy/state";
 import { resetReferralRail } from "@/referrals/store";
 import { resetRegisters } from "@/registers/store";
+import { resetVoiceSessions } from "@/voice/sessions";
 
 /** Every store reset, by the name the source tree exports it under. */
 export const STORE_RESETTERS: Record<string, () => unknown> = {
@@ -52,6 +53,7 @@ export const STORE_RESETTERS: Record<string, () => unknown> = {
   resetPrivacy,
   resetReferralRail,
   resetRegisters,
+  resetVoiceSessions,
 };
 
 /**

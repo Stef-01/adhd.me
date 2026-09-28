@@ -196,3 +196,21 @@ reading, $0, 1.6 seconds. Two changes came of it.
 - **A burst.** Ten searches at once along the finder's path (32 calls in flight together): all done in
   7.2 s, each waiting 3.2 s at p50 and 7.2 s at most (the burst opens new connections), no failed
   attempt, no fallback, $0.0004 a search. The project's ceilings are nowhere near.
+
+## R11 · what the voice finder's requests showed about the readers, 2026-09-28
+
+The voice finder (docs/matching/VOICE-FINDER.md) writes one request sentence per call, so its
+evaluation reads many model-written sentences. Four reader gaps, each confirmed on a single sentence:
+
+- **"ADHD" reads as an assessment.** The lexicon hears `care:adhd-assessment` in "keep prescribing my
+  ADHD medication" and "ADHD coaching and skills", and the level-1 read keeps it (the reads do not
+  refuse it). A person asking for scripts or coaching is ranked for assessment.
+- **A woman clinician is heard only beside "GP".** The lexicon hears "a female GP" and nothing in
+  "a woman psychologist", "a female psychologist" or "with a woman". The level-1 read hears "with a
+  woman" but not "a woman psychologist" or "a female psychologist": its meaning says "a woman
+  clinician", but not every read adds it, and a key stays only when every read does.
+- **"A medication review" is silent in the lexicon** (level 1 hears it as `care:titration`).
+- Candidate fixes, for the ladder: widen the lexicon's woman cue to any clinician word; read
+  `adhd-assessment` only on assessment, diagnosis or "find out" words; pins for each in the corpus.
+  The voice finder writes "a woman" and "a medication review" in the meantime, the phrasings level 1
+  hears.

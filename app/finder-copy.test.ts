@@ -26,7 +26,9 @@ const chips: { label: string; short: string; spoken: string }[] = [
 
 describe("FINDER_COPY", () => {
   it("keeps every fixed string within its cap", () => {
-    for (const copy of [FINDER_COPY.heardRow, FINDER_COPY.reading, FINDER_COPY.readingLate]) {
+    const { voice } = FINDER_COPY;
+    const voiceCopy = [voice.typeInstead, voice.urgent, voice.end, ...Object.values(voice.failed)];
+    for (const copy of [FINDER_COPY.heardRow, FINDER_COPY.reading, FINDER_COPY.readingLate, ...voiceCopy]) {
       expect(words(copy.text), copy.text).toBeLessThanOrEqual(copy.cap);
     }
   });
