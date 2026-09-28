@@ -235,9 +235,13 @@ evaluation reads many model-written sentences. Four reader gaps, each confirmed 
 - **For a person, fixed by memory.** `/api/finder/read` now keeps each reading for a day under a hash
   of the words (`src/lib/matching/read-cache.ts`): the same words read the same way, and a repeated
   search, an example chip say, costs nothing and waits for nothing.
+- **Split by kind** (the second P5 report's Flips table): 13 of 363 requests, 3.6%, flip on a care,
+  preference or language key, under the 5% gate; the other 21 flip on a manner key alone. Most of
+  the 13 are the sentences whose labels are already the founder's to decide: "just someone to talk
+  to", "keep the scripts going", "bulk billing was not available", "my brain will not switch off".
 - **For the gate, the founder's call.** Majority rather than unanimous voting on manner keys would
   steady them and cost precision, which unanimity was chosen for (R3). Or the gate could count flips
-  in care and preferences only. Neither is changed here.
+  in care, preferences and languages only, which pass at 3.6%. Neither is changed here.
 - **Lexicon, the same day:** "keep prescribing my medication", "someone to keep prescribing", "keep
   writing my scripts" and "continue prescribing my" now reach shared care, and "they keep prescribing
   me the wrong dose" is pinned as not asking for it. "keep my scripts going" was not added: it hears
