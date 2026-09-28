@@ -37,7 +37,7 @@ for (const width of WIDTHS) {
   let page = await ctx.newPage();
   for (const route of routes()) {
     try {
-      if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice") {
+      if (route.state?.startsWith("finder-")) {
         await ctx.close();
         ctx = await b.newContext({ ...contextFor(BASE), viewport: { width, height: 844 } });
         page = await ctx.newPage();

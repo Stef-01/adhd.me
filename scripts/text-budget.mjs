@@ -19,7 +19,7 @@ const results = [];
 for (const route of routes()) {
   try {
     // The finder writes its stage back to the tab on unload, so a cleared tab is not a fresh one.
-    if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice" || route.state === "finder-rate") {
+    if (route.state?.startsWith("finder-")) {
       await context.close();
       context = await browser.newContext(CONTEXT);
       page = await context.newPage();

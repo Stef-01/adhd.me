@@ -61,11 +61,32 @@ for (const [name, viewport] of [
   });
 }
 
-test("progressive disclosure opens known details without changing the page hierarchy", async ({ page }) => {
+test("one section open at a time: the bio folds while another is open, and comes back", async ({ page }) => {
   await toProfile(page);
+  const about = page.locator(".profile-about");
+  const sentence = about.locator(":scope > p");
+  await expect(about).toHaveAttribute("open", "");
+  await expect(sentence).toBeVisible();
+  // Open, the bio has no row over it: the sentence leads, as it always did.
+  await expect(about.locator(":scope > summary")).toBeHidden();
+
   const why = page.locator(".profile-disclosure").filter({ hasText: "Why matched" });
   await why.locator("summary").click();
   await expect(why).toHaveAttribute("open", "");
   await expect(why.locator(".profile-disclosure-body")).toBeVisible();
-  await expect(page.locator(".profile-about p").first()).toBeVisible();
+  // Folded, not deleted: the clinician's sentence is one tap away, under "About".
+  await expect(about).not.toHaveAttribute("open", "");
+  await expect(sentence).toBeHidden();
+  await expect(about.locator(":scope > summary")).toHaveText("About");
+
+  // Closing the last open section brings the sentence back.
+  await why.locator("summary").click();
+  await expect(about).toHaveAttribute("open", "");
+  await expect(sentence).toBeVisible();
+
+  // And "About" tapped while another section is open folds that one instead.
+  await why.locator("summary").click();
+  await about.locator(":scope > summary").click();
+  await expect(about).toHaveAttribute("open", "");
+  await expect(why).not.toHaveAttribute("open", "");
 });

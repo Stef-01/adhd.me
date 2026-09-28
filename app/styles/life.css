@@ -241,7 +241,8 @@
 
 /* ── Finder: the allied providers' "Best for" line (PRD §41) ─────────────────────────────── */
 .profile-best-for { margin: 4px 0 0; color: var(--ink); font-size: 0.875rem; line-height: 1.5; }
-.profile-best-for span { margin-right: 6px; color: var(--muted); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+/* The words that lead the line, in the line's own size and case: no 11px uppercase eyebrow. */
+.profile-best-for span { color: var(--muted); }
 .voice-reflection { display: grid; gap: 8px; margin-top: 10px; }
 .voice-reflection .learn-secondary { justify-self: start; }
 .voice-reflection-live { margin: 0; color: var(--muted); font-size: 0.9375rem; font-style: italic; }
@@ -250,7 +251,8 @@
 /* The NWIA line on the care map and a node: one sentence, muted, attributed. */
 .care-map-nwia { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; line-height: 1.55; }
 .care-map-nwia span { margin-right: 6px; font-size: 0.75rem; font-weight: 700; }
-.care-map-nwia a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+/* An onward link is ink; the underline says it goes somewhere. The accent is for live values. */
+.care-map-nwia a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
 /* Adjustments on paper (PRD §45) */
 .adjust-tracks { display: flex; gap: 8px; margin: 0 0 14px; }

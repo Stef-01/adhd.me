@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T22:51:16.387Z",
-  "base": "http://localhost:3400",
+  "measuredAt": "2026-09-28T03:06:09.623Z",
+  "base": "http://localhost:3420",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -170,7 +170,7 @@
         },
         {
           "w": 5,
-          "text": "01:37 left in this session",
+          "text": "02:04 left in this session",
           "tag": "small"
         }
       ]
@@ -449,26 +449,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 12,
+      "fold": 12,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
           "w": 3,
-          "text": "WRITE THE LINE!",
+          "text": "TURN IT DOWN!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
-        },
-        {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         }
       ]
     },
@@ -503,21 +503,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 2,
-      "fold": 2,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
+        {
+          "w": 3,
+          "text": "DUCK OR GOOSE!",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "small, quacking",
+          "tag": "p"
+        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "PIGEONS!",
-          "tag": "p"
         }
       ]
     },
@@ -931,7 +936,7 @@
       "name": "/my-adhd",
       "state": null,
       "total": 27,
-      "fold": 16,
+      "fold": 20,
       "chrome": 6,
       "ratio": 0.7,
       "verdict": "target",
@@ -1038,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1425,
-      "fold": 219,
+      "total": 1512,
+      "fold": 246,
       "chrome": 22,
-      "ratio": 35.6,
+      "ratio": 37.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -2628,10 +2633,102 @@
       ]
     },
     {
+      "path": "/",
+      "name": "Finder profile, why matched open",
+      "state": "finder-profile-why",
+      "total": 48,
+      "fold": 48,
+      "chrome": 2,
+      "ratio": 1.2,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 4,
+          "text": "By phone or telehealth",
+          "tag": "strong"
+        },
+        {
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Beecroft & Double Bay",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Settings, open (on the finder, where it holds the most)",
+      "state": "finder-settings",
+      "total": 45,
+      "fold": 17,
+      "chrome": 0,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 9,
+          "text": "This file holds your answers. Keep it somewhere private.",
+          "tag": "small"
+        },
+        {
+          "w": 8,
+          "text": "In this browser, and your searches with us.",
+          "tag": "small"
+        },
+        {
+          "w": 4,
+          "text": "Fictional providers, not bookable.",
+          "tag": "small"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Finder voice (the orb, one question)",
+      "state": "finder-voice",
+      "total": 0,
+      "fold": 0,
+      "chrome": 2,
+      "ratio": 0,
+      "verdict": "target",
+      "longest": []
+    },
+    {
+      "path": "/",
+      "name": "Finder home, a visit to rate",
+      "state": "finder-rate",
+      "total": 28,
+      "fold": 28,
+      "chrome": 6,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "What kind of support are you looking for?",
+          "tag": "h1"
+        },
+        {
+          "w": 8,
+          "text": "How was your visit with Dr Anubhav Saxena?",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Adult ADHD assessment",
+          "tag": "button"
+        }
+      ]
+    },
+    {
       "path": "/approach?module=everyday",
       "name": "A read module, first card",
       "state": null,
-      "total": 57,
+      "total": 56,
       "fold": 43,
       "chrome": 2,
       "ratio": 1.4,
@@ -2658,10 +2755,10 @@
       "path": "/approach?module=adhd",
       "name": "A read module, the ADHD card",
       "state": null,
-      "total": 58,
+      "total": 57,
       "fold": 48,
       "chrome": 2,
-      "ratio": 1.5,
+      "ratio": 1.4,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2896,26 +2993,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "GET OUT!",
+          "w": 3,
+          "text": "WRITE THE LINE!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "crooked book",
-          "tag": "span"
+          "w": 3,
+          "text": "Round the left",
+          "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 3,
+          "text": "Round the right",
+          "tag": "button"
         }
       ]
     },
@@ -3031,11 +3128,11 @@
       "path": "/match/prep",
       "name": "Match prep",
       "state": "intake",
-      "total": 56,
-      "fold": 49,
+      "total": 40,
+      "fold": 40,
       "chrome": 6,
-      "ratio": 1.4,
-      "verdict": "ceiling",
+      "ratio": 1,
+      "verdict": "target",
       "longest": [
         {
           "w": 5,
@@ -3043,13 +3140,13 @@
           "tag": "strong"
         },
         {
-          "w": 5,
-          "text": "What you will be asked",
-          "tag": "summary"
+          "w": 4,
+          "text": "School reports, primary years",
+          "tag": "strong"
         },
         {
           "w": 4,
-          "text": "School reports, primary years",
+          "text": "Someone from your childhood",
           "tag": "strong"
         }
       ]

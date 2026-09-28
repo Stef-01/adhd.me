@@ -409,6 +409,9 @@
   .map-screen .map-radar > .map-then-pill { position: absolute; left: 0; right: 0; top: calc(100% + 12px); }
 }
 
+/* Not started: Start and what fills the map, side by side in the card that leads. */
+.map-lead-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
 /* Where the record lives, said once under the map. Quiet, and still AA on the page. */
 .map-where {
   margin: 0;
@@ -468,6 +471,10 @@
   border-radius: 16px;
 }
 .map-step-link > svg { color: var(--accent-deep); }
+/* The arrow ends the heading's row, where a row that goes somewhere says so, not alone under it. */
+.map-step-link { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--sp-md); align-items: center; }
+.map-step-link > :not(svg) { grid-column: 1; }
+.map-step-link > svg { grid-column: 2; grid-row: 1; }
 .map-step-link:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
 @media (hover: hover) { .map-step-link:hover h2 { color: var(--accent-deep); } }
 
@@ -699,6 +706,9 @@
       "radar side";
     column-gap: var(--sp-2xl);
     align-items: start;
+    /* The screen is at least a window tall; its rows keep their height rather than sharing the
+       rest out, which put a gap under the heading that grew as the page got shorter. */
+    align-content: start;
   }
   .map-screen > .minimal-header {
     grid-column: 1 / -1;

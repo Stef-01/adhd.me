@@ -22,6 +22,11 @@ test("before the chart, the start card says what the questions are for", async (
   await page.evaluate((k) => localStorage.removeItem(k), MODEL_KEY);
   await page.reload();
   await expect(page.getByText("Ten quick questions start this map.")).toBeVisible();
+  // What fills it sits in the same card, so it is read before the chart, not after it.
+  const fills = page.locator(".map-lead").getByRole("button", { name: "How it fills in" });
+  await expect(fills).toBeVisible();
+  const before = await fills.evaluate((el) => !!(el.compareDocumentPosition(document.querySelector(".map-radar")!) & Node.DOCUMENT_POSITION_FOLLOWING));
+  expect(before, "the control precedes the chart").toBe(true);
 });
 
 test("how it fills in opens from a labelled control, and names what never counts", async ({ page }) => {

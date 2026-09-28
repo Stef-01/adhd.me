@@ -132,7 +132,7 @@ for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }
   let sampled = 0;
   for (const route of routes() as Route[]) {
     try {
-      if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice") {
+      if (route.state?.startsWith("finder-")) {
         await context.close();
         context = await browser.newContext(options);
         page = await context.newPage();

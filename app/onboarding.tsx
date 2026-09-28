@@ -14,7 +14,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { improveOption, improveOptions, QUESTIONS, type OnboardingAnswers } from "@/model/onboarding";
 import { answerAgain, completeOnboarding, onboardingArrival, saveOnboarding } from "@/model/store";
 import { recommend } from "@/model/recommend";
-import { interactiveModule } from "@/learn/interactive";
+import { INTERACTIVE_MODULES, interactiveModule } from "@/learn/interactive";
 import { track } from "@/model/events";
 import { CharacterMark } from "./characters";
 import { useModel } from "./use-model";
@@ -168,12 +168,20 @@ export function Onboarding() {
   );
 }
 
-/** The end reads the answers on the map, the same ones `recommend()` reads, never a draft. */
+/**
+ * The end reads the answers on the map, the same ones `recommend()` reads, never a draft. The one
+ * module follows from the one sentence: the first on the person's own priority they have not met.
+ * The engine's pick can be about something else (a pending experiment's module, say), and with no
+ * line to say why, "Working memory" under "Start assignments and work earlier" read as a mistake.
+ */
 function StartHere({ answers, onStart, onAgain }: { answers: OnboardingAnswers; onStart: (moduleId: string) => void; onAgain: () => void }) {
   const { record } = useModel();
   const goal = improveOption(answers.improveFirst);
   const rec = record ? recommend(record) : null;
-  const moduleId = rec?.moduleId ?? "context";
+  const onGoal = goal && record
+    ? INTERACTIVE_MODULES.filter((m) => m.targets[0] === goal.subdomain).find((m) => !record.completed.includes(m.id) && !record.resonance[m.id])
+    : undefined;
+  const moduleId = onGoal?.id ?? rec?.moduleId ?? "context";
   const module = interactiveModule(moduleId);
   return (
     <div className="onboarding-welcome" role="status">

@@ -10,6 +10,7 @@ import {
   VideoCamera,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
+import { useRef, type SyntheticEvent } from "react";
 import {
   closedBooksNote,
   distanceTo,
@@ -102,6 +103,13 @@ export function ProfileStage({
   strengthFit?: string | null;
 }) {
   const facts = profileFacts(clinician);
+  const about = useRef<HTMLDetailsElement | null>(null);
+  /** A section closed by hand with nothing else open: the first sentence comes back. */
+  const unfoldAbout = (event: SyntheticEvent<HTMLDetailsElement>) => {
+    if (event.currentTarget.open || !about.current) return;
+    if (event.currentTarget.closest(".profile-content")?.querySelector('details[name="profile-section"][open]')) return;
+    about.current.open = true;
+  };
   const accessFacts = [
     ...usefulPracticalSignals(clinician),
     !UNKNOWN_DETAIL.test(clinician.appointmentLength) ? clinician.appointmentLength : null,
@@ -196,7 +204,15 @@ export function ProfileStage({
           })}
         </ul>
 
-        <section className="profile-about" aria-label="About">
+        {/* One section open at a time (`name`): the clinician's own first sentence shows until
+            another section opens, then folds to "About", one tap from coming back. Folded, not
+            deleted, so "Why matched" open is one screen of words rather than two. Closing the
+            last open section brings the sentence back. */}
+        <details className="profile-about" name="profile-section" open ref={about}>
+          <summary>
+            <span>About</span>
+            <CaretRight size={19} weight="regular" aria-hidden="true" />
+          </summary>
           <p>{firstSentence(clinician.summary)}</p>
           <details className="profile-more">
             <summary>
@@ -206,10 +222,10 @@ export function ProfileStage({
             {firstSentence(clinician.summary) !== clinician.summary && <p>{clinician.summary}</p>}
             <p>{clinician.about}</p>
           </details>
-        </section>
+        </details>
 
         <div className="profile-disclosures">
-          <details className="profile-disclosure">
+          <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
             <summary>
               <span>Why matched</span>
               <CaretRight size={19} weight="regular" aria-hidden="true" />
@@ -253,7 +269,7 @@ export function ProfileStage({
             </div>
           </details>
 
-          <details className="profile-disclosure">
+          <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
             <summary>
               <span>Appointment and access</span>
               <CaretRight size={19} weight="regular" aria-hidden="true" />
@@ -265,7 +281,7 @@ export function ProfileStage({
             </div>
           </details>
 
-          <details className="profile-disclosure">
+          <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
             <summary>
               <span>Credentials and experience</span>
               <CaretRight size={19} weight="regular" aria-hidden="true" />

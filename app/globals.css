@@ -1031,7 +1031,10 @@ summary:focus-visible {
   height: 34px;
   object-fit: cover;
 }
-.compare-portrait .clinician-monogram {
+/* The finder's thumb size (76px) outranked this at equal specificity, so the initials drew at 76px
+   inside the 34px circle and a stray stroke of the "R" was all that showed. */
+.compare-portrait .clinician-monogram,
+.patient-v2 .compare-portrait .clinician-monogram-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5334,6 +5337,28 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
 .profile-more {
   margin-top: 16px;
 }
+
+/* The bio's own section: open, it reads as it always did, with no row over it; folded while
+   another section is open, it is a row like theirs, one tap from the sentence. */
+.profile-about > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 66px;
+  padding: 0 4px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 520;
+  list-style: none;
+  cursor: pointer;
+}
+
+.profile-about > summary::-webkit-details-marker { display: none; }
+.profile-about[open] > summary { display: none; }
+/* Folded, it sits straight under the facts' rule, which is its top line, like the rows under it. */
+.patient-v2 .profile-content details.profile-about:not([open]) { margin-top: 0; padding: 0; }
+.profile-about > summary svg { flex: 0 0 auto; }
 
 .profile-more summary,
 .profile-disclosure summary,

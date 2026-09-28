@@ -30,7 +30,7 @@ test("every app screen holds under the 60-word ceiling", async ({ browser, baseU
   const unreachable: string[] = [];
   for (const route of routes() as Route[]) {
     try {
-      if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-voice" || route.state === "finder-rate") {
+      if (route.state?.startsWith("finder-")) {
         await context.close();
         context = await browser.newContext(options);
         page = await context.newPage();

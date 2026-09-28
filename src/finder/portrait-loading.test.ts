@@ -15,6 +15,10 @@ describe("ClinicianPortrait thumb loading", () => {
     const html = renderToStaticMarkup(createElement(ClinicianPortrait, { clinician: withImage, variant: "thumb", eager: true }));
     expect(html).toContain('loading="eager"');
   });
+  it("is fetched at the largest size a row draws it (80px on a desk), so no source is upscaled", () => {
+    const html = renderToStaticMarkup(createElement(ClinicianPortrait, { clinician: withImage, variant: "thumb" }));
+    expect(html).toContain('width="80"');
+  });
   it("stays lazy by default, below the fold", () => {
     const html = renderToStaticMarkup(createElement(ClinicianPortrait, { clinician: withImage, variant: "thumb" }));
     expect(html).toContain('loading="lazy"');
