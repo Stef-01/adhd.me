@@ -58,6 +58,7 @@ import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
 import { fakeVoice, startLink } from "@/voice/link";
 import { handOff, newId, track, trackSearch, trackVoiceCall } from "@/finder/track";
+import { worthReading } from "@/finder/read-policy";
 import type { EventKind, SearchSource } from "@/db/finder";
 import type { CallSummary } from "./finder-stages/voice-stage";
 import type { Reveal } from "@/voice/conversation";
@@ -204,7 +205,9 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    * finder's own read, exactly the level 0 list.
    */
   const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
-  const reading = readLevel >= 1 && (routeRead.request !== request || !routeRead.done);
+  /** Only where it helps (src/finder/read-policy.ts): a short request the lexicon already heard lists at once. */
+  const modelReads = useMemo(() => readLevel >= 1 && worthReading(request, needsFor(request, roster).length), [readLevel, request, roster]);
+  const reading = modelReads && (routeRead.request !== request || !routeRead.done);
   /** Asks the route to read these words; the answer lands only while they are still the ones read. */
   const readWords = useCallback((words: string) => {
     setRouteRead({ request: words, done: false });
@@ -219,9 +222,9 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
       }));
   }, []);
   useEffect(() => {
-    if (readLevel < 1 || stage !== "results" || routeRead.request === request) return;
+    if (!modelReads || stage !== "results" || routeRead.request === request) return;
     readWords(request);
-  }, [readLevel, stage, request, routeRead.request, readWords]);
+  }, [modelReads, stage, request, routeRead.request, readWords]);
   /**
    * The voice finder's sentence is read the moment the model writes it, while its last words are
    * still being said, so the matches arrive with the read done rather than behind "Reading what you
@@ -229,8 +232,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    */
   const readAhead = useCallback((words: string) => {
     const trimmed = words.trim();
-    if (readLevel >= 1 && trimmed) readWords(trimmed);
-  }, [readLevel, readWords]);
+    if (readLevel >= 1 && trimmed && worthReading(trimmed, needsFor(trimmed, roster).length)) readWords(trimmed);
+  }, [readLevel, readWords, roster]);
   const modelNeeds = routeRead.request === request ? routeRead.needs : undefined;
   const read = useMemo(() => modelNeeds ?? needsFor(request, roster), [modelNeeds, request, roster]);
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);

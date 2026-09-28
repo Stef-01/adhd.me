@@ -707,7 +707,9 @@ always sees the same order for the same words. Two decisions are the founder's:
 
 1. **The flip gate:** keep 5% over every key, count care and preference keys only, or trade some
    precision for steadier manner keys (majority rather than unanimous voting).
-2. **Level 1 in the finder** (16d §4), now that P4 has passed.
+2. **Level 1 in the finder** (16d §4), now that P4 has passed. With it on, the model reads only the
+   42% of requests where it helps (R13: longer than ten words, or nothing the lexicon heard); the rest
+   list at once, as at level 0, with the same quality.
 
 Testing budget (founder, 2026-09-28): $14 for all live testing, matching and voice together
 (`TESTING_BUDGET_USD` in `src/lib/matching/eval/run.ts`); every runner refuses a run that could cross

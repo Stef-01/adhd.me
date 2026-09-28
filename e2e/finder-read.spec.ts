@@ -113,3 +113,23 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   await page.waitForTimeout(500);
   expect(posts).toEqual([REQUEST]);
 });
+
+test("level 1: a short request the lexicon already heard lists at once, with no read (read-policy.ts)", async ({ page }) => {
+  await page.route((url) => url.pathname === "/", async (route) => {
+    const response = await route.fetch();
+    const html = await response.text();
+    await route.fulfill({ response, body: html.replace('\\"readLevel\\":0', '\\"readLevel\\":1') });
+  });
+  const posts: string[] = [];
+  await page.route("**/api/finder/read", async (route) => {
+    posts.push(route.request().postData() ?? "");
+    await route.fulfill({ status: 500, body: "the model should not be asked" });
+  });
+  await page.goto("/");
+  await page.getByRole("textbox").fill("an ADHD assessment by telehealth");
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".clinician-row").first()).toBeVisible();
+  await expect(page.locator(".reading-line")).toHaveCount(0);
+  await page.waitForTimeout(500);
+  expect(posts, "no read for words the lexicon already heard").toEqual([]);
+});

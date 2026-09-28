@@ -243,3 +243,20 @@ evaluation reads many model-written sentences. Four reader gaps, each confirmed 
   me the wrong dose" is pinned as not asking for it. "keep my scripts going" was not added: it hears
   shared care in the corpus's "a GP who can do the assessment and keep the scripts going", which the
   corpus labels assessment only, a labelling question for the founder.
+
+## R13 · the model reads only where it helps, 2026-09-28
+
+Measured on the 360 dev requests the P4 run read, from its cached calls (no spend): the top three
+clinicians on the lexicon's reading against the model's, and both graded against the corpus.
+
+| Requests | Share | Same top 3 | NDCG@3 lexicon · model |
+| --- | --- | --- | --- |
+| ten words or fewer, the lexicon heard something | 58% | 93% | 0.980 · 0.981 (model better 5, worse 4) |
+| longer, or nothing heard | 42% | 79% | 0.808 · 0.918 (model better 20, worse 2) |
+| all | 100% | 88% | 0.927 · 0.961 |
+
+So at level 1 the finder asks the model only for the second row (`src/finder/read-policy.ts`): more
+than ten words, or nothing the lexicon heard. The first row lists at once, sends nothing and spends
+nothing, and loses nothing measurable; the voice finder's sentences, long by nature, are still read,
+and read ahead. Long narratives (over 40 words) are where the model matters most: it changes the top
+three in 7 of 8.
