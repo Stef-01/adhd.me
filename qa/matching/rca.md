@@ -210,7 +210,11 @@ evaluation reads many model-written sentences. Four reader gaps, each confirmed 
   woman" but not "a woman psychologist" or "a female psychologist": its meaning says "a woman
   clinician", but not every read adds it, and a key stays only when every read does.
 - **"A medication review" is silent in the lexicon** (level 1 hears it as `care:titration`).
-- Candidate fixes, for the ladder: widen the lexicon's woman cue to any clinician word; read
-  `adhd-assessment` only on assessment, diagnosis or "find out" words; pins for each in the corpus.
-  The voice finder writes "a woman" and "a medication review" in the meantime, the phrasings level 1
-  hears.
+- **Fixed the same day, in the lexicon:** the woman cue beside every clinician word ("a woman
+  psychologist", "a female psychiatrist", "a woman clinician", twelve cues), and "a medication review"
+  for titration, each pinned by a probe; "I'm a woman with ADHD" is pinned as not asking for one.
+  L0 over 621 requests: recall 1.000 held, NDCG@3 up on dev (0.945 → 0.946), precision's lower bound
+  0.984 → 0.981 only because two of the new probes pin the bare-"ADHD" key as a mention.
+- **Left for the founder:** "ADHD" alone reads as `care:adhd-assessment` by design, and 97 corpus
+  pins rest on it. Reading it only on assessment, diagnosis or "find out" words is a labelling
+  decision; until then the two probes above measure how often level 1 drops it.

@@ -213,6 +213,8 @@ const LEXICON: readonly Entry[] = [
        being asked FOR rather than therapy. */
     "script needs adjusting", "the generic brand", "afternoon rebound", "medication management",
     "titration", "dose", "wearing off", "wears off", "side effects", "not working", "adjust the dose",
+    /* 2026-09-28, R11: the review asked for by its own name, as the voice finder writes it. */
+    "medication review", "review my medication", "med review", "meds review",
   ]),
   care("shared-care", "Shared care with a psychiatrist", 18, [
     /* O139: the two registers this facet arrives in — the script that must not lapse, and the
@@ -496,7 +498,14 @@ const LEXICON: readonly Entry[] = [
          "a she not a he" collapses to the single token [not], which is far too loose to ship
                           under any pair rule, hearing it needs the raw RUN demand, and one
                           sentence does not earn a mechanism (the O84 bar) */
-    "lady doctor", "lady gp", "safer with a woman", "women doctors"]),
+    "lady doctor", "lady gp", "safer with a woman", "women doctors",
+    /* 2026-09-28, the voice finder's evaluation (qa/matching/rca.md R11): a woman is asked for beside
+       every kind of clinician the roster holds, and "a woman psychologist" read as nothing. Each cue
+       names the clinician, so "I'm a woman with ADHD", a person describing herself, still reads
+       nothing here; that sentence is pinned. */
+    "woman clinician", "female clinician", "woman psychologist", "female psychologist",
+    "woman psychiatrist", "female psychiatrist", "woman counsellor", "female counsellor",
+    "woman therapist", "female therapist", "woman paediatrician", "female paediatrician"]),
   pref("telehealth-first", "By phone or telehealth", 28, [
     /* O128: "immunosuppressed" beside O125's "immunocompromised". They are the same reason in
        two words people use interchangeably, and stemming does not bridge them, a reader does

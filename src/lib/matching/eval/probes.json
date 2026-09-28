@@ -387,5 +387,47 @@
       "pref:telehealth-first",
       "manner:collaborative"
     ]
+  },
+  {
+    "text": "I'd like ADHD coaching with a woman psychologist, by telehealth",
+    "reaches": [
+      "pref:woman-gp",
+      "pref:telehealth-first",
+      "care:non-medication"
+    ],
+    "mentions": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "a female psychiatrist for my ADHD medication",
+    "reaches": [
+      "pref:woman-gp"
+    ],
+    "mentions": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "a woman clinician who bulk bills",
+    "reaches": [
+      "pref:woman-gp",
+      "pref:bulk-billing"
+    ]
+  },
+  {
+    "text": "I need a medication review near Chatswood",
+    "reaches": [
+      "care:titration"
+    ]
+  },
+  {
+    "text": "I'm a woman with ADHD and I'd like to get assessed",
+    "reaches": [
+      "care:adhd-assessment"
+    ],
+    "never": [
+      "pref:woman-gp"
+    ]
   }
 ]
