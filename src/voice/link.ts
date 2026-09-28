@@ -42,6 +42,57 @@ export async function openLink(handlers: LinkHandlers): Promise<VoiceLink> {
   return webrtcLink(handlers);
 }
 
+/** Handlers that arrive later: whatever the call says before the screen is there waits for it. */
+function relay(): LinkHandlers & { attach(handlers: LinkHandlers): void } {
+  let target: LinkHandlers | null = null;
+  const waiting: ((handlers: LinkHandlers) => void)[] = [];
+  const call = (deliver: (handlers: LinkHandlers) => void) => (target ? deliver(target) : void waiting.push(deliver));
+  return {
+    onOpen: () => call((h) => h.onOpen()),
+    onEvent: (event) => call((h) => h.onEvent(event)),
+    onFail: (failure) => call((h) => h.onFail(failure)),
+    attach(handlers) {
+      target = handlers;
+      for (const deliver of waiting.splice(0)) deliver(handlers);
+    },
+  };
+}
+
+/** A call started by the tap and not yet claimed by the voice screen; one nobody claims closes. */
+let started: { link: Promise<VoiceLink>; attach(handlers: LinkHandlers): void; timer: ReturnType<typeof setTimeout> } | null = null;
+const UNCLAIMED_MS = 10_000;
+
+function drop() {
+  if (!started) return;
+  clearTimeout(started.timer);
+  void started.link.then((link) => link.close(), () => undefined);
+  started = null;
+}
+
+/**
+ * Starts a call inside the tap that asked for it, so the microphone, the audio and the network begin
+ * while the voice screen arrives (measured 2026-09-28: the screen's own mount and the orb's shader
+ * came first, up to a second on a software renderer), and the browser counts the tap as the gesture
+ * the audio needs. The screen takes it with `claimLink`.
+ */
+export function startLink(): void {
+  drop();
+  const handlers = relay();
+  const link = openLink(handlers);
+  link.catch(() => undefined);
+  started = { link, attach: handlers.attach, timer: setTimeout(drop, UNCLAIMED_MS) };
+}
+
+/** The call the tap started, or a new one: the screen's handlers get everything it has said. */
+export function claimLink(handlers: LinkHandlers): Promise<VoiceLink> {
+  if (!started) return openLink(handlers);
+  const { link, attach, timer } = started;
+  clearTimeout(timer);
+  started = null;
+  attach(handlers);
+  return link;
+}
+
 class LinkError extends Error {
   constructor(readonly failure: Failure) {
     super(failure);
@@ -71,9 +122,15 @@ function meter(context: AudioContext, stream: MediaStream): () => number {
 
 async function webrtcLink(handlers: LinkHandlers): Promise<VoiceLink> {
   if (!navigator.mediaDevices?.getUserMedia || typeof RTCPeerConnection === "undefined") throw new LinkError("unavailable");
-  const mic = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+  // Made before the first await, so it is made in the tap and runs from the start.
   const context = new AudioContext();
   void context.resume().catch(() => undefined);
+  const mic = await navigator.mediaDevices
+    .getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } })
+    .catch((error: unknown) => {
+      void context.close().catch(() => undefined);
+      throw error;
+    });
   const input = meter(context, mic);
   let output: (() => number) | null = null;
   const voice = new Audio();

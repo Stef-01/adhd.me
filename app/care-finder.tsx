@@ -56,7 +56,7 @@ import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
-import { fakeVoice } from "@/voice/link";
+import { fakeVoice, startLink } from "@/voice/link";
 import type { Reveal } from "@/voice/conversation";
 import { TypeStage } from "./finder-stages/type-stage";
 import { ResultsStage } from "./finder-stages/results-stage";
@@ -727,7 +727,12 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             onSearch={findMatches}
             includeSynthetic={includeSynthetic}
             onToggleSynthetic={toggleSynthetic}
-            onTalk={() => (voice || fakeVoice() ? goTo("voice") : startListening())}
+            onTalk={() => {
+              if (!voice && !fakeVoice()) return startListening();
+              // The call starts in the tap, while the screen arrives.
+              startLink();
+              goTo("voice");
+            }}
           />
         )}
 

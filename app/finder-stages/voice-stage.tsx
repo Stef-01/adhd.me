@@ -13,7 +13,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { contact, type CrisisContactId } from "@/model/crisis-contacts";
 import { initialVoice, saidAsRequest, step, type Action, type ClientEvent, type Reveal, type VoiceState } from "@/voice/conversation";
-import { failureOf, openLink, type VoiceLink } from "@/voice/link";
+import { claimLink, failureOf, type VoiceLink } from "@/voice/link";
 import { FINDER_COPY } from "../finder-copy";
 import { Sheet } from "../sheet";
 import { MotionScreen, StatusLine } from "./shared";
@@ -65,12 +65,12 @@ export function VoiceStage({
     }
   }, []);
 
-  // The call opens a tick after arrival, so React's development double mount opens one, and any
-  // way off this screen closes it.
+  // The tap started the call (`startLink`); the screen claims it a tick after arrival, so React's
+  // development double mount claims it once, and any way off this screen closes it.
   useEffect(() => {
     let live = true;
     const start = window.setTimeout(() => {
-      openLink({
+      claimLink({
         onOpen: () => live && act({ type: "connected" }),
         onEvent: (event) => live && act({ type: "server", event }),
         onFail: (failure) => live && act({ type: "failed", failure }),

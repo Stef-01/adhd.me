@@ -44,3 +44,4 @@
 {"time":"2026-09-28T00:42:08.901Z","kind":"eval","persona":"negation","model":"gpt-realtime-2.1-mini","costUsd":0.0076,"pass":true}
 {"time":"2026-09-28T00:42:08.902Z","kind":"eval","persona":"vietnamese","model":"gpt-realtime-2.1-mini","costUsd":0.006,"pass":true}
 {"time":"2026-09-28T00:42:08.902Z","kind":"eval","persona":"crisis","model":"gpt-realtime-2.1-mini","costUsd":0.011,"pass":true}
+{"time":"2026-09-28T00:48:43.272Z","kind":"spoken","wav":"adult.wav","seconds":98,"tokens":{"text_in":11411,"audio_in":773,"cached":9280,"text_out":627,"audio_out":389},"costUsd":0.020233,"stage":"results"}
