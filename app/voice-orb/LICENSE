@@ -2,10 +2,11 @@ MIT License
 
 Copyright (c) 2025 Javier García Domínguez
 
-The orb shader in this folder (shaders.ts) and public/voice/perlin-noise.png are vendored from
-https://github.com/Javi0108/VoiceChatGpt-Prototype (src/components/Circle, public/perlin-noise.png).
-That repository's README releases it under the MIT License; the repository ships no LICENSE file,
-so the notice is reproduced here from the README's grant.
+The sphere in this folder (sphere.ts) is ported from https://github.com/Javi0108/VoiceChatGpt-Prototype
+(src/components/Sphere: its vertex and fragment shaders and its parameters). That repository's README
+releases it under the MIT License; the repository ships no LICENSE file, so the notice is reproduced
+here from the README's grant. Its 4D simplex noise is Ian McEwan's, Ashima Arts, under the MIT License
+(https://github.com/ashima/webgl-noise), Copyright (C) 2011 Ashima Arts.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

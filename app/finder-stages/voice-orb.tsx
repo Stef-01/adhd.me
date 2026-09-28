@@ -1,19 +1,36 @@
 "use client";
 
-// The voice finder's orb (founder, 2026-09-28: "make it exactly like this, plug in this repo",
-// Javi0108/VoiceChatGpt-Prototype). The prototype's shader (app/voice-orb/, MIT) drawn with plain
-// WebGL2 on one canvas instead of three.js. It moves with the call: the person's voice swells its
-// rings, the assistant's voice quickens its flow, and it runs only while this screen is open.
-// While the call is live it floats over its own shadow (app/styles/voice.css). Under reduced
-// motion it is one still frame, resting; without WebGL2, a still disc in the same colours.
+// The voice finder's orb. The founder asked for Javi0108/VoiceChatGpt-Prototype ("make it exactly like
+// this, plug in this repo"), and then, the flat circle having read as a spinning disc, for something
+// "much more fluid, engaging, and reactive, like a visualizer". This is that repo's own visualizer
+// (src/components/Sphere), drawn with plain WebGL2 from app/voice-orb/sphere.ts: a sphere whose
+// surface flows with 4D simplex noise and swells with the call, the person's voice and the
+// assistant's alike, as the prototype's swells with its microphone. It runs only while this screen
+// is open and floats over its shadow while the call is live (app/styles/voice.css). Under reduced
+// motion it is one still frame; without WebGL2, a still disc in the same colours.
 
 import { useEffect, useRef, useState } from "react";
 import type { Phase } from "@/voice/conversation";
-import { ORB_FRAGMENT, ORB_VERTEX } from "../voice-orb/shaders";
+import { SPHERE_FRAGMENT, SPHERE_VERTEX, cameraMatrices, cubeSphere } from "../voice-orb/sphere";
 
-const NOISE = "/voice/perlin-noise.png";
-/** The prototype's frame loop: time at half speed, the flow quickening with the voice. */
+/** The prototype's own parameters (Sphere.jsx). */
+const RADIUS = 0.75;
 const TIME_RATE = 0.5;
+const TIME_FREQUENCY = 0.4;
+const WARP_POSITION_FREQUENCY = 0.38;
+const WARP_TIME_FREQUENCY = 0.12;
+const WARP_STRENGTH = 0.7;
+const LIGHT_INTENSITY = 5;
+/** How far a voice swells it: the prototype's `1 + volume / 100` over its FFT average, here over the call's 0-to-1 loudness. */
+const SWELL = 0.45;
+/** How much of the way to a voice's loudness the orb goes in a sixtieth of a second: quick to rise, slow to settle. */
+const ATTACK = 0.3;
+const DECAY = 0.08;
+/** A narrow camera, so the sphere at rest is a little over half the canvas across and at its loudest still fits. */
+const FOV_DEGREES = 20;
+const DISTANCE = 5;
+/** Cells a side of each cube face: 25,350 points, smooth at the orb's size. */
+const SEGMENTS = 64;
 
 /** A palette token's hex as linear RGB: the values three.js's colour management handed the prototype's shader. */
 function linearToken(name: string): [number, number, number] {
@@ -52,9 +69,9 @@ export function VoiceOrb({
 
   useEffect(() => {
     const node = canvas.current;
-    const gl = node?.getContext("webgl2", { alpha: true, premultipliedAlpha: true, antialias: false });
-    const vertex = gl && compile(gl, gl.VERTEX_SHADER, ORB_VERTEX);
-    const fragment = gl && compile(gl, gl.FRAGMENT_SHADER, ORB_FRAGMENT);
+    const gl = node?.getContext("webgl2", { alpha: true, premultipliedAlpha: true, antialias: true, depth: true });
+    const vertex = gl && compile(gl, gl.VERTEX_SHADER, SPHERE_VERTEX);
+    const fragment = gl && compile(gl, gl.FRAGMENT_SHADER, SPHERE_FRAGMENT);
     const program = gl?.createProgram();
     if (!node || !gl || !vertex || !fragment || !program) return setStill(true);
     gl.attachShader(program, vertex);
@@ -63,33 +80,39 @@ export function VoiceOrb({
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return setStill(true);
     gl.useProgram(program);
 
-    const quad = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const { positions, indices } = cubeSphere(SEGMENTS);
+    const vertices = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertices);
+    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
     const position = gl.getAttribLocation(program, "aPosition");
     gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 0, 0);
+    const elements = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elements);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
     const at = (name: string) => gl.getUniformLocation(program, name);
-    const u = {
-      time: at("uTime"),
-      animation: at("uAnimation"),
-      input: at("uInputVolume"),
-      output: at("uOutputVolume"),
-      edge: at("uEdge"),
-    };
-    gl.uniform1fv(at("uOffsets"), new Float32Array(7).map(() => Math.random() * Math.PI * 2));
-    gl.uniform3fv(at("uColor1"), linearToken("--orb-deep"));
-    gl.uniform3fv(at("uColor2"), linearToken("--orb-light"));
-    gl.uniform1i(at("uPerlinTexture"), 0);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    const u = { time: at("uTime"), positionFrequency: at("uPositionFrequency"), strength: at("uStrength"), scale: at("uScale") };
+    const { projection, view } = cameraMatrices(FOV_DEGREES, DISTANCE);
+    gl.uniformMatrix4fv(at("uProjection"), false, projection);
+    gl.uniformMatrix4fv(at("uView"), false, view);
+    gl.uniform1f(at("uRadius"), RADIUS);
+    gl.uniform1f(at("uTimeFrequency"), TIME_FREQUENCY);
+    gl.uniform1f(at("uWarpPositionFrequency"), WARP_POSITION_FREQUENCY);
+    gl.uniform1f(at("uWarpTimeFrequency"), WARP_TIME_FREQUENCY);
+    gl.uniform1f(at("uWarpStrength"), WARP_STRENGTH);
+    gl.uniform3fv(at("uColorA"), linearToken("--orb-a"));
+    gl.uniform3fv(at("uColorB"), linearToken("--orb-b"));
+    gl.uniform3f(at("uLightDirection"), 0, 0, 1);
+    gl.uniform1f(at("uLightIntensity"), LIGHT_INTENSITY);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.enable(gl.CULL_FACE);
 
     let frame = 0;
     let lost = false;
-    let ready = false;
     let last = performance.now();
-    const clock = { time: 0, animation: 0, input: 0, output: 0 };
+    const clock = { time: 0, input: 0, output: 0 };
 
     const size = () => {
       const scale = Math.min(window.devicePixelRatio || 1, 2);
@@ -99,46 +122,30 @@ export function VoiceOrb({
         node.height = px;
       }
       gl.viewport(0, 0, px, px);
-      // Two device pixels of softening on the circle's edge.
-      gl.uniform1f(u.edge, 4 / px);
     };
     const draw = (now: number) => {
       if (lost) return;
-      const delta = Math.min((now - last) / 1000, 0.1);
+      const delta = Math.min(Math.max(now - last, 0) / 1000, 0.1);
       last = now;
       const heard = read.current();
-      clock.input += (heard.input - clock.input) * (heard.input > clock.input ? 0.3 : 0.08);
-      clock.output += (heard.output - clock.output) * (heard.output > clock.output ? 0.3 : 0.08);
+      // By the clock, not by the frame, so a 120 Hz screen and a slow one move alike.
+      const ease = (from: number, to: number) => from + (to - from) * (1 - (1 - (to > from ? ATTACK : DECAY)) ** (delta * 60));
+      clock.input = ease(clock.input, heard.input);
+      clock.output = ease(clock.output, heard.output);
       clock.time += delta * TIME_RATE;
-      clock.animation += delta * (0.01 + Math.max(clock.input, clock.output) * 0.5);
+      // The prototype's reaction: a voice scales the sphere, quickens its ripples and deepens them.
+      const swell = 1 + Math.min(1, Math.max(clock.input, clock.output)) * SWELL;
       size();
       gl.uniform1f(u.time, clock.time);
-      gl.uniform1f(u.animation, clock.animation);
-      gl.uniform1f(u.input, clock.input);
-      gl.uniform1f(u.output, clock.output);
+      gl.uniform1f(u.positionFrequency, swell);
+      gl.uniform1f(u.strength, swell * 0.1);
+      gl.uniform3f(u.scale, swell * 0.65, swell * 0.65, swell * 0.75);
       gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
       if (!reducedMotion) frame = requestAnimationFrame(draw);
     };
-
-    const texture = gl.createTexture();
-    const image = new Image();
-    image.onload = () => {
-      if (lost) return;
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-      ready = true;
-      last = performance.now();
-      frame = requestAnimationFrame(draw);
-    };
-    image.onerror = () => setStill(true);
-    image.src = NOISE;
+    frame = requestAnimationFrame(draw);
 
     const onLost = (event: Event) => {
       event.preventDefault();
@@ -151,8 +158,8 @@ export function VoiceOrb({
       lost = true;
       cancelAnimationFrame(frame);
       node.removeEventListener("webglcontextlost", onLost);
-      if (ready) gl.deleteTexture(texture);
-      gl.deleteBuffer(quad);
+      gl.deleteBuffer(vertices);
+      gl.deleteBuffer(elements);
       gl.deleteProgram(program);
       gl.deleteShader(vertex);
       gl.deleteShader(fragment);

@@ -680,3 +680,23 @@ is never a dark silhouette.
 | Drafts, 1440 | ![Drafts, before, 1440](chaos-drafts-before-1440.jpg) | ![Drafts, after, 1440](chaos-drafts-after-1440.jpg) |
 | Spider, 1440 | ![Spider, before, 1440](chaos-spider-before-1440.jpg) | ![Spider, after, 1440](chaos-spider-after-1440.jpg) |
 | Spider, 390 | ![Spider, before, 390](chaos-spider-before-390.jpg) | ![Spider, after, 390](chaos-spider-after-390.jpg) |
+
+### The voice orb, the prototype's sphere
+
+The founder: the circle "still has that weird, CD-disc-looking, strange spinning wheel effect ... make
+it much more fluid, engaging, and reactive, like a visualizer". The prototype has two orbs, and the
+circle was the one its call screen used; the orb is now its other, the sphere visualizer: a surface
+that flows with 4D simplex noise, lit, deep blue where it is pulled in and cyan where it is pushed
+out, swelling and rippling harder with either voice. Larger on the screen, its halo close around it.
+`voice-sphere.mp4` is six seconds of it while the assistant speaks.
+
+| | Before | After, silent | After, the person speaking |
+| --- | --- | --- | --- |
+| 390 | ![The circle, 390](voice-orb-after-390.jpg) | ![The sphere, silent, 390](voice-sphere-silent-390.jpg) | ![The sphere, speaking, 390](voice-sphere-person-390.jpg) |
+
+![The sphere while the assistant speaks, 1440](voice-sphere-assistant-1440.jpg)
+
+Without WebGL2 it is a still disc as the sphere reads at rest, pale where it faces the light and blue
+toward its rim (it was a saturated blue ball, unlike the sphere it stands in for):
+
+![The still disc without WebGL2, 390](voice-sphere-no-webgl-390.jpg)

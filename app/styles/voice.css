@@ -1,12 +1,14 @@
 /* The voice finder (app/finder-stages/voice-stage.tsx), after Javi0108/VoiceChatGpt-Prototype
-   (founder, 2026-09-28: "make it exactly like this"): a plain screen, the orb at its centre, a
-   quarter of its height, and one red button a tenth of the way up from the foot that ends the
-   call. The finder is plain paper, so the orb is the one colour here, and the stop the one red. */
+   (founder, 2026-09-28: "make it exactly like this"): a plain screen, the orb at its centre (the
+   prototype's sphere visualizer, app/voice-orb/sphere.ts), and one red button a tenth of the way
+   up from the foot that ends the call. The finder is plain paper, so the orb is the one colour
+   here, and the stop the one red. */
 
 :root {
-  /* The prototype's two orb colours; its shader ramps black, these two, then white. */
-  --orb-deep: #4ab7ff;
-  --orb-light: #d3f4fa;
+  /* The prototype's sphere (src/components/Sphere): deep where its surface is pulled in, cyan where
+     it is pushed out. */
+  --orb-a: #0025f6;
+  --orb-b: #7bf5fd;
   /* The prototype's stop button, and its hover and press. White on it is 4:1. */
   --voice-stop: #ff0000;
   --voice-stop-hover: #e14747;
@@ -42,8 +44,10 @@ body:has(.care-app[data-stage="voice"]) .app-tabs { display: none; }
 
 /* ── The orb ─────────────────────────────────────────────────────────────────────────────────── */
 
+/* The box is larger than the sphere: at rest the sphere is a little over half its width, and the loudest
+   voice swells it to four fifths. */
 .voice-orb {
-  width: clamp(180px, 26svh, 280px);
+  width: min(clamp(240px, 44svh, 400px), calc(100vw - 32px));
   aspect-ratio: 1;
   transition:
     transform 540ms var(--ease-ui),
@@ -55,11 +59,21 @@ body:has(.care-app[data-stage="voice"]) .app-tabs { display: none; }
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
 }
-/* Without WebGL2: a still disc in the same two colours. */
+/* Without WebGL2: a still disc as the sphere reads at rest, its size, pale where it faces the light and
+   blue toward its rim. */
 .voice-orb-still {
-  background: radial-gradient(circle at 50% 42%, var(--orb-light) 0%, var(--orb-deep) 78%);
+  width: 57%;
+  height: 57%;
+  margin: 21.5%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, color-mix(in srgb, var(--orb-a) 25%, var(--orb-b)) 45%, var(--paper)) 0%,
+    color-mix(in srgb, color-mix(in srgb, var(--orb-a) 25%, var(--orb-b)) 55%, var(--paper)) 55%,
+    color-mix(in srgb, color-mix(in srgb, var(--orb-a) 40%, var(--orb-b)) 70%, var(--paper)) 82%,
+    color-mix(in srgb, var(--orb-a) 45%, var(--orb-b)) 100%
+  );
 }
 /* Floating (founder, 2026-09-28: "the floating orb"). While the call is live the orb rises and
    settles, a breath rather than a bounce, over a shadow that narrows as it lifts, inside a halo
@@ -72,19 +86,19 @@ body:has(.care-app[data-stage="voice"]) .app-tabs { display: none; }
 .voice-orb::before {
   content: "";
   position: absolute;
-  inset: -18%;
+  inset: 6%;
   z-index: -1;
   border-radius: 50%;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--orb-deep) 30%, transparent), transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, color-mix(in srgb, var(--orb-a) 35%, var(--orb-b)) 30%, transparent), transparent);
   pointer-events: none;
 }
 .voice-orb::after {
   content: "";
   position: absolute;
-  left: 24%;
-  right: 24%;
-  bottom: -15%;
-  height: 6%;
+  left: 31%;
+  right: 31%;
+  bottom: 7%;
+  height: 4%;
   border-radius: 50%;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 14%, transparent), transparent);
   pointer-events: none;

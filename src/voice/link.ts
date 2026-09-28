@@ -5,6 +5,7 @@
 // `window.__adhdmeVoiceFake` swaps in the scripted call in src/voice/fake-link.ts, which the e2e
 // suite, the text budget and screenshot audits use: the whole screen, with no microphone and no
 // spend. `true` holds at the first question; an array of answers runs a whole call.
+// `window.__adhdmeVoiceLevel` plays a voice to the orb on that call: levels, or a function of time.
 
 import type { ClientEvent, Failure, ServerEvent } from "./conversation";
 
@@ -25,9 +26,12 @@ export interface LinkHandlers {
   onFail(failure: Failure): void;
 }
 
+type Levels = ReturnType<VoiceLink["level"]>;
+
 declare global {
   interface Window {
     __adhdmeVoiceFake?: boolean | string[];
+    __adhdmeVoiceLevel?: Levels | (() => Levels);
   }
 }
 

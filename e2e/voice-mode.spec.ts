@@ -71,3 +71,47 @@ test("under reduced motion the orb rests on its shadow", async ({ page }) => {
   await expect(page.locator('.voice-orb[data-phase="live"]')).toHaveAttribute("data-still", "");
   await expect.poll(floating(page)).toEqual([]);
 });
+
+/** The frame the orb has just drawn: the share of its canvas the sphere covers, and a sum of its colour. */
+const drawn = (page: Page) =>
+  page.locator(".voice-orb-canvas").evaluate(
+    (canvas: HTMLCanvasElement) =>
+      new Promise<{ cover: number; colour: number }>((resolve) =>
+        // Called after the orb's own frame and before the browser presents it, so the pixels are there.
+        requestAnimationFrame(() => {
+          const gl = canvas.getContext("webgl2")!;
+          const pixels = new Uint8Array(canvas.width * canvas.height * 4);
+          gl.readPixels(0, 0, canvas.width, canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+          let cover = 0;
+          let colour = 0;
+          for (let i = 0; i < pixels.length; i += 4) {
+            if (pixels[i + 3]! > 127) cover += 1;
+            colour += pixels[i]! + pixels[i + 1]! + pixels[i + 2]!;
+          }
+          resolve({ cover: cover / (canvas.width * canvas.height), colour });
+        }),
+      ),
+  );
+
+test("the orb flows while nobody speaks, and swells with either voice", async ({ page }) => {
+  await openVoice(page, true);
+  await expect(page.locator('.voice-orb[data-phase="live"]')).toBeVisible();
+  // Drawn exactly when the engine can: the sphere with WebGL2, and a still disc without it.
+  if (!(await page.evaluate(() => Boolean(document.createElement("canvas").getContext("webgl2"))))) {
+    await expect(page.locator(".voice-orb-still")).toBeVisible();
+    return;
+  }
+  const quiet = await drawn(page);
+  expect(quiet.cover).toBeGreaterThan(0.15);
+  await expect.poll(async () => (await drawn(page)).colour).not.toBe(quiet.colour);
+  const play = (level: { input: number; output: number }) =>
+    page.evaluate((value) => {
+      (window as { __adhdmeVoiceLevel?: { input: number; output: number } }).__adhdmeVoiceLevel = value;
+    }, level);
+  for (const voice of [{ input: 0.8, output: 0 }, { input: 0, output: 0.8 }]) {
+    await play(voice);
+    await expect.poll(async () => (await drawn(page)).cover).toBeGreaterThan(quiet.cover * 1.4);
+    await play({ input: 0, output: 0 });
+    await expect.poll(async () => (await drawn(page)).cover, { timeout: 10000 }).toBeLessThan(quiet.cover * 1.15);
+  }
+});

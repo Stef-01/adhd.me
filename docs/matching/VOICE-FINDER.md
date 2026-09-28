@@ -19,7 +19,7 @@ ranks a typed one, and the results arrive where the orb was.
 | The call: WebRTC, the data channel, loudness | `src/voice/link.ts` |
 | The scripted call for e2e, the text budget and audits | `src/voice/fake-link.ts` |
 | The call route: the browser's offer to OpenAI, the key never leaves | `app/api/voice/session/route.ts` |
-| The screen, the orb (vendored shader, MIT) | `app/finder-stages/voice-stage.tsx`, `voice-orb.tsx`, `app/voice-orb/` |
+| The screen, the orb (the prototype's sphere visualizer, MIT, in WebGL2) | `app/finder-stages/voice-stage.tsx`, `voice-orb.tsx`, `app/voice-orb/` |
 
 ## Guards
 
@@ -33,6 +33,22 @@ ranks a typed one, and the results arrive where the orb was.
   Urgent help, stays on the screen.
 - **Spend:** 8 calls in ten minutes from one caller, `ADHDME_VOICE_DAILY_SESSIONS` a UTC day (default
   40), a six-minute ceiling on a call, and a key that fails pauses voice for ten minutes.
+
+## The orb
+
+The prototype has two: `Circle`, a flat shader of soft ovals in polar coordinates over a Perlin
+texture, which its call screen used and this finder first vendored; and `Sphere`, its visualizer.
+At the finder's size the circle read as a spinning disc (founder, 2026-09-28: "weird, CD-disc
+looking ... make it much more fluid, engaging and reactive, like a visualizer"), so the orb is the
+sphere now (`app/voice-orb/sphere.ts`): its surface flows with 4D simplex noise under a domain warp,
+deep blue where it is pulled in and cyan where it is pushed out, lit by one light from the viewer as
+three.js lit it; a voice, the person's or the assistant's, swells it, quickens its ripples and
+deepens them, rising to a voice within a tenth of a second and settling over about half of one, by
+the clock rather than the frame. It floats over its shadow while the call is live, breathes while it
+connects, and under reduced motion is one still frame. One departure: its roughness never drops
+below 0.3, where the prototype's pinpoint highlight read as a dead pixel. `e2e/voice-mode.spec.ts`
+reads the pixels it draws: they change with nobody speaking, and the sphere covers over 40% more of
+its canvas under either voice, then settles back.
 
 ## Live checks
 

@@ -107,7 +107,11 @@ export function fakeLink(handlers: LinkHandlers, answers: readonly string[] = []
       speak(replies === 0 ? `Hi. ${OPENING_QUESTION}` : FAKE_QUESTIONS[turn++ % FAKE_QUESTIONS.length]!);
     },
     setMuted() {},
-    level: () => ({ input: 0, output: 0 }),
+    // A scripted call is silent unless a test or a capture plays a voice to the orb.
+    level: () => {
+      const played = window.__adhdmeVoiceLevel;
+      return (typeof played === "function" ? played() : played) ?? { input: 0, output: 0 };
+    },
     close() {
       closed = true;
       for (const timer of timers) clearTimeout(timer);
