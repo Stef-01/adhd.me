@@ -33,6 +33,7 @@ export function VoiceStage({
   focusOnArrival,
   reducedMotion,
   onReveal,
+  onHeard,
   onLeave,
   onType,
 }: {
@@ -40,6 +41,8 @@ export function VoiceStage({
   reducedMotion: boolean | null;
   /** The last answer is in: rank on the model's sentence, near its place. */
   onReveal: (reveal: Reveal) => void;
+  /** The model has written the sentence: the finder can start reading it before the reveal. */
+  onHeard?: (request: string) => void;
   /** The stop button: back to the start, with what the person said in the box. */
   onLeave: (words: string) => void;
   /** The call could not start: the typing screen, with what was said. */
@@ -50,10 +53,12 @@ export function VoiceStage({
   const link = useRef<VoiceLink | null>(null);
   const queued = useRef<ClientEvent[]>([]);
   const revealTo = useRef(onReveal);
+  const heardTo = useRef(onHeard);
 
   useEffect(() => {
     revealTo.current = onReveal;
-  }, [onReveal]);
+    heardTo.current = onHeard;
+  }, [onReveal, onHeard]);
 
   const act = useCallback((action: Action) => {
     const { state: next, send } = step(state.current, action);
@@ -96,6 +101,10 @@ export function VoiceStage({
   // The reveal: after the last sentence has been said, the orb leaves and the matches arrive.
   const { phase, reveal, talking } = view;
   const speaking = talking === "assistant";
+  // The sentence exists before its last words are said: hand it on at once.
+  useEffect(() => {
+    if (reveal) heardTo.current?.(reveal.request);
+  }, [reveal]);
   useEffect(() => {
     if (phase !== "revealing" || !reveal) return;
     const wait = speaking ? LAST_WORDS_MS : reducedMotion ? 0 : REVEAL_MS;

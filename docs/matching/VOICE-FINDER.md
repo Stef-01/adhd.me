@@ -34,13 +34,25 @@ ranks a typed one, and the results arrive where the orb was.
 - **Spend:** 8 calls in ten minutes from one caller, `ADHDME_VOICE_DAILY_SESSIONS` a UTC day (default
   40), a six-minute ceiling on a call, and a key that fails pauses voice for ten minutes.
 
+## Live checks
+
+- `scripts/voice-eval.mjs`: the interviewer against nine personas, headless, no browser.
+- `scripts/voice-call.mjs`: a real spoken call from Chromium, its microphone a WAV built by macOS
+  `say` from the lines given; `CONNECT_ONLY=1` times each step from the tap to the first word.
+
 ## Cost and speed (live, 2026-09-28, gpt-realtime-2.1-mini)
 
 - A typed-answer call of 43 seconds: $0.013. The evaluator's calls: $0.003 to $0.022 each, patient
   simulator included. Spoken input adds transcription, about $0.003 a minute.
-- First word of each reply: about 1.0 s after an answer, 2.0 s for the opening question.
+- First word of each reply: 0.3 to 1.0 s after a spoken answer stops, about 1.0 s after a typed one.
+- From the tap: the microphone is asked for at 165 ms and the offer sent at 240 ms (the call starts in
+  the tap); OpenAI answers the offer at 1.0 to 1.3 s; the data channel opens 1.2 to 1.3 s later on a
+  warm browser. A fresh headless browser's first call waits about 5 s there, inside WebRTC's own
+  setup; candidates in the offer did not help (eight samples).
+- The voice sentence is read by level 1 the moment the model writes it, while its last words are
+  said, so the matches do not wait behind "Reading what you asked".
 
-## Evaluation (`qa/_runs/voice-eval.mjs`)
+## Evaluation (`scripts/voice-eval.mjs`)
 
 Nine personas played by gpt-5-mini from a hidden brief (an adult, a parent, a stable patient
 needing scripts, a rambler, a person asking for advice, a prompt injection, a person saying what they

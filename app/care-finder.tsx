@@ -202,19 +202,32 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    */
   const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
   const reading = readLevel >= 1 && (routeRead.request !== request || !routeRead.done);
-  useEffect(() => {
-    if (readLevel < 1 || stage !== "results" || routeRead.request === request) return;
-    setRouteRead({ request, done: false });
-    const body = JSON.stringify({ text: request });
+  /** Asks the route to read these words; the answer lands only while they are still the ones read. */
+  const readWords = useCallback((words: string) => {
+    setRouteRead({ request: words, done: false });
+    const body = JSON.stringify({ text: words });
     fetch("/api/finder/read", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
       .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string }>) : null))
       .catch(() => null)
-      .then((answer) => setRouteRead((held) => held.request !== request ? held : {
-        request,
+      .then((answer) => setRouteRead((held) => held.request !== words ? held : {
+        request: words,
         done: true,
         needs: answer?.source === "llm" ? answer.keys.flatMap((key) => needForKey(key) ?? []) : undefined,
       }));
-  }, [readLevel, stage, request, routeRead.request]);
+  }, []);
+  useEffect(() => {
+    if (readLevel < 1 || stage !== "results" || routeRead.request === request) return;
+    readWords(request);
+  }, [readLevel, stage, request, routeRead.request, readWords]);
+  /**
+   * The voice finder's sentence is read the moment the model writes it, while its last words are
+   * still being said, so the matches arrive with the read done rather than behind "Reading what you
+   * asked". The same trim `findMatches` applies, so the results find it as theirs.
+   */
+  const readAhead = useCallback((words: string) => {
+    const trimmed = words.trim();
+    if (readLevel >= 1 && trimmed) readWords(trimmed);
+  }, [readLevel, readWords]);
   const modelNeeds = routeRead.request === request ? routeRead.needs : undefined;
   const read = useMemo(() => modelNeeds ?? needsFor(request, roster), [modelNeeds, request, roster]);
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
@@ -742,6 +755,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             focusOnArrival={focusOnArrival}
             reducedMotion={reducedMotion}
             onReveal={revealVoice}
+            onHeard={readAhead}
             onLeave={(words) => {
               setDraft(words);
               backTo("welcome");
