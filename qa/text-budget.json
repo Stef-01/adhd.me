@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-28T07:52:59.115Z",
+  "measuredAt": "2026-09-28T08:36:24.357Z",
   "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
@@ -170,7 +170,7 @@
         },
         {
           "w": 5,
-          "text": "00:09 left in this session",
+          "text": "01:38 left in this session",
           "tag": "small"
         }
       ]
@@ -449,16 +449,16 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 6,
+      "fold": 6,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LOCK IN!",
-          "tag": "p"
+          "w": 3,
+          "text": "I held off",
+          "tag": "button"
         },
         {
           "w": 1,
@@ -467,8 +467,8 @@
         },
         {
           "w": 1,
-          "text": "agenda",
-          "tag": "span"
+          "text": "DON’T!",
+          "tag": "p"
         }
       ]
     },
@@ -503,26 +503,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 12,
-      "fold": 12,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DUCK OR GOOSE!",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "hissing at you",
-          "tag": "p"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "POP!",
+          "tag": "p"
         }
       ]
     },
@@ -1043,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1512,
+      "total": 1452,
       "fold": 246,
       "chrome": 22,
-      "ratio": 37.8,
+      "ratio": 36.3,
       "verdict": "long-form",
       "longest": [
         {
@@ -1934,6 +1934,33 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
+      "total": 28,
+      "fold": 28,
+      "chrome": 0,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Whatever. Sure. Guess work wins.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Ouch. I did say sorry.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, reply",
+      "state": "zoe-reply",
       "total": 18,
       "fold": 18,
       "chrome": 0,
@@ -1952,35 +1979,8 @@
         },
         {
           "w": 4,
-          "text": "That came out sharp.",
+          "text": "Said what you meant.",
           "tag": "h1"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/zoe-before-you-send",
-      "name": "Zoe, reply",
-      "state": "zoe-reply",
-      "total": 30,
-      "fold": 30,
-      "chrome": 0,
-      "ratio": 0.8,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 8,
-          "text": "Oh, that’s a shame. Sure. Is Friday free?",
-          "tag": "p"
-        },
-        {
-          "w": 7,
-          "text": "Can we move dinner? Work ran late.",
-          "tag": "p"
-        },
-        {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
         }
       ]
     },
@@ -2042,17 +2042,12 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, complete",
       "state": "zoe-complete",
-      "total": 35,
-      "fold": 35,
+      "total": 26,
+      "fold": 26,
       "chrome": 0,
-      "ratio": 0.9,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
-        {
-          "w": 6,
-          "text": "Yes! Saturday at 7. Can’t wait.",
-          "tag": "p"
-        },
         {
           "w": 5,
           "text": "Still on for our plan?",
@@ -2062,6 +2057,11 @@
           "w": 5,
           "text": "It started about the dishes",
           "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         }
       ]
     },
@@ -2664,7 +2664,7 @@
       "name": "Settings, open (on the finder, where it holds the most)",
       "state": "finder-settings",
       "total": 45,
-      "fold": 17,
+      "fold": 45,
       "chrome": 0,
       "ratio": 1.1,
       "verdict": "ceiling",
@@ -2993,21 +2993,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 2,
-      "fold": 2,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
+        {
+          "w": 3,
+          "text": "DUCK OR GOOSE!",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "small, quacking",
+          "tag": "p"
+        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "PIGEONS!",
-          "tag": "p"
         }
       ]
     },
@@ -3205,7 +3210,7 @@
       "name": "My ADHD, an axis open",
       "state": "sheet-open",
       "total": 54,
-      "fold": 27,
+      "fold": 48,
       "chrome": 0,
       "ratio": 1.4,
       "verdict": "ceiling",

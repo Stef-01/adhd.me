@@ -202,23 +202,55 @@ test("the sheet's handle is a control, not an ornament, the drag has a tap equiv
   await page.goto("/");
   await page.getByRole("button", { name: "Settings" }).click();
   const sheet = page.getByRole("dialog", { name: "Settings" });
-  const half = (await sheet.boundingBox())!.height;
+
+  // A sheet opens at the detent that shows all it holds. Settings holds more than half a phone, so
+  // it opens full, and its last control is on screen without a drag or a scroll.
+  const shrink = page.getByRole("button", { name: /Shrink Settings/i });
+  await expect(shrink).toBeVisible();
+  await expect(page.getByRole("button", { name: "Choose file" })).toBeInViewport({ ratio: 1 });
+  await expect.poll(async () => (await sheet.boundingBox())!.y).toBeLessThan(844 * 0.2);
+  const full = (await sheet.boundingBox())!.height;
 
   // Every gesture needs a tap equivalent: the grabber cycles the detents for anybody who cannot
   // drag, which is Material's own accessibility rule for this exact component.
-  const handle = page.getByRole("button", { name: /Expand Settings/i });
-  const handleBox = (await handle.boundingBox())!;
+  const handleBox = (await shrink.boundingBox())!;
   expect(handleBox.height, "the handle is under the 48px floor its own guidance sets").toBeGreaterThanOrEqual(48);
-  await handle.click();
-  await expect.poll(async () => (await sheet.boundingBox())!.height).toBeGreaterThan(half);
+  await shrink.click();
+  await expect.poll(async () => (await sheet.boundingBox())!.height).toBeLessThan(full - 1);
 
-  await page.getByRole("button", { name: /Shrink Settings/i }).click();
-  await expect.poll(async () => (await sheet.boundingBox())!.height).toBeLessThan(half + 1);
+  await page.getByRole("button", { name: /Expand Settings/i }).click();
+  await expect.poll(async () => (await sheet.boundingBox())!.height).toBeGreaterThan(full - 1);
 
   // An explicit close control exists, so dismissal is never gesture-only.
   await page.getByRole("button", { name: "Close Settings", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Settings" })).toHaveCount(0);
 });
+
+// Closed and opened again straight away, while it is still leaving (Escape, then Enter on the
+// control focus returns to), a sheet comes all the way back, never stopping part way up with its
+// lower half under the window.
+for (const [name, viewport] of [["a phone", { width: 390, height: 844 }], ["a desk", { width: 1280, height: 720 }]] as const) {
+  test(`a sheet reopened while it is leaving comes all the way back, on ${name}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const open = page.getByRole("button", { name: "Settings" });
+    const sheet = page.getByRole("dialog", { name: "Settings" });
+    for (let round = 0; round < 3; round += 1) {
+      await open.click();
+      await expect(sheet).toBeVisible();
+      // Escape hands focus back to Settings, so Enter straight after opens it again mid-exit.
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("Enter");
+      await expect.poll(async () => {
+        const box = await sheet.last().boundingBox();
+        return box ? Math.round(box.y + box.height) <= viewport.height : false;
+      }, { message: "the sheet sits wholly inside the window" }).toBe(true);
+      await expect(sheet.last()).toHaveCSS("transform", "none");
+      await page.keyboard.press("Escape");
+      await expect(sheet).toHaveCount(0);
+    }
+  });
+}
 
 test("the switch inside the sheet still changes the roster it names", async ({ page }) => {
   await page.goto("/");

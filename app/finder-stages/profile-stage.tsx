@@ -3,6 +3,7 @@
 import { CARE_NEEDS, IDENTITY_LABELS, publicCareProfile, publicIdentity } from "@/support/care-preferences";
 import {
   ArrowLeft,
+  ArrowRight,
   ArrowsLeftRight,
   CaretRight,
   Translate,
@@ -306,6 +307,7 @@ export function ProfileStage({
             that the button leads somewhere true, not that it leads somewhere at all. */}
         <Pressable className="primary-button" type="button" onClick={onBook}>
           {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
+          <ArrowRight size={17} weight="bold" aria-hidden="true" />
         </Pressable>
       </div>
     </MotionScreen>

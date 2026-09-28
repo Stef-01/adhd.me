@@ -27,7 +27,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { createPortal } from "react-dom";
-import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from "react";
 import { X } from "@phosphor-icons/react";
 
 /** The heights a sheet rests at, as a share of the viewport. */
@@ -130,7 +130,6 @@ export function Sheet({
   useEffect(() => {
     if (!open) return;
     opener.current = openedBy?.current ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
-    setDetent("half");
     const first = panel.current?.querySelector<HTMLElement>("[data-sheet-initial-focus]") ?? panel.current;
     first?.focus({ preventScroll: true });
     return () => opener.current?.focus({ preventScroll: true });
@@ -164,6 +163,22 @@ export function Sheet({
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
+
+  /**
+   * A sheet opens at the detent that shows all it holds: half when that is enough, full when it is
+   * not. At half, Settings hid "Your data" under the fold on a phone, a drag away from anybody
+   * looking for Delete. Measured at half before the first frame is painted, so nobody sees half
+   * first; every sheet closes back to half, so the next one is measured the same way.
+   */
+  useLayoutEffect(() => {
+    if (!open) {
+      setDetent("half");
+      return;
+    }
+    if (panelled) return;
+    const body = panel.current?.querySelector<HTMLElement>(".sheet-body");
+    if (body && body.scrollHeight > body.clientHeight + 1) setDetent("full");
+  }, [open, panelled]);
 
   const cycleDetent = useCallback(() => setDetent((d) => (d === "half" ? "full" : "half")), []);
   // O249: the height is animated, not set — a detent change is a move, with the sheet's own spring.

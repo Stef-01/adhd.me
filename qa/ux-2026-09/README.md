@@ -563,3 +563,49 @@ experiment, with no line left to say why. 28 → 25 words.
 | --- | --- | --- |
 | Before | ![Start end screen, before, 390](start-end-module-before-390.jpg) | ![Start end screen, before, 1440](start-end-module-before-1440.jpg) |
 | After | ![Start end screen, after, 390](start-end-module-after-390.jpg) | ![Start end screen, after, 1440](start-end-module-after-1440.jpg) |
+
+## Refinement pass three, 2026-09-28
+
+Found reviewing pass two's captures. Before is `main` at c1f6a212, after is this pass, both production
+builds; words are `measure()` from `scripts/text-budget-lib.mjs`.
+
+### Settings on a phone
+
+A sheet opens at the detent that shows all it holds: half when that is enough, full when it is not.
+Settings at half cut off under "Include example profiles", with Restore and Delete a drag away.
+45 words either way; above the fold, 17 → 45.
+
+| Before, 390 | After, 390 |
+| --- | --- |
+| ![Settings, before, 390](settings-whole-before-390.jpg) | ![Settings, after, 390](settings-whole-after-390.jpg) |
+
+### A profile's booking button
+
+Past a phone it is a pill of its own width with the yellow arrow every ink primary carries, not an
+816px ink bar; the strip under it lost the rule that ran 42px past the column. On a phone it is the
+same full-width pill, now with the arrow. 48 → 48 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Profile, before, 390](profile-book-before-390.jpg) | ![Profile, before, 1440](profile-book-before-1440.jpg) |
+| After | ![Profile, after, 390](profile-book-after-390.jpg) | ![Profile, after, 1440](profile-book-after-1440.jpg) |
+
+### My ADHD, lived in, on a phone
+
+Each corner of the chart carries its chip's glyph on the chip's stone disc, so a point on the shape
+can be told from the others; the chart scales 1.1 rather than 1.3 so the discs fit its frame. From
+768px the chips ring the chart and these stand down. No words: 53 → 53.
+
+| Before, 390 | After, 390 |
+| --- | --- |
+| ![My ADHD, before, 390](my-adhd-corners-before-390.jpg) | ![My ADHD, after, 390](my-adhd-corners-after-390.jpg) |
+
+### Finder, "A woman doctor"
+
+Chloe Bennett's example portrait is cropped to head and shoulders like every other: it was a stock
+pose, pointing, a small figure in a white square, at the top of this list.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![A woman doctor, before, 390](finder-portrait-before-390.jpg) | ![A woman doctor, before, 1440](finder-portrait-before-1440.jpg) |
+| After | ![A woman doctor, after, 390](finder-portrait-after-390.jpg) | ![A woman doctor, after, 1440](finder-portrait-after-1440.jpg) |

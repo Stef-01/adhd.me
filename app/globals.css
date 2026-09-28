@@ -5512,6 +5512,16 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   font-weight: 650;
 }
 
+/* Past a phone the one primary is a pill of its own width, not an 816px ink bar: the taste law
+   allows the ink pill once a screen, never an ink block. */
+@media (min-width: 600px) {
+  .patient-v2 .profile-footer .primary-button {
+    width: fit-content;
+    min-width: 280px;
+    padding-inline: 32px;
+  }
+}
+
 /* Secondary result controls stay available without sitting between the request and first doctor. */
 /* O226: no hairlines — see .results-head. A quiet underlined control, not a bar pretending to be
    a section: it reads as the tertiary thing it is. */
@@ -6430,6 +6440,11 @@ select { caret-color: var(--route-strong); }
 .patient-v2 .profile-footer {
   background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(18px);
+}
+/* Past a phone the pill floats on the frosted strip: the strip is wider than the column above it,
+   and its rule was the one thing that showed it, 42px past the content on each side. */
+@media (min-width: 600px) {
+  .patient-v2 .profile-footer { border-top-color: transparent; }
 }
 
 /* Clinician walkthrough --------------------------------------------------- */

@@ -37,6 +37,10 @@ const AMBIENT_R = R * 0.92;
 /** An axis nothing has reached still shows its node, just off centre, rather than vanishing. */
 const MIN_REACH = 0.1;
 const NODE_R = 4.5;
+/** Where each axis's glyph sits on a phone: just outside the outer ring, the size of a chip's disc. */
+const CORNER_REACH = 1.14;
+const CORNER_R = 20;
+const GLYPH = 20;
 
 function angleAt(index: number, count: number): number {
   return (Math.PI * 2 * index) / count - Math.PI / 2;
@@ -130,6 +134,19 @@ export function MyAdhdRadar({
               ))}
             </>
           )}
+          {/* Each corner carries its chip's glyph: on a phone the chips sit in a grid under the
+              chart, and without it a point on the shape could not be told from the others. From
+              768px the chips ring the chart themselves and these stand down (map.css). */}
+          {points.map((p, i) => {
+            const [x, y] = pointAt(i, n, CORNER_REACH);
+            const Glyph = AXIS_ICON[p.aspect].icon;
+            return (
+              <g key={p.aspect} className="map-corner">
+                <circle cx={round(x)} cy={round(y)} r={CORNER_R} />
+                <Glyph x={round(x - GLYPH / 2)} y={round(y - GLYPH / 2)} size={GLYPH} weight="bold" />
+              </g>
+            );
+          })}
           <polygon className="map-you" points={path(shape)} />
           {points.map((p, i) => {
             const [x, y] = shape[i]!;
