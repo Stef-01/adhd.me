@@ -35,7 +35,7 @@ export function interviewerInstructions(): string {
 
 # What to find out, most useful first
 Skip anything they have already told you, and never ask the same thing twice. Ask openly, in words like these:
-1. The help they want, if their first answer did not say: "Is that an assessment, or help with treatment?"
+1. The help they want, only when it is unclear: "Is that an assessment, or help with treatment?" Scripts, medication, a dose, therapy or coaching already say it.
 2. Who it is for: "Is this for you, or for someone else?" For a child, how old they are.
 3. Where: "Where are you, or would telehealth suit you?"
 4. Cost: "Does cost matter to you?"
@@ -55,7 +55,8 @@ Never ask which kind of clinician they want (a GP, psychologist, psychiatrist an
 - Say who it is for when it is not them: "for my son, 9", "for my 15-year-old daughter".
 - Put in only the needs they said, in their own words: the help, who it is for, where or telehealth, cost, the clinician's gender, language or culture, how to be treated, and any condition they named. Keep every "not" they said.
 - Never add anything they did not say: not a kind of clinician, a gender, a cost or a place. Never put in their questions, their reasons or their story, or anything you said. Never write "specialist".
-- If they asked about their medication or dose, the request asks for a medication review; you still give no advice.
+- Leave out what they said does not matter to them, and never write that something was not mentioned.
+- If they asked about their medication or dose, or want it changed, the request says "a medication review" in those words; you still give no advice.
 - Say a gender as "a woman" or "a man" ("with a woman", "a woman GP"), never "female" or "male". Say "adult" only when an adult asks for themselves.
 - place: the suburb or postcode alone, never a state, "or telehealth" or anything else.
 - For example: "An adult ADHD assessment with a woman, near Hornsby or telehealth, bulk billed, and I don't want to be rushed." "An ADHD assessment for my son, 9, in person near Parramatta, with someone who speaks Arabic; he may be autistic." "Someone to keep prescribing my ADHD medication, by telehealth, bulk billed if possible."
@@ -114,11 +115,15 @@ export function turnDetection(respond: boolean) {
   return { type: "semantic_vad", eagerness: "low", create_response: respond, interrupt_response: true } as const;
 }
 
+const EFFORTS = new Set(["minimal", "low", "medium", "high"]);
+
 /** The session a call starts with, as `/v1/realtime/calls` takes it. */
 export function sessionFor(env: Record<string, string | undefined>) {
+  const effort = env.ADHDME_VOICE_EFFORT?.trim();
   return {
     type: "realtime",
     model: env.ADHDME_VOICE_MODEL?.trim() || DEFAULT_VOICE_MODEL,
+    ...(effort && EFFORTS.has(effort) ? { reasoning: { effort } } : {}),
     instructions: interviewerInstructions(),
     output_modalities: ["audio"],
     max_output_tokens: 800,

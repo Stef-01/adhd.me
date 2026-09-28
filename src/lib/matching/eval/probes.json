@@ -429,5 +429,21 @@
     "never": [
       "pref:woman-gp"
     ]
+  },
+  {
+    "text": "an ADHD assessment for my 9 year old son",
+    "reaches": [
+      "care:adhd-assessment",
+      "care:child-adolescent-adhd"
+    ]
+  },
+  {
+    "text": "I'm 34 years old and want an assessment",
+    "reaches": [
+      "care:adhd-assessment"
+    ],
+    "never": [
+      "care:child-adolescent-adhd"
+    ]
   }
 ]

@@ -198,6 +198,10 @@ const LEXICON: readonly Entry[] = [
        direction, an adult ranked against paediatric GPs. An age is not a relationship. */
     "educational psychologist",
     "my son", "my daughter", "my child", "my kid", "teenager", "adolescent", "children", "school report",
+    /* 2026-09-28 (qa/matching/rca.md R11): the age said between "my" and the child, which "my son"
+       cannot bridge: "my nine-year-old son" read as nothing. Unlike the refused "year old", each
+       names the relationship, so "I am forty years old" stays silent; the precision is "my son"'s. */
+    "year old son", "year old daughter", "year old boy", "year old girl", "year old child", "year old kid",
     // O49: the ask phrased from the clinician side — "someone who sees kids". Both verb forms;
     // bare "kids" is refused because stem("kidding") is "kid" and "no kidding" is not a child.
     "sees kids", "see kids",

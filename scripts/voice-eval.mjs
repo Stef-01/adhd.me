@@ -18,6 +18,13 @@ await v.close();
 const KEY = process.env.OPENAI_API_KEY;
 const MODEL = process.env.ADHDME_VOICE_MODEL || iv.DEFAULT_VOICE_MODEL;
 const PATIENT_MODEL = "gpt-5-mini";
+/** USD per 1M tokens (the model pages, 2026-09-28): text in, cached, out; audio in, cached, out. */
+const PRICES = {
+  "gpt-realtime-2.1-mini": { ti: 0.6, tc: 0.06, to: 2.4, ai: 10, ac: 0.3, ao: 20 },
+  "gpt-realtime-2.1": { ti: 4, tc: 0.4, to: 24, ai: 32, ac: 0.4, ao: 64 },
+};
+/** Runs of each persona: a pass rate over one run is a coin toss. */
+const REPEAT = Number(process.env.REPEAT) || 1;
 
 /** Each brief is what the patient knows; `expect` is what the request must carry, `never` what it must not. */
 export const PERSONAS = {
@@ -105,15 +112,22 @@ async function inventedNeeds(transcript, request) {
   const body = {
     model: PATIENT_MODEL,
     reasoning: { effort: "low" },
-    instructions: "You check a search request an assistant wrote for a person looking for an ADHD clinician. Go through the request phrase by phrase. For each need the request STATES (a kind of help, who it is for, their age, a place, telehealth or in person, cost, the clinician's gender, language or culture, how they want to be treated, or a condition), check the person's answers: did they say it or clearly mean it? List only needs the request states that the person did not say. Never list something the request leaves out; a short request is fine. A paraphrase with the same meaning is fine, and so is a need that answers a question the assistant asked, when the person agreed to it. Return an empty list when the request adds nothing.",
+    instructions: "You check a search request an assistant wrote for a person looking for an ADHD clinician. Go through the request phrase by phrase. For each need the request STATES (a kind of help, who it is for, their age, a place, telehealth or in person, cost, the clinician's gender, language or culture, how they want to be treated, or a condition), check the person's answers: did they say it or clearly mean it? List only needs the request states that the person did not say, each with the request's own words for it, copied exactly. Never list something the request leaves out; a short request is fine. A paraphrase with the same meaning is fine, and so is a need that answers a question the assistant asked, when the person agreed to it. Return an empty list when the request adds nothing.",
     input: `The assistant asked:\n${asked}\n\nThe person said:\n${said}\n\nThe request:\n${request}`,
-    text: { format: { type: "json_schema", name: "invented", strict: true, schema: { type: "object", properties: { invented: { type: "array", items: { type: "string" } } }, required: ["invented"], additionalProperties: false } } },
+    text: { format: { type: "json_schema", name: "invented", strict: true, schema: { type: "object", properties: { invented: { type: "array", items: { type: "object", properties: { phrase: { type: "string", description: "The words in the request that state the need, copied exactly." }, why: { type: "string" } }, required: ["phrase", "why"], additionalProperties: false } } }, required: ["invented"], additionalProperties: false } } },
     max_output_tokens: 2000,
   };
   const reply = await fetch("https://api.openai.com/v1/responses", { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${KEY}` }, body: JSON.stringify(body) });
   const json = await reply.json();
   const text = (json.output ?? []).flatMap((o) => o.content ?? []).map((c) => c.text ?? "").join("");
-  try { return JSON.parse(text).invented; } catch { return [`(grader failed: ${json.error?.message ?? "no answer"})`]; }
+  try {
+    // An item stands only when its phrase is really in the request: a grader that lists what the
+    // request leaves out, or quotes words it does not hold, is not heard.
+    const inRequest = (phrase) => phrase.trim().length > 2 && request.toLowerCase().includes(phrase.trim().toLowerCase());
+    return JSON.parse(text).invented.filter((item) => inRequest(item.phrase)).map((item) => `"${item.phrase}": ${item.why}`);
+  } catch {
+    return [`(grader failed: ${json.error?.message ?? "no answer"})`];
+  }
 }
 
 function session() {
@@ -192,7 +206,7 @@ async function runPersona(name) {
   const toolCalls = events.filter((e) => e.type === "response.done").flatMap((e) => (e.response?.output ?? []).filter((o) => o.type === "function_call").map((o) => o.name));
   const advice = questions.filter((q) => ADVICE.test(q));
   let usd = 0;
-  const P = { ti: 0.6, tc: 0.06, ai: 10, ac: 0.3, to: 2.4, ao: 20 };
+  const P = PRICES[MODEL] ?? PRICES["gpt-realtime-2.1-mini"];
   for (const e of events.filter((e) => e.type === "response.done")) {
     const u = e.response?.usage; if (!u) continue;
     const d = u.input_token_details ?? {}; const c = d.cached_tokens_details ?? {}; const o = u.output_token_details ?? {};
@@ -229,15 +243,20 @@ async function runPersona(name) {
 
 const names = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(PERSONAS);
 mkdirSync("qa/voice/runs", { recursive: true });
-const results = await Promise.all(names.map((name) => runPersona(name).catch((error) => ({ persona: name, pass: false, error: String(error) }))));
+const jobs = Array.from({ length: REPEAT }, () => names).flat();
+const results = await Promise.all(jobs.map((name) => runPersona(name).catch((error) => ({ persona: name, pass: false, error: String(error) }))));
 const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-writeFileSync(`qa/voice/runs/eval-${stamp}.json`, JSON.stringify({ model: MODEL, prompt: iv.interviewerInstructions(), results }, null, 2));
+writeFileSync(`qa/voice/runs/eval-${stamp}.json`, JSON.stringify({ model: MODEL, effort: process.env.ADHDME_VOICE_EFFORT ?? "default", repeat: REPEAT, prompt: iv.interviewerInstructions(), results }, null, 2));
 let total = 0;
 for (const r of results) {
   total += r.usd ?? 0;
   if (r.error) { console.log(`${r.persona.padEnd(11)} ERROR ${r.error}`); continue; }
   console.log(`${r.persona.padEnd(11)} ${r.pass ? "PASS" : "FAIL"} asked ${r.asked} · multi-? ${r.multiQuestionTurns} · median ${r.medianWords}w · ${r.revealed ? "revealed" : "no reveal"}${r.urgentShown ? " · urgent" : ""} · missing [${r.missing}] · never [${r.violated}] · invented [${r.invented}] · ${r.requestWords}w${r.specialist ? " · SPECIALIST" : ""} · advice ${r.advice.length} · first word ${r.msToFirstWord.filter(Boolean).map((m) => (m / 1000).toFixed(1)).join("/")}s · $${r.usd}`);
   console.log(`            request: ${r.request || "-"}${r.place ? ` · place ${r.place}` : ""}`);
-  appendFileSync("qa/voice/ledger.jsonl", `${JSON.stringify({ time: new Date().toISOString(), kind: "eval", persona: r.persona, model: MODEL, costUsd: r.usd, pass: r.pass })}\n`);
+  appendFileSync("qa/voice/ledger.jsonl", `${JSON.stringify({ time: new Date().toISOString(), kind: "eval", persona: r.persona, model: MODEL, effort: process.env.ADHDME_VOICE_EFFORT ?? "default", costUsd: r.usd, pass: r.pass })}\n`);
 }
-console.log(`${results.filter((r) => r.pass).length}/${results.length} pass · $${total.toFixed(4)} · qa/voice/runs/eval-${stamp}.json`);
+const median = (xs) => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+const replies = results.flatMap((r) => (r.msToFirstWord ?? []).slice(1).filter(Boolean));
+const fails = {};
+for (const r of results.filter((r) => !r.pass)) fails[r.persona] = (fails[r.persona] ?? 0) + 1;
+console.log(`${MODEL} · effort ${process.env.ADHDME_VOICE_EFFORT ?? "default"} · ${results.filter((r) => r.pass).length}/${results.length} pass · reply first word p50 ${(median(replies) / 1000).toFixed(2)} s, p90 ${(median(replies.filter((x) => x >= median(replies))) / 1000).toFixed(2)} s · questions p50 ${median(results.map((r) => r.asked ?? 0))} · $${(total / results.length).toFixed(4)} a call · fails ${JSON.stringify(fails)} · qa/voice/runs/eval-${stamp}.json`);

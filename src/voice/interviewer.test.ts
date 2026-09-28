@@ -60,6 +60,12 @@ describe("the interviewer", () => {
     expect(full.audio.output.voice).toBe("cedar");
   });
 
+  it("sets a reasoning effort only when the env names a real one", () => {
+    expect(sessionFor({})).not.toHaveProperty("reasoning");
+    expect(sessionFor({ ADHDME_VOICE_EFFORT: "low" }).reasoning).toEqual({ effort: "low" });
+    expect(sessionFor({ ADHDME_VOICE_EFFORT: "extreme" })).not.toHaveProperty("reasoning");
+  });
+
   it("is on only with the founder's flag and a key", () => {
     expect(voiceOn({})).toBe(false);
     expect(voiceOn({ ADHDME_VOICE: "1" })).toBe(false);
