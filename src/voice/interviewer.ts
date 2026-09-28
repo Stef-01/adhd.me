@@ -15,9 +15,9 @@ export const DEFAULT_VOICE_MODEL = "gpt-realtime-2.1-mini";
 export const DEFAULT_VOICE = "marin";
 export const TRANSCRIBE_MODEL = "gpt-4o-mini-transcribe";
 
-/** Voice is on when the founder turns it on and there is a key to pay for it. */
+/** Voice is on wherever there is a key to pay for it, unless ADHDME_VOICE=0 turns it off. */
 export function voiceOn(env: Record<string, string | undefined>): boolean {
-  return env.ADHDME_VOICE === "1" && Boolean(env.OPENAI_API_KEY);
+  return Boolean(env.OPENAI_API_KEY) && env.ADHDME_VOICE !== "0";
 }
 
 const triple = said("emergency");

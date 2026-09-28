@@ -67,8 +67,8 @@ still orders clinicians level in fit and standing. The numbers reach the browser
 `GET /api/finder/weights` (`quality`); no screen shows them. This is an exception to C2 and to W83's
 refusal of a quality ranking of named clinicians, recorded in `src/compliance/cdss-boundary.ts` and
 `src/privacy/automated-decisions.ts`. /match's own ordering (`src/lib/matching/ranking.ts`) does not
-take it yet: every score there carries a breakdown a reviewer can recompute (W213), and a factor that
-is never shown needs the founder's word on how it sits in one.
+take it (founder, 2026-09-29): every score there carries a breakdown a reviewer can recompute (W213),
+and a factor that is never shown has no place in one.
 
 ## Running it on Supabase
 

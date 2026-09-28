@@ -1,7 +1,8 @@
 # The voice finder
 
-Status: built 2026-09-28. On when `ADHDME_VOICE=1` and `OPENAI_API_KEY` are set; otherwise the
-finder's microphone is dictation, as before.
+Status: built 2026-09-28. On wherever `OPENAI_API_KEY` is set, unless `ADHDME_VOICE=0` (founder,
+2026-09-29: voice on by default). The finder's AI or Standard choice (below its box, kept on the
+device) decides per person: AI talks through this finder, Standard's microphone is dictation.
 
 ## What it is
 

@@ -35,11 +35,19 @@ afterEach(() => {
 describe("POST /api/finder/read", () => {
   it("at level 0 reads with the lexicon and never calls fetch, with or without a key", async () => {
     const { input } = cassette("C7");
-    vi.stubEnv("OPENAI_API_KEY", "k");
     expect(await read(input)).toEqual({ status: 200, body: { keys: lexiconReading(input).keys, source: "lexicon" } });
+    vi.stubEnv("OPENAI_API_KEY", "k");
     vi.stubEnv("ADHDME_LLM_LEVEL", "0");
-    await read(input);
+    expect((await read(input)).body.source).toBe("lexicon");
     expect(network).not.toHaveBeenCalled();
+  });
+
+  it("is at level 1 wherever there is a key and no level is set", async () => {
+    vi.stubEnv("OPENAI_API_KEY", "k");
+    const { input, expect: want } = cassette("C7");
+    network = vi.fn(cassetteFetch(CASSETTES, () => completed({ verdicts: [] })));
+    vi.stubGlobal("fetch", network);
+    expect((await read(input)).body).toEqual(want);
   });
 
   it("at level 1 with no key reads with the lexicon and never calls fetch", async () => {

@@ -46,6 +46,7 @@ async function withEnv<T>(env: Record<string, string>, run: () => Promise<T>): P
 
 test("level 0: the finder reads the words itself and asks nothing", async ({ page }) => {
   await typeRequest(page);
+  await expect(page.getByRole("group", { name: "Matching" }), "no choice where only Standard runs").toHaveCount(0);
   // Web vitals and the like still go out, and the search's record (docs/data/FINDER-DATA.md) does,
   // once its list shows; nothing goes to the read route or anywhere else with the words.
   const asked: string[] = [];
@@ -112,6 +113,30 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   await expect.poll(() => rowIds(page)).toEqual(topFive(withoutTelehealth));
   await page.waitForTimeout(500);
   expect(posts).toEqual([REQUEST]);
+});
+
+test("level 1: AI is the default, and Standard, kept on the device, asks the model nothing", async ({ page }) => {
+  await page.route((url) => url.pathname === "/", async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).replace('\\"readLevel\\":0', '\\"readLevel\\":1') });
+  });
+  const posts: string[] = [];
+  await page.route("**/api/finder/read", async (route) => {
+    posts.push(route.request().postData() ?? "");
+    await route.fulfill({ status: 500, body: "Standard should not ask the model" });
+  });
+  await page.goto("/");
+  const modes = page.getByRole("group", { name: "Matching" });
+  await expect(modes.getByRole("button", { name: "AI" })).toHaveAttribute("aria-pressed", "true");
+  await modes.getByRole("button", { name: "Standard" }).click();
+  await page.reload();
+  await expect(modes.getByRole("button", { name: "Standard" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("textbox").fill(REQUEST);
+  await page.keyboard.press("Enter");
+  await expect.poll(() => rowIds(page), { timeout: 20000 }).toEqual(topFive());
+  await expect(page.locator(".reading-line")).toHaveCount(0);
+  await page.waitForTimeout(500);
+  expect(posts).toEqual([]);
 });
 
 test("level 1: a short request the lexicon already heard lists at once, with no read (read-policy.ts)", async ({ page }) => {

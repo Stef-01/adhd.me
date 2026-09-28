@@ -218,6 +218,12 @@
 @media (hover: hover) { .platform-shell .care-preference-fields :is(input,select):hover { border-color: var(--accent); } }
 @media (prefers-reduced-motion: reduce) { .platform-shell .care-preference-fields :is(input,select), .platform-shell .finder-care-summary summary::after { transition: none; } }
 
+/* AI or Standard, under the box: one switch of two halves, so it never reads as two more examples;
+   the chosen half in the accent. */
+.platform-shell .patient-v2 .finder-mode { display: flex; margin: 14px 0 0; padding: 3px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--paper); }
+.platform-shell .patient-v2 .finder-mode .finder-example { border-color: transparent; }
+.platform-shell .patient-v2 .finder-mode [aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+
 /* W6b: four example requests under the finder's box, each a 44px chip on paper. */
 .platform-shell .patient-v2 .finder-examples { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
 .platform-shell .patient-v2 .finder-example {

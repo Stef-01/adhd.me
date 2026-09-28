@@ -13,6 +13,11 @@ import { AppSettings } from "../app-settings";
 import { RateVisit } from "./rate-visit";
 import { EASE_OUT, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
+/** How the finder reads: the model and the voice finder, or the word matcher alone. A preference this device keeps. */
+export type FinderMode = "ai" | "standard";
+export const MODE_KEY = "adhdme.finder.mode";
+const MODES: readonly [FinderMode, string][] = [["ai", "AI"], ["standard", "Standard"]];
+
 export function WelcomeStage({
   draft,
   setDraft,
@@ -22,6 +27,8 @@ export function WelcomeStage({
   onTalk,
   includeSynthetic,
   onToggleSynthetic,
+  mode,
+  onMode,
 }: {
   draft: string;
   setDraft: (value: string) => void;
@@ -35,6 +42,9 @@ export function WelcomeStage({
    * the toggle card was the loudest block on a screen whose one job is the list). */
   includeSynthetic: boolean;
   onToggleSynthetic: (next: boolean) => void;
+  /** The chosen mode, or null where this server offers only Standard. */
+  mode: FinderMode | null;
+  onMode: (mode: FinderMode) => void;
 }) {
   const box = useRef<HTMLTextAreaElement | null>(null);
   return (
@@ -141,6 +151,16 @@ export function WelcomeStage({
             </AnimatePresence>
           </Pressable>
         </div>
+
+        {mode && (
+          <div className="finder-mode" role="group" aria-label="Matching">
+            {MODES.map(([value, name]) => (
+              <button key={value} type="button" className="finder-example" aria-pressed={mode === value} onClick={() => onMode(value)}>
+                {name}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* W6b: four requests a person can see and tap. Each fills the box and puts the cursor at
             its end, so the mic becomes the search arrow and the words can still be changed. */}

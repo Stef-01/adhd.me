@@ -66,11 +66,12 @@ describe("the interviewer", () => {
     expect(sessionFor({ ADHDME_VOICE_EFFORT: "extreme" })).not.toHaveProperty("reasoning");
   });
 
-  it("is on only with the founder's flag and a key", () => {
+  it("is on wherever there is a key, unless ADHDME_VOICE=0 turns it off", () => {
     expect(voiceOn({})).toBe(false);
     expect(voiceOn({ ADHDME_VOICE: "1" })).toBe(false);
-    expect(voiceOn({ OPENAI_API_KEY: "k" })).toBe(false);
+    expect(voiceOn({ OPENAI_API_KEY: "k" })).toBe(true);
     expect(voiceOn({ ADHDME_VOICE: "1", OPENAI_API_KEY: "k" })).toBe(true);
+    expect(voiceOn({ ADHDME_VOICE: "0", OPENAI_API_KEY: "k" })).toBe(false);
   });
 });
 

@@ -34,8 +34,8 @@ afterEach(() => {
 });
 
 describe("POST /api/voice/session", () => {
-  it("is off without the flag or without a key, and never calls out", async () => {
-    vi.stubEnv("ADHDME_VOICE", "");
+  it("is off when turned off or without a key, and never calls out", async () => {
+    vi.stubEnv("ADHDME_VOICE", "0");
     expect((await call()).status).toBe(404);
     vi.stubEnv("ADHDME_VOICE", "1");
     vi.stubEnv("OPENAI_API_KEY", "");

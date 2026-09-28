@@ -108,6 +108,9 @@ export default defineConfig({
       ADHDME_TOKEN_SECRET: "e2e-signing-secret",
       ADHDME_ENABLE_MOCK_ROUTES: "1",
       ADHDME_ENABLE_DEMO: "1", // W37: demo fails closed in prod builds unless opted in
+      // A key (a local .env.local) turns the model and voice on; the suite runs without them, as CI does.
+      ADHDME_LLM_LEVEL: "0",
+      ADHDME_VOICE: "0",
       NEXT_PUBLIC_GA_ID: GA_ID, // U13: the placeholder above, or the caller's
     },
   },

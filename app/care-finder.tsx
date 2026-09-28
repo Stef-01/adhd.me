@@ -57,6 +57,7 @@ import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
+import { MODE_KEY, type FinderMode } from "./finder-stages/welcome-stage";
 import { fakeVoice, startLink } from "@/voice/link";
 import { handOff, newId, track, trackSearch, trackVoiceCall } from "@/finder/track";
 import { worthReading } from "@/finder/read-policy";
@@ -99,6 +100,26 @@ const LISTLESS: ReadonlySet<Stage> = new Set(["welcome", "listening", "voice", "
  */
 export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: number; voice?: boolean }) {
   const reducedMotion = useReducedMotion();
+  /**
+   * AI or Standard (founder, 2026-09-29: "toggle between LLM matching or standard"), a choice this
+   * device keeps: AI reads with the model and talks with the voice finder; Standard is the word
+   * matcher alone, with dictation. Offered only where this server can do either.
+   */
+  const aiOffered = readLevel >= 1 || voice;
+  const [mode, setMode] = useState<FinderMode>("ai");
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem(MODE_KEY) === "standard") setMode("standard");
+    } catch {}
+  }, []);
+  const chooseMode = useCallback((next: FinderMode) => {
+    setMode(next);
+    try {
+      window.localStorage.setItem(MODE_KEY, next);
+    } catch {}
+  }, []);
+  const level = mode === "ai" ? readLevel : 0;
+  const talks = mode === "ai" && voice;
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
   /**
@@ -212,7 +233,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    */
   const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
   /** Only where it helps (src/finder/read-policy.ts): a short request the lexicon already heard lists at once. */
-  const modelReads = useMemo(() => readLevel >= 1 && worthReading(request, needsFor(request, roster).length), [readLevel, request, roster]);
+  const modelReads = useMemo(() => level >= 1 && worthReading(request, needsFor(request, roster).length), [level, request, roster]);
   const reading = modelReads && (routeRead.request !== request || !routeRead.done);
   /** Asks the route to read these words; the answer lands only while they are still the ones read. */
   const readWords = useCallback((words: string) => {
@@ -238,9 +259,9 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    */
   const readAhead = useCallback((words: string) => {
     const trimmed = words.trim();
-    if (readLevel >= 1 && trimmed && worthReading(trimmed, needsFor(trimmed, roster).length)) readWords(trimmed);
-  }, [readLevel, readWords, roster]);
-  const modelNeeds = routeRead.request === request ? routeRead.needs : undefined;
+    if (level >= 1 && trimmed && worthReading(trimmed, needsFor(trimmed, roster).length)) readWords(trimmed);
+  }, [level, readWords, roster]);
+  const modelNeeds = level >= 1 && routeRead.request === request ? routeRead.needs : undefined;
   const read = useMemo(() => modelNeeds ?? needsFor(request, roster), [modelNeeds, request, roster]);
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
   const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
@@ -814,8 +835,10 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             onSearch={findMatches}
             includeSynthetic={includeSynthetic}
             onToggleSynthetic={toggleSynthetic}
+            mode={aiOffered ? mode : null}
+            onMode={chooseMode}
             onTalk={() => {
-              if (!voice && !fakeVoice()) return startListening();
+              if (!talks && !fakeVoice()) return startListening();
               // The call starts in the tap, while the screen arrives.
               startLink();
               goTo("voice");

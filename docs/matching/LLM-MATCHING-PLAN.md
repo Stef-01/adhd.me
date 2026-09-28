@@ -580,7 +580,9 @@ The weak classes are exactly where the lexicon cannot hear: C7 (NDCG@3 0.467, hi
 
 **Step 2 as built.** `app/api/finder/read/route.ts` (30 lines): POST `{ text }` returns
 `{ keys, source }`. `levelOf` in `client.ts` reads `ADHDME_LLM_LEVEL` and gives 0 with no
-`OPENAI_API_KEY`, so level 1 without a key is level 0: the lexicon, no network. At 1 the route calls
+`OPENAI_API_KEY`, so level 1 without a key is level 0: the lexicon, no network. With a key and no
+level set it is 1 (founder, 2026-09-29), and the finder offers AI or Standard below its box: Standard
+is level 0 for that person, whatever the server's level. At 1 the route calls
 `readRequest` with no cache, and any failure answers with the lexicon's keys and `source: "lexicon"`.
 Text over 2,000 characters (the /match narrative's cap; the finder had none) gets a 400. After 20
 paid reads a minute from one caller it answers with the lexicon (in memory, per server instance).
@@ -714,6 +716,24 @@ always sees the same order for the same words. Two decisions are the founder's:
 Testing budget (founder, 2026-09-28): $14 for all live testing, matching and voice together
 (`TESTING_BUDGET_USD` in `src/lib/matching/eval/run.ts`); every runner refuses a run that could cross
 it.
+
+## 16f. 2026-09-29: the founder's defaults
+
+The founder took the default on every open question ("do all the default choices"):
+
+1. **The flip gate** counts care, preference and language keys; manner keys are shown beside it
+   (`src/lib/matching/eval/run.ts`). P5's 3.6% passes; its 9.4% over every key is reported, not gated.
+2. **Level 1 and voice** are on wherever there is a key (`levelOf`, `voiceOn`); `ADHDME_LLM_LEVEL=0`
+   and `ADHDME_VOICE=0` turn them off. Each person chooses AI or Standard below the finder's box
+   ("toggle between LLM matching or standard"); Standard is level 0 and dictation for them.
+3. **Labels stay as designed:** a bare "ADHD" and a past "diagnosed" read as the assessment ask, in
+   the lexicon and the corpus, so "diagnosed last year… keep my dexamphetamine going" brings
+   assessors forward beside shared care.
+4. **/match's order** keeps its recomputable breakdown and takes no quality factor (FINDER-DATA.md).
+5. **The finder's order is an automated decision** on the published notice (`finder-order` in
+   `src/privacy/automated-decisions.ts`), two of its three triggers having fired.
+6. **Supabase:** no project could be made; the free plan's two active projects are in use. Until one
+   is paused or the plan changes, the record lives in server memory.
 
 ## 17. Sources
 

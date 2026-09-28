@@ -144,7 +144,11 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   const fallback = (reading: Reading) => level === "L1" && reading.source === "lexicon";
   const fallbacks = done.filter((d) => fallback(d.reading)).length;
   const valid = 1 - fallbacks / Math.max(1, done.length);
-  const flips = repeats.length ? flipRate([devDone.map((d) => d.reading.keys), ...repeats.map((run) => run.map((d) => d?.reading.keys ?? []))]) : null;
+  // The gate counts what people ask for, care, preferences and languages (founder, 2026-09-29); manner keys wobble and are shown beside it.
+  const flipsOf = (keep: (key: string) => boolean) =>
+    flipRate([devDone.map((d) => d.reading.keys.filter(keep)), ...repeats.map((run) => run.map((d) => (d?.reading.keys ?? []).filter(keep)))]);
+  const flips = repeats.length ? flipsOf((key) => !key.startsWith("manner:")) : null;
+  const allFlips = repeats.length ? flipsOf(() => true) : null;
   const perCall = meter.calls ? meter.spent / meter.calls : 0;
   // Adversarial probes: the share of lexicon keys a text only mentions that the read drops. Measured at L1; L2 gates it.
   const mentioned = mentionsDropped(done.map((d) => d.entry), (text) => keysOf.get(text)!);
@@ -173,7 +177,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
     }
     if (flips !== null) {
       const [devScore, holdScore] = [score(devDone), score(holdDone)];
-      gates.push(["flip rate over 3 runs", pct(flips), flips <= 0.05]);
+      gates.push(["flip rate over 3 runs, asked-for keys", `${pct(flips)} (every key ${pct(allFlips)})`, flips <= 0.05]);
       gates.push(["holdout recall within 0.05 of dev", `${pct(holdScore.recall)} vs ${pct(devScore.recall)}`, (holdScore.recall ?? 1) >= (devScore.recall ?? 1) - 0.05]);
     }
     gates.push(["cost per call within 1.5x the estimate", `$${perCall.toFixed(6)} vs $${estimateUsd}`, perCall <= 1.5 * estimateUsd]);

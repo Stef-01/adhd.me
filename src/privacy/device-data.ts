@@ -22,9 +22,10 @@ import type { LearningProfile } from "@/lives/types";
 import { PROGRESS_KEY, PROGRESS_VERSION, readProgress, type Progress } from "@/learn/progress";
 import { PLAYED_KEY, parsePlayed, readPlayed, type Played } from "@/learn/played";
 
-/** Preferences about how the app looks, sounds and moves. None of them holds an answer. */
+/** Preferences about how the app looks, sounds, moves and reads. None of them holds an answer. */
 export const KEPT_PREFERENCES: readonly string[] = [
   "adhdme.sound",
+  "adhdme.finder.mode",
   "adhdme.lives.relaxed",
   "adhdme.lives.large",
   "adhdme.lives.reduced-flashing",
