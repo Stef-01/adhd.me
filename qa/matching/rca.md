@@ -264,3 +264,23 @@ than ten words, or nothing the lexicon heard. The first row lists at once, sends
 nothing, and loses nothing measurable; the voice finder's sentences, long by nature, are still read,
 and read ahead. Long narratives (over 40 words) are where the model matters most: it changes the top
 three in 7 of 8.
+
+## R14 · the key, checked again, 2026-09-28 (evening)
+
+- **Nothing of the key leaves the server.** The production build's 714 client and prerendered files
+  hold neither the key nor anything key-shaped; the read route answers with keys and a source only,
+  the voice route with a code (`upstream`, `busy`), and `withoutKeys` scrubs OpenAI's masked echo
+  from any error. Spend stays bounded: 20 reads a minute a caller, `ADHDME_LLM_DAILY_USD` (default
+  $1) a day, reads paused ten minutes after a refused key, voice capped by `ADHDME_VOICE_DAILY_SESSIONS`.
+- **Live, through the finder's own route** (level 1, standard tier, a server just started): three
+  new sentences read by the model in 3.9, 6.9 and 7.3 s, the first call paying for new connections
+  (R10); asked again, each came from the read cache in 9 to 12 ms. P1 passed, served by the eval's
+  cassette at $0.
+- **What the live reads showed.** "Diagnosed last year, my psychiatrist retired, I need a GP who will
+  keep my dexamphetamine going" reads shared care and bulk billing, and ADHD assessment too: the
+  lexicon hears a past "diagnosed" as the assessment ask, and so does the corpus ("diagnosed at
+  forty and still getting my head around it" is labelled assessment). Whether a diagnosis already
+  made should reach assessment is a labelling question for the founder, beside bare "ADHD".
+- **Voice, live:** three calls connect and speak; the first word 6.0 to 10.5 s from the tap on a
+  fresh headless browser, almost all of it WebRTC and OpenAI's session (docs/matching/VOICE-FINDER.md).
+

@@ -51,6 +51,13 @@ ranks a typed one, and the results arrive where the orb was.
   setup; candidates in the offer did not help (eight samples).
 - The voice sentence is read by level 1 the moment the model writes it, while its last words are
   said, so the matches do not wait behind "Reading what you asked".
+- Three more fresh-browser calls (2026-09-28, evening, the machine under load): OpenAI answered the
+  offer 0.4 to 1.5 s after it was sent; the channel opened 1.2 to 4.6 s after that and the session
+  0.8 to 3.0 s after the channel; the first word followed the session by 1.0 s: 6.0, 9.6 and 10.5 s
+  from the tap. Nearly all of it is WebRTC and OpenAI's session, outside the page. A recorded
+  greeting was weighed and refused: the person would answer before the line is open and lose the
+  start of their answer. While it connects the orb breathes instead, so the wait reads as getting
+  ready.
 
 ## Evaluation (`scripts/voice-eval.mjs`)
 
