@@ -315,7 +315,7 @@ export const clinicians: Clinician[] = [
     alsoConsultsAt: ["Double Bay"],
     practice: "Beecroft Family & Skin Cancer Clinic",
     reach: "Practice appointments and phone consultations",
-    image: "/clinicians/anubhav-saxena.png",
+    image: "/clinicians/anubhav-saxena.jpg",
     acceptingNewPatients: true,
     // The date each declaration went on the record, from this file's own history — not a survey
     // answer we never ran. Both Beecroft declarations landed 2026-08-14 (21196bd), Dr Anu

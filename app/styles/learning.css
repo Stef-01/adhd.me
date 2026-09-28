@@ -24,8 +24,7 @@
 .platform-shell .learn-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
 .platform-shell .learn-progress { color: var(--muted); margin: 0 0 20px; font-size: 13px; }
 .platform-shell .learn-pane-tabs { display: flex; gap: 8px; margin: 4px 0 18px; max-width: 420px; }
-.platform-shell .learn-pane-tab { flex: 1; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: 0.9375rem; font-weight: 650; cursor: pointer; }
-.platform-shell .learn-pane-tab.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
+.platform-shell .learn-pane-tab { flex: 1; }
 .platform-shell .learn-pane-tab:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .platform-shell .learn-pane { touch-action: pan-y; display: flow-root; min-width: 0; }
 .platform-shell .learn-play-card { display: grid; justify-items: center; gap: 12px; margin: 0 0 20px; padding: 24px 20px 20px; border-radius: 24px; background: var(--stone); }
@@ -164,11 +163,10 @@
 /* Every character game is a direct destination, not hidden inside the cast screen. */
 .learn-game-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:4px 0 18px; }
 .learn-game-toolbar a { display:inline-flex; gap:8px; align-items:center; min-height:48px; font-size:13px; color:var(--ink); text-decoration:none; }
-.learn-game-toolbar .learn-mix-link { background:var(--ink); color:var(--paper); border-radius:99px; padding:12px 20px; }
 
 /* ── The games pane, rebuilt (docs/design/ux-evaluation-2026-09/PLAN.md W7) ─────────────────── */
 /* The care map's one door: a full-width row above both panes, 56px and more. */
-.platform-shell .learn-care-map { display: flex; align-items: center; gap: 14px; min-height: 56px; margin: 0 0 20px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); color: var(--ink); text-decoration: none; }
+.platform-shell .learn-care-map { display: flex; align-items: center; gap: 14px; max-width: 560px; min-height: 56px; margin: 0 0 20px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); color: var(--ink); text-decoration: none; }
 .platform-shell .learn-care-map > span { display: grid; gap: 2px; flex: 1; min-width: 0; }
 .platform-shell .learn-care-map strong { font-size: 1rem; font-weight: 700; }
 .platform-shell .learn-care-map small { color: var(--muted); font-size: 0.875rem; }
@@ -191,14 +189,14 @@
 /* "All games" sits in the toolbar beside "Play mix", so opening it swaps what is below and the
    button stays where the finger left it. A pill, like its neighbour. */
 .platform-shell .learn-all-games { gap: 8px; margin: 0; border-radius: 99px; }
-.platform-shell .learn-all-games[aria-expanded="true"] svg { transform: rotate(180deg); }
+.platform-shell .learn-all-games[aria-expanded="true"] svg:last-child { transform: rotate(180deg); }
 .platform-shell .learn-game-groups { display: grid; gap: 8px; margin: 12px 0 0; }
 .platform-shell .learn-group-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; padding: 0 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); font: inherit; font-weight: 650; cursor: pointer; touch-action: manipulation; }
 .platform-shell .learn-group-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
 .platform-shell .learn-group-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .platform-shell .learn-game-names { display: grid; gap: 2px; margin: 6px 0 4px; padding: 0; list-style: none; }
 .platform-shell .learn-game-names :is(a, button) { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: transparent; color: var(--ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; }
-.platform-shell .learn-game-names svg { color: var(--accent-deep); }
+.platform-shell :is(.learn-game-names svg, .learn-played-tick) { color: var(--accent-deep); }
 @media (hover: hover) { .platform-shell .learn-game-names :is(a, button):hover { background: var(--stone); } }
 .platform-shell .learn-saved { margin: 20px 0 0; color: var(--muted); font-size: 0.875rem; }
 
@@ -206,10 +204,7 @@
    to everything else. */
 .platform-shell .learn-goals { display: grid; gap: 14px; margin: 24px 0 8px; }
 .platform-shell .learn-goals h2 { margin: 0; font-size: 1.375rem; line-height: 1.25; }
-/* Accent is for live values, so these text buttons are ink, and the underline says they act. */
-.platform-shell .learn-goals-done, .platform-shell .learn-change-goals { justify-self: start; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--ink); font: inherit; font-size: 0.9375rem; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; touch-action: manipulation; }
-.platform-shell :is(.learn-goals-done, .learn-change-goals):focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
-@media (hover: hover) { .platform-shell :is(.learn-goals-done, .learn-change-goals):hover { text-decoration-thickness: 2px; } }
+.platform-shell :is(.learn-goals-done, .learn-change-goals) { justify-self: start; touch-action: manipulation; }
 .platform-shell .learn-for-you { margin: 24px 0 8px; }
 .platform-shell .learn-for-you-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .platform-shell .learn-panes .learn-for-you-head .lives-section-title { margin: 0; }

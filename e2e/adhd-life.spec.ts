@@ -90,7 +90,9 @@ test("E2E 1: a new person completes onboarding and is handed a first module", as
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Around 10 minutes" }).click();
   await page.getByRole("button", { name: "Finish" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(/priority seems to be start assignments/i);
+  // One sentence about the priority, in the person's own words, and one module.
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Your biggest priority: “Start assignments and work earlier”.");
+  await expect(page.getByText(/biggest priority/)).toHaveCount(1);
   await expect(page.getByText("Why starting can be harder than doing")).toBeVisible();
   // Nothing scored, and the record is on the device only.
   const record = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), MODEL_KEY);

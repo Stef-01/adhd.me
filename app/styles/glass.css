@@ -78,7 +78,7 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
 /* ── Glass controls in the games section ─────────────────────────────────────────────────────
    One recipe: a lit fill, a bright rim where the light enters, the warm and cool split down the
    two sides, a seat at the foot for thickness, and a blurred, saturated backdrop. */
-[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) {
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound) {
   position: relative;
   isolation: isolate;
   /* The tap's bubble grows past the edge and is clipped to the surface, the way a drop spreading
@@ -103,15 +103,15 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
 }
 /* The glare band and, inside it, the Fresnel ring: brightest where the light enters, gone by the
    far edge. Both are one layer so a bubble costs one pseudo-element, not two. */
-[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound)::before {
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound)::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
   background: linear-gradient(var(--lg-glare-angle), rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.14) 26%, rgba(255, 255, 255, 0) 44%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.26) 100%);
   box-shadow: inset 0 0 0 1px var(--lg-fresnel), inset 0 0 14px rgba(255, 255, 255, 0.34);
   transition: opacity var(--dur-tap, 150ms) var(--ease-ui, ease), transform var(--dur-tap, 150ms) var(--ease-ui, ease);
 }
-[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) > * { position: relative; z-index: 2; }
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound) > * { position: relative; z-index: 2; }
 /* Pressed, a drop compresses and its highlight slides across rather than switching off. */
-[data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound):active {
+[data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound):active {
   transform: scale(0.972);
   box-shadow:
     inset 0 var(--lg-thickness) 0 var(--glass-rim),
@@ -120,20 +120,20 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
     inset 0 calc(-1 * var(--lg-thickness)) 0 color-mix(in srgb, var(--ink) 18%, transparent),
     0 1px 0 color-mix(in srgb, #fff 70%, transparent), 0 1px 3px color-mix(in srgb, var(--ink) 12%, transparent);
 }
-[data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound):active::before { transform: translateX(6%); }
+[data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound):active::before { transform: translateX(6%); }
 /* ── The bubble a tap makes ───────────────────────────────────────────────────────────────────
    A tap opens a droplet out of the point it landed on and lets it go (founder, 2026-09-11: "it
    should be playable with your bubble that the tap has"). The WebGL layer leaves a real one that
    melts into the glass, but it needs a GPU; this is the same event on every other device.
    `app/glass/glass-pointer.tsx` marks the surface for the length of the bloom and puts the point
    in --lg-x/--lg-y; the bubble is a second layer so it never disturbs the glare above it. */
-[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)::after {
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)::after {
   content: ""; position: absolute; left: var(--lg-x, 50%); top: var(--lg-y, 50%); z-index: 1;
   width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; pointer-events: none;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.35) 55%, rgba(255, 255, 255, 0) 72%);
   opacity: 0; transform: scale(0.2);
 }
-[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)[data-tap]::after {
+[data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)[data-tap]::after {
   animation: lg-bubble 620ms var(--ease-ui, ease-out) 1;
 }
 @keyframes lg-bubble {
@@ -181,7 +181,7 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
   background: radial-gradient(80% 90% at 80% 0%, rgb(255 255 255 / 0.24), transparent 72%);
   box-shadow: none;
 }
-.platform-shell .learn-games-scope :is(.learn-show-all, .learn-play-cast-link) {
+.platform-shell .learn-games-scope :is(.learn-show-all, .learn-mix-link, .learn-play-cast-link) {
   border-color: transparent;
   box-shadow: 0 2px 8px -5px rgb(23 32 51 / 0.12);
 }
@@ -195,7 +195,7 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
     var(--stone);
 }
 @supports (corner-shape: superellipse(2)) {
-  [data-liquid] :is(.learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-choice, .play-hut, .play-x, .lives-choice, .lives-row, .learn-show-all) { corner-shape: superellipse(var(--lg-shape)); }
+  [data-liquid] :is(.learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-choice, .play-hut, .play-x, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link) { corner-shape: superellipse(var(--lg-shape)); }
 }
 
 /* ── The WebGL layer (app/glass/liquid-glass.tsx, the studio's own pipeline) ─────────────────────
@@ -210,12 +210,12 @@ html.has-liquid [data-liquid] { --glass-fill: color-mix(in srgb, var(--paper) 34
 
 @media (prefers-reduced-transparency: reduce) {
   [data-liquid] { background-image: none; }
-  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
-  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound)::before, .platform-shell [data-liquid] :is(.learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card)::before, [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)::after { display: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound)::before, .platform-shell [data-liquid] :is(.learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card)::before, [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)::after { display: none; }
   .platform-shell [data-liquid] .learn-play-card { background: var(--stone); }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)::after { display: none; }
-  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .play-tempt.is-go) { transition: none; }
-  [data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-play-cast-link, .leo-sound, .play-tempt.is-go):active { transform: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound, .learn-stack .learn-card, .learn-try-tile, .leo-feature, .learn-play-card, .play-tempt.is-go)::after { display: none; }
+  [data-liquid] :is(.play-hut, .play-x, .play-choice, .play-bean-label, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound, .play-tempt.is-go) { transition: none; }
+  [data-liquid] :is(.play-x, .play-choice, .play-chip-big, .lives-choice, .lives-row, .learn-show-all, .learn-mix-link, .learn-play-cast-link, .leo-sound, .play-tempt.is-go):active { transform: none; }
 }

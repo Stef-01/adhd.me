@@ -177,8 +177,7 @@ function StartHere({ answers, onStart, onAgain }: { answers: OnboardingAnswers; 
   const module = interactiveModule(moduleId);
   return (
     <div className="onboarding-welcome" role="status">
-      <h1>{goal ? `Your biggest priority seems to be ${goal.label.toLowerCase()}.` : "Let’s start with the idea everything else rests on."}</h1>
-      <p>{rec?.why}</p>
+      <h1>{goal ? `Your biggest priority: “${goal.label}”.` : "Let’s start with the idea everything else rests on."}</h1>
       {module && (
         <div className="life-card is-lead">
           <h2>{module.title}</h2>
