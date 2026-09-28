@@ -131,6 +131,12 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
     rationale: "Phase M (ADR 0007) holds the most patient-shaped record in the tree: the narrative a person wrote. It is keyed by an opaque random id that lives only in the person's own browser session, never in a URL or a log line, and `eraseMatchingPatient` removes the patient row, every match proposed for them, every feedback record on those matches and the checklist in one call; `exportMatchingPatient` returns the same set for an access request. GP profiles in the same store are not patient data. WHERE IT GOES WHEN CONFIGURED: `src/lib/matching/persistence.ts` mirrors every row to the `0006_matching.sql` tables under the service role when SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set, and erasure issues the same deletes there in the same order; unset, nothing leaves the process. THE TRIGGER THAT WIDENS THIS ENTRY: `src/lib/matching/dense-embedder.ts` sends narrative and bio text to an embeddings endpoint only when ADHDME_EMBED_URL, ADHDME_EMBED_MODEL and ADHDME_EMBED_KEY are set; none is set, nothing is fetched at import, and the first configuration is an outbound disclosure of the narrative to a processor, to be recorded here and in the policy before it is switched on.",
   },
   {
+    module: "src/lib/matching/read-cache.ts",
+    what: "The finder's model readings, remembered for a day: facet keys under a hash of the request's words",
+    handling: "no_patient_identity",
+    rationale: "2026-09-28: the same words read the same way and a repeated search costs nothing. The words themselves are never held, only a SHA-256 of them, lower-cased and trimmed, beside the facet keys the model read; no id, device or person is attached, and nothing leaves the process. At most 500 entries, each for 24 hours, gone on restart.",
+  },
+  {
     module: "src/db/finder.ts",
     what: "The finder's record: searches (the words a person typed or said, the place, the filters, what was read and shown), voice call summaries, what they did with a list, handoffs to a practice, and the stars and words after a visit",
     handling: "stored",

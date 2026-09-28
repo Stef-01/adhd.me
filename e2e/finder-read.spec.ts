@@ -46,9 +46,11 @@ async function withEnv<T>(env: Record<string, string>, run: () => Promise<T>): P
 
 test("level 0: the finder reads the words itself and asks nothing", async ({ page }) => {
   await typeRequest(page);
-  // Web vitals and the like still go out; nothing goes to the read route or carries the words.
+  // Web vitals and the like still go out, and the search's record (docs/data/FINDER-DATA.md) does,
+  // once its list shows; nothing goes to the read route or anywhere else with the words.
   const asked: string[] = [];
   page.on("request", (request) => {
+    if (request.url().includes("/api/finder/track")) return;
     if (request.url().includes("/api/finder/") || (request.postData() ?? "").includes(REQUEST.slice(0, 40))) asked.push(request.url());
   });
   await page.keyboard.press("Enter");

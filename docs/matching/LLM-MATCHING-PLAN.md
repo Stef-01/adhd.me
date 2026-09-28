@@ -696,6 +696,23 @@ The decisions the loop cannot make:
    to 9 seconds (the check adds the most), inside the finder's 12-second fallback. The holdout stays
    unread until a formal P4 passes.
 
+## 16e. 2026-09-28, later: the ladder passes P4
+
+One reader example (`qa/matching/rca.md` R12) took L1 through P3 and P4, the first formal pass: over
+all 363 dev requests, precision 92.0%, never violations 0.0%, negation 96.6%, $0.000067 a call. P5
+opened the holdout once: recall 98.9% against dev 99.7%, so nothing is tuned to the dev set. P5's one
+failing gate is the flip rate (9.4% against 5%), and 24 of its 34 flipping requests differ only in a
+manner key. The finder now remembers each reading for a day under a hash of the words, so a person
+always sees the same order for the same words. Two decisions are the founder's:
+
+1. **The flip gate:** keep 5% over every key, count care and preference keys only, or trade some
+   precision for steadier manner keys (majority rather than unanimous voting).
+2. **Level 1 in the finder** (16d §4), now that P4 has passed.
+
+Testing budget (founder, 2026-09-28): $14 for all live testing, matching and voice together
+(`TESTING_BUDGET_USD` in `src/lib/matching/eval/run.ts`); every runner refuses a run that could cross
+it.
+
 ## 17. Sources
 
 - OpenAI pricing and model facts (gpt-5-nano $0.05 / $0.005 cached / $0.40 per million tokens,

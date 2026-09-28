@@ -14,6 +14,15 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const BASE = process.env.BASE || "http://localhost:3021";
+// The founder's testing budget (src/lib/matching/eval/run.ts, TESTING_BUDGET_USD) covers every live
+// test: a call costs about $0.02, and none starts once $14 less that is spent.
+const spentSoFar = ["qa/matching/ledger.jsonl", "qa/voice/ledger.jsonl"]
+  .flatMap((f) => { try { return readFileSync(f, "utf8").split("\n").filter(Boolean); } catch { return []; } })
+  .reduce((sum, line) => sum + (JSON.parse(line).costUsd ?? 0), 0);
+if (spentSoFar + 0.05 > 14) {
+  console.log(`refused: testing has spent $${spentSoFar.toFixed(2)} of $14`);
+  process.exit(2);
+}
 const RATE = 24000;
 const lines = process.argv.slice(2).length ? process.argv.slice(2) : [
   "I think I might have ADHD, and I'd like to get assessed.",

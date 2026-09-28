@@ -34,6 +34,8 @@ const MAX_CALL_MS = 6 * 60_000;
 const LAST_WORDS_MS = 6000;
 /** The orb's exit, before the matches arrive. */
 const REVEAL_MS = 560;
+/** How long a person may say nothing after the assistant has finished before a gentle check. */
+const QUIET_MS = 18_000;
 /** The contacts the urgent sheet lists, in the order a person in danger needs them. */
 const URGENT: readonly CrisisContactId[] = ["emergency", "emergency-text", "lifeline", "lifeline-text"];
 
@@ -151,6 +153,14 @@ export function VoiceStage({
     }, wait);
     return () => window.clearTimeout(timer);
   }, [phase, reveal, speaking, reducedMotion]);
+
+  // Quiet after the assistant has finished: a gentle check, then (once they have said anything) the
+  // matches for what they said. Any sound from either side starts the wait again.
+  useEffect(() => {
+    if (phase !== "live" || talking !== null || view.responding) return;
+    const timer = window.setTimeout(() => act({ type: "quiet" }), QUIET_MS);
+    return () => window.clearTimeout(timer);
+  }, [phase, talking, view.responding, view.quiet, view.answers, act]);
 
   const level = useCallback(() => link.current?.level() ?? { input: 0, output: 0 }, []);
 

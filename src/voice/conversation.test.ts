@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from "vitest";
 import { initialVoice, inTheirWords, placeOf, saidAsRequest, step, type Action, type ClientEvent, type ServerEvent, type VoiceState } from "./conversation";
-import { AFTER_URGENT, MAX_FOLLOW_UPS, OPENING_QUESTION, SHOW_MATCHES, URGENT_HELP, WRAP_UP } from "./interviewer";
+import { AFTER_URGENT, MAX_FOLLOW_UPS, NUDGE, NUDGE_START, OPENING_QUESTION, SHOW_MATCHES, URGENT_HELP, WRAP_UP } from "./interviewer";
 
 /** Runs actions in order, collecting everything sent. */
 function run(actions: Action[], start: VoiceState = initialVoice()) {
@@ -265,5 +265,40 @@ describe("the place the model gives", () => {
     expect(placeOf("Newtown or telehealth")).toBe("Newtown");
     expect(placeOf("")).toBe("");
     expect(placeOf(12)).toBe("");
+  });
+});
+
+describe("back and forth", () => {
+  it("does not count an answer to the person's own question as a follow-up", () => {
+    const { state } = run([...opened, ...answers("what is bulk billing?"), ...asks("It means the clinician charges Medicare only, so you pay nothing.")]);
+    expect(state.asked).toBe(0);
+    expect(run(asks("Does cost matter to you?"), state).state.asked).toBe(1);
+  });
+
+  it("checks gently on a quiet person, then shows the matches for what they said", () => {
+    const talked = run([...opened, ...answers("an adult ADHD assessment"), ...asks("Where are you?")]).state;
+    const first = run([{ type: "quiet" }], talked);
+    expect(first.state.quiet).toBe(1);
+    expect(JSON.stringify(first.sent)).toContain(JSON.stringify(NUDGE).slice(1, 40));
+    // The check asks something, but it is not a follow-up.
+    const checked = run([server({ type: "response.created", response: { id: "n1" } }), server({ type: "response.output_audio_transcript.done", response_id: "n1", transcript: "Still there? I can show you matches now if you like." }), server({ type: "response.done", response: { id: "n1", status: "completed", metadata: { purpose: "nudge" }, output: [{ type: "message", role: "assistant" }] } })], first.state).state;
+    expect(checked.asked).toBe(talked.asked);
+    const second = run([{ type: "quiet" }], checked);
+    expect(second.state.forced).toBe(true);
+    expect(second.sent.some(forced)).toBe(true);
+  });
+
+  it("before anything is said, asks the opening question again and never finishes", () => {
+    const first = run([...opened, { type: "quiet" }]);
+    expect(JSON.stringify(first.sent)).toContain(JSON.stringify(NUDGE_START).slice(1, 40));
+    const second = run([{ type: "quiet" }], first.state);
+    expect(second.sent).toEqual([]);
+    expect(second.state.forced).toBe(false);
+  });
+
+  it("starts the checks again once the person speaks", () => {
+    const quiet = run([...opened, ...answers("a GP"), ...asks("Where are you?"), { type: "quiet" }]).state;
+    expect(quiet.quiet).toBe(1);
+    expect(run(answers("Hornsby"), quiet).state.quiet).toBe(0);
   });
 });

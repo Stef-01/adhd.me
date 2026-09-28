@@ -218,3 +218,28 @@ evaluation reads many model-written sentences. Four reader gaps, each confirmed 
 - **Left for the founder:** "ADHD" alone reads as `care:adhd-assessment` by design, and 97 corpus
   pins rest on it. Reading it only on assessment, diagnosis or "find out" words is a labelling
   decision; until then the two probes above measure how often level 1 drops it.
+
+## R12 · the ladder passes P3 and P4; P5 fails on manner wobble alone, 2026-09-28
+
+- **One example unblocked it.** `"someone to keep prescribing my ADHD medication" → care: shared-care;
+  negated: adhd-assessment` teaches the reads that "ADHD" naming the condition is not an assessment
+  ask. P1 to P4 then passed on the new prompt: P3 precision 96.3%, C4 negation 100%; P4 over all 363
+  dev requests precision 92.0%, never violations 0.0% (it was 1.6%), C4 96.6%, $0.000067 a call.
+- **P5 (the holdout, opened once, as the plan allows after a formal P4 pass).** Holdout recall 98.9%
+  against dev 99.7%: within 0.05, so the prompt is not tuned to the dev set (F20 clear). Every gate
+  passed but one: the flip rate over three runs, 8.0% and then 9.4% against 5%.
+- **What flips.** Of 34 requests whose keys differ between runs, 24 differ only in a manner key
+  (sense_making, non_judgmental, collaborative, attuned, unhurried, structured): "gentle and
+  reassuring, not brisk" is unhurried in one run and not in another. Care and preference keys, what a
+  person asks FOR, barely move; how they want to be TREATED is where readers disagree, as people would.
+- **For a person, fixed by memory.** `/api/finder/read` now keeps each reading for a day under a hash
+  of the words (`src/lib/matching/read-cache.ts`): the same words read the same way, and a repeated
+  search, an example chip say, costs nothing and waits for nothing.
+- **For the gate, the founder's call.** Majority rather than unanimous voting on manner keys would
+  steady them and cost precision, which unanimity was chosen for (R3). Or the gate could count flips
+  in care and preferences only. Neither is changed here.
+- **Lexicon, the same day:** "keep prescribing my medication", "someone to keep prescribing", "keep
+  writing my scripts" and "continue prescribing my" now reach shared care, and "they keep prescribing
+  me the wrong dose" is pinned as not asking for it. "keep my scripts going" was not added: it hears
+  shared care in the corpus's "a GP who can do the assessment and keep the scripts going", which the
+  corpus labels assessment only, a labelling question for the founder.

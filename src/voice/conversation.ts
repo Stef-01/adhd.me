@@ -9,7 +9,7 @@
 
 import { checkSafety, type SafetyRuleId } from "@/model/safety";
 import { PROFESSION_ENTRIES, professionsMentioned } from "@/support/professions";
-import { AFTER_URGENT, MAX_FOLLOW_UPS, OPENING_QUESTION, SHOW_MATCHES, turnDetection, URGENT_HELP, WRAP_UP } from "./interviewer";
+import { AFTER_URGENT, MAX_FOLLOW_UPS, NUDGE, NUDGE_START, OPENING_QUESTION, SHOW_MATCHES, turnDetection, URGENT_HELP, WRAP_UP } from "./interviewer";
 
 export type Phase = "connecting" | "live" | "revealing" | "failed";
 export type Failure = "mic" | "busy" | "unavailable";
@@ -35,8 +35,10 @@ export interface VoiceState {
   /** The person's turns, counted when their audio is committed or their words are sent: a
    * transcript can arrive after the reply to it, so the count does not wait for one. */
   answers: number;
-  /** Questions asked after the person's first answer. */
+  /** Questions asked after the person's first answer: replies that ask something, not answers to theirs. */
   asked: number;
+  /** Gentle checks since the person last spoke: the first asks if they are there, the second finishes. */
+  quiet: number;
   /** The budget is spent: the next answer ends in show_matches. */
   wrapping: boolean;
   /** show_matches has been forced and not yet answered. */
@@ -56,6 +58,7 @@ export type Action =
   | { type: "typed"; text: string }
   | { type: "muted"; muted: boolean }
   | { type: "finish" }
+  | { type: "quiet" }
   | { type: "urgent-seen" };
 
 export function initialVoice(): VoiceState {
@@ -69,6 +72,7 @@ export function initialVoice(): VoiceState {
     said: [],
     answers: 0,
     asked: 0,
+    quiet: 0,
     wrapping: false,
     forced: false,
     muted: false,
@@ -129,6 +133,8 @@ const respondOnTurn = (on: boolean): ClientEvent => ({
 
 /** Marks the forced last response, so only it can end the call without show_matches. */
 const LAST = "wrap-up";
+/** Marks a check on a quiet person: it asks something, but it is not a follow-up. */
+const CHECK = "nudge";
 
 /** The last response: the model says one line and must call show_matches. */
 function forceWrapUp(state: VoiceState): ClientEvent[] {
@@ -182,7 +188,7 @@ interface OutputItem {
 }
 
 function onResponseDone(state: VoiceState, event: ServerEvent): { state: VoiceState; send: ClientEvent[] } {
-  const response = (event.response ?? {}) as { status?: string; output?: OutputItem[]; metadata?: { purpose?: string } | null };
+  const response = (event.response ?? {}) as { id?: string; status?: string; output?: OutputItem[]; metadata?: { purpose?: string } | null };
   const output = response.output ?? [];
   let next: VoiceState = { ...state, responding: false };
   const send: ClientEvent[] = [];
@@ -205,7 +211,11 @@ function onResponseDone(state: VoiceState, event: ServerEvent): { state: VoiceSt
   }
 
   const spoke = output.some((item) => item.type === "message" && item.role === "assistant");
-  if (spoke && response.status === "completed" && next.answers > 0 && !next.wrapping) {
+  // A reply counts against the eight only when it asks something: an answer to the person's own
+  // question, or a check on a quiet person, is not a follow-up.
+  const said = response.id && next.captionOf === response.id ? next.caption : "";
+  const asks = said.includes("?") && response.metadata?.purpose !== CHECK;
+  if (spoke && asks && response.status === "completed" && next.answers > 0 && !next.wrapping) {
     const asked = next.asked + 1;
     next = { ...next, asked };
     if (asked >= MAX_FOLLOW_UPS) {
@@ -238,7 +248,7 @@ function onServer(state: VoiceState, event: ServerEvent): { state: VoiceState; s
     case "input_audio_buffer.speech_stopped":
       return { state: { ...state, talking: state.talking === "person" ? null : state.talking }, send: none };
     case "input_audio_buffer.committed": {
-      const next = { ...state, answers: state.answers + 1 };
+      const next = { ...state, answers: state.answers + 1, quiet: 0 };
       // With the budget spent the server starts no response on its own; this answer gets the last one.
       if (state.wrapping && !state.forced && state.phase === "live") return { state: { ...next, forced: true }, send: forceWrapUp(state) };
       return { state: next, send: none };
@@ -274,7 +284,7 @@ export function step(state: VoiceState, action: Action): { state: VoiceState; se
     case "typed": {
       const words = heard(state, action.text);
       if (words === state || state.phase !== "live") return { state, send: none };
-      const next = { ...words, answers: words.answers + 1 };
+      const next = { ...words, answers: words.answers + 1, quiet: 0 };
       const item: ClientEvent = {
         type: "conversation.item.create",
         item: { type: "message", role: "user", content: [{ type: "input_text", text: action.text.trim() }] },
@@ -287,6 +297,13 @@ export function step(state: VoiceState, action: Action): { state: VoiceState; se
     case "finish":
       if (state.phase !== "live" || state.answers === 0 || state.forced) return { state, send: none };
       return { state: { ...state, wrapping: true, forced: true }, send: [respondOnTurn(false), ...forceWrapUp(state)] };
+    case "quiet":
+      // The first quiet spell gets one gentle check; the second, once they have said anything,
+      // shows the matches for what they said rather than leaving them waiting.
+      if (state.phase !== "live" || state.forced || state.responding || state.urgent) return { state, send: none };
+      if (state.quiet === 0) return { state: { ...state, quiet: 1 }, send: [system(state.answers ? NUDGE : NUDGE_START), respond({ metadata: { purpose: CHECK } })] };
+      if (state.answers === 0) return { state, send: none };
+      return { state: { ...state, quiet: state.quiet + 1, wrapping: true, forced: true }, send: [respondOnTurn(false), ...forceWrapUp(state)] };
     case "urgent-seen":
       return { state: { ...state, urgent: false }, send: none };
   }

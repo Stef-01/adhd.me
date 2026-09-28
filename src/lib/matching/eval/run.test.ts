@@ -7,7 +7,7 @@ import { completed } from "@/lib/llm/cassettes";
 import { appendLedger, ledgerSpend } from "@/lib/llm/meter";
 import { syntheticRoster } from "@/matching/scale-fixture";
 import { READS } from "../llm-read";
-import { promptHash, runEval } from "./run";
+import { promptHash, runEval, TESTING_BUDGET_USD } from "./run";
 
 const ENV = { OPENAI_API_KEY: "k" };
 const EMPTY = { care: [], manner: [], prefs: [], languages: [], negated: [] };
@@ -90,15 +90,17 @@ describe("the ladder", () => {
     expect(ledgerSpend(join(root, "qa/matching/ledger.jsonl"))).toBe(0);
   });
 
-  it("writes every paid call to the ledger, and refuses to start once it holds $8", async () => {
+  it("writes every paid call to the ledger, and refuses to start once testing has spent the budget", async () => {
     const root = workspace({ phase: "P1" });
     const fetch = api(() => ({ body: completed(EMPTY) }));
     await runEval({ level: "L1", phase: "P2", live: true, root, env: ENV, fetch });
     const ledger = join(root, "qa/matching/ledger.jsonl");
     expect(readFileSync(ledger, "utf8").trim().split("\n")).toHaveLength(10 * READS);
-    appendLedger(ledger, { level: "L1", phase: "P2", model: "gpt-5-nano", usage: USAGE, costUsd: 8 - ledgerSpend(ledger) });
+    appendLedger(ledger, { level: "L1", phase: "P2", model: "gpt-5-nano", usage: USAGE, costUsd: TESTING_BUDGET_USD - 1 - ledgerSpend(ledger) });
+    // The voice finder's live tests count against the same budget.
+    appendLedger(join(root, "qa/voice/ledger.jsonl"), { level: "voice", phase: "eval", model: "gpt-realtime-2.1-mini", usage: USAGE, costUsd: 1 });
     const outcome = await runEval({ level: "L1", phase: "P2", live: true, root, env: ENV, fetch });
-    expect(outcome).toMatchObject({ code: 2, message: expect.stringMatching(/programme's \$8 cap/) });
+    expect(outcome).toMatchObject({ code: 2, message: expect.stringMatching(new RegExp(`programme's \\$${TESTING_BUDGET_USD} cap`)) });
   });
 });
 

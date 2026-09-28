@@ -25,7 +25,18 @@ type Phase = keyof typeof PHASES;
 
 /** Per L1 call at effort "low" (§5): $0.000136 to $0.000147 measured on the P3 set, 2026-09-28. */
 export const ESTIMATE_USD = 0.00015;
-const PROGRAMME_CAP_USD = 8;
+/**
+ * All live testing against OpenAI together (founder, 2026-09-28: "set testing budget $14 total"): the
+ * matching ladder's ledger and the voice finder's (scripts/voice-eval.mjs, scripts/voice-call.mjs)
+ * count against one cap, and each runner refuses to start a run that could cross it.
+ */
+export const TESTING_BUDGET_USD = 14;
+const PROGRAMME_CAP_USD = TESTING_BUDGET_USD;
+
+/** Everything live testing has spent so far: the matching ledger and the voice one. */
+export function testingSpend(root = "."): number {
+  return ledgerSpend(join(root, "qa/matching/ledger.jsonl")) + ledgerSpend(join(root, "qa/voice/ledger.jsonl"));
+}
 const TODAY = new Date("2026-09-27T00:00:00Z");
 const FLAWS: Record<string, string> = { IncompleteError: "F1", SchemaError: "F2", HttpError: "F12/F22", TimeoutError: "F13", BudgetError: "F11" };
 
@@ -64,7 +75,7 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
   const ledger = join(root, "qa/matching/ledger.jsonl");
   const prompt = promptHash(level, env);
   const before = `P${Number(phase[1]) - 1}`;
-  const spentBefore = ledgerSpend(ledger);
+  const spentBefore = testingSpend(root);
   const refusal =
     level !== "L0" && level !== "L1" ? `--level is L0 or L1, not ${level}`
     : !(phase in PHASES) ? (options.phase === "P6" ? "P6 belongs to L6 and the Batch API" : `--phase is P0 to P6, not ${phase}`)
@@ -219,6 +230,21 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
       return [`| ${entry.cls} | ${entry.split} | ${entry.text.replace(/\|/g, "/")} | ${gold(entry).join(", ") || "nothing"}${never} | ${reading.keys.join(", ") || "nothing"} | ${code} |`];
     }),
     "",
+    ...(repeats.length
+      ? [
+          "Flips: dev requests whose keys differ across the three runs, and the keys that came and went.",
+          "",
+          "| Class | Request | Keys in some runs, not all |",
+          "| --- | --- | --- |",
+          ...devDone.flatMap((d, i) => {
+            const runs = [d.reading.keys, ...repeats.map((run) => run[i]?.reading.keys ?? [])];
+            const every = runs.reduce((kept, keys) => kept.filter((k) => keys.includes(k)));
+            const some = [...new Set(runs.flat())].filter((k) => !every.includes(k));
+            return some.length ? [`| ${d.entry.cls} | ${d.entry.text.slice(0, 90).replace(/\|/g, "/")} | ${some.join(", ")} |`] : [];
+          }),
+          "",
+        ]
+      : []),
     "Asks no facet covers: the reads' `unlisted` phrases, a needs-gap list that never reaches a person.",
     "",
     "| Class | Request | Unlisted |",

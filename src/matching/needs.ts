@@ -235,6 +235,10 @@ const LEXICON: readonly Entry[] = [
     "paediatrician", "pediatrician",
     // O53: the handover said as itself. Two content tokens ([take, script]).
     "take over my scripts",
+    /* 2026-09-28, the journeys test (src/matching/journeys.test.ts): "someone to keep prescribing my
+       ADHD medication" read as an assessment and nothing else, the stable patient NEEDS-GAPS.md ranks
+       second. Each names prescribing going on, not a cost or a history. */
+    "keep prescribing my medication", "someone to keep prescribing", "keep writing my scripts", "continue prescribing my",
   ]),
   // ── Depression & anxiety ────────────────────────────────────────────────────────────────────
   care("depression", "Depression and low mood", 24, [

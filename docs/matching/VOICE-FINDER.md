@@ -70,4 +70,24 @@ advice. Runs are in `qa/voice/runs/`.
 | 4 | 5/9 | A grader judges invention; it caught "an adult assessment for my 15-year-old daughter" |
 | 5 | 7/9 | "adult" guard; "a woman"; the two misses were a medication persona's wording, which varies |
 
+| 6 | 17/20 (each persona twice, a tenth who asks questions back) | The person may ask how things work; answers do not count toward the eight; "adult" and "ADHD" only where they belong |
+| 7 | 18/20 | No leading questions; never drop a need to fit the length |
+
+**Which model.** Twice over ten personas, same prompt:
+
+| Model, effort | Pass | Cost a call | First word p50 / p90 |
+| --- | --- | --- | --- |
+| gpt-realtime-2.1-mini, default | 18/20 | $0.012 | 1.00 / 1.77 s |
+| gpt-realtime-2.1-mini, low | 15/20 | $0.012 | 1.01 / 1.05 s |
+| gpt-realtime-2.1, default | 16/20 | $0.041 | 1.00 / 1.06 s |
+
+The mini model at its default effort stays: the full model costs 3.4 times as much, is no more
+accurate here and asks fewer questions. `ADHDME_VOICE_MODEL` and `ADHDME_VOICE_EFFORT` switch either.
+
+**Back and forth.** The person may ask how things work ("what does bulk billing mean?"); the
+interviewer answers in a sentence or two, generally and never about their own health, and carries
+on. Only replies that ask something count toward the eight. After 18 seconds of quiet it checks once
+("Still there? I can show you matches now if you like"); a second quiet spell, once the person has
+said anything, shows the matches for what they said.
+
 The readers' own gaps the requests exposed are in `qa/matching/rca.md` R11.

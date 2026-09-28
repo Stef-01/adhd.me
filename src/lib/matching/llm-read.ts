@@ -71,6 +71,7 @@ const EXAMPLES = [
   '"in person, not a screen" → negated: telehealth-first',
   '"someone who goes through the options and lets me choose" → manner: collaborative',
   '"help working out if my tablets are the right amount" → care: titration',
+  '"someone to keep prescribing my ADHD medication" → care: shared-care; negated: adhd-assessment',
   '"a clinician who speaks Tamil" → languages: tamil',
   '"a practice that runs on schedule" → unlisted: appointments that run on time',
 ];

@@ -445,5 +445,23 @@
     "never": [
       "care:child-adolescent-adhd"
     ]
+  },
+  {
+    "text": "someone to keep prescribing my ADHD medication",
+    "reaches": [
+      "care:shared-care"
+    ],
+    "mentions": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "they keep prescribing me the wrong dose",
+    "reaches": [
+      "care:titration"
+    ],
+    "never": [
+      "care:shared-care"
+    ]
   }
 ]
