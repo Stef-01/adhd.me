@@ -54,3 +54,20 @@ test("under reduced motion the orb holds still, and the call still runs", async 
   await openVoice(page, ANSWERS);
   await expect(page.locator("main")).toHaveAttribute("data-stage", "results", { timeout: 20000 });
 });
+
+/** The animations running on the orb's drawing: the float, or nothing. */
+const floating = (page: Page) => () =>
+  page.locator(".voice-orb-canvas, .voice-orb-still").first().evaluate((el) => el.getAnimations().map((a) => (a as CSSAnimation).animationName));
+
+test("live, the orb floats over its shadow", async ({ page }) => {
+  await openVoice(page, true);
+  await expect(page.locator('.voice-orb[data-phase="live"]')).toBeVisible();
+  await expect.poll(floating(page)).toEqual(["voice-float"]);
+});
+
+test("under reduced motion the orb rests on its shadow", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await openVoice(page, true);
+  await expect(page.locator('.voice-orb[data-phase="live"]')).toHaveAttribute("data-still", "");
+  await expect.poll(floating(page)).toEqual([]);
+});

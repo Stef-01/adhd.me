@@ -95,6 +95,8 @@ export function Sheet({
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const [detent, setDetent] = useState<Detent>("half");
+  /** Whether the sheet has finished coming up: until then it cannot be dragged. */
+  const [arrived, setArrived] = useState(false);
   const reducedMotion = useReducedMotion();
   const panelled = useSyncExternalStore(onPanelChange, () => matchMedia(PANEL).matches, () => false);
 
@@ -175,6 +177,7 @@ export function Sheet({
       setDetent("half");
       return;
     }
+    setArrived(false);
     if (panelled) return;
     const body = panel.current?.querySelector<HTMLElement>(".sheet-body");
     if (body && body.scrollHeight > body.clientHeight + 1) setDetent("full");
@@ -227,7 +230,13 @@ export function Sheet({
                 : { y: "100%", transition: { duration: EXIT_S, ease: [0.32, 0.72, 0, 1] } }
             }
             transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 40, mass: 0.9 }}
-            drag={reducedMotion ? false : "y"}
+            /* Draggable once it has arrived. A press on a draggable sheet stops it where it is, so
+               a drag can catch it mid-flight, and a tap on a row while it was still coming up froze
+               it there, its lower half under the window. */
+            drag={reducedMotion || !arrived ? false : "y"}
+            onAnimationComplete={(done) => {
+              if ((done as { y?: unknown }).y === 0) setArrived(true);
+            }}
             dragDirectionLock
             dragElastic={{ top: 0.04, bottom: 0.6 }}
             dragConstraints={{ top: 0, bottom: 0 }}

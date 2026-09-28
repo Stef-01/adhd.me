@@ -609,3 +609,16 @@ pose, pointing, a small figure in a white square, at the top of this list.
 | --- | --- | --- |
 | Before | ![A woman doctor, before, 390](finder-portrait-before-390.jpg) | ![A woman doctor, before, 1440](finder-portrait-before-1440.jpg) |
 | After | ![A woman doctor, after, 390](finder-portrait-after-390.jpg) | ![A woman doctor, after, 1440](finder-portrait-after-1440.jpg) |
+
+### The voice interview, floating
+
+The founder: "the aesthetic minimalist interaction for the voice interview ... with the floating
+orb". Live, the orb rises and settles over six seconds above a soft shadow that narrows as it lifts,
+in a faint halo of its own blue; connecting, it waits smaller and dimmer and grows into place as
+the call opens. Nothing added to press or read: the orb and the stop. Under reduced motion it rests.
+Stills cannot show the float; `voice-orb-float.mp4` is six seconds of it at 390.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Voice, before, 390](voice-orb-before-390.jpg) | ![Voice, before, 1440](voice-orb-before-1440.jpg) |
+| After | ![Voice, after, 390](voice-orb-after-390.jpg) | ![Voice, after, 1440](voice-orb-after-1440.jpg) |

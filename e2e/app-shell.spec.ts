@@ -252,6 +252,25 @@ for (const [name, viewport] of [["a phone", { width: 390, height: 844 }], ["a de
   });
 }
 
+// A press on a sheet stops it where it is, so a drag can catch it mid-flight. A tap on one of its
+// rows while it was still coming up froze it there; released, it has to go back to where it rests.
+for (const [name, viewport] of [["a phone", { width: 390, height: 844 }], ["a desk", { width: 1280, height: 720 }]] as const) {
+  test(`a sheet tapped while it is still coming up finishes coming up, on ${name}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await page.getByRole("button", { name: "Settings" }).click();
+    const sheet = page.getByRole("dialog", { name: "Settings" });
+    await sheet.evaluate((el) => {
+      const at = { bubbles: true, isPrimary: true, button: 0, pointerId: 1, pointerType: "mouse", clientX: 200, clientY: 600 };
+      el.dispatchEvent(new PointerEvent("pointerdown", at));
+      window.dispatchEvent(new PointerEvent("pointerup", at));
+    });
+    await expect(sheet).toHaveCSS("transform", "none");
+    const box = (await sheet.boundingBox())!;
+    expect(box.y + box.height, "the sheet sits wholly inside the window").toBeLessThanOrEqual(viewport.height + 1);
+  });
+}
+
 test("the switch inside the sheet still changes the roster it names", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Settings" }).click();

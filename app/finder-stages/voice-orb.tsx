@@ -4,7 +4,8 @@
 // Javi0108/VoiceChatGpt-Prototype). The prototype's shader (app/voice-orb/, MIT) drawn with plain
 // WebGL2 on one canvas instead of three.js. It moves with the call: the person's voice swells its
 // rings, the assistant's voice quickens its flow, and it runs only while this screen is open.
-// Under reduced motion it is one still frame; without WebGL2, a still disc in the same colours.
+// While the call is live it floats over its own shadow (app/styles/voice.css). Under reduced
+// motion it is one still frame, resting; without WebGL2, a still disc in the same colours.
 
 import { useEffect, useRef, useState } from "react";
 import type { Phase } from "@/voice/conversation";
@@ -159,7 +160,7 @@ export function VoiceOrb({
   }, [reducedMotion]);
 
   return (
-    <div className="voice-orb" data-phase={phase} aria-hidden="true">
+    <div className="voice-orb" data-phase={phase} data-still={reducedMotion ? "" : undefined} aria-hidden="true">
       {still ? <span className="voice-orb-still" /> : <canvas ref={canvas} className="voice-orb-canvas" />}
     </div>
   );
