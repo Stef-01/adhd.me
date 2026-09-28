@@ -4,7 +4,7 @@
 // /api/voice/session, and nothing is typed. Prints what the model heard and asked, the request, the
 // latencies and the cost, and appends the cost to qa/voice/ledger.jsonl. About $0.02 a call.
 //
-//   BASE=http://localhost:3021 node scripts/voice-call.mjs "I think I might have ADHD." "It's for me." ...
+//   BASE=http://localhost:3021 node scripts/voice-call.mjs "I think I might have ADHD." "It's for me." "[pause 25]" ...
 //   CONNECT_ONLY=1 ...   stops at the first spoken word and prints each step's time from the tap
 //   NO_WEBGL=1 ...       the orb's still disc, so a software renderer does not skew the timings
 import { chromium } from "@playwright/test";
@@ -54,7 +54,13 @@ function wavOf(pcm) {
 const silence = (seconds) => Buffer.alloc(Math.round(RATE * seconds) * 2);
 const dir = mkdtempSync(join(tmpdir(), "voice-call-"));
 const wav = join(dir, "person.wav");
-writeFileSync(wav, wavOf(Buffer.concat([silence(4), ...lines.flatMap((line, i) => [spoken(line, dir, i), silence(13)]), silence(30)])));
+// A line "[pause 25]" is 25 seconds of saying nothing, to meet the quiet check.
+const pcm = [silence(4)];
+lines.forEach((line, i) => {
+  const pause = /^\[pause (\d+)\]$/.exec(line);
+  pcm.push(...(pause ? [silence(Number(pause[1]))] : [spoken(line, dir, i), silence(13)]));
+});
+writeFileSync(wav, wavOf(Buffer.concat([...pcm, silence(30)])));
 
 const browser = await chromium.launch({
   args: [
