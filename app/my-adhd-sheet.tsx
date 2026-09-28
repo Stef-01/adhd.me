@@ -146,7 +146,7 @@ export function MyAdhdSheet({
                   <button
                     key={v.id}
                     type="button"
-                    className="learn-chip"
+                    className="lives-chip"
                     aria-pressed={record.insights[insight.id] === v.id}
                     onClick={() => onRefresh(recordInsight(storage, insight.id, v.id))}
                   >

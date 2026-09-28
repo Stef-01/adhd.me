@@ -309,7 +309,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
       <Completion completed={completedRun} start={start} />
       <p className="learn-pane-line">Short scenes from everyday life.</p>
       <div className="learn-game-toolbar">
-        <Link className="learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true" />Play mix</Link>
+        <Link className="learn-secondary learn-mix-link" href="/lives/play" data-testid="learn-play"><Play size={18} weight="fill" aria-hidden="true" />Play mix</Link>
         <button
           type="button"
           className="learn-secondary learn-show-all learn-all-games"
@@ -468,7 +468,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
       </div>
       <button
         type="button"
-        className="learn-goals-done"
+        className="learn-secondary learn-goals-done"
         onClick={() => {
           if (goals.length === 0) apply((s) => skipGoals(s));
           setEditing(false);
@@ -483,7 +483,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
       <div className="learn-for-you-head">
         <h2 id="learn-for-you-title" className="lives-section-title">For you</h2>
         {!ask && (
-          <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
+          <button type="button" className="learn-secondary learn-change-goals" onClick={() => setEditing(true)}>
             Change goals
           </button>
         )}
@@ -545,7 +545,7 @@ function ModulesPane({ progress, cursor, completed, hydrated, start, reducedMoti
         {/* After a skip with nothing else to go on there is no "For you" to sit beside, so the way
             back to the question sits here. */}
         {hydrated && !ask && !explore && forYou.length === 0 && (
-          <button type="button" className="learn-change-goals" onClick={() => setEditing(true)}>
+          <button type="button" className="learn-secondary learn-change-goals" onClick={() => setEditing(true)}>
             Choose goals
           </button>
         )}

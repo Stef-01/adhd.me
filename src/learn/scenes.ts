@@ -37,8 +37,8 @@ export const SCENES: readonly Scene[] = [
     n: "01",
     heading: "You search, and no GP comes back.",
     body:
-      "Search “ADHD GP near me” and you get directories, ads and waiting lists. Almost no GP near you.",
-    detail: ["No booking site filters for it", "The ads sell the expensive route", "Half the results are interstate"],
+      "Search “ADHD GP near me”: directories, ads, waiting lists.",
+    detail: ["No booking site filters for it", "Ads sell the expensive route", "Half the results are interstate"],
   },
   {
     n: "02",

@@ -250,7 +250,6 @@ export function ResultsStage({
           words and re-ranks; the sheet closes so the re-ordered list is what they see next. */}
       <Sheet open={clarifyOpen} title="Improve my matches" onClose={() => setClarifyOpen(false)}>
         <div className="clarify">
-          <p className="clarify-sub">One answer would narrow it:</p>
           <ul className="clarify-row">
             {clarifierList.map((clarifier) => (
               <li key={clarifier.facetKey}>

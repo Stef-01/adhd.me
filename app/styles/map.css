@@ -203,15 +203,9 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: var(--disc-bg, var(--stone));
-  color: var(--disc-ink, var(--ink));
+  background: var(--stone);
+  color: var(--ink);
 }
-.map-screen .map-axis-icon[data-tint="warm"]{ --disc-bg: var(--disc-warm-bg); --disc-ink: var(--disc-warm-ink); }
-.map-screen .map-axis-icon[data-tint="sky"]{ --disc-bg: var(--disc-sky-bg); --disc-ink: var(--disc-sky-ink); }
-.map-screen .map-axis-icon[data-tint="stone"]{ --disc-bg: var(--disc-stone-bg); --disc-ink: var(--disc-stone-ink); }
-.map-screen .map-axis-icon[data-tint="cool"]{ --disc-bg: var(--disc-cool-bg); --disc-ink: var(--disc-cool-ink); }
-.map-screen .map-axis-icon[data-tint="gold"]{ --disc-bg: var(--disc-gold-bg); --disc-ink: var(--disc-gold-ink); }
-.map-screen .map-axis-icon[data-tint="sage"]{ --disc-bg: var(--disc-sage-bg); --disc-ink: var(--disc-sage-ink); }
 
 .map-screen .map-axis-name{
   grid-area: name;
@@ -233,32 +227,6 @@
   color: var(--faint);
 }
 
-/* The word a cell is on, as a fill. Never red, never a traffic light: support is an ink outline,
-   improvement is the accent tint, held is the sky chip, working is the sage chip. */
-.map-screen .map-axis[data-status="needs-support"]{
-  border-color: var(--ink);
-}
-.map-screen .map-axis[data-status="worth-improving"]{
-  background: var(--accent-soft);
-  border-color: var(--accent-tint);
-}
-.map-screen .map-axis[data-status="mostly-supported"]{
-  background: var(--chip-held-bg);
-  border-color: var(--chip-held-bg);
-}
-.map-screen .map-axis[data-status="mostly-supported"] .map-axis-word{
-  color: var(--chip-held-ink);
-}
-.map-screen .map-axis[data-status="working-well"]{
-  background: var(--chip-strength-bg);
-  border-color: var(--chip-strength-bg);
-}
-.map-screen .map-axis[data-status="working-well"] .map-axis-word{
-  color: var(--chip-strength-ink);
-}
-.map-screen .map-axis[data-learning]{
-  border-style: dashed;
-}
 
 /* Under 400px a two-column cell is about 140px, and beside a 32px disc that leaves 74px for a
    word: "regulation" at 13px bold is 80. So the disc goes above the words there, and the cell
@@ -366,11 +334,6 @@
   touch-action: manipulation;
 }
 
-.map-chip.is-strength {
-  background: var(--chip-strength-bg);
-  border-color: var(--chip-strength-bg);
-  color: var(--chip-strength-ink);
-}
 
 /* --------------------------------------------------------------- the one step */
 
@@ -551,33 +514,8 @@
 
 .map-row-word {
   flex: none;
-  padding: 2px var(--sp-sm);
-  border: 1px solid transparent;
-  border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: var(--muted);
-}
-
-.map-row-word[data-status="needs-support"] {
-  border-color: var(--ink);
-  color: var(--ink);
-}
-.map-row-word[data-status="worth-improving"] {
-  background: var(--accent-soft);
-  border-color: var(--accent-tint);
-  color: var(--ink);
-}
-.map-row-word[data-status="mostly-supported"] {
-  background: var(--chip-held-bg);
-  color: var(--chip-held-ink);
-}
-.map-row-word[data-status="working-well"] {
-  background: var(--chip-strength-bg);
-  color: var(--chip-strength-ink);
-}
-.map-row-word[data-status="still-learning"] {
-  border-style: dashed;
-  border-color: var(--line-strong, var(--line));
 }
 
 .map-accuracy p {

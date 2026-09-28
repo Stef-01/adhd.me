@@ -271,8 +271,9 @@ A finished run links to the character game on the same subject.
 
 ## Refinement pass, 2026-09-28
 
-Before is `main` at 0e1ef33b, after is each commit below; both captured with the pointer parked
-off the content, so a first-row hover in a before shot is the old capture's, not the screen's.
+Before is the screen as it was before the commit that changed it (`main` at 0e1ef33b for most),
+after is that commit. A first-row hover in some before shots is the old capture's pointer, not the
+screen's; the afters are taken with the pointer parked off the content.
 
 ### Finder results, arrival by keyboard
 
@@ -386,3 +387,90 @@ Start sits under the heading, above the six axes it will fill.
 | --- | --- | --- |
 | Before | ![Not started, before, 390](my-adhd-start-before-390.jpg) | ![Not started, before, 1440](my-adhd-start-before-1440.jpg) |
 | After | ![Not started, after, 390](my-adhd-start-after-390.jpg) | ![Not started, after, 1440](my-adhd-start-after-1440.jpg) |
+
+### Learn, games
+
+"Play mix" is a secondary pill beside "All games"; the three to try first are the pane's action.
+The tabs take the chips' pill, and the care map's row is capped at 560px on a desk.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Learn games, before, 390](learn-games-quiet-before-390.jpg) | ![Learn games, before, 1440](learn-games-quiet-before-1440.jpg) |
+| After | ![Learn games, after, 390](learn-games-quiet-after-390.jpg) | ![Learn games, after, 1440](learn-games-quiet-after-1440.jpg) |
+
+### Learn, modules
+
+Skip, Done and Change goals are the pane's secondary buttons, not a third, underlined style.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Learn modules, before, 390](learn-modules-quiet-before-390.jpg) | ![Learn modules, before, 1440](learn-modules-quiet-before-1440.jpg) |
+| After | ![Learn modules, after, 390](learn-modules-quiet-after-390.jpg) | ![Learn modules, after, 1440](learn-modules-quiet-after-1440.jpg) |
+
+### My ADHD, lived in
+
+One disc colour, one card, one chip: the words already say where each axis is and what works.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![My ADHD, before, 390](my-adhd-calm-before-390.jpg) | ![My ADHD, before, 1440](my-adhd-calm-before-1440.jpg) |
+| After | ![My ADHD, after, 390](my-adhd-calm-after-390.jpg) | ![My ADHD, after, 1440](my-adhd-calm-after-1440.jpg) |
+
+### My ADHD, an axis open
+
+A row's word is a word, not a pill in one of five styles; the answers to "Does this fit?" take
+the one pill for a choice.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![An axis open, before, 390](my-adhd-sheet-before-390.jpg) | ![An axis open, before, 1440](my-adhd-sheet-before-1440.jpg) |
+| After | ![An axis open, after, 390](my-adhd-sheet-after-390.jpg) | ![An axis open, after, 1440](my-adhd-sheet-after-1440.jpg) |
+
+### Urgent help
+
+All eight rows above the tab bar at 390, and the page's own 560px measure on a desk. No number or
+wording changed.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Urgent help, before, 390](urgent-rows-before-390.jpg) | ![Urgent help, before, 1440](urgent-rows-before-1440.jpg) |
+| After | ![Urgent help, after, 390](urgent-rows-after-390.jpg) | ![Urgent help, after, 1440](urgent-rows-after-1440.jpg) |
+
+### Start, the end screen
+
+"Your biggest priority seems to be start assignments and work earlier." is now the person's own
+answer, quoted: "Your biggest priority: “Start assignments and work earlier”." The paragraph under it
+is gone: it said the priority a second time, or, with the goal skipped, that the app had been told
+nothing. One sentence and one module: 49 → 28 words here, 55 → 32 after a first run.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Start end screen, before, 390](start-end-before-390.jpg) | ![Start end screen, before, 1440](start-end-before-1440.jpg) |
+| After | ![Start end screen, after, 390](start-end-after-390.jpg) | ![Start end screen, after, 1440](start-end-after-1440.jpg) |
+
+### Finding a GP, the first card
+
+The body says the search once: 68 → 58 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Finding a GP, before, 390](module-finding-before-390.jpg) | ![Finding a GP, before, 1440](module-finding-before-1440.jpg) |
+| After | ![Finding a GP, after, 390](module-finding-after-390.jpg) | ![Finding a GP, after, 1440](module-finding-after-1440.jpg) |
+
+### Adjustments
+
+Its tabs share the Learn tabs' pill, which is the chips' pill: one pill for a choice.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Adjustments, before, 390](adjustments-tabs-before-390.jpg) | ![Adjustments, before, 1440](adjustments-tabs-before-1440.jpg) |
+| After | ![Adjustments, after, 390](adjustments-tabs-after-390.jpg) | ![Adjustments, after, 1440](adjustments-tabs-after-1440.jpg) |
+
+### Finder, "Improve my matches"
+
+The questions are outline chips, not amber ones, and "One answer would narrow it:" is gone. 32 → 27 words.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Improve my matches, before, 390](finder-clarify-before-390.jpg) | ![Improve my matches, before, 1440](finder-clarify-before-1440.jpg) |
+| After | ![Improve my matches, after, 390](finder-clarify-after-390.jpg) | ![Improve my matches, after, 1440](finder-clarify-after-1440.jpg) |

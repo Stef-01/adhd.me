@@ -146,16 +146,19 @@ body:has(.platform-shell) .aoc-band p { max-width: 80ch; font-size: 13px; line-h
 /* ── Urgent help (/urgent) ─────────────────────────────────────────────────────────────────────
    Each row calls, texts or opens a chat. Nothing to read past the number: a person who needs this
    screen is not reading. The whole row is the link, so a shaking thumb cannot miss it. */
-.urgent-screen { display: grid; gap: 18px; align-content: start; max-width: 560px; }
+.urgent-screen { display: grid; gap: 18px; align-content: start; }
+/* The page's own measure, at the specificity of the shell's 1120px rule it has to beat. */
+.platform-shell .me-screen.urgent-screen { max-width: 560px; }
 .urgent-screen h1 { margin: 0; font-size: clamp(30px, 8vw, 44px); font-weight: 460; letter-spacing: -.03em; line-height: 1.08; }
-.urgent-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.urgent-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .urgent-call {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  min-height: 72px; padding: 14px 18px; border: 1.5px solid var(--line-strong); border-radius: 18px;
+  /* 60px and 10px of padding: all eight rows sit above the tab bar on a 390 x 844 phone. */
+  min-height: 60px; padding: 10px 16px; border: 1.5px solid var(--line-strong); border-radius: 18px;
   background: var(--paper); color: var(--ink); text-decoration: none;
 }
 .urgent-call:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.urgent-name { display: grid; gap: 2px; }
+.urgent-name { display: grid; gap: 2px; line-height: 1.25; }
 .urgent-name strong { font-size: 1.0625rem; font-weight: 750; }
 .urgent-name span { color: var(--muted); font-size: 0.875rem; }
 .urgent-number { display: inline-flex; align-items: center; gap: 8px; color: var(--accent-deep); font-size: 1.0625rem; font-weight: 750; white-space: nowrap; }
