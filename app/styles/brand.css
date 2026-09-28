@@ -46,7 +46,9 @@ body { font-family: var(--font-ui); }
 .platform-shell :is(.learn-primary,.me-sticky a), .platform-console :is(.console-button,.console-primary-button), .platform-public-nav .site-nav-link, .story-demo-link, body:has(.platform-shell) .consent-agree {
   background: var(--ink); color: var(--paper); border-color: var(--ink);
 }
-.platform-shell .learn-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+/* A chosen chip takes the one pill for a choice (the care plan's, the Learn tabs'): the ink pill is
+   each screen's one primary, and a row of answers with one in ink read as a second. */
+.platform-shell .learn-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
 /* THE LEARN COVERS ARE THE ONE SURFACE THE WARM RAMP DOES NOT OWN.
    This file flattened the stack to alternating --stone and --paper with a hairline, which is a
    correct instinct everywhere else on the platform and wrong here: the founder drew the library

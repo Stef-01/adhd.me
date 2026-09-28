@@ -355,6 +355,14 @@ body:has(.play-run) { overflow-x: clip; }
 /* The title and its button read on a soft paper scrim, as the Chaos Run's chrome does over its world. */
 .play-card.is-title:has(.play-place)::before { content: ""; position: absolute; inset: 0 0 auto; height: 260px; z-index: 1; pointer-events: none; background: linear-gradient(to bottom, color-mix(in srgb, var(--paper) 96%, transparent) 0%, color-mix(in srgb, var(--paper) 84%, transparent) 55%, color-mix(in srgb, var(--paper) 0%, transparent) 100%); }
 .play-card.is-title:has(.play-place) > :not(.play-place) { z-index: 2; }
+/* At a desk the place fills the stage rather than a 640px column at its left (the cap on the card's
+   children caught it too): the art stays centred, its floors (drawn wide in scene.tsx) run to both edges, and the bean stands
+   at the art's left edge rather than the screen's. The button is a pill of its own width. */
+.play-card > .play-place { max-width: none; }
+@media (min-width: 768px) {
+  .play-card.is-title:has(.play-place) .play-hero-bean { margin-left: max(5%, calc(50% - 40svh)); }
+  .play-card.is-title > .play-tempt.is-go { width: fit-content; min-width: 280px; padding-inline: 36px; }
+}
 /* Stage 4: the note's outlines are strokes. The class fills beat the fill="none" attribute and painted the note a solid slab. */
 .play-note-art [fill="none"] { fill: none; }
 
@@ -370,6 +378,9 @@ body:has(.play-run) { overflow-x: clip; }
    buttons, and clipping them is the failure this is meant to stop, so the card scrolls nothing
    and shrinks instead. */
 .platform-shell .me-screen:has(.play-run) { padding: 0; max-width: none; }
+/* A run inside a learn module is the whole screen too, not the module page's 1160px column: the stage
+   bled past that column and the run's own clip cut it off 140px short of each edge at a desk. */
+.platform-shell .learn-module.play-run { max-width: none; }
 .play-run { height: 100svh; overflow: hidden; }
 .play-stage { height: 100svh; min-height: 0; }
 .play-card { height: 100%; min-height: 0; }

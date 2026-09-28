@@ -622,3 +622,61 @@ Stills cannot show the float; `voice-orb-float.mp4` is six seconds of it at 390.
 | --- | --- | --- |
 | Before | ![Voice, before, 390](voice-orb-before-390.jpg) | ![Voice, before, 1440](voice-orb-before-1440.jpg) |
 | After | ![Voice, after, 390](voice-orb-after-390.jpg) | ![Voice, after, 1440](voice-orb-after-1440.jpg) |
+
+## Refinement pass four, 2026-09-28
+
+Every screen the text budget measures, 137 of them, captured at 390×844 and 1440×900 on a production
+build and read one by one. Before is `main` at b4dd4501, after is this pass.
+
+### A game run's title card, and every run, at a desk
+
+A run inside a learn module took the module page's 1160px column, and the title card's room drew in
+a 500px strip at its left, the bean and the lamp cut off by its edge, over blank paper. A run is the
+whole screen now, as the Chaos Run always was; the room is centred and its floor reaches both edges;
+"Tap to play" is a pill of its own width.
+
+| | 390 | 1440 |
+| --- | --- | --- |
+| Before | ![Title card, before, 390](run-title-before-390.jpg) | ![Title card, before, 1440](run-title-before-1440.jpg) |
+| After | ![Title card, after, 390](run-title-after-390.jpg) | ![Title card, after, 1440](run-title-after-1440.jpg) |
+
+### A chosen chip
+
+The one pill for a choice everywhere: a chosen chip was a solid ink fill across the platform, a
+second black thing beside each screen's one primary.
+
+| History, 390 | Meditate, 1440 |
+| --- | --- |
+| ![History, before, 390](chip-history-before-390.jpg) | ![Meditate, before, 1440](chip-meditate-before-1440.jpg) |
+| ![History, after, 390](chip-history-after-390.jpg) | ![Meditate, after, 1440](chip-meditate-after-1440.jpg) |
+
+### Learn's buttons, and First step at a desk
+
+Pills, as every big control is (O232); they were 12px. "See GPs" sizes to its words: it was a
+1,000px ink bar at a desk.
+
+| | Learn, 390 | First step, 1440 |
+| --- | --- | --- |
+| Before | ![Learn, before, 390](learn-pills-before-390.jpg) | ![First step, before, 1440](first-step-before-1440.jpg) |
+| After | ![Learn, after, 390](learn-pills-after-390.jpg) | ![First step, after, 1440](first-step-after-1440.jpg) |
+
+### Search filters
+
+One heading in ink, as the Settings row that opens it says it: "Filters" in the accent was
+decoration.
+
+| Before, 390 | After, 390 |
+| --- | --- |
+| ![Search filters, before, 390](search-filters-before-390.jpg) | ![Search filters, after, 390](search-filters-after-390.jpg) |
+
+### The Chaos Run, no dark blocks
+
+The phone world rests on a mid-tone surface (at a desk its near-black backdrop was two dark slabs),
+the shed is at dusk rather than night, and the sprites are drawn in a mid-tone navy: a drawn thing
+is never a dark silhouette.
+
+| | Before | After |
+| --- | --- | --- |
+| Drafts, 1440 | ![Drafts, before, 1440](chaos-drafts-before-1440.jpg) | ![Drafts, after, 1440](chaos-drafts-after-1440.jpg) |
+| Spider, 1440 | ![Spider, before, 1440](chaos-spider-before-1440.jpg) | ![Spider, after, 1440](chaos-spider-after-1440.jpg) |
+| Spider, 390 | ![Spider, before, 390](chaos-spider-before-390.jpg) | ![Spider, after, 390](chaos-spider-after-390.jpg) |

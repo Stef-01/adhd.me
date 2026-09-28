@@ -103,8 +103,9 @@
 .platform-shell .meditation-invitation h1 { font-family: var(--font-display); font-weight: 430; font-size: clamp(44px,5.5vw,74px); line-height: 1.04; letter-spacing: -.035em; margin: 24px 0; }
 .meditation-invitation > p { max-width: 40ch; line-height: 1.7; color: #5a5851; }
 .meditation-length { display: flex; gap: 12px; margin: 30px 0; }
-.meditation-length button { border: 1px solid #6c6a65; border-radius: 30px; padding: 12px 22px; min-height: 48px; }
-.meditation-length button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.meditation-length button { border: 1px solid var(--line-strong); border-radius: 30px; padding: 12px 22px; min-height: 48px; }
+/* The one pill for a choice (the care plan's): the ink pill is the screen's one primary, Start. */
+.meditation-length button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
 .meditation-start { display: inline-flex; align-items: center; gap: 20px; background: var(--ink); color: var(--paper); padding: 18px 26px; border-radius: 16px; min-height: 64px; font-weight: 650; }
 .meditation-small { font-size: 12px; line-height: 1.6; margin-top: 22px; color: #49463e; }
 .meditation-landscape { min-height: 420px; position: relative; background: #f4d94f; border-radius: 120px 120px 28px 28px; overflow: hidden; }

@@ -378,7 +378,7 @@
 .first-step-answer { display: grid; gap: 10px; }
 .first-step-answer p { margin: 0; font-size: 1.0625rem; }
 .first-step-note { color: var(--muted); font-size: 0.9375rem; }
-.first-step-answer .learn-secondary { justify-self: start; }
+.first-step-answer :is(.learn-primary, .learn-secondary) { justify-self: start; }
 .first-step-back {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px;
   border: 0; background: none; font: inherit; color: var(--muted);

@@ -11,7 +11,8 @@ import type { ReactElement } from "react";
 import { worldOf } from "@/lives";
 import { LeoBedroom } from "./leo-mosquito";
 
-const I = "#172033";
+/** The sprites' ink: a mid-tone navy, since a drawn thing is never a dark silhouette (the taste law). */
+const I = "#46527a";
 const paper = <path d="M16 8h26l8 8v40H16z" fill="#fbfbfd" strokeLinejoin="round" />;
 const lines = <path d="M24 30h18M24 38h18M24 46h12" stroke="#8a90a0" strokeWidth="3" strokeLinecap="round" />;
 const envelope = <><rect x="8" y="16" width="48" height="32" rx="4" fill="#fbfbfd" /><path d="M8 20l24 16 24-16" stroke={I} strokeWidth="3" fill="none" /></>;

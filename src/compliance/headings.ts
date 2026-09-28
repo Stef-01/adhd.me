@@ -29,7 +29,7 @@ export const BARE_HEADINGS: Readonly<Record<string, string>> = {
   "The lab": "The name of a surface.",
   "My Toolkit": "The name of a surface.",
   "Eight lives": "The name of a surface — the cast page, and the count is the title.",
-  "Search Filters": "The name of a surface.",
+  "Search filters": "The name of a surface, as the Settings row that opens it says it.",
   "Everyday strategies": "The name of a learning module, shown as the card's own title.",
   "What ADHD is": "The name of a learning module, shown as the module page's own title.",
 

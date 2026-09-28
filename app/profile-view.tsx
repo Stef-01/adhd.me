@@ -173,7 +173,7 @@ export function ProfileView() {
         </div>
         <div className="me-head-row me-head-title">
           <span className="me-head-lead">
-            <h1>Search <em>Filters</em></h1>
+            <h1>Search filters</h1>
             {place && <span className="me-head-place">{place}</span>}
           </span>
           <Link href="/" className="me-close" aria-label="Close the filters and go back to the finder">

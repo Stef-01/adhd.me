@@ -261,13 +261,16 @@
 .lives-world[data-world="kitchen"]  { --w1: #f6efe3; --w2: #d3e3d8; --w3: #7fa88f; --w4: #5d8470; --w5: #fbf8f2; --w6: #d98f5c; --w7: #2c3340; }
 .lives-world[data-world="crossing"] { --w1: #cfe3f5; --w2: #4a5566; --w3: #f3f5f8; --w4: #8e9bb0; --w5: #f2b44c; --w6: #3f7fd0; --w7: #273044; }
 .lives-world[data-world="meeting"]  { --w1: #e6ecf4; --w2: #b9c7da; --w3: #5065a6; --w4: #6b7890; --w5: #fbfcfe; --w6: #bfe0ef; --w7: #253047; }
-.lives-world[data-world="phone"]    { --w1: #20283a; --w2: #f4f6fb; --w3: #5b7cd6; --w4: #dfe4ee; --w5: #ffffff; --w6: #9aa8c2; --w7: #1c2436; }
+/* The phone world's backdrop is the surface the phone lies on: mid-tone, since drawn things are never
+   a dark silhouette, and on a desk, where the screen stops short of the edges, it was two dark slabs. */
+.lives-world[data-world="phone"]    { --w1: #aab3c6; --w2: #f4f6fb; --w3: #5b7cd6; --w4: #dfe4ee; --w5: #ffffff; --w6: #9aa8c2; --w7: #1c2436; }
 .lives-world[data-world="hall"]     { --w1: #efe6d8; --w2: #b98f67; --w3: #8a5f43; --w4: #a8795a; --w5: #fbf6ec; --w6: #c9a14a; --w7: #33303a; }
 .lives-world[data-world="bathroom"] { --w1: #dcebf3; --w2: #b7d0de; --w3: #7fb3d6; --w4: #8c9aab; --w5: #ffffff; --w6: #f2a3a3; --w7: #273044; }
 .lives-world[data-world="shop"]     { --w1: #eef3ef; --w2: #cfd8d3; --w3: #9aa8a2; --w4: #5fae8b; --w5: #e8625c; --w6: #f2c14e; --w7: #2f3a45; }
 .lives-world[data-world="desk"]     { --w1: #e7eaf2; --w2: #8c7a6b; --w3: #3a4254; --w4: #6d7485; --w5: #fbfbfd; --w6: #f3c26b; --w7: #1f2635; }
 .lives-world[data-world="living"]   { --w1: #f3ece4; --w2: #d9826a; --w3: #b8624d; --w4: #6e9c6a; --w5: #fbf8f3; --w6: #bcd5e6; --w7: #33303a; }
-.lives-world[data-world="shed"]     { --w1: #3c4458; --w2: #2b3140; --w3: #7b6a58; --w4: #9aa3b5; --w5: #d9dee8; --w6: #f6e7b0; --w7: #1d2230; }
+/* The shed at dusk, not at night: its wall and floor were near-black, the whole screen one dark block. */
+.lives-world[data-world="shed"]     { --w1: #a3abbd; --w2: #858da0; --w3: #7b6a58; --w4: #c8cdd8; --w5: #eef0f4; --w6: #f6e7b0; --w7: #5f6679; }
 .lives-world[data-world="corridor"] { --w1: #e8ecf3; --w2: #9aa6bd; --w3: #5f7fbf; --w4: #3a4458; --w5: #ffffff; --w6: #f2c14e; --w7: #222a38; }
 .lives-world[data-world="pond"]     { --w1: #d6ebf2; --w2: #3f8f9a; --w3: #9fd3d8; --w4: #6e9c5a; --w5: #fbfdfd; --w6: #a8794f; --w7: #2a3a3f; }
 

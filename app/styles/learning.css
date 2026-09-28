@@ -109,7 +109,8 @@
 .platform-shell .learn-card-foot { max-width: 66ch; margin-top: 24px; color: var(--muted); font-size: 14px; line-height: 1.6; }
 .learning-lesson-art { float: right; width: 30%; margin: 0 0 24px 28px; border-radius: 20px; background: var(--stone); }
 .platform-shell .learn-controls { display: flex; justify-content: space-between; gap: 16px; margin: 24px 0 48px; padding: 0; position: static; background: transparent; }
-.platform-shell :is(.learn-primary, .learn-secondary, .learn-back) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border-radius: 12px; padding: 12px 20px; font: inherit; font-size: 14px; font-weight: 700; }
+/* Pills, as every big control is (O232's radius law: controls are pills, cards are 12 to 16px). */
+.platform-shell :is(.learn-primary, .learn-secondary, .learn-back) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border-radius: 999px; padding: 12px 22px; font: inherit; font-size: 14px; font-weight: 700; }
 .platform-shell .learn-primary { background: var(--accent); color: var(--paper); border: 1px solid var(--accent); }
 .platform-shell :is(.learn-secondary, .learn-back) { background: var(--paper); color: var(--ink); border: 1px solid var(--line-strong); }
 .platform-shell :is(.learn-primary, .learn-secondary):disabled { opacity: .5; cursor: not-allowed; }

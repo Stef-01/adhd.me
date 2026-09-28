@@ -48,7 +48,9 @@ export const SCENE_TINTS: Readonly<Record<Prop, SceneTints>> = {
 /** The sky of each place; kept for anything that wants one colour per prop. */
 export const PROP_TINTS: Readonly<Record<Prop, string>> = Object.fromEntries(Object.entries(SCENE_TINTS).map(([k, t]) => [k, t.sky])) as Record<Prop, string>;
 
-function Floor() { return <rect x="0" y="168" width="360" height="32" className="f-ground" />; }
+/** Floors run far past the drawing: where a title card is wider than the art, they reach both edges. */
+const WIDE = { x: -1000, width: 2360 } as const;
+function Floor() { return <rect {...WIDE} y="168" height="32" className="f-ground" />; }
 function Clock({ cx, cy, r = 14, turn = 0 }: { cx: number; cy: number; r?: number; turn?: number }) {
   return <>
     <circle cx={cx} cy={cy} r={r} className="f-light" />
@@ -291,7 +293,7 @@ function PropArt({ prop, stake }: { prop: Prop; stake: number }) {
       <rect x="290" y="112" width="34" height="14" rx="2" className="f-deep" /><rect x="286" y="124" width="42" height="4" rx="2" className="f-mid" /><rect x="230" y="114" width="12" height="12" rx="3" className="f-warm" />
     </>;
     case "crossing": return <>
-      <rect x="0" y="130" width="360" height="70" className="f-ground" /><rect x="0" y="124" width="360" height="8" className="f-light" />
+      <rect {...WIDE} y="130" height="70" className="f-ground" /><rect {...WIDE} y="124" height="8" className="f-light" />
       <ellipse cx="120" cy="40" rx="18" ry="8" className="f-light" />
       <rect x="150" y="50" width="60" height="74" className="f-mid" /><rect x="220" y="66" width="80" height="58" className="f-mid" opacity=".7" /><g className="f-light"><rect x="160" y="60" width="10" height="12" /><rect x="180" y="60" width="10" height="12" /><rect x="160" y="84" width="10" height="12" /><rect x="180" y="84" width="10" height="12" /><rect x="236" y="78" width="10" height="10" /><rect x="260" y="78" width="10" height="10" /></g>
       <g className="f-warm"><rect x="190" y="138" width="24" height="56" /><rect x="230" y="138" width="24" height="56" /><rect x="270" y="138" width="24" height="56" /><rect x="310" y="138" width="24" height="56" /></g>
@@ -310,7 +312,7 @@ function PropArt({ prop, stake }: { prop: Prop; stake: number }) {
       <path d="M306 142h12l6 20h24" fill="none" className="s-deep" strokeWidth="4" strokeLinecap="round" /><rect x="322" y="146" width="26" height="14" rx="2" className="f-mid" /><circle cx="326" cy="166" r="4" className="f-deep" /><circle cx="344" cy="166" r="4" className="f-deep" />
     </>;
     case "street": return <>
-      <rect x="0" y="176" width="360" height="24" className="f-ground" /><rect x="0" y="160" width="360" height="16" className="f-light" />
+      <rect {...WIDE} y="176" height="24" className="f-ground" /><rect {...WIDE} y="160" height="16" className="f-light" />
       <circle cx="300" cy={60 - stake * 20} r="18" className="f-warm" /><ellipse cx="130" cy="44" rx="20" ry="8" className="f-light" />
       <rect x="310" y="60" width="4" height="100" className="f-deep" /><rect x="302" y="50" width="20" height="12" rx="4" className="f-warm" />
       <rect x="232" y="104" width="12" height="56" className="f-deep" /><circle className="play-prop f-accent" cx="238" cy="88" r="34" />
