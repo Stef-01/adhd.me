@@ -26,7 +26,8 @@ export async function POST(request: Request) {
   }
   const form = new FormData();
   form.set("sdp", offer);
-  form.set("session", JSON.stringify(sessionFor(env)));
+  const session = sessionFor(env);
+  form.set("session", JSON.stringify(session));
   const reply = await fetch(CALLS_URL, {
     method: "POST",
     headers: { authorization: `Bearer ${env.OPENAI_API_KEY}` },
@@ -37,5 +38,5 @@ export async function POST(request: Request) {
     if (reply) noteKeyFailure(`HttpError: ${reply.status} ${await reply.text().catch(() => "")}`);
     return Response.json({ error: "upstream" }, { status: 502, headers: NO_STORE });
   }
-  return new Response(await reply.text(), { status: 201, headers: { "content-type": "application/sdp", ...NO_STORE } });
+  return new Response(await reply.text(), { status: 201, headers: { "content-type": "application/sdp", "x-voice-model": session.model, ...NO_STORE } });
 }

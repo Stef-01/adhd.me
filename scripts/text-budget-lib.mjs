@@ -98,6 +98,7 @@ export const EXTRA = [
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
   { path: "/", state: "finder-voice", name: "Finder voice (the orb, one question)" },
+  { path: "/", state: "finder-rate", name: "Finder home, a visit to rate" },
   { path: "/approach?module=everyday", name: "A read module, first card" },
   { path: "/approach?module=adhd", name: "A read module, the ADHD card" },
   { path: "/approach?module=starting", name: "A game run, title card" },
@@ -355,6 +356,12 @@ export async function reach(page, route, base) {
     return;
   }
   if (route.state === "finder-voice") await page.addInitScript(() => { window.__adhdmeVoiceFake = true; });
+  if (route.state === "finder-rate") {
+    await page.addInitScript(() => {
+      const at = Date.now() - 2 * 24 * 60 * 60 * 1000;
+      localStorage.setItem("adhdme.visits", JSON.stringify([{ handoffId: "11111111-1111-4111-8111-111111111111", clinicianId: "anubhav-saxena", name: "Dr Anubhav Saxena", at, asked: [], met: [], asks: 0, nextAt: at }]));
+    });
+  }
   await page.goto(`${base}${route.path}`, { waitUntil: "networkidle" });
   if (route.state === "finder-voice") {
     await page.getByRole("button", { name: "Talk instead of typing" }).click();

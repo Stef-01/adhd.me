@@ -54,7 +54,7 @@ test("a copy carries the map, its snapshots, the goals and the played ticks to a
 
   await sheet.getByRole("button", { name: /^Delete/ }).click();
   await sheet.getByRole("button", { name: "Yes, delete it" }).click();
-  await expect(sheet.getByText("Deleted from this browser.")).toBeVisible();
+  await expect(sheet.getByText("Deleted, here and with us.")).toBeVisible();
   expect(await page.evaluate((k) => localStorage.getItem(k), MODEL_KEY)).toBeNull();
   expect(await page.evaluate((k) => localStorage.getItem(k), PLAYED_KEY)).toBeNull();
 

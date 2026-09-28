@@ -7,6 +7,7 @@ import { aggregateFeedback, feedbackForGP, isRating, learnWeights, learningSampl
 import { allFeedback, allMatches, hydrateMatching, gpById, matchById, saveFeedback, saveGP, setWeights } from "@/lib/matching/store";
 import type { Feedback } from "@/lib/matching/types";
 import { serverNow } from "@/lib/server-clock";
+import { rateVisit } from "@/db/finder";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,20 @@ export async function POST(request: Request) {
     createdAt: serverNow().toISOString(),
   };
   saveFeedback(record, state);
+  // The same visit in the ratings both flows share (src/db/finder.ts): "did you feel understood?" is
+  // its stars. Internal, like everything here.
+  rateVisit({
+    source: "match",
+    handoffId: null,
+    matchId: match.id,
+    clinicianId: match.gpId,
+    deviceId: "",
+    stars: p.fit,
+    feedback: record.freeTextFeedback,
+    asked: [],
+    met: [],
+    at: record.createdAt,
+  });
 
   const gp = gpById(match.gpId, state);
   if (gp) saveGP({ ...gp, ratingAggregate: aggregateFeedback(feedbackForGP(gp.id, allMatches(state), allFeedback(state))) }, state);

@@ -88,6 +88,7 @@ export function fakeLink(handlers: LinkHandlers, answers: readonly string[] = []
   }, BEAT_MS);
 
   return {
+    model: "scripted",
     emit(event: ClientEvent) {
       if (closed) return;
       if (event.type === "session.update") {

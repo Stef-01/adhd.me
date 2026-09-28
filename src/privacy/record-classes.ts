@@ -131,6 +131,12 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
     rationale: "Phase M (ADR 0007) holds the most patient-shaped record in the tree: the narrative a person wrote. It is keyed by an opaque random id that lives only in the person's own browser session, never in a URL or a log line, and `eraseMatchingPatient` removes the patient row, every match proposed for them, every feedback record on those matches and the checklist in one call; `exportMatchingPatient` returns the same set for an access request. GP profiles in the same store are not patient data. WHERE IT GOES WHEN CONFIGURED: `src/lib/matching/persistence.ts` mirrors every row to the `0006_matching.sql` tables under the service role when SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set, and erasure issues the same deletes there in the same order; unset, nothing leaves the process. THE TRIGGER THAT WIDENS THIS ENTRY: `src/lib/matching/dense-embedder.ts` sends narrative and bio text to an embeddings endpoint only when ADHDME_EMBED_URL, ADHDME_EMBED_MODEL and ADHDME_EMBED_KEY are set; none is set, nothing is fetched at import, and the first configuration is an outbound disclosure of the narrative to a processor, to be recorded here and in the policy before it is switched on.",
   },
   {
+    module: "src/db/finder.ts",
+    what: "The finder's record: searches (the words a person typed or said, the place, the filters, what was read and shown), voice call summaries, what they did with a list, handoffs to a practice, and the stars and words after a visit",
+    handling: "stored",
+    rationale: "2026-09-28 (docs/data/FINDER-DATA.md): the words of a search are health information in a person's own voice, so the record is stored patient data even though no row names anybody. Every row is keyed by random ids the browser makes and a device id it keeps; `exportFinderDevice` returns every row one device made for an access request, and `eraseFinderDevice` removes them all, the searches' events with them. WHERE IT GOES WHEN CONFIGURED: with SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY set, every write is mirrored to the `0008_finder.sql` tables under the service role (row-level security on, no policy), and erasure issues the same deletes there by device id; unset, nothing leaves the process. Ratings are never shown to anyone: `src/db/learn.ts` turns them into weights per ask, never per clinician.",
+  },
+  {
     module: "src/referrals/store.ts",
     what: "Referral documents, acceptance acts, chain events and return reports",
     handling: "stored",

@@ -20,6 +20,14 @@ import { MotionScreen, StatusLine } from "./shared";
 import { VoiceOrb } from "./voice-orb";
 
 const COPY = FINDER_COPY.voice;
+
+/** How a call ended, for the finder's record (src/db/finder.ts): never what was said. */
+export interface CallSummary {
+  model: string;
+  questions: number;
+  seconds: number;
+  outcome: "revealed" | "stopped" | "failed" | "urgent";
+}
 /** A call that runs this long is wound up: the answers so far are enough to rank on. */
 const MAX_CALL_MS = 6 * 60_000;
 /** How long the reveal waits for the last sentence to finish playing. */
@@ -34,6 +42,7 @@ export function VoiceStage({
   reducedMotion,
   onReveal,
   onHeard,
+  onCallEnd,
   onLeave,
   onType,
 }: {
@@ -43,6 +52,8 @@ export function VoiceStage({
   onReveal: (reveal: Reveal) => void;
   /** The model has written the sentence: the finder can start reading it before the reveal. */
   onHeard?: (request: string) => void;
+  /** Once per call, however it ends. */
+  onCallEnd?: (call: CallSummary) => void;
   /** The stop button: back to the start, with what the person said in the box. */
   onLeave: (words: string) => void;
   /** The call could not start: the typing screen, with what was said. */
@@ -54,11 +65,28 @@ export function VoiceStage({
   const queued = useRef<ClientEvent[]>([]);
   const revealTo = useRef(onReveal);
   const heardTo = useRef(onHeard);
+  const endTo = useRef(onCallEnd);
+  const began = useRef(Date.now());
+  const ended = useRef(false);
 
   useEffect(() => {
     revealTo.current = onReveal;
     heardTo.current = onHeard;
-  }, [onReveal, onHeard]);
+    endTo.current = onCallEnd;
+  }, [onReveal, onHeard, onCallEnd]);
+
+  /** Reports the call once: the first way it ends is the one that counts. */
+  const end = useCallback((outcome: CallSummary["outcome"]) => {
+    if (ended.current) return;
+    ended.current = true;
+    const s = state.current;
+    endTo.current?.({
+      model: link.current?.model ?? "realtime",
+      questions: s.asked,
+      seconds: Math.round((Date.now() - began.current) / 1000),
+      outcome: outcome === "revealed" || outcome === "failed" ? outcome : s.urgent ? "urgent" : outcome,
+    });
+  }, []);
 
   const act = useCallback((action: Action) => {
     const { state: next, send } = step(state.current, action);
@@ -98,6 +126,15 @@ export function VoiceStage({
     };
   }, [act]);
 
+  // Leaving by any other way (the browser's Back) still reports the call, once it had connected: the
+  // development double mount, which unmounts while connecting, is not a call.
+  useEffect(
+    () => () => {
+      if (state.current.phase !== "connecting") end(state.current.phase === "failed" ? "failed" : "stopped");
+    },
+    [end],
+  );
+
   // The reveal: after the last sentence has been said, the orb leaves and the matches arrive.
   const { phase, reveal, talking } = view;
   const speaking = talking === "assistant";
@@ -108,7 +145,10 @@ export function VoiceStage({
   useEffect(() => {
     if (phase !== "revealing" || !reveal) return;
     const wait = speaking ? LAST_WORDS_MS : reducedMotion ? 0 : REVEAL_MS;
-    const timer = window.setTimeout(() => revealTo.current(reveal), wait);
+    const timer = window.setTimeout(() => {
+      end("revealed");
+      revealTo.current(reveal);
+    }, wait);
     return () => window.clearTimeout(timer);
   }, [phase, reveal, speaking, reducedMotion]);
 
@@ -137,11 +177,26 @@ export function VoiceStage({
 
       <div className="voice-mode-foot">
         {failed ? (
-          <button className="primary-button voice-mode-type" type="button" onClick={() => onType(saidAsRequest(view.said))}>
+          <button
+            className="primary-button voice-mode-type"
+            type="button"
+            onClick={() => {
+              end("failed");
+              onType(saidAsRequest(view.said));
+            }}
+          >
             {COPY.typeInstead.text}
           </button>
         ) : (
-          <button className="voice-stop" type="button" aria-label={COPY.end.text} onClick={() => onLeave(saidAsRequest(state.current.said))}>
+          <button
+            className="voice-stop"
+            type="button"
+            aria-label={COPY.end.text}
+            onClick={() => {
+              end("stopped");
+              onLeave(saidAsRequest(state.current.said));
+            }}
+          >
             <svg viewBox="0 0 56 56" aria-hidden="true">
               <circle cx="28" cy="28" r="21.9" fill="none" stroke="currentColor" strokeWidth="4" />
               <rect x="19.7" y="19.7" width="16.6" height="16.6" rx="2.3" fill="currentColor" />

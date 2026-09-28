@@ -12,10 +12,13 @@ export function BookingStage({
   clinician,
   focusOnArrival,
   onBack,
+  onHandoff,
 }: {
   clinician: Clinician;
   focusOnArrival: boolean;
   onBack: () => void;
+  /** The tap that leaves for the practice: the finder records it, and asks about the visit later. */
+  onHandoff?: () => void;
 }) {
   const handoff = bookingHandoff(clinician);
   return (
@@ -113,7 +116,10 @@ export function BookingStage({
           // Vercel drops custom events, so this records nothing today and starts
           // recording the day the plan upgrades — no code change at that moment. No
           // identifier travels with it; the payload is the same two fields /go logs.
-          onClick={() => track("booking_outbound", { clinician: clinician.id, surface: "finder" })}
+          onClick={() => {
+            track("booking_outbound", { clinician: clinician.id, surface: "finder" });
+            onHandoff?.();
+          }}
         >
           {handoff.label}
         </a>

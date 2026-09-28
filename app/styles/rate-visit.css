@@ -1,0 +1,100 @@
+/* The stars after a visit (app/finder-stages/rate-visit.tsx): one quiet card under the home screen's
+   examples, one line, five stars, one way to say "not yet". Stars are the accent's, the one live
+   token on the card. */
+
+.rate-visit {
+  width: 100%;
+  margin-top: 28px;
+  padding: 18px 18px 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-raised);
+  text-align: center;
+}
+
+.patient-v2 .rate-visit .rate-visit-question {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.rate-visit-stars {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.rate-visit-star {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-ui);
+}
+.rate-visit-star.is-lit { color: var(--accent-mid); }
+.rate-visit-star:active { transform: scale(0.9); }
+.platform-shell .rate-visit .rate-visit-star:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
+
+.rate-visit-later {
+  min-height: 44px;
+  margin-top: 2px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+@media (hover: hover) {
+  .rate-visit-later:hover { color: var(--ink); }
+}
+
+.rate-visit-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 4px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--paper);
+}
+.rate-visit-box:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.rate-visit-box input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+.platform-shell .rate-visit .rate-visit-box input:focus-visible { outline: none; }
+.rate-visit-send {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rate-visit-star { transition: none; }
+}

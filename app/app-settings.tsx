@@ -1,5 +1,7 @@
 "use client";
 
+import { eraseServerRecord } from "@/finder/track";
+
 // O233 (founder-directed): the settings control, top right.
 //
 // "About, is all found in the top right corner filtered away under a settings area … Similarly
@@ -169,7 +171,7 @@ function YourData() {
         <div className="settings-row is-danger">
           <span>
             <strong>Your data</strong>
-            <small>{gone ? "Deleted from this browser." : "Lives in this browser only."}</small>
+            <small>{gone ? "Deleted, here and with us." : "In this browser, and your searches with us."}</small>
           </span>
           {gone ? null : confirming ? (
             <span className="settings-danger-actions">
@@ -177,6 +179,8 @@ function YourData() {
                 type="button"
                 className="learn-primary"
                 onClick={() => {
+                  // The server's copy first: the device id it is kept under goes with the browser's.
+                  eraseServerRecord();
                   deleteDeviceData(browserStores());
                   setGone(true);
                   setPresent(false);

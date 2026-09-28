@@ -71,11 +71,12 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="text-lg font-medium text-stone-900">The finder, and what you type into it</h2>
           <p className="mt-2 text-sm leading-6">
-            The whole finder runs in your browser. The words you type about what you are looking
-            for are matched against the clinicians&apos; declared information on your own device:
-            they are not sent to ADHD.ME, not stored anywhere, and are gone when you close the
-            tab. You can read every page of the network, and use every part of the finder, without
-            telling us who you are.
+            The finder keeps a record of each search so the matching can get better: your words,
+            the suburb and filters, what it showed you, the practice you went on to, and the stars
+            you give a visit afterwards. It is kept under a random id your browser makes, never your
+            name, and no rating is ever shown to anyone. When the model reader or the voice finder
+            is on, your words, or your voice, go to OpenAI to be understood. Delete, in settings,
+            removes all of it, from this browser and from us.
           </p>
           <p className="mt-2 text-sm leading-6">
             If you type a suburb, that word is looked up on your device too, the site never asks

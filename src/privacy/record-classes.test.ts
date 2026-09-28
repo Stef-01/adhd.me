@@ -187,6 +187,7 @@ describe("W106 the classes W51 was about are still covered", () => {
     expect(storedClasses().map((c) => c.module).sort()).toEqual([
       "src/booking/store.ts",
       "src/complaints/store.ts",
+      "src/db/finder.ts",
       "src/interest/store.ts",
       "src/lib/matching/store.ts",
       "src/privacy/state.ts",

@@ -57,6 +57,9 @@ import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
 import { fakeVoice, startLink } from "@/voice/link";
+import { handOff, newId, track, trackSearch, trackVoiceCall } from "@/finder/track";
+import type { EventKind, SearchSource } from "@/db/finder";
+import type { CallSummary } from "./finder-stages/voice-stage";
 import type { Reveal } from "@/voice/conversation";
 import { TypeStage } from "./finder-stages/type-stage";
 import { ResultsStage } from "./finder-stages/results-stage";
@@ -237,8 +240,24 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     const keptLabels = new Set(kept.map((n) => n.label));
     return new Set(read.filter((n) => removed.has(facetKey(n.facet)) && !keptLabels.has(n.label)).map((n) => n.label));
   }, [read, removed, kept]);
-  /** Undefined is the lexicon's own path, with its weighting, when nothing is taken out. */
-  const rankNeeds = removed.size === 0 && !modelNeeds ? undefined : kept;
+  /**
+   * What the stars after visits have taught (src/db/learn.ts): a multiplier per ask, bounded, never
+   * per clinician. Until an ask has enough visits on both sides it is absent, and with none learned
+   * the list is ranked exactly as it always was.
+   */
+  const [askWeights, setAskWeights] = useState<Record<string, number>>({});
+  useEffect(() => {
+    fetch("/api/finder/weights")
+      .then((reply) => (reply.ok ? (reply.json() as Promise<{ weights?: Record<string, number> }>) : null))
+      .then((answer) => answer?.weights && setAskWeights(answer.weights))
+      .catch(() => undefined);
+  }, []);
+  const learned = useMemo(
+    () => (kept.some((n) => askWeights[facetKey(n.facet)] !== undefined) ? kept.map((n) => ({ ...n, weight: n.weight * (askWeights[facetKey(n.facet)] ?? 1) })) : null),
+    [kept, askWeights],
+  );
+  /** Undefined is the lexicon's own path, with its weighting, when nothing is taken out or learned. */
+  const rankNeeds = learned ?? (removed.size === 0 && !modelNeeds ? undefined : kept);
   const matches = useMemo(
     () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds), need),
     [request, origin, roster, need, rankNeeds],
@@ -532,7 +551,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
          * lands the words in the editable box instead, one tap from searching.
          */
         if (stopRequested.current) {
-          findMatches(text);
+          findMatches(text, "dictation");
           return;
         }
         dispatchBanner({ type: "ended", text, timedOut: timedOut.current });
@@ -600,7 +619,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     goTo("type");
   }
 
-  function findMatches(value = request) {
+  function findMatches(value = request, source: SearchSource = "typed") {
+    requestSource.current = source;
     const nextRequest = value.trim() || archetype.request;
     setRequest(nextRequest);
     setMatchIndex(0);
@@ -612,6 +632,39 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     goTo("results");
   }
 
+  /**
+   * The finder's record (src/db/finder.ts): one search once its list shows, what the person does
+   * with it, the handoff, and a voice call's summary. Sent and forgotten; nothing here waits.
+   */
+  const requestSource = useRef<SearchSource>("typed");
+  const tracked = useRef<{ request: string; id: string } | null>(null);
+  const pendingCall = useRef<CallSummary | null>(null);
+  useEffect(() => {
+    if (stage !== "results" || reading || tracked.current?.request === request) return;
+    const id = newId();
+    tracked.current = { request, id };
+    trackSearch({
+      id,
+      source: requestSource.current,
+      requestText: request,
+      place,
+      filters: effectiveFilters as unknown as Record<string, unknown>,
+      readSource: modelNeeds ? "llm" : "lexicon",
+      asked: kept.map((n) => facetKey(n.facet)),
+      shown: matches.slice(0, visibleCount).map((c) => c.id),
+    });
+    if (pendingCall.current) trackVoiceCall(pendingCall.current, id);
+    pendingCall.current = null;
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- once per request, when its list first shows.
+  }, [stage, reading, request]);
+  function note(kind: EventKind, clinicianId: string | null = null) {
+    if (tracked.current) track("event", { id: newId(), searchId: tracked.current.id, kind, clinicianId });
+  }
+  function voiceCallEnded(call: CallSummary) {
+    if (call.outcome === "revealed") pendingCall.current = call;
+    else trackVoiceCall(call, null);
+  }
+
   /** The voice finder's last answer: its sentence is the request, its suburb the place. */
   function revealVoice({ request: words, place: spoken }: Reveal) {
     if (spoken && resolvePlace(spoken)) {
@@ -619,10 +672,11 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
       rememberPlace(spoken);
     }
     setDraft(words);
-    findMatches(words);
+    findMatches(words, "voice");
   }
 
   function chooseClinician(selected: Clinician) {
+    note("profile", selected.id);
     const index = matches.findIndex((item) => item.id === selected.id);
     if (index >= 0) setMatchIndex(index);
     goTo("profile");
@@ -651,6 +705,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
 
   /** RADIANT: one yes/no filter switched from the results chips; written to the device like the profile does. */
   function toggleFilter(key: BooleanFilterKey) {
+    note("filter");
     const next: Filters = { ...filters, [key]: !filters[key] };
     writeFilters(window.localStorage, next);
     setFilters(next);
@@ -675,6 +730,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
 
   /** A "What we heard" chip tapped: out of the ranking, or back in. The list re-ranks in place. */
   function toggleHeard(key: string) {
+    note("heard");
     const keys = removed.has(key) ? [...removed].filter((k) => k !== key) : [...removed, key];
     setRemovedHeard({ request, keys });
     setMatchIndex(0);
@@ -756,6 +812,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             reducedMotion={reducedMotion}
             onReveal={revealVoice}
             onHeard={readAhead}
+            onCallEnd={voiceCallEnded}
             onLeave={(words) => {
               setDraft(words);
               backTo("welcome");
@@ -843,7 +900,10 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             careKinds={careKinds}
             onPickKind={pickKind}
             onClarify={(answer) => setRequest(`${request}, ${answer}`)}
-            onShowMore={() => setMore((n) => n + 5)}
+            onShowMore={() => {
+              note("more");
+              setMore((n) => n + 5);
+            }}
             onChoose={chooseClinician}
           />
         )}
@@ -863,7 +923,10 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             origin={origin}
             compareName={compareRows.length > 0 && compareWith ? compareWith.shortName : null}
             onBack={() => backTo("results")}
-            onCompare={() => goTo("compare")}
+            onCompare={() => {
+              note("compare", clinician.id);
+              goTo("compare");
+            }}
             onBook={() => goTo("booking")}
           />
         )}
@@ -888,6 +951,15 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             focusOnArrival={focusOnArrival}
             clinician={clinician}
             onBack={() => backTo("profile")}
+            onHandoff={() =>
+              handOff({
+                searchId: tracked.current?.id ?? null,
+                clinicianId: clinician.id,
+                name: clinician.name,
+                asked: kept.map((n) => facetKey(n.facet)),
+                met: profileEvidence.map((n) => facetKey(n.facet)),
+              })
+            }
           />
         )}
 

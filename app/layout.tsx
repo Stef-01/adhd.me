@@ -5,6 +5,7 @@ import "./styles/platform.css";
 import "./styles/learning.css";
 import "./styles/finder.css";
 import "./styles/voice.css";
+import "./styles/rate-visit.css";
 import "./styles/platform-surfaces.css";
 import "./styles/life.css";
 import "./styles/map.css";

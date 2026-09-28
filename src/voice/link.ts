@@ -9,6 +9,8 @@
 import type { ClientEvent, Failure, ServerEvent } from "./conversation";
 
 export interface VoiceLink {
+  /** The realtime model the call runs on, as the route named it. */
+  readonly model: string;
   /** One client event over the call's data channel. */
   emit(event: ClientEvent): void;
   setMuted(muted: boolean): void;
@@ -138,6 +140,7 @@ async function webrtcLink(handlers: LinkHandlers): Promise<VoiceLink> {
 
   const pc = new RTCPeerConnection();
   let closed = false;
+  let model = "realtime";
   const close = () => {
     if (closed) return;
     closed = true;
@@ -178,6 +181,7 @@ async function webrtcLink(handlers: LinkHandlers): Promise<VoiceLink> {
       body: offer.sdp,
     });
     if (!reply.ok) throw new LinkError(reply.status === 429 ? "busy" : "unavailable");
+    model = reply.headers.get("x-voice-model") ?? "realtime";
     await pc.setRemoteDescription({ type: "answer", sdp: await reply.text() });
   } catch (error) {
     close();
@@ -185,6 +189,7 @@ async function webrtcLink(handlers: LinkHandlers): Promise<VoiceLink> {
   }
 
   return {
+    model,
     emit: (event) => {
       if (channel.readyState === "open") channel.send(JSON.stringify(event));
     },

@@ -144,7 +144,7 @@ test("deleting everything is in settings, where somebody goes looking for it", a
   await expect(sheet.getByText("Your data")).toBeVisible();
   await sheet.getByRole("button", { name: /^Delete/ }).click();
   await sheet.getByRole("button", { name: "Yes, delete it" }).click();
-  await expect(sheet.getByText("Deleted from this browser.")).toBeVisible();
+  await expect(sheet.getByText("Deleted, here and with us.")).toBeVisible();
   const held = await page.evaluate((k) => localStorage.getItem(k), MODEL_KEY);
   expect(held, "the record is gone from the device, not hidden").toBeFalsy();
 });

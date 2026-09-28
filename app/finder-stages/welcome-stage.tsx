@@ -10,6 +10,7 @@ import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { EXAMPLE_SEARCHES } from "@/finder/examples";
 import { OPENING_QUESTION } from "@/voice/interviewer";
 import { AppSettings } from "../app-settings";
+import { RateVisit } from "./rate-visit";
 import { EASE_OUT, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
 
 export function WelcomeStage({
@@ -164,6 +165,9 @@ export function WelcomeStage({
             </li>
           ))}
         </ul>
+
+        {/* A day after a tap on "Book": how was the visit? One line, five stars (rate-visit.tsx). */}
+        <RateVisit />
 
         {/* O233: the testing options moved into the settings sheet (see the header above), so
             the app has one place a person changes anything. */}
