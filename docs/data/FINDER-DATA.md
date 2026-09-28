@@ -13,7 +13,8 @@ finder_searches ──< finder_events          (what a person did with a list)
       └────────< finder_handoffs ──── visit_ratings (source 'finder')
 match_matches (0006) ────────────────── visit_ratings (source 'match')
                                               │
-                                    facet_rating_signal (view) → the ranking's weights
+                          facet_rating_signal (view) → the ranking's per-ask weights
+                      clinician_rating_signal (view) → each clinician's demonstrated quality
 ```
 
 | Table | One row is | Written from |
@@ -43,14 +44,37 @@ row names a person. Everything the browser sends is parsed into a typed record o
 `src/db/learn.ts`, the finder's twin of /match's `learnWeights`: for each ask a person made, compare
 the stars of visits where the clinician declared it with those where they did not. With at least 8
 visits on each side, the ask's weight moves by up to half of itself, a star's difference at a time
-(a four-star gap is the full half). Per ask, never per clinician (C2): no clinician is promoted or
-demoted by name. `GET /api/finder/weights` serves the numbers; the finder multiplies each ask's
+(a four-star gap is the full half). These are per ask (C2), so no clinician moves by name through
+them; how each clinician's own visits went is the next section. `GET /api/finder/weights` serves the
+numbers; the finder multiplies each ask's
 weight by them before ranking, and with nothing learned it ranks exactly as it always did.
+
+## How visits rank a clinician
+
+The founder's decision of 2026-09-28: finding a clinician is "based on fit, needs and demonstrated
+quality", and asked how far, "a full ranking factor". `src/db/quality.ts` turns each clinician's
+stars into one multiplier on their fit:
+
+- silent until the clinician has 8 rated visits (from the finder and /match together);
+- their mean shrunk toward everybody's by 8 imaginary average visits, and everybody's toward four
+  stars by 20, so early visits barely move anyone;
+- a star above or below everybody's mean is the whole bound, 15% of fit either way, in steps of 5%.
+
+`rankClinicians` multiplies the care and manner evidence a clinician declared by it, and at equal
+fit orders by it after capacity. It never creates evidence (a clinician who answers nothing asked
+stays behind one who does) and never touches the language and access tier. Near a place, distance
+still orders clinicians level in fit and standing. The numbers reach the browser, which ranks, in
+`GET /api/finder/weights` (`quality`); no screen shows them. This is an exception to C2 and to W83's
+refusal of a quality ranking of named clinicians, recorded in `src/compliance/cdss-boundary.ts` and
+`src/privacy/automated-decisions.ts`. /match's own ordering (`src/lib/matching/ranking.ts`) does not
+take it yet: every score there carries a breakdown a reviewer can recompute (W213), and a factor that
+is never shown needs the founder's word on how it sits in one.
 
 ## Running it on Supabase
 
-Apply migrations `0001` to `0008`, and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` on the
-server. Each write then also goes to its table, in order, never delaying a person; the weights read
-every instance's ratings through the `facet_rating_signal` view. Without them, the record is memory
+Apply migrations `0001` to `0009`, and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` on the
+server. Each write then also goes to its table, in order, never delaying a person; the weights and
+the quality read every instance's ratings through the two views, which read as the caller, so only
+the service role sees through them. Without them, the record is memory
 on each server instance, capped at 5,000 of each kind, as every store here is. Row-level security is
 on for every table with no policy: only the server's service role reads or writes.

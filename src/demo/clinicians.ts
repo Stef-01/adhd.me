@@ -55,11 +55,34 @@ export function capacityGrade(clinician: Clinician, today: Date = new Date()): C
 /** Exported so the console's audit sort is the SAME order the finder uses, not a re-guess. */
 export const CAPACITY_ORDER: Record<CapacityGrade, number> = { "fresh-open": 0, "stale-open": 1, closed: 2 };
 
-export function rankClinicians(query: string, roster: readonly Clinician[] = clinicians, today: Date = new Date(), needs?: readonly NeedSignal[]): Clinician[] {
+/**
+ * Demonstrated quality (founder, 2026-09-28, "a full ranking factor"; `src/db/quality.ts`): a
+ * multiplier per clinician, within 0.15 of 1, from the stars people gave after visits. Not inferred
+ * and not shown: it scales the care and manner evidence a clinician declared, so it never creates
+ * evidence and never touches the access and language tier, and at equal fit it orders after
+ * capacity. A clinician it does not name is 1, and with none the order is exactly the one without it.
+ */
+export type Demonstrated = Readonly<Record<string, number>>;
+
+/** Good visits never lift a clinician whose books are closed past one who can see you (O4); poor ones still count. */
+const standing = (demonstrated: Demonstrated | undefined, clinician: Clinician) => {
+  const quality = demonstrated?.[clinician.id] ?? 1;
+  return clinician.acceptingNewPatients ? quality : Math.min(quality, 1);
+};
+
+export function rankClinicians(
+  query: string,
+  roster: readonly Clinician[] = clinicians,
+  today: Date = new Date(),
+  needs?: readonly NeedSignal[],
+  demonstrated?: Demonstrated,
+): Clinician[] {
   const read = needs ?? needsFor(query, roster);
   return [...roster].sort((a, b) => {
     const aProfile = rankingProfile(a, read);
     const bProfile = rankingProfile(b, read);
+    const aStanding = standing(demonstrated, a);
+    const bStanding = standing(demonstrated, b);
 
     /*
      * ACCESS BEFORE ACCUMULATION (2026-08-22 audit).
@@ -89,10 +112,10 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
      * is STRONG, manner is CONTRIBUTORY, and a contributory tier is never allowed to buy its
      * way past a strong one by piling up.
      */
-    const byCare = bProfile.careScore - aProfile.careScore;
+    const byCare = bProfile.careScore * bStanding - aProfile.careScore * aStanding;
     if (byCare !== 0) return byCare;
 
-    const byManner = bProfile.mannerScore - aProfile.mannerScore;
+    const byManner = bProfile.mannerScore * bStanding - aProfile.mannerScore * aStanding;
     if (byManner !== 0) return byManner;
 
     /* Equal weighted evidence is resolved by completeness: the clinician answering more of the
@@ -117,9 +140,14 @@ export function rankClinicians(query: string, roster: readonly Clinician[] = cli
     /* O56: the O4 boundary, now three grades. A stale open declaration still beats closed
        books (there is still a door to knock on), but no longer beats one confirmed this
        quarter, capacity that nobody has reconfirmed is capacity the mechanism stops
-       vouching for at a tie. */
+       vouching for at a tie. Demonstrated quality, which scales fit above, can put an open
+       clinician whose visits went poorly behind closed books; good visits never lift closed
+       books (`standing`). */
     const byCapacity = CAPACITY_ORDER[capacityGrade(a, today)] - CAPACITY_ORDER[capacityGrade(b, today)];
     if (byCapacity !== 0) return byCapacity;
+
+    const byStanding = bStanding - aStanding;
+    if (byStanding !== 0) return byStanding;
 
     // Exact ties remain peers in the UI's rank band, but source-file position must not decide
     // which named clinician appears first inside that band. Mix the request with the stable id so
@@ -153,7 +181,9 @@ export type RankingProfile = {
  *
  * Keeping this vector public gives tests, the matching console and future outcome evaluation one
  * definition of the order. It deliberately contains no opaque quality estimate, popularity,
- * symptom severity, or clinician-specific coefficient.
+ * symptom severity, or clinician-specific coefficient. The one clinician-specific number the
+ * ranking takes, how their visits went (`Demonstrated`), is the founder's 2026-09-28 decision and
+ * stays outside this vector: bounded, from patients' own stars, applied in `rankClinicians`.
  *
  * M9 (F9) SPLITS THE OLD SINGLE SUM INTO TIERS. Language and preference facets were already
  * pulled out ahead of everything else by O185 (`constraintCoverage`/`constraintScore`) — a
@@ -1049,8 +1079,9 @@ export function rankCliniciansNear(
   roster: readonly Clinician[] = clinicians,
   today: Date = new Date(),
   needs?: readonly NeedSignal[],
+  demonstrated?: Demonstrated,
 ): Clinician[] {
-  const byFit = rankClinicians(query, roster, today, needs);
+  const byFit = rankClinicians(query, roster, today, needs, demonstrated);
   if (!origin) return byFit;
 
   const read = needs ?? needsFor(query, roster);
@@ -1072,9 +1103,12 @@ export function rankCliniciansNear(
    * keep the fit order (which carries the owner-behind rule).
    */
   const out = [...byFit];
+  // Every tier `rankClinicians` compares, so distance never crosses one: the care and manner tiers as
+  // demonstrated quality scales them, and the quality tier itself.
   const tieKey = (c: Clinician) => {
     const profile = rankingProfile(c, read);
-    return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.weightedScore}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}`;
+    const q = standing(demonstrated, c);
+    return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.careScore * q}|${profile.mannerScore * q}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}|${q}`;
   };
   let start = 0;
   while (start < out.length) {

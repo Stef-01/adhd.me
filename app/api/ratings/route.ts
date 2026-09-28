@@ -1,7 +1,8 @@
 // The stars and words after a visit (src/db/finder.ts): POST { handoffId | matchId, clinicianId,
 // stars, feedback?, deviceId?, asked?, met? }. One rating per visit; a second answer (the note after
 // the stars) replaces the first. Never shown to anyone: it teaches the ranking which asks mattered
-// (src/db/learn.ts). 20 in ten minutes from one caller.
+// (src/db/learn.ts) and how each clinician's visits went (src/db/quality.ts). 20 in ten minutes from
+// one caller.
 
 import { parseRating, rateVisit } from "@/db/finder";
 import { rosterFor } from "@/demo/synthetic-roster";

@@ -3,6 +3,7 @@
 // silent until MIN_SAMPLES visits sit on each side (the ask declared, the ask not), and a weight
 // moves by at most MAX_SHIFT of itself. The finder multiplies an ask's weight by its number before
 // ranking (app/care-finder.tsx); with nothing learned, the finder ranks exactly as it always did.
+// How each clinician's own visits went is ./quality.ts's: the founder's 2026-09-28 exception to C2.
 
 import type { RatingRecord } from "./finder";
 

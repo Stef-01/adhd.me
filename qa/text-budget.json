@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-27T22:51:16.387Z",
-  "base": "http://localhost:3400",
+  "measuredAt": "2026-09-28T06:01:08.795Z",
+  "base": "http://localhost:3100",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "01:37 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -449,26 +449,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
           "w": 3,
-          "text": "WRITE THE LINE!",
+          "text": "ONLY THE LIST!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
+          "w": 1,
+          "text": "bread",
+          "tag": "span"
         }
       ]
     },
@@ -503,21 +503,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 2,
-      "fold": 2,
+      "total": 12,
+      "fold": 12,
       "chrome": 0,
-      "ratio": 0.1,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
+        {
+          "w": 3,
+          "text": "DUCK OR GOOSE!",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "hissing at you",
+          "tag": "p"
+        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "PIGEONS!",
-          "tag": "p"
         }
       ]
     },
@@ -1038,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1425,
-      "fold": 219,
+      "total": 1512,
+      "fold": 246,
       "chrome": 22,
-      "ratio": 35.6,
+      "ratio": 37.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -2628,6 +2633,44 @@
       ]
     },
     {
+      "path": "/",
+      "name": "Finder voice (the orb, one question)",
+      "state": "finder-voice",
+      "total": 0,
+      "fold": 0,
+      "chrome": 2,
+      "ratio": 0,
+      "verdict": "target",
+      "longest": []
+    },
+    {
+      "path": "/",
+      "name": "Finder home, a visit to rate",
+      "state": "finder-rate",
+      "total": 28,
+      "fold": 28,
+      "chrome": 6,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "What kind of support are you looking for?",
+          "tag": "h1"
+        },
+        {
+          "w": 8,
+          "text": "How was your visit with Dr Anubhav Saxena?",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Adult ADHD assessment",
+          "tag": "button"
+        }
+      ]
+    },
+    {
       "path": "/approach?module=everyday",
       "name": "A read module, first card",
       "state": null,
@@ -2896,20 +2939,20 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "GET OUT!",
+          "w": 4,
+          "text": "WHY ARE YOU HERE?",
           "tag": "p"
         },
         {
           "w": 2,
-          "text": "crooked book",
+          "text": "tiny horse",
           "tag": "span"
         },
         {

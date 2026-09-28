@@ -17,6 +17,7 @@ import {
   topTieNote,
   missedAsks,
   type Clinician,
+  type Demonstrated,
 } from "@/demo/clinicians";
 import { rosterFor } from "@/demo/synthetic-roster";
 import { profession, professionsMentioned, type Profession } from "@/support/professions";
@@ -86,6 +87,11 @@ const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
 /** At level 1, how long the results wait for the read before ranking on the finder's own. */
 const READ_TIMEOUT_MS = 12_000;
+/** What `/api/finder/weights` serves, and the request whose list was on screen when it landed. */
+type Taught = { weights: Record<string, number>; quality: Demonstrated; heldFor: string | null };
+const UNTAUGHT: Taught = { weights: {}, quality: {}, heldFor: null };
+/** The stages that show no list. */
+const LISTLESS: ReadonlySet<Stage> = new Set(["welcome", "listening", "voice", "type"]);
 
 /**
  * @param readLevel `ADHDME_LLM_LEVEL` in effect (LLM-MATCHING-PLAN §15): at 0 the finder reads the words itself and asks nothing.
@@ -244,17 +250,24 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     return new Set(read.filter((n) => removed.has(facetKey(n.facet)) && !keptLabels.has(n.label)).map((n) => n.label));
   }, [read, removed, kept]);
   /**
-   * What the stars after visits have taught (src/db/learn.ts): a multiplier per ask, bounded, never
-   * per clinician. Until an ask has enough visits on both sides it is absent, and with none learned
-   * the list is ranked exactly as it always was.
+   * What the stars after visits have taught: a multiplier per ask (src/db/learn.ts) and one per
+   * clinician for how their visits went (src/db/quality.ts, "demonstrated quality"). Bounded, never
+   * shown, and with none the list is ranked exactly as it always was. They land just after the page
+   * opens; a list already on screen then (a tab come back to) keeps its order, the next one takes them.
    */
-  const [askWeights, setAskWeights] = useState<Record<string, number>>({});
+  const [taught, setTaught] = useState<Taught>(UNTAUGHT);
+  const listed = useRef<string | null>(null);
+  useEffect(() => {
+    listed.current = LISTLESS.has(stage) ? null : request;
+  });
   useEffect(() => {
     fetch("/api/finder/weights")
-      .then((reply) => (reply.ok ? (reply.json() as Promise<{ weights?: Record<string, number> }>) : null))
-      .then((answer) => answer?.weights && setAskWeights(answer.weights))
+      .then((reply) => (reply.ok ? (reply.json() as Promise<Partial<Taught>>) : null))
+      .then((answer) => answer && setTaught({ weights: answer.weights ?? {}, quality: answer.quality ?? {}, heldFor: listed.current }))
       .catch(() => undefined);
   }, []);
+  const live = taught.heldFor === request ? UNTAUGHT : taught;
+  const askWeights = live.weights;
   const learned = useMemo(
     () => (kept.some((n) => askWeights[facetKey(n.facet)] !== undefined) ? kept.map((n) => ({ ...n, weight: n.weight * (askWeights[facetKey(n.facet)] ?? 1) })) : null),
     [kept, askWeights],
@@ -262,8 +275,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   /** Undefined is the lexicon's own path, with its weighting, when nothing is taken out or learned. */
   const rankNeeds = learned ?? (removed.size === 0 && !modelNeeds ? undefined : kept);
   const matches = useMemo(
-    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds), need),
-    [request, origin, roster, need, rankNeeds],
+    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds, live.quality), need),
+    [request, origin, roster, need, rankNeeds, live.quality],
   );
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // The matched tags, in the taxonomy's own order, capped at the three Calm Clarity allows in a
@@ -626,6 +639,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     requestSource.current = source;
     const nextRequest = value.trim() || archetype.request;
     setRequest(nextRequest);
+    // A new search is a new list: whatever the ratings taught applies to it, the same words or not.
+    setTaught((held) => (held.heldFor === null ? held : { ...held, heldFor: null }));
     setMatchIndex(0);
     setMore(0);
     // U10: the typing screen is being left — its banner does not follow the person to results.

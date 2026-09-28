@@ -45,14 +45,15 @@ export const PRODUCT_SUMMARY =
  * The boundaries, stated as facts rather than as a disclaimer.
  *
  * Each line is true of the code, not an aspiration: the matching runs in the browser, no rating is
- * ever shown (the stars after a visit only reweight kinds of request, src/db/learn.ts), searches are
+ * ever shown (the stars after a visit reweight kinds of request, src/db/learn.ts, and move a clinician
+ * a bounded step, src/db/quality.ts), searches are
  * recorded under a random id (docs/data/FINDER-DATA.md), booking hands off to the practice, and the
  * example profiles are labelled on every surface that renders them.
  */
 export const PRODUCT_BOUNDARIES: readonly string[] = [
   "ADHD.ME is not a clinic. It provides no care, no assessment and no medical advice, and nothing it shows is a statement about anybody's health.",
   "It does not decide whether anybody should be assessed, and reads nothing a person types as a fact about their health.",
-  "It shows no ratings, no reviews and no quoted patient experiences, and no clinician can pay to rank higher. A person may rate a visit afterwards; that rating is never shown, and only tunes how much each kind of request counts in the ordering.",
+  "It shows no ratings, no reviews and no quoted patient experiences, and no clinician can pay to rank higher. A person may rate a visit afterwards; no rating is ever shown. Ratings tune how much each kind of request counts and, after enough visits, move a clinician by at most 15 percent of their fit, never past one who answers a language or access need they do not.",
   "It holds no appointment book: each listing hands the person to that practice's own booking page or phone number.",
   "What a person types is matched in their own browser and kept as a record of the search under a random id, never a name. When the model reader or voice mode is switched on, the words or the voice go to OpenAI to be understood; otherwise the microphone uses the browser's own speech service.",
   "Alongside the real listed clinicians it shows invented example profiles, labelled as examples on every surface, so that the finder can be demonstrated without using anybody's real details.",
