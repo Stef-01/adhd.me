@@ -16,8 +16,8 @@ body:has(.play-run) { overflow-x: clip; }
 .play-run .play-dots li.is-done { background: color-mix(in srgb, var(--play-blue) 55%, var(--play-line)); }
 .play-run .play-dots li.is-current { background: var(--play-blue); }
 .play-count { flex: 0 0 auto; color: var(--muted); font-size: 0.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.play-stage { margin: 0 calc(50% - 50vw); min-height: 100svh; }
-.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; min-height: 100svh; padding: 76px 16px 32px; border-radius: 0; background: var(--play-soft); text-align: center; overflow: hidden; }
+.play-stage { margin: 0 calc(50% - 50vw); }
+.play-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 76px 16px 32px; border-radius: 0; background: var(--play-soft); text-align: center; overflow: hidden; }
 .play-card > * { width: 100%; max-width: 640px; }
 .play-card > .play-clock { max-width: none; }
 .play-card.is-title { background: color-mix(in srgb, var(--play-blue-2) 22%, var(--play-paper)); }
@@ -118,7 +118,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-heat[data-calm="true"] .play-heat-fill { background: var(--play-go); }
 .play-heat-calm { position: absolute; top: 0; bottom: 0; left: 35%; border-left: 3px solid var(--play-go); }
 /* Don't-tap: the tempting object in the scene, with a pull ring pulsing behind it under motion. */
-.play-tempt-spot.in-scene { position: absolute; right: 14px; bottom: 18px; }
+.play-tempt-spot.in-scene { position: absolute; right: 14px; }
 .play-tempt-pull { position: absolute; inset: -4px; border-radius: 999px; border: 3px solid var(--play-alert); pointer-events: none; }
 .play-tempt-thing { position: relative; flex-direction: column; gap: 4px; min-width: 96px; padding: 12px 18px 10px; border-radius: 22px; background: var(--play-paper); color: var(--play-ink); font-size: 0.9375rem; box-shadow: 0 6px 0 color-mix(in srgb, var(--play-ink) 14%, transparent); }
 .play-tempt-thing .play-glyph { color: var(--play-alert); }
@@ -152,9 +152,9 @@ body:has(.play-run) { overflow-x: clip; }
 .play-hold .play-scene, .play-dont .play-scene, .play-timing .play-scene, .play-pause .play-scene, .play-catch .play-scene, .play-balance .play-scene { flex: 1 0 auto; }
 /* Catch: things tossed across the scene on an arc; a basket waits at the bottom right; a caught thing squashes. */
 .play-falling { position: absolute; inset: 0; }
-.play-fall { position: absolute; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 12%, transparent); transition: top 80ms linear, left 80ms linear; transform-origin: center bottom; }
+.play-fall { position: absolute; display: inline-flex; align-items: center; border: 0; color: var(--play-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; cursor: pointer; transition: top 80ms linear, left 80ms linear; transform-origin: center bottom; }
 .play-fall .play-glyph { color: var(--play-blue); }
-.play-fall.is-decoy { background: var(--stone); color: var(--muted); }
+.play-fall.is-decoy { color: var(--muted); }
 .play-fall.is-decoy .play-glyph { color: var(--muted); }
 .play-basket { position: absolute; right: 8%; bottom: 9%; width: 90px; height: 44px; pointer-events: none; }
 .play-basket .b-mid { fill: var(--sc-mid); } .play-basket .b-deep { stroke: var(--sc-deep); }
@@ -315,7 +315,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-card.is-title:has(.play-place) { justify-content: flex-start; padding-top: 104px; background: transparent; }
 .play-place { position: absolute; inset: 0; z-index: 0; }
 .play-place .play-scene-art { position: absolute; inset: 0; width: 100%; height: 100%; }
-.play-card.is-title:has(.play-place) > :not(.play-place) { position: relative; z-index: 1; }
+.play-card.is-title:has(.play-place) > :not(.play-place) { position: relative; }
 .play-card.is-title:has(.play-place) .play-title { order: 1; }
 .play-card.is-title:has(.play-place) > .play-tempt { order: 2; }
 .play-card.is-title:has(.play-place) .play-hero-bean { order: 3; margin-top: auto; margin-bottom: 3svh; }

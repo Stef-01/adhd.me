@@ -40,7 +40,7 @@
 .bedroom-window { width: min(16%, 155px); right: 12%; top: 3%; }
 .bedroom-lamp { width: min(12%, 130px); left: 19%; bottom: 14%; }
 .bedroom-phone { width: min(8%, 82px); right: 16%; bottom: 13%; }
-.bedroom-headphones { width: min(8%, 85px); left: 30%; bottom: 3%; }
+.bedroom-headphones { width: min(8%, 85px); bottom: 3%; }
 .bedroom-book { width: min(16%, 156px); left: 50%; bottom: 1.5%; }
 .bedroom-night-shade { position: absolute; inset: 0; z-index: 2; background: #302e62; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
 .bedroom-scene[data-light="dim"] .bedroom-night-shade { opacity: .09; }
@@ -104,12 +104,10 @@
   /* At the right edge a 12px label is wider than its prop, so it hangs from the right, not the middle. */
   .bedroom-window, .bedroom-phone { align-items: flex-end; }
   .bedroom-lamp { width: 23%; max-width: 108px; left: 3%; bottom: 21%; }
-  .bedroom-phone { width: 17%; max-width: 82px; right: 3%; bottom: 18%; }
-  .bedroom-headphones { width: 20%; max-width: 79px; left: 23%; bottom: 3%; }
-  .bedroom-book { width: 31%; max-width: 135px; left: 53%; bottom: 2%; }
+  .bedroom-phone { width: 17%; max-width: 82px; bottom: 18%; }
+  .bedroom-headphones { width: 20%; max-width: 79px; bottom: 3%; }
+  .bedroom-book { width: 31%; max-width: 135px; bottom: 2%; }
   .bedroom-prop-label { font-size: 12px; padding: 4px 8px; line-height: 1.15; }
-  .bedroom-insect { width: 54px; height: 54px; margin: -27px 0 0 -27px; }
-  .bedroom-insect-flight { scale: .95; }
   .bedroom-footer { flex-direction: column; gap: 10px; padding: 13px 18px; min-height: 64px; }
   .bedroom-footer p { font-size: 12px; max-width: 300px; }
   .bedroom-finish { gap: 18px; }
@@ -144,7 +142,7 @@
 @keyframes bedroom-ping { 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
 @media (max-width: 700px) {
   .bedroom-phone { right: 5%; }
-  .bedroom-scene[data-book="open"] .bedroom-book { left: 32%; bottom: 29%; }
+  .bedroom-scene[data-book="open"] .bedroom-book { left: 32%; }
 }
 @media (max-height: 650px) and (min-width: 701px) {
   .bedroom-scene[data-book="open"] .bedroom-book { left: 42%; bottom: 25%; }
@@ -182,7 +180,6 @@
   .bedroom-insect { width: 48px; height: 48px; margin: -24px 0 0 -24px; }
   .bedroom-headphones { left: 23%; }
   .bedroom-book { left: 46%; }
-  .bedroom-scene[data-book="open"] .bedroom-book { bottom: 26%; }
 }
 @media (max-width: 700px) { .bedroom-scene[data-book="open"] .bedroom-book { bottom: 28%; } }
 .bedroom-game[data-still="true"] * { animation: none !important; }

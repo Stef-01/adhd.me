@@ -20,7 +20,6 @@
 @media (max-width: 767px) {
   .platform-shell .me-sticky { position: sticky; bottom: calc(var(--app-tabs-h) + env(safe-area-inset-bottom)); z-index: 5; margin: 8px calc(-1 * var(--shell-gutter)) 0; padding: 12px var(--shell-gutter) 10px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 96%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 }
-.platform-shell .results-summary-words { padding: 24px; border: 1px solid var(--line); }
 .platform-shell .patient-v2 .clinician-list { display: grid; grid-template-columns: minmax(0, 1fr); }
 .platform-shell .results-screen { max-width: 1200px; margin-inline: auto; }
 .platform-shell .clinician-card { min-width: 0; }
@@ -180,7 +179,7 @@
 .platform-shell .results-summary-text { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", sans-serif; }
 .platform-shell .patient-v2 .results-browser .clinician-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
 
-.platform-shell .care-preference-fields { display: grid; gap: 12px; padding-top: 16px; }
+.platform-shell .care-preference-fields { display: grid; padding-top: 16px; }
 .platform-shell .care-preference-fields label { font-size: 14px; font-weight: 600; }
 .platform-shell .care-preference-fields label span { color: var(--muted); font-weight: 400; }
 .platform-shell .care-preference-fields [data-slot="native-select-wrapper"] { width: 100%; }
@@ -188,7 +187,7 @@
 .platform-shell .care-preference-fields :is(select,input):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .platform-shell .care-preference-fields a { font-size: 14px; line-height: 1.5; text-underline-offset: 3px; }
 .platform-shell .finder-care-summary { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-.platform-shell .finder-care-summary summary { cursor: pointer; min-height: 28px; }
+.platform-shell .finder-care-summary summary { cursor: pointer; }
 .platform-shell .row-cultural-identity, .platform-shell .profile-cultural-identity { color: var(--muted); font-size: 14px; line-height: 1.5; }
 .platform-shell .profile-care-declaration { margin-block: 12px; font-size: 14px; line-height: 1.6; }
 
