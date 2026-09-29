@@ -350,6 +350,10 @@ production after the deploy: the interviewer kept "new mum", the reader heard `c
 worse and the gate is inside the model's run-to-run variance (LLM-MATCHING-PLAN §16g item 8). One
 finding stands open: in the first live call after the prompt change the interviewer still offered
 choices in its manner question ("clear, gentle, or very direct?"); the questions are now given as
-the words to ask, or fewer, and never with choices, and the next live call is the check. Beside the
+the words to ask, or fewer, and never with choices. The next live call asked "Does anything about
+the clinician matter to you?" in those words, carried the answer ("explains things properly and
+doesn't judge me") into the request as said, and skipped the manner question already answered. That
+call's read added `manner:collaborative` to `sense_making` for "explains things properly", so the
+collaborative meaning now says that explaining alone is sense-making, with a check example. Beside the
 fix, the North Star landed: "Why matched" says why in one sentence from the clinician's own listing
 (§16h), with the keys shown only where there is no sentence.
