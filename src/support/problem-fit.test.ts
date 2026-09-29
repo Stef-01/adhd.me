@@ -58,6 +58,20 @@ describe("problem fit (§42)", () => {
     // Ties keep the engine's order.
     expect(orderByProblemFit([psych, coach], { ...top, subdomain: "sleep", contributors: [] }).map((x) => x.id)).toEqual(["psych", "coach"]);
   });
+
+  it("never moves an allied entry past one that answers more of what the person asked (R15)", () => {
+    const top = deriveNeeds(need())[0]!;
+    const gp1 = { id: "gp1", profession: "gp" as const, expertise: [] as never[] };
+    const psych = { id: "psych", profession: "psychologist" as const, expertise: ["emotional-regulation" as const] };
+    const coach = { id: "coach", profession: "adhd-coach" as const, expertise: ["university-adhd" as const] };
+    const ot = { id: "ot", profession: "occupational-therapist" as const, expertise: ["task-initiation" as const] };
+    // The psychologist answers the ask (evidence 2), the coach and the OT do not (0): fit reorders
+    // the coach and the OT between themselves, and neither passes the psychologist.
+    const evidence = (p: { id: string }) => (p.id === "psych" ? 2 : 0);
+    expect(orderByProblemFit([gp1, psych, coach, ot], top, evidence).map((x) => x.id)).toEqual(["gp1", "psych", "ot", "coach"]);
+    // All level: fit alone orders them, as before.
+    expect(orderByProblemFit([gp1, psych, coach, ot], top, () => 1).map((x) => x.id)).toEqual(["gp1", "ot", "coach", "psych"]);
+  });
 });
 
 describe("strengths in the match", () => {

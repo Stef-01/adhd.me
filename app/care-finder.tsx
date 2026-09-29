@@ -13,6 +13,7 @@ import {
   orderNote,
   rankBands,
   rankCliniciansNear,
+  scoreAgainst,
   topTieNote,
   missedAsks,
   type Clinician,
@@ -226,10 +227,11 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   );
   /** Undefined is the lexicon's own path, with its weighting, when nothing is taken out or learned. */
   const rankNeeds = learned ?? (removed.size === 0 && !modelNeeds ? undefined : kept);
-  const matches = useMemo(
-    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds, live.quality), need),
-    [request, origin, roster, need, rankNeeds, live.quality],
-  );
+  // The map reorders allied entries only among those level on the asks (problem-fit.ts, R15).
+  const matches = useMemo(() => {
+    const asked = rankNeeds ?? kept;
+    return orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds, live.quality), need, (c) => scoreAgainst(c, asked));
+  }, [request, origin, roster, need, rankNeeds, kept, live.quality]);
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // The matched tags, in the taxonomy's own order, capped at the three Calm Clarity allows in a
   // row. These are the person's own map read back to them.

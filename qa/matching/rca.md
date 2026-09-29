@@ -359,3 +359,12 @@ the vocabulary's own reading: the lexicon cues collaborative on "explain" and th
 and reverted the same hour, since it cost the corpus's own gold (P3, F7). Beside the
 fix, the North Star landed: "Why matched" says why in one sentence from the clinician's own listing
 (§16h), with the keys shown only where there is no sentence.
+
+**A sixth cause, found on the live page afterwards.** Walking the deployed finder in a browser that
+had played the app before, the postpartum request ranked an occupational therapist first ("works
+on household organisation, which is part of what you described") and Samantha Courtney out of the
+first three, while the same request in a clean browser ranked her first. `orderByProblemFit`
+reordered EVERY allied entry by the person's stored map, so what they said weeks ago outranked what
+they asked for now; the founder's phone held such a map too, which is the "generic results" the
+scripted calls in clean browsers never reproduced. The map now reorders allied entries only among
+those level on the request's own evidence (`scoreAgainst`), never across, and the request wins.
