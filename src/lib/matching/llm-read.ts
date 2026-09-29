@@ -37,7 +37,7 @@ export const MEANINGS: Record<string, string> = {
   "autism-adhd": "names autism, AuDHD or being neurodivergent",
   "substance-history": "wants to be open about alcohol or other drug use, or is in recovery",
   "emotional-regulation": "names big emotions, anger, shame or rejection sensitivity as something to get help with",
-  "non-medication": "asks for options besides medication, or more than medication alone, such as skills and strategies",
+  "non-medication": "asks for options besides medication, or more than medication alone, such as skills and strategies (wanting someone to talk to, with no word about medication, is not this)",
   perinatal: "names pregnancy, birth or the months after having a baby (postpartum, postnatal, a new mum or dad) as part of what they need care for or understood",
   attuned: "asks for a clinician who listens and takes them seriously",
   steadying: "asks for a clinician who is calm and reassuring",
