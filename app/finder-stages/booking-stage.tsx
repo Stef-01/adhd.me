@@ -63,7 +63,7 @@ export function BookingStage({
               time you pick there is open.
             </p>
             <p className="booking-note">
-              ADHD.ME does not see your booking with {clinician.practice}, or any medical detail.
+              ADHD.ME does not see your booking with {clinician.practice}.
             </p>
           </>
         ) : (
