@@ -107,20 +107,23 @@ test("the query that failed in production now reads both halves (O13)", async ({
   await page.screenshot(shot("09-production-failure-query-now-reads"));
 });
 
-test("a psychographic ask ranks, explains, and shows its provenance on screen (O30)", async ({ page }) => {
-  // Values-level language on both sides of the roster's manner split: plain-language reaches
-  // sense_making (Dr Anubhav declares it), faith-in-the-room reaches culturally_attuned
-  // (Dr Anu declares it). Both rows must carry their reason, and the profile must quote
-  // the provenance — the O21 "from your words" line — for a phrase added in O30.
+test("a psychographic ask ranks and is shown nowhere (O30, then O259)", async ({ page }) => {
+  // O30 had both manner traits on the rows and quoted in the profile. O259 (founder, 2026-09-29:
+  // "it's a bad look to say we have certain clinicians that take people seriously") keeps the read
+  // for the ranking's last tier and shows it nowhere: no chip, no row text, no line in the profile.
   await searchFor(page, "explain things in plain language and someone who respects my faith");
   const rows = page.locator(".clinician-row");
-  // A row says a facet in its "What we heard" chip's words.
-  await expect(rows.first().getByText(EI_QUALITIES.sense_making.short!).or(rows.first().getByText(EI_QUALITIES.culturally_attuned.short!))).toBeVisible();
+  await expect(rows.first()).toBeVisible();
+  await expect(page.getByRole("group", { name: "What we heard" })).toHaveCount(0);
+  for (const trait of [EI_QUALITIES.sense_making, EI_QUALITIES.culturally_attuned]) {
+    await expect(page.locator(".clinician-row").getByText(trait.short!)).toHaveCount(0);
+    await expect(page.locator(".clinician-row").getByText(trait.label)).toHaveCount(0);
+  }
   await page.screenshot({ path: "qa/_runs/matching-o30/01-psychographic-ask-ranked.png", fullPage: true });
 
   await rows.first().click();
   await page.locator(".profile-disclosure").filter({ hasText: "Why matched" }).locator("summary").click();
-  await expect(page.getByText(/from your words/i).first()).toBeVisible();
+  for (const trait of [EI_QUALITIES.sense_making, EI_QUALITIES.culturally_attuned]) await expect(page.getByText(trait.label)).toHaveCount(0);
   await page.screenshot({ path: "qa/_runs/matching-o30/02-psychographic-provenance.png", fullPage: true });
 });
 

@@ -26,7 +26,7 @@ const FIELDS = Object.keys(VOCABULARY) as Field[];
  * paraphrase is fixed here, never by copying corpus text.
  */
 export const MEANINGS: Record<string, string> = {
-  "adhd-assessment": "asks for an ADHD assessment or diagnosis, or wants to find out whether it is ADHD (someone who says they already have the diagnosis, and asks for their medication or scripts to continue, is shared-care and not this; ADHD named only as what the clinician should understand or have themselves is not this)",
+  "adhd-assessment": "asks for an ADHD assessment or diagnosis, or wants to find out whether it is ADHD (someone who says they already have the diagnosis, and asks for their medication or scripts to continue, is shared-care and not this; ADHD named only as what the clinician should understand or have themselves is not this; a clinician described as diagnosed with ADHD themselves is lived-experience and not this)",
   "child-adolescent-adhd": "the appointment is for their child or teenager",
   titration: "asks for a medication dose to be reviewed or adjusted, or side effects sorted",
   "shared-care": "asks for a GP to share care with, or take over scripts from, a psychiatrist or paediatrician",
@@ -49,7 +49,7 @@ export const MEANINGS: Record<string, string> = {
   culturally_attuned: "asks for a clinician who understands their culture, faith, language, background or family (a life stage or a condition is not this)",
   structured: "asks for a structured approach: a baseline, measures and scheduled reviews",
   "woman-gp": "asks for a woman clinician",
-  "lived-experience": "asks for a clinician who has ADHD themselves (the person having ADHD is not this)",
+  "lived-experience": "asks for a clinician who has ADHD themselves, or was diagnosed with it themselves (the person having ADHD is not this)",
   "telehealth-first": "asks for telehealth: phone or video",
   "longer-appointment": "asks for a longer or double appointment, or more time than a standard one",
   "bulk-billing": "asks for bulk billing: Medicare covers it, with no gap or extra fee",
@@ -80,6 +80,9 @@ const EXAMPLES = [
   '"a clinician who speaks Tamil" → languages: tamil',
   '"a psychologist who has ADHD herself" → prefs: lived-experience',
   '"someone who understands ADHD from the inside" → prefs: lived-experience',
+  '"a psychologist who was diagnosed with ADHD themself" → prefs: lived-experience',
+  '"a GP who was diagnosed with ADHD as an adult" → prefs: lived-experience',
+  '"my psychiatrist retired, I\'m stable on Vyvanse and need a GP to take over prescribing" → care: shared-care',
   '"a practice that runs on schedule" → unlisted: appointments that run on time',
   '"our little one is five months and I want a GP who gets that" → care: perinatal',
 ];

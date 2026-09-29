@@ -255,7 +255,7 @@ describe("U4 the intake routes hold their shapes", () => {
       bootedAt: new Date(1_800_000_000_000 - 90_000).toISOString(),
       store: "jsonl-file",
       reporter: "console",
-      journal: { configured: false, sent: 0, failed: 0, refused: 0 },
+      journal: { configured: false, sent: 0, failed: 0, refused: 0, failedLast: null },
     });
     vi.stubEnv("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA", "");
     expect(health().sha).toBeNull();

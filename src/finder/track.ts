@@ -72,10 +72,11 @@ export function trackSearch(record: {
 
 /** A voice call (src/voice): how it went, the request it wrote, and every turn. */
 export function trackVoiceCall(
-  call: { model: string; questions: number; seconds: number; outcome: "revealed" | "stopped" | "failed" | "urgent"; request: string; place: string; turns: { who: string; text: string }[] },
+  call: { id?: string; model: string; questions: number; seconds: number; outcome: "revealed" | "stopped" | "failed" | "urgent"; request: string; place: string; turns: { who: string; text: string }[] },
   searchId: string | null,
 ): void {
-  track("voice", { id: newId(), deviceId: deviceId(), searchId, ...call });
+  // One id per call (RCA night, stage 5): each report mid-call and the last one land on the same row.
+  track("voice", { ...call, id: call.id ?? newId(), deviceId: deviceId(), searchId });
 }
 
 // ── The visits waiting for their stars ─────────────────────────────────────────────────────────

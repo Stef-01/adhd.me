@@ -871,3 +871,35 @@ Chantelle Pin, Alex Lawson, Trisha Harris. Left: `agesSeen`,
 the thirteen first-person bios, the remaining keys (neuro-affirming, NDIS, prescribing, coaching;
 eating disorders once more than two say it), manner out of the evidence and the filters, and a question gated on the
 split it makes.
+
+### 16k. 2026-09-29, afternoon: the founder's defaults
+
+Three of the founder's own calls left no transcript while their searches landed: both records
+reached the route (two 204s at 12:05:37), and the `voice_calls` table refused the call for having
+more than eight questions (`check (questions between 0 and 8)`), the same bound the parser had
+carried until the morning; migration 0012 allows 64, `/api/health` now shows the journal's last
+failure as table and status, and the fourth call landed. Then the founder's rules, executed as
+defaults: "Is this for you, or for someone else?" is gone from the interviewer (a useless question;
+a person asking for a child says so); "taken seriously" and every other manner trait leave every
+patient screen (O259, qa/design-qa.md); the interviewer says cost the way the person said it and
+writes one sentence, after the text eval showed "cost matters" reaching nothing and a request that
+joined four answers with commas.
+
+### 16l. 2026-09-29, 12:30 to 13:00: the request is the person's words, and what that found
+
+The client composes the voice request from the person's own turns (docs/matching/RCA-NIGHT-2026-09-29.md,
+stage 2), and the text eval read those requests instead of the model's sentence. Two reads were
+wrong within the hour, both in the lexicon's own bare words. "A psychologist who's been diagnosed
+with ADHD themself and understands it from the inside" reached the assessment on "diagnosed": the
+clinician's own diagnosis, by reflexive or by the clinician noun's relative clause ("a GP who was
+diagnosed"), is now a lived-experience cue that claims its words (O258), and the reader's meaning
+says so. "I'm stable on Vyvanse and need someone to take over prescribing … ADHD-experienced"
+reached the assessment on "adhd": treatment under way ("stable on", a named ADHD medicine the
+person is on, an ongoing script, a prescriber who retired, shared care, titration) now says the
+diagnosis is made, as "my diagnosis" did since O256, and the bare words stand down. The reader's
+prompt carries three more examples; the ladder was run again: P0 to P4 pass (13:06 to 13:09,
+prompt 41ce30616b72; P4 recall 1.000 on the dev split, $0.005). One P4 run
+before it tripped the breaker on recitals alone (a vote answering "care recites 7 keys", a
+SchemaError, on 2 of the first 21 reads); over the whole corpus 6 of 381 reads carry one such
+vote and every one of them still read from the other votes. Every call is on record turn by turn
+under one id from its first turn (stage 5), so a call that ends in a tunnel keeps what was said.

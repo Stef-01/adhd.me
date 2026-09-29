@@ -236,12 +236,12 @@ interface State {
   events: EventRecord[];
   handoffs: HandoffRecord[];
   ratings: Map<string, RatingRecord>;
-  journal: { sent: number; failed: number; refused: number; chain: Promise<void> };
+  journal: { sent: number; failed: number; refused: number; failedLast: string | null; chain: Promise<void> };
 }
 
 const holder = globalThis as { __adhdMeFinderDb?: State };
 function fresh(): State {
-  return { searches: [], calls: [], events: [], handoffs: [], ratings: new Map(), journal: { sent: 0, failed: 0, refused: 0, chain: Promise.resolve() } };
+  return { searches: [], calls: [], events: [], handoffs: [], ratings: new Map(), journal: { sent: 0, failed: 0, refused: 0, failedLast: null, chain: Promise.resolve() } };
 }
 function state(): State {
   holder.__adhdMeFinderDb ??= fresh();
@@ -286,9 +286,13 @@ function journal(table: Table, row: Record<string, unknown>, env: Record<string,
       method: "POST",
       headers: { apikey: key, authorization: `Bearer ${key}`, "content-type": "application/json", prefer: "resolution=merge-duplicates,return=minimal" },
       body: JSON.stringify(row),
-    }).catch(() => ({ ok: false }));
+    }).catch(() => ({ ok: false, status: 0 } as { ok: boolean; status?: number }));
     if (reply.ok) s.journal.sent += 1;
-    else s.journal.failed += 1;
+    else {
+      s.journal.failed += 1;
+      // The table and the status, never the row (2026-09-29: voice_calls refused every call past eight questions, and nothing said so).
+      s.journal.failedLast = `${table} ${"status" in reply ? reply.status : 0}`;
+    }
   });
   heldOpen(s.journal.chain);
 }
@@ -307,7 +311,11 @@ export function recordSearch(record: SearchRecord, deps: Deps = {}): void {
 }
 
 export function recordVoiceCall(record: VoiceCallRecord, deps: Deps = {}): void {
-  capped(state().calls, record);
+  // The same call reported again (mid-call, then at its end) replaces its earlier report here; the table upserts by id.
+  const calls = state().calls;
+  const at = calls.findIndex((held) => held.id === record.id);
+  if (at >= 0) calls.splice(at, 1);
+  capped(calls, record);
   journal("voice_calls", {
     id: record.id, device_id: record.deviceId, search_id: record.searchId, created_at: record.createdAt,
     model: record.model, questions: record.questions, seconds: record.seconds, outcome: record.outcome,
@@ -408,7 +416,7 @@ export function ratings(): RatingRecord[] {
 /** What this instance holds, for the tests and the ops view; no row leaves through here. */
 export function finderDbCounts() {
   const s = state();
-  return { searches: s.searches.length, calls: s.calls.length, events: s.events.length, handoffs: s.handoffs.length, ratings: s.ratings.size, journal: { sent: s.journal.sent, failed: s.journal.failed, refused: s.journal.refused } };
+  return { searches: s.searches.length, calls: s.calls.length, events: s.events.length, handoffs: s.handoffs.length, ratings: s.ratings.size, journal: { sent: s.journal.sent, failed: s.journal.failed, refused: s.journal.refused, failedLast: s.journal.failedLast } };
 }
 
 /**
@@ -417,9 +425,9 @@ export function finderDbCounts() {
  * empty after a live search, and no request in the API logs) is told apart from a failing write.
  * Booleans and counts only; never a value from the environment.
  */
-export function journalStatus(env: Record<string, string | undefined> = process.env): { configured: boolean; sent: number; failed: number; refused: number } {
+export function journalStatus(env: Record<string, string | undefined> = process.env): { configured: boolean; sent: number; failed: number; refused: number; failedLast: string | null } {
   const s = state();
-  return { configured: Boolean(env.SUPABASE_URL?.trim() && env.SUPABASE_SERVICE_ROLE_KEY?.trim()), sent: s.journal.sent, failed: s.journal.failed, refused: s.journal.refused };
+  return { configured: Boolean(env.SUPABASE_URL?.trim() && env.SUPABASE_SERVICE_ROLE_KEY?.trim()), sent: s.journal.sent, failed: s.journal.failed, refused: s.journal.refused, failedLast: s.journal.failedLast };
 }
 
 /** A record the track route could not parse: counted on this instance, so a silent 400 shows on /api/health. */

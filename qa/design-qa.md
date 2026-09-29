@@ -276,3 +276,25 @@ founder named it as the kind of question that should be asked (docs/matching/HIG
 switch, its chip and the heard chip share the two words (the chip cap), so a screen reader hears
 one name for one thing. The screen measures 38 words at 390 and at 1280, under the
 40-word target; captures `qa/roster-o254/filters-lived-{390,1280}.png`.
+
+# Manner leaves every patient screen (O259, 2026-09-29)
+
+The founder: "taken seriously is so useless, remove that; it's a bad look to say we have certain
+clinicians that take people seriously." The rule applied as a default across the finder: a manner
+trait is never shown as a thing the finder heard (no "Taken seriously", "Not rushed" or "Shared
+decisions" chip), never a key under "Why matched" and never in the "Not in their listing" line, is
+not given to the model that writes the why sentence (the "How they work" labels are out of the
+listing text it reads), and is never a clarifier question in the typed finder or the voice one.
+The words are still read, for the ranking's last tier, and change nothing a person can see. The
+text budget's own request ("an adult ADHD assessment, telehealth, not rushed") shows two chips now,
+not three. The nine manner traits themselves, and their cues, are left for a planned removal.
+
+# The results card prints twenty words of any request (O260, 2026-09-29)
+
+A spoken request is now every answer the person gave, each its own sentence (stage 2 of
+docs/matching/RCA-NIGHT-2026-09-29.md), and a rambling caller's ran to 156 words in the text eval.
+The card at the top of the results ("Your search") printed the whole request, which put one
+screen over its 60 words on the request alone. The card prints the first twenty words and an
+ellipsis; "Change what you said" still opens the box with every word in it, and the heard chips
+say what was read. Pinned in `e2e/voice-mode.spec.ts` on the scripted nine-answer call. The typed
+screens are unchanged for a request under twenty words, which is every measured one.

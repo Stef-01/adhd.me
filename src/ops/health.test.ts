@@ -8,7 +8,7 @@ import { health } from "./health";
 describe("health", () => {
   it("says the journal is not configured without both Supabase variables, and never repeats them", () => {
     const body = health(1_700_000_000_000, 10, {});
-    expect(body.journal).toEqual({ configured: false, sent: 0, failed: 0, refused: 0 });
+    expect(body.journal).toEqual({ configured: false, sent: 0, failed: 0, refused: 0, failedLast: null });
     expect(health(Date.now(), 1, { SUPABASE_URL: "https://x.supabase.co" }).journal.configured).toBe(false);
     const configured = health(Date.now(), 1, { SUPABASE_URL: "https://x.supabase.co", SUPABASE_SERVICE_ROLE_KEY: "service-role" });
     expect(configured.journal.configured).toBe(true);

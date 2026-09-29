@@ -2,7 +2,7 @@
 // client holds, the forced last turn, the reveal, typing, and urgent help.
 
 import { describe, expect, it } from "vitest";
-import { initialVoice, inTheirWords, placeOf, saidAsRequest, step, type Action, type ClientEvent, type ServerEvent, type VoiceState } from "./conversation";
+import { initialVoice, inTheirWords, LIVED_ASK, placeOf, requestFromTurns, saidAsRequest, step, type Action, type ClientEvent, type ServerEvent, type VoiceState } from "./conversation";
 import { AFTER_URGENT, MAX_FOLLOW_UPS, NUDGE, NUDGE_START, OPENING_QUESTION, SHOW_MATCHES, URGENT_HELP, WRAP_UP } from "./interviewer";
 
 /** Runs actions in order, collecting everything sent. */
@@ -141,20 +141,64 @@ describe("the voice conversation", () => {
     expect(extra.state.asked).toBe(8);
   });
 
-  it("reveals with the model's sentence and place when it calls show_matches", () => {
+  it("reveals with the person's own words, and the model's place, when it calls show_matches", () => {
     const { state } = run([
       ...opened,
       ...answers("an assessment for me"),
       calls(SHOW_MATCHES, { request: "An adult ADHD assessment near Hornsby", place: "Hornsby" }),
     ]);
     expect(state.phase).toBe("revealing");
-    expect(state.reveal).toEqual({ request: "An adult ADHD assessment near Hornsby", place: "Hornsby" });
+    // The model's sentence stays in the transcript and out of the request (stage 2 of the night's RCA).
+    expect(state.reveal).toEqual({ request: "an assessment for me", place: "Hornsby" });
   });
 
-  it("falls back to the person's own words when the model's call is empty or broken", () => {
+  it("assembles the request from the turns: yes to the lived-experience question is the ask, a bare no is nothing, junk is dropped", () => {
+    const turns = [
+      { who: "assistant" as const, text: `Hi. ${OPENING_QUESTION}` },
+      { who: "person" as const, text: "I was diagnosed last year and want a psychologist who gets it." },
+      { who: "assistant" as const, text: "Where are you, or would telehealth suit you?" },
+      { who: "person" as const, text: "Marrickville or telehealth." },
+      { who: "assistant" as const, text: "Would you like someone who has ADHD themselves?" },
+      { who: "person" as const, text: "Yes." },
+      { who: "assistant" as const, text: "Is there a language or a background that matters?" },
+      { who: "person" as const, text: "No, but I'd like a woman who understands." },
+      { who: "assistant" as const, text: "Is there anything else a clinician should know?" },
+      { who: "person" as const, text: "什么?" },
+      { who: "assistant" as const, text: "Sorry, I didn't catch that." },
+      { who: "person" as const, text: "Nah." },
+    ];
+    expect(requestFromTurns(turns)).toEqual({
+      request: `I was diagnosed last year and want a psychologist who gets it. Marrickville or telehealth. ${LIVED_ASK}. I'd like a woman who understands`,
+      place: "Marrickville",
+    });
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[4]!, { who: "person", text: "No thanks." }])).toEqual({ request: turns[1]!.text.replace(/\.$/, ""), place: "" });
+    // An answer to the lived-experience question that is neither yes nor no is theirs, however short.
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[4]!, { who: "person", text: "A woman." }]).request).toBe(`${turns[1]!.text.replace(/\.$/, "")}. A woman`);
+    // After a no, a short rest restates the no ("no, English is fine"); only a rest that runs on into an ask is kept.
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[6]!, { who: "person", text: "No, English is fine." }]).request).toBe(turns[1]!.text.replace(/\.$/, ""));
+    // A mention of a baby, a partner or a parent is not a patient: nothing here says who it is for but the person.
+    expect(requestFromTurns([turns[0]!, { who: "person", text: "I had a baby eight months ago and I think I have ADHD" }]).request).toBe("I had a baby eight months ago and I think I have ADHD");
+  });
+
+  it("refuses a reveal before the person has answered: the call is answered as not shown and the model asks again", () => {
+    const early = run([...opened, calls(SHOW_MATCHES, { request: "I want help finding ADHD care", place: "" })]);
+    expect(early.state.phase).toBe("live");
+    expect(early.state.reveal).toBeNull();
+    const last = early.sent.slice(-3);
+    expect(last[0]).toMatchObject({ type: "conversation.item.create", item: { type: "function_call_output", output: expect.stringContaining("not shown") } });
+    expect(last[1]).toMatchObject({ type: "conversation.item.create", item: { role: "system" } });
+    expect(last[2]!.type).toBe("response.create");
+    // Once the person has answered, the same call reveals their words.
+    const after = run([...answers("a psychiatrist"), calls(SHOW_MATCHES, { request: "A psychiatrist", place: "" })], early.state);
+    expect(after.state.phase).toBe("revealing");
+    expect(after.state.reveal?.request).toBe("a psychiatrist");
+  });
+
+  it("is the person's own words whether the model's call is full, empty or broken", () => {
     const start = run([...opened, ...answers("a psychiatrist"), ...answers("telehealth please")]).state;
-    expect(run([calls(SHOW_MATCHES, { request: " ", place: 3 })], start).state.reveal).toEqual({ request: "a psychiatrist, telehealth please", place: "" });
-    expect(run([calls(SHOW_MATCHES, "{not json")], start).state.reveal?.request).toBe("a psychiatrist, telehealth please");
+    expect(run([calls(SHOW_MATCHES, { request: " ", place: 3 })], start).state.reveal).toEqual({ request: "a psychiatrist. telehealth please", place: "" });
+    expect(run([calls(SHOW_MATCHES, "{not json")], start).state.reveal?.request).toBe("a psychiatrist. telehealth please");
+    expect(run([calls(SHOW_MATCHES, { request: "A psychiatrist by telehealth for an adult", place: "" })], start).state.reveal?.request).toBe("a psychiatrist. telehealth please");
   });
 
   it("reveals on the person's words when the forced last turn ends without show_matches", () => {
@@ -267,13 +311,13 @@ describe("the request the model composes", () => {
     expect(inTheirWords("An ADHD specialist by telehealth", ["telehealth"])).toBe("An ADHD clinician by telehealth");
   });
 
-  it("holds the model's sentence to the person's words at the reveal", () => {
+  it("never lets the model's sentence reach the request: the reveal is the person's words, scrubbed only of 'specialist'", () => {
     const { state } = run([
       ...opened,
-      ...answers("an assessment for my daughter, she's 15"),
+      ...answers("an assessment for my daughter, she's 15, with a specialist in teens"),
       calls(SHOW_MATCHES, { request: "An ADHD assessment for my 15-year-old daughter with a psychiatrist specialising in teens", place: "" }),
     ]);
-    expect(state.reveal?.request).toBe("An ADHD assessment for my 15-year-old daughter with a clinician for teens");
+    expect(state.reveal?.request).toBe("an assessment for my daughter, she's 15, with a clinician in teens");
   });
 });
 

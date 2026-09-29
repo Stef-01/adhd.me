@@ -25,6 +25,7 @@ const PRICES = {
   "gpt-realtime-2.1": { ti: 4, tc: 0.4, to: 24, ai: 32, ac: 0.4, ao: 64 },
 };
 /** Runs of each persona: a pass rate over one run is a coin toss. */
+// The request is the person's own words now (RCA night, stage 2), not the model's 30-word sentence: the cap guards a runaway, not a paraphrase.
 const REPEAT = Number(process.env.REPEAT) || 1;
 
 /** Each brief is what the patient knows; `expect` is what the request must carry, `never` what it must not. */
@@ -32,7 +33,8 @@ export const PERSONAS = {
   adult: {
     brief: "You are 34, in Hornsby, and think you might have ADHD. You want an assessment. Telehealth is fine. Money is tight so bulk billing matters. You'd like a woman. You've been brushed off before and don't want to be rushed. You also have anxiety.",
     style: "Plain and cooperative.",
-    expect: ["care:adhd-assessment", "pref:bulk-billing", "pref:woman-gp", "manner:not_rushed"],
+    // O259: manner is read for the ranking's last tier and shown nowhere, so it is no longer a target here.
+    expect: ["care:adhd-assessment", "pref:bulk-billing", "pref:woman-gp"],
     never: ["care:child-adolescent-adhd"],
   },
   parent: {
@@ -258,7 +260,7 @@ async function runPersona(name) {
     usd: Number((usd + patientUsd).toFixed(4)),
     transcript,
   };
-  result.pass = result.withinCap && result.multiQuestionTurns === 0 && (persona.urgent ? result.urgentOk : result.revealed) && missing.length === 0 && violated.length === 0 && advice.length === 0 && invented.length === 0 && requestWords <= 35 && !result.specialist;
+  result.pass = result.withinCap && result.multiQuestionTurns === 0 && (persona.urgent ? result.urgentOk : result.revealed) && missing.length === 0 && violated.length === 0 && advice.length === 0 && invented.length === 0 && requestWords <= 250 && !result.specialist;
   return result;
 }
 

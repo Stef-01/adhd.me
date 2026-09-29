@@ -2,7 +2,7 @@
 // more days and gives up after three asks, and a rated visit is never asked about again.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ASK_AFTER_MS, handOff, MOST_ASKS, forgetVisit, readVisits, SNOOZE_MS, snoozeVisit, visitDue } from "./track";
+import { ASK_AFTER_MS, handOff, MOST_ASKS, forgetVisit, readVisits, SNOOZE_MS, snoozeVisit, trackVoiceCall, visitDue } from "./track";
 
 let stored: Record<string, string>;
 const beacons: Blob[] = [];
@@ -16,6 +16,23 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 const book = (clinicianId: string, at: number) => handOff({ searchId: null, clinicianId, name: `Dr ${clinicianId}`, asked: ["pref:woman-gp"], met: ["pref:woman-gp"] }, at);
+
+describe("the record of a call", () => {
+  it("keeps the id the call was given, so its reports mid-call and at its end land on one row (stage 5)", async () => {
+    const call = { id: "call-1", model: "scripted", questions: 1, seconds: 12, outcome: "stopped" as const, request: "", place: "", turns: [{ who: "person", text: "an assessment" }] };
+    trackVoiceCall(call, null);
+    trackVoiceCall({ ...call, questions: 2, outcome: "revealed" }, "search-1");
+    const sent = await Promise.all(beacons.map(async (blob) => JSON.parse(await blob.text()) as { type: string; record: Record<string, unknown> }));
+    expect(sent.map((post) => post.type)).toEqual(["voice", "voice"]);
+    expect(sent.map((post) => post.record.id)).toEqual(["call-1", "call-1"]);
+    expect(sent[0]!.record).toMatchObject({ outcome: "stopped", searchId: null });
+    expect(sent[1]!.record).toMatchObject({ outcome: "revealed", searchId: "search-1", questions: 2 });
+    // A call without an id (an older client) still gets one.
+    const { id: _dropped, ...unnamed } = call;
+    trackVoiceCall(unnamed, null);
+    expect(typeof JSON.parse(await beacons[2]!.text()).record.id).toBe("string");
+  });
+});
 
 describe("the visits waiting for their stars", () => {
   it("records the handoff and asks about the visit a day later, not before", async () => {

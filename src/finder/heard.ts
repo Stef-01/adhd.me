@@ -19,7 +19,10 @@ const TIER: Readonly<Record<NeedSignal["facet"]["kind"], number>> = { language: 
 /** The strongest `max` facets of a read, one chip each, in the ranker's own order. */
 export function heardChips(needs: readonly NeedSignal[], max: number): HeardChip[] {
   const strongest = new Map<string, NeedSignal>();
-  for (const need of needs) {
+  // O259 (founder, 2026-09-29): a manner trait is never shown as a thing the finder heard. "Taken
+  // seriously" as a chip says other clinicians do not; the words stay read, for the ranking's last
+  // tier, and appear nowhere.
+  for (const need of needs.filter((n) => n.facet.kind !== "manner")) {
     const key = facetKey(need.facet);
     const held = strongest.get(key);
     if (!held || need.weight > held.weight) strongest.set(key, need);

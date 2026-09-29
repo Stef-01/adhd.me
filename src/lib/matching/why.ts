@@ -11,7 +11,6 @@
 
 import { createHash } from "node:crypto";
 import { askedFor, clinicians as roster, matchEvidence } from "@/demo/clinicians";
-import { EI_QUALITIES } from "@/demo/emotional-fit";
 import type { Clinician } from "@/demo/roster";
 import { professionOf } from "@/demo/roster";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
@@ -63,7 +62,7 @@ export function clinicianInWords(clinician: Clinician): string {
     clinician.fitSignals.length ? `They say: ${clinician.fitSignals.join("; ")}.` : "",
     clinician.careAreas.length ? `They list care for: ${clinician.careAreas.map(careLabel).join("; ")}.` : "",
     clinician.careAreasSometimes?.length ? `Sometimes: ${clinician.careAreasSometimes.map(careLabel).join("; ")}.` : "",
-    clinician.manner.length ? `How they work, in their words: ${clinician.manner.map((trait) => EI_QUALITIES[trait].label).join("; ")}.` : "",
+    // O259: the manner labels ("Listens and takes you seriously") are not given to the model, so no sentence ever says one clinician does what every clinician should.
     `Languages: ${clinician.languages.join(", ")}. Telehealth for a first appointment: ${clinician.telehealthFirstAppointment ? "yes" : "not stated"}. Appointments: ${clinician.appointmentLength}. ${clinician.practicalSignals.join("; ")}. Reach: ${clinician.reach}.`,
   ];
   return lines.filter(Boolean).join("\n");
@@ -138,7 +137,8 @@ export function resetWhyCache(): void {
 
 /** The ask the sentence rests on: the strongest with listing text behind it (care, manner, a language) before a bare preference. */
 export function askToWrite(evidence: readonly NeedSignal[]): NeedSignal | undefined {
-  return evidence.find((need) => need.facet.kind !== "preference") ?? evidence[0];
+  const shown = evidence.filter((need) => need.facet.kind !== "manner"); // O259: never a manner
+  return shown.find((need) => need.facet.kind !== "preference") ?? shown[0];
 }
 
 /** The second ask, when the first ran over: the same input, with the count. */

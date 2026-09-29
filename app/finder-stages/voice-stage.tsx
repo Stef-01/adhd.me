@@ -23,6 +23,8 @@ const COPY = FINDER_COPY.voice;
 
 /** The call, for the finder's record (src/db/finder.ts): how it went, and every turn of it. */
 export interface CallSummary {
+  /** Minted when the call starts, so every report of the call, mid-call or final, is one row. */
+  id: string;
   model: string;
   questions: number;
   seconds: number;
@@ -49,6 +51,7 @@ export function VoiceStage({
   onReveal,
   onHeard,
   onCallEnd,
+  onCallProgress,
   onLeave,
   onType,
 }: {
@@ -60,6 +63,8 @@ export function VoiceStage({
   onHeard?: (request: string) => void;
   /** Once per call, however it ends. */
   onCallEnd?: (call: CallSummary) => void;
+  /** After every turn, the call so far (RCA night, stage 5): a call that ends in a tunnel still has its turns. */
+  onCallProgress?: (call: CallSummary) => void;
   /** The stop button: back to the start, with what the person said in the box. */
   onLeave: (words: string) => void;
   /** The call could not start: the typing screen, with what was said. */
@@ -72,6 +77,8 @@ export function VoiceStage({
   const revealTo = useRef(onReveal);
   const heardTo = useRef(onHeard);
   const endTo = useRef(onCallEnd);
+  const progressTo = useRef(onCallProgress);
+  const callId = useRef(crypto.randomUUID());
   const began = useRef(Date.now());
   const ended = useRef(false);
 
@@ -79,28 +86,36 @@ export function VoiceStage({
     revealTo.current = onReveal;
     heardTo.current = onHeard;
     endTo.current = onCallEnd;
-  }, [onReveal, onHeard, onCallEnd]);
+    progressTo.current = onCallProgress;
+  }, [onReveal, onHeard, onCallEnd, onCallProgress]);
+
+  /** The call as the record keeps it, at this moment. */
+  const summary = useCallback((s: VoiceState, outcome: CallSummary["outcome"]): CallSummary => ({
+    id: callId.current,
+    model: link.current?.model ?? "realtime",
+    questions: s.asked,
+    seconds: Math.round((Date.now() - began.current) / 1000),
+    outcome,
+    request: s.reveal?.request ?? "",
+    place: s.reveal?.place ?? "",
+    turns: s.turns,
+  }), []);
 
   /** Reports the call once: the first way it ends is the one that counts. */
   const end = useCallback((outcome: CallSummary["outcome"]) => {
     if (ended.current) return;
     ended.current = true;
     const s = state.current;
-    endTo.current?.({
-      model: link.current?.model ?? "realtime",
-      questions: s.asked,
-      seconds: Math.round((Date.now() - began.current) / 1000),
-      outcome: outcome === "revealed" || outcome === "failed" ? outcome : s.urgent ? "urgent" : outcome,
-      request: s.reveal?.request ?? "",
-      place: s.reveal?.place ?? "",
-      turns: s.turns,
-    });
-  }, []);
+    endTo.current?.(summary(s, outcome === "revealed" || outcome === "failed" ? outcome : s.urgent ? "urgent" : outcome));
+  }, [summary]);
 
   const act = useCallback((action: Action) => {
+    const before = state.current.turns.length;
     const { state: next, send } = step(state.current, action);
     state.current = next;
     setView(next);
+    // A new turn on the record: the call so far goes out as "stopped", overwritten by the end.
+    if (!ended.current && next.turns.length > before) progressTo.current?.(summary(next, next.urgent ? "urgent" : "stopped"));
     for (const event of send) {
       if (link.current) link.current.emit(event);
       else queued.current.push(event);

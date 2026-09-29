@@ -105,7 +105,7 @@ describe("Q3 item 10's premise", () => {
     // 2026-09-29: thirty-seven real profiles, and six distinct evenness values among the questions.
     const report = clarifierScaleReport(ASK, clinicians);
     expect(report.rosterSize).toBe(37);
-    expect(report.distinctEvenness).toBe(6);
+    expect(report.distinctEvenness).toBe(5); // O260: 6 -> 5 with the corpus change below.
   });
 
   /**
@@ -128,7 +128,7 @@ describe("Q3 item 10's premise", () => {
     // has more genuinely different questions inside the bound to tell apart.
     // 2026-09-29: 1/4/7/9 -> 1/4/6/9, redrawn from the 37-profile roster's declaration rates.
     const measured = [3, 8, 20, 40].map((size) => clarifierScaleReport(ASK, syntheticRoster(size)));
-    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 6, 9]);
+    expect(measured.map((r) => r.distinctEvenness)).toEqual([1, 4, 4, 5]); // O260: one corpus sentence reads one key instead of two, and the co-occurrence rates redraw. O259: manner questions are never offered, so the selector has fewer axes to draw on
     // Monotone by construction of the evenness function, but pinned because the CLAIM is that it
     // grows — a change that made it non-monotone would falsify the claim while passing the above.
     const evenness = measured.map((r) => r.distinctEvenness);
@@ -155,11 +155,11 @@ describe("Q3 item 10's premise", () => {
     // what the "at twenty every one is distinct" half below predicted, arriving early.
     // R15: [11, 9] -> [12, 10]: the thirteenth care area is one more candidate question, and a distinct one.
     // 2026-09-29: [13, 12] on the 37-profile roster: one more candidate, and all but one distinct.
-    expect([real.candidates, real.distinctSignatures]).toEqual([13, 12]);
+    expect([real.candidates, real.distinctSignatures]).toEqual([8, 8]); // O260: [9, 9] -> [8, 8], the redrawn rates. O259: the four manner candidates are gone
     // O252: [9, 9] -> [10, 10] at twenty, the same "every candidate is its own question"
     // shape one candidate wider, from the same rate change that redrew the curve above.
     const atTwenty = clarifierScaleReport(ASK, syntheticRoster(20));
-    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([10, 10]); // R15: [11, 11]; 2026-09-29: [10, 10] from the redrawn rates
+    expect([atTwenty.candidates, atTwenty.distinctSignatures]).toEqual([6, 6]); // O260: [7, 7] -> [6, 6]. O259: manner never asked. R15: [11, 11]; 2026-09-29: [10, 10] from the redrawn rates
   });
 
   /** Non-vacuity for the whole report: the selector's order is not the tie-break's order. */

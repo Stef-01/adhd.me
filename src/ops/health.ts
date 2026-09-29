@@ -15,7 +15,7 @@ export interface Health {
   readonly store: "jsonl-file";
   readonly reporter: string;
   /** The finder's record in Supabase (docs/data/FINDER-DATA.md): whether this deployment holds the variables, and the writes since boot. */
-  readonly journal: { readonly configured: boolean; readonly sent: number; readonly failed: number; readonly refused: number };
+  readonly journal: { readonly configured: boolean; readonly sent: number; readonly failed: number; readonly refused: number; readonly failedLast: string | null };
 }
 
 export function health(now: number = Date.now(), uptimeSeconds: number = process.uptime(), env: Record<string, string | undefined> = process.env): Health {

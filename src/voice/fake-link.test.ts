@@ -47,7 +47,8 @@ describe("the scripted call", () => {
     expect(c.captions.slice(1)).toEqual(FAKE_QUESTIONS.slice(0, MAX_FOLLOW_UPS));
     expect(c.state.phase).toBe("revealing");
     // The ninth answer is the last one heard: it ends the call, and the tenth is never asked for.
-    expect(c.state.reveal?.request).toBe(answers.slice(0, MAX_FOLLOW_UPS + 1).join(", "));
+    // Each answer is its own sentence in the request (stage 2 of docs/matching/RCA-NIGHT-2026-09-29.md).
+    expect(c.state.reveal?.request).toBe(answers.slice(0, MAX_FOLLOW_UPS + 1).join(". "));
   });
 
   it("stops everything it scheduled when the call is closed", async () => {

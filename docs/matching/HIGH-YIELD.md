@@ -131,7 +131,8 @@ The questions, and the split each makes on this roster:
    eating disorders (2) waits for more to say it.
 
 Gone from the questions: "How would you like a clinician to treat you?" and "Does anything matter
-to you about the clinician?" (the two that produced the noise in both calls).
+to you about the clinician?" (the two that produced the noise in both calls). Gone since (founder,
+2026-09-29): "Is this for you, or for someone else?", and every manner trait from every screen (O259).
 
 ## 5. How it reaches the whole system
 

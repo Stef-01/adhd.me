@@ -371,21 +371,15 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // "diagnose me" and "get checked" are O49 additions, reviewed under the O45 collapse rule:
     // each ships as one token BUT can only fire beside its authored adjacent pair, so a stray
     // "diagnose" and "the heart checked first" cannot claim them. Listed in sort order below.
-    "an excuse", "at ease",
     // O112: reviewed and DELIBERATE — bare "believe" fires on "it is hard to believe how long
     // the wait is", and the pair does not.
-    "be believed", "been heard", "believe me",
     // O113: four more collapses, each reviewed. Every one is a multi-word phrase whose content
     // reduces to a single token, so the O45 pair demand is what keeps it precise — bare
     // [build], [lecture], [right] and [mechanism] would each be far too loose alone.
-    "build on what", "by phone",
     // O108: reviewed and DELIBERATE, the same device as "in recovery". Bare "video" fires on
     // "I watched a video about ADHD"; authored as a pair, the collapse rule demands "by video"
     // / "over video" in the raw stream and the innocent sentence is refused.
-    "by video", "diagnose me", "figure out",
-    "get a word in", "get checked",
     // R15: [baby] alone is a relative or a figure of speech; the skeleton "had a baby" is the ask.
-    "had a baby",
     // O210: reviewed and DELIBERATE, the same device as "in recovery" and "by video" above. Both
     // tenses collapse to [hear] — `stem("hears")` is "hear" — and bare [hear] would fire on "I hear
     // the wait is long" and "from what I hear the clinic is busy". Authored as pairs, the O45
@@ -393,32 +387,33 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // sentences are refused. Verified against exactly those, plus "I have heard good things", which
     // stays unread for a second reason: `stem("heard")` is "heard", so the past tense never collapses
     // into this cue at all.
-    "hear me out", "hears me out", "honest about", "hurry me",
     // O107: reviewed and DELIBERATE. Bare "recovery" fires on "recovery time after surgery",
     // so the cue is authored as the pair — the collapse rule then demands "in recovery" in
     // the raw stream, which is exactly the precision the bare word could not give.
-    "in recovery",
     // O94: O25's removed phrase, home under the raw-RUN demand (RUN_DEMANDED in needs.ts)
     // — reviewed as run-only, so the [room] collapse can never fire on a bare pair again.
-    "in the room with me",
-    "involve me", "just lazy", "lecture me", "listened to",
-    "make it up", "making it up", "my child", "my community", "my dad", "my daughter",
-    "my family", "my father", "my kid", "my mother", "my mum", "my parents", "my son",
-    "name it", "on a schedule", "on edge",
     // O109: collapses to [pocket] and ships under the O45 pair demand. Its negated sibling
     // "no out of pocket" is NOT here and must not be: the negator is a content token, so that
     // cue keeps two and never collapses.
-    "out of pocket", "out the door", "over the phone",
     // O108: see "by video" above — same phrase, other preposition.
-    "over video", "really listen", "right with me", "the mechanism",
-    "what is going on",
     // O210: collapses to [patience], and reviewed as safe on BOTH sides. Bare [patience] fires on
     // "she ran out of patience" and "waiting rooms test your patience", so the pair demand is what
     // makes it precise. And the word it does NOT collide with is the one that matters most here:
     // `stem("patience")` is "patience" while `stem("patient")` is "patient", so this cue cannot
     // reach "new patients welcome" or any of the roster's own copy — checked before it was written,
     // because a cue that collided with "patient" in THIS product would have been unrecoverable.
-    "with patience",
+      /* O260 (2026-09-29): the assessment asked for in the first person and care after a diagnosis, each in
+    /* Sorted, as the lexicon reports them. O260 (2026-09-29) added "be assessed", "could i have adhd", "do i have adhd",
+       "get assessed", "get diagnosed", "keep me on" and "my scripts", each in RUN_DEMANDED, so the one token never
+       stands alone: "be assessed" reads only where the raw words run "be assessed", never a bare "assessed" across a gap. */
+    "an excuse", "at ease", "be assessed", "be believed", "been heard", "believe me", "build on what", "by phone",
+    "by video", "could i have adhd", "diagnose me", "do i have adhd", "figure out", "get a word in", "get assessed",
+    "get checked", "get diagnosed", "had a baby", "hear me out", "hears me out", "honest about", "hurry me",
+    "in recovery", "in the room with me", "involve me", "just lazy", "keep me on", "lecture me", "listened to",
+    "make it up", "making it up", "my child", "my community", "my dad", "my daughter", "my family", "my father",
+    "my kid", "my mother", "my mum", "my parents", "my scripts", "my son", "name it", "on a schedule", "on edge",
+    "out of pocket", "out the door", "over the phone", "over video", "really listen", "right with me",
+    "the mechanism", "what is going on", "with patience",
   ];
 
   it("keeps the phrasings O210 refused unread, so the reason survives the sentence", () => {

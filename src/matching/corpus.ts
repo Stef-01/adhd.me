@@ -462,7 +462,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── care:shared-care / care:anxiety / care:autism-adhd / care:child-adolescent-adhd ─────
   { text: "my psychiatrist wants a GP to share the care with", reaches: ["care:shared-care"] },
-  { text: "shared care with the psychiatrist who diagnosed me", reaches: ["care:shared-care", "care:adhd-assessment"] },
+  // O260: the psychiatrist who diagnosed them has finished; the diagnosis is made and no assessment is asked for (as O256 reads "I already have a diagnosis").
+  { text: "shared care with the psychiatrist who diagnosed me", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
   { text: "panic attacks in supermarkets, it is getting worse", reaches: ["care:anxiety"] },
   { text: "I am autistic as well, the two tangle together", reaches: ["care:autism-adhd"] },
   { text: "AuDHD, both sides need understanding", reaches: ["care:autism-adhd"] },

@@ -17,6 +17,7 @@ import {
   rateVisit,
   ratings,
   recordSearch,
+  recordVoiceCall,
   resetFinderDb,
 } from "./finder";
 import { askSignals, learnAskWeights, MAX_SHIFT, MIN_SAMPLES } from "./learn";
@@ -79,6 +80,17 @@ describe("parsing what the browser sends", () => {
     expect(parseVoiceCall({ ...call, transcript: [{ who: "person", text: "y".repeat(2500) }] })?.transcript[0]?.text).toHaveLength(2000);
     expect(parseVoiceCall({ ...call, transcript: Array.from({ length: 130 }, () => turns[0]) })?.transcript).toHaveLength(120);
     expect(parseVoiceCall({ ...call, transcript: "everything" })).toBeNull();
+  });
+
+  it("keeps one record per call: a call reported again under its id replaces its earlier report (stage 5)", () => {
+    const call = parseVoiceCall({ id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 1, seconds: 20, outcome: "stopped", transcript: [{ who: "person", text: "an assessment" }] })!;
+    recordVoiceCall(call);
+    recordVoiceCall(parseVoiceCall({ id: B, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 0, seconds: 3, outcome: "stopped" })!);
+    recordVoiceCall({ ...call, questions: 3, seconds: 70, outcome: "revealed", transcript: [...call.transcript, { who: "person", text: "Hornsby" }] });
+    const calls = exportFinderDevice(D).calls;
+    expect(calls.map((held) => held.id)).toEqual([B, A]);
+    expect(calls[1]).toMatchObject({ questions: 3, outcome: "revealed" });
+    expect(calls[1]!.transcript).toHaveLength(2);
   });
 
   it("keeps a search's unlisted asks, bounded, and never a key among them", () => {
@@ -144,7 +156,7 @@ describe("the journal to Supabase", () => {
     expect(url).toBe("https://db.example/rest/v1/finder_searches");
     expect(init.headers).toMatchObject({ apikey: "service", authorization: "Bearer service", prefer: "resolution=merge-duplicates,return=minimal" });
     expect(JSON.parse(init.body)).toMatchObject({ id: A, request_text: search.requestText, read_source: "llm" });
-    expect(finderDbCounts().journal).toEqual({ sent: 1, failed: 1, refused: 0 });
+    expect(finderDbCounts().journal).toEqual({ sent: 1, failed: 1, refused: 0, failedLast: expect.stringMatching(/^[a-z_]+ \d+$/) });
   });
 });
 

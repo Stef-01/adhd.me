@@ -8,16 +8,17 @@ import type { ClientEvent, ServerEvent } from "./conversation";
 import { OPENING_QUESTION, SHOW_MATCHES } from "./interviewer";
 import type { LinkHandlers, VoiceLink } from "./link";
 
+/** The interviewer's questions (src/voice/interviewer.ts), then clarifying ones, so a call of eight follow-ups runs. */
 export const FAKE_QUESTIONS = [
-  "Is this for you, or for someone else?",
   "Where are you, or would telehealth suit you?",
-  "Does cost matter to you?",
-  "Is there anything that matters about the clinician?",
-  "How would you like a clinician to treat you?",
+  "Would you like someone who has ADHD themselves?",
+  "Is there a language or a background that matters?",
   "Is there anything else a clinician should know?",
   "Is that an assessment, or help with treatment?",
   "Is there a time of day that suits you?",
   "Anything more before I look?",
+  "Would anything make a first appointment easier?",
+  "Anything else at all?",
 ] as const;
 
 /** The pause between one scripted event and the next, so the screen shows each state in turn. */

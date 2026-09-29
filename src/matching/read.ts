@@ -748,6 +748,17 @@ const DIAGNOSIS_MADE: readonly (readonly string[])[] = [
   "existing prescription", "my scripts", "my script", "my prescriptions", "my prescription", "my medication", "my meds",
   "my adhd scripts", "my adhd script", "my adhd meds", "my adhd medication", "my adhd prescriptions", "my adhd prescription",
   "continue my", "take over my scripts", "scripts kept going", "keep prescribing", "medication continued",
+  // O260 (the voice eval's `scripts` persona, 2026-09-29): treatment under way says the diagnosis is made as plainly as
+  // "my diagnosis" does. "I'm stable on Vyvanse and need someone to take over prescribing … ADHD-experienced" reached the
+  // assessment on the bare "adhd". A named ADHD medicine the person is on, an ongoing script, a prescriber who retired,
+  // shared care, titration: each is care after a diagnosis, never a request for one.
+  "stable on", "ongoing scripts", "ongoing script", "ongoing prescriptions", "ongoing prescription", "ongoing prescribing",
+  "take over prescribing", "take over the prescribing", "take over the scripts", "take over my", "keep me on", "stay on my",
+  "psychiatrist retired", "psychiatrist has retired", "psychiatrist is retiring", "psychiatrist retiring", "prescriber retired", "paediatrician retired",
+  "shared care", "titration", "titrate", "titrating", "my dose", "dose review", "medication review", "wears off",
+  // The person's own medicine, never somebody else's: "my sister is on Vyvanse and I think I have ADHD" is an ask.
+  ...["vyvanse", "ritalin", "concerta", "dexamphetamine", "dexamfetamine", "dex", "dexies", "methylphenidate", "lisdexamfetamine", "elvanse", "strattera", "atomoxetine", "guanfacine", "intuniv"].flatMap((medicine) =>
+    [`im on ${medicine}`, `i am on ${medicine}`, `been on ${medicine}`, `stable on ${medicine}`, `my ${medicine}`, `i take ${medicine}`, `im taking ${medicine}`, `i am taking ${medicine}`, `prescribing of ${medicine}`, `prescribing my ${medicine}`, `prescribe my ${medicine}`]),
 ].map((phrase) => phrase.split(" ").map(stem));
 
 export function diagnosisAlreadyMade(rawSentence: readonly string[]): boolean {

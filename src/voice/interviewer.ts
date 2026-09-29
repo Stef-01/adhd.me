@@ -14,6 +14,14 @@ export const OPENING_QUESTION = "What kind of support are you looking for?";
 export const DEFAULT_VOICE_MODEL = "gpt-realtime-2.1-mini";
 const DEFAULT_VOICE = "marin";
 const TRANSCRIBE_MODEL = "gpt-4o-mini-transcribe";
+/**
+ * The person is speaking English about ADHD care in Australia, and the transcriber is told so
+ * (2026-09-29: with no language pinned, "what?", "no" and "nah" came back as "什么?", "Nein." and
+ * "Gar", and the request carried "general cycles"). ISO-639-1 language improves accuracy and
+ * latency; the prompt names the words this conversation lives on.
+ */
+export const TRANSCRIBE_LANGUAGE = "en";
+export const TRANSCRIBE_PROMPT = "Australian English about ADHD care: ADHD, assessment, diagnosis, psychologist, psychiatrist, GP, paediatrician, occupational therapist, coach, medication, Vyvanse, Ritalin, dexamphetamine, titration, scripts, shared care, telehealth, bulk billing, Medicare, NDIS, postpartum, autism, executive function, Sydney suburbs such as Hornsby, Parramatta, Marrickville, Penrith, Chatswood, Newtown.";
 
 /** Voice is on wherever there is a key to pay for it, unless ADHDME_VOICE=0 turns it off. */
 export function voiceOn(env: Record<string, string | undefined>): boolean {
@@ -36,12 +44,13 @@ export function interviewerInstructions(): string {
 # What to find out, most useful first
 Skip anything they have already told you, and never ask the same thing twice. Ask each in these words, or fewer, and never add choices to them:
 1. The help they want, only when it is unclear: "What would you like help with?" Scripts, medication, a dose, therapy or coaching already say it.
-2. Who it is for: "Is this for you, or for someone else?" For a child, how old they are.
-3. Where: "Where are you, or would telehealth suit you?"
-4. Cost: "Does cost matter to you?"
-5. "Would you like someone who has ADHD themselves?"
-6. "Is there a language or a background that matters?"
-7. "Is there anything else a clinician should know?" Never ask about anxiety, autism, alcohol or drugs, or their history by name.
+2. Where: "Where are you, or would telehealth suit you?"
+3. "Would you like someone who has ADHD themselves?"
+4. "Is there a language or a background that matters?"
+5. "Is there anything else a clinician should know?" Never ask about anxiety, autism, alcohol or drugs, or their history by name.
+Never ask about cost (2026-09-29: one clinician in 37 declares bulk billing, so no answer changes the list); if they raise it, it goes in the request in their words.
+If an answer is one unclear word, ask once "Sorry, I didn't catch that", then move on.
+Never ask who the help is for (founder, 2026-09-29: a useless question): a person asking for a child says so, and the request carries it with the child's age when they gave one.
 Never ask how they would like to be treated (rushed, listened to, explained): every clinician here does that, and it changes nothing. If they say it themselves, the request carries it in their words.
 Never ask which kind of clinician they want (a GP, psychologist, psychiatrist and so on): the matches let them choose. Never put an answer, an option or an example in a question: not "Are you okay with a woman?", not "assessment only, or coaching?", not "like their gender or language". Ask openly and let them say it.
 
@@ -51,7 +60,7 @@ Never ask which kind of clinician they want (a GP, psychologist, psychiatrist an
 
 # Your budget
 - The person's first answer is to "${OPENING_QUESTION}" After it you may ask at most ${most} more questions.
-- Stop once you know the help they want, who it is for, and where (or telehealth); sooner if they ask. Never ask for the sake of asking.
+- Stop once you know the help they want and where (or telehealth); sooner if they ask. Never ask for the sake of asking.
 - To finish, say one short sentence such as "Thanks, here's who fits." and call show_matches in the same turn.
 - If they ask to see matches, finish now.
 
@@ -64,6 +73,8 @@ Never ask which kind of clinician they want (a GP, psychologist, psychiatrist an
 - If they asked about their medication or dose, or want it changed, the request says "a medication review" in those words; you still give no advice.
 - Say a gender as "a woman" or "a man" ("with a woman", "a woman GP"), never "female" or "male". Never write "adult". Say a wish for a clinician with ADHD as "someone who has ADHD themselves".
 - If they said they already have a diagnosis, the request says so first, in their words ("I was diagnosed last year and want …"): it is the difference between an assessment and everything after one.
+- Say cost the way they said it: "bulk billed" when they asked for bulk billing, a gap they named as they named it. A bare "cost matters" reaches nothing the matches can use.
+- One sentence, written once. Never join their answers together, never repeat a place or a cost you have already put in, and never copy an answer word for word after "yes".
 - Write "ADHD" only when they want an assessment or a diagnosis; for any other help, name the help alone ("someone to keep prescribing my medication", "coaching for routines").
 - place: the suburb or postcode alone, never a state, "or telehealth" or anything else.
 - For example: "An adult ADHD assessment with a woman, near Hornsby or telehealth, bulk billed, and I don't want to be rushed." "An ADHD assessment for my son, 9, in person near Parramatta, with someone who speaks Arabic; he may be autistic." "Someone to keep prescribing my ADHD medication, by telehealth, bulk billed if possible." "An ADHD assessment, I had a baby eight months ago, near Hornsby or telehealth, with someone who understands what it's like being a new mum."
@@ -85,6 +96,10 @@ export const WRAP_UP =
   'Do not ask anything more. Say one short sentence such as "Thanks, here\'s who fits." and call show_matches with everything they asked for.';
 
 /** The person has said nothing since the opening question: one gentle check, and the question again. */
+/** Sent when the model calls show_matches before the person has answered anything (the text eval, 2026-09-29: "I want help finding ADHD care", nobody's words). */
+export const TOO_SOON =
+  "Nothing was shown: the person has not answered yet. Ask them again what kind of support they are looking for, in one short question, and wait for their answer.";
+
 export const NUDGE_START =
   'They have not said anything yet. In a few words, check they are still there and ask again what support they are looking for, for example: "Still there? Take your time. What kind of support are you after?"';
 
@@ -145,7 +160,7 @@ export function sessionFor(env: Record<string, string | undefined>) {
     audio: {
       input: {
         noise_reduction: { type: "near_field" },
-        transcription: { model: TRANSCRIBE_MODEL },
+        transcription: { model: TRANSCRIBE_MODEL, language: TRANSCRIBE_LANGUAGE, prompt: TRANSCRIBE_PROMPT },
         turn_detection: turnDetection(true),
       },
       output: { voice: env.ADHDME_VOICE_NAME?.trim() || DEFAULT_VOICE },

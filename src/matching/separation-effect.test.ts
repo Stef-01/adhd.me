@@ -81,10 +81,11 @@ const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 37,
   k: K,
   total: 471,
-  observedSeparationRate: 0.338,
-  nullMeanSeparationRate: 0.329,
+  // O260 (2026-09-29): 0.338/0.329/0.009 -> 0.335/0.327/0.008, the shared-care sentence reading one key.
+  observedSeparationRate: 0.335,
+  nullMeanSeparationRate: 0.327,
   nullStdSeparationRate: 0.006,
-  effect: 0.009,
+  effect: 0.008,
 };
 
 describe("M5 the separation effect size, over synthetic rosters", () => {
@@ -203,7 +204,7 @@ describe("M5 the real roster's own effect (37 real profiles)", () => {
       "small, real, and for the first time actually measured rather than forced",
     () => {
       const report = realRosterSeparationEffect(K);
-      expect(report.effect).toBe(0.009); // 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
+      expect(report.effect).toBe(0.008); // O260 (2026-09-29): 0.009 -> 0.008. 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
       expect(report.nullStdSeparationRate).toBeGreaterThan(0);
       expect(report.observedSeparationRate).toBeGreaterThan(report.nullMeanSeparationRate);
     },

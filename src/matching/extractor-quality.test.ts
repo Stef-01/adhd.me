@@ -44,10 +44,11 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
     // (perinatal): the postpartum call's phrasings, three carrying a second gold facet. Every one
     // parses exactly, so precision and recall stay at 1.
       sampleSize: 471,
-      goldFacetCount: 586,
-      hitCount: 586,
+      // O260 (2026-09-29): 586 -> 585, "shared care with the psychiatrist who diagnosed me" pins shared care alone; a made diagnosis is not an assessment ask.
+      goldFacetCount: 585,
+      hitCount: 585,
       recall: 1,
-      extractedCount: 586,
+      extractedCount: 585,
       extraCount: 0,
       precision: 1,
       correctlyParsedCount: 471,

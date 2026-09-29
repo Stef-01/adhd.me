@@ -21,8 +21,11 @@ describe("what the model is given", () => {
     expect(input.startsWith(`Person asked: "${REQUEST}"`)).toBe(true);
     expect(input.endsWith(`Finish, in at most 12 words: "You asked for telehealth; ${anubhav.shortName} says"`)).toBe(true);
     const words = clinicianInWords(anubhav);
-    for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Takes time with you", "Hindi", `Pronouns: ${anubhav.pronouns}.`]) expect(words).toContain(piece);
+    for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Hindi", `Pronouns: ${anubhav.pronouns}.`]) expect(words).toContain(piece);
     expect(words).not.toMatch(/manner:|care:|pref:/);
+    // O259: the manner labels are not given to the model, so no sentence says one clinician does what every clinician should.
+    expect(words).not.toContain("Takes time with you");
+    expect(words).not.toContain("How they work");
   });
 
   it("writes about a care, manner or language ask before a bare preference, which has no listing text behind it", () => {

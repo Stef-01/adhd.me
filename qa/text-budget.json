@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-29T08:26:05.435Z",
+  "measuredAt": "2026-09-29T13:20:15.649Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -17,8 +17,8 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 20,
-      "fold": 20,
+      "total": 18,
+      "fold": 18,
       "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "03:19 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -233,26 +233,26 @@
       "path": "/demo",
       "name": "/demo",
       "state": null,
-      "total": 32,
-      "fold": 32,
-      "chrome": 0,
-      "ratio": 0.8,
+      "total": 15,
+      "fold": 15,
+      "chrome": 22,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 18,
-          "text": ", one open session, three invited patients. No real patient data, no live SMS, t",
+          "w": 6,
+          "text": "That link is old or mistyped.",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A scripted synthetic practice:",
-          "tag": "p"
+          "w": 5,
+          "text": "That page does not exist.",
+          "tag": "h1"
         },
         {
-          "w": 3,
-          "text": "Demo Family Practice",
-          "tag": "p"
+          "w": 2,
+          "text": "Find support",
+          "tag": "a"
         }
       ]
     },
@@ -449,26 +449,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 11,
+      "fold": 11,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "POP IT!",
-          "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
+          "w": 4,
+          "text": "write the perfect email",
           "tag": "span"
         },
         {
-          "w": 1,
-          "text": "pale",
-          "tag": "button"
+          "w": 2,
+          "text": "START SMALL!",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "type ‘Hi’",
+          "tag": "span"
         }
       ]
     },
@@ -503,25 +503,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 9,
-      "fold": 9,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
           "w": 2,
-          "text": "CATCH IT!",
+          "text": "LOCK IN!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "slides",
           "tag": "span"
         }
       ]
@@ -530,12 +530,17 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "/lives/play/arjun-hold-the-thread",
       "state": null,
-      "total": 24,
-      "fold": 24,
+      "total": 32,
+      "fold": 32,
       "chrome": 0,
-      "ratio": 0.6,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Tap useful remarks. Park the ideas for later.",
+          "tag": "p"
+        },
         {
           "w": 5,
           "text": "Catch what answers the question.",
@@ -545,11 +550,6 @@
           "w": 4,
           "text": "Arjun · Hold the thread",
           "tag": "span"
-        },
-        {
-          "w": 4,
-          "text": "Where do we meet?",
-          "tag": "h1"
         }
       ]
     },
@@ -557,12 +557,17 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "/lives/play/jax-just-the-list",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 22,
+      "fold": 22,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
+        {
+          "w": 9,
+          "text": "Tap a list item to steer. Tap extras away.",
+          "tag": "p"
+        },
         {
           "w": 4,
           "text": "Jax · Just the list",
@@ -572,11 +577,6 @@
           "w": 4,
           "text": "Steer into the milk.",
           "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "Just milk.",
-          "tag": "h1"
         }
       ]
     },
@@ -665,12 +665,17 @@
       "path": "/lives/play/nina-the-first-line",
       "name": "/lives/play/nina-the-first-line",
       "state": null,
-      "total": 28,
-      "fold": 28,
+      "total": 36,
+      "fold": 36,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Steer through the gold words. Leave the tabs.",
+          "tag": "p"
+        },
         {
           "w": 6,
           "text": "Steer the pen through the words.",
@@ -680,11 +685,6 @@
           "w": 5,
           "text": "A flyer for the garden.",
           "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "Nina · The first line",
-          "tag": "span"
         }
       ]
     },
@@ -1016,10 +1016,10 @@
       "path": "/practices",
       "name": "/practices",
       "state": null,
-      "total": 735,
-      "fold": 55,
+      "total": 756,
+      "fold": 58,
       "chrome": 22,
-      "ratio": 18.4,
+      "ratio": 18.9,
       "verdict": "long-form",
       "longest": [
         {
@@ -1043,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1473,
+      "total": 1533,
       "fold": 267,
       "chrome": 22,
-      "ratio": 36.8,
+      "ratio": 38.3,
       "verdict": "long-form",
       "longest": [
         {
@@ -1124,10 +1124,10 @@
       "path": "/profile",
       "name": "/profile",
       "state": null,
-      "total": 36,
-      "fold": 31,
+      "total": 38,
+      "fold": 32,
       "chrome": 6,
-      "ratio": 0.9,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
         {
@@ -1367,25 +1367,25 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun, decided",
       "state": "arjun-decided",
-      "total": 17,
-      "fold": 17,
+      "total": 32,
+      "fold": 32,
       "chrome": 0,
-      "ratio": 0.4,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Tap useful remarks. Park the ideas for later.",
+          "tag": "p"
+        },
         {
           "w": 4,
           "text": "Arjun · Hold the thread",
           "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Six of us",
-          "tag": "span"
-        },
-        {
-          "w": 3,
-          "text": "Near the station",
+          "w": 4,
+          "text": "Give it a moment",
           "tag": "span"
         }
       ]
@@ -1475,10 +1475,10 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax, till",
       "state": "jax-till",
-      "total": 14,
-      "fold": 14,
+      "total": 21,
+      "fold": 21,
       "chrome": 0,
-      "ratio": 0.4,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -1487,14 +1487,14 @@
           "tag": "span"
         },
         {
+          "w": 4,
+          "text": "Keep the list visible",
+          "tag": "span"
+        },
+        {
           "w": 3,
           "text": "At the till.",
           "tag": "h1"
-        },
-        {
-          "w": 1,
-          "text": "Milk",
-          "tag": "span"
         }
       ]
     },
@@ -1529,12 +1529,17 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax, revisit",
       "state": "jax-revisit",
-      "total": 15,
-      "fold": 15,
+      "total": 24,
+      "fold": 24,
       "chrome": 0,
-      "ratio": 0.4,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
+        {
+          "w": 9,
+          "text": "Tap a list item to steer. Tap extras away.",
+          "tag": "p"
+        },
         {
           "w": 5,
           "text": "Same list, on the handle.",
@@ -1544,11 +1549,6 @@
           "w": 4,
           "text": "Jax · Just the list",
           "tag": "span"
-        },
-        {
-          "w": 3,
-          "text": "The list, again.",
-          "tag": "h1"
         }
       ]
     },
@@ -1583,10 +1583,10 @@
       "path": "/lives/play/nina-the-first-line",
       "name": "Nina, line-done",
       "state": "nina-line-done",
-      "total": 22,
-      "fold": 22,
+      "total": 29,
+      "fold": 29,
       "chrome": 0,
-      "ratio": 0.6,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1595,14 +1595,14 @@
           "tag": "span"
         },
         {
-          "w": 3,
-          "text": "One line down.",
-          "tag": "h1"
+          "w": 4,
+          "text": "Let it be rough",
+          "tag": "span"
         },
         {
           "w": 3,
-          "text": "the garden needs",
-          "tag": "span"
+          "text": "One line down.",
+          "tag": "h1"
         }
       ]
     },
@@ -1637,12 +1637,17 @@
       "path": "/lives/play/nina-the-first-line",
       "name": "Nina, revisit",
       "state": "nina-revisit",
-      "total": 22,
-      "fold": 22,
+      "total": 30,
+      "fold": 30,
       "chrome": 0,
-      "ratio": 0.6,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Steer through the gold words. Leave the tabs.",
+          "tag": "p"
+        },
         {
           "w": 5,
           "text": "Where to meet, and rain.",
@@ -1652,11 +1657,6 @@
           "w": 4,
           "text": "Nina · The first line",
           "tag": "span"
-        },
-        {
-          "w": 4,
-          "text": "Back at the marker.",
-          "tag": "h1"
         }
       ]
     },
@@ -1934,10 +1934,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 28,
-      "fold": 28,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
@@ -1946,14 +1946,14 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "Whatever. Sure. Guess work wins.",
-          "tag": "p"
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         },
         {
-          "w": 5,
-          "text": "Ouch. I did say sorry.",
-          "tag": "p"
+          "w": 4,
+          "text": "That came out sharp.",
+          "tag": "h1"
         }
       ]
     },
@@ -2366,12 +2366,17 @@
       "path": "/lives/play/nina-the-first-line",
       "name": "Nina: the first line",
       "state": null,
-      "total": 28,
-      "fold": 28,
+      "total": 36,
+      "fold": 36,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Steer through the gold words. Leave the tabs.",
+          "tag": "p"
+        },
         {
           "w": 6,
           "text": "Steer the pen through the words.",
@@ -2381,11 +2386,6 @@
           "w": 5,
           "text": "A flyer for the garden.",
           "tag": "h1"
-        },
-        {
-          "w": 4,
-          "text": "Nina · The first line",
-          "tag": "span"
         }
       ]
     },
@@ -2393,12 +2393,17 @@
       "path": "/lives/play/jax-just-the-list",
       "name": "Jax: just the list",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 22,
+      "fold": 22,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.6,
       "verdict": "target",
       "longest": [
+        {
+          "w": 9,
+          "text": "Tap a list item to steer. Tap extras away.",
+          "tag": "p"
+        },
         {
           "w": 4,
           "text": "Jax · Just the list",
@@ -2408,11 +2413,6 @@
           "w": 4,
           "text": "Steer into the milk.",
           "tag": "p"
-        },
-        {
-          "w": 2,
-          "text": "Just milk.",
-          "tag": "h1"
         }
       ]
     },
@@ -2474,12 +2474,17 @@
       "path": "/lives/play/arjun-hold-the-thread",
       "name": "Arjun: the meeting",
       "state": null,
-      "total": 24,
-      "fold": 24,
+      "total": 32,
+      "fold": 32,
       "chrome": 0,
-      "ratio": 0.6,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Tap useful remarks. Park the ideas for later.",
+          "tag": "p"
+        },
         {
           "w": 5,
           "text": "Catch what answers the question.",
@@ -2489,11 +2494,6 @@
           "w": 4,
           "text": "Arjun · Hold the thread",
           "tag": "span"
-        },
-        {
-          "w": 4,
-          "text": "Where do we meet?",
-          "tag": "h1"
         }
       ]
     },
@@ -2582,11 +2582,11 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 44,
-      "fold": 35,
+      "total": 40,
+      "fold": 34,
       "chrome": 6,
-      "ratio": 1.1,
-      "verdict": "ceiling",
+      "ratio": 1,
+      "verdict": "target",
       "longest": [
         {
           "w": 7,
@@ -2636,17 +2636,12 @@
       "path": "/",
       "name": "Finder profile, why matched open",
       "state": "finder-profile-why",
-      "total": 44,
-      "fold": 44,
+      "total": 35,
+      "fold": 35,
       "chrome": 2,
-      "ratio": 1.1,
-      "verdict": "ceiling",
+      "ratio": 0.9,
+      "verdict": "target",
       "longest": [
-        {
-          "w": 4,
-          "text": "Takes time with you",
-          "tag": "strong"
-        },
         {
           "w": 4,
           "text": "By phone or telehealth",
@@ -2656,6 +2651,11 @@
           "w": 3,
           "text": "Dr Anubhav Saxena",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Beecroft & Double Bay",
+          "tag": "p"
         }
       ]
     },
@@ -2782,10 +2782,10 @@
       "path": "/",
       "name": "Finder home, a visit to rate",
       "state": "finder-rate",
-      "total": 30,
-      "fold": 30,
+      "total": 28,
+      "fold": 28,
       "chrome": 6,
-      "ratio": 0.8,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -3074,16 +3074,16 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
+          "w": 2,
+          "text": "POP IT!",
+          "tag": "p"
         },
         {
           "w": 1,
@@ -3092,8 +3092,8 @@
         },
         {
           "w": 1,
-          "text": "SWAT!",
-          "tag": "p"
+          "text": "pale",
+          "tag": "button"
         }
       ]
     },

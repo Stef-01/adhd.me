@@ -150,6 +150,36 @@ function mannerPhrases(quality: MannerTrait): readonly string[] {
   return EI_QUALITIES[quality].cues.filter((phrase) => !PREFERENCE_OWNED_PHRASES.has(phrase));
 }
 
+/* O260: the assessment asked for in the first person. */
+const FIRST_PERSON_ASKS: readonly string[] = [
+  "i think i have adhd", "think i have adhd", "i might have adhd", "might have adhd", "i may have adhd", "i probably have adhd",
+  "do i have adhd", "could i have adhd", "wondering if i have adhd", "wonder if i have adhd", "wondering whether i have adhd",
+  "suspect i have adhd", "i suspect adhd", "find out if i have adhd", "find out if it is adhd", "find out whether i have adhd",
+  "undiagnosed", "get diagnosed", "get assessed", "be assessed", "want an assessment", "need an assessment",
+  "never been diagnosed", "never diagnosed", "not yet diagnosed", "not been diagnosed", "havent been diagnosed", "have not been diagnosed",
+  "pretty sure i have adhd", "sure i have adhd", "certain i have adhd", "convinced i have adhd",
+];
+/* O260 (the voice eval's `scripts` persona): care after a diagnosis, in the words of a person whose prescriber has gone.
+   Each demands its run of words; each also tells the assessment's bare words to stand down (read.ts, DIAGNOSIS_MADE). */
+const CONTINUING_CARE: readonly string[] = [
+  "ongoing scripts", "ongoing prescriptions", "ongoing prescribing", "take over prescribing", "take over the prescribing", "take over the scripts",
+  "take over my scripts", "take over my prescribing", "psychiatrist retired", "psychiatrist has retired", "psychiatrist is retiring", "prescriber retired", "paediatrician retired", "keep me on",
+  "ongoing adhd scripts", "adhd scripts", "my adhd scripts", "my scripts", "need scripts", "need my scripts", "scripts continued",
+];
+
+/* O260 (2026-09-29, the voice eval's `lived` persona): "a psychologist who's been diagnosed with ADHD
+   themself" read as an assessment ask, because "diagnosed" is an assessment cue and nothing claimed it.
+   The diagnosis predicated of the CLINICIAN, by a reflexive or by the clinician noun's own relative
+   clause, is lived experience; each cue below claims its run of words (O258), so "diagnosed" is spent
+   before the assessment cue looks. "someone who was diagnosed" is left out: a carer says it of the
+   person they are asking for. */
+const LIVED_DIAGNOSED: readonly string[] = [
+  ...["themself", "themselves", "herself", "himself"].flatMap((self) => [`diagnosed with adhd ${self}`, `been diagnosed with adhd ${self}`, `has adhd ${self}`, `adhd ${self}`, `diagnosed ${self}`]),
+  ...["clinician", "gp", "doctor", "psychologist", "psychiatrist", "coach", "therapist", "counsellor"].flatMap((noun) =>
+    ["who was diagnosed", "whos been diagnosed", "who has been diagnosed", "who got diagnosed", "who is diagnosed", "diagnosed with adhd"].map((said) => `${noun} ${said}`)),
+  "understands it from the inside", "understand it from the inside", "understands adhd from the inside",
+];
+
 const LEXICON: readonly Entry[] = [
   // ── What somebody is trying to get done ───────────────────────────────────────────────────
   // ── ADHD ──────────────────────────────────────────────────────────────────────────────────
@@ -158,6 +188,9 @@ const LEXICON: readonly Entry[] = [
        span `manner:sense_making` is already reading in "put a name to what has been going on
        since childhood", the span-theft O123 caught in its own work. */
     "finally sorting this out",
+    /* O260: the ask in the first person, each demanding its run of words (RUN_DEMANDED), so it reaches
+       whatever else the sentence says about treatment ("my sister is on Vyvanse and I think I have ADHD"). */
+    ...FIRST_PERSON_ASKS,
     "adhd", "assessment", "assessed", "diagnosis", "diagnosed", "attention",
     // O49 (corpus aspirations): "diagnose me" collapses to [diagnose] ("me" is a stopword), so
     // the O45 rule demands the authored pair — "can a GP diagnose me" fires, a stray
@@ -232,6 +265,7 @@ const LEXICON: readonly Entry[] = [
        their prescribing to be CONTINUED or HANDED BACK, none of which the facet could hear. */
     "hand the prescribing back", "scripts managed", "continue my prescriptions", "between pharmacies",
     "shared care", "psychiatrist", "already diagnosed", "existing prescription",
+    ...CONTINUING_CARE,
     /* O256: the continuation register in the words people use for it. "I already have a diagnosis
        and need my ADHD medication continued" reached nothing here and care:adhd-assessment twice
        over (on "diagnosis" and on "adhd"), so the GP who continues medication for people already
@@ -547,6 +581,7 @@ const LEXICON: readonly Entry[] = [
     "coach with adhd", "coach who has adhd", "therapist with adhd", "therapist who has adhd", "counsellor with adhd",
     "has adhd themselves", "has adhd herself", "has adhd himself", "have adhd themselves", "adhd themselves", "adhd herself", "adhd himself",
     "lived experience", "been through it themselves", "knows it from the inside", "gets it from the inside", "adhd from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
+    ...LIVED_DIAGNOSED,
   ]),
   pref("telehealth-first", "By phone or telehealth", 28, [
     /* O128: "immunosuppressed" beside O125's "immunocompromised". They are the same reason in
@@ -716,11 +751,13 @@ const CUES: readonly Cue[] = [...MATCHABLE_CUES].sort(
 // R15: "had a baby" collapses to [baby]; the any-pair rule is satisfied by "was a baby", so the full run is demanded.
 const RUN_DEMANDED = new Set([
   "over the phone", "in the room with me", "had a baby",
+  ...FIRST_PERSON_ASKS, ...CONTINUING_CARE,
   /* O257: every lived-experience cue demands its full raw run, collapsed or not. "gp who has adhd"
      collapses to [gp, adhd] and, matched across a gap, read "a GP for my drinking history and my
      ADHD" as a wish for a GP with ADHD, taking the "adhd" the assessment cue needed. The person
      saying it says it in one breath: "a psychologist who has ADHD herself". */
   "clinician with adhd", "clinician who has adhd", "gp with adhd", "gp who has adhd", "psychologist with adhd", "psychologist who has adhd", "coach with adhd", "coach who has adhd", "therapist with adhd", "therapist who has adhd", "counsellor with adhd", "has adhd themselves", "has adhd herself", "has adhd himself", "have adhd themselves", "adhd themselves", "adhd herself", "adhd himself", "lived experience", "been through it themselves", "knows it from the inside", "gets it from the inside", "adhd from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
+  ...LIVED_DIAGNOSED,
 ]);
 
 /** O256: the assessment cues that merely name the condition or the diagnosis; disclosure once the diagnosis is said to exist. */

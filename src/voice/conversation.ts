@@ -9,7 +9,7 @@
 
 import { checkSafety, type SafetyRuleId } from "@/model/safety";
 import { PROFESSION_ENTRIES, professionsMentioned } from "@/support/professions";
-import { AFTER_URGENT, MAX_FOLLOW_UPS, NUDGE, NUDGE_START, OPENING_QUESTION, SHOW_MATCHES, turnDetection, URGENT_HELP, WRAP_UP } from "./interviewer";
+import { AFTER_URGENT, MAX_FOLLOW_UPS, NUDGE, NUDGE_START, OPENING_QUESTION, SHOW_MATCHES, TOO_SOON, turnDetection, URGENT_HELP, WRAP_UP } from "./interviewer";
 
 export type Phase = "connecting" | "live" | "revealing" | "failed";
 export type Failure = "mic" | "busy" | "unavailable";
@@ -180,13 +180,82 @@ function parse(args: unknown): Record<string, unknown> {
 export function placeOf(value: unknown): string {
   if (typeof value !== "string") return "";
   const first = value.split(/,|;|\bor\b|\band\b/i)[0] ?? "";
-  return first.replace(/\b(NSW|VIC|QLD|SA|WA|TAS|ACT|NT)\b\.?/gi, "").replace(/\s+/g, " ").trim().slice(0, 80);
+  return first.replace(/^\s*(in|near|around|at|from)\s+/i, "").replace(/\b(NSW|VIC|QLD|SA|WA|TAS|ACT|NT)\b\.?/gi, "").replace(/[.!?]+$/, "").replace(/\s+/g, " ").trim().slice(0, 80);
+}
+
+/**
+ * THE REQUEST IS THE PERSON'S OWN WORDS (2026-09-29, docs/matching/RCA-NIGHT-2026-09-29.md, stage 2).
+ * The realtime model used to write it, and paraphrased, invented ("for a baby eight months old" for
+ * a mother asking for herself), dropped facts ("diagnosed last year") and merged answers. Now the
+ * client assembles it from the turns: the first answer verbatim, every free-text answer verbatim,
+ * and the yes/no questions mapped by rule, because the questions are fixed and known. An answer with
+ * no Latin letters (a transcriber's "什么?") is dropped. The model's sentence is a fallback only.
+ */
+type Ask = "opening" | "place" | "lived" | "language" | "extra" | "cost" | "who" | "catch" | "other";
+function askOf(question: string | null): Ask {
+  if (!question) return "opening";
+  const q = question.toLowerCase();
+  if (q.includes(OPENING_QUESTION.toLowerCase())) return "opening";
+  if (/didn.t catch/.test(q)) return "catch";
+  if (/adhd (them|her|him)sel|has adhd/.test(q)) return "lived";
+  if (/language|background/.test(q)) return "language";
+  if (/where are you|telehealth|in person|suburb|postcode/.test(q)) return "place";
+  if (/anything else/.test(q)) return "extra";
+  if (/\bcost\b|bulk|afford/.test(q)) return "cost";
+  if (/for you|someone else|who is (this|it) for/.test(q)) return "who";
+  return "other";
+}
+const YES = /^\s*(yes|yeah|yep|yup|sure|please|ok|okay|definitely|absolutely|i would|that would|i.d like that)\b/i;
+const NO = /^\s*(no|nah|nope|not really|no thanks|no preference|none|(it )?doesn.t matter|not (at all|particularly|really))\b/i;
+const LEAD = /^\s*(yes|yeah|yep|yup|sure|please|ok|okay|definitely|absolutely|no|nah|nope|not really|no thanks|no preference|none)\b[,.! ]*/i;
+const readable = (text: string) => /[a-z]{2,}/i.test(text);
+export const LIVED_ASK = "someone who has ADHD themselves";
+
+export function requestFromTurns(turns: readonly Turn[]): { request: string; place: string } {
+  const parts: string[] = [];
+  let question: string | null = null;
+  let answered = false;
+  let placeSaid = "";
+  for (const turn of turns) {
+    if (turn.who === "assistant") { question = turn.text; continue; }
+    if (turn.who !== "person") continue;
+    const text = turn.text.trim();
+    if (!readable(text)) continue;
+    const ask: Ask = answered ? askOf(question) : "opening";
+    answered = true;
+    const yes = YES.test(text);
+    const no = NO.test(text);
+    const rest = text.replace(LEAD, "").replace(/^(but|and|though|although)\s+/i, "").trim();
+    // After a yes the rest is usually the substance ("yes, a woman if possible"); after a no it usually
+    // restates the no ("no, English is fine", "no, that doesn't matter") unless it runs on into an ask.
+    const more = rest.split(/\s+/).filter(Boolean).length >= (no ? 6 : 3) ? rest : "";
+    // Yes to the lived-experience question is that ask in the finder's words; any other answer to it is theirs ("a woman would be good").
+    if (ask === "lived" && yes) {
+      parts.push(LIVED_ASK);
+      if (more) parts.push(more);
+      continue;
+    }
+    if (ask === "place") {
+      if (!no) { placeSaid = text; parts.push(text); }
+      continue;
+    }
+    if (yes || no) {
+      if (more) parts.push(more);
+      continue;
+    }
+    parts.push(text);
+  }
+  // Each answer keeps its own sentence: "…from the inside. Telehealth's fine, I'm in Marrickville." rather than "…inside., Telehealth's fine…".
+  const request = parts.map((part) => part.replace(/[\s.,;:!?]+$/, "")).filter(Boolean).join(". ").slice(0, MAX_REQUEST);
+  return { request, place: placeSaid ? placeOf(placeSaid) : "" };
 }
 
 function revealFrom(state: VoiceState, args: unknown): Reveal {
   const { request, place } = parse(args);
-  const words = typeof request === "string" && request.trim() ? inTheirWords(request.trim().slice(0, MAX_REQUEST), state.said) : saidAsRequest(state.said);
-  return { request: words, place: placeOf(place) };
+  const own = requestFromTurns(state.turns);
+  const modelWords = typeof request === "string" && request.trim() ? inTheirWords(request.trim().slice(0, MAX_REQUEST), state.said) : "";
+  const words = own.request ? inTheirWords(own.request, state.said) : modelWords || saidAsRequest(state.said);
+  return { request: words, place: placeOf(place) || own.place };
 }
 
 interface OutputItem {
@@ -205,6 +274,17 @@ function onResponseDone(state: VoiceState, event: ServerEvent): { state: VoiceSt
   const send: ClientEvent[] = [];
 
   const matches = output.find((item) => item.type === "function_call" && item.name === SHOW_MATCHES);
+  // A reveal before the person has said anything shows a list for words that are nobody's (the text eval,
+  // 2026-09-29: show_matches straight after the opening question, request "I want help finding ADHD care").
+  // The call is answered as not shown and the model asks again; the forced last turn is never this early.
+  if (matches && next.answers === 0 && !state.forced) {
+    send.push(
+      { type: "conversation.item.create", item: { type: "function_call_output", call_id: matches.call_id ?? "", output: "not shown: the person has not answered yet" } },
+      system(TOO_SOON),
+      respond(),
+    );
+    return { state: next, send };
+  }
   if (matches) return { state: { ...next, phase: "revealing", forced: false, reveal: revealFrom(next, matches.arguments) }, send };
   if (state.forced && response.metadata?.purpose === LAST && response.status !== "cancelled") {
     return { state: { ...next, phase: "revealing", forced: false, reveal: { request: saidAsRequest(next.said), place: "" } }, send };

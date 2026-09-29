@@ -48,9 +48,9 @@ describe("M10 the co-occurrence map is derived, not authored", () => {
    */
   it("holds the measured shape of the real corpus", () => {
     const counts = cooccurrenceCounts();
-    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(93); // O257: +2 (a coach who has ADHD themselves; the parent with ADHD asking for a child's assessment). O256: three continuation sentences lost their second facet (assessment). R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
+    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(92); // O260: -1 ("shared care with the psychiatrist who diagnosed me" reaches shared care alone). O257: +2 (a coach who has ADHD themselves; the parent with ADHD asking for a child's assessment). O256: three continuation sentences lost their second facet (assessment). R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
     expect(counts.size).toBe(148); // R15: perinatal pairs with assessment and telehealth; 2026-09-29: attuned with perinatal, both ways
-    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(56); // R15: two perinatal pairs clear the floor
+    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(54) /* O260: 56 -> 54, the shared-care sentence reading one key */; // R15: two perinatal pairs clear the floor
   });
 
   it("names blind spot (1): corpus gold sets carry no language keys, so language suggests nothing yet", () => {
@@ -105,10 +105,10 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
     // top-3 cut matters here: an external filter over the old top three would have zeroed two of
     // these readers, where the integrated gate promotes a suggested candidate from further down
     // the ranking instead.
-    expect(full).toBe(58); // O256: 57 -> 58, one more tied reader keeps a full offer. R15: 54 -> 57, three more tied readers keep a full offer
-    expect(partial).toBe(2);
-    expect(zero).toBe(1);
-    expect(zeroed).toEqual(["a calm doctor for my anxious mum, she speaks Hindi"]);
+    expect(full).toBe(58); // O259 (manner never asked): 58 full, 1 partial, 2 none. O256: 57 -> 58. R15: 54 -> 57
+    expect(partial).toBe(1);
+    expect(zero).toBe(2);
+    expect(zeroed).toEqual(["English is my second language and appointments move too fast", "a calm doctor for my anxious mum, she speaks Hindi"]);
   });
 
   it("zero questions is the designed outcome when everything the request suggests is already heard", () => {
@@ -131,7 +131,11 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
     // plan, follow-up booked" are asked together), so the selector reaches PAST the splitting
     // facets to the relevant one further down its own ranking.
     const query = "English is my second language and appointments move too fast";
-    expect(clarifiers(query, clinicians).map((c) => c.facetKey)).toEqual(["manner:structured"]);
+    // O259 (founder, 2026-09-29): manner is never asked, so the one question this reader used to
+    // get (manner:structured, the corpus's co-occurrence with "not rushed") is gone with the rest,
+    // and zero questions is the designed outcome: nothing the roster splits on is something the
+    // reader's own words suggest.
+    expect(clarifiers(query, clinicians).map((c) => c.facetKey)).toEqual([]);
   });
 
   it("the commonest query in the product keeps its full offer under the gate", () => {

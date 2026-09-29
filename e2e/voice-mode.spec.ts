@@ -6,7 +6,8 @@ import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { MAX_FOLLOW_UPS, OPENING_QUESTION } from "../src/voice/interviewer";
 
-const ANSWERS = ["an adult ADHD assessment", "for me", "Hornsby, or telehealth", "bulk billing please", "a woman", "please don't rush me", "I have anxiety too", "an assessment", "mornings", "that's everything"];
+// Answers to the scripted call's questions (src/voice/fake-link.ts), none a bare yes or no, so the request is their join.
+const ANSWERS = ["an adult ADHD assessment", "Hornsby, or telehealth", "someone who has ADHD themselves would be good", "Hindi would help", "I have anxiety too", "an assessment", "mornings", "nothing that comes to mind", "that's everything", "nothing more"];
 
 async function openVoice(page: Page, script: boolean | string[]) {
   await page.addInitScript((value) => {
@@ -38,15 +39,58 @@ test("a whole call asks at most eight questions, then reveals the matches for wh
   await expect(page.locator("main")).toHaveAttribute("data-stage", "results", { timeout: 20000 });
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   const request = await page.evaluate(() => JSON.parse(sessionStorage.getItem("adhdme.finder.v2") ?? "{}").request);
-  expect(request).toBe(ANSWERS.slice(0, MAX_FOLLOW_UPS + 1).join(", "));
+  // Each answer is its own sentence in the request (stage 2 of docs/matching/RCA-NIGHT-2026-09-29.md).
+  expect(request).toBe(ANSWERS.slice(0, MAX_FOLLOW_UPS + 1).join(". "));
 });
 
 test("the stop button ends the call and puts what was said in the box", async ({ page }) => {
   await openVoice(page, ANSWERS.slice(0, 2));
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Where are you, or would telehealth suit you?", { timeout: 10000 });
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Would you like someone who has ADHD themselves?", { timeout: 10000 });
   await page.getByRole("button", { name: "End voice" }).click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "welcome");
-  await expect(page.getByRole("textbox")).toHaveValue("an adult ADHD assessment, for me");
+  await expect(page.getByRole("textbox")).toHaveValue("an adult ADHD assessment, Hornsby, or telehealth");
+});
+
+/** Every record the page sent to the finder's journal, in order. */
+async function journal(page: Page) {
+  const posts: { type: string; record: Record<string, unknown> }[] = [];
+  await page.route("**/api/finder/track", async (route) => {
+    posts.push(JSON.parse(route.request().postData() ?? "{}"));
+    await route.fulfill({ status: 204, body: "" });
+  });
+  return () => posts.filter((post) => post.type === "voice").map((post) => post.record);
+}
+
+test("a call is on record turn by turn under one id, and its end fills the same row (stage 5)", async ({ page }) => {
+  const calls = await journal(page);
+  await openVoice(page, ANSWERS);
+  await expect(page.locator("main")).toHaveAttribute("data-stage", "results", { timeout: 20000 });
+  await expect.poll(() => calls().at(-1)?.outcome, { timeout: 10000 }).toBe("revealed");
+  const sent = calls();
+  expect(sent.length).toBeGreaterThan(2);
+  expect(new Set(sent.map((call) => call.id)).size, "one row for the whole call").toBe(1);
+  for (const call of sent.slice(0, -1)) expect(call.outcome).toBe("stopped");
+  expect((sent[0]!.turns as unknown[]).length).toBeLessThan((sent.at(-1)!.turns as unknown[]).length);
+  expect(sent.at(-1)!.searchId, "the end names its search").toBeTruthy();
+  expect(sent.at(-1)!.request).toBe(ANSWERS.slice(0, MAX_FOLLOW_UPS + 1).join(". "));
+  // O260: the card prints the first twenty words of the nine answers, and the rest live behind "Change what you said".
+  const card = (await page.locator(".results-summary-text").textContent()) ?? "";
+  expect(card.endsWith("…")).toBe(true);
+  expect(card.split(/\s+/).length).toBeLessThanOrEqual(21);
+});
+
+test("a call stopped in the middle keeps every turn said so far (stage 5)", async ({ page }) => {
+  const calls = await journal(page);
+  await openVoice(page, ANSWERS.slice(0, 2));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Would you like someone who has ADHD themselves?", { timeout: 10000 });
+  await expect.poll(() => calls().length).toBeGreaterThan(0);
+  await page.getByRole("button", { name: "End voice" }).click();
+  await expect(page.locator("main")).toHaveAttribute("data-stage", "welcome");
+  await expect.poll(() => calls().at(-1)?.outcome, { timeout: 10000 }).toBe("stopped");
+  const sent = calls();
+  expect(new Set(sent.map((call) => call.id)).size).toBe(1);
+  const turns = sent.at(-1)!.turns as { who: string; text: string }[];
+  expect(turns.filter((turn) => turn.who === "person").map((turn) => turn.text)).toEqual(ANSWERS.slice(0, 2));
 });
 
 test("under reduced motion the orb holds still, and the call still runs", async ({ page }) => {

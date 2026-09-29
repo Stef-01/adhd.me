@@ -68,6 +68,9 @@ import { ProfileStage } from "./finder-stages/profile-stage";
 import { CompareStage, type CompareRow } from "./finder-stages/compare-stage";
 import { BookingStage } from "./finder-stages/booking-stage";
 
+/** The most words of a request the results card prints (O260): the screen holds 60 in all. */
+const SUMMARY_WORDS = 20;
+
 /**
  * O95 (refactor lane, queue item 1): the 1,253-line single file became this orchestrator
  * plus app/finder-stages/ — one file per screen, shared pieces in shared.tsx. The state
@@ -366,7 +369,11 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   const requestSummary = useMemo(() => {
     const cleaned = request.trim().replace(/[.!?]+$/, "");
     if (!cleaned) return exampleRequest;
-    return `${cleaned.charAt(0).toUpperCase()}${cleaned.slice(1)}.`;
+    // A spoken request is every answer the person gave (stage 2 of docs/matching/RCA-NIGHT-2026-09-29.md), and a
+    // typed one can be a paragraph: the card shows the first SUMMARY_WORDS and "Change what you said" holds them all.
+    const all = cleaned.split(/\s+/);
+    const shown = all.length > SUMMARY_WORDS ? `${all.slice(0, SUMMARY_WORDS).join(" ")}…` : `${cleaned}.`;
+    return `${shown.charAt(0).toUpperCase()}${shown.slice(1)}`;
   }, [request]);
   const requestHeadline = useMemo(
     () => request.trim() === archetype.request ? archetype.headline : getRequestHeadline(request, requestSummary),
@@ -376,19 +383,28 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   const chipWords = useMemo(() => new Map(read.map((n) => [n.label, shortLabel(n)])), [read]);
   /** O222: ONE pass — the rows index into this instead of re-running the lexicon per row,
    * and the roster threads through so the printed reasons derive from the ranked roster. */
+  // O259: a manner trait is never a word on a row ("Making sense" sat on three rows for a plain-language ask).
+  const mannerLabels = useMemo(() => new Set(read.filter((n) => n.facet.kind === "manner").map((n) => n.label)), [read]);
   const allMatches = useMemo(
     () => matches.map((item) => {
       const match = getPersonalizedMatch(item, request, roster, read);
-      return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s)).map((s) => chipWords.get(s) ?? s) };
+      return { ...match, signals: match.signals.filter((s) => !removedLabels.has(s) && !mannerLabels.has(s)).map((s) => chipWords.get(s) ?? s) };
     }),
-    [matches, request, roster, read, removedLabels, chipWords],
+    [matches, request, roster, read, removedLabels, mannerLabels, chipWords],
   );
   /**
    * ONE PIPELINE RUN PER RENDER (O8 review). These four were each computed inline in the JSX,
    * some more than once, and every call re-runs the full lexicon read over the request — a
    * dozen redundant scans per keystroke once the geo field re-renders the results stage.
    */
-  const quality = useMemo(() => matchQuality(request, roster, rankNeeds), [request, roster, rankNeeds]);
+  /* O259: the list claims "Matches" on what the person can see. A manner trait still orders the last tier, but
+     with every visible chip out, or with nothing but manner read, the heading is the plain count and the
+     clarifier asks a question that changes the list. */
+  const quality = useMemo(() => {
+    const asked = rankNeeds ?? kept;
+    const visible = asked.filter((n) => n.facet.kind !== "manner");
+    return visible.length === asked.length ? matchQuality(request, roster, rankNeeds) : matchQuality(request, roster, visible);
+  }, [request, roster, rankNeeds, kept]);
   const tieNote = useMemo(() => topTieNote(request, roster), [request, roster]);
   /** Read only when a tie exists — unconditional, this would ADD a rankBands run to the common
    * no-tie render; conditional, it matches the old cost exactly with the derivation named. */
@@ -432,7 +448,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   // evidence and its "does not answer" list ran over the 2-entry real roster while the ranking
   // ran over 22 — exactly what the comment on `roster` above promises cannot happen. The
   // call-site pin in engine-seam.test.ts now refuses a defaulted roster read in this file.
-  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster, read).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
+  // O259: manner traits are read for the ranking's last tier and shown nowhere (founder, 2026-09-29).
+  const profileEvidence = useMemo(() => matchEvidence(clinician, request, roster, read).filter((n) => n.facet.kind !== "manner" && !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
   /**
    * The asks this clinician does NOT answer (O51) — the same needsFor read as the evidence
    * with the filter inverted, so the two lists partition what the reader asked and cannot
@@ -440,7 +457,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    * reader to assume the rest were hits too, which is the quiet dishonesty the console's
    * "Missed" column was built to prevent — for staff. The reader gets the same truth.
    */
-  const profileMissed = useMemo(() => missedAsks(clinician, request, roster, read).filter((n) => !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
+  const profileMissed = useMemo(() => missedAsks(clinician, request, roster, read).filter((n) => n.facet.kind !== "manner" && !removed.has(facetKey(n.facet))), [clinician, request, roster, read, removed]);
 
   /**
    * O102: the other GP to hold this one against, and the table that compares them.
@@ -635,6 +652,10 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   function note(kind: EventKind, clinicianId: string | null = null) {
     if (tracked.current) track("event", { id: newId(), searchId: tracked.current.id, kind, clinicianId });
   }
+  /** Every turn, the call so far, under the call's own id: the same row, filled in as it goes. */
+  function voiceCallProgress(call: CallSummary) {
+    trackVoiceCall(call, null);
+  }
   function voiceCallEnded(call: CallSummary) {
     if (call.outcome !== "revealed") {
       trackVoiceCall(call, null);
@@ -782,6 +803,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             onReveal={revealVoice}
             onHeard={readAhead}
             onCallEnd={voiceCallEnded}
+            onCallProgress={voiceCallProgress}
             onLeave={(words) => {
               setDraft(words);
               backTo("welcome");

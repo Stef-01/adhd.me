@@ -195,8 +195,9 @@ export const PREF_PROMPTS: Record<string, { prompt: string; answer: string }> = 
 /** The preferences a clarifier may ask about. Derived from the prompt table, never wider. */
 const ASKABLE_PREFERENCES: readonly Preference[] = ["woman-gp", "telehealth-first", "bulk-billing", "lived-experience"];
 
+/** O259 (founder, 2026-09-29): manner is never asked. The manner table stays for the reach ratchet; no question is drawn from it. */
 function promptFor(key: string): { prompt: string; answer: string } | null {
-  return CARE_PROMPTS[key] ?? MANNER_PROMPTS[key] ?? PREF_PROMPTS[key] ?? null;
+  return CARE_PROMPTS[key] ?? PREF_PROMPTS[key] ?? null;
 }
 
 /**
