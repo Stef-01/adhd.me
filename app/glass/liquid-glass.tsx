@@ -37,6 +37,10 @@ function cssColor(name: string, fallback: [number, number, number]): [number, nu
     const scope = document.querySelector(".platform-shell") ?? document.body;
     const raw = getComputedStyle(scope).getPropertyValue(name).trim();
     if (!raw) return fallback;
+    // A hex token is read as it is; only anything else (a color-mix()) is painted and read back,
+    // which on an accelerated canvas stalls the GPU.
+    const hex = /^#([0-9a-f]{6})$/i.exec(raw)?.[1];
+    if (hex) return [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number];
     const c = document.createElement("canvas");
     c.width = c.height = 1;
     const ctx = c.getContext("2d");

@@ -2,8 +2,7 @@
 // open synthetic-phase surfaces, so the guards (`secret.ts`, `mock-guard.ts`, `demo-guard.ts`) and
 // the console's cookie share one reading. It takes the source as a parameter so a test can hand it
 // a fixture, and reads on every call rather than memoising, because the guards' own tests set
-// `NODE_ENV` per test. Every other read in the tree stays where it is and is inventoried by
-// `.env.example`, which `env.test.ts` holds to the tree in both directions.
+// `NODE_ENV` per test. Every other read in the tree stays where it is; `.env.example` lists what a deployment sets.
 
 export interface Env {
   /** `NODE_ENV === "production"`: a production build, whether served locally or deployed. */
