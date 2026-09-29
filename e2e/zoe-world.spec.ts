@@ -79,7 +79,9 @@ test('keyboard only, with sound on, reaches the end', async ({ page }) => {
 test('the reply types itself, the fuse sends it, breathe and pause hold it', async ({ page }) => {
   await page.goto(URL);
   await expect(game(page)).toHaveAttribute('data-still', 'false');
-  await expect(page.locator('.zw-words .zw-word')).toHaveCount(1, { timeout: 3000 });
+  // The reply types itself: the first word lands within three seconds. (Exactly one word was a race
+  // the poll lost under load, seeing two or three by the time it looked.)
+  await expect(page.locator('.zw-words .zw-word').first()).toBeVisible({ timeout: 3000 });
   await page.getByRole('button', { name: 'Breathe' }).click();
   await expect(game(page)).toHaveAttribute('data-holding', 'true');
   const words = await page.locator('.zw-words .zw-word').count();
