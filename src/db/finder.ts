@@ -385,6 +385,17 @@ export function finderDbCounts() {
   return { searches: s.searches.length, calls: s.calls.length, events: s.events.length, handoffs: s.handoffs.length, ratings: s.ratings.size, journal: { sent: s.journal.sent, failed: s.journal.failed } };
 }
 
+/**
+ * Whether this deployment can reach the tables, and how the writes have gone since it booted: for
+ * /api/health, so a deploy made before the Supabase variables were saved (2026-09-29: every table
+ * empty after a live search, and no request in the API logs) is told apart from a failing write.
+ * Booleans and counts only; never a value from the environment.
+ */
+export function journalStatus(env: Record<string, string | undefined> = process.env): { configured: boolean; sent: number; failed: number } {
+  const s = state();
+  return { configured: Boolean(env.SUPABASE_URL?.trim() && env.SUPABASE_SERVICE_ROLE_KEY?.trim()), sent: s.journal.sent, failed: s.journal.failed };
+}
+
 /** Waits for the journal's queued writes; the tests use it. */
 export function journalSettled(): Promise<void> {
   return state().journal.chain;

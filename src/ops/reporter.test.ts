@@ -1,3 +1,4 @@
+import { resetFinderDb } from "@/db/finder";
 // U4 (O229): the reporter seam proven at the unit that matters most — the payload law.
 //
 // The ledger's verify text for U4: an uncaught server error reaches the sink with route and SHA,
@@ -247,12 +248,14 @@ describe("U4 the intake routes hold their shapes", () => {
   it("/api/health names the build, the boot instant, the store and the reporter", () => {
     vi.stubEnv("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA", "deadbeef");
     vi.stubEnv("ADHDME_REPORTER", "");
-    expect(health(1_800_000_000_000, 90)).toEqual({
+    resetFinderDb();
+    expect(health(1_800_000_000_000, 90, {})).toEqual({
       ok: true,
       sha: "deadbeef",
       bootedAt: new Date(1_800_000_000_000 - 90_000).toISOString(),
       store: "jsonl-file",
       reporter: "console",
+      journal: { configured: false, sent: 0, failed: 0 },
     });
     vi.stubEnv("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA", "");
     expect(health().sha).toBeNull();

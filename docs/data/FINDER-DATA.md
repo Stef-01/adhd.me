@@ -72,8 +72,10 @@ and a factor that is never shown has no place in one.
 
 ## Running it on Supabase
 
-Apply migrations `0001` to `0009`, and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` on the
-server. Each write then also goes to its table, in order, never delaying a person; the weights and
+Apply migrations `0001` to `0011`, and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` on the
+server; on Vercel a variable reaches only the deployments made after it was saved, and
+`/api/health` says whether the running one holds them (`journal.configured`) and how many rows
+it has sent and failed to send since it booted. Each write then also goes to its table, in order, never delaying a person; the weights and
 the quality read every instance's ratings through the two views, which read as the caller, so only
 the service role sees through them. Without them, the record is memory
 on each server instance, capped at 5,000 of each kind, as every store here is. Row-level security is
