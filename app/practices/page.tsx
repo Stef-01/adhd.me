@@ -163,16 +163,7 @@ export default function PracticesPage() {
               ))}
             </div>
 
-            <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
-              {C.practiceStory.evidenceNote}{" "}
-              <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/fampra/cmu028">
-                Gibson-Helm et al.
-              </a>{" "}
-              and{" "}
-              <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/humrep/deab101">
-                Fernandez et al.
-              </a>
-            </p>
+            <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">{C.practiceStory.evidenceNote}</p>
           </div>
 
           <div className="mt-12 grid gap-8 rounded-2xl border border-stone-200 p-7 sm:p-9 lg:grid-cols-[0.8fr_1.2fr]">
@@ -191,7 +182,7 @@ export default function PracticesPage() {
                   RACGP Specific Interests 2026
                 </a>{" "}
                 and{" "}
-                <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://mycollege.acrrm.org.au/search?clive=acrrm~ds-events-public&collection=acrrm~sp-search-public&query=polycystic%20ovarian%20syndrome">
+                <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://mycollege.acrrm.org.au/search?clive=acrrm~ds-events-public&collection=acrrm~sp-search-public&query=ADHD">
                   ACRRM learning search
                 </a>.
               </p>
