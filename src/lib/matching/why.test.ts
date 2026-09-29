@@ -1,51 +1,68 @@
-// Why this clinician, in their own words: the model sees only the request and the listing, the
-// screen sees only what is short, clean and never a key, and a failure leaves the keys alone.
+// Why this clinician, in their own words: the finder writes the first half from its strongest
+// evidence, the model sees only the request and the listing and writes the second half, the screen
+// sees only what is short, clean and never a key, and a failure leaves the keys alone.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { clinicians } from "@/demo/clinicians";
+import { clinicians, matchEvidence } from "@/demo/clinicians";
 import { completed } from "@/lib/llm/cassettes";
-import { cachedWhy, clinicianInWords, keepSentences, MAX_SENTENCES, MAX_WORDS, resetWhyCache, whyInput, whyMatched } from "./why";
+import { askedFor, cachedWhy, clinicianInWords, keepClause, MAX_CLAUSE_WORDS, MAX_WORDS, resetWhyCache, whyInput, whyMatched, whySentence } from "./why";
 
 const anubhav = clinicians.find((c) => c.id === "anubhav-saxena")!;
 const REQUEST = "an ADHD assessment by telehealth, and I don't want to be rushed";
-const answer = (sentences: unknown) => async () => new Response(JSON.stringify(completed({ sentences })));
+const answer = (says: unknown) => async () => new Response(JSON.stringify(completed({ says })));
 
 beforeEach(() => resetWhyCache());
 afterEach(() => vi.restoreAllMocks());
 
 describe("what the model is given", () => {
-  it("is the person's words and the clinician's own listing, labelled, and nothing else", () => {
-    const input = whyInput(REQUEST, anubhav, ["By phone or telehealth", "Takes time with you"]);
+  it("is the person's words, the clinician's own listing and the one thing to finish, and nothing else", () => {
+    const input = whyInput(REQUEST, anubhav, "telehealth");
     expect(input.startsWith(`Person asked: "${REQUEST}"`)).toBe(true);
-    expect(input.endsWith("The finder matched: By phone or telehealth; Takes time with you.")).toBe(true);
+    expect(input.endsWith(`Finish: "You asked for telehealth; ${anubhav.shortName} says"`)).toBe(true);
     const words = clinicianInWords(anubhav);
     for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Takes time with you", "Hindi"]) expect(words).toContain(piece);
     expect(words).not.toMatch(/manner:|care:|pref:/);
   });
+
+  it("says the ask the way a sentence would: a manner as someone who does it, a language as someone who speaks it", () => {
+    const needs = matchEvidence(anubhav, "an ADHD assessment with someone who speaks Hindi and doesn't rush me");
+    const said = needs.map(askedFor);
+    expect(said).toContain("ADHD assessment");
+    expect(said).toContain("someone who speaks Hindi");
+    expect(said).toContain("someone who takes time with you");
+  });
 });
 
 describe("what the screen may show", () => {
-  it("keeps the first clean sentence, splitting a pair written as one, and drops the rest", () => {
-    const kept = keepSentences(["  ", "You asked not to be rushed; Dr Saxena books a longer first appointment. You asked for Hindi; he consults in Hindi and Urdu."]);
-    expect(kept).toHaveLength(MAX_SENTENCES);
-    expect(kept[0]).toBe("You asked not to be rushed; Dr Saxena books a longer first appointment.");
+  it("keeps a short clean clause, without a name or 'says' the model repeated", () => {
+    expect(keepClause("he books a longer first appointment and takes time with you.", anubhav)).toBe("he books a longer first appointment and takes time with you");
+    expect(keepClause(`${anubhav.shortName} says he speaks Hindi and Urdu`, anubhav)).toBe("he speaks Hindi and Urdu");
+    expect(keepClause(`"${anubhav.name} says he speaks Hindi"`, anubhav)).toBe("he speaks Hindi");
   });
 
-  it("refuses a key, a verdict, a promise, a superlative and a long sentence", () => {
-    expect(keepSentences(["Your ask manner:not_rushed is met."])).toEqual([]);
-    expect(keepSentences(["He can diagnose and cure your ADHD quickly."])).toEqual([]);
-    expect(keepSentences(["She is the best ADHD specialist in Sydney."])).toEqual([]);
-    expect(keepSentences(["I recommend her; you will see an improvement."])).toEqual([]);
-    expect(keepSentences([Array.from({ length: MAX_WORDS + 1 }, () => "word").join(" ")])).toEqual([]);
-    expect(keepSentences("not a list")).toEqual([]);
+  it("refuses a key, a verdict, a promise, a superlative, a long clause and a non-string", () => {
+    expect(keepClause("he meets manner:not_rushed", anubhav)).toBeNull();
+    expect(keepClause("he can diagnose and cure your ADHD", anubhav)).toBeNull();
+    expect(keepClause("he is the best ADHD specialist in Sydney", anubhav)).toBeNull();
+    expect(keepClause("I recommend him; you will see an improvement", anubhav)).toBeNull();
+    expect(keepClause(Array.from({ length: MAX_CLAUSE_WORDS + 1 }, () => "word").join(" "), anubhav)).toBeNull();
+    expect(keepClause(["a list"], anubhav)).toBeNull();
+  });
+
+  it("composes the sentence, and drops one the two halves together would not fit", () => {
+    expect(whySentence("telehealth", anubhav, "he sees new people by video first")).toBe(`You asked for telehealth; ${anubhav.shortName} says he sees new people by video first.`);
+    const long = Array.from({ length: MAX_WORDS }, () => "word").join(" ");
+    expect(whySentence(long, anubhav, "he does")).toBeNull();
   });
 });
 
 describe("the call", () => {
   it("answers from the model once, then from memory for the same words", async () => {
-    const fetchFn = vi.fn(answer(["You asked for telehealth; Dr Saxena sees new people by video first."]));
+    const fetchFn = vi.fn(answer("he offers telehealth for a first appointment"));
     const first = await whyMatched(REQUEST, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } });
-    expect(first).toEqual({ sentences: ["You asked for telehealth; Dr Saxena sees new people by video first."], source: "llm" });
+    expect(first.source).toBe("llm");
+    expect(first.sentences).toHaveLength(1);
+    expect(first.sentences[0]).toMatch(new RegExp(`^You asked for .+; ${anubhav.shortName} says he offers telehealth for a first appointment\\.$`));
     const again = await whyMatched(`${REQUEST}.`, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } });
     expect(again.sentences).toEqual(first.sentences);
     expect(fetchFn).toHaveBeenCalledTimes(1);
@@ -60,8 +77,16 @@ describe("the call", () => {
     expect((await whyMatched(REQUEST, anubhav, { env: {} })).source).toBe("none");
   });
 
+  it("does not remember an empty answer, so the next ask may draw a clause that fits", async () => {
+    const fetchFn = vi.fn(answer(Array.from({ length: MAX_CLAUSE_WORDS + 1 }, () => "word").join(" ")));
+    expect((await whyMatched(REQUEST, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } })).sentences).toEqual([]);
+    expect(cachedWhy(REQUEST, anubhav.id)).toBeNull();
+    await whyMatched(REQUEST, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } });
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+  });
+
   it("makes no call where the listing answers nothing the person asked", async () => {
-    const fetchFn = vi.fn(answer(["Anything."]));
+    const fetchFn = vi.fn(answer("anything"));
     const ot = clinicians.find((c) => c.profession === "occupational-therapist")!;
     expect(await whyMatched("a woman GP who speaks Hindi", ot, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } })).toEqual({ sentences: [], source: "none" });
     expect(fetchFn).not.toHaveBeenCalled();

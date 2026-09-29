@@ -40,13 +40,13 @@ describe("POST /api/finder/why", () => {
     expect(network).not.toHaveBeenCalled();
   });
 
-  it("at level 1 with the cassettes writes from the listing, one sentence per key it answers", async () => {
+  it("at level 1 with the cassettes finishes the sentence the finder began from the strongest key", async () => {
     vi.stubEnv("ADHDME_LLM_CASSETTES", "1");
     const { status, body } = await why({ text: REQUEST, clinicianId: anubhav.id });
     expect(status).toBe(200);
     expect(body.source).toBe("llm");
     expect(body.sentences.length).toBeGreaterThan(0);
-    expect(body.sentences[0]).toBe(`You asked for ADHD assessment; ${anubhav.shortName} lists it.`);
+    expect(body.sentences[0]).toBe(`You asked for ADHD assessment; ${anubhav.shortName} says they list it, in their own words.`);
     for (const sentence of body.sentences) expect(sentence).not.toMatch(/(care|manner|pref|language):[a-z_-]+/);
     expect(network).not.toHaveBeenCalled();
   });
