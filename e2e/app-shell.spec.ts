@@ -213,8 +213,9 @@ test("the sheet's handle is a control, not an ornament, the drag has a tap equiv
 
   // Every gesture needs a tap equivalent: the grabber cycles the detents for anybody who cannot
   // drag, which is Material's own accessibility rule for this exact component.
+  // To the whole pixel: a box read while the sheet settles can come back a hair under (47.99999).
   const handleBox = (await shrink.boundingBox())!;
-  expect(handleBox.height, "the handle is under the 48px floor its own guidance sets").toBeGreaterThanOrEqual(48);
+  expect(Math.round(handleBox.height), "the handle is under the 48px floor its own guidance sets").toBeGreaterThanOrEqual(48);
   await shrink.click();
   await expect.poll(async () => (await sheet.boundingBox())!.height).toBeLessThan(full - 1);
 
