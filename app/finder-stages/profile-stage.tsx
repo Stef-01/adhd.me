@@ -19,7 +19,7 @@ import {
   missedAskParts,
   type Clinician,
 } from "@/demo/clinicians";
-import { type NeedSignal } from "@/matching/needs";
+import { shortLabel, type NeedSignal } from "@/matching/needs";
 import { APPROACH_LABELS } from "@/finder/filters";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { profileAnnouncement } from "@/finder/announce";
@@ -242,7 +242,7 @@ export function ProfileStage({
               {personalizedSignals.length > 0 ? (
                 <>
                   {insights.length > 0 ? (
-                    <p className="fit-keys">{profileEvidence.slice(0, 3).map((need) => need.label).join(" · ")}</p>
+                    <p className="fit-keys">{profileEvidence.slice(0, 3).map(shortLabel).join(" · ")}</p>
                   ) : (
                   <ul className="fit-evidence" aria-label="Why this provider is listed for you">
                     {profileEvidence.slice(0, 3).map((need) => (

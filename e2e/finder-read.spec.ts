@@ -19,7 +19,7 @@ import { facetKey, needForKey, type NeedSignal } from "../src/matching/needs";
 import { POST } from "../app/api/finder/read/route";
 
 /** Why matched, in their words: what the model would write, answered by the route for this spec. */
-const WHY_SENTENCES = ["You asked for telehealth and not to be rushed; they see new people by video first and book a longer first appointment."];
+const WHY_SENTENCES = ["You asked for telehealth and not to be rushed; they see people by video and book longer first appointments."];
 
 /** The C6 narrative: the model hears one facet more than the lexicon, and its weights reorder the list. */
 const NARRATIVE = CASSETTES.find((c) => c.class === "C6")!;

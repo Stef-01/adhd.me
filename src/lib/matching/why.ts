@@ -15,9 +15,9 @@ import { professionLabel } from "@/support/professions";
 import { callJson, type Deps } from "@/lib/llm/client";
 import { matchEvidence } from "@/demo/clinicians";
 
-/** One sentence of at most 26 words: what the model writes naturally, and what keeps the screen under its ceiling. */
+/** One sentence of at most 22 words: the length the model writes to a worked example, and what keeps the screen under its ceiling. */
 export const MAX_SENTENCES = 1;
-export const MAX_WORDS = 26;
+export const MAX_WORDS = 22;
 
 const INSTRUCTIONS = `You write why one clinician fits what a person asked, for ADHD.ME, a service in Australia that lists clinicians for ADHD care. You are given what the person asked, what the clinician says about themselves, and the matches the finder found between the two.
 

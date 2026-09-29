@@ -355,7 +355,7 @@ export const LEARNING_RECORD = {
 };
 
 /** What the model writes under "Why matched" at level 1, as the budget measures that screen. */
-const WHY_SENTENCES = ["You asked for telehealth and not to be rushed; they see new people by video first and book a longer first appointment."];
+const WHY_SENTENCES = ["You asked for telehealth and not to be rushed; they see people by video and book longer first appointments."];
 
 export async function reach(page, route, base) {
   if (route.state === "intake") {
@@ -388,7 +388,7 @@ export async function reach(page, route, base) {
     await page.getByRole("button", { name: "Talk instead of typing" }).click();
     await page.locator(".voice-orb").waitFor({ timeout: 10000 });
   }
-  if (route.state === "finder-results" || route.state === "finder-profile" || route.state.startsWith("finder-profile-why")) {
+  if (route.state === "finder-results" || route.state === "finder-profile" || route.state?.startsWith("finder-profile-why")) {
     await page.getByRole("textbox").fill("an adult ADHD assessment, telehealth, not rushed");
     await page.keyboard.press("Enter");
     await page.locator(".clinician-list").waitFor({ timeout: 20000 });
@@ -396,7 +396,7 @@ export async function reach(page, route, base) {
       await page.locator(".clinician-row").first().click();
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
-    if (route.state.startsWith("finder-profile-why")) {
+    if (route.state?.startsWith("finder-profile-why")) {
       await page.locator(".profile-disclosure", { hasText: "Why matched" }).locator("summary").click();
       await page.locator(".profile-disclosure[open] .profile-disclosure-body").waitFor({ timeout: 8000 });
       if (route.state === "finder-profile-why-words") await page.locator(".fit-insights li").first().waitFor({ timeout: 8000 });

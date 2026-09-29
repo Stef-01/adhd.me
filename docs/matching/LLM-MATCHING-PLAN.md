@@ -771,7 +771,7 @@ The founder took the default on every open question ("do all the default choices
 Founder, 2026-09-29: "sentences shown to the user for why they are matched perfectly ... the key
 insights from the clinician interview ... not overwhelming". At level 1, as a profile opens, the
 finder asks `/api/finder/why` once per (words, clinician): gpt-5-mini at effort minimal writes one
-sentence of at most 26 words ("You asked for …; <name> says …") from the person's request, the
+sentence of at most 22 words ("You asked for …; <name> says …") from the person's request, the
 clinician's own listing and the matches the finder itself found between them
 (`src/lib/matching/why.ts`); where the listing answers no key, no call is made. Measured
 2026-09-29 over eight profiles: nano paired asks with the wrong words ("bulk billed" answered by
