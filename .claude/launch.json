@@ -1,0 +1,60 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "adhd.me dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "adhd.me dev, model read (level 1)",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "-u",
+        "NODE_USE_SYSTEM_CA",
+        "ADHDME_LLM_LEVEL=1",
+        "pnpm",
+        "dev",
+        "-p",
+        "3010"
+      ],
+      "port": 3010
+    },
+    {
+      "name": "adhd.me dev, voice",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "-u",
+        "NODE_USE_SYSTEM_CA",
+        "ADHDME_VOICE=1",
+        "ADHDME_LLM_LEVEL=1",
+        "pnpm",
+        "dev",
+        "-p",
+        "3020"
+      ],
+      "port": 3020
+    },
+    {
+      "name": "adhd.me prod, voice",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "-u",
+        "NODE_USE_SYSTEM_CA",
+        "ADHDME_VOICE=1",
+        "ADHDME_LLM_LEVEL=1",
+        "ADHDME_TOKEN_SECRET=local-dev-secret",
+        "pnpm",
+        "exec",
+        "next",
+        "start",
+        "-p",
+        "3021"
+      ],
+      "port": 3021
+    }
+  ]
+}
