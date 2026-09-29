@@ -15,13 +15,15 @@ export const DEFAULT_VOICE_MODEL = "gpt-realtime-2.1-mini";
 const DEFAULT_VOICE = "marin";
 const TRANSCRIBE_MODEL = "gpt-4o-mini-transcribe";
 /**
- * The person is speaking English about ADHD care in Australia, and the transcriber is told so
- * (2026-09-29: with no language pinned, "what?", "no" and "nah" came back as "什么?", "Nein." and
- * "Gar", and the request carried "general cycles"). ISO-639-1 language improves accuracy and
- * latency; the prompt names the words this conversation lives on.
+ * The person is speaking English, and the transcriber is told so (2026-09-29: with no language pinned,
+ * "what?", "no" and "nah" came back as "什么?", "Nein." and "Gar"). It is told NOTHING ELSE. For a day it
+ * also carried a prompt of the words this conversation lives on ("ADHD, assessment, … Vyvanse, …
+ * Newtown"), and on a stretch of silence the transcriber returned that prompt, whole, as what the
+ * person had said (the founder's call, 2026-09-30 07:49 AEST): the request carried every word of it,
+ * and a person who asked for help at work was read as asking for ten things, non-medication supports
+ * among them. A prompt is text the transcriber can recite; there is none.
  */
 export const TRANSCRIBE_LANGUAGE = "en";
-export const TRANSCRIBE_PROMPT = "Australian English about ADHD care: ADHD, assessment, diagnosis, psychologist, psychiatrist, GP, paediatrician, occupational therapist, coach, medication, Vyvanse, Ritalin, dexamphetamine, titration, scripts, shared care, telehealth, bulk billing, Medicare, NDIS, postpartum, autism, executive function, Sydney suburbs such as Hornsby, Parramatta, Marrickville, Penrith, Chatswood, Newtown.";
 
 /** Voice is on wherever there is a key to pay for it, unless ADHDME_VOICE=0 turns it off. */
 export function voiceOn(env: Record<string, string | undefined>): boolean {
@@ -160,7 +162,7 @@ export function sessionFor(env: Record<string, string | undefined>) {
     audio: {
       input: {
         noise_reduction: { type: "near_field" },
-        transcription: { model: TRANSCRIBE_MODEL, language: TRANSCRIBE_LANGUAGE, prompt: TRANSCRIBE_PROMPT },
+        transcription: { model: TRANSCRIBE_MODEL, language: TRANSCRIBE_LANGUAGE },
         turn_detection: turnDetection(true),
       },
       output: { voice: env.ADHDME_VOICE_NAME?.trim() || DEFAULT_VOICE },

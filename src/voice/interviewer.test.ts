@@ -54,6 +54,8 @@ describe("the interviewer", () => {
     expect(session.output_modalities).toEqual(["audio"]);
     expect(session.audio.input.turn_detection).toEqual({ type: "semantic_vad", eagerness: "low", create_response: true, interrupt_response: true });
     expect(session.audio.input.transcription.model).toBe("gpt-4o-mini-transcribe");
+    // The language and nothing else: a prompt is text the transcriber recites on silence as the person's words.
+    expect(session.audio.input.transcription).toEqual({ model: "gpt-4o-mini-transcribe", language: "en" });
     expect(session.instructions).toBe(interviewerInstructions());
     const full = sessionFor({ ADHDME_VOICE_MODEL: "gpt-realtime-2.1", ADHDME_VOICE_NAME: "cedar" });
     expect(full.model).toBe("gpt-realtime-2.1");

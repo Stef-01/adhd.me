@@ -93,6 +93,31 @@ describe("parsing what the browser sends", () => {
     expect(calls[1]!.transcript).toHaveLength(2);
   });
 
+  it("tries a conflicting write again: a call's end that reaches the table before its search lands on the next try", async () => {
+    const env = { SUPABASE_URL: "https://x.supabase.co", SUPABASE_SERVICE_ROLE_KEY: "k" };
+    const call = parseVoiceCall({ id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 3, seconds: 60, outcome: "revealed", searchId: B })!;
+    let tries = 0;
+    const conflictOnce = async () => (++tries === 1 ? { ok: false, status: 409 } : { ok: true, status: 201 });
+    recordVoiceCall(call, { env, fetch: conflictOnce, retryMs: [1, 1] });
+    await journalSettled();
+    expect(tries).toBe(2);
+    expect(finderDbCounts().journal).toMatchObject({ sent: 1, failed: 0, failedLast: null });
+    // A conflict that never clears is counted once, by table and status, after the last try.
+    resetFinderDb();
+    tries = 0;
+    const always = async () => (tries++, { ok: false, status: 409 });
+    recordVoiceCall(call, { env, fetch: always, retryMs: [1, 1] });
+    await journalSettled();
+    expect(tries).toBe(3);
+    expect(finderDbCounts().journal).toMatchObject({ sent: 0, failed: 1, failedLast: "voice_calls 409" });
+    // Any other refusal is not tried again.
+    resetFinderDb();
+    tries = 0;
+    recordVoiceCall(call, { env, fetch: async () => (tries++, { ok: false, status: 400 }), retryMs: [1, 1] });
+    await journalSettled();
+    expect(tries).toBe(1);
+  });
+
   it("keeps a search's unlisted asks, bounded, and never a key among them", () => {
     const search = { id: A, deviceId: B, source: "voice", requestText: "help", readSource: "llm", unlisted: ["relates to postpartum", "  ", 7, "x".repeat(81), ...Array.from({ length: 12 }, (_, i) => `ask ${i}`)] };
     expect(parseSearch(search)?.unlisted).toEqual(["relates to postpartum", ...Array.from({ length: 9 }, (_, i) => `ask ${i}`)]);

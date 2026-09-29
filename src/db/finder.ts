@@ -261,6 +261,16 @@ function capped<T>(list: T[], item: T): void {
 type FetchLike = (url: string, init: { method: string; headers: Record<string, string>; body: string }) => Promise<{ ok: boolean }>;
 
 /**
+ * A conflict is tried again, after these waits. A call's last report names its search, and the two
+ * rows leave the browser in the same instant and can reach the table in either order: the call
+ * first is a foreign key that does not exist yet, which PostgREST answers 409 (the founder's call,
+ * 2026-09-30: the search landed, the call's end did not, and the row stayed "stopped" with no
+ * request). The search is there a moment later.
+ */
+export const CONFLICT_RETRY_MS: readonly number[] = [400, 1200, 2500];
+const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+/**
  * A write the request does not wait for, held open past the response. On Vercel a function is
  * frozen once it has answered, so a write still in flight is lost: the first day with the tables
  * connected (2026-09-29) kept two typed searches, whose instances a following request kept warm,
@@ -276,17 +286,24 @@ function heldOpen(work: Promise<void>): void {
 }
 
 /** Sends one row to its table when Supabase is configured; in order, never awaited by a request, held open by the platform. */
-function journal(table: Table, row: Record<string, unknown>, env: Record<string, string | undefined>, fetchFn: FetchLike = fetch): void {
+function journal(table: Table, row: Record<string, unknown>, env: Record<string, string | undefined>, fetchFn: FetchLike = fetch, retryMs: readonly number[] = CONFLICT_RETRY_MS): void {
   const url = env.SUPABASE_URL?.trim().replace(/\/$/, "");
   const key = env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) return;
   const s = state();
   s.journal.chain = s.journal.chain.then(async () => {
-    const reply = await fetchFn(`${url}/rest/v1/${table}`, {
-      method: "POST",
-      headers: { apikey: key, authorization: `Bearer ${key}`, "content-type": "application/json", prefer: "resolution=merge-duplicates,return=minimal" },
-      body: JSON.stringify(row),
-    }).catch(() => ({ ok: false, status: 0 } as { ok: boolean; status?: number }));
+    const send = () =>
+      fetchFn(`${url}/rest/v1/${table}`, {
+        method: "POST",
+        headers: { apikey: key, authorization: `Bearer ${key}`, "content-type": "application/json", prefer: "resolution=merge-duplicates,return=minimal" },
+        body: JSON.stringify(row),
+      }).catch(() => ({ ok: false, status: 0 } as { ok: boolean; status?: number }));
+    let reply = await send();
+    for (const ms of retryMs) {
+      if (reply.ok || !("status" in reply) || reply.status !== 409) break;
+      await wait(ms);
+      reply = await send();
+    }
     if (reply.ok) s.journal.sent += 1;
     else {
       s.journal.failed += 1;
@@ -300,6 +317,8 @@ function journal(table: Table, row: Record<string, unknown>, env: Record<string,
 interface Deps {
   env?: Record<string, string | undefined>;
   fetch?: FetchLike;
+  /** The waits between tries of a write that conflicts; tests pass their own. */
+  retryMs?: readonly number[];
 }
 
 export function recordSearch(record: SearchRecord, deps: Deps = {}): void {
@@ -307,7 +326,7 @@ export function recordSearch(record: SearchRecord, deps: Deps = {}): void {
   journal("finder_searches", {
     id: record.id, device_id: record.deviceId, created_at: record.createdAt, source: record.source, request_text: record.requestText,
     place: record.place, filters: record.filters, read_source: record.readSource, asked: record.asked, unlisted: record.unlisted, shown: record.shown,
-  }, deps.env ?? process.env, deps.fetch);
+  }, deps.env ?? process.env, deps.fetch, deps.retryMs);
 }
 
 export function recordVoiceCall(record: VoiceCallRecord, deps: Deps = {}): void {
@@ -320,12 +339,12 @@ export function recordVoiceCall(record: VoiceCallRecord, deps: Deps = {}): void 
     id: record.id, device_id: record.deviceId, search_id: record.searchId, created_at: record.createdAt,
     model: record.model, questions: record.questions, seconds: record.seconds, outcome: record.outcome,
     request: record.request, place: record.place, transcript: record.transcript,
-  }, deps.env ?? process.env, deps.fetch);
+  }, deps.env ?? process.env, deps.fetch, deps.retryMs);
 }
 
 export function recordEvent(record: EventRecord, deps: Deps = {}): void {
   capped(state().events, record);
-  journal("finder_events", { id: record.id, search_id: record.searchId, created_at: record.createdAt, kind: record.kind, clinician_id: record.clinicianId }, deps.env ?? process.env, deps.fetch);
+  journal("finder_events", { id: record.id, search_id: record.searchId, created_at: record.createdAt, kind: record.kind, clinician_id: record.clinicianId }, deps.env ?? process.env, deps.fetch, deps.retryMs);
 }
 
 export function recordHandoff(record: HandoffRecord, deps: Deps = {}): void {
@@ -333,7 +352,7 @@ export function recordHandoff(record: HandoffRecord, deps: Deps = {}): void {
   journal("finder_handoffs", {
     id: record.id, search_id: record.searchId, device_id: record.deviceId, clinician_id: record.clinicianId,
     created_at: record.createdAt, asked: record.asked, met: record.met,
-  }, deps.env ?? process.env, deps.fetch);
+  }, deps.env ?? process.env, deps.fetch, deps.retryMs);
 }
 
 /** One rating per visit: a second answer for the same handoff or match replaces the first. */
@@ -363,7 +382,7 @@ export function rateVisit(input: NonNullable<ReturnType<typeof parseRating>>, de
     id: record.id, source: record.source, handoff_id: record.handoffId, match_id: record.matchId, clinician_id: record.clinicianId,
     device_id: record.deviceId, stars: record.stars, feedback: record.feedback, asked: record.asked, met: record.met,
     created_at: record.createdAt, updated_at: record.updatedAt,
-  }, deps.env ?? process.env, deps.fetch);
+  }, deps.env ?? process.env, deps.fetch, deps.retryMs);
   return record;
 }
 
