@@ -114,8 +114,10 @@ export function VoiceStage({
     const { state: next, send } = step(state.current, action);
     state.current = next;
     setView(next);
-    // A new turn on the record: the call so far goes out as "stopped", overwritten by the end.
-    if (!ended.current && next.turns.length > before) progressTo.current?.(summary(next, next.urgent ? "urgent" : "stopped"));
+    // A new turn on the record: the call so far goes out as "stopped", overwritten by the end. Not on the turn that
+    // reveals: its report and the end's would leave the client together and race in the table, and production
+    // (2026-09-30, 14:57) kept the "stopped" one. The end report follows within the second and carries every turn.
+    if (!ended.current && next.turns.length > before && next.phase !== "revealing") progressTo.current?.(summary(next, next.urgent ? "urgent" : "stopped"));
     for (const event of send) {
       if (link.current) link.current.emit(event);
       else queued.current.push(event);

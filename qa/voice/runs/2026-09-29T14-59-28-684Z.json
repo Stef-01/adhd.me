@@ -1,0 +1,92 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I think I might have ADHD and I'd like to get assessed.",
+    "Marrickville, but telehealth is fine.",
+    "Yes please.",
+    "No, English is fine.",
+    "I have anxiety as well.",
+    "No, that's everything."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I think I might have ADHD and I'd like to get assessed."
+    },
+    {
+      "who": "assistant",
+      "text": "Got it. Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you prefer someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "Marrickville, but telehealth is fine."
+    },
+    {
+      "who": "person",
+      "text": "Yes, please."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay, thanks, let me think about the next step."
+    },
+    {
+      "who": "assistant",
+      "text": "Is there a language or background that matters?"
+    },
+    {
+      "who": "person",
+      "text": "No, English is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay. Is there anything else a clinician should know?"
+    },
+    {
+      "who": "person",
+      "text": "I have anxiety as well."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Marrickville\",\"request\":\"An ADHD assessment with someone who has ADHD themselves, in Marrickville or telehealth, and anxiety.\"}"
+    }
+  ],
+  "request": "I think I might have ADHD and I'd like to get assessed. Marrickville, but telehealth is fine. someone who has ADHD themselves. I have anxiety as well",
+  "reads": [
+    {
+      "text": "I think I might have ADHD and I'd like to get assessed. Marrickville, but telehealth is fine. someone who has ADHD themselves. I have anxiety as well",
+      "answer": {
+        "keys": [
+          "care:adhd-assessment",
+          "pref:telehealth-first",
+          "pref:lived-experience",
+          "care:anxiety"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Lived experience",
+    "Telehealth",
+    "Anxiety",
+    "ADHD assessment"
+  ],
+  "results": [
+    "Chantelle Pin Psychologist · ADHD assessment Benowa",
+    "Alex Lawson ADHD coach · Lived experience Sutherland",
+    "Trisha Harris Counsellor · Lived experience Glenbrook",
+    "Valeria Urrutia Psychologist · ADHD assessment Benowa",
+    "Lachlan Avent Psychologist · ADHD assessment Fortitude Valley"
+  ],
+  "whyMatched": "Why matched ADHD assessment From your words: “i might have adhd” By phone or telehealth Has ADHD themselves Not in their listing: anxiety. Compare",
+  "stage": "results"
+}

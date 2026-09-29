@@ -403,3 +403,5 @@
 {"time":"2026-09-29T14:44:57.654Z","kind":"eval","persona":"postpartum","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0109,"pass":true}
 {"time":"2026-09-29T14:44:57.654Z","kind":"eval","persona":"work","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0024,"pass":true}
 {"time":"2026-09-29T14:44:57.654Z","kind":"eval","persona":"crisis","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0103,"pass":true}
+{"time":"2026-09-29T14:57:51.443Z","kind":"spoken","lines":6,"seconds":77,"tokens":{"text_in":13035,"audio_in":453,"cached":10688,"text_out":399,"audio_out":264},"costUsd":0.014322,"stage":"results"}
+{"time":"2026-09-29T14:59:28.686Z","kind":"spoken","lines":6,"seconds":74,"tokens":{"text_in":13092,"audio_in":460,"cached":10624,"text_out":720,"audio_out":368},"costUsd":0.017748,"stage":"results"}
