@@ -91,11 +91,11 @@ work). None of these is a key today.
 | has ADHD themselves | 5 (Alice Bui, Trisha, Chantelle, Lana, Alex) | the founder's example; people ask for it and it changes who they see |
 | neuro-affirming | 5 | asked for in call two; the finder heard a manner trait instead |
 | autism named | 8 | the AuDHD half of the roster's work |
-| eating disorders | 9 | a whole specialty cluster with no key |
+| eating disorders | 2 | named by two; not a key until more say it (the loose count of nine matched other uses of "eating") |
 | NDIS | 6 | a plan is a hard fact about who a person can see |
 | sees children / teens / adults | 15 / 16 / 15 | the age of the person, not one child key |
-| women's health, perinatal | 7 | one key covers one of them |
-| a culture or language named | 4 | "where you are from", held as free text |
+| women's health, perinatal | 4 | one key covers one of them |
+| a culture or language named | 7 | "where you are from", held as free text and as languages |
 | prescribes | 3 (the GPs) | the only people who can continue medication |
 | coaching, skills, strategies | 19 | what most of the roster does all day |
 | older adults, LGBTQ+, faith | 1, 0, 0 | not on this roster; do not ask |
@@ -127,8 +127,8 @@ The questions, and the split each makes on this roster:
 6. **Where are you, or would telehealth suit you?** 24 / 13. Already asked and already the
    strongest split; kept.
 7. **Is there anything else a clinician should know?** The open door for autism (8),
-   neuro-affirming (5), trauma (10), eating (9), perinatal (7), NDIS (6): read as care keys, each
-   a real split.
+   neuro-affirming (5), trauma (10), perinatal (4), NDIS (6): read as care keys, each a real split;
+   eating disorders (2) waits for more to say it.
 
 Gone from the questions: "How would you like a clinician to treat you?" and "Does anything matter
 to you about the clinician?" (the two that produced the noise in both calls).
@@ -136,8 +136,8 @@ to you about the clinician?" (the two that produced the noise in both calls).
 ## 5. How it reaches the whole system
 
 - **Vocabulary** (`src/matching/needs.ts`, `src/lib/matching/llm-read.ts`): add `lived-experience`,
-  `neuroaffirming` (or fold into `autism-adhd` as "autism and neuro-affirming"), `eating-disorders`,
-  `ndis`, `coaching-skills`, `prescribing`; retire `complex-mental-health` from the asked set; stop
+  `neuroaffirming` (or fold into `autism-adhd` as "autism and neuro-affirming"), `ndis`,
+  `coaching-skills`, `prescribing` (eating disorders when more than two say it); retire `complex-mental-health` from the asked set; stop
   the manner traits from being asked, filtered or counted as evidence, and keep them readable as
   the person's own words only.
 - **Roster** (`src/demo/roster*.ts`): `livedExperience`, `agesSeen`, `culturalBackgrounds`,
