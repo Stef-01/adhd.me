@@ -27,6 +27,7 @@
 
 import { rankBands, type Clinician } from "@/demo/clinicians";
 import { clinicians } from "@/demo/clinicians";
+import type { NeedSignal } from "./needs";
 import { REACH_CORPUS } from "./corpus";
 
 type TieOutcome = "separated" | "partialTie" | "unseparated";
@@ -42,8 +43,8 @@ interface TieQualityReport {
 }
 
 /** Classify one request by what its top band did against this roster. */
-export function tieOutcome(text: string, roster: readonly Clinician[] = clinicians): TieOutcome {
-  const top = rankBands(text, roster)[0];
+export function tieOutcome(text: string, roster: readonly Clinician[] = clinicians, needs?: readonly NeedSignal[]): TieOutcome {
+  const top = rankBands(text, roster, needs)[0];
   const size = top?.clinicians.length ?? roster.length;
   if (size <= 1) return "separated";
   return size >= roster.length ? "unseparated" : "partialTie";
@@ -57,9 +58,11 @@ export function corpusRun(): readonly string[] {
 export function tieQualityReport(
   sentences: readonly string[] = corpusRun(),
   roster: readonly Clinician[] = clinicians,
+  /** Reads already taken for these sentences against a roster with the same languages and declaration counts. */
+  reads?: ReadonlyMap<string, readonly NeedSignal[]>,
 ): TieQualityReport {
   const report = { total: sentences.length, separated: 0, partialTie: 0, unseparated: 0 };
-  for (const text of sentences) report[tieOutcome(text, roster)] += 1;
+  for (const text of sentences) report[tieOutcome(text, roster, reads?.get(text))] += 1;
   return {
     ...report,
     separationRate: report.total === 0 ? 0 : Math.round((report.separated / report.total) * 1000) / 1000,

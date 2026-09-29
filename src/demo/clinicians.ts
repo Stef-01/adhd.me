@@ -662,10 +662,12 @@ type RankBand = {
   clinicians: Clinician[];
 };
 
-export function rankBands(query: string, roster: readonly Clinician[] = clinicians): RankBand[] {
-  const needs = needsFor(query, roster);
+export function rankBands(query: string, roster: readonly Clinician[] = clinicians, needs: readonly NeedSignal[] = needsFor(query, roster)): RankBand[] {
+  // The read is taken once and handed to the ranking (it used to read the same sentence twice); a caller
+  // that has the read already (the separation effect's fifty permuted rosters, whose reads are identical)
+  // passes it in.
   const bands: RankBand[] = [];
-  for (const clinician of rankClinicians(query, roster)) {
+  for (const clinician of rankClinicians(query, roster, undefined, needs)) {
     const profile = rankingProfile(clinician, needs);
     const last = bands.at(-1);
     if (

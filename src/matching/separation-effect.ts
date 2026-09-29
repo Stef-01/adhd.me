@@ -28,7 +28,7 @@
 // reader can see how much of a two-person effect to trust rather than a single number that
 // hides it.
 
-import { clinicians, type Clinician } from "@/demo/clinicians";
+import { clinicians, type Clinician, needsFor } from "@/demo/clinicians";
 import { corpusRun, tieQualityReport } from "./tie-quality";
 
 /**
@@ -121,10 +121,14 @@ export function separationEffect(
   k = 50,
   seed = "M5",
 ): SeparationEffectReport {
-  const observed = tieQualityReport(sentences, roster).separationRate;
+  // One read per sentence for all k + 1 runs: a permuted roster keeps every language and every declaration
+  // count (each dimension is shuffled whole), so `needsFor` returns the same signals against it, and the
+  // read was the cost (2026-09-30: 29 s for this file locally, a vitest worker timeout on CI).
+  const reads = new Map(sentences.map((text) => [text, needsFor(text, roster)] as const));
+  const observed = tieQualityReport(sentences, roster, reads).separationRate;
   const nullRates = Array.from(
     { length: k },
-    (_, i) => tieQualityReport(sentences, permuteRoster(roster, `${seed}:${i}`)).separationRate,
+    (_, i) => tieQualityReport(sentences, permuteRoster(roster, `${seed}:${i}`), reads).separationRate,
   );
   const nullMean = nullRates.reduce((sum, r) => sum + r, 0) / k;
   const variance = nullRates.reduce((sum, r) => sum + (r - nullMean) ** 2, 0) / k;
