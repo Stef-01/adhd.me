@@ -10,7 +10,7 @@ import { ConsoleNavigation } from "./console-navigation";
  * Rendered only when there is more than one — a switcher offering a single choice is furniture,
  * and every practice with one site would carry it forever.
  */
-export function PracticeSwitcher({
+function PracticeSwitcher({
   practices,
   activeId,
 }: {

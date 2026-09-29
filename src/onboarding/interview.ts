@@ -42,7 +42,7 @@ export const FREQUENCIES: readonly Frequency[] = ["often", "sometimes", "not-me"
  * disclosure. They are marked as such so the completeness test can tell "this question fills no
  * facet on purpose" from "somebody added a question that changes nothing".
  */
-export type QuestionTarget =
+type QuestionTarget =
   | { kind: "care"; area: CareArea }
   | { kind: "manner"; trait: MannerTrait }
   | { kind: "access"; field: "languages" | "telehealthFirstAppointment" | "appointmentLength" | "billing" | "wheelchairAccessible" }

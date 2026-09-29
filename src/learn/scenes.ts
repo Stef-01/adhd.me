@@ -22,7 +22,7 @@ import { runFor, runStepCount, type Run } from "./runs-index";
 // TWO HEADINGS ARE LOAD-BEARING: scenes 06 ("NSW and QLD") and 07 ("How it works") are named by
 // e2e specs; renaming either needs those specs updated with it.
 
-export type Scene = {
+type Scene = {
   readonly n: string;
   readonly heading: string;
   readonly body: string;
@@ -209,7 +209,7 @@ const INTERACTIVE: readonly LearnModule[] = INTERACTIVE_MODULES.map((m, i) => {
   };
 });
 
-export const MYTH_OR_FACT: readonly Question[] = [
+const MYTH_OR_FACT: readonly Question[] = [
   {
     prompt: "ADHD is only a childhood thing.",
     options: ["Myth", "Fact"],
@@ -248,7 +248,7 @@ export const MYTH_OR_FACT: readonly Question[] = [
   },
 ];
 
-export const WORDS_YOU_WILL_HEAR: readonly Question[] = [
+const WORDS_YOU_WILL_HEAR: readonly Question[] = [
   {
     prompt: "“Titration” means…",
     options: ["Finding the dose that fits, step by step, with reviews along the way", "A blood test", "The first appointment"],

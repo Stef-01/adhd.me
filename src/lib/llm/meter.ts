@@ -60,7 +60,7 @@ export class RateGate {
   }
 }
 
-export type LedgerRow = { level: string; phase: string; model: string; usage: Usage; costUsd: number };
+type LedgerRow = { level: string; phase: string; model: string; usage: Usage; costUsd: number };
 
 export function appendLedger(path: string, row: LedgerRow, now = new Date()): void {
   mkdirSync(dirname(path), { recursive: true });

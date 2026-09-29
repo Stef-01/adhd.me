@@ -49,7 +49,7 @@ import {
 } from "@/outcomes/response-graph";
 
 /** Why the page has no rates to show. Three states, because they are three different sentences. */
-export type ResponsesEmptyReason = "nothing_happened" | "nothing_recorded" | "everything_withheld";
+type ResponsesEmptyReason = "nothing_happened" | "nothing_recorded" | "everything_withheld";
 
 export const RESPONSES_EMPTY_COPY: Record<ResponsesEmptyReason, string> = {
   nothing_happened:
@@ -67,7 +67,7 @@ export const RESPONSES_REFUSAL_COPY: Record<GraphRefusal, string> = {
     "The reporting period could not be read, so no counts are shown. Nothing is being withheld and nothing is being claimed; the page has no period to count over.",
 };
 
-export interface ResponsesView {
+interface ResponsesView {
   /** Set when there is nothing to show, and which of the three reasons it is. */
   empty: ResponsesEmptyReason | null;
   /** The sentence for that reason, resolved here so no surface writes its own. */

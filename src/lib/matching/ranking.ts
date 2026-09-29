@@ -15,7 +15,7 @@ import type { Candidate } from "./candidates";
 import type { GP, Patient } from "./types";
 
 export type PatientCriterion = "similarity" | "capacity" | "communication" | "consultStyle" | "proximity";
-export type GPCriterion = "similarity" | "ageGroup" | "comorbidity" | "consultStyle" | "billing" | "capacity";
+type GPCriterion = "similarity" | "ageGroup" | "comorbidity" | "consultStyle" | "billing" | "capacity";
 
 export const PATIENT_WEIGHTS: Readonly<Record<PatientCriterion, number>> = {
   similarity: 0.5,
@@ -34,7 +34,7 @@ export const GP_WEIGHTS: Readonly<Record<GPCriterion, number>> = {
   capacity: 0.05,
 };
 
-export interface CriterionScore<C extends string> {
+interface CriterionScore<C extends string> {
   criterion: C;
   weight: number;
   /** 0 to 1 before weighting. */
@@ -60,7 +60,7 @@ export interface RankedPatient {
   unacceptableBecause: "below_minimum_fit" | "complex_comorbidity_declined" | null;
 }
 
-export const PROXIMITY_CAP_KM = 50;
+const PROXIMITY_CAP_KM = 50;
 
 const round = (value: number) => Math.round(value * 1000) / 1000;
 
@@ -120,7 +120,7 @@ export function rankGPsForPatient(
     .sort((a, b) => b.score - a.score || a.gpId.localeCompare(b.gpId));
 }
 
-export interface IncomingPatient {
+interface IncomingPatient {
   patient: Patient;
   /** The same cosine the candidate generator computed for this pair. */
   similarity: number;

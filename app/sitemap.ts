@@ -32,7 +32,7 @@ import { SITE_URL } from "./site";
  */
 const EXPANDED_DYNAMIC_PATHS: Readonly<Record<string, () => string[]>> = {};
 
-export function sitemapPaths(): string[] {
+function sitemapPaths(): string[] {
   return PUBLIC_SURFACES.flatMap((surface) => {
     if (surface.path.includes("[")) return EXPANDED_DYNAMIC_PATHS[surface.path]?.() ?? [];
     return [surface.path];

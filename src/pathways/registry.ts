@@ -38,7 +38,7 @@ export function resetPathwayRegistry(): void {
   globalStore.__adhdMePathwayRegistry = initial();
 }
 
-export function getPathwayEvents(): readonly PathwayEvent[] {
+function getPathwayEvents(): readonly PathwayEvent[] {
   return state().events;
 }
 
@@ -56,7 +56,7 @@ export function addPathwayAttestations(attestations: readonly PathwayAttestation
 }
 
 /** Every pathway id the catalogue knows about, in a stable order. */
-export function pathwayIds(): string[] {
+function pathwayIds(): string[] {
   return [...new Set(state().events.map((event) => event.pathwayId))].sort();
 }
 

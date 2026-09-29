@@ -5,10 +5,10 @@
  * she will not step forward until she has recovered. Nothing here measures a real person.
  */
 export type Dir = 'up' | 'down' | 'left' | 'right';
-export interface Lane { row: number; speed: number; groups: { x: number; w: number }[] }
-export interface Crossing { title: string; goal: number; lanes: Lane[]; benches: [number, number][]; speaker: [number, number] | null; pings: boolean }
-export interface Scenario { crossings: [Crossing, Crossing, Crossing]; revisit: Crossing & { queue: number } }
-export type Phase = 'crossing' | 'arrived' | 'setup' | 'revisit' | 'complete';
+interface Lane { row: number; speed: number; groups: { x: number; w: number }[] }
+interface Crossing { title: string; goal: number; lanes: Lane[]; benches: [number, number][]; speaker: [number, number] | null; pings: boolean }
+interface Scenario { crossings: [Crossing, Crossing, Crossing]; revisit: Crossing & { queue: number } }
+type Phase = 'crossing' | 'arrived' | 'setup' | 'revisit' | 'complete';
 
 export const COLS = 5, ROWS = 7;
 const lanes = (spec: [number, number, number[]][]): Lane[] => spec.map(([row, speed, xs]) => ({ row, speed, groups: xs.map(x => ({ x, w: 1.4 })) }));

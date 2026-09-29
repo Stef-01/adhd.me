@@ -231,7 +231,7 @@ export function statusFor(needs: readonly Need[], touchedByContributor: boolean)
 
 /* -------------------------------------------------------------------- cells */
 
-export interface Cell {
+interface Cell {
   readonly area: Area;
   readonly aspect: Aspect;
   readonly status: CellStatus;
@@ -399,7 +399,7 @@ export function axes(record: ModelRecord | null, profile: LearningProfile | null
 
 /* ---------------------------------------------------------------- the views */
 
-export interface AspectView {
+interface AspectView {
   readonly aspect: Aspect;
   readonly point: AxisPoint;
   /** The five areas, in `AREAS` order. */

@@ -12,8 +12,8 @@ export const MAX_FOLLOW_UPS = 8;
 export const OPENING_QUESTION = "What kind of support are you looking for?";
 
 export const DEFAULT_VOICE_MODEL = "gpt-realtime-2.1-mini";
-export const DEFAULT_VOICE = "marin";
-export const TRANSCRIBE_MODEL = "gpt-4o-mini-transcribe";
+const DEFAULT_VOICE = "marin";
+const TRANSCRIBE_MODEL = "gpt-4o-mini-transcribe";
 
 /** Voice is on wherever there is a key to pay for it, unless ADHDME_VOICE=0 turns it off. */
 export function voiceOn(env: Record<string, string | undefined>): boolean {

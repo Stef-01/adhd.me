@@ -63,7 +63,7 @@ export function readBackQuestionFor(facetKey: string): string {
 }
 
 /** One matchable facet the checklist can still ask about. */
-export type GapFacet = { key: string; kind: "care" | "manner"; label: string };
+type GapFacet = { key: string; kind: "care" | "manner"; label: string };
 
 /**
  * Every matchable facet, in the interview's own order — care first, then manner — with the

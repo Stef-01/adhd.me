@@ -37,9 +37,9 @@ import { usePlayed } from "./lives/played-hook";
 import { GAME_GROUPS, LIFE_GAMES, RUN_GAMES, tryFirst, type GameItem } from "@/learn/games";
 import { Bean } from "./play/beans";
 
-export type Pane = "games" | "modules";
-export const PANES: readonly Pane[] = ["games", "modules"];
-export const PANE_KEY = "adhdme.learn.pane.v1";
+type Pane = "games" | "modules";
+const PANES: readonly Pane[] = ["games", "modules"];
+const PANE_KEY = "adhdme.learn.pane.v1";
 
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 const POP = { type: "spring", stiffness: 520, damping: 28 } as const;
@@ -86,7 +86,7 @@ const coverOf = (module: LearnModule) => COLLECTION_COLOURS[module.id] ?? COVER_
 /** The pane for this page load when the store is denied: the last one written, else games. */
 let memoryPane: Pane = "games";
 
-export function readPane(): Pane {
+function readPane(): Pane {
   try {
     const raw = window.localStorage.getItem(PANE_KEY);
     if (raw === "modules" || raw === "games") return raw;
@@ -105,7 +105,7 @@ export function writePane(pane: Pane): void {
   }
 }
 
-export interface LearnPanesProps {
+interface LearnPanesProps {
   progress: Progress;
   cursor: LearnCursor | null;
   completed: string | null;

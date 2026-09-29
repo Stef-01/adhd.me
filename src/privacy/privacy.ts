@@ -106,7 +106,7 @@ export interface DeletionRecord {
   };
 }
 
-export interface DeletionResult {
+interface DeletionResult {
   dataset: PrivacyDataset;
   deletion: DeletionRecord;
   suppression: SuppressionEntry;

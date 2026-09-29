@@ -2,7 +2,7 @@
 // sessionStorage, in the tab and never in the address bar (the finder's law, `src/finder/state.ts`).
 import type { PatientView } from "@/lib/matching/views";
 
-export const MATCH_SESSION_KEY = "adhdme.match.v1";
+const MATCH_SESSION_KEY = "adhdme.match.v1";
 /**
  * The view the intake returned, kept in the tab beside the id. WHY: the store is in memory per
  * server process (the tree's mock posture), and on a serverless host the read may land on a
@@ -11,7 +11,7 @@ export const MATCH_SESSION_KEY = "adhdme.match.v1";
  * (Phase M5) the tab is the one place guaranteed to remember, so it does, and the screens say
  * when what they show came from the tab rather than the server.
  */
-export const MATCH_VIEW_KEY = "adhdme.match.view.v1";
+const MATCH_VIEW_KEY = "adhdme.match.view.v1";
 
 export type HeldView = PatientView & { fromTab?: boolean };
 
@@ -47,7 +47,7 @@ export function writeView(view: PatientView): void {
   }
 }
 
-export function readView(): PatientView | null {
+function readView(): PatientView | null {
   try {
     const raw = window.sessionStorage.getItem(MATCH_VIEW_KEY);
     return raw ? (JSON.parse(raw) as PatientView) : null;

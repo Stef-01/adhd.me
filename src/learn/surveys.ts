@@ -25,7 +25,7 @@ export interface SurveyOption {
   readonly claims?: Readonly<Record<string, boolean>>;
 }
 
-export interface SurveyQuestion {
+interface SurveyQuestion {
   readonly id: string;
   readonly prompt: string;
   readonly kind: "single" | "scale";

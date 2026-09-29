@@ -163,7 +163,7 @@ function asList(items: readonly string[]): string {
  * finder uses. If this file computed a score of its own it would eventually disagree with the
  * ranking, and a metrics panel that disagrees with the product is worse than no panel.
  */
-export type MatchAudit = {
+type MatchAudit = {
   query: string;
   /** Facets the reader's words reached, whether or not anybody answers them. Weights carry the
    *  O2 rarity discount, so a facet the whole roster declares shows what it can actually earn. */

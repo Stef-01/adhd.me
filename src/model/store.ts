@@ -23,10 +23,10 @@ export const MODEL_VERSION = 1;
 export const MODEL_KEY = `adhdme.model.v${MODEL_VERSION}`;
 
 /** PRD §19: the three resonance answers, stored separately. */
-export type Frequency = "often" | "sometimes" | "rarely" | "unsure";
+type Frequency = "often" | "sometimes" | "rarely" | "unsure";
 export type Priority = "yes" | "maybe" | "no";
 
-export interface Resonance {
+interface Resonance {
   frequency?: Frequency;
   /** 0–10. */
   cost?: number;
@@ -38,7 +38,7 @@ export type InsightVerdict = "yes" | "partly" | "no";
 
 export type ExperimentOutcome = "a-lot" | "a-little" | "no" | "didnt-try";
 
-export interface Experiment {
+interface Experiment {
   /** The strategy id, from the module that offered it. */
   strategyId: string;
   moduleId: string;
@@ -47,14 +47,14 @@ export interface Experiment {
   outcomeAt?: string;
 }
 
-export interface Reflection {
+interface Reflection {
   moduleId: string;
   text: string;
   at: string;
 }
 
 /** A reading of a reflection the person CONFIRMED (PRD §29). Never the text; the subdomain and the note. */
-export interface ConfirmedInterpretation {
+interface ConfirmedInterpretation {
   moduleId: string;
   subdomain: Subdomain;
   layer: Layer;
@@ -62,7 +62,7 @@ export interface ConfirmedInterpretation {
   at: string;
 }
 
-export interface SafetyEvent {
+interface SafetyEvent {
   ruleId: SafetyRuleId;
   at: string;
   /** Set once the person has seen the safety screen and chosen to continue. */
@@ -117,7 +117,7 @@ export interface ModelRecord {
 }
 
 export type MedicationField = "changes" | "untouched" | "unwanted";
-export interface MedicationNote {
+interface MedicationNote {
   changes: string;
   untouched: string;
   unwanted: string;
@@ -128,7 +128,7 @@ export function emptyMedicationNote(): MedicationNote {
 }
 
 export type ManualSection = "helps" | "harder" | "work-with-me";
-export interface ManualRecord {
+interface ManualRecord {
   helps: string;
   harder: string;
   "work-with-me": string;
@@ -278,7 +278,7 @@ export function answerAgain(storage: ModelStorage): ModelRecord {
  *   end:     a finished set and no draft.
  *   welcome: anything else.
  */
-export type OnboardingArrival = "again" | "resume" | "end" | "welcome";
+type OnboardingArrival = "again" | "resume" | "end" | "welcome";
 export function onboardingArrival(record: ModelRecord, again: boolean): OnboardingArrival {
   if (again && isComplete(record.onboarding)) return "again";
   if (record.onboardingDraft) return "resume";

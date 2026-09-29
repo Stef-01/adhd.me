@@ -69,18 +69,18 @@ export interface Prediction {
 }
 
 /** A week the back-test could not score, and why. Never silently absent. */
-export interface SkippedWeek {
+interface SkippedWeek {
   dayIso: string;
   why: string;
 }
 
-export interface BackTest {
+interface BackTest {
   key: SessionKey;
   predictions: readonly Prediction[];
   skipped: readonly SkippedWeek[];
 }
 
-export type ScoreRefusal = "too_few_predictions";
+type ScoreRefusal = "too_few_predictions";
 
 export const SCORE_WITHHELD_COPY: Record<ScoreRefusal, string> = {
   too_few_predictions:

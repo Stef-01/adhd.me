@@ -46,12 +46,12 @@ import {
   type SuppressedReport,
 } from "./suppression";
 
-export interface ReportPeriod {
+interface ReportPeriod {
   fromIso: string;
   toIso: string;
 }
 
-export interface PracticeReport {
+interface PracticeReport {
   practiceId: string;
   practiceName: string;
   period: ReportPeriod;
@@ -61,7 +61,7 @@ export interface PracticeReport {
   coverage: Coverage;
 }
 
-export interface Coverage {
+interface Coverage {
   /** Kinds present in the document, published or named as withheld. */
   reported: FigureKind[];
   /**

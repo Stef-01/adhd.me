@@ -23,7 +23,7 @@ import { Bean } from "./beans";
 import { Glyph, LayerGlyph } from "./glyphs";
 import { useCollected } from "../collected";
 
-export interface MechanicProps {
+interface MechanicProps {
   round: Round;
   live: boolean;
   /** The bean's mood right now; the scene-owning mechanics draw it. */

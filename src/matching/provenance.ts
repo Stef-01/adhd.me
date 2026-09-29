@@ -36,7 +36,7 @@ const CARE_LABEL = new Map(CARE_AREA_LABELS.map((entry) => [entry.id, entry.labe
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 
 /** One thing a patient can be told, and the declaration it was composed from. */
-export type ToldLine = {
+type ToldLine = {
   /** The words a patient reads. */
   said: string;
   /** The field on this clinician's record that produced it. */

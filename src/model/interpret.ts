@@ -13,7 +13,7 @@
 
 import type { Layer, Subdomain } from "./layers";
 
-export interface InterpretationCue {
+interface InterpretationCue {
   readonly subdomain: Subdomain;
   readonly layer: Layer;
   /** The contributor note the model keeps if confirmed — plain words, no diagnosis. */

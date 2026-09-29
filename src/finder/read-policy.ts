@@ -5,7 +5,7 @@
 // against 0.808). So at level 1 the finder reads only the rest: most searches list at once, with
 // nothing sent and nothing spent, and the model still reads the requests where it helps.
 
-export const SHORT_WORDS = 10;
+const SHORT_WORDS = 10;
 
 /** True when the model should read these words: more than ten of them, or nothing the lexicon heard. */
 export function worthReading(request: string, lexiconHeard: number): boolean {

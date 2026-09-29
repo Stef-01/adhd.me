@@ -8,7 +8,7 @@ import { EXPERTISE_FOR, fitTags, problemFit, strengthFit } from "./problem-fit";
 import { EXPERTISE_LABELS, type ExpertiseTag } from "./professions";
 import type { Subdomain } from "@/model/layers";
 
-export interface SkillMatch {
+interface SkillMatch {
   provider: Clinician;
   skill: ExpertiseTag;
   label: string;

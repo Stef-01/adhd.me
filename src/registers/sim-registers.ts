@@ -25,7 +25,7 @@ import { deriveMemberships, type PmsConditionFlag } from "./membership";
 import { rankGapAware } from "./ranking";
 
 /** One register in the simulation. W63 ran exactly one; W75 runs several. */
-export interface RegisterConditionSpec {
+interface RegisterConditionSpec {
   conditionCode: ConditionCode;
   /** Cadence of the FIXTURE interval, in months. Not a clinical value (see G5 note above). */
   intervalMonths: number;
@@ -70,7 +70,7 @@ export function conditionsOf(config: RegisterSimConfig): RegisterConditionSpec[]
   ];
 }
 
-export function fixtureCatalogue(config: RegisterSimConfig): IntervalCatalogue {
+function fixtureCatalogue(config: RegisterSimConfig): IntervalCatalogue {
   return loadIntervals(
     conditionsOf(config).map((spec) => ({
       id: `iv-${spec.conditionCode}`,
@@ -87,7 +87,7 @@ export function fixtureCatalogue(config: RegisterSimConfig): IntervalCatalogue {
   );
 }
 
-export interface RegisterLayer {
+interface RegisterLayer {
   /** Patients on the register, by id. */
   memberIds: ReadonlySet<string>;
   gaps: readonly CareGap[];

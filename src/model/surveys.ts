@@ -12,15 +12,15 @@ import { needLabel } from "./labels";
 import type { Layer, Subdomain } from "./layers";
 import type { ModelRecord } from "./store";
 
-export type SurveyAnswers = Readonly<Record<string, string | number>>;
+type SurveyAnswers = Readonly<Record<string, string | number>>;
 
-export interface SurveyContributor {
+interface SurveyContributor {
   readonly layer: Layer;
   readonly subdomain: Subdomain;
   readonly note: string;
 }
 
-export interface SurveyResult {
+interface SurveyResult {
   readonly surveyId: string;
   readonly answered: number;
   readonly total: number;

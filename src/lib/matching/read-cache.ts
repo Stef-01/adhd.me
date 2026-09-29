@@ -6,8 +6,8 @@
 
 import { createHash } from "node:crypto";
 
-export const MAX = 500;
-export const TTL_MS = 24 * 60 * 60 * 1000;
+const MAX = 500;
+const TTL_MS = 24 * 60 * 60 * 1000;
 
 interface Held {
   keys: string[];
@@ -21,7 +21,7 @@ function cache(): Map<string, Held> {
 }
 
 /** Words that differ only in case, spacing or a closing full stop are the same request; the key is their hash. */
-export function readKey(text: string): string {
+function readKey(text: string): string {
   const words = text.trim().toLowerCase().replace(/\s+/g, " ").replace(/[.!]+$/, "");
   return createHash("sha256").update(words).digest("hex");
 }

@@ -41,7 +41,7 @@ import type { GuidelineInterval } from "@/domain/types";
 import type { UsablePathway } from "@/pathways/approval";
 import type { PathwayCriterion } from "@/pathways/versioning";
 
-export type ContradictionSeverity = "blocking" | "review";
+type ContradictionSeverity = "blocking" | "review";
 
 export type ContradictionKind =
   /** Two different versions of one pathway. Which applies is undecidable. */
@@ -65,7 +65,7 @@ export interface Contradiction {
   detail: string;
 }
 
-export interface VerticalContents {
+interface VerticalContents {
   pathways: readonly UsablePathway[];
   intervals: readonly GuidelineInterval[];
 }

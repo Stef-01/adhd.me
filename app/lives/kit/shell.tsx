@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, Pause, SpeakerHigh, SpeakerSlash, X } from "@pho
 import { sound, type ScoreSpec } from "../sounds";
 
 /** Subscribe to the shared mute preference. */
-export function useMuted() { return useSyncExternalStore(fn => sound().subscribe(fn), () => sound().muted, () => true); }
+function useMuted() { return useSyncExternalStore(fn => sound().subscribe(fn), () => sound().muted, () => true); }
 
 /** Leo's calm frame for every live world: toolbar, caption, HUD, stage, status and a pause sheet. */
 export function GameShell({ name, label, eyebrow, heading, objective, hud, status, paused, still, onPause, onResume, onStill, phaseKey, data, style, score, playing = false, intensity = .3, children }: {

@@ -23,7 +23,7 @@
 // It lives on `globalThis` because Next bundles `instrumentation.ts` and each route separately,
 // and a module-level array would be a different array in each.
 
-export interface ServerErrorReport {
+interface ServerErrorReport {
   readonly kind: "server-error";
   readonly at: string;
   readonly sha: string | null;
@@ -64,7 +64,7 @@ export interface CspViolationReport {
 
 export type Report = ServerErrorReport | WebVitalReport | CspViolationReport;
 
-export interface ReporterSink {
+interface ReporterSink {
   readonly name: string;
   report(report: Report): void;
 }
@@ -83,7 +83,7 @@ export const ADAPTERS: Readonly<Record<string, () => ReporterSink>> = {
   console: () => consoleSink,
 };
 
-export const DEFAULT_ADAPTER = "console";
+const DEFAULT_ADAPTER = "console";
 
 /** Selects the sink `ADHDME_REPORTER` names; unset means the console; an unknown name throws. */
 export function selectSink(name: string | undefined = process.env.ADHDME_REPORTER): ReporterSink {
@@ -147,13 +147,13 @@ export function stripQuery(path: string): string {
 const STACK_LIMIT = 4000;
 
 /** The shape Next hands `onRequestError`, named here so the builder is testable without Next. */
-export interface ErrorRequest {
+interface ErrorRequest {
   readonly path: string;
   readonly method: string;
   readonly headers?: unknown;
 }
 
-export interface ErrorContext {
+interface ErrorContext {
   readonly routerKind: string;
   readonly routePath: string;
   readonly routeType: string;

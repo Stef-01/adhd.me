@@ -28,7 +28,7 @@ export const PROFESSIONS = [
 ] as const;
 export type Profession = (typeof PROFESSIONS)[number];
 
-export interface ProfessionEntry {
+interface ProfessionEntry {
   readonly id: Profession;
   /** The name on a card: "GP", "Psychologist". */
   readonly label: string;

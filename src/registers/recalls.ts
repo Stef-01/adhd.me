@@ -23,7 +23,7 @@
 import type { ConditionCode, PatientId, PracticeId } from "@/domain/types";
 import type { CareGap } from "./caregap";
 
-export type RecallStatus = "open" | "closed";
+type RecallStatus = "open" | "closed";
 
 export interface PracticeRecall {
   practiceId: PracticeId;
@@ -35,26 +35,26 @@ export interface PracticeRecall {
   closedAt?: string | null;
 }
 
-export type SuppressionReason =
+type SuppressionReason =
   | "recall_same_condition"
   | "recall_unscoped"
   | "patient_active_recall";
 
-export interface SuppressedGap {
+interface SuppressedGap {
   gap: CareGap;
   reason: SuppressionReason;
   /** When the practice opened the recall that won, where there is one. */
   recallOpenedAt?: string;
 }
 
-export interface RecallReconciliation {
+interface RecallReconciliation {
   /** Gaps no practice recall is already covering. */
   send: CareGap[];
   /** Gaps withheld, each with the recall that took precedence. */
   suppressed: SuppressedGap[];
 }
 
-export interface ReconcileOptions {
+interface ReconcileOptions {
   /**
    * Patients carrying the legacy coarse `activeRecall` flag (W3 domain model). Kept as a
    * separate input because it predates condition-scoped recalls and is still what the

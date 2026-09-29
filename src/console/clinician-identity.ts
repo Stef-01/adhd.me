@@ -11,7 +11,7 @@
 
 import type { ClinicianRecord } from "./store";
 
-export type ClinicianIdentity =
+type ClinicianIdentity =
   | { linked: true; clinician: ClinicianRecord }
   | { linked: false; reason: "no_clinician_for_email" };
 

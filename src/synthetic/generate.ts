@@ -15,7 +15,7 @@ import type {
 import { isoDaysFrom } from "@/lib/dates";
 import { chance, intBetween, mulberry32, pick, type Rng } from "./rng";
 
-export interface GeneratorOptions {
+interface GeneratorOptions {
   seed: number;
   patientCount: number; // ~12k for the reference practice
   clinicianCount: number; // 10

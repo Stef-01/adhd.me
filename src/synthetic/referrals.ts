@@ -17,7 +17,7 @@ import type { ReferralEvent, ReferralEventKind } from "@/referrals/leakage";
 import type { PracticeRecall } from "@/registers/recalls";
 import { intBetween, mulberry32, pick } from "./rng";
 
-export interface ReferralGeneratorOptions {
+interface ReferralGeneratorOptions {
   seed: number;
   practiceId: PracticeId;
   /** How many referral histories to produce. */
@@ -25,7 +25,7 @@ export interface ReferralGeneratorOptions {
   todayIso: string;
 }
 
-export interface SyntheticReferrals {
+interface SyntheticReferrals {
   events: ReferralEvent[];
   barriers: BarrierRecord[];
   recalls: PracticeRecall[];

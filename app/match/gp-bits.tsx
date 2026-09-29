@@ -5,7 +5,7 @@ import { CheckCircle, Clock, VideoCamera } from "@phosphor-icons/react/dist/ssr"
 import { AGE_GROUP_LABELS, VERIFICATION_LABELS } from "@/lib/matching/labels";
 import type { GPPublicView } from "@/lib/matching/views";
 
-export function initialsOf(name: string): string {
+function initialsOf(name: string): string {
   return name
     .replace(/^Dr\s+/i, "")
     .split(/\s+/)

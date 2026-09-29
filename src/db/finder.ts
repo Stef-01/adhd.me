@@ -12,9 +12,9 @@ import { MAX_FOLLOW_UPS } from "@/voice/interviewer";
 
 export type SearchSource = "typed" | "dictation" | "voice";
 export type EventKind = "profile" | "compare" | "more" | "heard" | "filter";
-export type CallOutcome = "revealed" | "stopped" | "failed" | "urgent";
+type CallOutcome = "revealed" | "stopped" | "failed" | "urgent";
 
-export interface SearchRecord {
+interface SearchRecord {
   id: string;
   deviceId: string;
   createdAt: string;
@@ -27,7 +27,7 @@ export interface SearchRecord {
   shown: string[];
 }
 
-export interface VoiceCallRecord {
+interface VoiceCallRecord {
   id: string;
   deviceId: string;
   searchId: string | null;
@@ -38,7 +38,7 @@ export interface VoiceCallRecord {
   outcome: CallOutcome;
 }
 
-export interface EventRecord {
+interface EventRecord {
   id: string;
   searchId: string;
   createdAt: string;
@@ -46,7 +46,7 @@ export interface EventRecord {
   clinicianId: string | null;
 }
 
-export interface HandoffRecord {
+interface HandoffRecord {
   id: string;
   searchId: string | null;
   deviceId: string;
@@ -229,7 +229,7 @@ function journal(table: Table, row: Record<string, unknown>, env: Record<string,
   });
 }
 
-export interface Deps {
+interface Deps {
   env?: Record<string, string | undefined>;
   fetch?: FetchLike;
 }

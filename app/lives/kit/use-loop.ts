@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 
 /** Actions every live world understands. */
-export type LoopAction = { type: "tick"; ms: number } | { type: "pause" } | { type: "resume" } | { type: "still"; value: boolean };
-export interface LoopState { paused: boolean; still: boolean }
+type LoopAction = { type: "tick"; ms: number } | { type: "pause" } | { type: "resume" } | { type: "still"; value: boolean };
+interface LoopState { paused: boolean; still: boolean }
 
 /**
  * Fixed 50 ms simulation steps on one animation frame, published every frame while the world runs.

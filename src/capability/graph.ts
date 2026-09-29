@@ -38,7 +38,7 @@ import {
   type StalenessPolicy,
 } from "./provenance";
 
-export interface CapabilityState {
+interface CapabilityState {
   interests: ClinicianInterest[];
   experience: ClinicianExperience[];
   competence: ClinicianCompetence[];
@@ -84,7 +84,7 @@ export function putCompetence(records: readonly ClinicianCompetence[]): void {
   getCapability().competence = [...records];
 }
 
-export interface OwnProfileRow {
+interface OwnProfileRow {
   conditionCode: ConditionCode;
   interest: { strength: number; statedAt: string; freshness: Freshness; reason: string } | null;
   /** Full detail — a clinician may see what was derived about them, not just what they typed. */
@@ -141,7 +141,7 @@ export function ownProfile(
   });
 }
 
-export interface PanelCell {
+interface PanelCell {
   clinicianId: ClinicianId;
   conditionCode: ConditionCode;
   /** Present-and-fresh, present-but-stale, or absent. Deliberately NOT the underlying counts. */

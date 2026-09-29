@@ -6,7 +6,7 @@ import { readEnv } from "./env";
 // unauthenticated owner-session + state-reset endpoint, so it fails CLOSED unless
 // a deployment explicitly opts in (same posture as the mock introspection routes).
 // U2: read through `env.ts`; the production deployment refuses to serve with the flag on.
-export function demoEnabled(): boolean {
+function demoEnabled(): boolean {
   const env = readEnv();
   return !env.production || env.demoOptedIn;
 }

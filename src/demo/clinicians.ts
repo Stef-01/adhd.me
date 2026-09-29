@@ -156,7 +156,7 @@ export function rankClinicians(
   });
 }
 
-export type RankingProfile = {
+type RankingProfile = {
   /** Number of distinct language and access constraints this clinician answers. */
   constraintCoverage: number;
   /** Weight of explicitly requested language and access constraints this clinician answers. */
@@ -518,7 +518,7 @@ export type MatchQuality = "informed" | "tied" | "unmatched" | "unserved";
  * my anxious mum, she speaks Hindi" (both 0.33) — and the M6 ladder tally moves with them
  * (`extractor-quality.test.ts` re-pins both `informed`/`tied`).
  */
-export const INFORMED_SEPARATION_RATIO = 0.5;
+const INFORMED_SEPARATION_RATIO = 0.5;
 
 /** `separationRatio`'s computation, given needs already resolved — the shared inner step. */
 function separationRatioForNeeds(needs: readonly NeedSignal[], roster: readonly Clinician[]): number | null {
@@ -531,15 +531,6 @@ function separationRatioForNeeds(needs: readonly NeedSignal[], roster: readonly 
   return differing / askedFacets.size;
 }
 
-/**
- * The fraction of distinct facets a query reached on which the roster's declared strength
- * actually differs — the measure `matchQuality` grades `informed` against. `null` when the
- * query reached nothing. Exported so the boundary can be asserted directly rather than only
- * through the four-way label.
- */
-export function separationRatio(query: string, roster: readonly Clinician[] = clinicians): number | null {
-  return separationRatioForNeeds(needsFor(query, roster), roster);
-}
 
 export function matchQuality(query: string, roster: readonly Clinician[] = clinicians, needs: readonly NeedSignal[] = needsFor(query, roster)): MatchQuality {
   if (needs.length === 0) return "unmatched";
@@ -572,9 +563,9 @@ export function matchQuality(query: string, roster: readonly Clinician[] = clini
  * and the fitting sentence would be the finder explaining a ranking that never happened, the
  * exact defect O1 removed. The caller picks by whether the clinician has match evidence.
  */
-export const CLOSED_BOOKS_COPY =
+const CLOSED_BOOKS_COPY =
   "Their books are closed to new patients right now, shown because they fit what you asked. The practice can say when that changes.";
-export const CLOSED_BOOKS_NEUTRAL_COPY =
+const CLOSED_BOOKS_NEUTRAL_COPY =
   "Their books are closed to new patients right now. The practice can say when that changes.";
 
 /** The right closed-books sentence for this clinician and query. Empty when books are open. */
@@ -600,7 +591,7 @@ export function closedBooksNote(clinician: Clinician, query: string): string | n
  * label. Returns `null` for `synthetic-none`, which has no url and therefore no control — the
  * terminal state O231 designed, rather than a disabled button or a link to a fabricated page.
  */
-export type BookingHandoff = { label: string; caption: string };
+type BookingHandoff = { label: string; caption: string };
 
 export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
   switch (clinician.booking.via) {
@@ -646,7 +637,7 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
  * only when it is true everywhere. Same closed-vocabulary posture as everything else — a band
  * is a fact about equal numbers, not an estimate.
  */
-export type RankBand = {
+type RankBand = {
   score: number;
   constraintCoverage: number;
   constraintScore: number;
@@ -733,7 +724,7 @@ function orderedAsks(query: string, roster: readonly Clinician[]): NeedSignal[] 
  * when it mixes kinds. The sentence about an order must name the list it is about — narrowed to
  * occupational therapists, "every listed GP" is a false statement about the screen.
  */
-export function rosterNoun(roster: readonly Clinician[]): { one: string; many: string } {
+function rosterNoun(roster: readonly Clinician[]): { one: string; many: string } {
   const kinds = new Set(roster.map((c) => c.profession ?? "gp"));
   if (kinds.size === 1) {
     const only = [...kinds][0]!;
@@ -989,7 +980,7 @@ export function missedAsks(
   return needs.filter((need) => !answers(clinician, need));
 }
 
-export type RequestFitSummary = {
+type RequestFitSummary = {
   recognizedNeedCount: number;
   constraintCount: number;
   fullMatchCount: number;
@@ -1191,7 +1182,7 @@ export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): st
  * match, per W213's explain module — rather than a directory that either advertises care it
  * cannot reach (narrowing) or inflates a "sometimes" into an "often" (the bug F5 named).
  */
-export const ELIGIBILITY_CARE_THRESHOLD = 0.5;
+const ELIGIBILITY_CARE_THRESHOLD = 0.5;
 
 /**
  * `careThreshold` defaults to the decided value and exists so M2's measurement can call this

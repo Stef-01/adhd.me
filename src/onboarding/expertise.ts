@@ -28,7 +28,7 @@ import { readNeeds, type NeedSignal } from "@/matching/needs";
 import { OFFERED_LANGUAGES } from "@/onboarding/types";
 
 /** One declaration the transcript supports, with the evidence and the read-back question. */
-export type DeclarationProposal = {
+type DeclarationProposal = {
   /** The facet the doctor's words reached, in the matcher's own vocabulary. */
   facet: NeedSignal["facet"];
   /** The closed-vocabulary label a patient would eventually see beside a match. */

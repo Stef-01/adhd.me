@@ -288,7 +288,7 @@ function splitWordsKeepingCommas(text: string): string[] {
     .filter((word) => word.length > 0);
 }
 
-export function isStopword(word: string): boolean {
+function isStopword(word: string): boolean {
   return STOPWORDS.has(word);
 }
 
@@ -418,7 +418,7 @@ const MAX_NEGATION_LEAD = 3;
  * lost bulk-billing). Binding is now done once per trigger, over all candidate spans, in
  * `suppressedByDesireNegation` below.
  */
-export function desireNegationEnds(sentence: readonly string[]): number[] {
+function desireNegationEnds(sentence: readonly string[]): number[] {
   const ends = new Set<number>();
   for (const phrase of DESIRE_NEGATIONS) {
     for (let start = 0; start < sentence.length; start++) {

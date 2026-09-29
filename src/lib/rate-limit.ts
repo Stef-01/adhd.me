@@ -2,7 +2,7 @@
 // (sign-in, booking confirm). In-memory is honest for the single-process synthetic
 // phase; a real deployment adds infrastructure-level limits in front (dossier item).
 
-export interface RateLimitRule {
+interface RateLimitRule {
   limit: number;
   windowMs: number;
 }

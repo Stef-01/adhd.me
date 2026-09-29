@@ -5,10 +5,10 @@
  * draft is fictional and stays in memory; nothing here grades writing.
  */
 export type Dir = 'up' | 'down' | 'left' | 'right';
-export interface Chunk { id: number; text: string; x: number; y: number; slot: number | null }
-export interface Line { slots: string[]; tabs: string[]; change?: { at: number; slot: number; text: string; note: string } }
-export interface Scenario { brief: string; lines: [Line, Line, Line]; revisit: Line & { note: string }; steps: [string, string] }
-export type Phase = 'writing' | 'line-done' | 'setup' | 'revisit' | 'complete';
+interface Chunk { id: number; text: string; x: number; y: number; slot: number | null }
+interface Line { slots: string[]; tabs: string[]; change?: { at: number; slot: number; text: string; note: string } }
+interface Scenario { brief: string; lines: [Line, Line, Line]; revisit: Line & { note: string }; steps: [string, string] }
+type Phase = 'writing' | 'line-done' | 'setup' | 'revisit' | 'complete';
 
 export const COLS = 5, ROWS = 7;
 export const SCENARIOS: Scenario[] = [
@@ -51,7 +51,7 @@ export type NinaAction =
   | { type: 'tick'; ms: number } | { type: 'pause' } | { type: 'resume' } | { type: 'still'; value: boolean }
   | { type: 'dir'; dir: Dir } | { type: 'continue' } | { type: 'save' } | { type: 'marker' } | { type: 'next'; step: string } | { type: 'restart' };
 
-export function lineDef(s: Pick<NinaWorld, 'scenario' | 'line'>): Line { const c = SCENARIOS[s.scenario]!; return s.line === 3 ? c.revisit : c.lines[s.line]!; }
+function lineDef(s: Pick<NinaWorld, 'scenario' | 'line'>): Line { const c = SCENARIOS[s.scenario]!; return s.line === 3 ? c.revisit : c.lines[s.line]!; }
 /** The slot texts the line needs now, after any mid-line change. */
 export function wanted(s: NinaWorld): string[] {
   const l = lineDef(s);
@@ -172,4 +172,3 @@ export function ninaReducer(s: NinaWorld, a: NinaAction): NinaWorld {
   }
   return s;
 }
-export function blotAt(s: NinaWorld, x: number, y: number) { return s.blots.some(b => b.x === x && b.y === y); }

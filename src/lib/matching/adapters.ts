@@ -64,7 +64,7 @@ function sentence(text: string): string {
   return /[.!?]$/.test(t) ? t : `${t}.`;
 }
 
-export function isGeneralPractitioner(clinician: Clinician): boolean {
+function isGeneralPractitioner(clinician: Clinician): boolean {
   return clinician.profession === undefined || clinician.profession === "gp";
 }
 
@@ -159,7 +159,7 @@ export function rosterGPs(today: Date = new Date(), roster: readonly Clinician[]
   });
 }
 
-export interface IntakeInput {
+interface IntakeInput {
   id: string;
   name: string;
   narrative: string;

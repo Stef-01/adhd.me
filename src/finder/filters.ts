@@ -28,7 +28,7 @@ import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { APPROACHES, type Approach } from "@/demo/roster";
 import type { SuburbPoint } from "@/geo/suburbs";
 
-export const FILTERS_VERSION = 1;
+const FILTERS_VERSION = 1;
 /** The localStorage key. Versioned in the name too, so two shapes never share one slot. */
 export const FILTERS_KEY = `adhdme.filters.v${FILTERS_VERSION}`;
 
@@ -207,7 +207,7 @@ export function activeFilterCount(filters: Filters): number {
 }
 
 /** One filter that is on, and the set with exactly that filter off — the way out of a list it emptied. */
-export interface Relaxation {
+interface Relaxation {
   label: string;
   filters: Filters;
 }

@@ -13,7 +13,7 @@ export const REFLECTION_LIMIT = 6;
 /** Words the question and its options must never carry (§37: never "rate your ADHD severity"). */
 export const REFLECTION_BANNED = ["rate", "rating", "severity", "score", "how bad", "symptom"] as const;
 
-export interface ReflectionOption {
+interface ReflectionOption {
   gameId: string;
   label: string;
 }

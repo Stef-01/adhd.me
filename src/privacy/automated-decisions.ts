@@ -43,7 +43,7 @@
 // decision or is declared as not being one.
 
 /** Whether the decision is actually being taken about anybody today. */
-export type DecisionStatus =
+type DecisionStatus =
   /** Live: this is happening now, wherever a practice has the feature on. */
   | "in_use"
   /** Built, and taking no decisions, because the content it needs is gated and empty. */
@@ -56,12 +56,12 @@ export type DecisionStatus =
  * `in_use` at a non-empty one. This is the check that makes `status` a fact about the tree instead
  * of a claim in a document.
  */
-export interface ContentRegistry {
+interface ContentRegistry {
   module: string;
   exportName: string;
 }
 
-export interface AutomatedDecision {
+interface AutomatedDecision {
   id: string;
   /** The bold lead-in on the page. */
   title: string;

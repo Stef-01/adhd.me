@@ -119,7 +119,7 @@ export interface OutreachInput {
   maxInvitesInWindow: number;
 }
 
-export interface PlannedNudge {
+interface PlannedNudge {
   referralId: string;
   patientId: PatientId;
   sendAt: string;
@@ -128,13 +128,13 @@ export interface PlannedNudge {
   text: string;
 }
 
-export interface WithheldNudge {
+interface WithheldNudge {
   referralId: string;
   patientId: PatientId;
   reason: NudgeRefusal;
 }
 
-export interface OutreachPlan {
+interface OutreachPlan {
   practiceId: PracticeId;
   send: PlannedNudge[];
   /** Nothing disappears silently — every referral considered ends up in one list or the other. */

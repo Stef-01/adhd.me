@@ -51,7 +51,7 @@ export type Subdomain =
   | "peers"
   | "clinicians";
 
-export interface SubdomainEntry {
+interface SubdomainEntry {
   readonly id: Subdomain;
   readonly layer: Layer;
   readonly label: string;
@@ -100,7 +100,7 @@ export function subdomainsOf(layer: Layer): SubdomainEntry[] {
 }
 
 /** The P0 life domains a module and a need belong to (PRD §5). */
-export const DOMAINS = ["understand", "work-study", "relationships", "daily-life", "mind-emotions", "sleep-body"] as const;
+const DOMAINS = ["understand", "work-study", "relationships", "daily-life", "mind-emotions", "sleep-body"] as const;
 export type Domain = (typeof DOMAINS)[number];
 
 export const DOMAIN_LABELS: Readonly<Record<Domain, string>> = {

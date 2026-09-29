@@ -1,7 +1,7 @@
 // The console spine (docs/console-spine-brief.md): six screens in the tab bar, everything else
 // behind /console/more. A folded route keeps its path and its spec; only the navigation changed.
 
-export type ConsoleRoute = { href: string; label: string; exact?: boolean; staffOnly?: boolean };
+type ConsoleRoute = { href: string; label: string; exact?: boolean; staffOnly?: boolean };
 
 export const SPINE: readonly ConsoleRoute[] = [
   { href: "/console", label: "Home", exact: true },

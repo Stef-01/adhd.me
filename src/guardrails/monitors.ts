@@ -40,7 +40,7 @@ export interface GuardrailMetrics {
   openComplaints: number;
 }
 
-export type MonitorName = "opt_out_rate" | "generated_dna_rate" | "complaints";
+type MonitorName = "opt_out_rate" | "generated_dna_rate" | "complaints";
 
 export interface GuardrailAlert {
   monitor: MonitorName;

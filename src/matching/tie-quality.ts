@@ -29,9 +29,9 @@ import { rankBands, type Clinician } from "@/demo/clinicians";
 import { clinicians } from "@/demo/clinicians";
 import { REACH_CORPUS } from "./corpus";
 
-export type TieOutcome = "separated" | "partialTie" | "unseparated";
+type TieOutcome = "separated" | "partialTie" | "unseparated";
 
-export interface TieQualityReport {
+interface TieQualityReport {
   /** How many corpus requests were measured (the reaching register, verbatim). */
   total: number;
   separated: number;

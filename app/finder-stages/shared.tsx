@@ -54,7 +54,7 @@ export const STAGE_SPRING = { type: "spring", stiffness: 380, damping: 36, mass:
  */
 export const StageDirection = createContext<1 | -1>(1);
 
-export const stageVariants: Variants = {
+const stageVariants: Variants = {
   // transitions.dev's page-slide lane: an arriving screen starts a little BLURRED and resolves,
   // which reads as the screen condensing into place rather than sliding in as a flat card. Three
   // pixels — its `--blur-medium` — cleared on the same clock as the opacity, so the blur is gone
@@ -75,7 +75,7 @@ export const stageVariants: Variants = {
   exit: { opacity: 0, transition: { duration: 0 } },
 };
 
-export const reducedStageVariants: Variants = {
+const reducedStageVariants: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.15 } },
   exit: { opacity: 0, transition: { duration: 0 } },

@@ -17,7 +17,7 @@ import c10 from "./c10-empty.json";
 import x1 from "./x1-incomplete.json";
 import x2 from "./x2-refusal.json";
 
-export type Cassette = {
+type Cassette = {
   class: string;
   input: string;
   /** What `readRequest` must return for this input. */

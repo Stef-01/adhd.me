@@ -18,13 +18,13 @@
 // Absent preferences fall back to a conservative practice default rather than to "any time":
 // no stated preference is not consent to be messaged at 5am.
 
-export type ContactChannel = "sms";
+type ContactChannel = "sms";
 
 /** Channels the product can actually deliver on today. G3 still gates live sending. */
-export const SUPPORTED_CHANNELS: readonly ContactChannel[] = ["sms"];
+const SUPPORTED_CHANNELS: readonly ContactChannel[] = ["sms"];
 
 /** 0 = Sunday, matching Date#getUTCDay. */
-export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface ContactPreferences {
   /** null means the patient wants no contact on any channel we support. */
@@ -50,11 +50,11 @@ export type ContactRefusal =
   | "channel_unsupported"
   | "offer_expires_before_window";
 
-export type ContactPlan =
+type ContactPlan =
   | { send: true; at: string; deferred: boolean }
   | { send: false; reason: ContactRefusal };
 
-export interface PreferenceValidation {
+interface PreferenceValidation {
   ok: boolean;
   errors: string[];
 }

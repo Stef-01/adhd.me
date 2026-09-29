@@ -16,7 +16,7 @@ export interface Env {
   readonly demoOptedIn: boolean;
 }
 
-export type EnvSource = Readonly<Record<string, string | undefined>>;
+type EnvSource = Readonly<Record<string, string | undefined>>;
 
 export function readEnv(source: EnvSource = process.env): Env {
   return {

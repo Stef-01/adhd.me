@@ -69,7 +69,7 @@ export type ConceptId =
   | "long-standing"
   | "school";
 
-export interface Concept {
+interface Concept {
   id: ConceptId;
   /** The patient-safe phrase a rationale may say. */
   label: string;
@@ -117,14 +117,14 @@ export const CONCEPTS: readonly Concept[] = [
   { id: "school", label: "school", weight: 1, cues: ["school", "teacher", "classroom", "school report"] },
 ];
 
-export const CONCEPT_BY_ID: ReadonlyMap<ConceptId, Concept> = new Map(CONCEPTS.map((c) => [c.id, c]));
+const CONCEPT_BY_ID: ReadonlyMap<ConceptId, Concept> = new Map(CONCEPTS.map((c) => [c.id, c]));
 
 export function conceptLabel(id: ConceptId): string {
   return CONCEPT_BY_ID.get(id)!.label;
 }
 
 /** Dimensions: one per concept, then the hashed stem space. */
-export const HASH_DIM = 224;
+const HASH_DIM = 224;
 export const EMBEDDING_DIM = CONCEPTS.length + HASH_DIM;
 
 const PAIR_WEIGHT = 0.5;

@@ -49,7 +49,7 @@ export interface FinderRecord {
 }
 
 /** What a history entry carries: the stage and its index into the trail. Two words. */
-export interface FinderEntry {
+interface FinderEntry {
   v: typeof STATE_VERSION;
   stage: Stage;
   index: number;

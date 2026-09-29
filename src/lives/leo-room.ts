@@ -1,7 +1,7 @@
-export type RoomMode = "challenge" | "recovery" | "wind-down" | "rest" | "revisit" | "complete";
-export type InsectKind = "scout" | "hoverer";
+type RoomMode = "challenge" | "recovery" | "wind-down" | "rest" | "revisit" | "complete";
+type InsectKind = "scout" | "hoverer";
 export interface RoomInsect { id: number; slot: number; kind: InsectKind; arrivedAt: number }
-export interface RoomEvent { id: string; at: number; kind: "insects" | "phone"; amount: number }
+interface RoomEvent { id: string; at: number; kind: "insects" | "phone"; amount: number }
 export interface BedroomState {
   version: 1;
   rounds?: boolean;

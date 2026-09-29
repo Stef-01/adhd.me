@@ -48,7 +48,7 @@ export const RESPONSIBILITY_STATEMENT =
   "appointment times. It does not provide treatment, does not give clinical advice, and is " +
   "not part of your care team. Anything about your health goes to your practice, not to us.";
 
-export interface PartyToCareFinding {
+interface PartyToCareFinding {
   rule: string;
   match: string;
   explanation: string;

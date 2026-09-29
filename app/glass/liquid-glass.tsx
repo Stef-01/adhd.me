@@ -59,7 +59,7 @@ function radiusOf(el: Element, w: number, h: number): { radius: number; roundnes
 }
 
 /** WebGL2 with float render targets, on a hardware renderer. Exported so a test can ask the same question. */
-export function canRunLiquidGlass(gl: WebGL2RenderingContext): boolean {
+function canRunLiquidGlass(gl: WebGL2RenderingContext): boolean {
   const info = gl.getExtension("WEBGL_debug_renderer_info");
   const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : String(gl.getParameter(gl.RENDERER));
   return !/swiftshader|llvmpipe|software|mesa offscreen/i.test(renderer);

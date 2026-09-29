@@ -98,12 +98,12 @@ export const APPOINTMENT_UNMAPPED: readonly UnmappedField[] = [
   },
 ];
 
-export interface FhirReference {
+interface FhirReference {
   reference: string;
 }
 
 /** The subset of R4 `Appointment` this mapping produces. Nothing here is invented. */
-export interface FhirAppointment {
+interface FhirAppointment {
   resourceType: "Appointment";
   id: string;
   status: string;
@@ -113,7 +113,7 @@ export interface FhirAppointment {
   participant: readonly { actor: FhirReference; status: "accepted" | "needs-action" }[];
 }
 
-export interface MappedResource<T> {
+interface MappedResource<T> {
   resource: T;
   /** Everything the mapping had no home for. Never empty by accident — see the register above. */
   unmapped: readonly UnmappedField[];
@@ -163,7 +163,7 @@ export function appointmentToFhir(appointment: Appointment): MappedResource<Fhir
   };
 }
 
-export type FhirReadRefusal =
+type FhirReadRefusal =
   | "not_an_appointment"
   | "unknown_status"
   | "no_practitioner"
@@ -184,7 +184,7 @@ export const FHIR_READ_REFUSAL_COPY: Record<FhirReadRefusal, string> = {
     "The resource names more than one patient, or more than one practitioner, and this mapping will not choose between them. R4 permits several participants and a group session is a real thing; what is not real is a single-patient appointment silently attributed to whichever reference happened to come first in the array. Refused rather than resolved: picking one would put a booking in a named person\'s record on the strength of array order.",
 };
 
-export type FhirReadResult =
+type FhirReadResult =
   | { read: true; appointment: Appointment; unmapped: readonly UnmappedField[] }
   | { read: false; why: FhirReadRefusal; copy: string };
 

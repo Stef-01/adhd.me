@@ -18,7 +18,7 @@
 import type { Domain, Subdomain } from "@/model/layers";
 import type { Profession } from "@/support/professions";
 
-export const CHARACTERS = ["maya", "alex", "jordan", "sam", "priya"] as const;
+const CHARACTERS = ["maya", "alex", "jordan", "sam", "priya"] as const;
 export type Character = (typeof CHARACTERS)[number];
 
 export const CHARACTER_BIOS: Readonly<Record<Character, { name: string; who: string }>> = {
@@ -35,7 +35,7 @@ export type Mood = "neutral" | "pleased" | "anxious" | "frustrated" | "embarrass
 /** The places a scene can be (docs/design/games-to-leo-standard.md §3): the nine original props and the six rooms the run table asks for. */
 export type Prop = "desk" | "phone" | "bill" | "ball" | "lecture" | "bed" | "kitchen" | "calendar" | "door" | "living" | "meeting" | "crossing" | "shop" | "street" | "study" | "none";
 
-export interface Option {
+interface Option {
   readonly id: string;
   readonly label: string;
 }
@@ -62,7 +62,7 @@ export type Step =
   | { readonly kind: "perspective"; readonly heading: string; readonly body: string; readonly sides: readonly [PerspectiveSide, PerspectiveSide]; readonly teaching: string }
   | { readonly kind: "simulation"; readonly sim: "working-memory" | "interruption" | "ambiguity" };
 
-export interface PerspectiveSide {
+interface PerspectiveSide {
   readonly who: Character;
   readonly mood: Mood;
   readonly label: string;

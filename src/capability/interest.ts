@@ -23,7 +23,7 @@ import type {
   PracticeId,
 } from "@/domain/types";
 
-export const MIN_STRENGTH = 1;
+const MIN_STRENGTH = 1;
 export const MAX_STRENGTH = 5;
 
 /**
@@ -43,7 +43,7 @@ export interface InterestState {
   byKey: Record<string, ClinicianInterest>;
 }
 
-export type SaveInterestResult =
+type SaveInterestResult =
   | { ok: true; interest: ClinicianInterest }
   | { ok: false; reason: "not_own_interest" | "strength_out_of_range" | "unknown_condition" };
 
@@ -55,7 +55,7 @@ export function emptyInterestState(): InterestState {
   return { byKey: {} };
 }
 
-export interface SaveInterestInput {
+interface SaveInterestInput {
   state: InterestState;
   practiceId: PracticeId;
   /** Who is performing the write. Must be the subject. */

@@ -310,7 +310,7 @@ export interface SpeechSession {
   cancel(): void;
 }
 
-export interface SpeechHandlers {
+interface SpeechHandlers {
   /** Fires repeatedly as the browser revises its guess. Interim text, safe to render. */
   onPartial(text: string): void;
   /** Fires once, with everything recognised. May be empty if nothing was heard. */

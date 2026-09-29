@@ -54,7 +54,7 @@ export interface CareGap {
   basis: "interval_elapsed" | "no_recorded_visit";
 }
 
-export interface CareGapInput {
+interface CareGapInput {
   membership: RegisterMembership;
   /** Date of the last visit relevant to this register; null when none is recorded. */
   lastRelevantVisit: string | null;

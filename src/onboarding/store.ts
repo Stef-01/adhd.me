@@ -46,7 +46,7 @@ function readRows(filePath: string): ClinicianApplication[] {
  */
 export const AHPRA_SHAPE = /^[A-Z]{3}\d{10}$/;
 
-export interface ApplicationInput {
+interface ApplicationInput {
   fullName: string;
   ahpraRegistrationNumber: string;
   email: string;
@@ -83,7 +83,7 @@ function sanitiseOtherLanguages(raw: string | undefined): string[] {
     .slice(0, 5);
 }
 
-export type ApplicationFieldError = keyof Omit<ApplicationInput, "nswAdhdTrained" | "acceptingNewPatients">;
+type ApplicationFieldError = keyof Omit<ApplicationInput, "nswAdhdTrained" | "acceptingNewPatients">;
 
 const VALID_MANNER = new Set<string>(EI_QUALITY_KEYS);
 const VALID_AREAS = new Set<string>(CARE_AREA_LABELS.map((a) => a.id));

@@ -54,7 +54,7 @@ export const MIN_RECORDED_WEEKS: { readonly weeks: number; readonly why: string 
     "The forecast is the range this session actually ran at, so it needs enough occurrences for a range to mean anything. With two, the lowest and highest observed values are simply the two values seen; with one there is no range at all. Four is the smallest number at which the interval describes the session rather than the sample, and it is the same figure for every session because a floor that varied between them could be lowered by choosing which session to ask about.",
 };
 
-export type ForecastRefusal =
+type ForecastRefusal =
   /** W222 has nothing recorded for this session. Its reason and its words are carried through. */
   | "no_recorded_history"
   /** It has run, and not often enough for a range to describe anything. */
@@ -78,13 +78,13 @@ export interface FilledRange {
 }
 
 /** The observed fill rates the range was extrapolated from. Stated so a reader can check it. */
-export interface ObservedSpread {
+interface ObservedSpread {
   lowestRate: number;
   highestRate: number;
   recordedWeeks: number;
 }
 
-export type Forecast =
+type Forecast =
   | {
       forecast: true;
       slotsToOpen: number;

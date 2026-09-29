@@ -1,7 +1,7 @@
 // W81: interest store (mock, synthetic only — globalThis, same posture as the other
 // phase-1 stores). Holds what clinicians have said about the case mix they would take on.
 
-import type { ClinicianId, ConditionCode, PracticeId } from "@/domain/types";
+import type { ClinicianId, PracticeId } from "@/domain/types";
 import { emptyInterestState, type InterestState } from "./interest";
 
 const globalStore = globalThis as { __adhdMeInterest?: InterestState };
@@ -23,4 +23,4 @@ export function statedBy(practiceId: PracticeId, clinicianId: ClinicianId) {
   );
 }
 
-export type { ConditionCode };
+

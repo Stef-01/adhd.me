@@ -1,16 +1,16 @@
 import { seededRng } from "./random";
 import type { Entity } from "./layout";
 
-export interface SwarmTarget extends Entity { readonly arrivesAt: number; readonly wave: number }
-export interface SwarmPlan { readonly targets: readonly SwarmTarget[]; readonly waves: number; readonly sizes: readonly number[]; readonly duration: number }
+interface SwarmTarget extends Entity { readonly arrivesAt: number; readonly wave: number }
+interface SwarmPlan { readonly targets: readonly SwarmTarget[]; readonly waves: number; readonly sizes: readonly number[]; readonly duration: number }
 export type SwarmCatches = Readonly<Record<string, number>>;
-export const NOISE_DRAIN_PER_SECOND = 1.8;
+const NOISE_DRAIN_PER_SECOND = 1.8;
 
 /** Three waves, each bigger than the last: three, four, five at the start. There is no difficulty to
  *  choose; the room starts calm and the third wave is the hardest of it. The Chaos Run's later
  *  levels add a mosquito to every wave, which is how the arcade grows without a setting. */
-export const WAVE_SIZES = [3, 4, 5] as const;
-export function waveSizes(level: number): number[] {
+const WAVE_SIZES = [3, 4, 5] as const;
+function waveSizes(level: number): number[] {
   const extra = level >= 7 ? 2 : level >= 4 ? 1 : 0;
   return WAVE_SIZES.map((n) => n + extra);
 }

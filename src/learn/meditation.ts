@@ -8,7 +8,7 @@ export function sharedMeditation(now: number) {
   return { serverNow: now, startsAt, endsAt, nextStartsAt: startsAt + SHARED_INTERVAL_MS, live: now < endsAt };
 }
 
-export const STILLNESS_GUIDE = [
+const STILLNESS_GUIDE = [
   { at: 0, title: "Arrive as you are.", text: "Find a position that feels comfortable. Your eyes can stay open. There is nothing to get right." },
   { at: .16, title: "Notice the room.", text: "Let your attention settle on a sound nearby, or the place where your body meets the chair." },
   { at: .34, title: "Let breathing be ordinary.", text: "There is no need to change your breath or match the circle. It is simply a gentle visual to return to." },

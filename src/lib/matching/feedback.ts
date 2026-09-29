@@ -103,7 +103,7 @@ function correlation(xs: readonly number[], ys: readonly number[]): number {
   return num / Math.sqrt(dx * dy);
 }
 
-export interface LearnedWeights {
+interface LearnedWeights {
   weights: Readonly<Record<PatientCriterion, number>>;
   /** Per criterion, the correlation the shift was based on. Empty when nothing was learned. */
   evidence: Readonly<Partial<Record<PatientCriterion, number>>>;

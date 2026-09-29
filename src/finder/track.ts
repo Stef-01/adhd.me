@@ -17,7 +17,7 @@ export function newId(): string {
   return crypto.randomUUID();
 }
 
-export function deviceId(storage: Pick<Storage, "getItem" | "setItem"> = window.localStorage): string {
+function deviceId(storage: Pick<Storage, "getItem" | "setItem"> = window.localStorage): string {
   try {
     const held = storage.getItem(DEVICE);
     if (held) return held;

@@ -29,7 +29,7 @@ function railDataset(): PrivacyDataset {
   };
 }
 
-export interface ConsoleExport extends PatientExport {
+interface ConsoleExport extends PatientExport {
   suppressed: boolean;
   /** W51: complaints live in their own store; an access request covers them too. */
   complaints: ComplaintRecord[];

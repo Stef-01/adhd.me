@@ -89,7 +89,7 @@ function hasAny(
   );
 }
 
-export type UsabilityResult =
+type UsabilityResult =
   | { usable: true; pathway: UsablePathway }
   | { usable: false; reason: PathwayRefusal };
 

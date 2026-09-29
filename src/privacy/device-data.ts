@@ -74,7 +74,7 @@ export function deleteDeviceData(stores: readonly Listable[]): void {
 
 /* ------------------------------------------------------------------ the copy */
 
-export const COPY_SCHEMA = 1;
+const COPY_SCHEMA = 1;
 
 export interface DeviceCopy {
   schema: typeof COPY_SCHEMA;

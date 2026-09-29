@@ -196,7 +196,7 @@ export const careArchetypes: CareArchetype[] = [
  * and an ask about who the GP is — and `example-archetypes.test.ts` holds them to that, so a
  * future edit to the list cannot quietly collapse the page back to one shape.
  */
-export const EXAMPLE_ARCHETYPE_IDS = ["notetaker-and-understanding", "anxiety-differential-hindi", "woman-gp"] as const;
+const EXAMPLE_ARCHETYPE_IDS = ["notetaker-and-understanding", "anxiety-differential-hindi", "woman-gp"] as const;
 
 export function exampleArchetypes(): CareArchetype[] {
   return EXAMPLE_ARCHETYPE_IDS.map((id) => {

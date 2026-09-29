@@ -25,7 +25,7 @@
 import { validateSubmission, type UsefulnessSubmission, type ValidationError } from "@/audit/usefulness";
 import type { AppointmentId, OutcomeRecord, PracticeId } from "@/domain/types";
 
-export interface AuditableVisit {
+interface AuditableVisit {
   appointmentId: AppointmentId;
   /** W209: which practice's appointment this was. Was a single field on the state. */
   practiceId: PracticeId;
@@ -33,7 +33,7 @@ export interface AuditableVisit {
   attendedAt: string; // ISO datetime
 }
 
-export interface AuditState {
+interface AuditState {
   visits: AuditableVisit[];
   outcomes: OutcomeRecord[];
 }
@@ -84,7 +84,7 @@ export function outcomesFor(practiceId: PracticeId): OutcomeRecord[] {
   return getAudit().outcomes.filter((o) => o.practiceId === practiceId);
 }
 
-export type RecordResult =
+type RecordResult =
   | { ok: true }
   | { ok: false; error: ValidationError | "unknown_visit" | "already_recorded" };
 

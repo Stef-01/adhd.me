@@ -1,8 +1,8 @@
 /** A routing puzzle, not an assessment of memory or clinical ability. */
-export type Direction = 0 | 1 | 2 | 3;
-export type Cue = 'note' | 'say';
-export type Phase = 'play' | 'setup' | 'revisit' | 'complete';
-export interface Tile { kind: 'bend' | 'line'; turn: number }
+type Direction = 0 | 1 | 2 | 3;
+type Cue = 'note' | 'say';
+type Phase = 'play' | 'setup' | 'revisit' | 'complete';
+interface Tile { kind: 'bend' | 'line'; turn: number }
 export const PATHS = [
   [4, 0, 1, 5, 9, 10, 6, 7],
   [4, 8, 12, 13, 9, 5, 6, 10, 11, 7],
@@ -16,7 +16,7 @@ export interface MiaWorld {
   parked: number[]; distracted: number | null; shifts: number; shifted: number | null;
   cue: Cue | null; anchor: number | null; savedTurn: number | null; message: string;
 }
-export type Action =
+type Action =
   | { type: 'rotate'; index: number }
   | { type: 'anchor'; index: number }
   | { type: 'cue'; cue: Cue }

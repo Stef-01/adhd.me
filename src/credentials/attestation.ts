@@ -66,7 +66,7 @@ function addDays(date: string, days: number): string | null {
   return new Date(ms + days * DAY_MS).toISOString().slice(0, 10);
 }
 
-export interface EffectiveExpiry {
+interface EffectiveExpiry {
   on: string;
   /** False when the date was derived from the policy rather than stated on the credential. */
   stated: boolean;
@@ -142,13 +142,13 @@ export function liveCredentials(
   return live;
 }
 
-export type ReattestationUrgency =
+type ReattestationUrgency =
   /** Still live, but inside the notice window. */
   | "due_soon"
   /** Past its effective expiry and not replaced. Already absent from `liveCredentials`. */
   | "lapsed";
 
-export interface ReattestationItem {
+interface ReattestationItem {
   credentialId: string;
   subjectClinicianId: string;
   urgency: ReattestationUrgency;

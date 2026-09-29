@@ -55,7 +55,7 @@ export const EXPERTISE_FOR: Partial<Record<Subdomain, readonly ExpertiseTag[]>> 
   peers: ["workplace-adjustments", "university-adhd"],
 };
 
-export interface Fittable {
+interface Fittable {
   readonly profession?: string | undefined;
   readonly expertise?: readonly ExpertiseTag[] | undefined;
 }

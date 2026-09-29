@@ -14,7 +14,7 @@ import type { Profession } from "@/support/professions";
 
 export type AdjustmentTrack = "university" | "work";
 
-export interface AdjustmentEntry {
+interface AdjustmentEntry {
   readonly id: AdjustmentTrack;
   readonly title: string;
   readonly eyebrow: string;

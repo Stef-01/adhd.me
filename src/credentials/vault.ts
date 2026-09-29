@@ -54,7 +54,7 @@ export interface VaultGrant {
 
 /** What a vault can hold. Narrow on purpose: an evidence document is a scan, not a web page. */
 export const ALLOWED_CONTENT_TYPES = ["application/pdf", "image/png", "image/jpeg"] as const;
-export type EvidenceContentType = (typeof ALLOWED_CONTENT_TYPES)[number];
+type EvidenceContentType = (typeof ALLOWED_CONTENT_TYPES)[number];
 
 /** 8 MB. A certificate scan that exceeds this is a scan of the wrong thing. */
 export const MAX_EVIDENCE_BYTES = 8 * 1024 * 1024;
@@ -72,7 +72,7 @@ export function evidenceByteLength(content: string): number {
   return Buffer.byteLength(content, "utf8");
 }
 
-export interface EvidenceDocument {
+interface EvidenceDocument {
   ref: string;
   practiceId: string;
   /** The W108 credential this is evidence for. */
@@ -93,7 +93,7 @@ export interface EvidenceDocument {
  * What a listing returns. `content` is absent from the TYPE, not merely unset — so no caller
  * can accidentally hand a document's bytes to a client that only asked what exists.
  */
-export type EvidenceSummary = Omit<EvidenceDocument, "content">;
+type EvidenceSummary = Omit<EvidenceDocument, "content">;
 
 interface VaultState {
   documents: EvidenceDocument[];
@@ -110,9 +110,9 @@ export function resetVault(): void {
   globalStore.__adhdMeEvidenceVault = { documents: [] };
 }
 
-export type VaultDenial = "no_membership" | "role_denied";
+type VaultDenial = "no_membership" | "role_denied";
 
-export type VaultOpen = { ok: true; grant: VaultGrant } | { ok: false; reason: VaultDenial };
+type VaultOpen = { ok: true; grant: VaultGrant } | { ok: false; reason: VaultDenial };
 
 /**
  * The only way into the vault.
@@ -183,7 +183,7 @@ export type EvidenceRejection =
   | "too_large"
   | "duplicate_ref";
 
-export type StoreResult =
+type StoreResult =
   | { ok: true; summary: EvidenceSummary }
   | { ok: false; errors: EvidenceRejection[] };
 
@@ -234,7 +234,7 @@ function summarise(document: EvidenceDocument): EvidenceSummary {
   return summary;
 }
 
-export type ReadResult =
+type ReadResult =
   | { found: true; document: EvidenceDocument }
   | { found: false; reason: "not_found" };
 

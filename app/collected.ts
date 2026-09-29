@@ -15,7 +15,7 @@
 
 import { useRef, useState } from "react";
 
-export interface Collected<T> {
+interface Collected<T> {
   /** Everything taken so far, newest last. Safe to read while rendering. */
   readonly all: Readonly<Record<string, T>>;
   readonly size: number;

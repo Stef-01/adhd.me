@@ -12,7 +12,7 @@ import { conceptLabel, type ConceptId } from "./embedding";
 import type { RankedGP, RankedPatient } from "./ranking";
 import type { GP, MatchRationale, Patient } from "./types";
 
-export interface RationaleInput {
+interface RationaleInput {
   patient: Patient;
   gp: GP;
   similarity: number;

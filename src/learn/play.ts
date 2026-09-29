@@ -17,9 +17,9 @@ export const MECHANICS = ["tap", "dont-tap", "hold", "swipe", "drag-capture", "o
 /** A run must use at least this many distinct mechanics, and at most MAX_TAPS plain tap rounds (PLAY-QA.md). */
 export const MIN_MECHANICS = 4;
 export const MAX_TAPS = 3;
-export type Mechanic = (typeof MECHANICS)[number];
+type Mechanic = (typeof MECHANICS)[number];
 
-export interface RoundOption {
+interface RoundOption {
   readonly id: string;
   readonly label: string;
   /** For `tap` and `order`: the right answer(s). For `order`, options are listed in the right order. */
@@ -89,7 +89,7 @@ export interface Run {
   readonly next: Extract<Step, { kind: "next" }>;
 }
 
-export type RelateForm = "buttons" | "slider";
+type RelateForm = "buttons" | "slider";
 /** The three buttons, as points on the same 0–10 scale the slider writes. */
 export const RELATE_BUTTONS: ReadonlyArray<{ readonly id: string; readonly label: string; readonly value: number }> = [
   { id: "not-me", label: "Not me", value: 0 },
@@ -126,7 +126,7 @@ export function needsClue(round: Round): boolean {
 
 export const CLUE_WORDS = 16;
 
-export type RunPhase = "title" | "round" | "recognition" | "insight" | "reflect" | "try" | "next";
+type RunPhase = "title" | "round" | "recognition" | "insight" | "reflect" | "try" | "next";
 
 function tailOf(run: Run): RunPhase[] {
   return run.reflect ? ["recognition", "insight", "reflect", "try", "next"] : ["recognition", "insight", "try", "next"];
@@ -151,7 +151,7 @@ export function runPhaseAt(run: Run, step: number): { phase: RunPhase; round?: R
  * so a run has a rhythm you can feel. Rounds that write an answer are not ramped: choosing
  * which bean is you is not a race.
  */
-export const RAMP_PER_ROUND = 0.05;
+const RAMP_PER_ROUND = 0.05;
 export const RAMP_FLOOR = 0.7;
 
 export function rampedSeconds(run: Run, index: number): number {

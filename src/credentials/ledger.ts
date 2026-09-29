@@ -47,7 +47,7 @@ export function logFor(practiceId: string): VerificationLog {
   return state().logs[practiceId] ?? EMPTY_VERIFICATION_LOG;
 }
 
-export type LedgerAppend = { ok: true } | { ok: false; reason: TransitionRefusal };
+type LedgerAppend = { ok: true } | { ok: false; reason: TransitionRefusal };
 
 /** Append through W110's rules — so nothing reaches storage that the machine would refuse. */
 export function recordEvent(practiceId: string, event: VerificationEvent): LedgerAppend {

@@ -20,9 +20,9 @@
 // cannot tell us how a person in a photograph identifies, and guessing would put words in a
 // stranger's mouth. Their tiles stay the drawn monogram, which was never a claim about anybody.
 
-export type PortraitSource = "unsplash" | "pexels";
+type PortraitSource = "unsplash" | "pexels";
 
-export interface PortraitCredit {
+interface PortraitCredit {
   /** The persona this portrait is used for. */
   readonly clinicianId: string;
   /** The self-hosted path the roster carries. */
@@ -36,7 +36,7 @@ export interface PortraitCredit {
   readonly licence: "Unsplash License" | "Pexels License";
 }
 
-export const PORTRAIT_CREDITS: readonly PortraitCredit[] = [
+const PORTRAIT_CREDITS: readonly PortraitCredit[] = [
   { clinicianId: "example-mei-chao", image: "/portraits/example-mei-chao.jpg", source: "pexels", photographer: "Daniil Kondrashin", page: "https://www.pexels.com/photo/32254667/", licence: "Pexels License" },
   { clinicianId: "example-tomas-rivera", image: "/portraits/example-tomas-rivera.jpg", source: "pexels", photographer: "Daniil Kondrashin", page: "https://www.pexels.com/photo/32160037/", licence: "Pexels License" },
   { clinicianId: "example-priya-nair", image: "/portraits/example-priya-nair.jpg", source: "unsplash", photographer: "Siednji Leon", page: "https://unsplash.com/photos/5o3-brQ0cy8", licence: "Unsplash License" },

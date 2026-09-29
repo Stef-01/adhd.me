@@ -24,7 +24,7 @@ import type { CareArea } from "@/demo/care-archetypes";
 import type { EIQuality } from "@/demo/emotional-fit";
 
 /** The condition a roster serves. ADHD today; the vocabularies are the only ADHD-specific part. */
-export type Condition = "adhd";
+type Condition = "adhd";
 
 export type AgeGroup = "children" | "adolescents" | "adults" | "older-adults";
 export const AGE_GROUPS: readonly AgeGroup[] = ["children", "adolescents", "adults", "older-adults"];
@@ -69,9 +69,9 @@ export const COMORBIDITIES: readonly Comorbidity[] = [
 /** A dense vector. Fixed dimension per embedder; L2-normalised so a dot product is a cosine. */
 export type Embedding = readonly number[];
 
-export type PatientStatus = "intake" | "matched" | "booked" | "consulted" | "closed";
+type PatientStatus = "intake" | "matched" | "booked" | "consulted" | "closed";
 
-export type UploadedDocument = {
+type UploadedDocument = {
   id: string;
   /** The checklist item it answers, when it answers one. */
   checklistItemId: string | null;
@@ -118,7 +118,7 @@ export type Patient = {
 export type VerificationStatus = "pending" | "verified" | "rejected";
 
 /** What a GP declares about training, experience and how they work. Null means "not declared". */
-export type GPCredentials = {
+type GPCredentials = {
   racgpSpecificInterestsMember: boolean | null;
   aadpaTrained: boolean | null;
   /** State ADHD prescribing training (NSW's, today). Distinct from AADPA's course. */
@@ -141,7 +141,7 @@ export type GPCredentials = {
 };
 
 /** What a GP says about the matches they want to receive. The bidirectional half. */
-export type GPPreferences = {
+type GPPreferences = {
   ageGroups: readonly AgeGroup[];
   consultStyles: readonly Exclude<ConsultStyle, "either">[];
   billingAccepted: readonly Exclude<BillingPreference, "either">[];
@@ -235,14 +235,14 @@ export type DeclineReason = "no_capacity" | "outside_scope" | "age_group" | "nee
 
 export type Rating = 1 | 2 | 3 | 4 | 5;
 
-export type PatientFeedback = {
+type PatientFeedback = {
   /** Did this person feel understood by this GP. */
   fit: Rating;
   communication: Rating;
   clinicalAppropriateness: Rating;
 };
 
-export type GPFeedback = {
+type GPFeedback = {
   /** Was the referral clinically appropriate for what the GP does. */
   clinicalAppropriateness: Rating;
   /** Did the match fit the capacity the GP had declared. */

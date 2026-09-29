@@ -70,7 +70,7 @@ export type VerificationEvent =
   /** Pulled by the practice or the clinician. Terminal. */
   | { kind: "withdrawn"; at: string; credentialId: string; withdrawnBy: string; reason: string };
 
-export type VerificationLogEntry = VerificationEvent & { readonly seq: number };
+type VerificationLogEntry = VerificationEvent & { readonly seq: number };
 export type VerificationLog = readonly VerificationLogEntry[];
 
 export const EMPTY_VERIFICATION_LOG: VerificationLog = Object.freeze([]);
@@ -84,7 +84,7 @@ export const EMPTY_VERIFICATION_LOG: VerificationLog = Object.freeze([]);
 export type LifecycleState = "none" | "submitted" | "checked" | "verified" | "rejected" | "withdrawn";
 
 /** What replay reports, which includes the derived states the log does not hold. */
-export type VerificationStatus = LifecycleState | "expired";
+type VerificationStatus = LifecycleState | "expired";
 
 /**
  * Which event kinds each state accepts. Declared as a table rather than as a chain of `if`s
@@ -109,7 +109,7 @@ export type TransitionRefusal =
   | "timestamp_before_previous"
   | "credential_missing";
 
-export type AppendResult =
+type AppendResult =
   | { ok: true; log: VerificationLog }
   | { ok: false; reason: TransitionRefusal };
 
