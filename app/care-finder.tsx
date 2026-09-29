@@ -28,7 +28,7 @@ import { readModel } from "@/model/store";
 import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
-import { facetKey, needForKey, shortLabel, type NeedSignal } from "@/matching/needs";
+import { facetKey, shortLabel } from "@/matching/needs";
 import { heardChips } from "@/finder/heard";
 import { FINDER_COPY } from "./finder-copy";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
@@ -57,10 +57,9 @@ import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
-import { MODE_KEY, type FinderMode } from "./finder-stages/welcome-stage";
+import { useFinderMode, useModelRead } from "./finder-read";
 import { fakeVoice, startLink } from "@/voice/link";
 import { handOff, newId, track, trackSearch, trackVoiceCall } from "@/finder/track";
-import { worthReading } from "@/finder/read-policy";
 import type { EventKind, SearchSource } from "@/db/finder";
 import type { CallSummary } from "./finder-stages/voice-stage";
 import type { Reveal } from "@/voice/conversation";
@@ -86,8 +85,6 @@ import { BookingStage } from "./finder-stages/booking-stage";
 
 const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
-/** At level 1, how long the results wait for the read before ranking on the finder's own. */
-const READ_TIMEOUT_MS = 12_000;
 /** What `/api/finder/weights` serves, and the request whose list was on screen when it landed. */
 type Taught = { weights: Record<string, number>; quality: Demonstrated; heldFor: string | null };
 const UNTAUGHT: Taught = { weights: {}, quality: {}, heldFor: null };
@@ -100,26 +97,7 @@ const LISTLESS: ReadonlySet<Stage> = new Set(["welcome", "listening", "voice", "
  */
 export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: number; voice?: boolean }) {
   const reducedMotion = useReducedMotion();
-  /**
-   * AI or Standard (founder, 2026-09-29: "toggle between LLM matching or standard"), a choice this
-   * device keeps: AI reads with the model and talks with the voice finder; Standard is the word
-   * matcher alone, with dictation. Offered only where this server can do either.
-   */
-  const aiOffered = readLevel >= 1 || voice;
-  const [mode, setMode] = useState<FinderMode>("ai");
-  useEffect(() => {
-    try {
-      if (window.localStorage.getItem(MODE_KEY) === "standard") setMode("standard");
-    } catch {}
-  }, []);
-  const chooseMode = useCallback((next: FinderMode) => {
-    setMode(next);
-    try {
-      window.localStorage.setItem(MODE_KEY, next);
-    } catch {}
-  }, []);
-  const level = mode === "ai" ? readLevel : 0;
-  const talks = mode === "ai" && voice;
+  const { mode, chooseMode, level, talks } = useFinderMode(readLevel, voice);
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
   /**
@@ -226,42 +204,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    */
   const [removedHeard, setRemovedHeard] = useState<{ request: string; keys: readonly string[] }>({ request: "", keys: [] });
   const removed = useMemo(() => new Set(removedHeard.request === request ? removedHeard.keys : []), [removedHeard, request]);
-  /**
-   * Level 1: the results ask `/api/finder/read` once for each new set of words and wait for it.
-   * Its keys are the read everything below runs on; with no answer, or the lexicon's, it is the
-   * finder's own read, exactly the level 0 list.
-   */
-  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
-  /** Only where it helps (src/finder/read-policy.ts): a short request the lexicon already heard lists at once. */
-  const modelReads = useMemo(() => level >= 1 && worthReading(request, needsFor(request, roster).length), [level, request, roster]);
-  const reading = modelReads && (routeRead.request !== request || !routeRead.done);
-  /** Asks the route to read these words; the answer lands only while they are still the ones read. */
-  const readWords = useCallback((words: string) => {
-    setRouteRead({ request: words, done: false });
-    const body = JSON.stringify({ text: words });
-    fetch("/api/finder/read", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
-      .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string }>) : null))
-      .catch(() => null)
-      .then((answer) => setRouteRead((held) => held.request !== words ? held : {
-        request: words,
-        done: true,
-        needs: answer?.source === "llm" ? answer.keys.flatMap((key) => needForKey(key) ?? []) : undefined,
-      }));
-  }, []);
-  useEffect(() => {
-    if (!modelReads || stage !== "results" || routeRead.request === request) return;
-    readWords(request);
-  }, [modelReads, stage, request, routeRead.request, readWords]);
-  /**
-   * The voice finder's sentence is read the moment the model writes it, while its last words are
-   * still being said, so the matches arrive with the read done rather than behind "Reading what you
-   * asked". The same trim `findMatches` applies, so the results find it as theirs.
-   */
-  const readAhead = useCallback((words: string) => {
-    const trimmed = words.trim();
-    if (level >= 1 && trimmed && worthReading(trimmed, needsFor(trimmed, roster).length)) readWords(trimmed);
-  }, [level, readWords, roster]);
-  const modelNeeds = level >= 1 && routeRead.request === request ? routeRead.needs : undefined;
+  const { reading, modelNeeds, readAhead } = useModelRead(level, request, roster, stage === "results");
   const read = useMemo(() => modelNeeds ?? needsFor(request, roster), [modelNeeds, request, roster]);
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
   const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
@@ -835,7 +778,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             onSearch={findMatches}
             includeSynthetic={includeSynthetic}
             onToggleSynthetic={toggleSynthetic}
-            mode={aiOffered ? mode : null}
+            mode={mode}
             onMode={chooseMode}
             onTalk={() => {
               if (!talks && !fakeVoice()) return startListening();
