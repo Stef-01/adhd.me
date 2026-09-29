@@ -11,8 +11,7 @@ group until a clinician declares one. The manner trait `unhurried` is `not_rushe
 with you", chip "Not rushed").
 
 Under "Why matched", at level 1, one sentence gpt-5-mini wrote from the request, the listing and
-the finder's own matches ("You asked for …; <name> says …", at most 22 words), with the keys it
-rests on as one line beneath it; at level 0, or with nothing to say, the keys carry the person's
+the finder's own matches ("You asked for …; <name> says …", at most 26 words), in place of the key rows; at level 0, or with nothing to say, the keys carry the person's
 own words as before.
 
 Captures at 390 and 1280: the settings sheet, results for "An adult ADHD assessment,

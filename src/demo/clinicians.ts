@@ -1,4 +1,5 @@
 import type { CareArchetype } from "./care-archetypes";
+import { EI_QUALITIES } from "./emotional-fit";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal, type Preference } from "@/matching/needs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
@@ -381,6 +382,8 @@ export function labelInSentence(need: NeedSignal): string {
 export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
   const facet = need.facet;
   let after = ", not something they declare. Another listing may.";
+  // A manner label is a verb phrase ("Takes time with you"), so the sentence asks for someone who does it.
+  if (facet.kind === "manner") return { before: "You also asked for someone who ", label: EI_QUALITIES[facet.trait].matchLine, after };
   if (facet.kind === "language") {
     after = ", not listed among the languages they consult in. Another listing may.";
   } else if (facet.kind === "preference") {

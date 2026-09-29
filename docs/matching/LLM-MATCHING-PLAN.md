@@ -779,15 +779,15 @@ The founder took the default on every open question ("do all the default choices
 Founder, 2026-09-29: "sentences shown to the user for why they are matched perfectly ... the key
 insights from the clinician interview ... not overwhelming". At level 1, as a profile opens, the
 finder asks `/api/finder/why` once per (words, clinician): gpt-5-mini at effort minimal writes one
-sentence of at most 22 words ("You asked for …; <name> says …") from the person's request, the
+sentence of at most 26 words ("You asked for …; <name> says …") from the person's request, the
 clinician's own listing and the matches the finder itself found between them
 (`src/lib/matching/why.ts`); where the listing answers no key, no call is made. Measured
 2026-09-29 over eight profiles: nano paired asks with the wrong words ("bulk billed" answered by
 "mixed billing"), mini wrote to the matches given; at effort low the reasoning spent the output
 budget, at two sentences of fourteen words nothing fit, and one sentence with a worked example of
 its length landed seven of eight at 20 to 25 words. Nothing reaches the screen unless it is within
-the bound, free of any rank, promise or verdict, and free of the vocabulary's keys; the keys stay
-under the sentence as one line, and without a sentence (level 0, Standard, a failure, nothing
+the bound, free of any rank, promise or verdict, and free of the vocabulary's keys; the sentence stands in
+place of the key rows (a keys line under it put the screen over its ceiling at 26 words), and without one (level 0, Standard, a failure, nothing
 answered) the keys carry the person's own words as before. Remembered on the instance for a day,
 rate-limited per caller, inside the same daily meter as the read (`src/lib/llm/daily-meter.ts`).
 About $0.0003 a profile.

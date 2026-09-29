@@ -19,7 +19,8 @@ import { facetKey, needForKey, type NeedSignal } from "../src/matching/needs";
 import { POST } from "../app/api/finder/read/route";
 
 /** Why matched, in their words: what the model would write, answered by the route for this spec. */
-const WHY_SENTENCES = ["You asked for telehealth and not to be rushed; they see people by video and book longer first appointments."];
+/** The longest sentence the screen keeps (26 words), so the walk and the budget see the worst case. */
+const WHY_SENTENCES = ["You asked for ADHD assessment by telehealth and not to be rushed; Dr Saxena says he offers telehealth for first appointments and takes time with you."];
 
 /** The C6 narrative: the model hears one facet more than the lexicon, and its weights reorder the list. */
 const NARRATIVE = CASSETTES.find((c) => c.class === "C6")!;
@@ -120,9 +121,7 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   await why.locator("summary").click();
   await expect(why.locator(".fit-insights li")).toHaveText(WHY_SENTENCES);
   await expect(why.locator(".fit-evidence")).toHaveCount(0);
-  const keys = await why.locator(".fit-keys").innerText();
-  expect(keys.length).toBeGreaterThan(0);
-  expect(keys, "a key shown as the person's words").not.toMatch(/(care|manner|pref|language):[a-z_-]+/);
+  expect(await why.locator(".profile-disclosure-body").innerText(), "a key shown as the person's words").not.toMatch(/(care|manner|pref|language):[a-z_-]+/);
   expect(whyPosts.map((post) => JSON.parse(post).text)).toEqual([REQUEST]);
   await page.goBack();
   await expect(page.locator(".clinician-row").first()).toBeVisible();

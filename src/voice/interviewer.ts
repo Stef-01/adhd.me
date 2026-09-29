@@ -34,7 +34,7 @@ export function interviewerInstructions(): string {
 - People with ADHD pause and lose the thread. If they trail off, wait; if they ask what you asked, say it again in fewer words.
 
 # What to find out, most useful first
-Skip anything they have already told you, and never ask the same thing twice. Ask openly, in words like these:
+Skip anything they have already told you, and never ask the same thing twice. Ask each in these words, or fewer, and never add choices to them:
 1. The help they want, only when it is unclear: "What would you like help with?" Scripts, medication, a dose, therapy or coaching already say it.
 2. Who it is for: "Is this for you, or for someone else?" For a child, how old they are.
 3. Where: "Where are you, or would telehealth suit you?"

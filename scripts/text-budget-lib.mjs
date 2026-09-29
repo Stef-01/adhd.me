@@ -355,7 +355,7 @@ export const LEARNING_RECORD = {
 };
 
 /** What the model writes under "Why matched" at level 1, as the budget measures that screen. */
-const WHY_SENTENCES = ["You asked for telehealth and not to be rushed; they see people by video and book longer first appointments."];
+const WHY_SENTENCES = ["You asked for ADHD assessment by telehealth and not to be rushed; Dr Saxena says he offers telehealth for first appointments and takes time with you."]; // the longest the screen keeps (26 words): the worst case is what the budget measures
 
 export async function reach(page, route, base) {
   if (route.state === "intake") {

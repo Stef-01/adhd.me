@@ -4463,11 +4463,10 @@ a focus ring that is not the browser default removed {
    weight rather than as chips, because chips would look like matched signals. */
 .profile-no-match { margin: 14px 0 0; color: var(--muted); font-size: 0.875rem; line-height: 1.55; max-width: 44ch; }
 
-/* Why matched, in their words: two short sentences the model wrote from the request and the
-   clinician's own listing (src/lib/matching/why.ts), then the keys they rest on as one quiet line. */
+/* Why matched, in their words: the one sentence the model wrote from the request and the
+   clinician's own listing (src/lib/matching/why.ts), in place of the key rows. */
 .fit-insights { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
 .fit-insights li { font-size: 0.9375rem; line-height: 1.55; color: var(--ink); max-width: 44ch; }
-.fit-keys { margin: 12px 0 0; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; }
 
 /* O126: the asked list carries provenance now, so it is a stack of rows rather than a chip
    cloud — the label and the phrase that reached it are ONE fact and must share a row (the

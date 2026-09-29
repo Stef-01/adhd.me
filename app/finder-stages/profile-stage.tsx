@@ -19,7 +19,7 @@ import {
   missedAskParts,
   type Clinician,
 } from "@/demo/clinicians";
-import { shortLabel, type NeedSignal } from "@/matching/needs";
+import { type NeedSignal } from "@/matching/needs";
 import { APPROACH_LABELS } from "@/finder/filters";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { profileAnnouncement } from "@/finder/announce";
@@ -232,8 +232,8 @@ export function ProfileStage({
               <CaretRight size={19} weight="regular" aria-hidden="true" />
             </summary>
             <div className="profile-disclosure-body">
-              {/* The sentences first, the way a person would say why; then the keys they rest on,
-                  as one line. Without sentences the keys carry the person's own words, as before. */}
+              {/* The sentence, the way a person would say why, in place of the key rows; without one the
+                  keys carry the person's own words, as before. */}
               {insights.length > 0 && (
                 <ul className="fit-insights" aria-label="Why, in their words">
                   {insights.map((sentence) => <li key={sentence}>{sentence}</li>)}
@@ -241,9 +241,7 @@ export function ProfileStage({
               )}
               {personalizedSignals.length > 0 ? (
                 <>
-                  {insights.length > 0 ? (
-                    <p className="fit-keys">{profileEvidence.slice(0, 3).map(shortLabel).join(" · ")}</p>
-                  ) : (
+                  {insights.length === 0 && (
                   <ul className="fit-evidence" aria-label="Why this provider is listed for you">
                     {profileEvidence.slice(0, 3).map((need) => (
                       <li key={need.label}>

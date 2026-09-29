@@ -15,9 +15,13 @@ import { professionLabel } from "@/support/professions";
 import { callJson, type Deps } from "@/lib/llm/client";
 import { matchEvidence } from "@/demo/clinicians";
 
-/** One sentence of at most 22 words: the length the model writes to a worked example, and what keeps the screen under its ceiling. */
+/**
+ * One sentence of at most 26 words: what gpt-5-mini writes to a worked example (24 to 28 on the
+ * live site, whatever number the instruction names), and the most the screen holds under its
+ * ceiling with nothing else added beneath it.
+ */
 export const MAX_SENTENCES = 1;
-export const MAX_WORDS = 22;
+export const MAX_WORDS = 26;
 
 const INSTRUCTIONS = `You write why one clinician fits what a person asked, for ADHD.ME, a service in Australia that lists clinicians for ADHD care. You are given what the person asked, what the clinician says about themselves, and the matches the finder found between the two.
 
@@ -131,7 +135,7 @@ export async function whyMatched(text: string, clinician: Clinician, deps: Deps 
   const held = cachedWhy(text, clinician.id);
   if (held) return { sentences: held, source: "llm" };
   try {
-    const { data } = await callJson<{ sentences?: unknown }>({ ...WHY_CALL, input: whyInput(text, clinician, matched.slice(0, MAX_SENTENCES)) }, deps);
+    const { data } = await callJson<{ sentences?: unknown }>({ ...WHY_CALL, input: whyInput(text, clinician, matched.slice(0, 2)) }, deps);
     const sentences = keepSentences(data?.sentences);
     rememberWhy(text, clinician.id, sentences);
     return { sentences, source: "llm" };

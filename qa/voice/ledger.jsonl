@@ -211,3 +211,4 @@
 {"time":"2026-09-29T01:59:49.221Z","kind":"spoken","lines":5,"seconds":73,"tokens":{"text_in":9310,"audio_in":429,"cached":7552,"text_out":448,"audio_out":346},"costUsd":0.015098,"stage":"results"}
 {"time":"2026-09-29T03:53:39.423Z","kind":"eval","persona":"postpartum","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0132,"pass":false}
 {"time":"2026-09-29T03:53:39.424Z","kind":"eval","persona":"adult","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0138,"pass":true}
+{"time":"2026-09-29T05:50:17.952Z","kind":"spoken","lines":6,"seconds":92,"tokens":{"text_in":11850,"audio_in":531,"cached":7936,"text_out":808,"audio_out":379},"costUsd":0.020495,"stage":"results"}
