@@ -27,7 +27,7 @@ export const MIN_CLAUSE_WORDS = 5;
 
 const INSTRUCTIONS = `You finish one sentence about a clinician, for ADHD.ME, a service in Australia that lists clinicians for ADHD care. You are given what a person asked, what the clinician says about themselves, and the one thing the person asked that the clinician's listing answers.
 
-The sentence begins "You asked for <that thing>; <clinician> says". Return only the words that follow "says", beginning with "he", "she" or "they": what the clinician says about exactly that thing, in their own words rather than the words of the ask, in plain Australian English, within the number of words the input allows. For example: "he books a longer first appointment and takes time with you", or "she works with pregnancy, postpartum and new parents".
+The sentence begins "You asked for <that thing>; <clinician> says". Return only the words that follow "says", beginning with "he", "she" or "they": what the clinician says about exactly that thing, in their own words rather than the words of the ask, in plain Australian English. The input names the most words allowed after "says"; count them, and say one thing in few words rather than list several. For example: "he books a longer first appointment and takes time with you", or "she works with pregnancy, postpartum and new parents".
 
 Only what is given: never a fact, quality, outcome or comparison the clinician did not state, never a question, never the clinician's name. If the listing says nothing about that thing, return an empty string rather than something else about them. Never rate, rank, recommend or promise. Never write "specialist", "best", "expert", "treat", "cure" or "diagnose", and never give health advice.`;
 
@@ -140,10 +140,17 @@ export function askToWrite(evidence: readonly NeedSignal[]): NeedSignal | undefi
   return evidence.find((need) => need.facet.kind !== "preference") ?? evidence[0];
 }
 
+/** The second ask, when the first ran over: the same input, with the count. */
+export function whyInputAgain(text: string, clinician: Clinician, asked: string, budget: number, says: string): string {
+  return `${whyInput(text, clinician, asked, budget)}\nYour last answer, "${says.trim()}", had ${words(says)} words. At most ${budget}: the same fact, in fewer words.`;
+}
+
 /**
  * One paid call, or the cached answer; any failure is `none`, and the screen keeps the keys alone.
  * The sentence rests on the finder's own evidence: where the listing answers no key the person
- * asked, there is nothing to say and no call is made.
+ * asked, there is nothing to say and no call is made. A clause over its budget is asked for once
+ * more with the count: measured live (2026-09-29), gpt-5-mini ran one to four words over on five
+ * of ten first answers, and a refusal there is a profile with keys where a sentence was due.
  */
 export async function whyMatched(text: string, clinician: Clinician, deps: Deps = {}): Promise<Why> {
   const strongest = askToWrite(matchEvidence(clinician, text, roster));
@@ -155,7 +162,11 @@ export async function whyMatched(text: string, clinician: Clinician, deps: Deps 
   if (budget < MIN_CLAUSE_WORDS) return { sentences: [], source: "none" };
   try {
     const { data } = await callJson<{ says?: unknown }>({ ...WHY_CALL, input: whyInput(text, clinician, asked, budget) }, deps);
-    const clause = keepClause(data?.says, clinician, budget);
+    let clause = keepClause(data?.says, clinician, budget);
+    if (!clause && typeof data?.says === "string" && words(data.says) > budget) {
+      const again = await callJson<{ says?: unknown }>({ ...WHY_CALL, input: whyInputAgain(text, clinician, asked, budget, data.says) }, deps);
+      clause = keepClause(again.data?.says, clinician, budget);
+    }
     const sentence = clause ? whySentence(asked, clinician, clause) : null;
     const sentences = sentence ? [sentence] : [];
     // An empty answer is not remembered: the next tap may draw a clause that fits.

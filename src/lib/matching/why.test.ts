@@ -104,8 +104,29 @@ describe("the call", () => {
     expect((await whyMatched(REQUEST, anubhav, { env: {} })).source).toBe("none");
   });
 
+  it("asks once more, with the count, when the first clause runs over its budget", async () => {
+    const long = "he offers a structured adult ADHD assessment with a documented baseline and long first appointment";
+    const fetchFn = vi.fn().mockImplementationOnce(answer(long)).mockImplementationOnce(answer("he offers a structured adult ADHD assessment"));
+    const result = await whyMatched(REQUEST, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } });
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+    const second = JSON.parse((fetchFn.mock.calls[1] as [string, { body: string }])[1].body) as { input: string };
+    expect(second.input).toContain(`Your last answer, "${long}", had ${long.split(" ").length} words.`);
+    expect(result.sentences).toHaveLength(1);
+    expect(result.sentences[0]).toMatch(/says he offers a structured adult ADHD assessment\.$/);
+  });
+
+  it("does not ask again when the first clause was clean, empty or refused for its words", async () => {
+    const once = vi.fn(answer("he is the best ADHD specialist"));
+    expect((await whyMatched(REQUEST, anubhav, { fetch: once, env: { OPENAI_API_KEY: "k" } })).sentences).toEqual([]);
+    expect(once).toHaveBeenCalledTimes(1);
+    const empty = vi.fn(answer(""));
+    expect((await whyMatched(REQUEST, anubhav, { fetch: empty, env: { OPENAI_API_KEY: "k" } })).sentences).toEqual([]);
+    expect(empty).toHaveBeenCalledTimes(1);
+  });
+
   it("does not remember an empty answer, so the next ask may draw a clause that fits", async () => {
-    const fetchFn = vi.fn(answer(Array.from({ length: MAX_CLAUSE_WORDS + 1 }, () => "word").join(" ")));
+    // A clause refused for its words, not its length: the length case asks once more (above).
+    const fetchFn = vi.fn(answer("he is the best ADHD specialist in Sydney"));
     expect((await whyMatched(REQUEST, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } })).sentences).toEqual([]);
     expect(cachedWhy(REQUEST, anubhav.id)).toBeNull();
     await whyMatched(REQUEST, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } });
