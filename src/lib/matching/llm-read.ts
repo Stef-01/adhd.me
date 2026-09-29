@@ -43,7 +43,7 @@ export const MEANINGS: Record<string, string> = {
   steadying: "asks for a clinician who is calm and reassuring",
   sense_making: "asks for what is going on, or the plan, to be explained so it makes sense",
   motivating: "asks for a clinician who is encouraging and strengths-focused, or a plan they can act on",
-  not_rushed: "asks for more time with the clinician, or not to be rushed (punctuality is not this)",
+  not_rushed: "asks for more time with the clinician, or not to be hurried through the appointment; wanting appointments to start on time, or less waiting, is punctuality and is not this",
   non_judgmental: "asks to be able to be honest without being judged",
   collaborative: "asks to make the decisions together with the clinician, or to be given choices",
   culturally_attuned: "asks for a clinician who understands their culture, faith, language, background or family (a life stage or a condition is not this)",

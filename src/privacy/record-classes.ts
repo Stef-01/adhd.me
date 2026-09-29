@@ -137,6 +137,12 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
     rationale: "2026-09-28: the same words read the same way and a repeated search costs nothing. The words themselves are never held, only a SHA-256 of them, lower-cased and trimmed, beside the facet keys the model read; no id, device or person is attached, and nothing leaves the process. At most 500 entries, each for 24 hours, gone on restart.",
   },
   {
+    module: "src/lib/matching/why.ts",
+    what: "Why a clinician fits, in their own words: the model's two sentences, remembered for a day under a hash of the request's words and the clinician's id",
+    handling: "no_patient_identity",
+    rationale: "2026-09-29 (the North Star): the sentences address the person but name nobody; the words themselves are never held, only a SHA-256 of them with the clinician's id, beside the sentences, on this instance, for a day.",
+  },
+  {
     module: "src/db/finder.ts",
     what: "The finder's record: searches (the words a person typed or said, the place, the filters, what was read and shown, the asks no key covers), voice calls with every turn of their transcript, what they did with a list, handoffs to a practice, and the stars and words after a visit",
     handling: "stored",

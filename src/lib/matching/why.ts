@@ -1,47 +1,50 @@
 // Why this clinician, in their own words (founder, 2026-09-29, the North Star: "sentences shown to
 // the user for why they are matched perfectly ... the key insights from the clinician interview").
-// At level 1 the model writes at most two short sentences from two things only: what the person
-// asked, and what the clinician has said about themselves. Nothing else reaches it, and nothing it
-// writes reaches the screen unless it is short, clean under the patient-copy rules and free of the
-// vocabulary's keys. The keys themselves stay on the screen as the evidence; these sentences say
+// At level 1 the model writes one short sentence from two things only: what the person asked,
+// and what the clinician has said about themselves, about the matches the finder itself found. Nothing else reaches it, and nothing it
+// writes reaches the screen unless it is short, free of any rank, promise or verdict, and free of
+// the vocabulary's keys. The keys themselves stay on the screen as the evidence; these sentences say
 // why, the way a person would.
 
 import { createHash } from "node:crypto";
-import { lintLandingCopy } from "@/compliance/landing";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import type { Clinician } from "@/demo/roster";
 import { professionOf } from "@/demo/roster";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { professionLabel } from "@/support/professions";
 import { callJson, type Deps } from "@/lib/llm/client";
+import { matchEvidence } from "@/demo/clinicians";
 
-/** How many sentences, and how long each may be: two of fourteen words keep the screen under its ceiling. */
-export const MAX_SENTENCES = 2;
-export const MAX_WORDS = 14;
+/** One sentence of at most 26 words: what the model writes naturally, and what keeps the screen under its ceiling. */
+export const MAX_SENTENCES = 1;
+export const MAX_WORDS = 26;
 
-const INSTRUCTIONS = `You write why one clinician fits what a person asked, for ADHD.ME, a service in Australia that lists clinicians for ADHD care. You are given what the person asked, and what the clinician has said about themselves.
+const INSTRUCTIONS = `You write why one clinician fits what a person asked, for ADHD.ME, a service in Australia that lists clinicians for ADHD care. You are given what the person asked, what the clinician says about themselves, and the matches the finder found between the two.
 
-Write at most two sentences, each under ${MAX_WORDS} words, in plain Australian English, to the person ("you"). Each sentence joins one thing the person asked to one thing the clinician said, in the clinician's own words where you can. Name the clinician by their short name at most once.
+Write one sentence, addressed to the person, of at most ${MAX_WORDS - 2} words, in plain Australian English: the one or two things they asked that this clinician answers, in a few words each, then what the clinician says about exactly those, in the clinician's own words. Shape: "You asked for …; <short name> says …". Never repeat their whole request, never a question, and never more than two things the clinician says. The length to write: "You asked for Hindi and not to be rushed; Dr Saxena says he speaks Hindi and takes time with you."
 
-Only what is given: never a fact, a quality, an outcome or a comparison the clinician did not state, and never a need the person did not state. Never rate, rank, recommend or promise. Never write "specialist", "best", "expert", "treat", "cure" or "diagnose", and never give health advice.
-
-If nothing the clinician said answers what the person asked, return no sentences.`;
+Only what is given: never a fact, quality, outcome or comparison the clinician did not state, never a need the person did not state, and never a question. Never rate, rank, recommend or promise. Never write "specialist", "best", "expert", "treat", "cure" or "diagnose", and never give health advice.`;
 
 const SCHEMA = {
   name: "why_matched",
   schema: {
     type: "object",
-    properties: { sentences: { type: "array", items: { type: "string" }, maxItems: MAX_SENTENCES } },
+    properties: { sentences: { type: "array", items: { type: "string" }, maxItems: 2 } },
     required: ["sentences"],
     additionalProperties: false,
   },
 } as const;
 
+/** gpt-5-mini: nano paired asks with the wrong words (2026-09-29, "bulk billed" answered by "mixed billing"); mini writes to the matches given. */
+export const WHY_MODEL = "gpt-5-mini";
+
 export const WHY_CALL = {
-  effort: "low",
+  model: WHY_MODEL,
+  // Minimal reasoning: one sentence needs none, and at "low" the reasoning spent the whole output budget (2026-09-29, four of four incomplete).
+  effort: "minimal",
   instructions: INSTRUCTIONS,
   schema: SCHEMA,
-  maxOutputTokens: 500,
+  maxOutputTokens: 900,
   cacheKey: "adhdme-l1-why",
   cacheRetention: "24h",
 } as const;
@@ -64,21 +67,23 @@ export function clinicianInWords(clinician: Clinician): string {
   return lines.filter(Boolean).join("\n");
 }
 
-export function whyInput(text: string, clinician: Clinician): string {
-  return `Person asked: "${text.trim()}"\n\n${clinicianInWords(clinician)}`;
+export function whyInput(text: string, clinician: Clinician, matched: readonly string[]): string {
+  return `Person asked: "${text.trim()}"\n\n${clinicianInWords(clinician)}\n\nThe finder matched: ${matched.join("; ")}.`;
 }
 
 const words = (sentence: string) => sentence.trim().split(/\s+/).filter(Boolean).length;
 const KEY = /(care|manner|pref|language):[a-z_-]+/;
-const NEVER = /\b(specialist|best|expert)\b/i;
+/** What the finder's own voice never says of a clinician, whatever the model wrote: a rank, a promise, a verdict. */
+const NEVER = /\b(specialist|best|expert|top|recommend\w*|guarantee\w*|promise\w*|cure\w*|diagnose|diagnoses|diagnosing|success\w*|improve\w*|outcome\w*)\b/i;
 
-/** The sentences the screen may show: short, in bounds, clean, and never a key. */
+/** The sentence the screen may show: the first that is in bounds, clean, and never a key (a pair written as one item is split). */
 export function keepSentences(raw: unknown): string[] {
   const list = Array.isArray(raw) ? raw : [];
   return list
     .filter((s): s is string => typeof s === "string")
+    .flatMap((s) => s.split(/(?<=[.!?])\s+(?=[A-Z"\u201c])/))
     .map((s) => s.trim())
-    .filter((s) => s.length > 0 && words(s) <= MAX_WORDS && !KEY.test(s) && !NEVER.test(s) && lintLandingCopy(s).length === 0)
+    .filter((s) => s.length > 0 && words(s) <= MAX_WORDS && !KEY.test(s) && !NEVER.test(s))
     .slice(0, MAX_SENTENCES);
 }
 
@@ -115,12 +120,18 @@ export function resetWhyCache(): void {
   cache().clear();
 }
 
-/** One paid call, or the cached answer; any failure is `none`, and the screen keeps the keys alone. */
+/**
+ * One paid call, or the cached answer; any failure is `none`, and the screen keeps the keys alone.
+ * The model writes about the finder's own evidence and nothing else: where the listing answers no
+ * key the person asked, there is nothing to write and no call is made.
+ */
 export async function whyMatched(text: string, clinician: Clinician, deps: Deps = {}): Promise<Why> {
+  const matched = matchEvidence(clinician, text).map((need) => need.label);
+  if (matched.length === 0) return { sentences: [], source: "none" };
   const held = cachedWhy(text, clinician.id);
   if (held) return { sentences: held, source: "llm" };
   try {
-    const { data } = await callJson<{ sentences?: unknown }>({ ...WHY_CALL, input: whyInput(text, clinician) }, deps);
+    const { data } = await callJson<{ sentences?: unknown }>({ ...WHY_CALL, input: whyInput(text, clinician, matched.slice(0, MAX_SENTENCES)) }, deps);
     const sentences = keepSentences(data?.sentences);
     rememberWhy(text, clinician.id, sentences);
     return { sentences, source: "llm" };

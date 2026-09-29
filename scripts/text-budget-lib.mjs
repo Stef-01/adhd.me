@@ -355,7 +355,7 @@ export const LEARNING_RECORD = {
 };
 
 /** What the model writes under "Why matched" at level 1, as the budget measures that screen. */
-const WHY_SENTENCES = ["You asked for telehealth; this clinician sees new people by video first.", "You said not rushed; they book a longer first appointment."];
+const WHY_SENTENCES = ["You asked for telehealth and not to be rushed; they see new people by video first and book a longer first appointment."];
 
 export async function reach(page, route, base) {
   if (route.state === "intake") {

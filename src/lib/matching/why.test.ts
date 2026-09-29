@@ -15,8 +15,9 @@ afterEach(() => vi.restoreAllMocks());
 
 describe("what the model is given", () => {
   it("is the person's words and the clinician's own listing, labelled, and nothing else", () => {
-    const input = whyInput(REQUEST, anubhav);
+    const input = whyInput(REQUEST, anubhav, ["By phone or telehealth", "Takes time with you"]);
     expect(input.startsWith(`Person asked: "${REQUEST}"`)).toBe(true);
+    expect(input.endsWith("The finder matched: By phone or telehealth; Takes time with you.")).toBe(true);
     const words = clinicianInWords(anubhav);
     for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Takes time with you", "Hindi"]) expect(words).toContain(piece);
     expect(words).not.toMatch(/manner:|care:|pref:/);
@@ -24,21 +25,17 @@ describe("what the model is given", () => {
 });
 
 describe("what the screen may show", () => {
-  it("keeps at most two short, clean sentences and drops the rest", () => {
-    const kept = keepSentences([
-      "You asked not to be rushed; Anubhav books a longer first appointment.",
-      "  ",
-      "You asked for Hindi; he consults in Hindi and Urdu.",
-      "A third sentence that is fine but one too many.",
-    ]);
+  it("keeps the first clean sentence, splitting a pair written as one, and drops the rest", () => {
+    const kept = keepSentences(["  ", "You asked not to be rushed; Dr Saxena books a longer first appointment. You asked for Hindi; he consults in Hindi and Urdu."]);
     expect(kept).toHaveLength(MAX_SENTENCES);
-    expect(kept[0]).toBe("You asked not to be rushed; Anubhav books a longer first appointment.");
+    expect(kept[0]).toBe("You asked not to be rushed; Dr Saxena books a longer first appointment.");
   });
 
-  it("refuses a key, a claim the patient rules forbid, a superlative and a long sentence", () => {
+  it("refuses a key, a verdict, a promise, a superlative and a long sentence", () => {
     expect(keepSentences(["Your ask manner:not_rushed is met."])).toEqual([]);
-    expect(keepSentences(["He can diagnose and treat your ADHD quickly."])).toEqual([]);
+    expect(keepSentences(["He can diagnose and cure your ADHD quickly."])).toEqual([]);
     expect(keepSentences(["She is the best ADHD specialist in Sydney."])).toEqual([]);
+    expect(keepSentences(["I recommend her; you will see an improvement."])).toEqual([]);
     expect(keepSentences([Array.from({ length: MAX_WORDS + 1 }, () => "word").join(" ")])).toEqual([]);
     expect(keepSentences("not a list")).toEqual([]);
   });
@@ -46,9 +43,9 @@ describe("what the screen may show", () => {
 
 describe("the call", () => {
   it("answers from the model once, then from memory for the same words", async () => {
-    const fetchFn = vi.fn(answer(["You asked for telehealth; Anubhav sees new people by video first."]));
+    const fetchFn = vi.fn(answer(["You asked for telehealth; Dr Saxena sees new people by video first."]));
     const first = await whyMatched(REQUEST, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } });
-    expect(first).toEqual({ sentences: ["You asked for telehealth; Anubhav sees new people by video first."], source: "llm" });
+    expect(first).toEqual({ sentences: ["You asked for telehealth; Dr Saxena sees new people by video first."], source: "llm" });
     const again = await whyMatched(`${REQUEST}.`, anubhav, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } });
     expect(again.sentences).toEqual(first.sentences);
     expect(fetchFn).toHaveBeenCalledTimes(1);
@@ -61,5 +58,12 @@ describe("the call", () => {
     expect(failed.sentences).toEqual([]);
     expect(failed.error).toMatch(/HttpError/);
     expect((await whyMatched(REQUEST, anubhav, { env: {} })).source).toBe("none");
+  });
+
+  it("makes no call where the listing answers nothing the person asked", async () => {
+    const fetchFn = vi.fn(answer(["Anything."]));
+    const ot = clinicians.find((c) => c.profession === "occupational-therapist")!;
+    expect(await whyMatched("a woman GP who speaks Hindi", ot, { fetch: fetchFn, env: { OPENAI_API_KEY: "k" } })).toEqual({ sentences: [], source: "none" });
+    expect(fetchFn).not.toHaveBeenCalled();
   });
 });
