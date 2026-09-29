@@ -189,6 +189,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a psychologist who has ADHD herself", reaches: ["pref:lived-experience"] },
   { text: "someone who has ADHD themselves and gets it from the inside", reaches: ["pref:lived-experience"] },
   { text: "a coach who has ADHD themselves", reaches: ["pref:lived-experience", "care:non-medication"] },
+  // The production call of 2026-09-29 11:40: the interviewer wrote "understands ADHD from the inside", and both readers heard an assessment.
+  { text: "a psychologist who understands ADHD from the inside", reaches: ["pref:lived-experience"], never: ["care:adhd-assessment"] },
   { text: "I have ADHD myself and I need an assessment for my daughter", reaches: ["care:child-adolescent-adhd", "care:adhd-assessment"], never: ["pref:lived-experience"] },
   { text: "can the first appointment be over the phone", reaches: ["pref:telehealth-first"] },
   { text: "telehealth to start, I am rural", reaches: ["pref:telehealth-first"] },

@@ -55,11 +55,11 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 // again for O256 (463 -> 466: three continuation sentences added, three assessment reads gone),
 // and for O257 (466 -> 470: four lived-experience sentences and a fifth preference; the synthetic
 // roster draws gender at the real roster's rate, and seven profiles declared theirs the same day).
-  { rosterSize: 2, k: K, total: 470, observedSeparationRate: 0.274, nullMeanSeparationRate: 0.274, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 470, observedSeparationRate: 0.174, nullMeanSeparationRate: 0.176, nullStdSeparationRate: 0.001, effect: -0.002 },
-  { rosterSize: 5, k: K, total: 470, observedSeparationRate: 0.298, nullMeanSeparationRate: 0.295, nullStdSeparationRate: 0.003, effect: 0.003 },
-  { rosterSize: 10, k: K, total: 470, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.238, nullStdSeparationRate: 0.002, effect: 0.002 },
-  { rosterSize: 25, k: K, total: 470, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.235, nullStdSeparationRate: 0.006, effect: 0.005 },
+  { rosterSize: 2, k: K, total: 471, observedSeparationRate: 0.274, nullMeanSeparationRate: 0.274, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 471, observedSeparationRate: 0.174, nullMeanSeparationRate: 0.175, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 471, observedSeparationRate: 0.297, nullMeanSeparationRate: 0.295, nullStdSeparationRate: 0.003, effect: 0.002 },
+  { rosterSize: 10, k: K, total: 471, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.238, nullStdSeparationRate: 0.002, effect: 0.002 },
+  { rosterSize: 25, k: K, total: 471, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.235, nullStdSeparationRate: 0.006, effect: 0.005 },
 ];
 
 /*
@@ -80,11 +80,11 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 37,
   k: K,
-  total: 470,
+  total: 471,
   observedSeparationRate: 0.338,
-  nullMeanSeparationRate: 0.33,
+  nullMeanSeparationRate: 0.329,
   nullStdSeparationRate: 0.006,
-  effect: 0.008,
+  effect: 0.009,
 };
 
 describe("M5 the separation effect size, over synthetic rosters", () => {
@@ -134,7 +134,7 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
     () => {
       const size3 = curve.find((point) => point.rosterSize === 3)!;
       const size2 = curve.find((point) => point.rosterSize === 2)!;
-      expect(size3.effect).toBe(-0.002); // 2026-09-29: 0.001 -> -0.001, one null standard deviation below zero
+      expect(size3.effect).toBe(-0.001); // 2026-09-29: 0.001 -> -0.001, one null standard deviation below zero
       expect(size2.effect).toBe(0);
       // O252: stated over the whole curve rather than one pair, now that the pair that
       // demonstrates the raw artefact has moved once and may move again.
@@ -203,7 +203,7 @@ describe("M5 the real roster's own effect (37 real profiles)", () => {
       "small, real, and for the first time actually measured rather than forced",
     () => {
       const report = realRosterSeparationEffect(K);
-      expect(report.effect).toBe(0.008); // 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
+      expect(report.effect).toBe(0.009); // 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
       expect(report.nullStdSeparationRate).toBeGreaterThan(0);
       expect(report.observedSeparationRate).toBeGreaterThan(report.nullMeanSeparationRate);
     },

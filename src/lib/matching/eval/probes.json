@@ -473,5 +473,15 @@
       "pref:lived-experience",
       "care:adhd-assessment"
     ]
+  },
+  {
+    "text": "someone who understands ADHD from the inside, for me, 29, telehealth",
+    "reaches": [
+      "pref:lived-experience",
+      "pref:telehealth-first"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
   }
 ]

@@ -1,0 +1,109 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I was diagnosed last year and I want a psychologist who gets it from the inside.",
+    "It's for me, I'm twenty nine.",
+    "Marrickville, or telehealth.",
+    "Cost is fine.",
+    "Yes, someone who has ADHD themselves.",
+    "No, English is fine.",
+    "No, that's all."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I was diagnosed last year and I want a psychologist who gets it from the inside."
+    },
+    {
+      "who": "assistant",
+      "text": "Great, who is this for—just you, or someone else?"
+    },
+    {
+      "who": "person",
+      "text": "It's for me, I'm twenty-nine."
+    },
+    {
+      "who": "assistant",
+      "text": "Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "assistant",
+      "text": "Does cost matter to you?"
+    },
+    {
+      "who": "person",
+      "text": "Merivale, or telehealth."
+    },
+    {
+      "who": "person",
+      "text": "Cost is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "Yes, someone who has ADHD themselves."
+    },
+    {
+      "who": "assistant",
+      "text": "Do you need a specific language spoken?"
+    },
+    {
+      "who": "person",
+      "text": "No, English is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    },
+    {
+      "who": "person",
+      "text": "No, that's all."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay, thanks. I’ll pull together a request for matches."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Marrickville or telehealth\",\"request\":\"I want a psychologist who understands ADHD from the inside for me, 29, in Marrickville or telehealth, cost is fine, someone who has ADHD themselves, English.\"}"
+    }
+  ],
+  "request": "I want a psychologist who understands ADHD from the inside for me, 29, in Marrickville or telehealth, cost is fine, someone who has ADHD themselves, English.",
+  "reads": [
+    {
+      "text": "I want a psychologist who understands ADHD from the inside for me, 29, in Marrickville or telehealth, cost is fine, someone who has ADHD themselves, English.",
+      "answer": {
+        "keys": [
+          "pref:telehealth-first",
+          "pref:lived-experience",
+          "care:adhd-assessment"
+        ],
+        "source": "llm",
+        "unlisted": [
+          "Marrickville"
+        ]
+      }
+    }
+  ],
+  "heard": [
+    "Lived experience",
+    "Telehealth",
+    "ADHD assessment"
+  ],
+  "results": [
+    "Chantelle Pin Psychologist · Lived experience Benowa",
+    "Valeria Urrutia Psychologist · ADHD assessment Benowa",
+    "Meera Lakhani Psychologist · ADHD assessment Fortitude Valley",
+    "Lachlan Avent Psychologist · ADHD assessment Fortitude Valley",
+    "Samantha Courtney Psychologist Fortitude Valley"
+  ],
+  "whyMatched": "Why matched By phone or telehealth Has ADHD themselves ADHD assessment Compare with Valeria",
+  "stage": "results"
+}

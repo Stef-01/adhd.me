@@ -546,7 +546,7 @@ const LEXICON: readonly Entry[] = [
     "clinician with adhd", "clinician who has adhd", "gp with adhd", "gp who has adhd", "psychologist with adhd", "psychologist who has adhd",
     "coach with adhd", "coach who has adhd", "therapist with adhd", "therapist who has adhd", "counsellor with adhd",
     "has adhd themselves", "has adhd herself", "has adhd himself", "have adhd themselves", "adhd themselves", "adhd herself", "adhd himself",
-    "lived experience", "been through it themselves", "knows it from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
+    "lived experience", "been through it themselves", "knows it from the inside", "gets it from the inside", "adhd from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
   ]),
   pref("telehealth-first", "By phone or telehealth", 28, [
     /* O128: "immunosuppressed" beside O125's "immunocompromised". They are the same reason in
@@ -720,7 +720,7 @@ const RUN_DEMANDED = new Set([
      collapses to [gp, adhd] and, matched across a gap, read "a GP for my drinking history and my
      ADHD" as a wish for a GP with ADHD, taking the "adhd" the assessment cue needed. The person
      saying it says it in one breath: "a psychologist who has ADHD herself". */
-  "clinician with adhd", "clinician who has adhd", "gp with adhd", "gp who has adhd", "psychologist with adhd", "psychologist who has adhd", "coach with adhd", "coach who has adhd", "therapist with adhd", "therapist who has adhd", "counsellor with adhd", "has adhd themselves", "has adhd herself", "has adhd himself", "have adhd themselves", "adhd themselves", "adhd herself", "adhd himself", "lived experience", "been through it themselves", "knows it from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
+  "clinician with adhd", "clinician who has adhd", "gp with adhd", "gp who has adhd", "psychologist with adhd", "psychologist who has adhd", "coach with adhd", "coach who has adhd", "therapist with adhd", "therapist who has adhd", "counsellor with adhd", "has adhd themselves", "has adhd herself", "has adhd himself", "have adhd themselves", "adhd themselves", "adhd herself", "adhd himself", "lived experience", "been through it themselves", "knows it from the inside", "gets it from the inside", "adhd from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
 ]);
 
 /** O256: the assessment cues that merely name the condition or the diagnosis; disclosure once the diagnosis is said to exist. */
@@ -881,9 +881,15 @@ export function readNeeds(text: string): NeedSignal[] {
     if (candidate.at.some((position) => claimed.has(position))) return;
 
     const key = facetKey(cue.entry.facet);
-    if (seen.has(key)) return;
-
+    /* O258 (2026-09-29): a facet already heard still CLAIMS the words a later cue of its own
+       matched, and only the signal is not repeated. Before this the second cue claimed nothing,
+       so in "someone who has ADHD themselves and gets it from the inside" the longer cue landed
+       first, "has ADHD themselves" was skipped whole, and the bare "adhd" it should have taken
+       went to care:adhd-assessment: a person asking for a clinician with ADHD was sent for an
+       assessment. The words a person spent on one thing are that thing's, however many times
+       they say it. */
     for (const position of candidate.at) claimed.add(position);
+    if (seen.has(key)) return;
     seen.add(key);
     signals.push({
       facet: cue.entry.facet,

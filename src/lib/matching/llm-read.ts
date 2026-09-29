@@ -26,7 +26,7 @@ const FIELDS = Object.keys(VOCABULARY) as Field[];
  * paraphrase is fixed here, never by copying corpus text.
  */
 export const MEANINGS: Record<string, string> = {
-  "adhd-assessment": "asks for an ADHD assessment or diagnosis, or wants to find out whether it is ADHD (someone who says they already have the diagnosis, and asks for their medication or scripts to continue, is shared-care and not this)",
+  "adhd-assessment": "asks for an ADHD assessment or diagnosis, or wants to find out whether it is ADHD (someone who says they already have the diagnosis, and asks for their medication or scripts to continue, is shared-care and not this; ADHD named only as what the clinician should understand or have themselves is not this)",
   "child-adolescent-adhd": "the appointment is for their child or teenager",
   titration: "asks for a medication dose to be reviewed or adjusted, or side effects sorted",
   "shared-care": "asks for a GP to share care with, or take over scripts from, a psychiatrist or paediatrician",
@@ -79,6 +79,7 @@ const EXAMPLES = [
   '"I already have a diagnosis and need my ADHD medication continued" → care: shared-care; negated: adhd-assessment',
   '"a clinician who speaks Tamil" → languages: tamil',
   '"a psychologist who has ADHD herself" → prefs: lived-experience',
+  '"someone who understands ADHD from the inside" → prefs: lived-experience',
   '"a practice that runs on schedule" → unlisted: appointments that run on time',
   '"our little one is five months and I want a GP who gets that" → care: perinatal',
 ];

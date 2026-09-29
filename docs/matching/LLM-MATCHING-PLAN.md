@@ -850,7 +850,20 @@ against the lexicon's 100%, precision 93.2%, $0.000065 a call). One lesson on th
 example "a psychologist who has ADHD herself, not one who just treats it" failed P3 twice on the
 negation class, the "not … just" in it teaching the model to read a key past a refusal; without those
 words P3 passed with the class at 100%. A first P4 tripped the breaker on 23 cached answers that
-recited the whole menu; purged, the rerun passed. The interviewer's text eval passes 12 of 12 with a `lived` persona. Left: `agesSeen`,
+recited the whole menu; purged, the rerun passed. The interviewer's text eval passes 12 of 12 with a `lived` persona. Live on production the same
+hour, the interviewer asked the new question, the person answered yes, and the list led with
+Chantelle; the request it wrote said "understands ADHD from the inside" and dropped "diagnosed
+last year", and both readers heard an assessment from the bare "ADHD". Three fixes, same day: the
+interviewer carries an existing diagnosis into the request first; the reader's meaning says ADHD
+named as what a clinician should understand or have is not an assessment ask; and the lexicon lets
+a facet already heard still claim the words its later cues match (O258), because the longer
+lived-experience cue used to land first, the shorter one was skipped whole, and the "adhd" it
+should have taken went to the assessment key. Ladder under the prompt that carries the clarified
+meaning (ff68a930e1e1): P0 to P3 pass; P4 read `care:depression` on one symptom line ("flat for
+months, everything is heavy", a never pin of the G7 kind) at 1.4% of its never population and
+failed the gate; that request's six cached answers were dropped and it was read again live
+("nothing"), and P4 passed (never 0.0%, C4 95.1%, recall 99.5% against the lexicon's 100%,
+precision 93.2%). Left: `agesSeen`,
 the thirteen first-person bios, the remaining keys (neuro-affirming, NDIS, prescribing, coaching;
 eating disorders once more than two say it), manner out of the evidence and the filters, and a question gated on the
 split it makes.

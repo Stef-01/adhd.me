@@ -1654,9 +1654,13 @@ describe("§O257 a clinician who has ADHD themselves", () => {
   const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
 
   it("is asked for as the clinician's own ADHD, in several words", () => {
-    for (const text of ["a psychologist who has ADHD herself", "someone who has ADHD themselves", "a coach with lived experience of ADHD", "a GP who has ADHD"]) {
+    for (const text of ["a psychologist who has ADHD herself", "someone who has ADHD themselves", "a coach with lived experience of ADHD", "a GP who has ADHD", "a psychologist who understands ADHD from the inside"]) {
       expect(facets(text), text).toContain("pref:lived-experience");
     }
+  });
+
+  it("takes the word ADHD with it, so the person who wants it understood from the inside is not sent for an assessment", () => {
+    expect(facets("a psychologist who understands ADHD from the inside")).not.toContain("care:adhd-assessment");
   });
 
   it("is never the person's own ADHD, nor the ADHD of the person they ask for", () => {

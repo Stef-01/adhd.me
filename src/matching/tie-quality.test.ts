@@ -181,7 +181,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
 // because the four profiles that declare the area are not the same four on anything else.
 // 2026-09-29: 37 real profiles, separated 134 -> 160 and unseparated 29 -> 11: the network answers
 // more of what the corpus asks, and answers it differently from the founding eleven.
-const PINNED = { total: 470, separated: 159, partialTie: 300, unseparated: 11 }; // O257 (2026-09-29): +4 lived-experience sentences, one separated. O256 (2026-09-29): +3 continuation sentences, and three lost care:adhd-assessment, so three separated reads became partial ties (161 -> 158). Before that, 2026-09-29: +1 sentence ("new mums"), separated
+const PINNED = { total: 471, separated: 159, partialTie: 301, unseparated: 11 }; // O257 (2026-09-29): +4 lived-experience sentences, one separated. O256 (2026-09-29): +3 continuation sentences, and three lost care:adhd-assessment, so three separated reads became partial ties (161 -> 158). Before that, 2026-09-29: +1 sentence ("new mums"), separated
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();

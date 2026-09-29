@@ -166,6 +166,8 @@ to you about the clinician?" (the two that produced the noise in both calls).
    (Trisha, Chantelle, Alex; Lana's "lived experience" names no condition and is left for her to
    say), and gender for the seven whose bios say "he" or "she" of themselves (13 / 11 / 13 now).
    `agesSeen` and the thirteen first-person bios remain, and the founder confirms each.
+   The words each profile uses for ages and for the other candidate keys are tabled in
+   `qa/matching/ages-seen.md` and `qa/matching/high-yield-declarations.md`.
 4. Vocabulary: the new keys in the lexicon and the reader, with corpus and probe pins; manner
    out of evidence and filters. Large; the count pins move and are re-pinned as O256's were.
    Begun 2026-09-29 with `pref:lived-experience`: cues that name the clinician, each demanding its
