@@ -56,7 +56,7 @@ export const SCENARIOS: Scenario[] = [
 ];
 
 export interface JaxWorld {
-  paused: boolean; still: boolean;
+  support: 'list' | 'space' | null; paused: boolean; still: boolean;
   scenario: number; phase: Phase; trip: number; t: number;
   lane: number; items: Item[]; nextId: number; nextAt: number; spawn: number;
   list: string[]; basket: string[]; wishes: string[]; requested: boolean; soldOutSeen: boolean;
@@ -66,7 +66,7 @@ export interface JaxWorld {
 }
 export type JaxAction =
   | { type: 'tick'; ms: number } | { type: 'pause' } | { type: 'resume' } | { type: 'still'; value: boolean }
-  | { type: 'steer'; lane: number } | { type: 'flick'; id: number } | { type: 'roll' }
+  | { type: 'support'; choice: 'list' | 'space' } | { type: 'steer'; lane: number } | { type: 'flick'; id: number } | { type: 'roll' }
   | { type: 'return'; index: number } | { type: 'pay' } | { type: 'continue' }
   | { type: 'stick-list' } | { type: 'save-wish' } | { type: 'fridge' } | { type: 'restart' };
 
@@ -96,7 +96,7 @@ function begin(s: JaxWorld, n: number): JaxWorld {
   return fill(next);
 }
 export function createJax(scenario = 0, still = false): JaxWorld {
-  return begin({ paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'aisle', trip: 0, t: 0, lane: 1, items: [], nextId: 1, nextAt: 0, spawn: 0, list: [], basket: [], wishes: [], requested: false, soldOutSeen: false, receipts: [], setup: { list: false, wish: false, fridge: false }, message: '', revision: 0, bump: 0 }, 0);
+  return begin({ support: null, paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'aisle', trip: 0, t: 0, lane: 1, items: [], nextId: 1, nextAt: 0, spawn: 0, list: [], basket: [], wishes: [], requested: false, soldOutSeen: false, receipts: [], setup: { list: false, wish: false, fridge: false }, message: '', revision: 0, bump: 0 }, 0);
 }
 
 /** The next product on the shelf: a missing need every other spawn, lures and the wish between. */
@@ -158,8 +158,8 @@ export function jaxReducer(s: JaxWorld, a: JaxAction): JaxWorld {
     let n: JaxWorld = { ...s, t: s.t + a.ms };
     const t = trip(n);
     if (t.request && !n.requested && n.t >= t.request.at) n = { ...n, requested: true, list: [...n.list, t.request.key], message: `Ari: can you grab ${PRODUCTS[t.request.key]!.name.toLowerCase()}?`, revision: n.revision + 1 };
-    n = roll(n, t.speed * a.ms);
-    if (live(n) && n.t >= n.nextAt && n.items.length < 5) n = { ...spawn(n), nextAt: n.t + t.gap };
+    n = roll(n, t.speed * a.ms * (s.support === 'space' ? .8 : 1));
+    if (live(n) && n.t >= n.nextAt && n.items.length < 5) n = { ...spawn(n), nextAt: n.t + t.gap * (s.support === 'space' ? 1.2 : 1) };
     return n;
   }
   if (a.type === 'restart') return s.phase === 'complete' ? createJax(s.scenario + 1, s.still) : s;
@@ -188,6 +188,7 @@ export function jaxReducer(s: JaxWorld, a: JaxAction): JaxWorld {
       if (!key || (s.list.includes(key) && s.basket.indexOf(key) === a.index)) return s;
       return { ...s, basket: s.basket.filter((_, i) => i !== a.index), message: `${PRODUCTS[key]!.name} goes back.` };
     }
+    if (a.type === 'support') return { ...s, support: a.choice, message: a.choice === 'list' ? 'The list will mark what you came for.' : 'A little more room between the offers.' };
     if (a.type === 'pay') {
       const total = spent(s);
       if (total > budget(s)) return { ...s, message: 'Over by a little. Put something back.' };

@@ -13,6 +13,8 @@ async function shop(page: Page, until: string, { keys = false, buyWish = false }
     if (phase === until || phase === 'setup' || phase === 'complete') return;
     if (phase === 'till' || phase === 'revisit-till') {
       while (await page.locator('.jw-total[data-over="true"]').count()) await page.locator('.jw-back').last().click();
+      await page.getByRole('button', { name: 'Keep the list visible' }).click();
+      await expect(game(page)).toHaveAttribute('data-support', 'list');
       await page.getByRole('button', { name: 'Pay' }).click();
       continue;
     }
@@ -136,7 +138,9 @@ test('on the smallest phone the till puts things back and a far item takes its o
   await expect(back).toBeVisible();
   expect(await back.evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); })).toBe(true);
   await back.click();
-  await page.getByRole('button', { name: 'Pay' }).click();
+  await page.getByRole('button', { name: 'Keep the list visible' }).click();
+      await expect(game(page)).toHaveAttribute('data-support', 'list');
+      await page.getByRole('button', { name: 'Pay' }).click();
   await shop(page, 'setup');
   await setup(page);
 });

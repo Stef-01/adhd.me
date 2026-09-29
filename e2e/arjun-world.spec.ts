@@ -10,7 +10,7 @@ async function meet(page: Page, until: string, keys = false) {
   for (let guard = 0; guard < 160; guard++) {
     const phase = await game(page).getAttribute('data-phase');
     if (phase === until) return;
-    if (phase === 'decided') { await page.locator('.aw-overlay .kit-primary').click(); continue; }
+    if (phase === 'decided') { await page.getByRole('button', { name: 'Pin the question' }).click(); await expect(game(page)).toHaveAttribute('data-support', 'anchor'); await page.locator('.aw-overlay .kit-primary').click(); continue; }
     if (phase === 'setup') return;
     const stray = page.locator('.aw-card[data-off="true"]').first();
     if (await stray.count()) { await stray.click(); continue; }

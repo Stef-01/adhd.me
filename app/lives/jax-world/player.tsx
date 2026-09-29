@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { ArrowRight, Check, Star, Tag, Coin, ArrowUUpLeft } from "@phosphor-icons/react";
 import type { Mood } from "@/learn/interactive";
 import { budget, createJax, jaxReducer, missing, nearestLure, price, PRODUCTS, running, spent, trip, type JaxWorld } from "@/lives/jax-world";
+import { SettleChoices } from "../kit/settle";
 import { GameShell } from "../kit/shell";
 import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
@@ -27,7 +28,7 @@ function objective(s: JaxWorld) {
   if (s.phase === "till" || s.phase === "revisit-till") return spent(s) > budget(s) ? "Over budget. Put something back." : undefined;
   if (s.phase === "setup") return "Leave the next shop easier.";
   if (s.phase === "complete") return "Same list. The wish was your call.";
-  return undefined;
+  return "Tap a list item to steer. Tap extras away.";
 }
 
 export function JaxWorldGame() {
@@ -79,7 +80,7 @@ export function JaxWorldGame() {
 
   return <GameShell name="jw-game" label="Jax’s shop" eyebrow="Jax · Just the list" heading={heading(s)} objective={objective(s)} hud={hud} status={s.message}
     paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
-    phaseKey={`${s.phase}-${s.trip}`} data={{ phase: s.phase, trip: s.trip, scenario: s.scenario, lane: s.lane }}
+    phaseKey={`${s.phase}-${s.trip}`} data={{ support: s.support ?? "none", phase: s.phase, trip: s.trip, scenario: s.scenario, lane: s.lane }}
     score={SCORES.jax} playing={live} intensity={.3 + s.trip * .2 + (tempted ? .3 : 0)}>
     {(live || till) && <div className="jw-scene" onPointerDown={down} onPointerUp={up} onPointerCancel={() => { swipe.current = null; }}>
       <Aisle flicker={s.trip >= 1} />
@@ -100,7 +101,7 @@ export function JaxWorldGame() {
             {item.lure && p.kind === "extra" && <span className="jw-tag"><Tag size={12} weight="fill" /> Sale</span>}
             {p.kind === "wish" && <span className="jw-tag is-wish"><Star size={12} weight="fill" /> {s.trip === 3 ? "Sale" : "Want"}</span>}
             {sold && <span className="jw-tag is-sold">Sold out</span>}
-            {need && s.setup.list && <span className="jw-tick"><Check size={12} weight="bold" /></span>}
+            {need && (s.setup.list || s.support === "list") && <span className="jw-tick"><Check size={12} weight="bold" /></span>}
           </button>;
         })}
       </div>}
@@ -122,6 +123,7 @@ export function JaxWorldGame() {
           })}
         </ul>
         <p className="jw-total" data-over={over}><span>Total</span><b>{spent(s)} of {budget(s)}</b></p>
+        <SettleChoices value={s.support} onChoose={choice => dispatch({ type: "support", choice })} choices={[{ id: "list", label: "Keep the list visible", art: "shopping-list" }, { id: "space", label: "Take more time", art: "shopping-space" }]} />
         <button className="kit-primary" onClick={() => dispatch({ type: "pay" })} aria-disabled={over}>Pay <ArrowRight size={18} /></button>
       </motion.div>}
     </div>}

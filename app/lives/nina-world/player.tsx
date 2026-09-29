@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookmarkSimple, Check, FolderSimple } from "@phosphor-icons/react";
 import type { Mood } from "@/learn/interactive";
 import { COLS, createNina, ninaReducer, ROWS, running, SCENARIOS, wanted, type Dir, type NinaWorld } from "@/lives/nina-world";
+import { SettleChoices } from "../kit/settle";
 import { GameShell } from "../kit/shell";
 import { useLoop } from "../kit/use-loop";
 import { CastBean } from "../kit/cast";
@@ -52,15 +53,17 @@ export function NinaWorldGame() {
 
   // Tap toward a spot on the page, or swipe, to turn the pen.
   const board = useRef<HTMLDivElement>(null);
+  const swiped = useRef(false);
   const start = useRef<{ x: number; y: number } | null>(null);
   const toward = (dx: number, dy: number): Dir => Math.abs(dx) > Math.abs(dy) ? dx < 0 ? "left" : "right" : dy < 0 ? "up" : "down";
   const tap = (e: MouseEvent) => {
+    if (swiped.current) { swiped.current = false; return; }
     const r = board.current!.getBoundingClientRect();
     const px = r.left + (s.pen.x + .5) / COLS * r.width, py = r.top + (s.pen.y + .5) / ROWS * r.height;
     if (Math.hypot(e.clientX - px, e.clientY - py) > 18) steer(toward(e.clientX - px, e.clientY - py));
   };
-  const down = (e: PointerEvent) => { start.current = { x: e.clientX, y: e.clientY }; };
-  const up = (e: PointerEvent) => { const p = start.current; start.current = null; if (p && Math.hypot(e.clientX - p.x, e.clientY - p.y) > 36) { e.preventDefault(); steer(toward(e.clientX - p.x, e.clientY - p.y)); } };
+  const down = (e: PointerEvent) => { swiped.current = false; start.current = { x: e.clientX, y: e.clientY }; };
+  const up = (e: PointerEvent) => { const p = start.current; start.current = null; if (p && Math.hypot(e.clientX - p.x, e.clientY - p.y) > 36) { e.preventDefault(); swiped.current = true; steer(toward(e.clientX - p.x, e.clientY - p.y)); } };
 
   const heard = useRef({ filled: 0, bump: 0, rev: s.revision, moves: 0 });
   useEffect(() => {
@@ -80,15 +83,15 @@ export function NinaWorldGame() {
   const line = (words: (string | null)[], cls = "") => <p className={`nw-line ${cls}`}>{words.map((w, i) => <span key={i} data-empty={!w}>{w ?? "···"}</span>)}</p>;
 
   return <GameShell name="nw-game" label="Nina’s desk" eyebrow="Nina · The first line" heading={heading(s)}
-    hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
-    phaseKey={`${s.phase}-${s.line}`} data={{ phase: s.phase, line: s.line, scenario: s.scenario, emotion }}
+    objective={live ? "Steer through the gold words. Leave the tabs." : undefined} hud={hud} status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
+    phaseKey={`${s.phase}-${s.line}`} data={{ support: s.support ?? "none", phase: s.phase, line: s.line, scenario: s.scenario, emotion }}
     score={SCORES.nina} playing={live} intensity={.3 + s.filled.filter(Boolean).length * .18 + s.draft.length * .05}>
     <div className="nw-scene">
       <Desk />
       <span className="nw-nina" data-emotion={emotion}><CastBean who="nina" mood={MOOD[emotion]} size={120} /></span>
       {(live || s.phase === "line-done") && <div className="nw-sheet">
         {line(s.phase === "line-done" ? s.draft.at(-1)! : s.filled, "is-current")}
-        <div className="nw-board"><div className="nw-page" ref={board} role="group" aria-label="The page" onClick={live ? tap : undefined} onPointerDown={down} onPointerUp={up}>
+        <div className="nw-board"><div className="nw-page" ref={board} role="group" aria-label="The page" onClick={live ? tap : undefined} onPointerDown={down} onPointerUp={up} onPointerCancel={() => { start.current = null; swiped.current = false; }}>
           {live && s.trail.length > 0 && <svg className="nw-trail" viewBox={`0 0 ${COLS} ${ROWS}`} preserveAspectRatio="none" aria-hidden="true"><polyline points={[s.pen, ...s.trail].map(t => `${t.x + .5},${t.y + .5}`).join(" ")} /></svg>}
           {s.chunks.map(ch => {
             const needed = ch.slot !== null && want[ch.slot] === ch.text && !s.filled[ch.slot];
@@ -100,6 +103,7 @@ export function NinaWorldGame() {
         </div></div>
         {live && <div className="nw-pad" role="group" aria-label="Steer the pen">{PAD.map(([dir, label, Icon]) => <button key={dir} data-dir={dir} aria-label={label} onClick={() => steer(dir)}><Icon size={22} weight="bold" /></button>)}</div>}
         {s.phase === "line-done" && <motion.div className="nw-done" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <SettleChoices value={s.support} onChoose={choice => dispatch({ type: "support", choice })} choices={[{ id: "quiet", label: "Close extra tabs", art: "quiet-tabs" }, { id: "rough", label: "Let it be rough", art: "rough-line" }]} />
           <button className="kit-primary" autoFocus onClick={() => dispatch({ type: "continue" })}>{s.line < 2 ? "Next line" : "Put the pen down"} <ArrowRight size={18} /></button>
         </motion.div>}
       </div>}

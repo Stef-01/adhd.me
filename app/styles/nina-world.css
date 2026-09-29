@@ -83,3 +83,10 @@
   .nw-nina { display: none; }
   .nw-chunk { font-size: 12px; padding: 2px; line-height: 1.05; }
 }
+
+.nw-done { width: min(360px, 96%); display: flex; flex-direction: column; gap: 12px; padding: 18px; border-radius: 20px; background: #fffdf6; box-shadow: 0 12px 32px #2b213f26; max-height: 95%; overflow-y: auto; }
+.nw-done .kit-primary { width: 100%; flex-shrink: 0; }
+.nw-sheet.is-draft { bottom: 3%; overflow-y: auto; overscroll-behavior: contain; padding: 4px; }
+@media (min-width: 1000px) and (min-height: 650px) { .nw-scene { width: min(900px, calc(100% - 64px)); } .nw-sheet { width: min(66%, 530px); } }
+
+.nw-done { inset: 0; margin: auto; height: max-content; transform: none; }

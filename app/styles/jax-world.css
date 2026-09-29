@@ -1,7 +1,7 @@
 /* Jax's supermarket: sage and shelf colours, a perspective aisle and a trolley that steers. */
 .jw-game { --g-bg: #eef1e4; --g-ink: #294c3d; --g-muted: #52695d; --g-focus: #2f6b52; --g-accent: #3e8a66; --g-soft: #d8e2d2; }
 .jw-scene { position: absolute; top: 0; bottom: 6px; left: 50%; transform: translateX(-50%); width: min(calc(100% - 16px), calc((100svh - 190px) * .86), 720px); border-radius: 28px; overflow: hidden; background: #eef1e4; box-shadow: 0 2px 0 #cfd8c4; touch-action: pan-y; --u: clamp(96px, 17vmin, 150px); }
-.jw-aisle, .jw-kitchen { position: absolute; inset: 0; width: 100%; height: 100%; }
+.jw-aisle, .jw-kitchen { pointer-events: none; position: absolute; inset: 0; width: 100%; height: 100%; }
 .jw-lanes { position: absolute; inset: 30% 0 0; display: grid; grid-template-columns: repeat(3, 1fr); z-index: 1; }
 .jw-lane { border: 0; background: transparent; padding: 0; }
 .jw-lane:hover { background: linear-gradient(transparent, #ffffff30); }
@@ -86,3 +86,8 @@
   .jw-end { bottom: 3%; }
 }
 @media (max-height: 560px) and (min-aspect-ratio: 1/1) { .jw-scene { width: min(calc(100% - 16px), 640px); } .jw-trolley { width: 26%; } .jw-prop { min-width: 96px; padding: 6px 10px; } }
+
+.jw-receipt { max-height: 90%; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+.jw-receipt .kit-settle { margin-bottom: 12px; }
+.jw-receipt .kit-primary { position: sticky; bottom: 0; }
+@media (min-width: 1000px) and (min-height: 650px) { .jw-scene { width: min(880px, calc(100% - 64px)); } }

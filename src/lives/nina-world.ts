@@ -40,7 +40,7 @@ const BLOT_EVERY = [5200, 4400, 3800, 4800];
 const BLOT_MAX = 6;
 
 export interface NinaWorld {
-  paused: boolean; still: boolean; scenario: number; phase: Phase; line: number; t: number;
+  support: 'quiet' | 'rough' | null; paused: boolean; still: boolean; scenario: number; phase: Phase; line: number; t: number;
   pen: { x: number; y: number; dir: Dir | null }; trail: { x: number; y: number }[];
   chunks: Chunk[]; blots: { x: number; y: number }[]; nextId: number; moveAt: number; blotAt: number; moves: number;
   stunUntil: number; slowUntil: number; filled: (string | null)[]; changed: boolean;
@@ -49,7 +49,7 @@ export interface NinaWorld {
 }
 export type NinaAction =
   | { type: 'tick'; ms: number } | { type: 'pause' } | { type: 'resume' } | { type: 'still'; value: boolean }
-  | { type: 'dir'; dir: Dir } | { type: 'continue' } | { type: 'save' } | { type: 'marker' } | { type: 'next'; step: string } | { type: 'restart' };
+  | { type: 'support'; choice: 'quiet' | 'rough' } | { type: 'dir'; dir: Dir } | { type: 'continue' } | { type: 'save' } | { type: 'marker' } | { type: 'next'; step: string } | { type: 'restart' };
 
 export function lineDef(s: Pick<NinaWorld, 'scenario' | 'line'>): Line { const c = SCENARIOS[s.scenario]!; return s.line === 3 ? c.revisit : c.lines[s.line]!; }
 /** The slot texts the line needs now, after any mid-line change. */
@@ -82,13 +82,13 @@ function startLine(s: NinaWorld, n: number): NinaWorld {
   let next: NinaWorld = { ...s, line: n, phase: n === 3 ? 'revisit' : 'writing', t: 0, pen: { ...start, dir: null }, trail: [], chunks: [], blots: [], moveAt: 0, blotAt: BLOT_EVERY[n]!, moves: 0, stunUntil: 0, slowUntil: 0, changed: false, revision: s.revision + 1 };
   const l = lineDef(next);
   next.filled = l.slots.map(() => null);
-  next = { ...next, chunks: place(next, [...l.slots.map((text, slot) => ({ text, slot })), ...l.tabs.map(text => ({ text, slot: null }))], s.scenario * 31 + n * 7 + 3) };
+  next = { ...next, chunks: place(next, [...l.slots.map((text, slot) => ({ text, slot })), ...(s.support === 'quiet' ? [] : l.tabs.map(text => ({ text, slot: null })))], s.scenario * 31 + n * 7 + 3) };
   next.nextId = s.nextId + next.chunks.length;
   next.message = n === 3 ? (SCENARIOS[s.scenario]!.revisit.note) : n === 0 ? 'Steer the pen through the words.' : '';
   return next;
 }
 export function createNina(scenario = 0, still = false): NinaWorld {
-  return startLine({ paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'writing', line: 0, t: 0, pen: { x: 2, y: ROWS - 1, dir: null }, trail: [], chunks: [], blots: [], nextId: 1, moveAt: 0, blotAt: 0, moves: 0, stunUntil: 0, slowUntil: 0, filled: [], changed: false, draft: [], saved: false, last: { x: 2, y: 3 }, marker: null, next: null, message: '', revision: 0, bump: 0 }, 0);
+  return startLine({ support: null, paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'writing', line: 0, t: 0, pen: { x: 2, y: ROWS - 1, dir: null }, trail: [], chunks: [], blots: [], nextId: 1, moveAt: 0, blotAt: 0, moves: 0, stunUntil: 0, slowUntil: 0, filled: [], changed: false, draft: [], saved: false, last: { x: 2, y: 3 }, marker: null, next: null, message: '', revision: 0, bump: 0 }, 0);
 }
 
 function spawnBlot(s: NinaWorld): NinaWorld {
@@ -141,12 +141,12 @@ export function ninaReducer(s: NinaWorld, a: NinaAction): NinaWorld {
   if (s.paused) return s;
   if (a.type === 'restart') return s.phase === 'complete' ? createNina(s.scenario + 1, s.still) : s;
   if (a.type === 'tick') {
-    if (!live(s) || s.still) return s;
+    if (!live(s) || s.still || (!s.pen.dir && s.moves === 0 && !s.filled.some(Boolean))) return s;
     let n: NinaWorld = { ...s, t: s.t + a.ms };
     const l = lineDef(n);
     // Scope changes the moment the soon-to-change phrase is written, or after a while regardless.
     if (l.change && !n.changed && (n.t >= l.change.at || (n.filled[l.change.slot] && n.t > 600))) n = change(n);
-    if (n.t >= n.blotAt) n = { ...spawnBlot(n), blotAt: n.t + BLOT_EVERY[n.line]! };
+    if (n.t >= n.blotAt) n = { ...spawnBlot(n), blotAt: n.t + BLOT_EVERY[n.line]! * (n.support === 'rough' ? 2 : 1) };
     if (n.t >= n.stunUntil && n.t >= n.moveAt && n.pen.dir) n = { ...move(n), moveAt: n.t + STEP[n.line]! * (n.t < n.slowUntil ? 1.8 : 1) };
     return n;
   }
@@ -157,9 +157,10 @@ export function ninaReducer(s: NinaWorld, a: NinaAction): NinaWorld {
     n = { ...n, pen: { ...n.pen, dir: null } };
     const l = lineDef(n);
     if (live(n) && l.change && !n.changed && (n.moves >= 6 || n.filled[l.change.slot])) n = change(n);
-    if (live(n) && n.moves > 0 && n.moves % 4 === 0 && n.blots.length < BLOT_MAX) n = spawnBlot(n);
+    if (live(n) && n.moves > 0 && n.moves % (n.support === 'rough' ? 8 : 4) === 0 && n.blots.length < BLOT_MAX) n = spawnBlot(n);
     return n;
   }
+  if (a.type === 'support' && s.phase === 'line-done') return { ...s, support: a.choice, message: a.choice === 'quiet' ? 'Extra tabs closed for the next line.' : 'A rough line is enough. The critic can wait.' };
   if (a.type === 'continue') {
     if (s.phase === 'line-done') return s.line < 2 ? startLine(s, s.line + 1) : { ...s, phase: 'setup', message: '', revision: s.revision + 1 };
     if (s.phase === 'setup' && s.saved && s.marker && s.next) return startLine(s, 3);

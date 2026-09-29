@@ -217,3 +217,9 @@
 .platform-shell .learn-explore-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 24px 0 0; }
 .platform-shell .learn-explore[aria-expanded="true"] svg { transform: rotate(180deg); }
 .platform-shell .learn-explore-all { margin-top: 16px; }
+
+/* Evaluation follow-through: consistent targets and quieter keyboard/hover feedback. */
+.platform-shell .learn-game-names :is(a, button) { padding-block: 8px; transition: background-color 140ms ease-out; }
+.platform-shell .learn-game-names :is(a, button):hover { background: var(--paper-2, #f4f1e8); }
+.platform-shell .learn-game-names :is(a, button):focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; background: var(--paper-2, #f4f1e8); }
+.platform-shell .learn-game-names :is(a, button) > svg:last-child { flex-shrink: 0; }

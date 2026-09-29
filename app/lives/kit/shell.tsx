@@ -7,6 +7,14 @@ import { sound, type ScoreSpec } from "../sounds";
 /** Subscribe to the shared mute preference. */
 export function useMuted() { return useSyncExternalStore(fn => sound().subscribe(fn), () => sound().muted, () => true); }
 
+const HELP: Record<string, string[]> = {
+  "nw-game": ["Use arrows or swipe to steer the pen through gold words.", "Tabs and blots slow the pen; your draft stays safe.", "Between lines, try a change. Save a next step for tomorrow."],
+  "jw-game": ["Tap a list item or a lane to steer the trolley.", "Tap extras away. A saved wish can wait for later.", "At the till, return extras and try a change before the next shop."],
+  "aw-game": ["Tap remarks that answer the question at the top.", "Park ideas for later. Tap an off-topic card to clear it.", "Ask again if you miss something; you can catch up at the end."],
+  "mw-game": ["Choose a clear path, then move one crossing at a time.", "Wait when the way is busy. You do not need to rush.", "Try a calmer setup before the next crossing."],
+  "zw-game": ["Read the message before choosing what to do.", "Give Zoe a moment, then choose a reply.", "Try a different response and notice what changes."],
+};
+
 /** Leo's calm frame for every live world: toolbar, caption, HUD, stage, status and a pause sheet. */
 export function GameShell({ name, label, eyebrow, heading, objective, hud, status, paused, still, onPause, onResume, onStill, phaseKey, data, style, score, playing = false, intensity = .3, children }: {
   name: string; label: string; eyebrow: string; heading: string; objective?: string; hud?: ReactNode; status?: ReactNode;
@@ -58,6 +66,7 @@ export function GameShell({ name, label, eyebrow, heading, objective, hud, statu
       <button className="kit-icon kit-pause-close" aria-label="Close pause menu" onClick={onResume}><X size={20} /></button>
       <h2 id={`${name}-pause`}>Nothing to keep up with.</h2>
       <button className="kit-primary" autoFocus onClick={onResume}>Resume <ArrowRight size={19} /></button>
+      {HELP[name] && <details className="kit-help"><summary>How to play</summary><ol>{HELP[name]!.map(step => <li key={step}>{step}</li>)}</ol></details>}
       <button className="kit-pace" aria-pressed={still} onClick={() => onStill(!still)}><span>Play at my pace</span><span className="kit-switch" aria-hidden="true" data-on={still}><span /></span></button>
     </dialog>
   </section>;

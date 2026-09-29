@@ -36,7 +36,7 @@ async function write(page: Page, until: string, via: 'keys' | 'pad' = 'keys') {
   for (let guard = 0; guard < 300; guard++) {
     const phase = await game(page).getAttribute('data-phase');
     if (phase === until || phase === 'setup' || phase === 'complete') return;
-    if (phase === 'line-done') { await page.locator('.nw-done .kit-primary').click(); continue; }
+    if (phase === 'line-done') { await page.getByRole('button', { name: 'Close extra tabs' }).click(); await expect(game(page)).toHaveAttribute('data-support', 'quiet'); await page.locator('.nw-done .kit-primary').click(); continue; }
     const key = nextKey(await board(page));
     if (!key) continue;
     if (via === 'pad') await page.getByRole('button', { name: pad[key]! }).click();

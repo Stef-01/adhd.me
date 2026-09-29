@@ -14,7 +14,7 @@ export interface Pin { line: number; stale?: boolean }
 export type Phase = 'round' | 'decided' | 'recap' | 'setup' | 'revisit' | 'complete';
 
 export interface ArjunWorld {
-  paused: boolean; still: boolean;
+  support: 'anchor' | 'space' | null; paused: boolean; still: boolean;
   scenario: number; phase: Phase; round: number; question: number; t: number;
   queue: number[]; nextAt: number; stream: Remark[]; nextId: number;
   board: (Pin | null)[]; pocket: string[]; drift: number; askReady: number; constraint: boolean; returnAt: number;
@@ -24,7 +24,7 @@ export interface ArjunWorld {
 export type ArjunAction =
   | { type: 'tick'; ms: number } | { type: 'pause' } | { type: 'resume' } | { type: 'still'; value: boolean }
   | { type: 'catch'; id: number } | { type: 'clear'; slot: number } | { type: 'ask' } | { type: 'next' } | { type: 'retrieve' }
-  | { type: 'continue' } | { type: 'anchor' } | { type: 'keep-idea' } | { type: 'owner'; person: 'noor' | 'rae' }
+  | { type: 'support'; choice: 'anchor' | 'space' } | { type: 'continue' } | { type: 'anchor' } | { type: 'keep-idea' } | { type: 'owner'; person: 'noor' | 'rae' }
   | { type: 'when'; when: 'today' | 'tomorrow' } | { type: 'restart' };
 
 export const SCENARIOS: Scenario[] = [
@@ -123,12 +123,12 @@ function start(s: ArjunWorld, round: number): ArjunWorld {
 }
 
 export function createArjun(scenario = 0, still = false): ArjunWorld {
-  return start({ paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'round', round: 0, question: 0, t: 0, queue: [], nextAt: 0, stream: [], nextId: 1, board: [null, null, null], pocket: [], drift: 0, askReady: 0, constraint: false, returnAt: 0, anchor: false, owner: null, when: null, decisions: [], message: '', revision: 0 }, 0);
+  return start({ support: null, paused: false, still, scenario: scenario % SCENARIOS.length, phase: 'round', round: 0, question: 0, t: 0, queue: [], nextAt: 0, stream: [], nextId: 1, board: [null, null, null], pocket: [], drift: 0, askReady: 0, constraint: false, returnAt: 0, anchor: false, owner: null, when: null, decisions: [], message: '', revision: 0 }, 0);
 }
 
 function spawn(s: ArjunWorld, line: number, slow = false): ArjunWorld {
   // One speed for every remark, so lanes never overlap; a repeat is marked, not slowed.
-  const life = s.still || s.phase === 'recap' ? Number.POSITIVE_INFINITY : LIFE[s.round]!;
+  const life = s.still || s.phase === 'recap' ? Number.POSITIVE_INFINITY : LIFE[s.round]! * (s.support === 'space' ? 1.3 : 1);
   return { ...s, stream: [...s.stream, { id: s.nextId, line, born: s.t, life, slow }], nextId: s.nextId + 1 };
 }
 /** Top up the queue with anything still missing, so no meeting can stall. */
@@ -253,6 +253,7 @@ export function arjunReducer(s: ArjunWorld, a: ArjunAction): ArjunWorld {
     if (!s.pocket.includes(lines(s)[idea]!.text) || pinned(s, idea) || s.stream.some(r => r.line === idea)) return s;
     return spawn({ ...s, returnAt: 0, message: 'Arjun: what about the idea I saved?' }, idea, true);
   }
+  if (a.type === 'support' && s.phase === 'decided') return { ...s, support: a.choice, message: a.choice === 'anchor' ? 'The question stays in view next round.' : 'More time to hear each person.' };
   if (a.type === 'continue') {
     if (s.phase === 'decided') return s.round < 2 ? start(s, s.round + 1) : { ...s, phase: 'setup', message: '', revision: s.revision + 1 };
     if (s.phase === 'setup' && ready(s)) return start(s, 3);

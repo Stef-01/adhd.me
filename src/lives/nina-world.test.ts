@@ -67,8 +67,11 @@ describe('Nina: the first line', () => {
     s = tick(s, 800);
     expect(s.pen.y).toBeLessThan(y);
   });
-  it('blots gather over time, up to a limit', () => {
-    let s = tick(createNina(), 60000);
+  it('lets the player read first, then blots gather once steering starts', () => {
+    const waiting = tick(createNina(), 60000);
+    expect(waiting.blots).toHaveLength(0);
+    expect(waiting.t).toBe(0);
+    let s = tick(act(waiting, { type: 'dir', dir: 'up' }), 60000);
     expect(s.blots.length).toBeGreaterThan(2);
     expect(s.blots.length).toBeLessThanOrEqual(6);
   });

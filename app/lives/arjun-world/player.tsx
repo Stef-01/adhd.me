@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, type CSSProperties } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, Check, HandWaving, Lightbulb, Notebook, PushPin } from "@phosphor-icons/react";
 import { arjunReducer, createArjun, currentQuestion, isRelevant, lines, MEETING, name, ready, remarkX, running, SCENARIOS, type ArjunWorld, type Speaker } from "@/lives/arjun-world";
+import { SettleChoices } from "../kit/settle";
 import { GameShell } from "../kit/shell";
 import { useLoop } from "../kit/use-loop";
 import { SCORES, sound } from "../sounds";
@@ -32,7 +33,7 @@ function objective(s: ArjunWorld) {
   if (s.phase === "complete") return "Same people. Your saved idea decided it.";
   if (s.phase === "recap") return "Nothing is lost. Pin what you missed.";
   if (s.phase === "revisit") return s.constraint ? "Something changed. Your pocket can help." : "Pinned questions show what matters.";
-  return undefined;
+  return "Tap useful remarks. Park the ideas for later.";
 }
 
 export function ArjunWorldGame() {
@@ -72,10 +73,10 @@ export function ArjunWorldGame() {
 
   return <GameShell name="aw-game" label="Arjun’s meeting" eyebrow="Arjun · Hold the thread" heading={heading(s)} objective={objective(s)} hud={hud}
     status={s.message} paused={s.paused} still={s.still} onPause={pause} onResume={() => dispatch({ type: "resume" })} onStill={value => dispatch({ type: "still", value })}
-    phaseKey={`${s.phase}-${s.round}-${s.question}`} score={SCORES.arjun} playing={s.phase === "round" || s.phase === "revisit"} intensity={.3 + s.stream.length * .12 + (s.drift > 0 ? .3 : 0)} data={{ phase: s.phase, round: s.round, scenario: s.scenario, question: s.question, drift: s.drift > 0 }}>
+    phaseKey={`${s.phase}-${s.round}-${s.question}`} score={SCORES.arjun} playing={s.phase === "round" || s.phase === "revisit"} intensity={.3 + s.stream.length * .12 + (s.drift > 0 ? .3 : 0)} data={{ support: s.support ?? "none", phase: s.phase, round: s.round, scenario: s.scenario, question: s.question, drift: s.drift > 0 }}>
       <div className="aw-room" data-drift={s.drift > 0}>
         <div className="aw-board" role="group" aria-label="The board">
-          {(s.anchor || s.phase === "revisit" || s.phase === "complete") && <span className="aw-pin-note"><PushPin size={14} weight="fill" />{s.phase === "setup" ? currentQuestionOf(s) : currentQuestion(s).ask}</span>}
+          {(s.anchor || s.support === "anchor" || s.phase === "revisit" || s.phase === "complete") && <span className="aw-pin-note"><PushPin size={14} weight="fill" />{s.phase === "setup" ? currentQuestionOf(s) : currentQuestion(s).ask}</span>}
           {s.phase === "setup" && !s.anchor && <button className="aw-prop aw-anchor" onClick={() => dispatch({ type: "anchor" })}><PushPin size={26} weight="duotone" /><span>Pin the next question</span></button>}
           <div className="aw-slots">
             {(s.phase === "setup" || s.phase === "complete" ? [0, 1, 2] : s.board.map((_, i) => i)).map(slot => {
@@ -111,7 +112,7 @@ export function ArjunWorldGame() {
               {live && s.stream.map((r, n) => {
                 const l = all[r.line]!;
                 const p = remarkX(s, r);
-                const cue = s.anchor && s.phase === "revisit" && isRelevant(s, r.line);
+                const cue = (s.support === "anchor" || (s.anchor && s.phase === "revisit")) && isRelevant(s, r.line);
                 return <motion.button key={r.id} className="aw-bubble" data-kind={l.kind} data-lane={r.id % 2} data-cue={cue} data-slow={r.slow} data-relevant={isRelevant(s, r.line) || (l.kind === "idea" && s.round < 3)}
                   style={{ "--p": p ?? 0, "--n": n } as CSSProperties} data-still={p === null}
                   initial={{ opacity: 0, scale: .6 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", stiffness: 500, damping: 24 }}
@@ -140,6 +141,7 @@ export function ArjunWorldGame() {
         </div>}
         {s.phase === "decided" && <motion.div className="aw-overlay" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <span className="kit-stamp"><Check size={18} weight="bold" /> {s.decisions.at(-1)}</span>
+          <SettleChoices value={s.support} onChoose={choice => dispatch({ type: "support", choice })} choices={[{ id: "anchor", label: "Pin the question", art: "meeting-pin" }, { id: "space", label: "Give it a moment", art: "meeting-space" }]} />
           <button className="kit-primary" autoFocus onClick={() => dispatch({ type: "continue" })}>{s.round < 2 ? "Next item" : "After the meeting"} <ArrowRight size={19} /></button>
         </motion.div>}
         {s.phase === "complete" && <div className="aw-overlay is-final">
