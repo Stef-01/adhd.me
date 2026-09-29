@@ -353,7 +353,9 @@ choices in its manner question ("clear, gentle, or very direct?"); the questions
 the words to ask, or fewer, and never with choices. The next live call asked "Does anything about
 the clinician matter to you?" in those words, carried the answer ("explains things properly and
 doesn't judge me") into the request as said, and skipped the manner question already answered. That
-call's read added `manner:collaborative` to `sense_making` for "explains things properly", so the
-collaborative meaning now says that explaining alone is sense-making, with a check example. Beside the
+call's read added `manner:collaborative` to `sense_making` for "explains things properly", which is
+the vocabulary's own reading: the lexicon cues collaborative on "explain" and the corpus pins
+"explain what ADHD actually is, properly" as reaching it. A meaning line saying otherwise was tried
+and reverted the same hour, since it cost the corpus's own gold (P3, F7). Beside the
 fix, the North Star landed: "Why matched" says why in one sentence from the clinician's own listing
 (§16h), with the keys shown only where there is no sentence.
