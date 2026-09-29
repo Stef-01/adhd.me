@@ -24,8 +24,8 @@ function flags(text) {
   if (!given(t)) {
     // "like" as a verb ("how would you like") is not an example; ", like their approach" is.
     if (/\?/.test(t) && /(,\s*like\b|\blike (their|a|an|some|your)\b|\bsuch as\b|\bfor example\b|\be\.g\.)/.test(t)) out.push("adds a choice");
-    // The given place question is itself "…, or would telehealth suit you?"; a paraphrase of it is not a second question.
-    if (/\?/.test(t) && /,\s*or\s+\w+.*\?/.test(t) && !/telehealth/.test(t)) out.push("joins with or");
+    // Two given questions carry an "or" of their own ("…, or would telehealth suit you?", "…, or for someone else?"); a paraphrase of either is not a second question.
+    if (/\?/.test(t) && /,\s*or\s+\w+.*\?/.test(t) && !/telehealth|someone else/.test(t)) out.push("joins with or");
   }
   if (/\?/.test(t) && words(text) > 15) out.push(`${words(text)} words`);
   return out;
