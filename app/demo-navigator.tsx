@@ -11,7 +11,7 @@ const demoStops = [
     id: "patient",
     label: "Patient finder",
     detail: "15 qualitative care journeys",
-    href: "/finder",
+    href: "/",
   },
   {
     id: "clinician",

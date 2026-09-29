@@ -32,7 +32,7 @@ export function LearnHome() {
     return recommendStrategies({ encounteredGameIds: [], encounteredCharacterIds: [], resonanceSignals: profile.resonanceSignals, savedStrategyIds: profile.savedStrategyIds, completedModuleIds: profile.completedModuleIds, recentlyCompletedModuleIds: recentlyCompleted(profile), dismissedStrategyIds: profile.dismissedStrategyIds, selectedGoals: profile.selectedGoals }, STRATEGIES).filter((r) => r.score > 0);
   }, [profile]);
 
-  if (moduleId) return <ModuleRenderer key={moduleId} moduleId={moduleId} onLeave={() => router.push("/lives/learn")} />;
+  if (moduleId) return <ModuleRenderer key={moduleId} moduleId={moduleId} onLeave={() => router.push("/approach?pane=modules")} />;
 
   const quick = STRATEGIES.filter((s) => s.estimatedMinutes <= 2);
   return (

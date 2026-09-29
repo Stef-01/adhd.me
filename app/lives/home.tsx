@@ -55,7 +55,7 @@ export function LivesHome() {
         )}
         <li><Link className="lives-row" href="/lives/toolkit"><span className="lives-row-text"><strong>Your Toolkit</strong><span>{tools === 0 ? "Nothing yet" : `${tools} ${tools === 1 ? "strategy" : "strategies"}`}</span></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
         <li><Link className="lives-row" href="/lives/characters"><span className="lives-row-text"><strong>The eight lives</strong></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
-        <li><Link className="lives-row" href="/lives/learn"><span className="lives-row-text"><strong>Learn</strong></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
+        <li><Link className="lives-row" href="/approach?pane=modules"><span className="lives-row-text"><strong>Learn</strong></span><ArrowRight size={16} weight="bold" aria-hidden="true" /></Link></li>
       </ul>
 
       <details className="life-why lives-goals">
