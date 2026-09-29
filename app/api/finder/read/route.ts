@@ -12,7 +12,7 @@
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
 import { levelOf } from "@/lib/llm/client";
 import { keyPaused, noteKeyFailure } from "@/lib/llm/key-pause";
-import { BudgetMeter } from "@/lib/llm/meter";
+import { todaysMeter } from "@/lib/llm/daily-meter";
 import { answerFor, lexiconReading, readRequest } from "@/lib/matching/llm-read";
 import { cachedReading, rememberReading } from "@/lib/matching/read-cache";
 import { rateLimit } from "@/lib/rate-limit";
@@ -26,16 +26,6 @@ const replay = {
   fetch: cassetteFetch(CASSETTES, (input) => completed(input.startsWith("Request: ") ? { verdicts: [] } : answerFor(lexiconReading(input).keys))),
   env: { OPENAI_API_KEY: "cassette" },
 };
-
-/** The day's spend on this instance: a new meter each UTC day, or when the cap changes. */
-const day = { date: "", meter: new BudgetMeter(0) };
-function todaysMeter(env: Record<string, string | undefined>): BudgetMeter {
-  const set = Number(env.ADHDME_LLM_DAILY_USD);
-  const cap = env.ADHDME_LLM_DAILY_USD?.trim() && Number.isFinite(set) && set >= 0 ? set : 1;
-  const date = new Date().toISOString().slice(0, 10);
-  if (day.date !== date || day.meter.capUsd !== cap) Object.assign(day, { date, meter: new BudgetMeter(cap) });
-  return day.meter;
-}
 
 export async function POST(request: Request) {
   const { text } = ((await request.json().catch(() => null)) ?? {}) as { text?: unknown };

@@ -766,6 +766,19 @@ The founder took the default on every open question ("do all the default choices
 9. **Live again:** both scripted calls on production after the deploy, the finder's e2e, and the
    founder's own scenario.
 
+### 16h. Why matched, in their words (the North Star)
+
+Founder, 2026-09-29: "sentences shown to the user for why they are matched perfectly ... the key
+insights from the clinician interview ... not overwhelming". At level 1, as a profile opens, the
+finder asks `/api/finder/why` once per (words, clinician): gpt-5-nano at effort low writes at most
+two sentences of at most fourteen words from two things only, the person's request and the
+clinician's own listing (`src/lib/matching/why.ts`). Nothing reaches the screen unless it is
+within those bounds, clean under the patient-copy linter, free of superlatives and free of the
+vocabulary's keys; the keys themselves stay under the sentences as one line, and without sentences
+(level 0, Standard, a failure) the keys carry the person's own words as before. Remembered on the
+instance for a day, rate-limited per caller, inside the same daily meter as the read
+(`src/lib/llm/daily-meter.ts`). About $0.0001 a profile.
+
 ## 17. Sources
 
 - OpenAI pricing and model facts (gpt-5-nano $0.05 / $0.005 cached / $0.40 per million tokens,

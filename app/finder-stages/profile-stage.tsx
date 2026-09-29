@@ -75,6 +75,7 @@ export function ProfileStage({
   personalizedSignals,
   profileEvidence,
   profileMissed,
+  insights = [],
   request,
   origin,
   compareName,
@@ -90,6 +91,8 @@ export function ProfileStage({
   personalizedSignals: readonly string[];
   profileEvidence: readonly NeedSignal[];
   profileMissed: readonly NeedSignal[];
+  /** Why this clinician, in their own words (src/lib/matching/why.ts), or none: the keys then stand alone. */
+  insights?: readonly string[];
   request: string;
   origin: SuburbPoint | null;
   compareName: string | null;
@@ -229,8 +232,18 @@ export function ProfileStage({
               <CaretRight size={19} weight="regular" aria-hidden="true" />
             </summary>
             <div className="profile-disclosure-body">
+              {/* The sentences first, the way a person would say why; then the keys they rest on,
+                  as one line. Without sentences the keys carry the person's own words, as before. */}
+              {insights.length > 0 && (
+                <ul className="fit-insights" aria-label="Why, in their words">
+                  {insights.map((sentence) => <li key={sentence}>{sentence}</li>)}
+                </ul>
+              )}
               {personalizedSignals.length > 0 ? (
                 <>
+                  {insights.length > 0 ? (
+                    <p className="fit-keys">{profileEvidence.slice(0, 3).map((need) => need.label).join(" · ")}</p>
+                  ) : (
                   <ul className="fit-evidence" aria-label="Why this provider is listed for you">
                     {profileEvidence.slice(0, 3).map((need) => (
                       <li key={need.label}>
@@ -243,6 +256,7 @@ export function ProfileStage({
                       </li>
                     ))}
                   </ul>
+                  )}
                   {profileMissed.length > 0 && (
                     <ul className="fit-missed" aria-label="What you asked for that this provider has not declared">
                       {profileMissed.slice(0, 2).map((need) => (
@@ -255,7 +269,7 @@ export function ProfileStage({
                     </ul>
                   )}
                 </>
-              ) : (
+              ) : insights.length === 0 && (
                 <p className="profile-no-match">
                   {clinician.focus}. Nothing in what you said pointed here specifically.
                 </p>

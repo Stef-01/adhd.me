@@ -18,6 +18,9 @@ import { lexiconReading } from "../src/lib/matching/llm-read";
 import { facetKey, needForKey, type NeedSignal } from "../src/matching/needs";
 import { POST } from "../app/api/finder/read/route";
 
+/** Why matched, in their words: what the model would write, answered by the route for this spec. */
+const WHY_SENTENCES = ["You asked for telehealth; this clinician sees new people by video first.", "You said not rushed; they book a longer first appointment."];
+
 /** The C6 narrative: the model hears one facet more than the lexicon, and its weights reorder the list. */
 const NARRATIVE = CASSETTES.find((c) => c.class === "C6")!;
 const REQUEST = NARRATIVE.input;
@@ -85,6 +88,11 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
     );
     await route.fulfill({ status: reply.status, contentType: "application/json", body: await reply.text() });
   });
+  const whyPosts: string[] = [];
+  await page.route("**/api/finder/why", async (route) => {
+    whyPosts.push(route.request().postData() ?? "");
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ sentences: WHY_SENTENCES, source: "llm" }) });
+  });
 
   await typeRequest(page);
   await page.keyboard.press("Enter");
@@ -105,13 +113,17 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   expect(await listTop(page), "the rows land where the blank rows were").toBeCloseTo(top, 0);
   expect(posts).toEqual([REQUEST]);
 
-  // The first profile's reasons quote words the person said, never a key (qa/matching/rca.md, R15).
+  // The first profile says why in their words, over the keys as one line, and never a key
+  // (qa/matching/rca.md, R15). The sentences were asked for as the profile opened, once.
   await page.locator(".clinician-row").first().click();
   const why = page.locator("details.profile-disclosure", { hasText: "Why matched" });
   await why.locator("summary").click();
-  const reasons = await why.locator(".fit-evidence li").allInnerTexts();
-  expect(reasons.length).toBeGreaterThan(0);
-  for (const reason of reasons) expect(reason, "a key shown as the person's words").not.toMatch(/(care|manner|pref|language):[a-z_-]+/);
+  await expect(why.locator(".fit-insights li")).toHaveText(WHY_SENTENCES);
+  await expect(why.locator(".fit-evidence")).toHaveCount(0);
+  const keys = await why.locator(".fit-keys").innerText();
+  expect(keys.length).toBeGreaterThan(0);
+  expect(keys, "a key shown as the person's words").not.toMatch(/(care|manner|pref|language):[a-z_-]+/);
+  expect(whyPosts.map((post) => JSON.parse(post).text)).toEqual([REQUEST]);
   await page.goBack();
   await expect(page.locator(".clinician-row").first()).toBeVisible();
 

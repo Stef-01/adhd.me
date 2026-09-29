@@ -99,6 +99,7 @@ export const EXTRA = [
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
   // The profile with its reasons open: the bio folds while they show (2026-09-28, was 75 words).
   { path: "/", state: "finder-profile-why", name: "Finder profile, why matched open" },
+  { path: "/", state: "finder-profile-why-words", name: "Finder profile, why matched in their words (AI)" },
   // The settings sheet, from the header on every app screen: it was never measured, and read 99.
   { path: "/", state: "finder-settings", name: "Settings, open (on the finder, where it holds the most)" },
   { path: "/", state: "finder-voice", name: "Finder voice (the orb, one question)" },
@@ -353,6 +354,9 @@ export const LEARNING_RECORD = {
   experiments: [],
 };
 
+/** What the model writes under "Why matched" at level 1, as the budget measures that screen. */
+const WHY_SENTENCES = ["You asked for telehealth; this clinician sees new people by video first.", "You said not rushed; they book a longer first appointment."];
+
 export async function reach(page, route, base) {
   if (route.state === "intake") {
     await page.goto(`${base}/match`);
@@ -365,6 +369,14 @@ export async function reach(page, route, base) {
     return;
   }
   if (route.state === "finder-voice") await page.addInitScript(() => { window.__adhdmeVoiceFake = true; });
+  // The AI screen without a model: the page at level 1 and the why route answering as the model would.
+  if (route.state === "finder-profile-why-words") {
+    await page.route((url) => url.pathname === "/", async (r) => {
+      const response = await r.fetch();
+      await r.fulfill({ response, body: (await response.text()).replace('\\"readLevel\\":0', '\\"readLevel\\":1') });
+    });
+    await page.route("**/api/finder/why", (r) => r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ sentences: WHY_SENTENCES, source: "llm" }) }));
+  }
   if (route.state === "finder-rate") {
     await page.addInitScript(() => {
       const at = Date.now() - 2 * 24 * 60 * 60 * 1000;
@@ -376,7 +388,7 @@ export async function reach(page, route, base) {
     await page.getByRole("button", { name: "Talk instead of typing" }).click();
     await page.locator(".voice-orb").waitFor({ timeout: 10000 });
   }
-  if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-profile-why") {
+  if (route.state === "finder-results" || route.state === "finder-profile" || route.state.startsWith("finder-profile-why")) {
     await page.getByRole("textbox").fill("an adult ADHD assessment, telehealth, not rushed");
     await page.keyboard.press("Enter");
     await page.locator(".clinician-list").waitFor({ timeout: 20000 });
@@ -384,9 +396,10 @@ export async function reach(page, route, base) {
       await page.locator(".clinician-row").first().click();
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
-    if (route.state === "finder-profile-why") {
+    if (route.state.startsWith("finder-profile-why")) {
       await page.locator(".profile-disclosure", { hasText: "Why matched" }).locator("summary").click();
       await page.locator(".profile-disclosure[open] .profile-disclosure-body").waitFor({ timeout: 8000 });
+      if (route.state === "finder-profile-why-words") await page.locator(".fit-insights li").first().waitFor({ timeout: 8000 });
     }
   }
   if (route.state === "finder-settings") {

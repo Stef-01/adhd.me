@@ -55,7 +55,7 @@ import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
-import { useFinderMode, useModelRead } from "./finder-read";
+import { useFinderMode, useModelRead, useWhyMatched } from "./finder-read";
 import { fakeVoice, startLink } from "@/voice/link";
 import { handOff, newId, track, trackSearch, trackVoiceCall } from "@/finder/track";
 import type { EventKind, SearchSource } from "@/db/finder";
@@ -314,6 +314,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   // through the others is gone (PLAN.md W6b), and /examples keeps the long archetypes.
   const archetype = defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
+  /** Why this clinician, in their own words: asked as the profile opens, shown under "Why matched". */
+  const insights = useWhyMatched(level, request, stage === "profile" ? clinician.id : null);
 
   const focusOnArrival = moved.current || stage !== arrivalStage.current;
   useEffect(() => {
@@ -877,6 +879,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             personalizedSignals={personalizedMatch.signals}
             profileEvidence={profileEvidence}
             profileMissed={profileMissed}
+            insights={insights}
             request={request}
             origin={origin}
             compareName={compareRows.length > 0 && compareWith ? compareWith.shortName : null}

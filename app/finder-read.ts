@@ -106,3 +106,30 @@ export function useModelRead(level: number, request: string, roster: readonly Cl
     readAhead,
   };
 }
+
+/**
+ * Why this clinician, in their own words (src/lib/matching/why.ts): asked the moment a profile opens,
+ * so the sentences are there before "Why matched" is tapped, and never at level 0. The answer lands
+ * only while the same profile and words are open; anything else shows the keys alone.
+ */
+export function useWhyMatched(level: number, request: string, clinicianId: string | null): string[] {
+  const key = level >= 1 && clinicianId && request.trim() ? `${clinicianId}\n${request}` : "";
+  const [held, setHeld] = useState<{ key: string; sentences: string[] }>({ key: "", sentences: [] });
+  useEffect(() => {
+    if (!key || held.key === key) return;
+    let live = true;
+    const body = JSON.stringify({ text: request, clinicianId });
+    fetch("/api/finder/why", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
+      .then((reply) => (reply.ok ? (reply.json() as Promise<{ sentences?: unknown }>) : null))
+      .catch(() => null)
+      .then((answer) => {
+        if (!live) return;
+        const sentences = Array.isArray(answer?.sentences) ? answer.sentences.filter((s): s is string => typeof s === "string") : [];
+        setHeld({ key, sentences });
+      });
+    return () => {
+      live = false;
+    };
+  }, [key, held.key, request, clinicianId]);
+  return held.key === key && key ? held.sentences : [];
+}
