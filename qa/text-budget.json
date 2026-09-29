@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-29T04:59:47.275Z",
+  "measuredAt": "2026-09-29T06:07:51.109Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -17,8 +17,8 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 20,
-      "fold": 20,
+      "total": 18,
+      "fold": 18,
       "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 39,
+      "total": 40,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A little less doing.",
-          "tag": "h1"
+          "w": 5,
+          "text": "00:29 left in this session",
+          "tag": "small"
         }
       ]
     },
@@ -449,26 +449,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 12,
-      "fold": 12,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DUCK OR GOOSE!",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "hissing at you",
+          "w": 2,
+          "text": "POP IT!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "pale",
+          "tag": "button"
         }
       ]
     },
@@ -510,19 +510,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
+          "w": 2,
+          "text": "GET OUT!",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "open drawer",
+          "tag": "span"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "SWAT!",
-          "tag": "p"
         }
       ]
     },
@@ -1016,10 +1016,10 @@
       "path": "/practices",
       "name": "/practices",
       "state": null,
-      "total": 735,
-      "fold": 55,
+      "total": 756,
+      "fold": 58,
       "chrome": 22,
-      "ratio": 18.4,
+      "ratio": 18.9,
       "verdict": "long-form",
       "longest": [
         {
@@ -1043,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1473,
+      "total": 1533,
       "fold": 267,
       "chrome": 22,
-      "ratio": 36.8,
+      "ratio": 38.3,
       "verdict": "long-form",
       "longest": [
         {
@@ -1934,33 +1934,6 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 28,
-      "fold": 28,
-      "chrome": 0,
-      "ratio": 0.7,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 7,
-          "text": "Can we move dinner? Work ran late.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Whatever. Sure. Guess work wins.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Ouch. I did say sorry.",
-          "tag": "p"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/zoe-before-you-send",
-      "name": "Zoe, reply",
-      "state": "zoe-reply",
       "total": 18,
       "fold": 18,
       "chrome": 0,
@@ -1979,8 +1952,35 @@
         },
         {
           "w": 4,
-          "text": "Said what you meant.",
+          "text": "That came out sharp.",
           "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, reply",
+      "state": "zoe-reply",
+      "total": 30,
+      "fold": 30,
+      "chrome": 0,
+      "ratio": 0.8,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 8,
+          "text": "Oh, that’s a shame. Sure. Is Friday free?",
+          "tag": "p"
+        },
+        {
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         }
       ]
     },
@@ -2042,17 +2042,12 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, complete",
       "state": "zoe-complete",
-      "total": 35,
-      "fold": 35,
+      "total": 26,
+      "fold": 26,
       "chrome": 0,
-      "ratio": 0.9,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
-        {
-          "w": 6,
-          "text": "Yes! Saturday at 7. Can’t wait.",
-          "tag": "p"
-        },
         {
           "w": 5,
           "text": "Still on for our plan?",
@@ -2062,6 +2057,11 @@
           "w": 5,
           "text": "It started about the dishes",
           "tag": "a"
+        },
+        {
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
         }
       ]
     },
@@ -2663,26 +2663,26 @@
       "path": "/",
       "name": "Finder profile, why matched in their words (AI)",
       "state": "finder-profile-why-words",
-      "total": 57,
-      "fold": 57,
+      "total": 59,
+      "fold": 59,
       "chrome": 2,
-      "ratio": 1.4,
+      "ratio": 1.5,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 19,
-          "text": "You asked for telehealth and not to be rushed; they see people by video and book",
+          "w": 26,
+          "text": "You asked for ADHD assessment by telehealth and not to be rushed; Dr Saxena says",
           "tag": "li"
-        },
-        {
-          "w": 5,
-          "text": "Not rushed · ADHD assessment · Telehealth",
-          "tag": "p"
         },
         {
           "w": 3,
           "text": "Dr Anubhav Saxena",
           "tag": "h1"
+        },
+        {
+          "w": 3,
+          "text": "Beecroft & Double Bay",
+          "tag": "p"
         }
       ]
     },
@@ -2728,10 +2728,10 @@
       "path": "/",
       "name": "Finder home, a visit to rate",
       "state": "finder-rate",
-      "total": 30,
-      "fold": 30,
+      "total": 28,
+      "fold": 28,
       "chrome": 6,
-      "ratio": 0.8,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -3020,26 +3020,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 12,
-      "fold": 12,
+      "total": 13,
+      "fold": 13,
       "chrome": 0,
       "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
+          "w": 3,
+          "text": "WRITE THE LINE!",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "Round the left",
           "tag": "button"
         },
         {
           "w": 3,
-          "text": "TURN IT DOWN!",
-          "tag": "p"
-        },
-        {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "text": "Round the right",
+          "tag": "button"
         }
       ]
     },
