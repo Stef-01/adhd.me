@@ -5,7 +5,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { clinicians, matchEvidence } from "@/demo/clinicians";
 import { completed } from "@/lib/llm/cassettes";
-import { askedFor, cachedWhy, clinicianInWords, keepClause, MAX_CLAUSE_WORDS, MAX_WORDS, resetWhyCache, whyInput, whyMatched, whySentence } from "./why";
+import { askedFor, askToWrite, cachedWhy, clinicianInWords, keepClause, MAX_CLAUSE_WORDS, MAX_WORDS, resetWhyCache, whyInput, whyMatched, whySentence } from "./why";
 
 const anubhav = clinicians.find((c) => c.id === "anubhav-saxena")!;
 const REQUEST = "an ADHD assessment by telehealth, and I don't want to be rushed";
@@ -22,6 +22,14 @@ describe("what the model is given", () => {
     const words = clinicianInWords(anubhav);
     for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Takes time with you", "Hindi"]) expect(words).toContain(piece);
     expect(words).not.toMatch(/manner:|care:|pref:/);
+  });
+
+  it("writes about a care, manner or language ask before a bare preference, which has no listing text behind it", () => {
+    const evidence = matchEvidence(anubhav, "a woman GP for an ADHD assessment by telehealth");
+    const preference = evidence.find((need) => need.facet.kind === "preference")!;
+    const care = evidence.find((need) => need.facet.kind === "care")!;
+    expect(askToWrite([preference, care])).toBe(care);
+    expect(askToWrite([preference])).toBe(preference);
   });
 
   it("says the ask the way a sentence would: a manner as someone who does it, a language as someone who speaks it", () => {

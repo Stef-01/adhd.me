@@ -23,9 +23,9 @@ export const MAX_WORDS = 26;
 
 const INSTRUCTIONS = `You finish one sentence about a clinician, for ADHD.ME, a service in Australia that lists clinicians for ADHD care. You are given what a person asked, what the clinician says about themselves, and the one thing the person asked that the clinician's listing answers.
 
-The sentence begins "You asked for <that thing>; <clinician> says". Return only the words that follow "says", beginning with "he", "she" or "they": what the clinician says about exactly that thing, in their own words, in plain Australian English, in at most ${MAX_CLAUSE_WORDS} words. For example: "he books a longer first appointment and takes time with you", or "she works with pregnancy, postpartum and new parents".
+The sentence begins "You asked for <that thing>; <clinician> says". Return only the words that follow "says", beginning with "he", "she" or "they": what the clinician says about exactly that thing, in their own words rather than the words of the ask, in plain Australian English, in at most ${MAX_CLAUSE_WORDS} words. For example: "he books a longer first appointment and takes time with you", or "she works with pregnancy, postpartum and new parents".
 
-Only what is given: never a fact, quality, outcome or comparison the clinician did not state, never a question, never the clinician's name. Never rate, rank, recommend or promise. Never write "specialist", "best", "expert", "treat", "cure" or "diagnose", and never give health advice.`;
+Only what is given: never a fact, quality, outcome or comparison the clinician did not state, never a question, never the clinician's name. If the listing says nothing about that thing, return an empty string rather than something else about them. Never rate, rank, recommend or promise. Never write "specialist", "best", "expert", "treat", "cure" or "diagnose", and never give health advice.`;
 
 const SCHEMA = {
   name: "why_matched",
@@ -131,13 +131,18 @@ export function resetWhyCache(): void {
   cache().clear();
 }
 
+/** The ask the sentence rests on: the strongest with listing text behind it (care, manner, a language) before a bare preference. */
+export function askToWrite(evidence: readonly NeedSignal[]): NeedSignal | undefined {
+  return evidence.find((need) => need.facet.kind !== "preference") ?? evidence[0];
+}
+
 /**
  * One paid call, or the cached answer; any failure is `none`, and the screen keeps the keys alone.
- * The sentence rests on the finder's own strongest evidence: where the listing answers no key the
- * person asked, there is nothing to say and no call is made.
+ * The sentence rests on the finder's own evidence: where the listing answers no key the person
+ * asked, there is nothing to say and no call is made.
  */
 export async function whyMatched(text: string, clinician: Clinician, deps: Deps = {}): Promise<Why> {
-  const [strongest] = matchEvidence(clinician, text, roster);
+  const strongest = askToWrite(matchEvidence(clinician, text, roster));
   if (!strongest) return { sentences: [], source: "none" };
   const held = cachedWhy(text, clinician.id);
   if (held) return { sentences: held, source: "llm" };
