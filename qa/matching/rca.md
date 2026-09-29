@@ -410,3 +410,17 @@ separated (three continuation sentences are level now where assessment used to s
 the clarifier's two-facet sentences 94 → 91; the offer distribution 57 → 58; the separation
 curve within a thousandth. P0 on the cassettes passes, and its report now names an entry that does
 not read back as sent instead of counting it.
+
+**Left for the founder (2026-09-29, after the fix).** On production the same request now reads
+`care:shared-care, pref:telehealth-first`, and the list is Dr Saxena (shared care and telehealth),
+then twenty telehealth psychologists and coaches who list no shared care at all; Dr Kalra, the one
+GP whose listing is exactly this ask, sits 25th of 37 because his practice does not offer telehealth.
+That is the ranker's own law, "access before accumulation" (2026-08-22 audit): a stated access
+preference sorts before every care answer, so a clinician who does not offer telehealth cannot pass
+one who does. It was written against clinicians piling up small care overlaps to beat a language or
+access ask; here the clinicians it lifts answer nothing the person came for, and none of them can
+prescribe. The choices are the founder's: keep the law as written; let the access tier sort only
+among clinicians who answer at least one care ask (a prescriber without telehealth before a
+psychologist with it, for a person who needs scripts continued); or treat telehealth as a lift
+rather than a tier when nobody answers both. The corpus pins on tie quality and separation move
+with any of the last two, and are re-pinned the way O256's were.
