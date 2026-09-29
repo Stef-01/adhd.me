@@ -772,7 +772,11 @@ The founder took the default on every open question ("do all the default choices
    a key rests on), an RCA item rather than a fourth prompt edit. Spend for the day's rungs about
    $0.30, ledger $5.28 of $14.
 9. **Live again:** both scripted calls on production after the deploy, the finder's e2e, and the
-   founder's own scenario.
+   founder's own scenario. Done 2026-09-29: the postpartum call on production kept "new mum", read
+   `care:perinatal`, and ranked Samantha Courtney first; a second call asked its questions in the
+   given words; the eval sweep passes ten of eleven personas, then the two that ask back; the
+   finder's e2e and the full suite pass; and a headless walk of production with a stored personal
+   map ranks the same first four as a clean browser (qa/matching/rca.md, R15's sixth cause).
 
 ### 16h. Why matched, in their words (the North Star)
 
