@@ -73,7 +73,9 @@ and a factor that is never shown has no place in one.
 ## Running it on Supabase
 
 Apply migrations `0001` to `0011`, and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` on the
-server; on Vercel a variable reaches only the deployments made after it was saved, and
+server; each write is handed to the platform to finish after the response (Next's `after`), because a
+serverless function is frozen once it has answered and a write still in flight is otherwise lost
+(2026-09-29: every profile event and the first voice call). On Vercel a variable reaches only the deployments made after it was saved, and
 `/api/health` says whether the running one holds them (`journal.configured`) and how many rows
 it has sent and failed to send since it booted. Each write then also goes to its table, in order, never delaying a person; the weights and
 the quality read every instance's ratings through the two views, which read as the caller, so only
