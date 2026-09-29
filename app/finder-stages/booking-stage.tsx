@@ -47,7 +47,7 @@ export function BookingStage({
             The heading carries its own weight; a label that repeats its first word is noise. */}
         <h1 tabIndex={-1}>
           {clinician.booking.via === "healthengine"
-            ? `Book with ${clinician.shortName} on Healthengine`
+            ? `Book with ${clinician.shortName}`
             : `Booking ${clinician.shortName}`}
         </h1>
 
@@ -56,14 +56,14 @@ export function BookingStage({
             {/* O44: "his practice" was written when Dr Anubhav Saxena was the only
                 online-bookable GP, and misgendered every clinician added after him.
                 The practice holds the times; no pronoun is needed to say so. */}
+            {/* 2026-09-29: this screen measured 83 words against a ceiling of 60 (the budget
+                instrument had never reached it). The same facts in half the words. */}
             <p>
-              {clinician.shortName}’s live appointment times are held by the practice on
-              Healthengine. We send you straight there, so the time you pick is a time that
-              is genuinely open.
+              {clinician.shortName}’s live times are held by the practice on Healthengine, so the
+              time you pick there is open.
             </p>
             <p className="booking-note">
-              You book with {clinician.practice} on Healthengine. ADHD.ME does not see your
-              booking and no medical details are entered here.
+              ADHD.ME does not see your booking with {clinician.practice}, or any medical detail.
             </p>
           </>
         ) : (
@@ -118,7 +118,7 @@ export function BookingStage({
             patients how they heard about the practice, and the practice sees the
             answer. One factual sentence, no incentive, no claim. */}
         {clinician.booking.via === "healthengine" && (
-          <p className="booking-heard">If the booking asks how you heard about the practice, you can say ADHD.ME.</p>
+          <p className="booking-heard">If asked how you heard about the practice, say ADHD.ME.</p>
         )}
       </div>
     </MotionScreen>

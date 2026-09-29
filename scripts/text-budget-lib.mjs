@@ -359,6 +359,9 @@ const WHY_SENTENCES = ["You asked for ADHD assessment by telehealth and not to b
 
 export async function reach(page, route, base) {
   if (route.state === "intake") {
+    // The match store is process-wide: a spec earlier in a CI shard can fill the three GPs' places, and
+    // the results heading then reads "Nobody fits yet." instead of the count. Start from the seeded roster.
+    await page.request.post(`${base}/api/mock/matching`).catch(() => undefined);
     await page.goto(`${base}/match`);
     await page.locator("#match-narrative").fill(NARRATIVE);
     await page.locator("#match-suburb").fill("Epping");
