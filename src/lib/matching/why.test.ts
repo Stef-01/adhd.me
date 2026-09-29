@@ -21,7 +21,7 @@ describe("what the model is given", () => {
     expect(input.startsWith(`Person asked: "${REQUEST}"`)).toBe(true);
     expect(input.endsWith(`Finish, in at most 12 words: "You asked for telehealth; ${anubhav.shortName} says"`)).toBe(true);
     const words = clinicianInWords(anubhav);
-    for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Takes time with you", "Hindi"]) expect(words).toContain(piece);
+    for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Takes time with you", "Hindi", `Pronouns: ${anubhav.pronouns}.`]) expect(words).toContain(piece);
     expect(words).not.toMatch(/manner:|care:|pref:/);
   });
 

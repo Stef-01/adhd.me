@@ -55,7 +55,8 @@ const careLabel = (id: string) => CARE_AREA_LABELS.find((row) => row.id === id)?
 /** What the clinician has said about themselves, as the model reads it: their listing, and nothing inferred. */
 export function clinicianInWords(clinician: Clinician): string {
   const lines = [
-    `Clinician: ${clinician.name} (${clinician.shortName}), ${professionLabel(professionOf(clinician))}, ${clinician.suburb}.`,
+    // The pronouns the clinician declares, so the clause says "he" or "she" where they do and "they" where they do not (2026-09-29: "Dr Saxena says they …" for a clinician listed he/him).
+    `Clinician: ${clinician.name} (${clinician.shortName}), ${professionLabel(professionOf(clinician))}, ${clinician.suburb}.${clinician.pronouns ? ` Pronouns: ${clinician.pronouns}.` : ""}`,
     `Focus: ${clinician.focus}`,
     `About: ${clinician.summary} ${clinician.about}`.trim(),
     clinician.experience.length ? `Experience: ${clinician.experience.join("; ")}.` : "",
