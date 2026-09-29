@@ -778,19 +778,24 @@ The founder took the default on every open question ("do all the default choices
 
 Founder, 2026-09-29: "sentences shown to the user for why they are matched perfectly ... the key
 insights from the clinician interview ... not overwhelming". At level 1, as a profile opens, the
-finder asks `/api/finder/why` once per (words, clinician): gpt-5-mini at effort minimal writes one
-sentence of at most 26 words ("You asked for …; <name> says …") from the person's request, the
-clinician's own listing and the matches the finder itself found between them
-(`src/lib/matching/why.ts`); where the listing answers no key, no call is made. Measured
-2026-09-29 over eight profiles: nano paired asks with the wrong words ("bulk billed" answered by
-"mixed billing"), mini wrote to the matches given; at effort low the reasoning spent the output
-budget, at two sentences of fourteen words nothing fit, and one sentence with a worked example of
-its length landed seven of eight at 20 to 25 words. Nothing reaches the screen unless it is within
-the bound, free of any rank, promise or verdict, and free of the vocabulary's keys; the sentence stands in
-place of the key rows (a keys line under it put the screen over its ceiling at 26 words), and without one (level 0, Standard, a failure, nothing
-answered) the keys carry the person's own words as before. Remembered on the instance for a day,
-rate-limited per caller, inside the same daily meter as the read (`src/lib/llm/daily-meter.ts`).
-About $0.0003 a profile.
+finder asks `/api/finder/why` once per (words, clinician) and shows one sentence under "Why
+matched": "You asked for ⟨the ask⟩; ⟨name⟩ says ⟨what they say about it⟩." The finder writes the
+first half itself from its own evidence, the strongest care, manner or language ask this listing
+answers (a manner as "someone who takes time with you", a language as "someone who speaks Hindi"),
+so that half is never wrong; gpt-5-mini at effort minimal writes only the clause after "says", at
+most twelve words, from the listing alone (`src/lib/matching/why.ts`), in other words than the
+ask, and nothing where the listing says nothing about it. Nothing reaches the screen unless the
+clause is within the bound and free of any rank, promise or verdict, and the whole sentence is at
+most 26 words and free of the vocabulary's keys; the sentence stands in place of the key rows, and
+without one (level 0, Standard, a failure, nothing answered) the keys carry the person's own words
+as before.
+
+Measured 2026-09-29: asked for the whole sentence, nano paired asks with the wrong words ("bulk
+billed" answered by "mixed billing") and mini wrote 25 to 32 words whatever number the instruction
+named, so the production route kept nothing; composed, five of five profiles kept at 17 to 24
+words, all from the clinician's own text, about $0.0003 each. Remembered on the instance for a day
+(never an empty answer), rate-limited per caller, inside the day's meter the read route shares
+(`src/lib/llm/daily-meter.ts`). The screen measures 59 words at its worst case.
 
 ## 17. Sources
 
