@@ -157,13 +157,21 @@ describe("W234 the many-session path agrees with the one-session path", () => {
 
   it("is materially cheaper, which is the only reason it exists", () => {
     // Asserted as a ratio rather than a wall-clock threshold — a timing bound is a flaky test on a
-    // shared runner. The batch does one pooled back-test; the loop does one per session.
-    const started = process.hrtime.bigint();
-    sessionRecommendations(occurrences, keys, 2, PERIOD);
-    const batched = Number(process.hrtime.bigint() - started);
-    const loopStart = process.hrtime.bigint();
-    for (const key of keys) sessionRecommendation(occurrences, key, 2, PERIOD);
-    const looped = Number(process.hrtime.bigint() - loopStart);
+    // shared runner. The batch does one pooled back-test; the loop does one per session. Each path
+    // is timed as the best of five after a warm run: one cold measurement of the batch, taken first
+    // and unwarmed, read as 3x rather than the 15x it is, twice on a loaded machine (2026-09-29).
+    const time = (run: () => void) => {
+      run();
+      let best = Infinity;
+      for (let i = 0; i < 5; i++) {
+        const started = process.hrtime.bigint();
+        run();
+        best = Math.min(best, Number(process.hrtime.bigint() - started));
+      }
+      return best;
+    };
+    const batched = time(() => { sessionRecommendations(occurrences, keys, 2, PERIOD); });
+    const looped = time(() => { for (const key of keys) sessionRecommendation(occurrences, key, 2, PERIOD); });
     expect(looped / batched, "the batch is not meaningfully cheaper than the loop").toBeGreaterThan(5);
   });
 });
