@@ -2802,13 +2802,20 @@ summary:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Animations keep 0.01ms rather than none: the final keyframe still applies and animationend
+     still fires (e2e/reduced-motion.spec.ts). Transitions are 0s, not 0.01ms: nothing in the tree
+     waits on transitionend, and a 0.01ms transition still spends one frame at the property's OLD
+     value while everything that cannot transition has already changed. The game scene flips to
+     position: absolute when its world mounts; with its width and margins one frame behind, it was
+     32px wider than the screen and the trace game's route buttons hung 4px off each side, on two
+     CI runs of four (2026-09-29). With 0s no transition starts and the change is one style update. */
   *,
   *::before,
   *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
   }
 }
 
@@ -8309,8 +8316,8 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* The global reduce block collapses every timing to 0.01ms, so each of these
-     lands on its end state immediately. These rules make the rest state explicit
+  /* The global reduce block collapses every animation to 0.01ms and every transition to 0s, so
+     each of these lands on its end state immediately. These rules make the rest state explicit
      anyway: a word stuck at opacity 0 is an unreadable transcript, and that is
      too important to leave to a cascade somebody might edit. */
   .t-stream-w,

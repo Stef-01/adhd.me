@@ -5,7 +5,10 @@
 // `animation: none` — it gives them a duration of `1e-05s`. That is deliberate and better: a
 // zero-duration animation still applies its final keyframe and still fires `animationend`, so a
 // scene that reveals itself through an animation is fully revealed rather than never revealed, and
-// code waiting on the event is not left hanging. `animation: none` would break both.
+// code waiting on the event is not left hanging. `animation: none` would break both. Transitions
+// are the other case: they get 0s, because a 0.01ms transition still spends a frame at the old
+// value after the non-animatable properties have changed (the game scene, 2026-09-29), and nothing
+// here waits on transitionend.
 //
 // So the question is not "is an animation declared" but "is anything still MOVING for long enough
 // to be motion". Anything under a millisecond is a state change, not an animation.
