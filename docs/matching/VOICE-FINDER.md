@@ -58,6 +58,18 @@ its canvas under either voice, then settles back.
 - `scripts/voice-call.mjs`: a real spoken call from Chromium, its microphone a WAV built by macOS
   `say` from the lines given; `CONNECT_ONLY=1` times each step from the tap to the first word.
 
+### Drift on the record (`scripts/voice-drift.mjs`)
+
+The text eval simulates the model; the calls on record are what it said. `node --env-file=.env.local
+scripts/voice-drift.mjs` reads every call under `qa/voice/runs/` and, with the Supabase variables,
+the `voice_calls` table, and flags an assistant question that asks two things, joins them with
+"or" outside the given wording, adds a choice or an example, says what it is about to do, or runs
+past fifteen words. Measured 2026-09-29 over the six production calls of the day: the three before
+the interviewer's rewording, 15 questions and 6 flagged; the three after, 15 questions and 1 flagged
+("Does anything matter to you about the clinician, like their approach or background?"). The
+residual is the realtime model adding an example to the one open question; the text eval passes it
+11 of 11.
+
 ## Cost and speed (live, 2026-09-28, gpt-realtime-2.1-mini)
 
 - A typed-answer call of 43 seconds: $0.013. The evaluator's calls: $0.003 to $0.022 each, patient
