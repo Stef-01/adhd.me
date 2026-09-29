@@ -332,6 +332,24 @@ read, the chips, the first five and the first profile's reasons):
 
 **The fix, in stages** (docs/matching/LLM-MATCHING-PLAN.md §16g): record every call and read;
 quote only words a person said; a `perinatal` care area, declared by the profiles that hold it;
-the over-broad cue narrowed; the trait renamed `takes_time`, "Takes time with you"; the interviewer
+the over-broad cue narrowed; the trait renamed `not_rushed`, "Takes time with you"; the interviewer
 held to questions without options and to the person's own words for any condition or life stage;
 the reader's meanings sharpened; the eval ladder rerun under the new prompt; the two calls again.
+
+**Resolved, 2026-09-29.** Every stage shipped (commits 3e65d86e to 27fc05f0). The trait is
+`not_rushed` rather than `takes_time`: the reachability ratchet requires a facet's own plain name to
+be a cue, and "takes time" is one this facet refuses (it collapses to [take, time] and reads "an
+assessment takes time" as an ask). Every voice call is kept turn by turn (`voice_calls.transcript`,
+migration 0011) with the request it wrote, a search keeps the asks no key covered, and
+`scripts/voice-transcripts.mjs` reads the last calls back. The lexicon hears "new mums" and "new
+dads" after the eval's postpartum persona wrote the plural. The founder's scenario, replayed on
+production after the deploy: the interviewer kept "new mum", the reader heard `care:perinatal`,
+`manner:not_rushed`, `pref:telehealth-first` and `care:adhd-assessment`, and Samantha Courtney
+(postpartum) ranked first. The ladder under the new prompt: P0 to P3 pass; P4's never gate sits at
+1.5% on two nothing-asked reads, the figure the pre-change prompt also measured, so the reader is no
+worse and the gate is inside the model's run-to-run variance (LLM-MATCHING-PLAN §16g item 8). One
+finding stands open: in the first live call after the prompt change the interviewer still offered
+choices in its manner question ("clear, gentle, or very direct?"); the questions are now given as
+the words to ask, or fewer, and never with choices, and the next live call is the check. Beside the
+fix, the North Star landed: "Why matched" says why in one sentence from the clinician's own listing
+(§16h), with the keys shown only where there is no sentence.
