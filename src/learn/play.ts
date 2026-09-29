@@ -90,7 +90,6 @@ export interface Run {
 }
 
 export type RelateForm = "buttons" | "slider";
-export const RELATE_FORMS: readonly RelateForm[] = ["buttons", "slider"];
 /** The three buttons, as points on the same 0–10 scale the slider writes. */
 export const RELATE_BUTTONS: ReadonlyArray<{ readonly id: string; readonly label: string; readonly value: number }> = [
   { id: "not-me", label: "Not me", value: 0 },

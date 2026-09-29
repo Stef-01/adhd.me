@@ -8,7 +8,6 @@ import Link from "next/link";
 import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import type { Rating } from "@/lib/matching/types";
-import type { PatientView } from "@/lib/matching/views";
 import { fetchPatient, readPatientId, type HeldView } from "./session";
 
 const QUESTIONS: ReadonlyArray<{ key: "fit" | "communication" | "clinicalAppropriateness"; label: string; low: string; high: string }> = [

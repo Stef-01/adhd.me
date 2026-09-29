@@ -160,7 +160,6 @@ body:has(.play-run) { overflow-x: clip; }
 .play-basket .b-mid { fill: var(--sc-mid); } .play-basket .b-deep { stroke: var(--sc-deep); }
 .play-timing-zone.is-middle { left: 30%; width: 40%; }
 .play-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: color-mix(in srgb, var(--play-ink) 8%, transparent); }
-.play-controls { width: 100%; }
 .bean { display: block; }
 .play-hero-bean { }
 
@@ -172,7 +171,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-choice { min-height: 64px; padding: 12px 18px; border: 2px solid var(--play-line); border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 1rem; font-weight: 650; cursor: pointer; transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui), box-shadow var(--dur-tap) var(--ease-ui); }
 .play-choice[aria-pressed="true"] { border-color: var(--play-blue); background: var(--play-soft); }
 .play-choice:disabled { opacity: 0.6; cursor: default; }
-.play-choice:focus-visible, .play-tempt:focus-visible, .play-hold-button:focus-visible, .play-bean-button:focus-visible, .play-layer:focus-visible, .play-note:focus-visible, .play-chip-big:focus-visible { outline: 3px solid var(--play-blue); outline-offset: 3px; }
+.play-choice:focus-visible, .play-tempt:focus-visible, .play-bean-button:focus-visible, .play-layer:focus-visible, .play-note:focus-visible, .play-chip-big:focus-visible { outline: 3px solid var(--play-blue); outline-offset: 3px; }
 /* An option as an object: the glyph on a card, the chosen one lifting. */
 .play-object { display: inline-flex; align-items: center; justify-content: flex-start; gap: 12px; text-align: left; border-radius: 20px; box-shadow: 0 3px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
 .play-object .play-glyph { width: 40px; height: 40px; padding: 8px; border-radius: 12px; background: var(--play-soft); color: var(--play-blue); }
@@ -187,8 +186,6 @@ body:has(.play-run) { overflow-x: clip; }
 .play-tempt:disabled { opacity: 0.5; cursor: default; }
 .play-dont { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .play-hold { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-.play-hold-button { min-width: 160px; min-height: 96px; border: 4px solid var(--play-blue); border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font: inherit; font-size: 1.125rem; font-weight: 700; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
-.play-hold-button.is-holding { background: var(--play-blue); color: var(--play-paper); transform: scale(0.96); }
 /* Hold: the distractions drift across the scene as drawn things; still, parked at the edge, under reduced motion. */
 .play-drift { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; overflow: hidden; pointer-events: none; }
 .play-drift li { position: absolute; left: 0; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--play-paper); color: var(--play-ink); font-size: 0.9375rem; font-weight: 700; box-shadow: 0 4px 0 color-mix(in srgb, var(--play-ink) 10%, transparent); }
@@ -236,13 +233,7 @@ body:has(.play-run) { overflow-x: clip; }
 .play-timing-track.in-scene { background: none; }
 .play-timing-zone { position: absolute; left: 70%; width: 25%; top: 0; bottom: 0; border-radius: 999px; background: color-mix(in srgb, var(--play-go) 30%, transparent); }
 .play-timing-marker { position: absolute; top: -6px; width: 10px; height: 40px; margin-left: -5px; border-radius: 999px; background: var(--play-blue); transition: left 80ms linear; }
-.play-timing-label { position: absolute; top: 34px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 /* The scale (the sense gate): the marks along the line, the last one the moment to act. */
-.play-scale { position: absolute; left: 0; right: 0; top: 30px; margin: 0; padding: 0; list-style: none; }
-.play-scale li { position: absolute; transform: translateX(-50%); width: 10ch; color: var(--play-ink); font-size: 0.72rem; font-weight: 700; line-height: 1.15; text-align: center; }
-.play-scale li:first-child { transform: none; text-align: left; }
-.play-scale li:last-child { transform: translateX(-100%); text-align: right; }
-.play-scale li.is-last { color: var(--play-go); }
 .play-share { display: grid; gap: 6px; justify-items: center; margin-top: 4px; }
 .play-share .play-choice { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; min-height: 44px; }
 .play-share-note { margin: 0; color: var(--muted); font-size: 0.8125rem; }
@@ -291,10 +282,6 @@ body:has(.play-run) { overflow-x: clip; }
 .play-heat em { position: absolute; top: 0; bottom: 0; border-right: 3px solid var(--play-go); }
 .play-heat-label { margin: 0; color: var(--muted); font-size: 0.875rem; font-weight: 600; }
 .play-result { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.play-verdict { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.01em; }
-.play-scale { display: grid; gap: 6px; width: 100%; max-width: 360px; justify-items: center; }
-.play-scale input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--play-blue); }
-.play-scale output { font-size: 1.5rem; font-weight: 700; color: var(--play-blue); font-variant-numeric: tabular-nums; }
 .play-steps { margin: 0; padding-left: 20px; text-align: left; font-size: 1rem; line-height: 1.5; display: grid; gap: 6px; max-width: 34ch; }
 .platform-shell .learn-card-art .bean { width: 72px; height: auto; }
 @media (max-width: 767px) { .play-card { padding: 72px 16px 28px; } }
@@ -302,17 +289,8 @@ body:has(.play-run) { overflow-x: clip; }
   .play-choice, .play-heat span, .play-heat-fill, .play-ring-fill, .play-tray-arm, .play-tray-arm > g, .play-timing-marker, .play-fall, .play-plinth, .play-station-badge { transition: none; }
   .play-pinned { animation: none; }
 }
-/* The cast (PLAY-PLAN.md §5): five beans, asleep until a run they lead is cleared. */
-.play-cast { display: flex; gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }
-/* Only the bean art sleeps (dimmed and grey); the name stays a real colour so it clears AA. */
-.play-cast li { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; color: var(--muted); font-size: 0.6875rem; font-weight: 700; }
-.play-cast li .bean { opacity: 0.45; filter: grayscale(1); transition: opacity var(--dur-enter) var(--ease-ui), filter var(--dur-enter) var(--ease-ui); }
-.play-cast li.is-awake { color: var(--ink); }
-.play-cast li.is-awake .bean { opacity: 1; filter: none; }
-@media (prefers-reduced-motion: reduce) { .play-cast li .bean { transition: none; } }
 
 /* PRD §29: the reading offered after a reflection — one sentence, a yes per reading, one "not quite". */
-.play-body { margin: 0 0 12px; max-width: 34ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; text-align: center; }
 .play-reading .play-choice { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 
 /* The clue (PLAY-PLAN §13): what on the scene makes the hit inferable — one line, under the instruction, marked. */

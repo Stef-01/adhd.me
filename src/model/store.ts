@@ -13,7 +13,6 @@ import type { LearningProfile } from "@/lives/types";
 // than half-read: the version is what lets a later shape refuse an old one.
 
 import type { Layer, Subdomain } from "./layers";
-import { isProfession } from "@/support/professions";
 import { isComplete, type OnboardingAnswers } from "./onboarding";
 import { checkSafety, type SafetyRuleId } from "./safety";
 import type { Checkpoint, CheckpointAnswer, CheckpointMonths } from "./checkpoint";
@@ -440,11 +439,6 @@ export function pendingExperiment(record: ModelRecord): Experiment | null {
 /** Whether the record holds anything at all beyond an empty shell. */
 export function hasSignals(record: ModelRecord): boolean {
   return Boolean(record.onboarding) || Object.keys(record.resonance).length > 0 || Object.keys(record.answers).length > 0;
-}
-
-/** PRD §37's last step: the profession the support path chose, held with the finder's filters. Validated on read. */
-export function professionChoice(value: unknown): string | null {
-  return isProfession(value) ? value : null;
 }
 
 /**

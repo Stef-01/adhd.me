@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-28T23:05:38.979Z",
-  "base": "http://localhost:3021",
+  "measuredAt": "2026-09-29T00:22:04.259Z",
+  "base": "http://localhost:3201",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -17,8 +17,8 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 20,
-      "fold": 20,
+      "total": 18,
+      "fold": 18,
       "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
@@ -170,7 +170,7 @@
         },
         {
           "w": 5,
-          "text": "02:27 left in this session",
+          "text": "01:15 left in this session",
           "tag": "small"
         }
       ]
@@ -449,26 +449,21 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 12,
-      "fold": 12,
+      "total": 2,
+      "fold": 2,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.1,
       "verdict": "target",
       "longest": [
-        {
-          "w": 3,
-          "text": "DUCK OR GOOSE!",
-          "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "hissing at you",
-          "tag": "p"
-        },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "PIGEONS!",
+          "tag": "p"
         }
       ]
     },
@@ -503,26 +498,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
+          "w": 3,
+          "text": "LET IT PASS!",
+          "tag": "p"
+        },
+        {
+          "w": 3,
+          "text": "I held off",
           "tag": "button"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 2,
+          "text": "the spider",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "POP!",
-          "tag": "p"
         }
       ]
     },
@@ -1043,10 +1038,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1452,
+      "total": 1512,
       "fold": 246,
       "chrome": 22,
-      "ratio": 36.3,
+      "ratio": 37.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -1961,17 +1956,12 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, reply",
       "state": "zoe-reply",
-      "total": 30,
-      "fold": 30,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.8,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
-        {
-          "w": 8,
-          "text": "Oh, that’s a shame. Sure. Is Friday free?",
-          "tag": "p"
-        },
         {
           "w": 7,
           "text": "Can we move dinner? Work ran late.",
@@ -1981,6 +1971,11 @@
           "w": 4,
           "text": "Zoe · Before you send",
           "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Said what you meant.",
+          "tag": "h1"
         }
       ]
     },
@@ -2701,10 +2696,10 @@
       "path": "/",
       "name": "Finder home, a visit to rate",
       "state": "finder-rate",
-      "total": 30,
-      "fold": 30,
+      "total": 28,
+      "fold": 28,
       "chrome": 6,
-      "ratio": 0.8,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -2993,25 +2988,25 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 8,
-      "fold": 8,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LOCK IN!",
+          "w": 3,
+          "text": "FIND THE LIST!",
           "tag": "p"
         },
         {
           "w": 2,
-          "text": "revenue chart",
+          "text": "a receipt",
           "tag": "span"
         },
         {
-          "w": 1,
-          "text": "0",
+          "w": 2,
+          "text": "the list",
           "tag": "span"
         }
       ]
@@ -3020,8 +3015,8 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 50,
-      "fold": 33,
+      "total": 51,
+      "fold": 34,
       "chrome": 6,
       "ratio": 1.3,
       "verdict": "ceiling",

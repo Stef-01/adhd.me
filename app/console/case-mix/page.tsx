@@ -5,11 +5,9 @@
 // rules both exist to prevent. The page says outright that stating an interest does not by
 // itself change who gets offered what — W82 holds that law.
 
-import { redirect } from "next/navigation";
 import { STRENGTH_LABELS, interestIn } from "@/capability/interest";
 import { getInterestState } from "@/capability/store";
 import { clinicianForEmail } from "@/console/clinician-identity";
-import { getConsole } from "@/console/store";
 import { getRegisters } from "@/registers/store";
 import { requirePractice } from "../guard";
 import { ConsoleShell } from "../ui";
@@ -34,7 +32,6 @@ export default async function CaseMixPage({
   searchParams: Promise<{ error?: string; saved?: string }>;
 }) {
   const { email, record } = await requirePractice();
-  const console_ = getConsole();
   const { error, saved } = await searchParams;
 
   const identity = clinicianForEmail(record.clinicians, email);

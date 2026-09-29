@@ -70,9 +70,7 @@ button.aw-seat[aria-pressed="true"] > span { background: #4a5bb0; color: #fff; b
 .aw-pocket-still { color: var(--g-accent); }
 
 .aw-follow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
-.aw-person { display: inline-flex; align-items: center; gap: 8px; min-height: 56px; padding: 4px 16px 4px 6px; border: 2px solid transparent; border-radius: 99px; background: #fbfbfe; font-size: 14px; font-weight: 650; }
-.aw-person img { width: 36px; height: 42px; object-fit: contain; }
-.aw-person[aria-pressed="true"], .aw-when button[aria-pressed="true"] { border-color: var(--g-accent); background: #e4e8fb; }
+.aw-when button[aria-pressed="true"] { border-color: var(--g-accent); background: #e4e8fb; }
 .aw-when { display: flex; gap: 6px; }
 .aw-when button { min-height: 52px; padding: 0 16px; border: 2px solid transparent; border-radius: 99px; background: #fbfbfe; font-size: 14px; }
 

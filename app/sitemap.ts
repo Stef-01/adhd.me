@@ -41,14 +41,6 @@ export function sitemapPaths(): string[] {
     .filter((path) => !isHiddenFromCrawlers(path));
 }
 
-/** The census path an expanded URL came from, or the URL itself when it is a census path. */
-export function censusPathFor(path: string): string {
-  for (const [dynamic, expand] of Object.entries(EXPANDED_DYNAMIC_PATHS)) {
-    if (expand().includes(path)) return dynamic;
-  }
-  return path;
-}
-
 export default function sitemap(): MetadataRoute.Sitemap {
   return sitemapPaths().map((path) => ({ url: `${SITE_URL}${path}`, changeFrequency: "weekly", priority: path === "/" ? 1 : 0.6 }));
 }

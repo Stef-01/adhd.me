@@ -63,8 +63,6 @@ export const CREDENTIAL_REFUSAL_COPY: Record<CredentialRefusal, string> = {
  */
 export type CredentialSource = "process_environment";
 
-export const ALL_CREDENTIAL_SOURCES: readonly CredentialSource[] = ["process_environment"];
-
 export interface CredentialRequest {
   /** Which integration. Named so a refusal says what was refused. */
   integration: string;

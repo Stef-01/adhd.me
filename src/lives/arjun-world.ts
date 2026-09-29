@@ -281,5 +281,4 @@ function step(s: ArjunWorld): ArjunWorld {
 export function ready(s: ArjunWorld) { return s.anchor && s.pocket.includes(SCENARIOS[s.scenario]!.rounds[0].idea!) && Boolean(s.owner && s.when); }
 export function name(p: Speaker) { return p === 'noor' ? 'Noor' : p === 'rae' ? 'Rae' : p === 'sam' ? 'Sam' : 'Arjun'; }
 export function remarkX(s: ArjunWorld, r: Remark) { return r.life === Number.POSITIVE_INFINITY ? null : Math.min(1, Math.max(0, (s.t - r.born) / r.life)); }
-export function remaining(s: ArjunWorld) { return Math.max(0, Math.ceil((MEETING[s.round]! - s.t) / 1000)); }
 export function running(s: ArjunWorld) { return s.phase === 'round' || s.phase === 'revisit'; }

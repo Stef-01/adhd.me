@@ -39,11 +39,3 @@ export const BOUNDARY_COPY = {
   },
 } as const;
 
-/** Every sentence above, flattened, so a sweep reaches each one without knowing the shape. */
-export function boundarySentences(): ReadonlyArray<{ key: string; text: string }> {
-  const out: { key: string; text: string }[] = [];
-  for (const [group, leaves] of Object.entries(BOUNDARY_COPY)) {
-    for (const [leaf, text] of Object.entries(leaves)) out.push({ key: `${group}.${leaf}`, text });
-  }
-  return out;
-}

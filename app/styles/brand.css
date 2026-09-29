@@ -64,7 +64,6 @@ body { font-family: var(--font-ui); }
 .learning-care-ring.ring-2 { background: var(--paper); }
 .learning-care-ring[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--accent); }
 .platform-shell .learn-reveal { color: var(--ink); }
-.platform-shell .learn-figures dt { font-family: var(--font-ui); font-weight: 600; }
 body .aoc-band, body:has(.platform-shell) .aoc-band, .site-footer {
   background: var(--ink); background-image: none; color: var(--line);
   border-top: 4px solid var(--brand);

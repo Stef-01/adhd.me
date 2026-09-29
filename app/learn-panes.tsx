@@ -28,7 +28,7 @@ import { reasonLine, recentlyCompleted, recommendStrategies, selectGoals, skipGo
 import { MODULES, type LearnModule } from "@/learn/scenes";
 import type { Progress } from "@/learn/progress";
 import type { LearnCursor } from "@/learn/cursor";
-import { deviceLearningStorage, resumable } from "@/learn/cursor";
+import { resumable } from "@/learn/cursor";
 import { LearningCoverArt, LearningScene } from "./learning-scene";
 import { LifeBean } from "./lives/bean";
 import { GAME_ENTRY } from "@/lives/entry-points";

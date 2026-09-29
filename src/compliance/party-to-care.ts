@@ -48,12 +48,6 @@ export const RESPONSIBILITY_STATEMENT =
   "appointment times. It does not provide treatment, does not give clinical advice, and is " +
   "not part of your care team. Anything about your health goes to your practice, not to us.";
 
-/** The same point for the practice-facing side, where the reader is the treating entity. */
-export const PRACTICE_RESPONSIBILITY_STATEMENT =
-  "Your practice remains the treating entity and the sender of every message. ADHD.ME schedules " +
-  "and reports; it makes no clinical decision and holds no clinical responsibility for any " +
-  "patient.";
-
 export interface PartyToCareFinding {
   rule: string;
   match: string;
@@ -200,13 +194,3 @@ export function lintPartyToCare(text: string): PartyToCareFinding[] {
   return findings;
 }
 
-/**
- * Rule names, for tests that assert the rule set has not silently shrunk.
- *
- * Deduplicated since O97: one name can now be carried by more than one pattern (the
- * care-provider rule has an unconditional arm and an object-conditional one), and a reader of
- * a finding should not have to know which arm caught them. The census still does its job — it
- * is the NAMES that must not disappear — and it caught this change on the way through, which
- * is the tripwire working rather than complaining.
- */
-export const PARTY_TO_CARE_RULES: readonly string[] = [...new Set(RULES.map((r) => r.name))];

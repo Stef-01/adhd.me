@@ -4,7 +4,6 @@ import type { Page } from '@playwright/test';
 test.setTimeout(120000);
 const URL = '/lives/play/jax-just-the-list';
 const game = (page: Page) => page.locator('.jw-game');
-const LANE = ['Steer left', 'Steer middle', 'Steer right'];
 
 /** At the player's pace: line up under what the list needs, knock lures away, roll on; pay at the till. */
 async function shop(page: Page, until: string, { keys = false, buyWish = false } = {}) {

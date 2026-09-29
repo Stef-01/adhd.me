@@ -28,8 +28,6 @@
 // still say "you said this" about every signal it acted on, including the ones it prompted.
 
 import type { Clinician } from "@/demo/clinicians";
-import { EI_QUALITIES } from "@/demo/emotional-fit";
-import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { requestSuggests } from "./clarifier-relevance";
 import { facetKey, holdsPreference, readNeeds, type Facet, type Preference } from "./needs";
 
@@ -319,19 +317,3 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
   return picked;
 }
 
-/** Human-readable labels, so the console can show which facet a question is about. */
-export function facetLabel(key: string): string {
-  const care = CARE_AREA_LABELS.find((area) => `care:${area.id}` === key);
-  if (care) return care.label;
-  const preference = PREF_LABELS[key];
-  if (preference) return preference;
-  const trait = key.startsWith("manner:") ? key.slice("manner:".length) : null;
-  return trait && trait in EI_QUALITIES ? EI_QUALITIES[trait as keyof typeof EI_QUALITIES].label : key;
-}
-
-/** Console-facing names for the preference facets, matching the lexicon's own labels. */
-const PREF_LABELS: Record<string, string> = {
-  "pref:woman-gp": "A woman clinician",
-  "pref:telehealth-first": "By phone or telehealth",
-  "pref:bulk-billing": "Bulk billing",
-};

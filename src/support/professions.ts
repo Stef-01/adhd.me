@@ -244,6 +244,3 @@ export const EXPERTISE_LABELS: Readonly<Record<ExpertiseTag, string>> = {
   "regular-eating": "Regular eating",
 };
 
-export function isExpertiseTag(value: unknown): value is ExpertiseTag {
-  return typeof value === "string" && (EXPERTISE_TAGS as readonly string[]).includes(value);
-}

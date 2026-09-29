@@ -28,7 +28,7 @@
 import { INTERACTIVE_MODULES, type InteractiveModule } from "@/learn/interactive";
 import type { LearningProfile } from "@/lives/types";
 import { RUNG_REACH, type Rung } from "@/wellness/map";
-import { DOMAIN_LABELS, type Domain, type Subdomain } from "./layers";
+import { DOMAIN_LABELS, type Subdomain } from "./layers";
 import { deriveNeeds, priorityScore, type Need } from "./needs";
 import type { ModelRecord } from "./store";
 

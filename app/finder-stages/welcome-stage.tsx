@@ -11,7 +11,7 @@ import { EXAMPLE_SEARCHES } from "@/finder/examples";
 import { OPENING_QUESTION } from "@/voice/interviewer";
 import { AppSettings } from "../app-settings";
 import { RateVisit } from "./rate-visit";
-import { EASE_OUT, introItem, introStagger, MotionScreen, Pressable, STAGE_SPRING, StatusLine, Wordmark } from "./shared";
+import { EASE_OUT, introItem, introStagger, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 /** How the finder reads: the model and the voice finder, or the word matcher alone. A preference this device keeps. */
 export type FinderMode = "ai" | "standard";

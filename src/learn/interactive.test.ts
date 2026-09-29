@@ -7,7 +7,7 @@ import { lintLandingCopy } from "@/compliance/landing";
 import { SUBDOMAINS } from "@/model/layers";
 import { PROFESSIONS } from "@/support/professions";
 import { CHARACTER_BIOS, INTERACTIVE_MODULES, moduleText, RESONANCE_HEADING, strategyById } from "./interactive";
-import { cardCount, MODULES, SHELVES } from "./scenes";
+import { MODULES, SHELVES } from "./scenes";
 
 const known = new Set(SUBDOMAINS.map((s) => s.id));
 
@@ -41,7 +41,6 @@ describe("the fifteen modules", () => {
       expect(kinds.at(-1), m.id).toBe("next");
       expect(kinds.indexOf("resonance")).toBeLessThan(kinds.indexOf("explain"));
       expect(kinds.indexOf("explain")).toBeLessThan(kinds.indexOf("strategy"));
-      const listed = MODULES.find((x) => x.id === m.id)!;
     }
   });
 

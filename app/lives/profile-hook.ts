@@ -16,8 +16,6 @@ export function useProfile(): { profile: LearningProfile | null; apply: (change:
   return { profile, apply, storage: deviceLearningStorage };
 }
 
-/** The device remembers that the run's three-card tutorial has been seen. */
-export const LIVES_TUTORED_KEY = "adhdme.lives.tutored";
 /** §93: relaxed timing (half as long again on every clock) and larger instructions, on this device. */
 export const LIVES_RELAXED_KEY = "adhdme.lives.relaxed";
 export const LIVES_LARGE_KEY = "adhdme.lives.large";

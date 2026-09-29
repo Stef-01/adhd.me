@@ -20,14 +20,6 @@ export const LAYER_LABELS: Readonly<Record<Layer, string>> = {
   people: "People",
 };
 
-/** What each layer is, in one sentence a person can read on the map. */
-export const LAYER_BLURBS: Readonly<Record<Layer, string>> = {
-  brain: "How attention, memory, activation and emotion actually run for you, the part most explanations stop at.",
-  body: "Sleep, movement, appetite and energy: the physical conditions the brain is working under.",
-  environment: "The structure around you, deadlines, noise, workload, where you live and study and work.",
-  people: "The relationships that carry part of the load, or add to it: partner, family, manager, teachers, peers, clinicians.",
-};
-
 export type Subdomain =
   // brain
   | "activation"

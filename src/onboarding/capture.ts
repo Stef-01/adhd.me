@@ -16,7 +16,7 @@
 
 import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
 import { backgroundFromProposals, type BackgroundFacet, type ClinicianBackground } from "./background";
-import { FREQUENCIES, INTERVIEW, type Frequency, type Question } from "./interview";
+import { INTERVIEW, type Frequency, type Question } from "./interview";
 import type { ProposedBackground, TranscriptTurn } from "./transcript";
 import { CARE_AREA_LABELS } from "./types";
 
@@ -60,10 +60,6 @@ const QUESTION_BY_FACET_KEY = new Map<string, Question>(
  */
 export function readBackQuestionFor(facetKey: string): string {
   return QUESTION_BY_FACET_KEY.get(facetKey)?.ask ?? "Is this yours? (No scripted question found — the vocabulary and the interview have drifted.)";
-}
-
-export function isFrequency(value: string): value is Frequency {
-  return (FREQUENCIES as readonly string[]).includes(value);
 }
 
 /** One matchable facet the checklist can still ask about. */

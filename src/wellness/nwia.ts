@@ -89,10 +89,6 @@ export const NWIA_OF: Readonly<Record<Subdomain, readonly NwiaDimension[]>> = {
   clinicians: ["social"],
 };
 
-export function nwiaFor(subdomain: Subdomain): readonly NwiaDimension[] {
-  return NWIA_OF[subdomain];
-}
-
 /**
  * The balance principle, computed honestly: which dimensions the person's own signals touch,
  * and which nothing has touched yet. Spiritual values has no node on the map — the app's nearest

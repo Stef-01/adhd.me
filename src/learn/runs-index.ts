@@ -1,2 +1,2 @@
-export { runFor, RUNS } from "./runs";
+export { runFor } from "./runs";
 export { runStepCount, type Run } from "./play";

@@ -16,7 +16,7 @@ import {
   WidthType,
 } from "docx";
 import { renderRegisterSection, type RegisterSectionInput } from "./registers-section";
-import { evaluateGuardrails, metricsFromSim, DEFAULT_GUARDRAILS, type Complaint, type GuardrailAlert, type GuardrailConfig } from "@/guardrails/monitors";
+import { evaluateGuardrails, metricsFromSim, type GuardrailAlert } from "@/guardrails/monitors";
 import { buildDashboardData } from "@/sim/dashboard-data";
 import type { SimResult } from "@/sim/harness";
 

@@ -9,7 +9,6 @@ import {
   AGGREGATION_FLOORS,
   ALL_FIGURE_KINDS,
   FIGURE_REFUSAL_COPY,
-  type FigureKind,
   REFUSED_FIGURES,
   SHIPPED_DISCLOSURES,
   type RecordedBasis,

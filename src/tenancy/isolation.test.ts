@@ -4,7 +4,6 @@ import { generatePractice } from "@/synthetic/generate";
 import { getConsole, onboardPractice, resetConsole, updateRules } from "@/console/store";
 import {
   ALL_ACTIONS,
-  ALL_ROLES,
   authorize,
   can,
   scopeToPractice,

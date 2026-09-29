@@ -17,7 +17,7 @@ import {
 } from "./privacy";
 import { getPrivacy } from "./state";
 
-export { getPrivacy, resetPrivacy, type PrivacyState } from "./state";
+export { getPrivacy, resetPrivacy } from "./state";
 
 function railDataset(): PrivacyDataset {
   const rail = getStore();

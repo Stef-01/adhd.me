@@ -43,7 +43,6 @@
 /* The field stops 64px short of the bottom: that band belongs to the skip and never to a target. */
 .lives-field { position: absolute; inset: 0 0 64px 0; }
 .lives-thing { position: absolute; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; aspect-ratio: 1; min-width: 48px; min-height: 48px; padding: 4px; border: 3px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 0.8125rem; font-weight: 750; line-height: 1.05; text-align: center; cursor: pointer; transform: translate(-50%, -50%); box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-.lives-thing .lives-glyph { width: 52%; height: auto; }
 .lives-thing .lives-thing-label { max-width: 100%; overflow-wrap: normal; }
 /* A word-only thing is a pill sized to its words, never a circle the words wrap inside. */
 .lives-thing:not(:has(.lives-glyph, .lives-sprite)) { aspect-ratio: auto; width: max-content !important; max-width: 46%; min-height: 56px; padding: 10px 16px; font-size: 0.9375rem; }
@@ -187,7 +186,6 @@
 .lives-run.is-large .lives-thing { font-size: 1.0625rem; }
 .lives-run.is-large .lives-thing:not(:has(.lives-glyph, .lives-sprite)) { font-size: 1.125rem; min-height: 64px; }
 .lives-run.is-large .lives-choice { font-size: 1.125rem; min-height: 68px; }
-.lives-goals-note { margin: 6px 0 10px; color: var(--muted); font-size: 0.875rem; }
 .lives-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 /* One pill for a choice: the chips, and the tabs on Learn and Adjustments, which are a choice of two. */
 .lives-chip, .platform-shell .learn-pane-tab, .adjust-tab { min-height: 44px; padding: 8px 14px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9rem; font-weight: 650; cursor: pointer; }
@@ -200,7 +198,6 @@
 .lives-hook { font-style: italic; }
 .lives-pattern { color: var(--accent-deep) !important; font-weight: 650; }
 .lives-moment-line { margin: 10px 0; color: var(--ink); font-family: "Newsreader Variable", Newsreader, Georgia, serif; font-size: 1.125rem; }
-.lives-trying { margin-top: 12px; }
 .lives-kicker { display: block; margin: 0 0 6px; color: var(--muted); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
 .lives-module-name { margin: 0; color: var(--muted); font-size: 0.875rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
 .lives-text { font-size: 1.125rem; max-width: 36ch; }

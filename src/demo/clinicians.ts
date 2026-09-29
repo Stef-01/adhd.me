@@ -1,11 +1,10 @@
-import type { CareArchetype, CareArea } from "./care-archetypes";
+import type { CareArchetype } from "./care-archetypes";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal, type Preference } from "@/matching/needs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 // Value import of copy tables only. `clarify.ts` imports nothing but TYPES from this module, so
 // this direction is the one that keeps the graph acyclic at runtime.
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "@/matching/clarify";
-import { type EIQuality } from "./emotional-fit";
 
 /**
  * The ranking, the copy tables and the geo helpers behind /finder and the walkthrough.
@@ -15,8 +14,7 @@ import { type EIQuality } from "./emotional-fit";
  * Both are re-exported below, so this module is still the one every consumer imports and
  * nothing outside these two files changed.
  */
-export type { Approach, CareArea, Clinician } from "./roster";
-export { APPROACHES } from "./roster";
+export type { Clinician } from "./roster";
 export { clinicians, professionOf } from "./roster";
 
 import { clinicians, type Clinician } from "./roster";
@@ -307,23 +305,6 @@ export type DisplayTwin = {
   /** The preference the matcher must then hold true. */
   preference: Preference;
 };
-
-export const DISPLAY_TWINS: readonly DisplayTwin[] = [
-  {
-    field: "appointmentLength",
-    impliesClaim: (clinician) => /\blonger?\s+(?:first\s+)?appointment/i.test(clinician.appointmentLength),
-    preference: "longer-appointment",
-  },
-];
-
-/**
- * Every display twin whose wording asserts a claim on this clinician that the matcher does not
- * hold. Empty is the healthy state; a non-empty result is the F6 shape — a promise on the page
- * the ranker cannot act on.
- */
-export function unheldDisplayClaims(clinician: Clinician): DisplayTwin[] {
-  return DISPLAY_TWINS.filter((twin) => twin.impliesClaim(clinician) && !holdsPreference(clinician, twin.preference));
-}
 
 /** Whether this clinician answers one stated need at all. Derived from `facetStrength`. */
 function answers(clinician: Clinician, need: NeedSignal): boolean {

@@ -164,8 +164,6 @@ export function kindFor(label: string): string | null {
   return null;
 }
 
-export const PIECE_KINDS = Object.keys(PIECES);
-
 /** A drawn thing. `kind` names a piece directly; otherwise the label picks one, or the fallback. */
 export function Sprite({ label, kind, fallback = "note", className }: { label?: string; kind?: string; fallback?: string; className?: string }) {
   const k = kind ?? (label ? kindFor(label) : null) ?? fallback;

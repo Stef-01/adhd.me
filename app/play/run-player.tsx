@@ -68,7 +68,7 @@ export function RunPlayer({ run, step, onStep, onFinish, onOpenModule, onLeave }
   const reducedMotion = Boolean(useReducedMotion());
   const total = runStepCount(run);
   const [record, setRecord] = useState<ModelRecord | null>(null);
-  const [cleared, setCleared] = useState<Record<string, boolean>>({});
+  const [, setCleared] = useState<Record<string, boolean>>({});
   const [reflection, setReflection] = useState("");
   /** PRD §29: readings of the reflection just written, offered once, entering the model only on a yes. */
   const [reading, setReading] = useState<readonly Interpretation[] | null>(null);

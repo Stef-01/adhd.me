@@ -17,7 +17,6 @@
 .mw-crowd { position: absolute; display: grid; place-items: center; pointer-events: none; z-index: 2; }
 .mw-crowd > svg { width: 100%; height: 100%; }
 .mw-ghost { position: absolute; border: 2px dashed #8fa3c4; border-radius: 14px; pointer-events: none; z-index: 1; }
-.mw-walker { animation: mw-walk .45s ease-in-out infinite alternate; }
 @keyframes mw-walk { to { transform: translateY(-3px); } }
 .mw-maya { z-index: 3; transition: left .14s ease-out, top .14s ease-out; }
 .mw-maya > svg { width: 72%; height: auto; max-height: 100%; }
@@ -27,7 +26,6 @@
 .mw-ping { position: absolute; right: 4%; z-index: 5; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 6px 12px; border: 0; border-radius: 14px; background: #273044; color: #fff !important; font-size: 13px; box-shadow: 0 8px 20px #27304440; }
 .mw-ping { animation: mw-ping-in .22s ease-out; }
 @keyframes mw-ping-in { from { opacity: 0; transform: translateY(-10px); } }
-.mw-ping-dot { width: 10px; height: 10px; border-radius: 50%; background: #f29a5b; }
 
 .mw-pad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(2, 52px); gap: 6px; }
 .mw-pad button { display: grid; place-items: center; border: 0; border-radius: 16px; background: #fff; color: var(--g-ink); box-shadow: 0 3px 0 #c3d0e2; }

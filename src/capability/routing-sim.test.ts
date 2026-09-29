@@ -8,7 +8,7 @@
 import { describe, expect, it } from "vitest";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { ClinicianId, ConditionCode, PatientId, PracticeId } from "@/domain/types";
+import type { ClinicianId, ConditionCode, PracticeId } from "@/domain/types";
 import { DEFAULT_CONTINUITY_CONFIG, continuityReport } from "@/engine/continuity";
 import { DEFAULT_SIM_CONFIG, checkInvariants, runSim } from "@/sim/harness";
 import { DEFAULT_CONTINUITY_GUARD, applyContinuityGuard } from "./continuity-guard";

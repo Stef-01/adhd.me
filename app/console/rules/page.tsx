@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-import { getConsole } from "@/console/store";
 import { requirePractice } from "../guard";
 import { saveRules } from "../actions";
 import { ConsoleShell, ErrorNote, Field, inputClass, primaryButtonClass } from "../ui";
@@ -12,7 +10,6 @@ export default async function RulesPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { email, record } = await requirePractice();
-  const state = getConsole();
   const { error } = await searchParams;
   const rules = record.rulesConfig;
 

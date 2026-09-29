@@ -189,22 +189,6 @@ export const SEO_PAGES: readonly SeoPage[] = [
   },
 ];
 
-/**
- * Whether a route is deep enough to owe the reader — and a crawler — a trail.
- *
- * TWO SEGMENTS, and the threshold is the argument. A one-level page has nothing to say that its
- * own title does not already say, and a "Home ›" crumb above the app's own header would be chrome
- * apologising for itself. At two, the parent is real information: `/privacy/counsel-review` is
- * about `/privacy`, `/clinicians/join` is the end of `/clinicians`, and a search result for either
- * is improved by the hierarchy being stated. `app/breadcrumbs.tsx` emits the visible nav and the
- * `BreadcrumbList` from one list, so the markup cannot claim a path the reader was not shown.
- *
- * A floor, not a ceiling: `/faq` and `/terms` carry trails at depth one and keep them.
- */
-export function needsBreadcrumbs(path: string): boolean {
-  return path.split("/").filter(Boolean).length >= 2;
-}
-
 /** What a search result actually shows: the page's half plus the layout's template. */
 export function renderedTitle(page: SeoPage): string {
   return `${page.title}${TITLE_SUFFIX}`;

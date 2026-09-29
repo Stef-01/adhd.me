@@ -33,7 +33,6 @@ import {
   activeFilterCount,
   applyFilters,
   APPROACH_LABELS,
-  BOOLEAN_FILTER_KEYS,
   CONSULT_RECORDING_CHOICES,
   DISTANCE_CHOICES,
   emptyFilters,

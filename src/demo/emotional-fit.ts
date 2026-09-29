@@ -394,26 +394,4 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
 /** The qualities, as a stable list. Exported so the matcher and the interview iterate one order. */
 export const EI_QUALITY_KEYS = Object.keys(EI_QUALITIES) as EIQuality[];
 
-/** How much a single matched facet is worth. Comparable to a language or gender preference (18), a
- *  touch lower so clinical fit still leads and EI reorders within it rather than overturning it. */
-const EI_FACET_WEIGHT = 12;
 
-const ALL_QUALITIES = Object.keys(EI_QUALITIES) as EIQuality[];
-
-/** The qualities a reader's words EXPRESS a preference for. Not a profile of the reader. */
-export function preferredQualities(query: string): EIQuality[] {
-  const words = query.toLowerCase();
-  return ALL_QUALITIES.filter((quality) => EI_QUALITIES[quality].cues.some((cue) => words.includes(cue)));
-}
-
-/** The EI contribution to a clinician's score: their DECLARED qualities that the reader ASKED for. */
-export function emotionalFitScore(query: string, declared: readonly EIQuality[]): number {
-  const wanted = new Set(preferredQualities(query));
-  return declared.reduce((total, quality) => total + (wanted.has(quality) ? EI_FACET_WEIGHT : 0), 0);
-}
-
-/** The reader-facing signals for the EI facets that matched, in the clinician's declared order. */
-export function emotionalFitSignals(query: string, declared: readonly EIQuality[]): string[] {
-  const wanted = new Set(preferredQualities(query));
-  return declared.filter((quality) => wanted.has(quality)).map((quality) => EI_QUALITIES[quality].label);
-}

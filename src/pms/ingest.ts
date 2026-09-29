@@ -8,7 +8,7 @@
 //      ever re-enables contact (W6 law, upheld here at the ingestion boundary).
 
 import type { Patient, PatientId } from "@/domain/types";
-import type { ConsentRecord, PmsReadAdapter } from "./adapter";
+import type { PmsReadAdapter } from "./adapter";
 
 export interface IdentityRecord {
   platformId: PatientId;

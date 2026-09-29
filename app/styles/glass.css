@@ -149,10 +149,6 @@ html.has-liquid [data-liquid] .play-card.is-title { background-image: none; }
 [data-liquid] .play-choice[aria-pressed="true"] { background: var(--play-soft, var(--accent-soft)); border-color: var(--play-blue, var(--accent)); }
 [data-liquid] .play-help[aria-pressed="true"] { background: var(--play-blue, var(--accent)); border-color: var(--play-blue, var(--accent)); color: var(--play-paper, var(--paper)); }
 [data-liquid] .play-bean-hit:is(.is-holding, .is-now) .play-bean-label { background: var(--play-blue, var(--accent)); color: var(--play-paper, var(--paper)); }
-
-/* The cast link is a pill, not a slab: it took the glass fill with square corners and read as a
-   white box in every capture (qa/games-glass, 2026-09-11). */
-.platform-shell [data-liquid] .learn-play-cast-link { padding: 0 16px; border-radius: 999px; }
 /* The go button keeps its colour and takes the same lens: tinted glass, not a flat fill. */
 [data-liquid] .play-tempt.is-go {
   position: relative;

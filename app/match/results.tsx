@@ -8,7 +8,6 @@ import Link from "next/link";
 import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import { DECLINE_REASON_LABELS } from "@/lib/matching/labels";
-import type { PatientView } from "@/lib/matching/views";
 import { Badges, Portrait } from "./gp-bits";
 import { FROM_TAB_COPY, MATCH_STATUS_COPY, clearPatientId, clearView, fetchPatient, readPatientId, type HeldView } from "./session";
 

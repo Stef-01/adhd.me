@@ -82,14 +82,6 @@ export interface ClinicianApplication {
   status: "received";
 }
 
-export interface ClinicianFormState {
-  status: "idle" | "error" | "success";
-  message: string;
-  fieldErrors?: Partial<
-    Record<"fullName" | "ahpraRegistrationNumber" | "email" | "practiceSuburb" | "practiceName" | "careAreas" | "manner" | "languages" | "desiredMixPercent" | "consent", string>
-  >;
-}
-
 /**
  * The mix values the hero can express, shared with the store's validator so the two cannot
  * drift: 10–50 in steps of 10. The ceiling is deliberate — a hero that let a GP ask for 100%
@@ -117,7 +109,6 @@ export const OFFERED_LANGUAGES = MATCHABLE_LANGUAGES;
 
 /** The three headings the care areas sit under, in display order. Mental health, streamlined. */
 export type CareAreaGroup = "ADHD" | "Depression and anxiety" | "Other mental health";
-export const CARE_AREA_GROUPS: readonly CareAreaGroup[] = ["ADHD", "Depression and anxiety", "Other mental health"];
 
 /**
  * Care areas as a GP would read them, grouped, paired with the union member the finder matches on.

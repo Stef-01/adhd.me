@@ -22,7 +22,7 @@
 // Deterministic, total, dependency-free: the same text always yields the same vector, garbage
 // yields the zero vector rather than a throw, and no randomness exists anywhere in it.
 
-import { CLAUSE_BOUNDARY, stem, tokenise } from "@/matching/read";
+import { CLAUSE_BOUNDARY, tokenise } from "@/matching/read";
 import type { Embedding } from "./types";
 
 export interface Embedder {
@@ -258,5 +258,3 @@ export function sharedConcepts(embedder: Embedder, a: string, b: string): Concep
   return embedder.concepts(a).filter((id) => inB.has(id));
 }
 
-/** Stem a word the way the embedder does, for callers that need to compare a cue. */
-export const stemWord = stem;

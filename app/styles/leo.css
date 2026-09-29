@@ -6,23 +6,8 @@ body:has(.lives-run) .aoc-band { display: none; }
 .platform-shell:has(.lives-run) { padding-bottom: 0; }
 .platform-shell .me-screen:has(.lives-run) { padding: 0; max-width: none; }
 .lives-run .lives-card.is-round { height: calc(100svh - var(--consent-height, 0px)); }
-.leo-practice { --leo-ink: #363454; --leo-paper: #fff9ed; color: var(--leo-ink); background: #c5c6ed; min-height: 100svh; padding: 16px 24px 28px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-.leo-toolbar { width: 100%; max-width: 900px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 650; }
-.leo-toolbar a, .leo-toolbar button, .leo-toolbar-spacer { display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; color: inherit; }
-.leo-toolbar a, .leo-toolbar button { border-radius: 50%; background: #ffffff55; border: 0; cursor: pointer; color: inherit; }
-.leo-toolbar button[aria-pressed="false"] { opacity: .7; }
-.leo-practice h1 { margin: 4px 0 0; font: 600 clamp(32px, 5vw, 60px)/1.05 "Newsreader Variable", Georgia, serif; color: var(--leo-ink); text-align: center; }
-.leo-practice h1:focus { outline: none; }
-.leo-clock { height: 7px; border-radius: 10px; width: min(100%, 600px); background: #aaaed4; overflow: hidden; }
-.leo-clock span { display: block; height: 100%; background: #514d7d; transform-origin: left; }
-.leo-board { position: relative; width: min(100%, 600px); height: clamp(220px, calc(46svh - var(--consent-height, 0px)), 460px); overflow: hidden; border-radius: 30px; isolation: isolate; }
-.leo-practice:not([data-phase="ready"]) .leo-board { height: clamp(360px, calc(64svh - var(--consent-height, 0px)), 620px); }
-.leo-countdown { width: min(100%, 600px); display: flex; align-items: center; gap: 14px; font-size: 14px; }
-.leo-countdown .leo-clock { flex: 1 1 auto; width: auto; }
-.leo-countdown [role="timer"] { min-width: 3.2ch; text-align: right; font-size: 20px; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
 /* With no bar beside it the words are the whole row, so they start at the left edge like every
    other line on the screen rather than hanging off a right edge that is no longer there. */
-.leo-countdown[data-still="true"] [role="timer"] { text-align: left; font-size: 14px; font-weight: 600; }
 .leo-swarm { position: absolute; inset: 0; }
 .leo-swarm .leo-room { top: 60px; }
 .leo-swarm-hud { position: absolute; inset: 0 0 auto; height: 60px; padding: 6px 18px 0; background: #c5c6ed; color: #363454; z-index: 4; display: grid; gap: 6px; align-content: start; }
@@ -38,7 +23,7 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-room[data-live="true"][data-reduced="false"] .leo-buzz-lines { animation: leo-buzz .65s ease-in-out infinite alternate; }
 .leo-bedroom[data-emotion="overwhelmed"].is-moving .leo-sleepy-head { animation-duration: 1.2s; }
 @keyframes leo-buzz { from { opacity: .35; transform: scale(.96); } to { opacity: .8; transform: scale(1.02); } }
-.leo-board, .leo-room, .leo-feature-art { background: linear-gradient(#c5c6ed 75.36%, #abaed9 75.36%); }
+.leo-room, .leo-feature-art { background: linear-gradient(#c5c6ed 75.36%, #abaed9 75.36%); }
 .leo-room { position: absolute; inset: 0; container-type: size; overflow: hidden; touch-action: manipulation; }
 .leo-bedroom { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .leo-fly-position { position: absolute; top: 0; left: 0; width: 0; height: 0; z-index: 2; }
@@ -54,15 +39,7 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-bedroom.is-moving .leo-sleepy-head { animation: leo-head 2s steps(4, end) infinite; }
 @keyframes leo-wing { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(18deg); } }
 @keyframes leo-head { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
-.leo-pause { position: absolute; inset: 0; display: grid; place-items: center; background: #c5c6edbb; z-index: 5; }
-.leo-bottom { width: min(100%, 700px); display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
-.leo-bottom p { margin: 0; color: var(--leo-ink); font-size: 16px; line-height: 1.5; }
-.leo-primary, .leo-pause button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border: none; border-radius: 99px; padding: 12px 26px; background: #363454; color: #fff9ed; font: inherit; font-weight: 700; cursor: pointer; }
-.leo-secondary { padding: 12px 20px; min-height: 48px; border: 1px solid #777298; background: transparent; color: #363454; border-radius: 99px; font: inherit; cursor: pointer; }
-.leo-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-.leo-learn-link { display: inline-flex; align-items: center; justify-content: center; gap: 10px; color: #363454; min-height: 48px; text-underline-offset: 4px; font-size: 14px; }
 .leo-skip { position: absolute; left: 50%; bottom: 5px; transform: translateX(-50%); border: 1px solid #777298; color: #363454; background: #fff9ed; min-height: 44px; border-radius: 99px; padding: 8px 20px; white-space: nowrap; z-index: 3; cursor: pointer; }
-.leo-practice button:focus-visible, .leo-practice a:focus-visible, .leo-practice select:focus-visible, .leo-practice input:focus-visible { outline: 3px solid #363454; outline-offset: 4px; }
 .lives-scene[data-game="leo_mosquito"]::after { display: none; }
 .lives-scene[data-game="leo_mosquito"] .lives-result { z-index: 4; background: #fff9edea; border-radius: 24px; margin: 12px; }
 .leo-feature { display: flex; align-items: center; gap: 24px; position: relative; overflow: hidden; padding: 24px; background: #c5c6ed; color: #363454; border-radius: 24px; text-decoration: none; margin-bottom: 32px; }
@@ -70,31 +47,9 @@ body:has(.lives-run) .aoc-band { display: none; }
 .leo-feature strong { display: block; font-size: clamp(22px, 3vw, 32px); line-height: 1.1; }
 .leo-feature span > span { display: block; margin-top: 10px; }
 @media (max-width: 600px) {
-  .leo-practice { padding: 10px 16px 24px; gap: 12px; }
-  .leo-board { width: calc(100% + 32px); border-radius: 0; }
   .leo-feature { padding: 16px; gap: 16px; }
   .leo-feature-art { width: 84px; height: 120px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .leo-bedroom.is-moving .leo-sleepy-head, .leo-wing { animation: none !important; }
 }
-
-/* Stage 3: the room takes the screen. Both phases left a band of bare lavender under the board;
-   the board now grows into whatever the rows above and below it leave. */
-.leo-practice .leo-board, .leo-practice:not([data-phase="ready"]) .leo-board { flex: 1 1 auto; height: auto; min-height: clamp(220px, calc(46svh - var(--consent-height, 0px)), 460px); max-height: 760px; }
-
-/* ── The routine after the round (app/lives/leo-practice.tsx) ─────────────────────────────────
-   One step at a time, and the line above it is what the last tap did. The button is the same
-   primary as Play, because it is the same kind of thing: the one control on the screen. */
-.leo-routine-step { min-width: min(100%, 320px); }
-.leo-practice[data-phase="routine"] .leo-bottom p,
-.leo-practice[data-phase="settled"] .leo-bottom p { font-size: 17px; }
-
-/* ── A game fills the screen and never scrolls (founder, 2026-09-11) ──────────────────────────
-   `min-height: 100svh` let the rows below the board push the page taller than the viewport and a
-   game you have to scroll is a game with its controls somewhere you cannot see. The height is now
-   exact and the board is the row that gives: everything else is a fixed toolbar, a heading, a
-   line and a button, and the room takes what is left. `svh` rather than `dvh` on purpose — the
-   SMALLEST viewport is the one that has to fit, so nothing moves when a phone's bar slides away. */
-.leo-practice { height: 100svh; min-height: 0; overflow: hidden; }
-.leo-practice .leo-board, .leo-practice:not([data-phase="ready"]) .leo-board { min-height: 0; }

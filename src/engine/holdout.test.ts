@@ -4,7 +4,7 @@ import path from "node:path";
 import type { Practice } from "@/domain/types";
 import { generatePractice } from "@/synthetic/generate";
 import { DEFAULT_CONFIG, evaluateEligibility } from "./eligibility";
-import { assignArm, assignHoldout, assignmentUnit } from "./holdout";
+import { assignHoldout, assignmentUnit } from "./holdout";
 
 const TODAY = "2026-08-08";
 const AT = `${TODAY}T08:00:00Z`;

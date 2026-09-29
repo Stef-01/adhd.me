@@ -11,7 +11,6 @@ import {
   getPersonalizedMatch,
 } from "@/demo/clinicians";
 import { MANNER_TRAITS, NEED_LABELS, facetKey, languageNeeds, readNeeds } from "./needs";
-import { syntheticClinician } from "@/demo/synthetic-clinician";
 
 describe("W221 reading what somebody said into the closed vocabulary", () => {
   it("reads a preference about care, and reaches nothing on text that names none", () => {

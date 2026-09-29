@@ -8,7 +8,7 @@ import { checkSafety, SAFETY_RULES } from "./safety";
 import { ENOUGH_FOR_NOW, mayAskOptional, MAX_CONSECUTIVE_QUESTIONS, surveyFatigue } from "./fatigue";
 import { EVENTS, safeProps, track } from "./events";
 import { improveOptions, improveOption, QUESTIONS } from "./onboarding";
-import { acceptExperiment, acknowledgeSafety, activeSafety, clearModel, completeOnboarding, emptyModel, MODEL_KEY, pendingExperiment, readModel, recordAnswer, recordInsight, recordOutcome, recordReflection, recordResonance, saveOnboarding, writeModel, type ModelRecord, recordRelate, meanRelate } from "./store";
+import { acceptExperiment, acknowledgeSafety, activeSafety, clearModel, completeOnboarding, emptyModel, MODEL_KEY, pendingExperiment, readModel, recordAnswer, recordInsight, recordOutcome, recordReflection, recordResonance, saveOnboarding, type ModelRecord, recordRelate, meanRelate } from "./store";
 import { deriveNeeds, priorityScore } from "./needs";
 import { escalationEligible, professionsFor, recommend, summarise } from "./recommend";
 import { LAYERS, SUBDOMAINS, subdomainsOf } from "./layers";

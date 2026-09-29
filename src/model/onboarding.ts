@@ -208,7 +208,3 @@ export function isComplete(answers: OnboardingAnswers | null | undefined): answe
   return Boolean(answers?.completedAt);
 }
 
-/** How many of the ten have an answer (skips count as passed only once the flow moved on). */
-export function questionIndexFor(key: OnboardingQuestion["key"]): number {
-  return QUESTIONS.findIndex((q) => q.key === key);
-}

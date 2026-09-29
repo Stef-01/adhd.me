@@ -25,7 +25,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkle } from "@phosphor-icons/react";
 import { recommend } from "@/model/recommend";
 import { interactiveModule } from "@/learn/interactive";
-import { ASPECT_LABELS, axes, currentFocus, leadAxis, standsOut, type Aspect } from "@/model/matrix";
+import { ASPECT_LABELS, axes, currentFocus, standsOut, type Aspect } from "@/model/matrix";
 import { compareFor, compareSentence, pointsOf, snapshotOf, snapshotsToWrite, storedOrMigrated, type MapSnapshot } from "@/model/snapshots";
 import { localDay } from "@/lib/dates";
 import { isComplete } from "@/model/onboarding";
@@ -413,7 +413,3 @@ function NextStepAction({ rec }: { rec: Recommendation }) {
   );
 }
 
-/** The leading axis, for anything that needs one without rendering the whole hub. */
-export function leadingAspect(record: Parameters<typeof axes>[0]): Aspect {
-  return leadAxis(axes(record)).aspect;
-}

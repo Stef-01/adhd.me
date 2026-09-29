@@ -10,7 +10,6 @@ import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import { Check, Copy } from "@phosphor-icons/react";
 import { TIMELINE_TEMPLATE } from "@/lib/matching/checklist";
-import type { PatientView } from "@/lib/matching/views";
 import { FROM_TAB_COPY, fetchPatient, readPatientId, writeView, type HeldView } from "./session";
 
 export function MatchPrep() {

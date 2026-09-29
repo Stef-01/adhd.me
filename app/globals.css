@@ -683,7 +683,6 @@ summary:focus-visible {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.text-action,
 .icon-button {
   border: 0;
   color: var(--muted);
@@ -692,11 +691,8 @@ summary:focus-visible {
   text-decoration: none;
 }
 
-.text-action { color: var(--ink); }
-
 @media (hover: hover) {
-  .text-action:hover,
-.icon-button:hover { color: var(--ink); }
+  .icon-button:hover { color: var(--ink); }
 }
 
 /* U9: 44, not 42. Every finder header's round control (cancel, back) sat 2px under O14's floor,
@@ -818,21 +814,6 @@ summary:focus-visible {
 
 .listening-screen .voice-actions {
   padding-bottom: 48px;
-}
-
-.waveform-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-}
-
-.waveform-mark.is-active {
-  animation: wave-pulse 900ms ease-in-out infinite alternate;
-}
-
-.voice-actions .waveform-mark {
-  margin-top: 22px;
 }
 
 .type-content,
@@ -1573,51 +1554,11 @@ summary:focus-visible {
    compliance copy rules that govern the regions above do not repeat here — but
    the palette does, so these surfaces still move when region 1 moves.
    =========================================================================== */
-.briefing-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin-top: 25px;
-}
-
-.briefing-footer > span,
-.briefing-footer > button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.briefing-footer > span {
-  color: var(--muted);
-  font-size: 0.6875rem;
-}
-
-.briefing-footer > button {
-  min-height: 46px;
-  padding: 0 18px;
-  border: 0;
-  border-radius: 6px;
-  color: var(--on-ground);
-  background: var(--ground);
-  font-size: 0.75rem;
-  font-weight: 620;
-  cursor: pointer;
-}
 
 @media (max-width: 680px) {
   .clinician-app {
     padding: 0;
     background: var(--paper);
-  }
-
-                                  .briefing-footer {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .briefing-footer > button {
-    justify-content: center;
   }
 
       }
@@ -1702,11 +1643,6 @@ summary:focus-visible {
   letter-spacing: -0.055em;
 }
 
-.patient-v2 .text-action {
-  font-size: 0.6875rem;
-  font-weight: 650;
-}
-
 .patient-v2 .voice-prompt {
   max-width: none;
   margin: 0;
@@ -1722,27 +1658,6 @@ summary:focus-visible {
   color: var(--muted);
   font-size: 0.8125rem;
   line-height: 1.55;
-}
-
-.patient-v2 .archetype-switcher {
-  display: grid;
-  width: min(600px, 100%);
-  grid-template-columns: 44px minmax(0, 1fr) 44px;
-  align-items: center;
-  gap: 6px;
-  margin: 0 auto;
-}
-
-.patient-v2 .archetype-switcher > button {
-  display: grid;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  color: var(--muted);
-  background: transparent;
-  cursor: pointer;
-  place-items: center;
 }
 
 .patient-v2 .voice-actions {
@@ -1777,13 +1692,6 @@ summary:focus-visible {
 .patient-v2 .voice-screen .mic-button svg {
   width: 22px;
   height: 22px;
-}
-
-.patient-v2 .voice-actions .text-action {
-  min-height: 46px;
-  margin-top: 8px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
 }
 
 /* The dual-functional input: one field, one trailing control that morphs between talk (mic) and
@@ -1848,10 +1756,6 @@ summary:focus-visible {
 .patient-v2 .listening-screen .mic-button {
   width: 102px;
   height: 102px;
-}
-
-.patient-v2 .listening-screen .text-action {
-  width: 100%;
 }
 
 .patient-v2 .type-content,
@@ -2337,34 +2241,6 @@ summary:focus-visible {
   color: var(--cv2-muted);
   font-size: 0.5625rem;
   line-height: 1.35;
-}
-
-.cv2-coming-tooltip {
-  position: absolute;
-  z-index: 5;
-  right: 8px;
-  bottom: calc(100% + 8px);
-  padding: 7px 9px;
-  border-radius: 8px;
-  color: white;
-  background: var(--cv2-ground);
-  box-shadow: 0 8px 24px rgb(30 32 26 / 15%);
-  font-size: 0.5625rem;
-  font-weight: 650;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(4px);
-  transition: opacity var(--dur-tap) var(--ease-ui), transform var(--dur-tap) var(--ease-ui);
-}
-
-.cv2-coming-tooltip::after {
-  position: absolute;
-  top: 100%;
-  right: 12px;
-  border: 5px solid transparent;
-  border-top-color: var(--cv2-ground);
-  content: "";
 }
 
 .cv2-mix-card {
@@ -3314,39 +3190,6 @@ summary:focus-visible {
   min-height: 0;
   margin-top: auto;
   padding: 24px 0 0;
-}
-
-/* One quiet line at the foot of the welcome screen; the flow needs no more context. */
-.patient-v2 .finder-context {
-  display: block;
-  margin: 0;
-  padding: 12px var(--shell-gutter) max(16px, env(safe-area-inset-bottom));
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  text-align: center;
-}
-
-.patient-v2 .finder-context p {
-  margin: 0 auto;
-  max-width: 52ch;
-  color: var(--faint);
-  font-size: 0.625rem;
-  font-weight: 560;
-  line-height: 1.5;
-}
-
-/* ROUND 7c: the corner control must not sit on top of the demo disclaimer.
-   At 1280 the note is centred and the control clears it to the right; at 390 the note runs the
-   full width and the pill lands on its last line, hiding part of a sentence that exists to tell a
-   reader what this demo is. Reserving the control's own height (44px + its 20px offset, plus air)
-   moves the words up rather than shrinking them — a disclaimer nobody can finish reading is not a
-   disclaimer. Scoped to `.patient-v2`, which is the finder and nothing else, and to the widths
-   where the collision actually happens. */
-@media (max-width: 700px) {
-  .patient-v2 .finder-context {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
-  }
 }
 
 /* The `span`/`em` pair here set the two halves of the old tagline on the TYPE screen. The tagline
@@ -4420,7 +4263,6 @@ summary:focus-visible {
    it. O96 looked at moving them and left them here for exactly this reason: the
    order is a fact about the design, not untidiness.
    =========================================================================== */
-.text-action,
 .show-all,
 .cv2-join-link,
 .story-demo-link,
@@ -5154,21 +4996,7 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
 }
 
 /* Sticky mobile CTA on the landing page (item 9). */
-.story-sticky-cta { display: none; }
 @media (max-width: 640px) {
-  .story-sticky-cta {
-    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
-    background: color-mix(in srgb, var(--paper) 92%, transparent);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid var(--line);
-  }
-  .story-sticky-cta a {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    min-height: 48px; border-radius: 999px; background: var(--ink); color: var(--paper);
-    font-size: 1rem; text-decoration: none;
-  }
-  .story-sticky-cta a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   /* The page's own footer must outlive the bar. */
   .story-footer { padding-bottom: 86px; }
 }
@@ -5555,16 +5383,6 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
    the shell's 760px rather than a tighter one, because a narrower centred box would pull its left
    edge off the heading's on desktop — one screen, one left edge, and `text-wrap: pretty` is what
    keeps the last line from stranding a word. */
-.results-order-note {
-  width: 100%;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 var(--shell-gutter) 12px;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  text-wrap: pretty;
-}
 
 @media (min-width: 680px) {
   .patient-v2 .profile-content {
@@ -5699,21 +5517,6 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   margin: 0 auto;
   padding: 0 20px 110px;
 }
-.gp-book {
-  display: block;
-  margin-top: 32px;
-  min-height: 44px;
-  padding: 18px 22px;
-  border-radius: 4px;
-  background: var(--ground);
-  color: var(--on-ground);
-  text-decoration: none;
-  touch-action: manipulation;
-}
-.gp-book:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
 
 
 /* ROUND 8, AND THE BREAKPOINT MOVED A LONG WAY FOR A REASON THE SCREENSHOTS MADE PLAIN.
@@ -5726,23 +5529,6 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
    the 760px column ends at x≈1020 and the wide pill starts there — touching, not clear — so the
    threshold is above that, not at it. The sentence the hint carried is not lost: round 7 put it
    in the purpose band as prose, where it cannot cover anybody. */
-
-/* ─── /mission — the network's landing page (O197, founder-directed) ─────────────────────────
-   ONE IDEA, AND THE IDEA IS A SENTENCE. `layout.one-idea`: this screen states why the network
-   exists and does nothing else — no deck, no search box, no floating control offering a second
-   product. The founder's mission sentence is set at reading size in the serif, directly under the
-   heading, because it is the largest thing this page has to say and burying it in body copy would
-   make it look like an aside.
-
-   The measure matches `/network` at 760px so a reader moving between the two pages keeps the same
-   column, and the accent is spent exactly once — on the single door out.
-   ─────────────────────────────────────────────────────────────────────────────────────────── */
-
-.mission {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 20px 96px;
-}
 
 /* ===========================================================================
    DAYLIGHT WAYFINDING — 2026-09-01 PRODUCT-WIDE REDESIGN
@@ -6348,9 +6134,6 @@ select { caret-color: var(--route-strong); }
   background: var(--accent);
   box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 24%, transparent);
 }
-.patient-v2 .text-action { color: var(--ink); }
-
-.patient-v2 .finder-context p { color: var(--muted); }
 
 
 /* 2026-09-05, from the finder re-walk: `.booking-content h1` was in this selector, and it made the
@@ -6926,114 +6709,6 @@ select { caret-color: var(--route-strong); }
   }
 }
 
-.console-workspace-menu { position: relative; flex: 0 0 auto; }
-.console-workspace-menu > summary {
-  display: flex;
-  min-width: 112px;
-  min-height: 51px;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 9px;
-  padding: 0 12px;
-  color: var(--route-strong);
-  font-size: 0.8125rem;
-  font-weight: 650;
-  list-style: none;
-  cursor: pointer;
-}
-
-.console-workspace-menu > summary::-webkit-details-marker { display: none; }
-.console-workspace-menu > summary span {
-  display: grid;
-  width: 22px;
-  height: 22px;
-  place-items: center;
-  border: 1px solid var(--route-line);
-  border-radius: 6px;
-  transition: transform var(--dur-move) var(--ease-ui), border-color var(--dur-move) var(--ease-ui);
-}
-
-.console-workspace-menu[open] > summary span { transform: rotate(180deg); }
-.console-workspace-menu[open] > summary,
-.console-workspace-menu.has-active-route > summary { color: var(--accent); }
-.console-workspace-menu[open] > summary span { border-color: color-mix(in srgb, var(--accent) 46%, var(--route-line)); }
-
-.console-workspace-panel {
-  position: absolute;
-  z-index: 50;
-  top: calc(100% + 10px);
-  right: 0;
-  width: min(1120px, calc(100vw - 48px));
-  max-height: calc(100dvh - 144px);
-  overflow: auto;
-  padding: 26px;
-  border: 1px solid var(--route-line);
-  border-radius: 16px;
-  background: var(--surface-raised);
-  box-shadow: var(--shadow-ambient);
-}
-
-.console-workspace-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 0 4px 20px;
-  border-bottom: 1px solid var(--route-line);
-}
-
-.console-workspace-heading strong {
-  color: var(--ink);
-  font-size: 1.125rem;
-  font-weight: 650;
-  letter-spacing: -0.025em;
-}
-
-.console-workspace-heading span { color: var(--muted); font-size: 0.8125rem; }
-
-.console-workspace-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 30px;
-  padding-top: 22px;
-}
-
-.console-workspace-grid section { min-width: 0; }
-.console-workspace-grid h2 {
-  margin: 0 0 10px;
-  color: var(--route-strong);
-  font-size: 0.75rem;
-  font-weight: 720;
-  letter-spacing: -0.01em;
-}
-
-.console-workspace-grid section > div { display: grid; gap: 2px; }
-.console-workspace-grid a {
-  display: grid;
-  gap: 3px;
-  min-height: 52px;
-  align-content: center;
-  padding: 8px 10px;
-  border-left: 2px solid transparent;
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.console-workspace-grid a strong { font-size: 0.8125rem; font-weight: 610; }
-.console-workspace-grid a span { color: var(--muted); font-size: 0.6875rem; line-height: 1.35; }
-.console-workspace-grid a.is-active {
-  border-left-color: var(--accent);
-  color: var(--route-strong);
-  background: var(--route-soft);
-}
-
-@media (hover: hover) {
-  .console-workspace-grid a:hover {
-    border-left-color: var(--route);
-    background: color-mix(in srgb, var(--route-soft) 62%, transparent);
-  }
-}
-
 .console-main {
   width: min(100% - 48px, 1180px);
   min-height: calc(100dvh - 117px);
@@ -7253,10 +6928,6 @@ select { caret-color: var(--route-strong); }
   .console-main { padding-bottom: max(112px, calc(80px + var(--safe-bottom))); }
 }
 
-@media (max-width: 1100px) {
-  .console-workspace-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-
 @media (max-width: 760px) {
   .console-header-inner { width: 100%; }
   .console-brand-row { min-height: 62px; padding-inline: 18px; }
@@ -7273,18 +6944,6 @@ select { caret-color: var(--route-strong); }
   }
   .console-nav-core::-webkit-scrollbar { display: none; }
   .console-nav-link { padding-inline: 14px; white-space: nowrap; }
-  .console-workspace-menu > summary { min-width: 96px; padding-inline: 10px 14px; background: var(--paper); }
-  .console-workspace-panel {
-    position: fixed;
-    top: 124px;
-    right: 12px;
-    left: 12px;
-    width: auto;
-    max-height: calc(100dvh - 140px);
-    padding: 20px;
-  }
-  .console-workspace-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
-  .console-workspace-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
   .console-main { width: calc(100% - 36px); padding-block: 36px 88px; }
   .console-home-heading { align-items: flex-start; }
   .console-home-heading > span { max-width: 150px; padding-top: 4px; text-align: right; }
@@ -7294,11 +6953,6 @@ select { caret-color: var(--route-strong); }
 @media (max-width: 520px) {
   .console-brand > span { display: none; }
   .console-practice-switcher { display: none; }
-  .console-workspace-grid { grid-template-columns: 1fr; }
-  .console-workspace-grid { gap: 18px; }
-  .console-workspace-grid section > div { gap: 0; }
-  .console-workspace-grid a { min-height: 44px; padding-block: 7px; }
-  .console-workspace-grid a span { display: none; }
   .console-home-heading h1 { max-width: 8ch; }
   .console-quick-actions { gap: 7px; }
   .console-quick-link { min-height: 48px; padding-inline: 11px; }
@@ -7310,7 +6964,6 @@ select { caret-color: var(--route-strong); }
 @media (prefers-reduced-motion: reduce) {
   .console-main > :first-child { animation: none; }
   .console-nav-link,
-  .console-workspace-menu > summary span,
   .console-primary-button { transition: none; }
 }
 
@@ -7719,9 +7372,6 @@ button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--lin
 
 .me-empty p { margin: 0 0 22px; max-width: 46ch; color: var(--muted); font-size: 0.9375rem; line-height: 1.6; }
 
-.me-privacy { margin: 30px 0 0; color: var(--faint); font-size: 0.8125rem; line-height: 1.5; }
-.me-privacy a { color: var(--muted); text-underline-offset: 3px; }
-
 
 /* ═══════════════════════════════════════════════════════════════════════════════════════════════
    O234 — THE MAP, THE FILTERS AND ONE SHELL.
@@ -8007,7 +7657,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 .me-section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .me-filter-count { color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
-.me-section-lead { margin: 0 0 12px; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
 
 .me-place label {
   display: block;
@@ -8380,161 +8029,8 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 }
 
 /* The opening field. */
-.learn-hero {
-  position: relative;
-  margin: 0 0 26px;
-  padding: 26px 22px 22px;
-  border-radius: 26px;
-  color: var(--on-ground);
-  background: var(--route-strong);
-  overflow: hidden;
-}
-
-.learn-hero::after {
-  /* A soft light in the corner — the route family's own tint, not a new colour. */
-  content: "";
-  position: absolute;
-  right: -60px;
-  top: -80px;
-  width: 220px;
-  height: 220px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--hero-blue) 55%, transparent);
-  pointer-events: none;
-}
-
-.learn-hero > * { position: relative; }
-
-.learn-hero-eyebrow {
-  margin: 0 0 10px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  opacity: 0.85;
-}
-
-.learn-hero-title {
-  margin: 0 0 8px;
-  max-width: 14ch;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: clamp(1.875rem, 8vw, 2.5rem);
-  font-weight: 440;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
-}
-
-.learn-hero-lede { margin: 0 0 18px; max-width: 34ch; font-size: 0.9375rem; line-height: 1.5; opacity: 0.9; }
-
-.learn-rail { display: flex; gap: 5px; margin: 0 0 8px; padding: 0; list-style: none; }
-.learn-rail li { flex: 1 1 0; height: 5px; border-radius: 999px; background: var(--on-ground); }
-.learn-hero-count { font-size: 0.75rem; font-weight: 600; opacity: 0.85; font-variant-numeric: tabular-nums; }
 
 .learn-shelf { margin: 0 0 26px; }
-
-.learn-shelf-title {
-  margin: 0 0 10px 4px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.learn-tiles { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-
-/* A tile: tinted ground, no hairline, the mark on the left, the arrow settling in on hover. */
-.learn-tile {
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) 24px;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  min-height: 96px;
-  padding: 16px 14px 16px 14px;
-  border: 0;
-  border-radius: 22px;
-  background: var(--stone);
-  color: var(--ink);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.learn-tile.is-route { background: color-mix(in srgb, var(--route) 12%, var(--paper)); }
-.learn-tile.is-accent { background: var(--accent-soft); }
-.learn-tile.is-ink { background: var(--stone); }
-.learn-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-.learn-tile-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.learn-tile-kind { color: var(--muted); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.learn-tile.is-quiz .learn-tile-kind { color: var(--accent-deep); } /* RADIANT: 5.6:1 on the tinted tile; the accent itself read 4.2 at 11px. */
-.learn-tile-text strong {
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.3125rem;
-  font-weight: 460;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-.learn-tile-text small { color: var(--muted); font-size: 0.8125rem; line-height: 1.4; }
-
-.learn-tile-meta { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 4px; color: var(--muted); font-size: 0.75rem; font-weight: 620; font-variant-numeric: tabular-nums; }
-.learn-tile-time { display: inline-flex; align-items: center; gap: 4px; }
-.learn-tile-dot { width: 3px; height: 3px; border-radius: 999px; background: var(--faint); }
-.learn-tile-done { display: inline-flex; align-items: center; gap: 4px; color: var(--route-strong); }
-.learn-tile-arrow { display: inline-flex; color: var(--faint); transition: color var(--dur-tap) var(--ease-ui), translate var(--dur-tap) var(--ease-ui); }
-
-@media (hover: hover) {
-  .learn-tile:hover .learn-tile-arrow { color: var(--ink); translate: 2px 0; }
-}
-
-/* The marks: a halo of the family's tint with the family's line inside it. */
-.learn-mark { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; }
-.learn-mark svg { width: 64px; height: 64px; }
-.learn-mark-halo { fill: var(--surface-raised); }
-.learn-mark-ring { fill: none; stroke-width: 3; stroke-linecap: round; }
-.learn-mark-tick { fill: none; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
-.learn-mark.is-route .learn-mark-ring { stroke: var(--route-strong); }
-.learn-mark.is-route .learn-mark-core { fill: var(--route-strong); }
-.learn-mark.is-accent .learn-mark-ring { stroke: var(--accent); }
-.learn-mark.is-accent .learn-mark-core { fill: var(--accent); }
-.learn-mark.is-ink .learn-mark-ring { stroke: var(--ink); }
-.learn-mark.is-ink .learn-mark-core { fill: var(--ink); }
-.learn-mark.is-ink .learn-mark-tick { stroke: var(--ink); }
-
-.learn-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 4px 0 8px; }
-.learn-figures > div { padding: 16px; border-radius: 20px; background: var(--stone); }
-.learn-figures dt {
-  margin: 0 0 4px;
-  color: var(--ink);
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 1.5rem;
-  font-weight: 440;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-}
-.learn-figures dd { margin: 0; color: var(--muted); font-size: 0.8125rem; line-height: 1.4; }
-.learn-figures-note { margin: 0 4px 22px; color: var(--faint); font-size: 0.75rem; }
-
-.learn-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  min-height: 52px;
-  padding: 0 24px;
-  border-radius: 999px;
-  color: var(--on-ground);
-  background: var(--ground);
-  font-size: 0.9375rem;
-  font-weight: 640;
-  text-decoration: none;
-  transition: transform var(--dur-tap) var(--ease-spring);
-}
-.learn-cta:active { transform: scale(0.97); }
-.learn-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ── Inside a module ── */
 .learn-module-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 10px; }
@@ -8574,22 +8070,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .learn-cards { display: grid; gap: 12px; }
 
 /* Every card is in the DOM; once hydrated only the current one is shown. */
-
-.learn-card-number {
-  position: absolute;
-  right: 18px;
-  top: 6px;
-  font-family: "Newsreader Variable", Newsreader, Georgia, serif;
-  font-size: 4.5rem;
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: color-mix(in srgb, var(--route) 12%, transparent);
-  font-variant-numeric: tabular-nums;
-  pointer-events: none;
-}
-
-.learn-module.is-accent .learn-card-number { color: color-mix(in srgb, var(--accent) 14%, transparent); }
 
 .learn-card-eyebrow { margin: 0 0 10px; color: var(--route-strong); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
 .learn-module.is-accent .learn-card-eyebrow { color: var(--accent); }
@@ -8715,34 +8195,12 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .clarify { margin: 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  .learn-cta, .learn-tile-arrow, .learn-option, .clarify-star { transition: none; }
+  .learn-option, .clarify-star { transition: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════════════════════
    O240 — SIMPLER, AND MOVING LIKE A MODERN APP.
    ═══════════════════════════════════════════════════════════════════════════════════════════════ */
-
-/* The welcome disclaimer is one quiet line, not a tinted panel.
-   It is also on the SAME EDGE as everything above it. The screen's composition (see "one edge, one
-   group" below) put the question, the compose box and the example link on the shell gutter and
-   left-aligned; this line stayed centred inside a 52ch measure, so the one screen with three
-   elements had two alignments and the odd one out was the sentence at the foot. Same gutter, same
-   edge — the eye returns down a single margin instead of finding a new one. */
-.patient-v2 .finder-context {
-  margin: 0;
-  padding: 10px var(--shell-gutter) max(14px, env(safe-area-inset-bottom));
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  text-align: left;
-}
-
-.patient-v2 .finder-context p {
-  margin-inline: 0;
-  color: var(--faint);
-  font-size: 0.6875rem;
-  font-weight: 520;
-}
 
 /* The consent card arrives on a spring-like curve from the bottom edge. */
 @keyframes consent-in {
@@ -8943,17 +8401,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .nearby-zoom-button { border: 0; border-radius: 999px; box-shadow: 0 2px 10px color-mix(in srgb, var(--hero-dusk) 18%, transparent); }
 .nearby-marker-pin { min-width: 26px; height: 26px; font-size: 0.75rem; box-shadow: 0 2px 10px color-mix(in srgb, var(--hero-dusk) 30%, transparent); }
 .nearby-marker-label { font-family: var(--font-ui); font-size: 0.75rem; }
-
-
-/* ═══════════════════════════════════════════════════════════════════════════════════════════════
-   O249 — THE APPLE-DESIGN APPRAISAL, ACTED ON.
-   The Learn hero's light stays out of its own sentence; two accessibility signals answered; the
-   core controls in rem so a larger text setting grows the layout with the words.
-   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
-
-@media (max-width: 479px) {
-  .learn-hero::after { width: 140px; height: 140px; right: -70px; top: -70px; }
-}
 
 /* Reduced transparency: the two materials become solid. Nothing else in the product blurs. */
 @media (prefers-reduced-transparency: reduce) {
@@ -9326,51 +8773,15 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 
 /* ── Notification badge — the Profile tab, when filters are on. Only the badge moves; the tab
    never does, so the bar's geometry is untouched by a number appearing on it. */
-.t-badge {
-  position: absolute;
-  top: 6px;
-  left: calc(50% + 8px);
-  pointer-events: none;
-  will-change: transform;
-}
-
-.t-badge[data-open="true"] { animation: t-badge-slide-in var(--dur-enter) var(--ease-soft); }
 
 @keyframes t-badge-slide-in {
   from { transform: translate(var(--badge-offset-x), var(--badge-offset-y)); }
   to { transform: translate(0, 0); }
 }
 
-.t-badge-dot {
-  display: grid;
-  place-items: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  line-height: 1;
-  box-shadow: 0 0 0 2px var(--paper);
-  transform: scale(1);
-  opacity: 1;
-  filter: blur(0);
-  transition: transform var(--dur-enter) var(--badge-pop-ease), opacity var(--dur-move) var(--ease-ui), filter var(--dur-enter) var(--badge-pop-ease);
-}
-
-.t-badge[data-open="false"] .t-badge-dot {
-  transform: scale(0);
-  opacity: 0;
-  filter: blur(var(--badge-blur));
-  transition: transform var(--dur-exit) var(--ease-ui), opacity var(--dur-exit) var(--ease-ui), filter var(--dur-exit) var(--ease-ui);
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .t-check, .t-check svg path, .t-learn-arm, .t-badge-dot { transition: none !important; }
+  .t-check, .t-check svg path, .t-learn-arm { transition: none !important; }
   .finder-demo-toggle input:checked + .t-check svg path { stroke-dashoffset: 0; }
-  .t-badge { animation: none !important; }
   .t-learn-arm { transform: none !important; }
 }
 
@@ -9488,16 +8899,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   font-weight: 700;
   letter-spacing: -0.02em;
 }
-.wordmark-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-left: 2px;
-  border-radius: 50%;
-  background: var(--accent-mid);
-}
-.patient-v2 .text-action { color: var(--muted); font-size: 0.75rem; font-weight: 600; }
-@media (hover: hover) { .patient-v2 .text-action:hover { color: var(--accent); } }
 
 /* The search summary: one white card, the words on one line with the place under them, and
    Start over at its end. The words give way first, so the button keeps its label at 320. */
@@ -9652,13 +9053,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 /* ── RADIANT, unit 2: the filters screen (the Profile tab) ─────────────────────────────────── */
 .me-head { margin-bottom: 4px; }
 .me-head-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.me-eyebrow {
-  color: var(--accent);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
 .me-reset {
   position: relative;
   min-height: 32px;
@@ -9706,7 +9100,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 .me-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .me-head p { margin: 10px 0 20px; font-size: 0.8125rem; }
 .me-section h2 { font-size: 0.9375rem; font-weight: 600; }
-.me-section-lead { font-size: 0.8125rem; }
 
 /* The toggle card: one white card, its rows divided, the switch as drawn — a 48×28 track, a
    24px white knob, the track in the terracotta when on. */
@@ -9813,16 +9206,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
      twenty-seven now, so the ramp needs its second dark card. */
   --learn-night:   #dedcf3;  --learn-night-ink:   #22205a;  --learn-night-sub:   #3d3a86;  --learn-night-deep:   #2f2a7a;
 }
-.learn-tagline { margin: 0 0 12px; color: var(--muted); font-size: 0.8125rem; font-weight: 500; line-height: 1.45; }
-.learn-chips {
-  display: flex;
-  gap: 8px;
-  margin: 0 calc(var(--shell-gutter) * -1) 10px;
-  padding: 4px var(--shell-gutter);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.learn-chips::-webkit-scrollbar { display: none; }
 .learn-chip {
   position: relative;
   flex: none;
@@ -9850,22 +9233,10 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 }
 @media (hover: hover) { .learn-chip:not([aria-pressed="true"]):hover { background: var(--stone); } }
 .learn-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.learn-progress { margin: 0 0 14px; color: var(--faint); font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .learn-stack { display: flex; flex-direction: column; gap: 12px; margin: 0 0 26px; padding: 0; list-style: none; }
 .learn-card-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; max-width: 70%; }
 .learn-card-text strong { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
 .learn-card-text small { font-size: 0.75rem; font-weight: 500; line-height: 1.35; }
-.learn-card-meta {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-top: 2px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-.learn-card-meta .learn-tile-dot { background: currentColor; opacity: 0.6; }
 .learn-card-done { display: inline-flex; align-items: center; gap: 3px; }
 .learn-card-art { flex: none; width: 64px; height: 64px; filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.08)); }
 .learn-card-art svg { display: block; width: 64px; height: 64px; }
@@ -9917,8 +9288,7 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
   .patient-v2 .screen:not(.results-screen) {
     padding-inline: max(0px, calc((100% - 780px) / 2 - var(--shell-gutter)));
   }
-  .results-list-head,
-  .results-order-note { max-width: none; }
+  .results-list-head { max-width: none; }
   .patient-v2 .clinician-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   .show-all { max-width: 420px; margin-inline: auto; }
 
@@ -9935,8 +9305,7 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: 40px;
   }
-  .me-section[aria-labelledby="me-filters-title"] > .me-section-head,
-  .me-section[aria-labelledby="me-filters-title"] > .me-section-lead { grid-column: 1 / -1; }
+  .me-section[aria-labelledby="me-filters-title"] > .me-section-head { grid-column: 1 / -1; }
   /* Two columns that each stack from the top: the switches on the left, the folds on the right in
      the order they read. Before, each fold took its own grid row beside the spanning switch card,
      so the card's height was shared out as empty space between the folds and the Languages fold
@@ -9949,8 +9318,6 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
 
   /* The learn stack in two columns; the reader keeps a reading measure. */
   .learn-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); display: grid; gap: 14px; }
-  .learn-chips { margin-inline: 0; padding-inline: 0; }
-  .learn-figures { max-width: 720px; }
   .me-screen.learn-screen:has(.learn-module-bar) { --shell-w: 780px; }
 }
 
@@ -10116,7 +9483,6 @@ main h1.learn-thesis { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta 
      Here rather than in the 900px block because the stranding is a function of window HEIGHT, and
      the window is full height from 641px up. */
   .patient-v2 .voice-screen .voice-core { margin-top: auto; }
-  .patient-v2 .voice-screen .finder-context { margin-bottom: auto; padding-top: 16px; }
   /* 68px of floor padding was holding the group off a bottom edge that no longer ends the screen. */
   .patient-v2 .voice-screen .voice-actions { padding-bottom: 0; }
 }

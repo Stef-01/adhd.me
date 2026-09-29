@@ -6,7 +6,6 @@
 // The dense case is skipped when the variables are absent; nothing is fetched otherwise.
 
 import { describe, expect, it } from "vitest";
-import { REACH_CORPUS } from "@/matching/corpus";
 import { rosterGPs } from "./adapters";
 import { gpBioText } from "./candidates";
 import { EVAL_CASES, beatsBaseline, evaluateEmbedder, evaluateOnCorpus, formatCorpusReport, formatEvalReport } from "./embedder-eval";

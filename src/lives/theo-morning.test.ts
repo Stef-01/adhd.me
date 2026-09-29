@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { advance, choose, createMorning, morningReducer, carrying, packed, position, ESSENTIALS, type TheoMorning, type Command, type Essential, type Room } from "./theo-morning";
+import { advance, choose, createMorning, morningReducer, carrying, packed, position, ESSENTIALS, type TheoMorning, type Command, type Room } from "./theo-morning";
 
 function doTask(s: TheoMorning, command: Command) {
   let next = choose(s, command);

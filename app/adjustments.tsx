@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight, Check, ListChecks, Paperclip, UsersThree } from "@phosphor-icons/react";
+import { ArrowRight, Check } from "@phosphor-icons/react";
 import { ADJUSTMENT_TRACKS, adjustmentTrack, leadingTrack, type AdjustmentTrack } from "@/model/adjustments";
 import { topNeed } from "@/model/needs";
 import { track } from "@/model/events";

@@ -252,7 +252,3 @@ export const ACCEPTANCE_STATE_COPY: Record<AcceptanceState, string> = {
   handed_back: "Handed back. The other practice has ended their part and this practice is watching again.",
 };
 
-export const OBLIGATION_COPY: Record<ReferralObligation, string> = {
-  appears_on_receiving_worklist: "The referral is on the receiving practice's work list.",
-  return_report_outstanding: "A return report is outstanding for this referral.",
-};

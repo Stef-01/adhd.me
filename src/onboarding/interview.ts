@@ -166,25 +166,6 @@ export function interviewMinutes(): number {
 }
 
 /**
- * WHAT ONBOARDING PRODUCES — the profile the matcher consumes, and nothing beyond it.
- *
- * Deliberately NOT the full `Clinician` record: `about`, `matchLine`, `fitSignals` and the rest
- * are surface copy authored elsewhere and reviewed, and letting an interview write them would put
- * an unlinted paragraph about a named clinician into the tree through the side door W183 shut.
- */
-export type ClinicianMatchProfile = {
-  clinicianId: string;
-  careAreas: ReadonlyArray<{ area: CareArea; frequency: Frequency }>;
-  manner: ReadonlyArray<{ trait: MannerTrait; frequency: Frequency }>;
-  languages: readonly string[];
-  telehealthFirstAppointment: boolean;
-  wheelchairAccessible: boolean;
-  /** Declared, never checked. Rendered as a declaration on every surface. */
-  nswAdhdTrained: boolean;
-  readBackConfirmed: boolean;
-};
-
-/**
  * The facets a completed interview must be able to fill.
  *
  * Exported so the test can compare it against both the interview and the matcher, which is what

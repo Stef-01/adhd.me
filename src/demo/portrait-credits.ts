@@ -57,12 +57,6 @@ export const PORTRAIT_CREDITS: readonly PortraitCredit[] = [
   { clinicianId: "example-ewan-blake", image: "/portraits/example-ewan-blake.jpg", source: "unsplash", photographer: "Muhammad Hicham", page: "https://unsplash.com/photos/AZDVF4fEcY4", licence: "Unsplash License" },
 ];
 
-/** Personas that deliberately keep the monogram, each with the reason. */
-export const MONOGRAM_PERSONAS: ReadonlyArray<{ readonly clinicianId: string; readonly why: string }> = [
-  { clinicianId: "example-ash-coleman", why: "Non-binary persona: a stock library cannot say how the person photographed identifies, and guessing would speak for a stranger." },
-  { clinicianId: "example-jordan-reyes", why: "Non-binary persona: as above." },
-];
-
 export function portraitFor(clinicianId: string): string | null {
   return PORTRAIT_CREDITS.find((c) => c.clinicianId === clinicianId)?.image ?? null;
 }

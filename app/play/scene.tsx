@@ -45,9 +45,6 @@ export const SCENE_TINTS: Readonly<Record<Prop, SceneTints>> = {
   none: { sky: "#ebeefa", ground: "#d0d8ef", deep: "#5065a6", mid: "#6679b9", light: "#f7f8fc", warm: "#f3d9a6", accent: "#8fa5d6" },
 };
 
-/** The sky of each place; kept for anything that wants one colour per prop. */
-export const PROP_TINTS: Readonly<Record<Prop, string>> = Object.fromEntries(Object.entries(SCENE_TINTS).map(([k, t]) => [k, t.sky])) as Record<Prop, string>;
-
 /** Floors run far past the drawing: where a title card is wider than the art, they reach both edges. */
 const WIDE = { x: -1000, width: 2360 } as const;
 function Floor() { return <rect {...WIDE} y="168" height="32" className="f-ground" />; }
