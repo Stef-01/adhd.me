@@ -761,8 +761,16 @@ The founder took the default on every open question ("do all the default choices
    life stage or experience in the person's own word, never paraphrased, with a postpartum example.
 7. **The reader's meanings:** culturally_attuned is culture, faith, language, background or family,
    not a life stage or condition; sense_making is explanation of what is going on or the plan.
-8. **The ladder again** under the new prompt hash: L0 P0 and L1 P0 free, then P1 to P4 live
-   (about $0.63), and the results here.
+8. **The ladder again** under the new prompt hash: L0 P0 and L1 P0 free, then P1 to P4 live.
+   Run 2026-09-29 (reports in qa/matching/reports): L0 P0, L1 P0, P1, P2 and P3 pass; P4 fails
+   its never gate at 1.5%, two reads of 133 nothing-asked requests ("flat for months, everything
+   is heavy" as depression, "I just want to talk to someone first" as non-medication), the same
+   1.5% the pre-change prompt measured that morning. Three prompt iterations moved WHICH two,
+   not how many: a meaning line for not_rushed (punctuality) and non-medication (someone to talk
+   to), then paraphrased examples for the read and the check. The gate sits inside gpt-5-nano's
+   run-to-run variance at this size; the next lever is structural (the check asking for the words
+   a key rests on), an RCA item rather than a fourth prompt edit. Spend for the day's rungs about
+   $0.30, ledger $5.28 of $14.
 9. **Live again:** both scripted calls on production after the deploy, the finder's e2e, and the
    founder's own scenario.
 
