@@ -33,19 +33,21 @@ const demoStops = [
   },
 ] as const;
 
-function getActiveStop(pathname: string) {
-  if (pathname.startsWith("/clinicians")) return 1;
-  if (pathname.startsWith("/practices")) return 2;
-  if (pathname.startsWith("/demo") || pathname.startsWith("/console") || pathname.startsWith("/book")) return 3;
-  return 0;
+function activeStopId(pathname: string) {
+  if (pathname.startsWith("/clinicians")) return "clinician";
+  if (pathname.startsWith("/practices")) return "practice";
+  if (pathname.startsWith("/demo") || pathname.startsWith("/console") || pathname.startsWith("/book")) return "operations";
+  return "patient";
 }
 
-export function DemoNavigator() {
+/** @param demo Whether /demo answers here (src/lib/demo-guard.ts); without it the operations stop is not offered. */
+export function DemoNavigator({ demo = true }: { demo?: boolean }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const activeIndex = getActiveStop(pathname);
-  const nextStop = demoStops[(activeIndex + 1) % demoStops.length]!;
+  const stops = demo ? demoStops : demoStops.filter((stop) => stop.id !== "operations");
+  const activeIndex = stops.findIndex((stop) => stop.id === activeStopId(pathname));
+  const nextStop = stops[(activeIndex + 1) % stops.length]!;
 
   useEffect(() => {
     if (!open) return;
@@ -87,11 +89,11 @@ export function DemoNavigator() {
           </Link>
           <div className="demo-nav-heading">
             <span>Demo map</span>
-            <strong>{activeIndex + 1} of {demoStops.length}</strong>
+            {activeIndex >= 0 && <strong>{activeIndex + 1} of {stops.length}</strong>}
           </div>
 
           <div className="demo-nav-stops">
-            {demoStops.map((stop, index) => {
+            {stops.map((stop, index) => {
               const active = index === activeIndex;
               return (
                 <Link

@@ -13,7 +13,9 @@
 // filtered out here too, so the sitemap never announces a page whose response says `noindex`.
 import type { MetadataRoute } from "next";
 import { PUBLIC_SURFACES } from "@/compliance/public-surfaces";
+import { demoEnabled } from "@/lib/demo-guard";
 import { isHiddenFromCrawlers } from "@/security/robots";
+import { REDIRECTS } from "@/seo/redirects";
 import { TEAM_PAGE_PUBLIC } from "./about/team";
 import { SITE_URL } from "./site";
 
@@ -38,6 +40,9 @@ function sitemapPaths(): string[] {
     return [surface.path];
   })
     .filter((path) => path !== "/about" || TEAM_PAGE_PUBLIC)
+    // Nor a page that answers 404 here, or with a redirect.
+    .filter((path) => path !== "/demo" || demoEnabled())
+    .filter((path) => !REDIRECTS.some((redirect) => redirect.source === path))
     .filter((path) => !isHiddenFromCrawlers(path));
 }
 

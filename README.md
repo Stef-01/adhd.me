@@ -74,10 +74,10 @@ cardiac screening, titration review. Linking out instead of restating narrowed i
 it. See the `/clinicians` entry in `STANDING_FLAGS` (`src/compliance/public-surfaces.ts`).
 
 7. **Whether `/demo` is reachable in production.** It fails closed unless `ADHDME_ENABLE_DEMO=1`
-   is set (`src/lib/mock-guard.ts`; the e2e config sets it, a bare production start does not), and
-   the practices page's primary call to action, "See a demo", links there twice. Either the flag
-   is set on Vercel, or the button should point somewhere that exists. Found by walking the
-   production build on 2026-09-05; `CLAUDE.md` now names the flag beside the token secret.
+   is set (`src/lib/demo-guard.ts`; the e2e config sets it, a bare production start does not).
+   Since 2026-09-29 its ways in (the practices page's "See a demo" twice, and the presenter
+   navigator's operations stop on /clinicians and /console) show only where it answers, so
+   production has no link to a 404 either way. Setting the flag on Vercel brings them back.
 
 ## Layout
 

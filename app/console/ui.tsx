@@ -1,6 +1,7 @@
 // W11: shared console primitives — one look for every console surface.
 
 import { signOut, switchPractice } from "./actions";
+import { demoEnabled } from "@/lib/demo-guard";
 import { DemoNavigator } from "../demo-navigator";
 import { ConsoleNavigation } from "./console-navigation";
 
@@ -59,7 +60,7 @@ export function ConsoleShell({
         <div className="console-header-inner">
           <div className="console-brand-row">
             <div className="console-brand">
-            <DemoNavigator />
+            <DemoNavigator demo={demoEnabled()} />
               <span>Practice console</span>
             </div>
           {email && (
