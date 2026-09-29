@@ -55,11 +55,14 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 // again for O256 (463 -> 466: three continuation sentences added, three assessment reads gone),
 // and for O257 (466 -> 470: four lived-experience sentences and a fifth preference; the synthetic
 // roster draws gender at the real roster's rate, and seven profiles declared theirs the same day).
-  { rosterSize: 2, k: K, total: 471, observedSeparationRate: 0.274, nullMeanSeparationRate: 0.274, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 471, observedSeparationRate: 0.174, nullMeanSeparationRate: 0.175, nullStdSeparationRate: 0.001, effect: -0.001 },
-  { rosterSize: 5, k: K, total: 471, observedSeparationRate: 0.297, nullMeanSeparationRate: 0.295, nullStdSeparationRate: 0.003, effect: 0.002 },
-  { rosterSize: 10, k: K, total: 471, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.238, nullStdSeparationRate: 0.002, effect: 0.002 },
-  { rosterSize: 25, k: K, total: 471, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.235, nullStdSeparationRate: 0.006, effect: 0.005 },
+// O261 (2026-09-30): 471 -> 520 sentences and thirteen life-domain areas in the facet space; every rate
+// moved, the shape held: N=2's null exactly degenerate, every effect within 0.005 of zero, the
+// N=2 -> N=3 dip (0 -> -0.001) still there.
+  { rosterSize: 2, k: K, total: 520, observedSeparationRate: 0.275, nullMeanSeparationRate: 0.275, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 520, observedSeparationRate: 0.196, nullMeanSeparationRate: 0.197, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 520, observedSeparationRate: 0.317, nullMeanSeparationRate: 0.315, nullStdSeparationRate: 0.003, effect: 0.002 },
+  { rosterSize: 10, k: K, total: 520, observedSeparationRate: 0.292, nullMeanSeparationRate: 0.29, nullStdSeparationRate: 0.002, effect: 0.002 },
+  { rosterSize: 25, k: K, total: 520, observedSeparationRate: 0.269, nullMeanSeparationRate: 0.264, nullStdSeparationRate: 0.006, effect: 0.005 },
 ];
 
 /*
@@ -80,12 +83,13 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 37,
   k: K,
-  total: 471,
+  total: 520,
+  // O261 (2026-09-30): 471 -> 520 sentences; 0.335/0.327/0.008 -> 0.308/0.299/0.009.
   // O260 (2026-09-29): 0.338/0.329/0.009 -> 0.335/0.327/0.008, the shared-care sentence reading one key.
-  observedSeparationRate: 0.335,
-  nullMeanSeparationRate: 0.327,
+  observedSeparationRate: 0.308,
+  nullMeanSeparationRate: 0.299,
   nullStdSeparationRate: 0.006,
-  effect: 0.008,
+  effect: 0.009,
 };
 
 describe("M5 the separation effect size, over synthetic rosters", () => {
@@ -117,11 +121,11 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
       // rate (0.154 -> 0.24), and 3 -> 2 inflates it again (0.173 -> 0.275), the direction O252
       // had seen reverse: the pair proves nothing fixed, which is the point.
       const naive = (size: number) => tieQualityReport(corpusRun(), syntheticRoster(size)).separationRate;
-      expect(naive(40)).toBe(0.155);
-      expect(naive(25)).toBe(0.24);
+      expect(naive(40)).toBe(0.165); // O261: 0.155 -> 0.165 over 520 sentences
+      expect(naive(25)).toBe(0.269); // O261
       expect(naive(25)).toBeGreaterThan(naive(40));
-      expect(naive(3)).toBe(0.174);
-      expect(naive(2)).toBe(0.274);
+      expect(naive(3)).toBe(0.196); // O261
+      expect(naive(2)).toBe(0.275); // O261
       expect(naive(2)).toBeGreaterThan(naive(3));
     },
   );
@@ -204,7 +208,7 @@ describe("M5 the real roster's own effect (37 real profiles)", () => {
       "small, real, and for the first time actually measured rather than forced",
     () => {
       const report = realRosterSeparationEffect(K);
-      expect(report.effect).toBe(0.008); // O260 (2026-09-29): 0.009 -> 0.008. 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
+      expect(report.effect).toBe(0.009); // O261 (2026-09-30): 0.008 -> 0.009. O260 (2026-09-29): 0.009 -> 0.008. 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
       expect(report.nullStdSeparationRate).toBeGreaterThan(0);
       expect(report.observedSeparationRate).toBeGreaterThan(report.nullMeanSeparationRate);
     },

@@ -108,7 +108,7 @@ export function isDeclarableMixPercent(value: number): boolean {
 export const OFFERED_LANGUAGES = MATCHABLE_LANGUAGES;
 
 /** The three headings the care areas sit under, in display order. Mental health, streamlined. */
-export type CareAreaGroup = "ADHD" | "Depression and anxiety" | "Other mental health";
+export type CareAreaGroup = "ADHD" | "Depression and anxiety" | "Other mental health" | "Everyday life" | "Body and health" | "Who you are";
 
 /**
  * Care areas as a GP would read them, grouped, paired with the union member the finder matches on.
@@ -132,6 +132,20 @@ export const CARE_AREA_LABELS: ReadonlyArray<{ id: CareArea; label: string; grou
   { id: "emotional-regulation", label: "Emotional regulation", group: "Other mental health" },
   { id: "non-medication", label: "Non-medication and psychological supports", group: "Other mental health" },
   { id: "perinatal", label: "Pregnancy, postpartum and new parents", group: "Other mental health" },
+  // O261 (2026-09-29): what people need help with in life, each declared by two to twelve of the 37.
+  { id: "executive-function", label: "Focus, organisation and getting things done", group: "Everyday life" },
+  { id: "work-career", label: "Work and career", group: "Everyday life" },
+  { id: "study-school", label: "School, study and learning", group: "Everyday life" },
+  { id: "parenting", label: "Parenting", group: "Everyday life" },
+  { id: "relationships", label: "Relationships and couples", group: "Everyday life" },
+  { id: "social-connection", label: "Friendships and social skills", group: "Everyday life" },
+  { id: "late-diagnosis", label: "Adjusting to a late diagnosis", group: "Everyday life" },
+  { id: "grief-life-change", label: "Grief and big life changes", group: "Everyday life" },
+  { id: "sleep", label: "Sleep", group: "Body and health" },
+  { id: "eating-body", label: "Eating and body image", group: "Body and health" },
+  { id: "womens-health", label: "Women's health and hormones", group: "Body and health" },
+  { id: "movement-exercise", label: "Exercise and movement", group: "Body and health" },
+  { id: "cultural-background", label: "Understands your cultural background", group: "Who you are" },
 ];
 
 /**

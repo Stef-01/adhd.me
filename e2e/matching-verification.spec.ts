@@ -114,7 +114,8 @@ test("a psychographic ask ranks and is shown nowhere (O30, then O259)", async ({
   await searchFor(page, "explain things in plain language and someone who respects my faith");
   const rows = page.locator(".clinician-row");
   await expect(rows.first()).toBeVisible();
-  await expect(page.getByRole("group", { name: "What we heard" })).toHaveCount(0);
+  // O261: faith is a declared care area now (care:cultural-background), so it is the one chip; the plain-language manner is still shown nowhere.
+  await expect(page.getByRole("group", { name: "What we heard" }).getByRole("button")).toHaveText(["Cultural background"]);
   for (const trait of [EI_QUALITIES.sense_making, EI_QUALITIES.culturally_attuned]) {
     await expect(page.locator(".clinician-row").getByText(trait.short!)).toHaveCount(0);
     await expect(page.locator(".clinician-row").getByText(trait.label)).toHaveCount(0);

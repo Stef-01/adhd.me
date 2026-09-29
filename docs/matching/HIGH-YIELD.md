@@ -175,4 +175,14 @@ to you about the clinician?" (the two that produced the noise in both calls). Go
    full run of words ("a psychologist who has ADHD herself"; "GP … my ADHD" across a gap read as
    one until the run was demanded), the reader's meaning, a filter switch (38 words on the
    filters screen), the clarifier's question, four corpus sentences and two probes.
-5. Screens: chips, why, compare, filters follow the vocabulary. Medium.
+5. Screens: chips, why, compare, filters follow the vocabulary. Medium. Begun 2026-09-30 (O261):
+   the profile shows three pills of what the clinician declares, the asked-for ones first, in place
+   of "Best for"; an NDIS switch joins the filters; the heard chips and the why keys carry the life
+   domains through the vocabulary they already read.
+6. The life domains (2026-09-30, O261, docs/matching/RCA-NIGHT-2026-09-29.md stage 3): thirteen
+   care areas for what people need help with in life, read off the 37 profiles with each
+   clinician's sentence (qa/matching/life-domains.md), an NDIS preference, the cultural words
+   moved from the invisible manner trait to a declared area, cues in the person's words, the
+   reader's meanings, 51 corpus sentences and a thirty-persona simulation
+   (src/matching/simulation.test.ts). "Help at work with focus and getting things done" lists
+   the coaches.

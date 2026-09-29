@@ -756,17 +756,35 @@ const DIAGNOSIS_MADE: readonly (readonly string[])[] = [
   "take over prescribing", "take over the prescribing", "take over the scripts", "take over my", "keep me on", "stay on my",
   "psychiatrist retired", "psychiatrist has retired", "psychiatrist is retiring", "psychiatrist retiring", "prescriber retired", "paediatrician retired",
   "shared care", "titration", "titrate", "titrating", "my dose", "dose review", "medication review", "wears off",
+  // O261: "my ADHD" is a diagnosis the person has ("perimenopause has made my ADHD unmanageable"); "the ADHD" and bare "ADHD" are not.
+  "my adhd", "with my adhd", "manage my adhd", "of my adhd",
   // The person's own medicine, never somebody else's: "my sister is on Vyvanse and I think I have ADHD" is an ask.
   ...["vyvanse", "ritalin", "concerta", "dexamphetamine", "dexamfetamine", "dex", "dexies", "methylphenidate", "lisdexamfetamine", "elvanse", "strattera", "atomoxetine", "guanfacine", "intuniv"].flatMap((medicine) =>
     [`im on ${medicine}`, `i am on ${medicine}`, `been on ${medicine}`, `stable on ${medicine}`, `my ${medicine}`, `i take ${medicine}`, `im taking ${medicine}`, `i am taking ${medicine}`, `prescribing of ${medicine}`, `prescribing my ${medicine}`, `prescribe my ${medicine}`]),
 ].map((phrase) => phrase.split(" ").map(stem));
 
+/* O261 (the voice eval's `lived` persona, 2026-09-30): "I'm 29, diagnosed last year" says the diagnosis is made without
+   "I was". A diagnosis placed in time counts as the reader's own unless a relative is its subject within the four
+   words before it: "my sister was diagnosed last year and I recognised myself" stays an ask (O256's lesson). */
+const TIME_DIAGNOSED: readonly (readonly string[])[] = [
+  "diagnosed last year", "diagnosed last month", "diagnosed years ago", "diagnosed a year ago", "diagnosed two years ago",
+  "diagnosed three years ago", "diagnosed recently", "diagnosed in my", "diagnosed as a kid", "diagnosed as a child",
+  "diagnosed as a teenager", "diagnosed when i was", "diagnosed at",
+].map((phrase) => phrase.split(" ").map(stem));
+const RELATIVE = new Set(["sister", "brother", "son", "daughter", "mum", "mother", "dad", "father", "partner", "wife", "husband", "friend", "kid", "child", "boy", "girl", "cousin", "colleague", "niece", "nephew", "teenager", "twin"].map(stem));
+
 export function diagnosisAlreadyMade(rawSentence: readonly string[]): boolean {
-  return DIAGNOSIS_MADE.some((pattern) => {
+  const at = (pattern: readonly string[]) => {
     for (let i = 0; i + pattern.length <= rawSentence.length; i++) {
-      if (pattern.every((word, k) => rawSentence[i + k] === word)) return true;
+      if (pattern.every((word, k) => rawSentence[i + k] === word)) return i;
     }
-    return false;
+    return -1;
+  };
+  if (DIAGNOSIS_MADE.some((pattern) => at(pattern) >= 0)) return true;
+  return TIME_DIAGNOSED.some((pattern) => {
+    const i = at(pattern);
+    if (i < 0) return false;
+    return !rawSentence.slice(Math.max(0, i - 4), i).some((word) => RELATIVE.has(word));
   });
 }
 

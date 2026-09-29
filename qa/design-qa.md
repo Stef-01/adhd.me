@@ -298,3 +298,21 @@ screen over its 60 words on the request alone. The card prints the first twenty 
 ellipsis; "Change what you said" still opens the box with every word in it, and the heard chips
 say what was read. Pinned in `e2e/voice-mode.spec.ts` on the scripted nine-answer call. The typed
 screens are unchanged for a request under twenty words, which is every measured one.
+
+# What they work with, as pills (O261, 2026-09-30)
+
+The founder (2026-09-29): "think about what people need in life; how can this be key pill tags?"
+The profile now shows up to three pills of what the clinician declares they work with, in the
+chips' own words ("Getting organised", "At work", "Parenting", "Sleep" …), the ones this person
+asked for first, in place of the "Best for" line that showed five profiles' legacy expertise tags
+(those tags now sit inside the care areas). The pills are the same closed vocabulary the heard
+chips, the why keys and the clarifier use, so a word on the profile is a word the ranking read.
+An NDIS switch joins the filters screen ("Clinicians who say they see NDIS participants."). The
+pills cost six words, and the heaviest profile (the why sentence in the clinician's words, with
+two asks not in the listing) went from 60 to 66, so two things that said nothing went: the
+"Accepting new patients" chip (every listed clinician accepts new patients, so the chip carried no
+information; closed books still say so on the row) and the compare button's visible name (it reads
+"Compare"; the accessible name and the compare screen still say with whom). Word counts
+(node scripts/text-budget.mjs, final build): the finder profile 47, with "Why matched" open 36, in
+the clinician's words 50, with two asks not in the listing 45 and 59; the filters screen holds the
+NDIS switch within its ceiling; 127 of 127 app screens within their ceiling, median 32.

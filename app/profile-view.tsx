@@ -52,6 +52,7 @@ import { BrandMark } from "./brand-wordmark";
 const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: string }> = [
   { key: "womanGp", title: "Woman clinician", detail: "Only clinicians who are women." },
   { key: "livedExperience", title: "Lived experience", detail: "Clinicians who say they have ADHD." },
+  { key: "ndis", title: "NDIS", detail: "Clinicians who say they see NDIS participants." },
   { key: "telehealth", title: "Telehealth first", detail: "GPs who see new people by phone or video first." },
   { key: "bulkBilling", title: "Bulk billing", detail: "Practices that declare bulk billing." },
   { key: "longerAppointments", title: "Longer appointments", detail: "GPs who declare they do not rush a first visit." },

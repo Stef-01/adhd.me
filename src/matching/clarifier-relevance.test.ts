@@ -48,9 +48,9 @@ describe("M10 the co-occurrence map is derived, not authored", () => {
    */
   it("holds the measured shape of the real corpus", () => {
     const counts = cooccurrenceCounts();
-    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(92); // O260: -1 ("shared care with the psychiatrist who diagnosed me" reaches shared care alone). O257: +2 (a coach who has ADHD themselves; the parent with ADHD asking for a child's assessment). O256: three continuation sentences lost their second facet (assessment). R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
-    expect(counts.size).toBe(148); // R15: perinatal pairs with assessment and telehealth; 2026-09-29: attuned with perinatal, both ways
-    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(54) /* O260: 56 -> 54, the shared-care sentence reading one key */; // R15: two perinatal pairs clear the floor
+    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(108); // O261 (2026-09-30): +16 two-facet sentences among the life domains. O260: -1 ("shared care with the psychiatrist who diagnosed me" reaches shared care alone). O257: +2 (a coach who has ADHD themselves; the parent with ADHD asking for a child's assessment). O256: three continuation sentences lost their second facet (assessment). R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
+    expect(counts.size).toBe(174); // O261 (2026-09-30): 148 -> 174 ordered pairs with the life domains. R15: perinatal pairs with assessment and telehealth; 2026-09-29: attuned with perinatal, both ways
+    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(60) /* O261: 54 -> 60 with the life domains. O260: 56 -> 54, the shared-care sentence reading one key */; // R15: two perinatal pairs clear the floor
   });
 
   it("names blind spot (1): corpus gold sets carry no language keys, so language suggests nothing yet", () => {
@@ -105,10 +105,10 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
     // top-3 cut matters here: an external filter over the old top three would have zeroed two of
     // these readers, where the integrated gate promotes a suggested candidate from further down
     // the ranking instead.
-    expect(full).toBe(58); // O259 (manner never asked): 58 full, 1 partial, 2 none. O256: 57 -> 58. R15: 54 -> 57
+    expect(full).toBe(60); // O261: 58 -> 60. O259 (manner never asked): 58 full, 1 partial, 2 none. O256: 57 -> 58. R15: 54 -> 57
     expect(partial).toBe(1);
-    expect(zero).toBe(2);
-    expect(zeroed).toEqual(["English is my second language and appointments move too fast", "a calm doctor for my anxious mum, she speaks Hindi"]);
+    expect(zero).toBe(1); // O261: the second-language sentence reads care:cultural-background now and gets a question
+    expect(zeroed).toEqual(["a calm doctor for my anxious mum, she speaks Hindi"]);
   });
 
   it("zero questions is the designed outcome when everything the request suggests is already heard", () => {

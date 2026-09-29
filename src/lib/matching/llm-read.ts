@@ -8,7 +8,7 @@ import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, languageNeeds, needForKey, readNeeds, type NeedSignal, type Preference } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 
-const PREFERENCES: Record<Preference, 1> = { "woman-gp": 1, "telehealth-first": 1, "longer-appointment": 1, "bulk-billing": 1, "lived-experience": 1 };
+const PREFERENCES: Record<Preference, 1> = { "woman-gp": 1, "telehealth-first": 1, "longer-appointment": 1, "bulk-billing": 1, "lived-experience": 1, ndis: 1 };
 
 /** Schema field → enum values (bare ids) and the facet-key prefix they take. */
 export const VOCABULARY = {
@@ -50,6 +50,21 @@ export const MEANINGS: Record<string, string> = {
   structured: "asks for a structured approach: a baseline, measures and scheduled reviews",
   "woman-gp": "asks for a woman clinician",
   "lived-experience": "asks for a clinician who has ADHD themselves, or was diagnosed with it themselves (the person having ADHD is not this)",
+  // O261: the life domains.
+  "executive-function": "asks for help with focus, organisation, starting or finishing things, time, routines or life admin, or for coaching and strategies (the person listing their symptoms, for an assessment or for nothing, is not this)",
+  "work-career": "the person's own work, job, career, workplace, burnout or workplace adjustments",
+  "study-school": "school, university, TAFE, exams, study, homework, learning difficulties or giftedness, for the person or their child",
+  "parenting": "help as a parent: parenting strategies, a child's behaviour at home, family sessions, being a parent with ADHD",
+  "relationships": "the person's relationship, marriage or partner, couples work, dating, conflict, people-pleasing or attachment",
+  "social-connection": "friendships, social skills, loneliness, fitting in, masking, bullying",
+  "late-diagnosis": "adjusting to, or making sense of, a recent or late ADHD diagnosis and what it means for who they are",
+  "grief-life-change": "grief, bereavement, or a big life change or transition (a move, retirement, a loss)",
+  "sleep": "asks for help with sleep: insomnia, falling or staying asleep, a night owl, a sleep routine (a bad night described while asking for nothing is not this)",
+  "eating-body": "eating, an eating disorder, binge or disordered eating, appetite, forgetting to eat, weight, body image",
+  "womens-health": "women's health: hormones, periods, perimenopause or menopause, PMDD, fertility, ADHD in women and girls",
+  "movement-exercise": "exercise, movement, physio, sport, injury or pain, staying active",
+  "cultural-background": "asks for a clinician who understands their culture, background, faith, migration or community, or names their own background (a language they speak is a language key, not this; a relative coming to the appointment is not this)",
+  "ndis": "the person is an NDIS participant or has NDIS funding or a plan",
   "telehealth-first": "asks for telehealth: phone or video",
   "longer-appointment": "asks for a longer or double appointment, or more time than a standard one",
   "bulk-billing": "asks for bulk billing: Medicare covers it, with no gap or extra fee",
@@ -57,7 +72,7 @@ export const MEANINGS: Record<string, string> = {
 
 /** What counts in each field. Most of the read's precision rests on the manner rule. */
 const FIELD_RULES: Record<Exclude<Field, "languages">, string> = {
-  care: "care (what the person wants help with; a condition they name counts, a struggle that names no condition does not):",
+  care: "care (what the person wants help with; a condition they name counts, a struggle that names no condition does not; a description of how they sleep, focus, eat, feel or cope, with no help asked for, adds nothing):",
   manner:
     "manner (only when the request describes the clinician they want next or how that clinician should work; the person's feelings, and what a past clinician did, are story and never add one):",
   prefs: "prefs (only when the request names the arrangement):",
@@ -83,6 +98,11 @@ const EXAMPLES = [
   '"a psychologist who was diagnosed with ADHD themself" → prefs: lived-experience',
   '"a GP who was diagnosed with ADHD as an adult" → prefs: lived-experience',
   '"my psychiatrist retired, I\'m stable on Vyvanse and need a GP to take over prescribing" → care: shared-care',
+  '"help at work with focus and getting things done" → care: executive-function, work-career',
+  '"my marriage is falling apart because of my ADHD" → care: relationships',
+  '"diagnosed at forty and now I am rethinking everything" → care: late-diagnosis',
+  '"someone who understands Indian families" → care: cultural-background',
+  '"I am on an NDIS plan, self managed" → prefs: ndis',
   '"a practice that runs on schedule" → unlisted: appointments that run on time',
   '"our little one is five months and I want a GP who gets that" → care: perinatal',
 ];

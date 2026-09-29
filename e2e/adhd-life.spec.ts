@@ -287,7 +287,7 @@ test("E2E 6: the support path walks from the problem to professions, and 'See pr
   await expect(rows.first()).toContainText("Occupational therapist");
   for (const text of await rows.allInnerTexts()) expect(text).toContain("Occupational therapist");
   await rows.first().click();
-  await expect(page.getByText("Best for")).toBeVisible();
+  await expect(page.getByRole("list", { name: "Works with" })).toBeVisible(); // O261: the declared areas as pills, in place of "Best for"
   await expect(page.getByText(/Why this provider is listed/).or(page.locator(".fit-evidence"))).toHaveCount(1);
 });
 

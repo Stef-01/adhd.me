@@ -55,7 +55,37 @@ export type CareArea =
    * Pregnancy, the postpartum year and new parenthood, where ADHD is often first noticed or first
    * unmanageable (qa/matching/rca.md, R15: the founder's call asked for it and nothing could hear it).
    */
-  | "perinatal";
+  | "perinatal"
+  // ── Everyday life (O261, 2026-09-29: what people need help with in life, read from what the 37
+  //    clinicians say they do; docs/matching/RCA-NIGHT-2026-09-29.md, stage 3) ──────────────────
+  /** Focus, organisation, starting and finishing things, time, routines, life admin: the coaches' work. */
+  | "executive-function"
+  /** The person's own work, job, career, workplace or burnout. */
+  | "work-career"
+  /** School, university, TAFE, exams and study, learning differences and giftedness. */
+  | "study-school"
+  /** Help as a parent: strategies, a child's behaviour at home, family sessions, a parent with ADHD. */
+  | "parenting"
+  /** The person's relationship, marriage or partner; couples work, dating, conflict, attachment. */
+  | "relationships"
+  /** Friendships, social skills, loneliness, fitting in, masking. */
+  | "social-connection"
+  /** Adjusting to, and making sense of, a recent or late diagnosis. */
+  | "late-diagnosis"
+  /** Grief, bereavement and the big transitions: a move, retirement, a loss. */
+  | "grief-life-change"
+  // ── Body and health ──────────────────────────────────────────────────────────────────────────
+  /** Sleep: insomnia, falling or staying asleep, the night owl, a sleep routine. */
+  | "sleep"
+  /** Eating, an eating disorder, appetite, forgetting to eat, weight, body image. */
+  | "eating-body"
+  /** Women's health: hormones, periods, perimenopause and menopause, fertility, ADHD in women and girls. */
+  | "womens-health"
+  /** Exercise, movement, physio, sport, injury and pain, staying active. */
+  | "movement-exercise"
+  // ── Who you are ──────────────────────────────────────────────────────────────────────────────
+  /** A clinician who understands the person's culture, background, faith, migration or community. */
+  | "cultural-background";
 
 export type CareArchetype = {
   id: string;

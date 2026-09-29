@@ -386,6 +386,7 @@ const PREFERENCE_ASKED: Record<Preference, string> = {
   "telehealth-first": "telehealth",
   "bulk-billing": "bulk billing",
   "longer-appointment": "a longer first appointment",
+  ndis: "an NDIS participant",
 };
 
 /** An ask as a sentence says it: a manner as someone who does it, a language as someone who speaks it. */

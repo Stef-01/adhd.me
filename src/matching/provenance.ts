@@ -51,6 +51,7 @@ const PREFERENCE_LABELS: Readonly<Record<Preference, string>> = {
   "bulk-billing": "Bulk billing",
   "longer-appointment": "A longer first appointment",
   "lived-experience": "Has ADHD themselves",
+  ndis: "For NDIS participants",
 };
 
 const PREFERENCE_SOURCE: Readonly<Record<Preference, string>> = {
@@ -59,6 +60,7 @@ const PREFERENCE_SOURCE: Readonly<Record<Preference, string>> = {
   "bulk-billing": "practicalSignals",
   "longer-appointment": "manner (not_rushed)",
   "lived-experience": "livedExperience",
+  ndis: "ndis",
 };
 
 /**

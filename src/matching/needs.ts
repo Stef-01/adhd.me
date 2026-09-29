@@ -64,7 +64,7 @@ export type Facet = { kind: "care"; area: CareArea } | { kind: "manner"; trait: 
  * A preference that is a hard filter or a strong lift rather than a facet — the things somebody
  * says that are about access rather than about the care itself.
  */
-export type Preference = "woman-gp" | "telehealth-first" | "bulk-billing" | "longer-appointment" | "lived-experience";
+export type Preference = "woman-gp" | "telehealth-first" | "bulk-billing" | "longer-appointment" | "lived-experience" | "ndis";
 
 /**
  * One thing the reader asked for, with the words to say it back to them.
@@ -178,7 +178,194 @@ const LIVED_DIAGNOSED: readonly string[] = [
   ...["clinician", "gp", "doctor", "psychologist", "psychiatrist", "coach", "therapist", "counsellor"].flatMap((noun) =>
     ["who was diagnosed", "whos been diagnosed", "who has been diagnosed", "who got diagnosed", "who is diagnosed", "diagnosed with adhd"].map((said) => `${noun} ${said}`)),
   "understands it from the inside", "understand it from the inside", "understands adhd from the inside",
+  // 2026-09-30 (the voice eval's `lived` persona): "personal experience with ADHD" named of the clinician, which left "adhd" to the assessment cue.
+  "personal experience with adhd", "personal experience of adhd", "lived experience with adhd", "lived experience of adhd", "first hand experience of adhd", "firsthand experience of adhd", "first hand experience with adhd", "firsthand experience with adhd",
 ];
+
+/* O261 (2026-09-29, docs/matching/RCA-NIGHT-2026-09-29.md stage 3): what people need help with in LIFE, one facet per
+   domain the 37 clinicians say they work in (qa/matching/life-domains.md). Every cue is the person's own words for
+   the HELP they want or the part of life it is in, never a symptom on its own (O114's rule: "I'm forgetful" is a
+   person describing themselves for an assessment, "help getting organised" is an ask), and every multi-word cue
+   demands its run of words (RUN_DEMANDED), so "school" reads a school and "my teacher" a student. */
+const EXECUTIVE_FUNCTION_CUES: readonly string[] = [
+    // ‘stay on top of’ belongs to manner:structured and ‘coaching’ to care:non-medication already; a phrase is one facet’s.
+    // ‘adhd coach’ keeps its two tokens and reaches here. Symptom words (‘procrastinate’, ‘losing things’, ‘deadlines’)
+    // are refused under O114: a person describing themselves for an assessment is not asking a coach for help.
+    "executive function", "executive functioning", "executive functions", "getting things done", "get things done",
+    "getting anything done", "get anything done", "getting started", "get started on", "cant get started",
+    "cannot get started", "starting tasks", "start tasks", "task initiation", "help with procrastination",
+    "help with focus", "help me focus", "help focusing", "focus at work", "focusing at work", "focus at uni",
+    "stay focused", "staying focused", "keep focused", "trouble focusing", "help with organisation",
+    "help with organization", "get organised", "get organized", "getting organised", "getting organized",
+    "stay organised", "staying organised", "organise my life", "organising my life", "organise my time",
+    "organising my time", "time management", "manage my time", "managing my time", "time blindness", "prioritising",
+    "prioritise", "prioritize", "meeting deadlines", "routines", "daily routines", "build routines", "a routine",
+    "structure my day", "structure to my day", "systems that work", "adhd coach", "adhd coaching", "strategies",
+    "practical strategies", "tools and strategies", "skills and strategies", "everyday life skills", "life skills",
+];
+const WORK_CAREER_CUES: readonly string[] = [
+    "my job", "workplace", "work adjustments", "workplace adjustments", "reasonable adjustments", "career",
+    "my career", "performance review", "performance reviews", "performance at work", "high pressure job",
+    "high-pressure", "high pressure", "keep losing jobs", "losing my job", "lost my job", "lose my job",
+    "keep getting fired", "getting fired", "been fired", "fired", "made redundant", "redundancy", "return to work",
+    "back to work", "run a business", "running a business", "my business", "small business", "self employed",
+    "self-employed", "sole trader", "freelance", "career change", "changing careers", "leaving my job",
+    "quit my job", "adhd at work", "help at work", "help with work", "at work with", "keep my job",
+    "my job is on the line", "help with burnout", "recovering from burnout", "burnout recovery", "burnout at work",
+    "work burnout", "adhd and work", "work and adhd", "struggling at work", "struggle at work", "cope at work",
+    "coping at work", "function at work", "functioning at work",
+];
+const STUDY_SCHOOL_CUES: readonly string[] = [
+    "at uni", "uni", "university", "tafe", "college", "exams", "exam", "assignments", "assignment", "studying",
+    "studies", "student", "students", "hsc", "atar", "year 12", "year 11", "year 10", "my teacher", "his teacher",
+    "her teacher", "their teacher", "the teacher", "the teachers", "teachers say", "teacher says", "teacher thinks",
+    "learning difficulties", "learning difficulty", "learning disorder", "learning differences", "learning support",
+    "learning plan", "education plan", "iep", "dyslexia", "dyslexic", "dyscalculia", "gifted", "twice exceptional",
+    "2e", "school refusal", "school cant", "cant go to school", "wont go to school", "refusing school", "tutoring",
+    "tutor", "semester", "thesis", "phd", "postgrad", "apprenticeship", "the readings", "struggling at school",
+    "struggles at school", "help at school", "help with school", "school support", "support at school",
+    "failing at school", "school work", "schoolwork", "my study", "my studies", "study skills", "help with study",
+    "help studying", "keep up at uni", "keep up at school", "failing uni", "failing exams",
+];
+const PARENTING_CUES: readonly string[] = [
+    // Refused: bare ‘parenting’, ‘my parenting’ and ‘parents of’, each collapsing to [parent], the token ‘my parents’ (a
+    // manner cue, the family in the room) collapses to.
+    "my parents", "as a parent", "parent training", "parenting support", "parenting strategies", "parenting help",
+    "help with parenting", "raising a child", "tantrums", "behaviour at home", "his behaviour", "her behaviour",
+    "their behaviour", "challenging behaviour", "disruptive behaviour", "bedtime battles", "homework battles",
+    "family therapy", "family sessions", "family counselling", "whole family", "the whole family",
+    "parent with adhd", "adhd parent", "adhd parents", "mum with adhd", "dad with adhd", "mother with adhd",
+    "father with adhd", "single mum", "single dad", "single parent", "parents like me", "as a mum", "as a dad",
+    "as a mother", "as a father", "exhausted parent", "parent of a child", "step kids", "stepkids", "the school run",
+];
+const RELATIONSHIPS_CUES: readonly string[] = [
+    "my relationship", "our relationship", "relationship problems", "relationship difficulties",
+    "relationship issues", "relationship is suffering", "my marriage", "our marriage", "marriage",
+    "marriage counselling", "couples", "couples counselling", "couples therapy", "couple therapy", "as a couple",
+    "keep fighting", "always fighting", "fighting all the time", "arguing all the time", "divorce", "divorced",
+    "getting divorced", "going through a separation", "breakup", "break up", "broke up", "co-parenting",
+    "interpersonal", "people pleasing", "people-pleasing", "people pleaser", "people please", "attachment issues",
+    "attachment wounds", "trust issues", "setting boundaries", "hold a boundary", "conflict at home",
+    "conflict with my", "my relationships", "relationship strain", "relationship trouble",
+    "relationship counselling", "help with my marriage", "relationship help", "in my relationships",
+];
+const SOCIAL_CONNECTION_CUES: readonly string[] = [
+    "social skills", "friendships", "friendship", "making friends", "make friends", "keep friends",
+    "keeping friends", "no friends", "few friends", "socialising", "socialise", "socializing", "socialize",
+    "social situations", "social life", "small talk", "reading people", "social cues", "connect with people",
+    "connecting with people", "connection with others", "socially awkward", "help with masking",
+    "help making friends", "help with friendships", "so lonely", "very lonely", "feel isolated", "feeling isolated",
+    "being bullied", "gets bullied", "getting bullied", "is bullied", "bullied at school", "help fitting in",
+    "social anxiety at", "social skills group",
+];
+const LATE_DIAGNOSIS_CUES: readonly string[] = [
+    // Refused: ‘who i am’ and ‘where to from here’, every word a stopword.
+    "late diagnosis", "late diagnosed", "late-diagnosed", "diagnosed late", "diagnosed at", "just been diagnosed",
+    "just got diagnosed", "just diagnosed", "recently diagnosed", "newly diagnosed", "new diagnosis",
+    "fresh diagnosis", "adjust to the diagnosis", "adjusting to the diagnosis", "adjusting to a diagnosis",
+    "make sense of the diagnosis", "make sense of my diagnosis", "make sense of my adhd", "make sense of adhd",
+    "make sense of it all", "understand my adhd", "understand myself", "understanding myself", "rethinking my life",
+    "rethinking everything", "my whole life makes sense", "whole life makes sense", "explains my whole life",
+    "wish i had known", "wish id known", "what it means for me", "what this means for me", "unpack the diagnosis",
+    "process the diagnosis", "processing the diagnosis", "grieving the diagnosis", "grief about the diagnosis",
+    "self understanding", "self-understanding", "diagnosed as an adult", "adult diagnosis",
+    "adjusting to a late diagnosis", "adjusting to my diagnosis", "adjusting to an adhd diagnosis",
+    "diagnosed at forty", "diagnosed at fifty", "diagnosed in my forties", "diagnosed in my fifties",
+    "diagnosed in my thirties", "coming to terms with the diagnosis", "come to terms with the diagnosis",
+    "since my diagnosis", "after my diagnosis", "post diagnosis", "post-diagnosis",
+];
+const GRIEF_LIFE_CHANGE_CUES: readonly string[] = [
+    "grief", "grieving", "bereavement", "bereaved", "lost my mum", "lost my dad", "lost my mother", "lost my father",
+    "lost my partner", "lost my wife", "lost my husband", "lost my son", "lost my daughter", "lost my brother",
+    "lost my sister", "lost my best friend", "passed away", "life transition", "life transitions", "big life change",
+    "major life change", "empty nest", "empty nester", "midlife crisis", "starting over", "fresh start",
+    "life upside down", "miscarriage", "stillbirth", "i retired", "my retirement", "after retirement",
+    "just retired", "recently retired", "im retired", "my mum died", "my dad died", "my mother died",
+    "my father died", "my partner died", "my wife died", "my husband died", "my son died", "my daughter died",
+    "my brother died", "my sister died", "a death in the family", "death of my", "big life changes",
+    "major life changes", "life is changing", "my whole life is changing", "starting over after",
+    "moving interstate and starting over", "moved interstate and starting over",
+];
+const SLEEP_CUES: readonly string[] = [
+    "insomnia", "cant sleep", "cannot sleep", "dont sleep", "not sleeping", "up all night", "night owl",
+    "delayed sleep", "delayed sleep phase", "fall asleep", "falling asleep", "stay asleep", "staying asleep",
+    "sleep routine", "sleep schedule", "sleep problems", "sleep issues", "sleep is a mess", "my sleep",
+    "cant wake up", "getting up in the morning", "melatonin", "body clock", "circadian", "nightmares",
+    "restless nights", "up until three", "up until two", "help with sleep", "help me sleep", "help sleeping",
+    "trouble sleeping", "sleep is terrible", "terrible sleep", "sleep is awful", "sleep specialist",
+    "sleep and adhd", "adhd and sleep", "cant get to sleep", "cannot get to sleep", "get to sleep",
+];
+const EATING_BODY_CUES: readonly string[] = [
+    "eating disorder", "eating disorders", "disordered eating", "binge eating", "bingeing", "binging",
+    "restricting food", "restrict food", "anorexia", "bulimia", "arfid", "body image", "relationship with food",
+    "comfort eating", "emotional eating", "fussy eating", "picky eating", "help with eating", "help with food",
+    "help with my eating", "my eating", "eating and adhd", "adhd and eating", "appetite on stimulants",
+    "appetite on medication", "lost my appetite", "weight and adhd", "my weight and", "forget to eat and",
+    "forgetting to eat and",
+];
+const WOMENS_HEALTH_CUES: readonly string[] = [
+    "womens health", "women's health", "womens issues", "perimenopause", "perimenopausal", "menopause", "menopausal",
+    "hormones", "hormonal", "my period", "my periods", "heavy periods", "period pain", "pmdd", "pms", "menstrual",
+    "menstrual cycle", "my cycle", "pcos", "endometriosis", "fertility", "ivf", "trying to conceive", "female adhd",
+    "adhd in women", "adhd in girls", "oestrogen", "estrogen", "hrt",
+];
+const MOVEMENT_EXERCISE_CUES: readonly string[] = [
+    "exercise physiologist", "exercise physiology", "use exercise", "exercise to manage", "exercise for my adhd",
+    "exercise program", "exercise plan", "physio", "physiotherapy", "physiotherapist", "pilates", "hydrotherapy",
+    "after an injury", "my injury", "an injury", "recovering from an injury", "return to sport", "back into sport",
+    "get back into sport", "back to the gym", "help with exercise", "exercise and adhd", "adhd and exercise",
+    "exercise routine", "an exercise routine", "stick to exercise", "stick to the rehab", "my rehab", "the rehab",
+    "my chronic pain", "chronic pain and", "with chronic pain", "for chronic pain", "my back pain",
+    "movement and adhd", "get moving again", "keep active with", "help me stay active", "help staying active",
+    "help getting fit", "help me get fit", "exercise as medicine", "an exercise plan", "a movement plan",
+];
+const CULTURAL_BACKGROUND_CUES: readonly string[] = [
+    // Refused: ‘where i am from’ and ‘not my first language’ (every word a stopword or a negator). The language-like
+    // nationalities (Chinese, Arabic, Greek …) are cued only with family, background, parents or community beside
+    // them, because ‘speaks Arabic’ is a language ask; bare ‘faith’ would claim ‘faith in doctors’.
+    "my culture", "our culture", "culturally", "cultural background", "cultural context", "cultural identity",
+    "my background", "our background", "from my background", "same background", "shares my background",
+    "understands my background", "understand my background", "understands where i come from", "where i come from",
+    "where my family comes from", "where my family is from", "where we come from", "my heritage", "our heritage",
+    "migrant", "migrants", "migrant families", "immigrant", "immigrants", "refugee", "refugees", "newly arrived",
+    "new to australia", "moved to australia", "came to australia", "arrived in australia", "second language",
+    "interpreter", "translator", "indian families", "south asian", "lebanese", "middle eastern", "pacific islander",
+    "maori", "samoan", "tongan", "fijian", "sri lankan", "pakistani", "bangladeshi", "afghan", "iranian",
+    "latin american", "south american", "brazilian", "peruvian", "colombian", "chilean", "asian background",
+    "asian family", "asian parents", "aboriginal", "torres strait", "torres strait islander", "indigenous",
+    "first nations", "koori", "murri", "noongar", "my mob", "my community", "our community", "my faith", "our faith",
+    "family expectations", "cultural expectations", "traditional family", "traditional parents",
+    "shame in my culture", "stigma in my community", "understands migrant", "arabic family", "arabic families",
+    "arabic background", "arabic parents", "arabic community", "chinese family", "chinese families",
+    "chinese background", "chinese parents", "chinese community", "vietnamese family", "vietnamese families",
+    "vietnamese background", "vietnamese parents", "vietnamese community", "korean family", "korean families",
+    "korean background", "korean parents", "korean community", "japanese family", "japanese families",
+    "japanese background", "japanese parents", "japanese community", "greek family", "greek families",
+    "greek background", "greek parents", "greek community", "italian family", "italian families",
+    "italian background", "italian parents", "italian community", "turkish family", "turkish families",
+    "turkish background", "turkish parents", "turkish community", "persian family", "persian families",
+    "persian background", "persian parents", "persian community", "nepali family", "nepali families",
+    "nepali background", "nepali parents", "nepali community", "filipino family", "filipino families",
+    "filipino background", "filipino parents", "filipino community", "respects my faith", "respect my faith",
+    "faith is important", "respects my religion", "faith matters", "my faith matters", "faith in my care",
+    "respects my beliefs", "my religion", "our religion", "my religious", "religious background", "my church",
+    "my mosque", "muslim family", "hindu family", "christian family", "jewish family", "catholic family",
+    "sikh family", "buddhist family", "indian family", "indian background", "indian parents", "african family",
+    "african background", "immigrant family", "immigrant parents", "immigrant background", "cald background",
+    "cald community", "understands my culture", "understand my culture", "respects my culture", "my culture and",
+    "culturally sensitive", "culturally safe", "culturally aware", "cultural safety", "cultural sensitivity",
+    "cultural understanding",
+];
+const NDIS_CUES: readonly string[] = [
+    "ndis", "ndis plan", "ndis funding", "ndis funded", "ndis participant", "ndis participants", "ndis supports",
+    "my ndis", "plan managed", "plan-managed", "self managed", "self-managed", "through my plan", "on the ndis",
+    "national disability insurance", "support coordinator", "plan manager",
+];
+/** Every multi-word life cue demands its run of words. */
+/* O261: a child named by age. O120 refused bare ‘year old’ because an adult says ‘I am forty years old’; ‘my nine year
+   old’ and ‘for our 7 year old’ name a child, and each demands its run of words. */
+const CHILD_AGE_CUES: readonly string[] = ["my two year old", "our two year old", "for my two year old", "for our two year old", "my three year old", "our three year old", "for my three year old", "for our three year old", "my four year old", "our four year old", "for my four year old", "for our four year old", "my five year old", "our five year old", "for my five year old", "for our five year old", "my six year old", "our six year old", "for my six year old", "for our six year old", "my seven year old", "our seven year old", "for my seven year old", "for our seven year old", "my eight year old", "our eight year old", "for my eight year old", "for our eight year old", "my nine year old", "our nine year old", "for my nine year old", "for our nine year old", "my ten year old", "our ten year old", "for my ten year old", "for our ten year old", "my eleven year old", "our eleven year old", "for my eleven year old", "for our eleven year old", "my twelve year old", "our twelve year old", "for my twelve year old", "for our twelve year old", "my thirteen year old", "our thirteen year old", "for my thirteen year old", "for our thirteen year old", "my fourteen year old", "our fourteen year old", "for my fourteen year old", "for our fourteen year old", "my fifteen year old", "our fifteen year old", "for my fifteen year old", "for our fifteen year old", "my sixteen year old", "our sixteen year old", "for my sixteen year old", "for our sixteen year old", "my seventeen year old", "our seventeen year old", "for my seventeen year old", "for our seventeen year old", "my 2 year old", "our 2 year old", "for my 2 year old", "for our 2 year old", "my 3 year old", "our 3 year old", "for my 3 year old", "for our 3 year old", "my 4 year old", "our 4 year old", "for my 4 year old", "for our 4 year old", "my 5 year old", "our 5 year old", "for my 5 year old", "for our 5 year old", "my 6 year old", "our 6 year old", "for my 6 year old", "for our 6 year old", "my 7 year old", "our 7 year old", "for my 7 year old", "for our 7 year old", "my 8 year old", "our 8 year old", "for my 8 year old", "for our 8 year old", "my 9 year old", "our 9 year old", "for my 9 year old", "for our 9 year old", "my 10 year old", "our 10 year old", "for my 10 year old", "for our 10 year old", "my 11 year old", "our 11 year old", "for my 11 year old", "for our 11 year old", "my 12 year old", "our 12 year old", "for my 12 year old", "for our 12 year old", "my 13 year old", "our 13 year old", "for my 13 year old", "for our 13 year old", "my 14 year old", "our 14 year old", "for my 14 year old", "for our 14 year old", "my 15 year old", "our 15 year old", "for my 15 year old", "for our 15 year old", "my 16 year old", "our 16 year old", "for my 16 year old", "for our 16 year old", "my 17 year old", "our 17 year old", "for my 17 year old", "for our 17 year old"];
+const LIFE_RUN: readonly string[] = [CHILD_AGE_CUES, EXECUTIVE_FUNCTION_CUES, WORK_CAREER_CUES, STUDY_SCHOOL_CUES, PARENTING_CUES, RELATIONSHIPS_CUES, SOCIAL_CONNECTION_CUES, LATE_DIAGNOSIS_CUES, GRIEF_LIFE_CHANGE_CUES, SLEEP_CUES, EATING_BODY_CUES, WOMENS_HEALTH_CUES, MOVEMENT_EXERCISE_CUES, CULTURAL_BACKGROUND_CUES, NDIS_CUES].flatMap((cues) => cues.filter((cue) => cue.includes(" ")));
 
 const LEXICON: readonly Entry[] = [
   // ── What somebody is trying to get done ───────────────────────────────────────────────────
@@ -211,6 +398,7 @@ const LEXICON: readonly Entry[] = [
   // infers. Symptom sentences are pinned as an intentional non-reach in reach.test.ts. Widen cues
   // for what a reader WANTS or SAYS THEY HAVE, never for what the finder would have to deduce.
   care("child-adolescent-adhd", "Children and adolescents", 26, [
+    ...CHILD_AGE_CUES,
     /* O122: THE FIRST-PERSON PLURAL. This facet knew "my son" and "my daughter" and not "our" —
        and a parent booking for a child says "our ten year old", "our boy", "we need answers".
        Each of these collapses to one token, so O45's pair demand is what keeps them precise: a
@@ -542,6 +730,22 @@ const LEXICON: readonly Entry[] = [
   // ── Access ────────────────────────────────────────────────────────────────────────────────
   // "A woman clinician", not "A woman GP": the roster holds psychologists, OTs and coaches now, and
   // the label is printed beside every kind the preference reaches.
+  /* O261: the life domains. Weights sit with the roster's other care facets (22 to 26); the strong tier orders
+     them together with the rest of what was asked, and a person who said "help at work with focus" sees the
+     coaches, who declare both, before anyone who declares one. */
+  care("executive-function", "Focus and getting things done", 26, EXECUTIVE_FUNCTION_CUES),
+  care("work-career", "Work and career", 24, WORK_CAREER_CUES),
+  care("study-school", "School, study and learning", 24, STUDY_SCHOOL_CUES),
+  care("parenting", "Parenting", 24, PARENTING_CUES),
+  care("relationships", "Relationships and couples", 24, RELATIONSHIPS_CUES),
+  care("social-connection", "Friendships and social skills", 22, SOCIAL_CONNECTION_CUES),
+  care("late-diagnosis", "Adjusting to a late diagnosis", 22, LATE_DIAGNOSIS_CUES),
+  care("grief-life-change", "Grief and big life changes", 22, GRIEF_LIFE_CHANGE_CUES),
+  care("sleep", "Sleep", 22, SLEEP_CUES),
+  care("eating-body", "Eating and body image", 26, EATING_BODY_CUES),
+  care("womens-health", "Women's health and hormones", 24, WOMENS_HEALTH_CUES),
+  care("movement-exercise", "Exercise and movement", 22, MOVEMENT_EXERCISE_CUES),
+  care("cultural-background", "Understands your cultural background", 26, CULTURAL_BACKGROUND_CUES),
   pref("woman-gp", "A woman clinician", 30, [
     /* O128 (tranche seven): "female practitioner" — the corpus asked for it in a sentence the
        existing "female gp" and "female doctor" could not read. The tranche's job is to supply
@@ -583,6 +787,8 @@ const LEXICON: readonly Entry[] = [
     "lived experience", "been through it themselves", "knows it from the inside", "gets it from the inside", "adhd from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
     ...LIVED_DIAGNOSED,
   ]),
+  /* O261: an NDIS plan is a hard fact about who a person can see; six of 37 say they see participants. */
+  pref("ndis", "For NDIS participants", 28, NDIS_CUES),
   pref("telehealth-first", "By phone or telehealth", 28, [
     /* O128: "immunosuppressed" beside O125's "immunocompromised". They are the same reason in
        two words people use interchangeably, and stemming does not bridge them, a reader does
@@ -751,7 +957,7 @@ const CUES: readonly Cue[] = [...MATCHABLE_CUES].sort(
 // R15: "had a baby" collapses to [baby]; the any-pair rule is satisfied by "was a baby", so the full run is demanded.
 const RUN_DEMANDED = new Set([
   "over the phone", "in the room with me", "had a baby",
-  ...FIRST_PERSON_ASKS, ...CONTINUING_CARE,
+  ...FIRST_PERSON_ASKS, ...CONTINUING_CARE, ...LIFE_RUN,
   /* O257: every lived-experience cue demands its full raw run, collapsed or not. "gp who has adhd"
      collapses to [gp, adhd] and, matched across a gap, read "a GP for my drinking history and my
      ADHD" as a wish for a GP with ADHD, taking the "adhd" the assessment cue needed. The person
@@ -954,6 +1160,7 @@ export function holdsPreference(
     gender: string;
     telehealthFirstAppointment?: boolean;
     livedExperience?: boolean;
+    ndis?: boolean;
     manner: readonly string[];
     practicalSignals: readonly string[];
   },
@@ -964,6 +1171,8 @@ export function holdsPreference(
       return clinician.gender === "woman";
     case "lived-experience":
       return clinician.livedExperience === true;
+    case "ndis":
+      return clinician.ndis === true;
     case "telehealth-first":
       return clinician.telehealthFirstAppointment === true;
     case "longer-appointment":
@@ -1058,6 +1267,19 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   "pref:lived-experience": "Lived experience",
   "pref:telehealth-first": "Telehealth",
   "pref:longer-appointment": "Longer appointment",
+  "pref:ndis": "NDIS",
+  // O261: the life domains, in two words.
+  "care:executive-function": "Getting organised",
+  "care:work-career": "At work",
+  "care:study-school": "School, study",
+  "care:relationships": "Relationships",
+  "care:social-connection": "Social skills",
+  "care:late-diagnosis": "Late diagnosis",
+  "care:grief-life-change": "Life changes",
+  "care:eating-body": "Eating",
+  "care:womens-health": "Women's health",
+  "care:movement-exercise": "Exercise",
+  "care:cultural-background": "Cultural background",
 };
 
 export function shortLabel(need: Pick<NeedSignal, "facet" | "label">): string {

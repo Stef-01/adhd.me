@@ -43,6 +43,8 @@ export interface Filters extends CarePreferences {
   womanGp: boolean;
   /** Only clinicians who say they have ADHD themselves (O257). */
   livedExperience: boolean;
+  /** Only clinicians who say they see NDIS participants (O261). */
+  ndis: boolean;
   telehealth: boolean;
   bulkBilling: boolean;
   longerAppointments: boolean;
@@ -85,6 +87,7 @@ export interface Filterable extends CareProvider {
   profession?: Profession;
   telehealthFirstAppointment?: boolean;
   livedExperience?: boolean;
+  ndis?: boolean;
   manner: readonly string[];
   practicalSignals: readonly string[];
   languages: readonly string[];
@@ -100,6 +103,7 @@ export function emptyFilters(): Filters {
     place: "",
     womanGp: false,
     livedExperience: false,
+    ndis: false,
     telehealth: false,
     bulkBilling: false,
     longerAppointments: false,
@@ -116,13 +120,14 @@ export function emptyFilters(): Filters {
   };
 }
 
-export const BOOLEAN_FILTER_KEYS = ["womanGp", "livedExperience", "telehealth", "bulkBilling", "longerAppointments", "wheelchair", "openBooks"] as const;
+export const BOOLEAN_FILTER_KEYS = ["womanGp", "livedExperience", "ndis", "telehealth", "bulkBilling", "longerAppointments", "wheelchair", "openBooks"] as const;
 export type BooleanFilterKey = (typeof BOOLEAN_FILTER_KEYS)[number];
 
 /** The words each yes/no filter is shown as — on the profile, on the results chips, in the strip's labels. */
 export const BOOLEAN_FILTER_LABELS: Readonly<Record<BooleanFilterKey, string>> = {
   womanGp: "Woman clinician",
   livedExperience: "Lived experience",
+  ndis: "NDIS",
   telehealth: "Telehealth",
   bulkBilling: "Bulk billing",
   longerAppointments: "Longer appointments",
@@ -161,6 +166,7 @@ export function readFilters(storage: Pick<Storage, "getItem">): Filters {
       place: r.place.trim().slice(0, 80),
       womanGp: r.womanGp === true,
       livedExperience: r.livedExperience === true,
+      ndis: r.ndis === true,
       telehealth: r.telehealth === true,
       bulkBilling: r.bulkBilling === true,
       longerAppointments: r.longerAppointments === true,
@@ -271,6 +277,7 @@ export function applyFilters<T extends Filterable>(
     if (!matchesCare(clinician, filters)) return false;
     if (filters.womanGp && !holdsPreference(clinician, "woman-gp")) return false;
     if (filters.livedExperience && !holdsPreference(clinician, "lived-experience")) return false;
+    if (filters.ndis && !holdsPreference(clinician, "ndis")) return false;
     if (filters.telehealth && !holdsPreference(clinician, "telehealth-first")) return false;
     if (filters.bulkBilling && !holdsPreference(clinician, "bulk-billing")) return false;
     if (filters.longerAppointments && !holdsPreference(clinician, "longer-appointment")) return false;

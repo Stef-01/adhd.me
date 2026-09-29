@@ -56,6 +56,20 @@ export type Clarifier = {
  * "Do you need cardiac screening?" is a question for a clinician.
  */
 export const CARE_PROMPTS: Record<string, { prompt: string; answer: string }> = {
+  // O261: the life domains, each a question whose answer changes the list (two to twelve of 37 declare each).
+  "care:executive-function": { prompt: "Is it help with focus and getting things done?", answer: "help with focus and getting things done" },
+  "care:work-career": { prompt: "Is this about work?", answer: "help at work" },
+  "care:study-school": { prompt: "Is this about school or study?", answer: "help with school and study" },
+  "care:parenting": { prompt: "Is it help as a parent?", answer: "help as a parent" },
+  "care:relationships": { prompt: "Is it about a relationship?", answer: "help with my relationship" },
+  "care:social-connection": { prompt: "Is it friendships and social situations?", answer: "help with friendships and social situations" },
+  "care:late-diagnosis": { prompt: "Is it making sense of a recent diagnosis?", answer: "I want to make sense of my diagnosis" },
+  "care:grief-life-change": { prompt: "Is it grief, or a big life change?", answer: "help with grief and a big life change" },
+  "care:sleep": { prompt: "Is sleep part of it?", answer: "help with sleep" },
+  "care:eating-body": { prompt: "Is eating or body image part of it?", answer: "help with eating" },
+  "care:womens-health": { prompt: "Is this about women's health or hormones?", answer: "help with women's health and hormones" },
+  "care:movement-exercise": { prompt: "Would exercise or movement help?", answer: "help with exercise and movement" },
+  "care:cultural-background": { prompt: "Would you like someone who understands your background?", answer: "someone who understands my cultural background" },
   "care:titration": {
     prompt: "Is your dose already something you are working on?",
     answer: "my dose needs titration and follow-up",
@@ -190,10 +204,15 @@ export const PREF_PROMPTS: Record<string, { prompt: string; answer: string }> = 
     prompt: "Would you like someone who has ADHD themselves?",
     answer: "someone who has ADHD themselves",
   },
+  // O261: six of 37 say they see NDIS participants.
+  "pref:ndis": {
+    prompt: "Are you an NDIS participant?",
+    answer: "I'm an NDIS participant",
+  },
 };
 
 /** The preferences a clarifier may ask about. Derived from the prompt table, never wider. */
-const ASKABLE_PREFERENCES: readonly Preference[] = ["woman-gp", "telehealth-first", "bulk-billing", "lived-experience"];
+const ASKABLE_PREFERENCES: readonly Preference[] = ["woman-gp", "telehealth-first", "bulk-billing", "lived-experience", "ndis"];
 
 /** O259 (founder, 2026-09-29): manner is never asked. The manner table stays for the reach ratchet; no question is drawn from it. */
 function promptFor(key: string): { prompt: string; answer: string } | null {

@@ -175,18 +175,31 @@ describe("M8: auditSeparation — the module header's claim, pinned against the 
     // R15: 519 -> 533, four profiles declare the thirteenth area. 2026-09-29: 533 -> 562,
     // intervalSeparates 93 -> 159 and ambiguous 440 -> 403 on the 37-profile roster: more pairs
     // hold two exact, different grades, and four more care areas separate without a negative.
-    expect(result.valueDiffers).toBe(570); // O260 (2026-09-29): -1, "shared care with the psychiatrist who diagnosed me" no longer reaches the assessment. O257 (2026-09-29): +6 for the lived-experience preference and its four sentences; before that +2 for the "new mums" sentence
-    expect(result.intervalSeparates).toBe(161);
+    expect(result.valueDiffers).toBe(635); // O261 (2026-09-30): 570 -> 635 with 49 sentences and thirteen areas more. O260 (2026-09-29): -1, "shared care with the psychiatrist who diagnosed me" no longer reaches the assessment. O257 (2026-09-29): +6 for the lived-experience preference and its four sentences; before that +2 for the "new mums" sentence
+    expect(result.intervalSeparates).toBe(226); // O261: 161 -> 226
     expect(result.ambiguous).toBe(409); // O260: 410 -> 409, with valueDiffers.
+    // O261 (2026-09-30): every life domain separates on the real roster, two to twelve declaring each.
     expect(result.separatingFacetKeys).toEqual([
       "care:anxiety",
       "care:autism-adhd",
       "care:child-adolescent-adhd",
+      "care:cultural-background",
       "care:depression",
       "care:emotional-regulation",
+      "care:executive-function",
+      "care:grief-life-change",
+      "care:late-diagnosis",
+      "care:movement-exercise",
       "care:non-medication",
+      "care:parenting",
+      "care:relationships",
+      "care:sleep",
+      "care:social-connection",
+      "care:study-school",
       "care:substance-history",
       "care:trauma-informed",
+      "care:womens-health",
+      "care:work-career",
       "pref:woman-gp",
     ]);
   });

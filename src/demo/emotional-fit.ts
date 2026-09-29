@@ -321,13 +321,15 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     cues: [
       /* O139: naming English as a second language is how the ask arrives when somebody is not
          asking for an interpreter but for the pace and patience that go with it. */
-      "second language", "culturally", "my family", "cultural", "culture", "background", "my community", "migrant", "south asian", "indian",
+      /* O261 (2026-09-29): the cultural words ("culturally", "culture", "background", "my community", "migrant",
+         "south asian", "indian", "second language", "refugee") moved to care:cultural-background, a declaration five
+         clinicians make and a chip a person sees; what stays here is the family's presence in the room. */
+      "my family",
       // O191 (founder-directed): the refugee register. A single precise word (the
       // "neuroaffirming" precedent — no pair needed, nothing else says it), because an ADHD
       // assessment leans on childhood evidence and a refugee childhood carries none of the
       // usual paper; the ask is cultural attunement plus that understanding, which is exactly
       // this facet's territory. Pinned in corpus.ts beside the other culturally_attuned lines.
-      "refugee",
       // W221 probe: "my mum thinks this is nonsense and she'll be in the room" reached nothing.
       // O25: "in the room with me" stopword-stripped down to the single token [room], so
       // "my rooms are above the pharmacy" claimed this facet (found by the W227 reach-gap
@@ -357,9 +359,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // O30 psychographics: faith named as part of the appointment is the same values ask as
       // family-in-the-room. Verb+noun pairs so nothing collapses ("my faith" alone would
       // strip to [faith] and claim "faith in doctors").
-      "respects my faith", "respect my faith", "faith is important", "respects my religion",
-      // O53: the shorter way the same value is said ([faith, matter]).
-      "faith matters",
+      // O261: the faith pairs moved to care:cultural-background with the rest of the cultural words.
       // O49: family presence stated as a fact rather than a fear — "family will be involved".
       "family involved"],
   },

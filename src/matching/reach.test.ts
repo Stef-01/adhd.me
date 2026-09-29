@@ -302,7 +302,7 @@ describe("O13 every manner facet is reachable by its plain name", () => {
     ["manner:steadying", "calm and gentle"],
     ["manner:attuned", "takes me seriously"],
     ["manner:attuned", "attentive"],
-    ["manner:culturally_attuned", "culturally sensitive"],
+    ["manner:culturally_attuned", "my family will be involved"], // O261: "culturally sensitive" is care:cultural-background now
   ];
 
   it.each(PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
@@ -349,6 +349,21 @@ describe("O17 every care area is reachable by its plain name", () => {
     ["care:emotional-regulation", "emotional dysregulation"],
     ["care:emotional-regulation", "my emotions take over"],
     ["care:non-medication", "not just medication"],
+    // O261: the life domains, by the words a person types for each.
+    ["care:executive-function", "help getting organised"],
+    ["care:executive-function", "an ADHD coach"],
+    ["care:work-career", "help at work"],
+    ["care:study-school", "I am struggling at uni"],
+    ["care:parenting", "parenting support"],
+    ["care:relationships", "couples counselling"],
+    ["care:social-connection", "help making friends"],
+    ["care:late-diagnosis", "just been diagnosed"],
+    ["care:grief-life-change", "grief"],
+    ["care:sleep", "insomnia"],
+    ["care:eating-body", "binge eating"],
+    ["care:womens-health", "perimenopause"],
+    ["care:movement-exercise", "an exercise physiologist"],
+    ["care:cultural-background", "culturally sensitive"],
   ];
 
   it.each(CARE_PLAIN_NAMES)("%s is reached by %s", (key, phrase) => {
@@ -368,52 +383,30 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
    * The list may shrink as the Q1 corpus re-authors cues; it must never grow silently.
    */
   const REVIEWED_SINGLE_TOKEN_PHRASES = [
-    // "diagnose me" and "get checked" are O49 additions, reviewed under the O45 collapse rule:
-    // each ships as one token BUT can only fire beside its authored adjacent pair, so a stray
-    // "diagnose" and "the heart checked first" cannot claim them. Listed in sort order below.
-    // O112: reviewed and DELIBERATE — bare "believe" fires on "it is hard to believe how long
-    // the wait is", and the pair does not.
-    // O113: four more collapses, each reviewed. Every one is a multi-word phrase whose content
-    // reduces to a single token, so the O45 pair demand is what keeps it precise — bare
-    // [build], [lecture], [right] and [mechanism] would each be far too loose alone.
-    // O108: reviewed and DELIBERATE, the same device as "in recovery". Bare "video" fires on
-    // "I watched a video about ADHD"; authored as a pair, the collapse rule demands "by video"
-    // / "over video" in the raw stream and the innocent sentence is refused.
-    // R15: [baby] alone is a relative or a figure of speech; the skeleton "had a baby" is the ask.
-    // O210: reviewed and DELIBERATE, the same device as "in recovery" and "by video" above. Both
-    // tenses collapse to [hear] — `stem("hears")` is "hear" — and bare [hear] would fire on "I hear
-    // the wait is long" and "from what I hear the clinic is busy". Authored as pairs, the O45
-    // collapse rule demands "hear me out" / "hears me out" in the raw stream, and both innocent
-    // sentences are refused. Verified against exactly those, plus "I have heard good things", which
-    // stays unread for a second reason: `stem("heard")` is "heard", so the past tense never collapses
-    // into this cue at all.
-    // O107: reviewed and DELIBERATE. Bare "recovery" fires on "recovery time after surgery",
-    // so the cue is authored as the pair — the collapse rule then demands "in recovery" in
-    // the raw stream, which is exactly the precision the bare word could not give.
-    // O94: O25's removed phrase, home under the raw-RUN demand (RUN_DEMANDED in needs.ts)
-    // — reviewed as run-only, so the [room] collapse can never fire on a bare pair again.
-    // O109: collapses to [pocket] and ships under the O45 pair demand. Its negated sibling
-    // "no out of pocket" is NOT here and must not be: the negator is a content token, so that
-    // cue keeps two and never collapses.
-    // O108: see "by video" above — same phrase, other preposition.
-    // O210: collapses to [patience], and reviewed as safe on BOTH sides. Bare [patience] fires on
-    // "she ran out of patience" and "waiting rooms test your patience", so the pair demand is what
-    // makes it precise. And the word it does NOT collide with is the one that matters most here:
-    // `stem("patience")` is "patience" while `stem("patient")` is "patient", so this cue cannot
-    // reach "new patients welcome" or any of the roster's own copy — checked before it was written,
-    // because a cue that collided with "patient" in THIS product would have been unrecoverable.
-      /* O260 (2026-09-29): the assessment asked for in the first person and care after a diagnosis, each in
     /* Sorted, as the lexicon reports them. O260 (2026-09-29) added "be assessed", "could i have adhd", "do i have adhd",
-       "get assessed", "get diagnosed", "keep me on" and "my scripts", each in RUN_DEMANDED, so the one token never
-       stands alone: "be assessed" reads only where the raw words run "be assessed", never a bare "assessed" across a gap. */
-    "an excuse", "at ease", "be assessed", "be believed", "been heard", "believe me", "build on what", "by phone",
-    "by video", "could i have adhd", "diagnose me", "do i have adhd", "figure out", "get a word in", "get assessed",
-    "get checked", "get diagnosed", "had a baby", "hear me out", "hears me out", "honest about", "hurry me",
-    "in recovery", "in the room with me", "involve me", "just lazy", "keep me on", "lecture me", "listened to",
-    "make it up", "making it up", "my child", "my community", "my dad", "my daughter", "my family", "my father",
-    "my kid", "my mother", "my mum", "my parents", "my scripts", "my son", "name it", "on a schedule", "on edge",
-    "out of pocket", "out the door", "over the phone", "over video", "really listen", "right with me",
-    "the mechanism", "what is going on", "with patience",
+       "get assessed", "get diagnosed", "keep me on" and "my scripts"; O261 added the life domains' phrases ("a routine",
+       "my job", "my sleep", "my culture" …). Every one of them is in RUN_DEMANDED, so the one token never stands alone:
+       "my job" reads only where the raw words run "my job", never a bare "job" across a gap. */
+    "a routine", "an excuse", "an injury", "as a couple", "as a dad", "as a father", "as a mother", "as a mum",
+    "as a parent", "at ease", "at uni", "at work with", "be assessed", "be believed", "been fired", "been heard",
+    "believe me", "break up", "broke up", "build on what", "by phone", "by video", "conflict with my",
+    "could i have adhd", "death of my", "diagnose me", "diagnosed at", "do i have adhd", "figure out",
+    "from my background", "get a word in", "get assessed", "get checked", "get diagnosed", "get organised",
+    "get organized", "get started on", "get to sleep", "had a baby", "hear me out", "hears me out", "her behaviour",
+    "her teacher", "his behaviour", "his teacher", "honest about", "hurry me", "i retired", "in my relationships",
+    "in recovery", "in the room with me", "involve me", "is bullied", "just been diagnosed", "just diagnosed",
+    "just got diagnosed", "just lazy", "just retired", "keep me on", "lecture me", "listened to", "make it up",
+    "making it up", "my background", "my business", "my career", "my child", "my church", "my community",
+    "my culture", "my culture and", "my cycle", "my dad", "my daughter", "my eating", "my faith", "my family",
+    "my father", "my heritage", "my injury", "my job", "my kid", "my marriage", "my mob", "my mosque", "my mother",
+    "my mum", "my ndis", "my parents", "my period", "my periods", "my rehab", "my relationship", "my relationships",
+    "my religion", "my religious", "my retirement", "my scripts", "my sleep", "my son", "my studies", "my study",
+    "my teacher", "my weight and", "name it", "on a schedule", "on edge", "on the ndis", "our background",
+    "our community", "our culture", "our faith", "our heritage", "our marriage", "our relationship", "our religion",
+    "out of pocket", "out the door", "over the phone", "over video", "really listen", "right with me", "so lonely",
+    "starting over", "the mechanism", "the readings", "the rehab", "the teacher", "the teachers", "their behaviour",
+    "their teacher", "very lonely", "what is going on", "what it means for me", "what this means for me",
+    "where i come from", "where my family is from", "where we come from", "with patience",
   ];
 
   it("keeps the phrasings O210 refused unread, so the reason survives the sentence", () => {
@@ -476,8 +469,9 @@ describe("O30 the psychographic asks, reachable and not over-reachable", () => {
     ["a doctor who is neurodiversity affirming", "Strengths-focused"],
     ["someone neuroaffirming who gets adhd brains", "Strengths-focused"],
     ["a neurodivergent friendly gp", "Strengths-focused"],
-    ["someone who respects my faith", "Understands your background"],
-    ["my faith is important to me", "Understands your background"],
+    // O261: faith is care:cultural-background now, a declaration five clinicians make and a chip a person sees.
+    ["someone who respects my faith", "Understands your cultural background"],
+    ["my faith is important to me", "Understands your cultural background"],
     ["treat me as a whole person not a diagnosis", "Listens and takes you seriously"],
   ])("reaches: %s", (query, label) => {
     expect(readNeeds(query).map((n) => n.label), query).toContain(label);

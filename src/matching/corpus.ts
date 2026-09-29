@@ -112,7 +112,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "honest about drinking", reaches: ["care:substance-history", "manner:non_judgmental"] },
 
   // ── care:emotional-regulation ────────────────────────────────────────────────────────────
-  { text: "rejection sensitivity is wrecking my relationships", reaches: ["care:emotional-regulation"] },
+  { text: "rejection sensitivity is wrecking my relationships", reaches: ["care:emotional-regulation", "care:relationships"] }, // O261
   { text: "my emotions take over before I can think", reaches: ["care:emotional-regulation"] },
   { text: "emotional dysregulation, the real kind", reaches: ["care:emotional-regulation"] },
   { text: "big emotions over small things", reaches: ["care:emotional-regulation"] },
@@ -169,10 +169,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── manner:culturally_attuned ────────────────────────────────────────────────────────────
   { text: "my mum thinks this is nonsense and she'll be in the room", reaches: ["manner:culturally_attuned"] },
   { text: "family will be involved whether anyone likes it or not", reaches: ["manner:culturally_attuned"] },
-  { text: "someone who respects my faith", reaches: ["manner:culturally_attuned"] },
+  { text: "someone who respects my faith", reaches: ["care:cultural-background"] }, // O261: was manner:culturally_attuned
   // O191: the refugee register — childhood in another country, none of the usual assessment
   // paper. The word is precise enough to carry the facet alone (the "neuroaffirming" shape).
-  { text: "I came here as a refugee and my childhood was in another language", reaches: ["manner:culturally_attuned"] },
+  { text: "I came here as a refugee and my childhood was in another language", reaches: ["care:cultural-background"] },
   { text: "my rooms are above the pharmacy", never: ["manner:culturally_attuned"] },
 
   // ── manner:structured ────────────────────────────────────────────────────────────────────
@@ -237,7 +237,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the house is chaos and so is my head", never: ["care:adhd-assessment"] },
   { text: "I cry in the car after every appointment", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
   { text: "I need someone who has seen women like me before", reaches: ["manner:attuned"] },
-  { text: "diagnosed at forty and still getting my head around it", reaches: ["manner:sense_making", "care:adhd-assessment"] },
+  { text: "diagnosed at forty and still getting my head around it", reaches: ["manner:sense_making", "care:late-diagnosis"] }, // O261: was an assessment; the diagnosis is made
   { text: "I want the science, not the pep talk", reaches: ["manner:sense_making"] },
   { text: "appointments where I do not have to perform being fine", reaches: ["manner:attuned"] },
 
@@ -257,7 +257,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:child-adolescent-adhd ───────────────────────────────────────────────────────────
   { text: "my kid's teacher suggested an assessment", reaches: ["care:child-adolescent-adhd", "care:adhd-assessment"] },
   { text: "a paediatric ADHD assessment", reaches: ["care:child-adolescent-adhd", "care:adhd-assessment"] },
-  { text: "my teenager needs this sorted before the HSC", reaches: ["care:child-adolescent-adhd"] },
+  { text: "my teenager needs this sorted before the HSC", reaches: ["care:child-adolescent-adhd", "care:study-school"] }, // O261
   { text: "both my children probably have it", reaches: ["care:child-adolescent-adhd"] },
 
   // ── care:titration ───────────────────────────────────────────────────────────────────────
@@ -343,10 +343,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "explain my options and let me choose", reaches: ["manner:collaborative"] },
   { text: "decide together or not at all", reaches: ["manner:collaborative"] },
   { text: "talk the choices through with me", reaches: ["manner:collaborative"] },
-  { text: "a GP who gets South Asian families", reaches: ["manner:culturally_attuned"] },
-  { text: "my community views this stuff badly and it matters", reaches: ["manner:culturally_attuned"] },
+  { text: "a GP who gets South Asian families", reaches: ["care:cultural-background"] },
+  { text: "my community views this stuff badly and it matters", reaches: ["care:cultural-background"] },
   { text: "my mother comes in to translate", reaches: ["manner:culturally_attuned"] },
-  { text: "faith matters in my care", reaches: ["manner:culturally_attuned"] },
+  { text: "faith matters in my care", reaches: ["care:cultural-background"] },
   { text: "baseline bloods first and a written plan", reaches: ["manner:structured"] },
   { text: "monitoring on a schedule, not when things break", reaches: ["manner:structured"] },
   { text: "methodical follow-up, please", reaches: ["manner:structured"] },
@@ -468,11 +468,11 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I am autistic as well, the two tangle together", reaches: ["care:autism-adhd"] },
   { text: "AuDHD, both sides need understanding", reaches: ["care:autism-adhd"] },
   { text: "my teenager is falling apart at school", reaches: ["care:child-adolescent-adhd"] },
-  { text: "our ten year old needs an assessment", reaches: ["care:adhd-assessment"], aspires: ["care:child-adolescent-adhd"] },
+  { text: "our ten year old needs an assessment", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd"] }, // O261: a child named by age is heard
 
   // ── manner breadth: culturally_attuned, attuned, non_judgmental, not_rushed, structured ──
-  { text: "someone who understands where my family comes from", reaches: ["manner:culturally_attuned"] },
-  { text: "a doctor who gets cultural context, mine is complicated", reaches: ["manner:culturally_attuned"] },
+  { text: "someone who understands where my family comes from", reaches: ["care:cultural-background"] },
+  { text: "a doctor who gets cultural context, mine is complicated", reaches: ["care:cultural-background"] },
   { text: "I want to be believed the first time I say it", reaches: ["manner:attuned"] },
   { text: "somewhere I will not be judged for how long I left this", reaches: ["manner:non_judgmental"] },
   { text: "no lectures, I know the history looks bad", reaches: ["manner:non_judgmental"] },
@@ -503,7 +503,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "shared care with my psychiatrist, and don't rush the appointments", reaches: ["care:shared-care", "manner:not_rushed"] },
   { text: "a structured assessment, not rushed, with the heart checks done first", reaches: ["care:adhd-assessment", "manner:structured", "manner:not_rushed"] },
   { text: "my teenager needs an assessment and we want a woman doctor", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd", "pref:woman-gp"] },
-  { text: "a non-judgmental GP for my drinking history and my ADHD", reaches: ["care:adhd-assessment", "care:substance-history", "manner:non_judgmental"] },
+  { text: "a non-judgmental GP for my drinking history and my ADHD", reaches: ["care:substance-history", "manner:non_judgmental"] }, // O261: "my ADHD" is a diagnosis they have, not an assessment ask
   { text: "someone strengths focused who also handles the depression side", reaches: ["care:depression", "manner:motivating"] },
   { text: "video appointments and a doctor who explains what is going on", reaches: ["pref:telehealth-first", "manner:sense_making", "manner:collaborative"] },
   { text: "an autistic-friendly GP who won't lecture me about my past", reaches: ["care:autism-adhd", "manner:non_judgmental"] },
@@ -612,7 +612,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "year seven has been a disaster, we need answers for our boy", aspires: ["care:child-adolescent-adhd"] },
 
   // ── life-stage and situation: the context the ask rides in on ───────────────────────────
-  { text: "I am at uni and my study is falling apart, I want this assessed", reaches: ["care:adhd-assessment"] },
+  { text: "I am at uni and my study is falling apart, I want this assessed", reaches: ["care:adhd-assessment", "care:study-school"] }, // O261: uni is heard
   { text: "fifty years old and finally sorting this out properly", reaches: ["care:adhd-assessment"] },
   { text: "shift work means I can only do phone appointments", reaches: ["pref:telehealth-first"] },
   // R15: the new baby is why it has to be online; a clinician who sees new parents is a fit, so it is declared.
@@ -633,7 +633,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "shared care and someone calm, my psychiatrist can be blunt", reaches: ["care:shared-care", "manner:steadying"] },
   { text: "an autism aware doctor who bulk bills", reaches: ["care:autism-adhd", "pref:bulk-billing"] },
   { text: "someone collaborative about the dose, it is my body", reaches: ["manner:collaborative", "care:titration"] },
-  { text: "late diagnosed autistic, now querying the ADHD part", reaches: ["care:autism-adhd", "care:adhd-assessment"] },
+  { text: "late diagnosed autistic, now querying the ADHD part", reaches: ["care:autism-adhd", "care:adhd-assessment", "care:late-diagnosis"] }, // O261
   { text: "a GP good with anxious teenagers", reaches: ["care:child-adolescent-adhd", "care:anxiety"] },
 
   // ── paraphrase depth and honest gaps, facet by facet ─────────────────────────────────────
@@ -672,7 +672,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      `attuned` reads not-being-believed BY THE DOCTOR. Here the family is the disbeliever, and
      the ask is help navigating them. */
   { text: "my family does not believe in ADHD and I need help navigating that", reaches: ["manner:culturally_attuned", "manner:attuned", "care:adhd-assessment"] },
-  { text: "English is my second language and appointments move too fast", reaches: ["manner:not_rushed", "manner:culturally_attuned"] },
+  { text: "English is my second language and appointments move too fast", reaches: ["manner:not_rushed", "care:cultural-background"] },
   { text: "I rehearse what to say and still leave unheard", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
   { text: "believe women when they describe this", reaches: ["manner:non_judgmental"] },
   { text: "I need the appointment to not feel like an interrogation", reaches: ["manner:steadying"] },
@@ -818,7 +818,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // O92's boundary as data: definite-article deprivation suppresses too; every declining
   // shape keeps reaching, including the indefinite article inside the cue's own span.
   { text: "three weeks without the medication and nobody warned me", never: ["care:non-medication"] },
-  { text: "no medication please, I want strategies", reaches: ["care:non-medication"] },
+  { text: "no medication please, I want strategies", reaches: ["care:non-medication", "care:executive-function"] }, // O261: strategies are the coaches' word
   { text: "coaching first, without a script if we can", reaches: ["care:non-medication"] },
   { text: "my script keeps bouncing between pharmacies, I need someone who can manage that", reaches: ["care:shared-care"] },
   // O256: "continue my … prescriptions" is continuation, and the person is diagnosed (assessment reached here until 2026-09-29).
@@ -834,7 +834,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "keep the depression treatment going while we sort the attention side", reaches: ["care:depression", "care:adhd-assessment"] },
 
   // ── emotional regulation / non-medication / substance: the thin floors fed ──────────────
-  { text: "I want help with the rage before it costs me my marriage", reaches: ["care:emotional-regulation"] },
+  { text: "I want help with the rage before it costs me my marriage", reaches: ["care:emotional-regulation", "care:relationships"] }, // O261
   { text: "the shame spiral after every mistake is the worst part", reaches: ["care:emotional-regulation"] },
   { text: "crying at work over nothing and I want it taken seriously", awaitingFounder: "self-state", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
   { text: "I want a plan that is more than a prescription", aspires: ["care:non-medication"] },
@@ -844,8 +844,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "weekend cocaine use is part of my history and I will not lie about it", reaches: ["care:substance-history"] },
 
   // ── manner, wider ────────────────────────────────────────────────────────────────────────
-  { text: "my community treats this as a western invention and I need a GP who gets that", reaches: ["manner:culturally_attuned"] },
-  { text: "I want a doctor who understands migrant families", reaches: ["manner:culturally_attuned"] },
+  { text: "my community treats this as a western invention and I need a GP who gets that", reaches: ["care:cultural-background"] },
+  { text: "I want a doctor who understands migrant families", reaches: ["care:cultural-background"] },
   { text: "someone who talks to me like an adult, not a case file", reaches: ["manner:attuned"] },
   { text: "explain the plan on paper so I can take it home", reaches: ["manner:sense_making"] },
   { text: "walk me through every result line by line", reaches: ["manner:sense_making"] },
@@ -1042,6 +1042,71 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "baby steps, I just want to talk to someone first", never: ["care:perinatal"] },
   { text: "I have been like this since I was a baby", never: ["care:perinatal"] },
 
+  // ── O261: the life domains (docs/matching/RCA-NIGHT-2026-09-29.md, stage 3) ─────────────────
+  // care:executive-function
+  { text: "help at work with focus and getting things done", reaches: ["care:executive-function", "care:work-career"] },
+  { text: "I need someone to help me get organised, the bills and the paperwork are out of control", reaches: ["care:executive-function"] },
+  { text: "an ADHD coach for time management and actually finishing things", reaches: ["care:executive-function"] },
+  { text: "strategies for starting tasks, I procrastinate on everything", reaches: ["care:executive-function"] },
+  { text: "I want to focus on my anxiety for now", reaches: ["care:anxiety"], never: ["care:executive-function"] },
+  // care:work-career
+  { text: "my job is on the line, I keep missing deadlines at work", reaches: ["care:work-career"] }, // "missing deadlines" is the person describing themselves (O114), not an ask
+  { text: "help with burnout from work, and I think ADHD is part of it", reaches: ["care:work-career", "care:adhd-assessment"] },
+  { text: "I need workplace adjustments and my manager wants a letter", reaches: ["care:work-career"] },
+  { text: "I run a small business and need help getting organised", reaches: ["care:work-career", "care:executive-function"] },
+  { text: "a professional assessment please", reaches: ["care:adhd-assessment"], never: ["care:work-career"] },
+  // care:study-school
+  { text: "I am at uni and I cannot get through the readings before exams", reaches: ["care:study-school"] },
+  { text: "his teacher thinks he has ADHD and school is a battle", reaches: ["care:study-school", "care:adhd-assessment"] },
+  { text: "year 12 next year and she cannot start an assignment", reaches: ["care:study-school"] },
+  { text: "dyslexia as well, someone who understands learning differences", reaches: ["care:study-school"] },
+  // care:parenting
+  { text: "I am a parent with ADHD and I am drowning", reaches: ["care:parenting"] },
+  { text: "parenting strategies for a seven year old who melts down every afternoon", reaches: ["care:parenting"] },
+  { text: "we need family sessions, the whole family is struggling", reaches: ["care:parenting"] },
+  { text: "help as a dad, I lose my temper at bedtime", reaches: ["care:parenting"] },
+  // care:relationships
+  { text: "my marriage is falling apart because of my ADHD", reaches: ["care:relationships"] },
+  { text: "couples counselling with someone who understands it", reaches: ["care:relationships"] },
+  { text: "my partner and I keep fighting about the mess", reaches: ["care:relationships"] },
+  { text: "I people please and cannot hold a boundary", reaches: ["care:relationships"] },
+  // care:social-connection
+  { text: "I want help making friends, I have been lonely since uni", reaches: ["care:social-connection", "care:study-school"] },
+  { text: "social skills for my teenager who gets bullied", reaches: ["care:social-connection", "care:child-adolescent-adhd"] },
+  { text: "help with masking, I have no idea how to socialise", reaches: ["care:social-connection"] },
+  // care:late-diagnosis
+  { text: "diagnosed at forty and now I am rethinking everything", reaches: ["care:late-diagnosis"] },
+  { text: "just been diagnosed and I want to make sense of my ADHD", reaches: ["care:late-diagnosis"], never: ["care:adhd-assessment"] },
+  { text: "someone who works with women adjusting to a late diagnosis", reaches: ["care:late-diagnosis"] },
+  // care:sleep
+  { text: "my sleep is a mess, I am up until three every night", reaches: ["care:sleep"] },
+  { text: "insomnia on top of my ADHD", reaches: ["care:sleep"] },
+  { text: "help with a sleep routine, I cannot fall asleep", reaches: ["care:sleep"] },
+  // care:eating-body
+  { text: "binge eating in the evenings once the medication wears off", reaches: ["care:eating-body", "care:titration"] },
+  { text: "help with my eating, I forget to eat and then cannot stop", reaches: ["care:eating-body"] },
+  { text: "body image and my ADHD, someone who works with both", reaches: ["care:eating-body"] },
+  // care:cultural-background
+  { text: "someone who understands Indian families, mine does not believe in it", reaches: ["care:cultural-background", "manner:attuned"] }, // "does not believe" is the attuned facet's, as the corpus reads it elsewhere
+  { text: "a psychologist from a migrant background like me", reaches: ["care:cultural-background"] },
+  { text: "I am Aboriginal and I want someone who gets where I come from", reaches: ["care:cultural-background"] },
+  // care:womens-health
+  { text: "perimenopause has made my ADHD unmanageable", reaches: ["care:womens-health"] },
+  { text: "my symptoms are worse before my period, someone who understands hormones", reaches: ["care:womens-health"] },
+  { text: "ADHD in women, I want someone who actually knows about it", reaches: ["care:womens-health"] },
+  // care:movement-exercise
+  { text: "I want to use exercise to manage my ADHD, an exercise physiologist maybe", reaches: ["care:movement-exercise"] },
+  { text: "a physio who gets it, I never stick to the rehab", reaches: ["care:movement-exercise"] },
+  { text: "getting back into sport after an injury", reaches: ["care:movement-exercise"] },
+  { text: "an exercise in patience", reaches: [], never: ["care:movement-exercise"] },
+  // care:grief-life-change
+  { text: "my dad passed away and everything has fallen apart", reaches: ["care:grief-life-change", "manner:culturally_attuned"] }, // "my dad" is the family facet's cue
+  { text: "I moved interstate and am starting over after a divorce", reaches: ["care:grief-life-change", "care:relationships"] },
+  { text: "grief and my ADHD together, I cannot function", reaches: ["care:grief-life-change"] },
+  // pref:ndis
+  { text: "I am on an NDIS plan, self managed", reaches: ["pref:ndis"] },
+  { text: "does anyone here take NDIS participants", reaches: ["pref:ndis"] },
+  { text: "my support coordinator said to look for a psychologist", reaches: ["pref:ndis"] },
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -1137,7 +1202,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   "manner:collaborative": 23,
   // O139 raised 17→18 with "second language": the ask as it arrives when somebody wants pace and
   // patience rather than an interpreter.
-  "manner:culturally_attuned": 18,
+  "manner:culturally_attuned": 9, // O261: 18 -> 9, ten cultural sentences moved to care:cultural-background; what stays is the family in the room
   // O125 raised 13→14 with strengths language in the reader's own words ("works with my
   // chaos"). "what we can build" was refused: it strips to [build] alone.
   "manner:motivating": 14,
@@ -1192,4 +1257,19 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // "not a man of many words"; "a she not a he" collapses to the bare token [not]).
   "pref:woman-gp": 25,
   "pref:lived-experience": 3, // O257, 2026-09-29
+  // O261, 2026-09-29: the life domains, each floor the sentences written for it (cultural-background also holds ten moved from manner:culturally_attuned).
+  "care:executive-function": 5,
+  "care:work-career": 5,
+  "care:study-school": 4,
+  "care:parenting": 4,
+  "care:relationships": 4,
+  "care:social-connection": 3,
+  "care:late-diagnosis": 3,
+  "care:sleep": 3,
+  "care:eating-body": 3,
+  "care:cultural-background": 13,
+  "care:womens-health": 3,
+  "care:movement-exercise": 3,
+  "care:grief-life-change": 3,
+  "pref:ndis": 3,
 };

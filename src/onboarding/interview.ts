@@ -87,6 +87,20 @@ const CARE_QUESTIONS: ReadonlyArray<{ area: CareArea; ask: string }> = [
   { area: "emotional-regulation", ask: "Rejection sensitivity and emotional regulation?" },
   { area: "non-medication", ask: "Patients who want options other than medication?" },
   { area: "perinatal", ask: "People through pregnancy, or in the year after a baby?" },
+  // O261: the life domains, asked the way the founder asks a clinician what they actually work with.
+  { area: "executive-function", ask: "Focus, organisation and getting things done: coaching, strategies, routines?" },
+  { area: "work-career", ask: "People's work and careers: burnout, workplace adjustments, performance?" },
+  { area: "study-school", ask: "School, uni and study: students, exams, learning differences?" },
+  { area: "parenting", ask: "Parents as parents: strategies at home, family sessions, a parent with ADHD?" },
+  { area: "relationships", ask: "Relationships and couples?" },
+  { area: "social-connection", ask: "Friendships and social skills?" },
+  { area: "late-diagnosis", ask: "Making sense of a late diagnosis?" },
+  { area: "grief-life-change", ask: "Grief, and the big life changes?" },
+  { area: "sleep", ask: "Sleep?" },
+  { area: "eating-body", ask: "Eating and body image?" },
+  { area: "womens-health", ask: "Women's health and hormones?" },
+  { area: "movement-exercise", ask: "Exercise and movement as part of the plan?" },
+  { area: "cultural-background", ask: "A culture, faith or migrant background you work with in particular?" },
 ];
 
 /**

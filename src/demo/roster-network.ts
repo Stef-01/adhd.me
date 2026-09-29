@@ -33,6 +33,9 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     experience: ["General practice, Dr Yogesh Kalra’s Surgery, Bateau Bay", "Fellow of the Royal Australian College of General Practitioners", "Diploma in Skin Cancer Surgery", "Professional Diploma of Dermoscopy"],
     languages: ["English", "Hindi"],
     careAreas: ["shared-care"],
+    careAreasSometimes: ["womens-health"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "womens-health": "His other interests are family medicine, women\u2019s health, and skin cancer checks and surgery" },
     // sense_making, in their words: "Yogesh is a GP and a Fellow of the Royal Australian College of General Practitioners, practising at his own surgery in B"
     manner: ["sense_making"],
     wheelchairAccessible: false,
@@ -62,8 +65,11 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "Hi, I’m Trisha, a Clinical Counsellor, mum of 4 (3 who have diagnosis'), I have ADHD and run a business, so I absolutely understand how busy, stressful and chaotic life can get! I work with individuals, couples and teens, including NDIS participants. I understand the need for support, to be heard, to have undivided attention that is just for YOU. I can help you handle the 'right now' with a safe space for you to plan for your future and reach your goals. Supporting you, every step of the way.",
     experience: ["Clinical counsellor, Riverview Counselling, Glenbrook", "PACFA Registered Clinical counsellor, registration 27633", "Over two decades working in mental health and counselling", "Individuals, couples, families and teenagers, including NDIS participants", "Attachment-based, CBT, compassion-focused, family systems, Internal Family Systems, person-centred, psychodynamic and solution-focused brief therapy", "Registered career counsellor", "Post Graduate Diploma of Counselling, 2014", "Post Graduate Certificate in Education (Career Development), Australian Catholic University, 2011", "Bachelor of Social Science (Criminology), Western Sydney University, 2003"],
     languages: ["English"],
-    careAreas: [],
-    careAreasSometimes: ["child-adolescent-adhd"],
+    careAreas: ["relationships"],
+    careAreasSometimes: ["child-adolescent-adhd", "work-career", "parenting"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "relationships": "I work with individuals, couples and teens, including NDIS participants", "work-career": "Registered career counsellor", "parenting": "Individuals, couples, families and teenagers, including NDIS participants" },
+    ndis: true, // in their words: "including NDIS participants"
     // attuned, in their words: "I understand the need for support, to be heard, to have undivided attention that is just for YOU. I can help you handle "
     // motivating, in their words: "I understand the need for support, to be heard, to have undivided attention that is just for YOU. I can help you handle "
     manner: ["attuned", "motivating"],
@@ -95,6 +101,9 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     experience: ["Director and principal neurotherapy practitioner, Neurotherapy Clinics Australia", "Alpine Neurotherapy Clinic, Jindabyne, established after relocating from Perth", "Neurotherapy training in Santa Barbara, California, with Dr Nicholas Dogris, founder of Neurofield Neurotherapy, and Dr Tiffany Thompson", "EEG and QEEG assessment, and ERP assessment and analysis", "Neurostimulation including tACS, tDCS, tAPNS and pEMF", "Graduate Diploma in Psychology, University of New South Wales", "Master of Business Management, Charles Sturt University", "Presented her practice results at the Neurofield International Conference, Santa Barbara, September 2022", "Speaks at conferences internationally and domestically, and to clinician groups on mental health awareness in regional areas"],
     languages: ["English"],
     careAreas: [],
+    careAreasSometimes: ["study-school"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "study-school": "wanting to help and reassure anyone with learning difficulties, ADHD or any other disability" },
     manner: [],
     mannerPending: "2026-09-29: listed from their public profile; manner is theirs to declare at their interview.",
     wheelchairAccessible: false,
@@ -123,7 +132,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "Throughout my 25 years in education, I’ve had the privilege of teaching children from all walks of life, each with their own strengths and unique ways of thinking. It didn’t take long for me to recognise that every student learns differently and that diversity in learning is something to be celebrated. This realisation inspired me to specialise in ADHD education, where I could focus on supporting neurodivergent students and their families. My teaching journey has taken me across both local and international schools, and in every classroom, I’ve learned just as much as my students. Understanding how your brain works is the first step in overcoming challenges, and it’s incredibly rewarding to help students and families discover that. My coaching approach is about guiding individuals through this journey of self-discovery, helping them embrace who they are, and confidently navigating the learning process. I’m passionate about helping clients thrive in their own way. Together, we can make learning an empowering experience that brings out the best in you.",
     experience: ["Co-founder, REACH ADHD Coaching and Consultancy, Perth", "25 years teaching in local and international schools", "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York", "Associate Certified Coach (ACC), International Coaching Federation", "Bachelor of Arts (Primary School Education)", "Bachelor of Education", "Teaching and Learning for Able/Gifted Children"],
     languages: ["English"],
-    careAreas: ["non-medication", "child-adolescent-adhd"],
+    careAreas: ["non-medication", "child-adolescent-adhd", "executive-function", "study-school"],
+    careAreasSometimes: ["parenting"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "Executive functioning", "study-school": "supporting neurodivergent students and their families", "parenting": "helping students and families discover that" },
     // sense_making, in their words: "An ADHD coach with 25 years of teaching, helping students and families understand how their brain works."
     // motivating, in their words: "Throughout my 25 years in education, I’ve had the privilege of teaching children from all walks of life, each with their"
     // non_judgmental, in their words: "I’m passionate about helping clients thrive in their own way. Together, we can make learning an empowering experience th"
@@ -155,7 +167,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "With nearly three decades in Independent schools, my commitment to supporting neurodivergent students and their families has been a driving force throughout my career. I’ve had the opportunity to work as a classroom teacher, specialist, and later, as a Gifted and Talented Specialist, advocating for students and helping them succeed both academically and socially. Over the years, I’ve developed a deep understanding of the unique challenges neurodivergent individuals face. My role has allowed me to mentor educators, collaborate with families, and support students through tailored strategies designed to meet their needs. Working closely with this incredible community has only strengthened my passion for helping individuals embrace their unique brain wiring. Through ADHD coaching, my goal is to help students and families see that differences in learning are something to be embraced, not feared. I’m here to provide the tools and strategies that enable growth and success, helping every individual step into their best self with confidence.",
     experience: ["Co-founder, REACH ADHD Coaching and Consultancy, Perth", "Nearly 30 years in independent schools as classroom teacher, specialist and Gifted and Talented Specialist", "Mentoring educators, and co-designing Individual Education Plans with families and schools", "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York", "Associate Certified Coach (ACC), International Coaching Federation", "Bachelor of Arts (Early Childhood Education)"],
     languages: ["English"],
-    careAreas: ["non-medication", "child-adolescent-adhd"],
+    careAreas: ["non-medication", "child-adolescent-adhd", "executive-function", "study-school"],
+    careAreasSometimes: ["parenting"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "Executive functioning", "study-school": "co-designing Individual Education Plans with families and schools", "parenting": "collaborate with families, and support students through tailored strategies" },
     manner: [],
     mannerPending: "2026-09-29: listed from their public profile; manner is theirs to declare at their interview.",
     wheelchairAccessible: false,
@@ -185,7 +200,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "For the past 23 years, I’ve worked with students across diverse local and interstate schools, and one of the most important things I’ve learned is that no two minds work the same. Recognising this truth inspired me to pursue specialist training as an ADHD coach, allowing me to focus on supporting neurodivergent individuals in a way that celebrates their strengths and addresses their unique challenges. As a consultant coach to REACH ADHD it provides me the opportunity to create a safe and inclusive space where neurodiverse students can feel heard and understood. It’s incredibly rewarding to help them develop strategies that fit their individual needs, whether that’s in the classroom, in relationships, or at home. My passion for advocacy drives me to promote awareness and acceptance for all neurodiverse individuals, building a culture of inclusivity in every environment I work in. Watching my clients grow and achieve goals they once thought were out of reach is the most fulfilling part of my work. Together, we’ll work towards success in a way that is meaningful to you.",
     experience: ["Consultant coach, REACH ADHD Coaching and Consultancy, Perth", "23 years working with students across local and interstate schools", "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York", "Associate Certified Coach (ACC), International Coaching Federation", "Bachelor of Science", "Graduate Diploma in Education", "Mini-COGE, gifted and talented education"],
     languages: ["English"],
-    careAreas: ["non-medication"],
+    careAreas: ["non-medication", "executive-function", "study-school"],
+    careAreasSometimes: ["relationships"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "Executive functioning", "study-school": "23 years working with students across local and interstate schools", "relationships": "whether that\u2019s in the classroom, in relationships, or at home" },
     // motivating, in their words: "ADHD coach with 23 years of work with students, building strategies for school, home and relationships."
     // attuned, in their words: "As a consultant coach to REACH ADHD it provides me the opportunity to create a safe and inclusive space where neurodiver"
     manner: ["motivating", "attuned"],
@@ -216,7 +234,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "With over 34 years of teaching experience, I’ve had the privilege of working across a wide range of educational settings. Over time, I’ve come to understand just how varied and complex ADHD can be for each individual, and this insight has shaped my approach as an ADHD coach. I bring together my expertise in education with a deep understanding of ADHD, crafting strategies that truly connect with each client. As a consulting coach to REACH ADHD, my priority is meeting each person where they are. I believe in creating a supportive, positive environment where clients feel encouraged to explore new strategies and tackle challenges head-on. Whether we’re focusing on building self-confidence, improving executive functioning, or enhancing social skills, my coaching is centred around empathy, patience, and understanding. My role is to help clients not only manage ADHD traits but to help them grow in a way that aligns with their personal goals and values. I celebrate every milestone with my clients, big or small, and I’m dedicated to equipping them with tools that lead to long-lasting success.",
     experience: ["Consultant coach, REACH ADHD Coaching and Consultancy, Perth", "Over 34 years teaching across a wide range of educational settings", "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York", "Bachelor of Arts", "Bachelor of Education"],
     languages: ["English"],
-    careAreas: ["non-medication"],
+    careAreas: ["non-medication", "executive-function", "social-connection"],
+    careAreasSometimes: ["study-school"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "improving executive functioning", "social-connection": "enhancing social skills", "study-school": "working across a wide range of educational settings" },
     // attuned, in their words: "As a consulting coach to REACH ADHD, my priority is meeting each person where they are. I believe in creating a supporti"
     // motivating, in their words: "As a consulting coach to REACH ADHD, my priority is meeting each person where they are. I believe in creating a supporti"
     // non_judgmental, in their words: "As a consulting coach to REACH ADHD, my priority is meeting each person where they are. I believe in creating a supporti"
@@ -249,7 +270,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "With over two decades of experience across Australian and international school communities, Donna Italiano is an ADHD coach, consultant, and educator with a deep understanding of how learning, wellbeing, and performance intersect. Her background spans secondary education, ATAR Economics and Business Management, Special Needs Support, Commerce, and Sport, giving her a whole-person perspective on education that integrates neuroscience, emotional safety, and compassion. Throughout her career, Donna has taught and mentored thousands of students, led middle-management teams, supported both high-performing and neurodivergent learners, and contributed beyond the classroom through roles in professional services, governance, and community sport. These diverse experiences have shaped her belief that connection is foundational to learning, and that understanding how the brain works is key to unlocking confidence, regulation, and growth. As a consultant coach with REACH ADHD, Donna focuses on ADHD, executive functioning, emotional regulation, and neurodivergent-affirming practice. She is passionate about creating safe, inclusive spaces where students and families feel seen, understood, and supported. Donna works alongside young people to help them understand their unique brain wiring, build practical strategies, and move toward their goals with clarity, confidence, and self-belief.",
     experience: ["Consultant coach, REACH ADHD Coaching and Consultancy, Perth", "Secondary education: ATAR Economics and Business Management, Special Needs Support, Commerce and Sport", "Middle-management leadership, and roles in professional services, governance and community sport", "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York", "Bachelor of Arts", "Bachelor of Education"],
     languages: ["English"],
-    careAreas: ["emotional-regulation", "non-medication"],
+    careAreas: ["emotional-regulation", "non-medication", "executive-function", "study-school"],
+    careAreasSometimes: ["work-career"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "Donna focuses on ADHD, executive functioning, emotional regulation, and neurodivergent-affirming practice", "study-school": "creating safe, inclusive spaces where students and families feel seen", "work-career": "how learning, wellbeing, and performance intersect" },
     // attuned, in their words: "With over two decades of experience across Australian and international school communities, Donna Italiano is an ADHD co"
     // sense_making, in their words: "Throughout her career, Donna has taught and mentored thousands of students, led middle-management teams, supported both "
     // motivating, in their words: "As a consultant coach with REACH ADHD, Donna focuses on ADHD, executive functioning, emotional regulation, and neurodive"
@@ -282,8 +306,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "I bring over 30 years of experience across healthcare, secondary and tertiary education, mentoring, leadership and community involvement to my work as an ADHD Consultant Coach. Across my career, I have been drawn to supporting people who have not always felt understood, helping them feel safe enough to recognise their strengths, trust themselves and take the next step. My work with students, families, clients and professionals has always centred on creating calm, supportive spaces where people feel heard, respected and able to build confidence and belief in themselves. As an ADHD Consultant Coach with REACH ADHD, I bring a warm, neurodiversity-affirming and trauma-informed approach to supporting individuals with ADHD and executive functioning challenges. My experience supporting people navigating ongoing stress, anxiety, overwhelm and complex life experiences has shaped the way I coach, with a strong focus on safety, trust, empathy and respect. I believe meaningful growth begins with connection and a genuine sense of belonging. My coaching is collaborative and strengths-based, helping clients better understand their unique brain wiring, recognise what is already working, develop practical strategies and move toward their goals with greater clarity, confidence and self-trust.",
     experience: ["Consultant coach, REACH ADHD Coaching and Consultancy, Perth", "Over 30 years across healthcare, secondary and tertiary education, mentoring and leadership", "Supporting people through ongoing stress, anxiety, overwhelm and complex life experiences", "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York", "Associate Certified Coach (ACC)", "Bachelor of Science (Physiotherapy) with Honours", "Postgraduate Diploma in Respiratory Physiotherapy", "Master of Teaching (Secondary)"],
     languages: ["English"],
-    careAreas: ["trauma-informed", "non-medication"],
-    careAreasSometimes: ["anxiety"],
+    careAreas: ["trauma-informed", "non-medication", "executive-function"],
+    careAreasSometimes: ["anxiety", "work-career"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "supporting individuals with ADHD and executive functioning challenges", "work-career": "supporting people navigating ongoing stress, anxiety, overwhelm and complex life experiences" },
     // motivating, in their words: "Neurodiversity-affirming"
     // attuned, in their words: "I bring over 30 years of experience across healthcare, secondary and tertiary education, mentoring, leadership and commu"
     // steadying, in their words: "I bring over 30 years of experience across healthcare, secondary and tertiary education, mentoring, leadership and commu"
@@ -316,8 +342,11 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "Hi, I’m Jess, a psychologist who believes therapy should feel like a space where you can take a breath, put the mask down, and be a little more human. I work primarily with young neurodivergent adults who may be navigating anxiety, burnout, low self-esteem, relationship difficulties, attachment wounds, or the lingering impact of past experiences. Many of the people I work with have spent a long time trying to understand why everyday life can feel harder than it seems to for everyone else. They may be used to overthinking, people-pleasing, masking, holding everything together, or feeling like they’re constantly trying to keep up. As someone passionate about neurodiversity-affirming care, I also understand that healing and growth don’t have to mean becoming “less neurodivergent” or learning to fit yourself into someone else’s idea of what life should look like. Sometimes, therapy is about understanding yourself more deeply, letting go of strategies that no longer serve you, and creating a life that actually works for you. My work draws on evidence-based approaches including CBT, ACT and mindfulness, alongside attachment-focused, trauma-informed and somatic-informed perspectives. I have a particular interest in the ways our early relationships and experiences can shape how we see ourselves, connect with others and cope with the world around us. My approach to therapy is warm, collaborative and down-to-earth. I’m not here to tell you how you should feel or hand you a list of strategies and send you on your way. Instead, we’ll work together to better understand your experiences, patterns, relationships and nervous system, while finding practical ways to make life feel more manageable. You don’t need to have the right words. You don’t need to know exactly what you want to work on. You just need a place to start. We can figure out the rest together.",
     experience: ["Registered psychologist and director, Neutral Minds Psychology, Ashgrove", "Individual supportive psychological counselling for adults 18 and over", "Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT) and mindfulness", "Attachment-focused, trauma-informed and somatic-informed practice", "Anxiety, burnout, low self-esteem, relationship difficulties and attachment wounds", "Neurodiversity-affirming care for young neurodivergent adults", "Psychological integration support for experiences undertaken outside formal therapeutic settings", "NDIS participants who are self-managed and plan-managed"],
     languages: ["English"],
-    careAreas: ["anxiety", "trauma-informed"],
-    careAreasSometimes: ["non-medication"],
+    careAreas: ["anxiety", "trauma-informed", "work-career", "relationships", "late-diagnosis"],
+    careAreasSometimes: ["non-medication", "social-connection"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "work-career": "young neurodivergent adults who may be navigating anxiety, burnout, low self-esteem", "relationships": "relationship difficulties, attachment wounds", "late-diagnosis": "spent a long time trying to understand why everyday life can feel harder than it seems to for everyone else", "social-connection": "overthinking, people-pleasing, masking" },
+    ndis: true, // in their words: "NDIS participants who are self-managed and plan-managed"
     // motivating, in their words: "Neurodiversity-affirming"
     // attuned, in their words: "Hi, I’m Jess, a psychologist who believes therapy should feel like a space where you can take a breath, put the mask dow"
     // non_judgmental, in their words: "Hi, I’m Jess, a psychologist who believes therapy should feel like a space where you can take a breath, put the mask dow"
@@ -352,7 +381,9 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "I aim to provide a safe, comfortable space for yourself or your child to tackle the obstacles life throws. I work across the lifespan with neurodiverse clients. I am a late-diagnosed neurodivergent (ADHD) adult, so I bring lived experience together with my training to support my clients. When I am not at Therapy Co, I spend my time with family, my two dachshunds, friends, jigsaw puzzles, Harry Potter and travelling.",
     experience: ["Clinical psychologist, founder and director, Therapy Co, Benowa", "Board Approved Supervisor", "Clinical Registrar Program, completed 2022", "Master of Clinical Psychology, Griffith University", "Graduate Diploma of Psychological Science, Bond University", "Bachelor of Psychological Science, Griffith University", "Bachelor of Criminology and Criminal Justice, Griffith University"],
     languages: ["English"],
-    careAreas: ["adhd-assessment", "child-adolescent-adhd"],
+    careAreas: ["adhd-assessment", "child-adolescent-adhd", "late-diagnosis"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "late-diagnosis": "I am a late-diagnosed neurodivergent (ADHD) adult, so I bring lived experience together with my training" },
     manner: [],
     mannerPending: "2026-09-29: listed from their public profile; manner is theirs to declare at their interview.",
     wheelchairAccessible: false,
@@ -382,7 +413,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "I am passionate about the transformative potential of psychotherapy in supporting personal growth and healing. I am dedicated to creating a safe, supportive and non-judgmental environment where clients feel empowered to navigate life’s challenges and work towards their goals. I have worked with depression, anxiety, trauma, neurodiversity (autism and ADHD), interpersonal difficulties, disordered eating and body image concerns. My approach is warm, compassionate, person-centred and strengths-based, drawing on CBT, DBT, ACT, Compassion-Focused Therapy and Positive Psychology. Outside work I enjoy gardening, hiking, swimming, travelling, the gym, and time with family and friends.",
     experience: ["Registered psychologist, Therapy Co, Benowa", "Clinical Registrar Program, in progress", "Master of Clinical Psychology, 2025", "Bachelor of Psychology (Honours), research on neural pathways in children with ADHD", "CBT, DBT, ACT, Compassion-Focused Therapy and Positive Psychology"],
     languages: ["English"],
-    careAreas: ["depression", "anxiety", "trauma-informed", "autism-adhd"],
+    careAreas: ["depression", "anxiety", "trauma-informed", "autism-adhd", "eating-body"],
+    careAreasSometimes: ["relationships"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "eating-body": "disordered eating and body image concerns", "relationships": "interpersonal difficulties" },
     // non_judgmental, in their words: "I am dedicated to creating a safe, supportive and non-judgmental environment where clients feel empowered to navigate li"
     // motivating, in their words: "I have worked with depression, anxiety, trauma, neurodiversity (autism and ADHD), interpersonal difficulties, disordered"
     manner: ["non_judgmental", "motivating"],
@@ -414,8 +448,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "I am a psychologist committed to supporting children’s development and helping women move toward greater confidence, clarity and more fulfilling relationships. I trained in Brazil and am fully registered in Australia. I provide a warm, supportive space grounded in evidence-based practice, with clear, practical guidance. I work with parents and children on emotional regulation, behaviour, communication and self-esteem, with a special interest in ADHD and autism, using a strengths-based, neurodivergence-affirming approach. I also support women with self-esteem, identity, life transitions, relationships, anxiety and low mood, including women exploring or adjusting to an ADHD or autism diagnosis. I offer sessions in Portuguese and English.",
     experience: ["Senior psychologist, Therapy Co, Benowa", "Level 1 Couples Counselling, Gottman Institute, 2026", "5+1 Internship Program, completed 2024", "Postgraduate Certificate in Psychodrama Psychology, Florianópolis, Brazil", "Bachelor of Psychology with Honours thesis on learning difficulties in children, Brazil"],
     languages: ["English", "Portuguese"],
-    careAreas: ["child-adolescent-adhd", "autism-adhd"],
-    careAreasSometimes: ["emotional-regulation", "depression", "anxiety"],
+    careAreas: ["child-adolescent-adhd", "autism-adhd", "parenting", "relationships", "late-diagnosis"],
+    careAreasSometimes: ["emotional-regulation", "depression", "anxiety", "womens-health", "grief-life-change", "cultural-background"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "parenting": "I work with parents and children on emotional regulation, behaviour, communication and self-esteem", "relationships": "Level 1 Couples Counselling, Gottman Institute; more fulfilling relationships", "late-diagnosis": "women exploring or adjusting to an ADHD or autism diagnosis", "womens-health": "helping women move toward greater confidence, clarity and more fulfilling relationships", "grief-life-change": "self-esteem, identity, life transitions", "cultural-background": "I trained in Brazil and am fully registered in Australia; sessions in Portuguese and English" },
     // motivating, in their words: "I work with parents and children on emotional regulation, behaviour, communication and self-esteem, with a special inter"
     manner: ["motivating"],
     wheelchairAccessible: false,
@@ -446,7 +482,9 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "If you’re navigating neurodiversity, relationships, sleep, perinatal and postnatal mental health or women’s health, I offer a supportive and culturally compassionate space shaped by my own diverse background. I integrate lived experience with professional training to support clients in a grounded, holistic way, in a safe and collaborative space where people feel genuinely understood. My approach is warm, compassionate and non-judgmental, drawing on person-centred, strengths-based and evidence-based approaches including CBT, DBT, ACT and positive psychology. In my downtime I get outdoors with a coffee and a good book, travel, do pilates or yoga, and make friends with the local king parrots.",
     experience: ["Psychologist, Therapy Co, Benowa", "Master of Clinical Psychology, Bond University, 2026", "Graduate Diploma of Psychology (Honours), 2023", "CBT, DBT, ACT and positive psychology"],
     languages: ["English", "Mandarin", "Shanghainese"],
-    careAreas: [],
+    careAreas: ["sleep", "relationships", "womens-health", "cultural-background", "perinatal"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "sleep": "navigating neurodiversity, relationships, sleep, perinatal and postnatal mental health or women\u2019s health", "relationships": "navigating neurodiversity, relationships, sleep", "womens-health": "perinatal and postnatal mental health or women\u2019s health", "cultural-background": "a supportive and culturally compassionate space shaped by my own diverse background", "perinatal": "perinatal and postnatal mental health" },
     // attuned, in their words: "I integrate lived experience with professional training to support clients in a grounded, holistic way, in a safe and co"
     // collaborative, in their words: "I integrate lived experience with professional training to support clients in a grounded, holistic way, in a safe and co"
     // motivating, in their words: "My approach is warm, compassionate and non-judgmental, drawing on person-centred, strengths-based and evidence-based app"
@@ -479,8 +517,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "I enjoy taking a curious, collaborative and flexible approach to therapy, and I believe the therapeutic relationship is an important part of creating meaningful change. I aim to create a space where people feel respected, understood and comfortable being themselves. I tailor therapy to each person, drawing on CBT, ACT, DBT and Compassion-Focused Therapy. I work across the lifespan with life transitions, anxiety and depression, grief and loss, neurodiversity, alcohol and other drug concerns, and psychological assessments, which I approach in a client-centred, strengths-based way. I am originally from Peru and can also provide therapy in Spanish. Outside work I enjoy beach days, hiking, tennis, new recipes and a good record.",
     experience: ["Registered psychologist, Therapy Co, Benowa", "Master of Psychology (Clinical), Bond University, 2026", "Bachelor of Psychological Science (Honours), Bond University", "Bachelor of Arts in psychology and music psychology, University of Queensland", "Inpatient, outpatient and therapeutic community settings"],
     languages: ["English", "Spanish"],
-    careAreas: ["adhd-assessment", "depression", "anxiety"],
-    careAreasSometimes: ["substance-history"],
+    careAreas: ["adhd-assessment", "depression", "anxiety", "grief-life-change"],
+    careAreasSometimes: ["substance-history", "cultural-background"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "grief-life-change": "life transitions, anxiety and depression, grief and loss", "cultural-background": "I am originally from Peru and can also provide therapy in Spanish" },
     // attuned, in their words: "I aim to create a space where people feel respected, understood and comfortable being themselves. I tailor therapy to ea"
     // motivating, in their words: "I work across the lifespan with life transitions, anxiety and depression, grief and loss, neurodiversity, alcohol and ot"
     manner: ["attuned", "motivating"],
@@ -541,6 +581,7 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     experience: ["Therapy assistant and support worker, Therapy Co, Benowa, supervised by the practice’s psychologists", "Bachelor of Psychological Science, Griffith University, in progress"],
     languages: ["English"],
     careAreas: [],
+    ndis: true, // in their words: "NDIS support work"
     manner: [],
     mannerPending: "2026-09-29: listed from their public profile; manner is theirs to declare at their interview.",
     wheelchairAccessible: false,
@@ -570,6 +611,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     experience: ["Therapy assistant and support worker, Therapy Co, Benowa, supervised by the practice’s psychologists", "Master of Clinical Psychology, Griffith University, in progress", "Bachelor of Psychological Science (Honours), University of New England"],
     languages: ["English"],
     careAreas: ["child-adolescent-adhd"],
+    careAreasSometimes: ["executive-function"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "supporting children and adults with everyday life skills" },
+    ndis: true, // in their words: "NDIS support work"
     manner: [],
     mannerPending: "2026-09-29: listed from their public profile; manner is theirs to declare at their interview.",
     wheelchairAccessible: false,
@@ -598,7 +643,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "Bart is a passionate, straight-talking Clinical Psychologist who believes mental health support should help people function better in everyday life, not just feel better in the therapy room. He works with clients facing complex challenges, career and performance pressures, and major life transitions, while also supporting clinicians through supervision and professional development. As Director of Atlantis Recovery Centre, Bart leads an integrated approach that brings together psychology, movement, physical rehabilitation, and performance. His warm, practical style helps people build resilience, improve both mental and physical fitness, and create meaningful, lasting change.",
     experience: ["Clinical psychologist, director and co-owner, Atlantis Recovery Centre, Bundall", "AHPRA board-approved clinical supervisor", "Complex challenges, career and performance pressures, and major life transitions", "Supervision and professional development for clinicians", "Member, Australian Association of Psychologists", "Member, Association of Applied Sports Psychology"],
     languages: ["English"],
-    careAreas: [],
+    careAreas: ["work-career", "grief-life-change"],
+    careAreasSometimes: ["movement-exercise"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "work-career": "clients facing complex challenges, career and performance pressures", "grief-life-change": "major life transitions", "movement-exercise": "brings together psychology, movement, physical rehabilitation, and performance" },
     // attuned, in their words: "Bart is a passionate, straight-talking Clinical Psychologist who believes mental health support should help people funct"
     // non_judgmental, in their words: "Bart is a passionate, straight-talking Clinical Psychologist who believes mental health support should help people funct"
     // motivating, in their words: "As Director of Atlantis Recovery Centre, Bart leads an integrated approach that brings together psychology, movement, ph"
@@ -629,7 +677,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "Jeff is passionate about helping people overcome life’s most complex challenges. Whether you’re recovering from trauma, managing anxiety or depression, or striving to perform at your best, Jeff provides personalised, evidence-based care using Schema Therapy, ACT, and Activity-Based Psychotherapy. He is also completing advanced training in Psychedelic-Assisted Therapy, combining proven approaches with emerging treatments to help clients achieve lasting change.",
     experience: ["Clinical psychologist, Atlantis Recovery Centre, Bundall", "Schema Therapy, Acceptance and Commitment Therapy (ACT) and Activity-Based Psychotherapy", "Trauma, anxiety, depression and performance", "Advanced training in Psychedelic-Assisted Therapy, in progress", "Master of Clinical Psychology, University of Queensland", "Bachelor of Psychological Science (Honours), Southern Cross University", "Background in outdoor education, military service, emergency services and adventure and endurance events"],
     languages: ["English"],
-    careAreas: ["depression", "anxiety", "trauma-informed"],
+    careAreas: ["depression", "anxiety", "trauma-informed", "work-career"],
+    careAreasSometimes: ["movement-exercise"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "work-career": "striving to perform at your best", "movement-exercise": "Activity-Based Psychotherapy" },
     manner: [],
     mannerPending: "2026-09-29: listed from their public profile; manner is theirs to declare at their interview.",
     wheelchairAccessible: true,
@@ -688,8 +739,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "‘Exercise as Medicine’ … Sarah lives and breathes her mantra. Sarah is passionate about helping people move with confidence, build strength, and enjoy a better quality of life. She has a particular interest in supporting older adults and brings warmth, intelligence, and genuine care to every session. Sarah combines her Exercise Physiology expertise with Pilates, Functional Range Conditioning, and hydrotherapy to create safe, personalised programs that make exercise feel achievable, empowering, and enjoyable.",
     experience: ["Senior exercise physiologist, Atlantis Recovery Centre, Bundall", "Pilates, Functional Range Conditioning and hydrotherapy", "Particular interest in supporting older adults", "Bachelor and Graduate Diploma in Exercise Science, Griffith University"],
     languages: ["English"],
-    careAreas: [],
+    careAreas: ["movement-exercise"],
     careAreasSometimes: ["non-medication"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "movement-exercise": "\u2018Exercise as Medicine\u2019, Sarah lives and breathes her mantra" },
     // motivating, in their words: "‘Exercise as Medicine’ … Sarah lives and breathes her mantra. Sarah is passionate about helping people move with confide"
     // non_judgmental, in their words: "Sarah combines her Exercise Physiology expertise with Pilates, Functional Range Conditioning, and hydrotherapy to create"
     manner: ["motivating", "non_judgmental"],
@@ -719,8 +772,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "With a lifelong passion for movement and sports, Yuri’s approach combines clinical expertise in orthopaedic and sports rehabilitation and patient-centred care to help clients return to their optimal level of function and performance. He believes in empowering individuals through education and active involvement in their recovery process. He is also committed to advancing the field of physiotherapy by holding a Master in Rehabilitation Sciences and a PhD where he investigated ACL injuries in Athletes.",
     experience: ["Physiotherapist, Atlantis Recovery Centre, Bundall", "Orthopaedic and sports rehabilitation", "PhD investigating ACL injuries in athletes", "Master in Rehabilitation Sciences"],
     languages: ["English", "Portuguese"],
-    careAreas: [],
+    careAreas: ["movement-exercise"],
     careAreasSometimes: ["non-medication"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "movement-exercise": "clinical expertise in orthopaedic and sports rehabilitation" },
     // attuned, in their words: "With a lifelong passion for movement and sports, Yuri’s approach combines clinical expertise in orthopaedic and sports r"
     // non_judgmental, in their words: "With a lifelong passion for movement and sports, Yuri’s approach combines clinical expertise in orthopaedic and sports r"
     manner: ["attuned", "non_judgmental"],
@@ -750,8 +805,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "Tom is an incredibly welcoming Australian Army veteran with experience in both occupational rehabilitation and musculoskeletal physiotherapy, including overseas work supporting UK military personnel. He specialises in helping people return to full function, from young athletes to older clients, drawing on experience in a high-performance setting in Glasgow working with runners, HYROX athletes, and footballers. Having gone through back surgery and rehab himself, Tom understands what recovery really takes. He combines clinical expertise with genuine care, helping clients rebuild strength and confidence as part of Atlantis’s whole person approach to movement and wellbeing.",
     experience: ["Senior physiotherapist, Atlantis Recovery Centre, Bundall", "Occupational rehabilitation and musculoskeletal physiotherapy", "Overseas work supporting UK military personnel", "High-performance setting in Glasgow: runners, HYROX athletes and footballers", "Australian Army veteran"],
     languages: ["English"],
-    careAreas: [],
-    careAreasSometimes: ["non-medication"],
+    careAreas: ["movement-exercise"],
+    careAreasSometimes: ["non-medication", "work-career"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "movement-exercise": "helping people return to full function, from young athletes to older clients", "work-career": "occupational rehabilitation" },
     // attuned, in their words: "Having gone through back surgery and rehab himself, Tom understands what recovery really takes. He combines clinical exp"
     // motivating, in their words: "Having gone through back surgery and rehab himself, Tom understands what recovery really takes. He combines clinical exp"
     manner: ["attuned", "motivating"],
@@ -781,8 +838,11 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "Lester Rafanan graduated with a Doctor of Physiotherapy from Bond University and has a background in personal training, strength and conditioning, and competitive sport, giving Lester a strong understanding of movement, performance, and injury prevention. He takes an evidence-based, personalised approach to physiotherapy, whether you’re recovering from an injury or surgery, managing chronic pain, returning to sport, accessing NDIS supports, or simply wanting to stay active. Every treatment plan is tailored to your goals so you can move with confidence.",
     experience: ["Physiotherapist, Atlantis Recovery Centre, Bundall", "Doctor of Physiotherapy, Bond University", "Background in personal training, strength and conditioning, and competitive sport", "Injury and surgery recovery, chronic pain, return to sport and NDIS supports"],
     languages: ["English"],
-    careAreas: [],
+    careAreas: ["movement-exercise"],
     careAreasSometimes: ["non-medication"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "movement-exercise": "recovering from an injury or surgery, managing chronic pain, returning to sport, accessing NDIS supports" },
+    ndis: true, // in their words: "accessing NDIS supports"
     // motivating, in their words: "Strength & conditioning"
     manner: ["motivating"],
     wheelchairAccessible: true,
@@ -812,7 +872,10 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     about: "I’m Alex. I’m an ADHD coach, high school teacher and former lawyer, and I know what it’s like to work in high-pressure environments and navigate the demands of a busy brain. I’ve been living with ADHD for over 30 years, and today I support adults, students, parents and families who are trying to make sense of ADHD in everyday life. Over that time, I’ve learned what it feels like to want to start something and just not be able to. To work hard, care deeply, and still feel like it doesn’t show the way it should. For the past decade, I’ve also had the privilege of supporting people with ADHD professionally. As a high school teacher, ADHD coach, educational leader, and through my previous career in law, I’ve helped students, parents, educators, and professionals better understand ADHD, navigate its challenges, and build practical strategies that are useful in real life. Long before I became an ADHD coach, I noticed something else happening around me. I was the person people came to when they didn’t understand ADHD. Students who felt like they were failing but weren’t. Parents who were exhausted and trying everything they could. Partners who didn’t know how to support someone they loved. Teachers and colleagues trying to make sense of behaviour that didn’t fit the system. And in every conversation, the goal was the same: to help people feel less blamed, less confused, and more understood. Today, I combine lived experience with years of professional practice to help people with ADHD make life more manageable, understand what is getting in the way, and find practical ways forward. That’s why Lawson ADHD Solutions exists. There’s no single planner, app, or system that works for every ADHD brain. My role is to understand how your ADHD shows up in your life specifically, then help you build strategies that actually fit. The goal is simple: you leave each session feeling understood, more confident, and knowing exactly what to do next.",
     experience: ["ADHD coach and mentor, Lawson ADHD Solutions, Sutherland", "Almost a decade of high school teaching and school leadership, as Head Teacher and Year Advisor", "Master of Teaching (Secondary) with Distinction, University of Wollongong", "Bachelor of Laws (LLB), and a previous career in law", "PESI ADHD Coaching Course", "Mentored by ADHD coach Mark Brandtman", "More than 50 families, adults and students supported through one-to-one coaching in six months", "Proficient High School Teacher Accreditation", "Listed in the ADHD Support Australia directory"],
     languages: ["English"],
-    careAreas: ["non-medication"],
+    careAreas: ["non-medication", "executive-function", "work-career", "study-school", "parenting"],
+    careAreasSometimes: ["relationships", "late-diagnosis"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "I\u2019ve learned what it feels like to want to start something and just not be able to", "work-career": "I know what it\u2019s like to work in high-pressure environments; students, parents, educators, and professionals", "study-school": "Students who felt like they were failing but weren\u2019t", "parenting": "Parents who were exhausted and trying everything they could", "relationships": "Partners who didn\u2019t know how to support someone they loved", "late-diagnosis": "trying to make sense of ADHD in everyday life" },
     // sense_making, in their words: "I’ve been living with ADHD for over 30 years, and today I support adults, students, parents and families who are trying "
     // non_judgmental, in their words: "I’ve been living with ADHD for over 30 years, and today I support adults, students, parents and families who are trying "
     // motivating, in their words: "For the past decade, I’ve also had the privilege of supporting people with ADHD professionally. As a high school teacher"

@@ -11,7 +11,7 @@ import {
   VideoCamera,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
-import { Fragment, useRef, type SyntheticEvent } from "react";
+import { Fragment, useRef, type SyntheticEvent, useMemo } from "react";
 import {
   closedBooksNote,
   distanceTo,
@@ -19,12 +19,12 @@ import {
   missedAsksLine,
   type Clinician,
 } from "@/demo/clinicians";
-import { type NeedSignal } from "@/matching/needs";
+import { facetKey, needForKey, shortLabel, type NeedSignal } from "@/matching/needs";
 import { APPROACH_LABELS } from "@/finder/filters";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { profileAnnouncement } from "@/finder/announce";
 import { professionOf } from "@/demo/clinicians";
-import { EXPERTISE_LABELS, professionLabel } from "@/support/professions";
+import { professionLabel } from "@/support/professions";
 import { ClinicianPortrait, EASE_OUT, MotionScreen, Pressable, StatusLine, Wordmark } from "./shared";
 
 const UNKNOWN_DETAIL = /set (?:by|with) the practice/i;
@@ -53,9 +53,9 @@ function profileFacts(clinician: Clinician): ProfileFact[] {
   if (additionalLanguages.length > 0) {
     facts.push({ kind: "language", label: LANGUAGE_LIST.format(additionalLanguages) });
   }
-  if (clinician.acceptingNewPatients) {
-    facts.push({ kind: "availability", label: "Accepting new patients" });
-  }
+  // O261: every listed clinician accepts new patients, so the fact carries no information as a chip on
+  // each profile (three words on a screen that holds sixty); closed books still say so on the row (O4).
+  // The profile pills took its place.
   // O236: the declared note-taking fact, in the practice's own terms.
   if (clinician.consultRecording === "ai-scribe") facts.push({ kind: "recording", label: "AI scribe, with your consent" });
   if (clinician.consultRecording === "no-ai") facts.push({ kind: "recording", label: "No AI recording" });
@@ -107,6 +107,14 @@ export function ProfileStage({
   strengthFit?: string | null;
 }) {
   const facts = profileFacts(clinician);
+  /** The declared care areas as pills: asked-for ones first, then the rest as declared, three at most. */
+  const worksWith = useMemo(() => {
+    const asked = new Set(profileEvidence.map((need) => facetKey(need.facet)));
+    const declared = [...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])];
+    const ordered = [...declared.filter((area) => asked.has(`care:${area}`)), ...declared.filter((area) => !asked.has(`care:${area}`))];
+    const words = ordered.map((area) => needForKey(`care:${area}`)).filter((need): need is NeedSignal => need !== null).map(shortLabel);
+    return [...new Set(words)].slice(0, 3);
+  }, [clinician.careAreas, clinician.careAreasSometimes, profileEvidence]);
   const about = useRef<HTMLDetailsElement | null>(null);
   /** A section closed by hand with nothing else open: the first sentence comes back. */
   const unfoldAbout = (event: SyntheticEvent<HTMLDetailsElement>) => {
@@ -146,9 +154,13 @@ export function ProfileStage({
           <div className="profile-identity">
             <h1 tabIndex={-1}>{clinician.name}</h1>
             <p className="clinician-meta">{professionOf(clinician) === "gp" ? shortTitle(clinician.title) : `${professionLabel(professionOf(clinician))} · ${clinician.title.split(",").slice(1).join(",").trim() || shortTitle(clinician.title)}`}</p>
-            {clinician.expertise && clinician.expertise.length > 0 && (
-              /* PRD §41: "Best for" — the declared expertise, in the closed taxonomy's own words. */
-              <p className="profile-best-for"><span>Best for</span> {clinician.expertise.map((t) => EXPERTISE_LABELS[t]).join(", ")}</p>
+            {worksWith.length > 0 && (
+              /* O261 (founder, 2026-09-29: "key pill tags"): what they declare they work with, in the chips' own
+                 words, the ones this person asked for first, at most three. Replaces PRD §41's "Best for" line,
+                 whose expertise tags now sit inside the care areas. */
+              <ul className="profile-fit-tags profile-works-with" aria-label="Works with">
+                {worksWith.map((tag) => <li key={tag}>{tag}</li>)}
+              </ul>
             )}
             {problemFit && <p className="profile-best-for profile-fit"><span>Why you’re seeing them</span> {problemFit}</p>}
             {/* WHY THIS MATCH, MADE TRACEABLE (founder, 2026-09-19). These are the same expertise
@@ -276,10 +288,11 @@ export function ProfileStage({
                   {clinician.focus}. Nothing in what you said pointed here specifically.
                 </p>
               )}
+              {/* O261: the visible label is one word; the name stays in the accessible name, and the compare screen shows both. */}
               {compareName && (
-                <button className="profile-compare" type="button" onClick={onCompare}>
+                <button className="profile-compare" type="button" onClick={onCompare} aria-label={`Compare with ${compareName}`}>
                   <ArrowsLeftRight size={18} weight="regular" aria-hidden="true" />
-                  Compare with {compareName}
+                  Compare
                 </button>
               )}
             </div>

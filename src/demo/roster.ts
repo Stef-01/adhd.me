@@ -227,6 +227,13 @@ export type Clinician = {
   telehealthFirstAppointment?: true;
   /** The clinician says they have ADHD themselves (O257): in their own public words, never inferred. */
   livedExperience?: true;
+  /** The clinician says they see NDIS participants (O261): in their own public words, never inferred. */
+  ndis?: true;
+  /**
+   * The clinician's own sentence behind a care-area declaration (O261): read off their public words when the
+   * life domains were declared, kept so a screen can quote them and the founder can confirm each one.
+   */
+  careEvidence?: Partial<Record<CareArea, string>>;
   /**
    * The clinician says they have completed the training NSW requires to carry ADHD care without
    * ongoing psychiatrist involvement.
@@ -323,12 +330,10 @@ const founding: Clinician[] = [
       "Chronic disease management",
     ],
     languages: ["English", "Hindi", "Urdu"],
-    careAreas: [
-      "adhd-assessment",
-      "titration",
-      "substance-history",
-      "shared-care",
-    ],
+    careAreas: ["adhd-assessment", "titration", "substance-history", "shared-care"],
+    careAreasSometimes: ["sleep"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "sleep": "He covers cardiovascular and sleep screening before a stimulant is considered" },
     // M3 (F6): `not_rushed`'s own interview question ("Do you book a longer first appointment
     // for this, and roughly how long?", interview.ts) and appointmentLength's question ("How
     // long is a first appointment... and is a longer one bookable?") ask the SAME real-world
@@ -459,13 +464,15 @@ const founding: Clinician[] = [
     // O88: from her supplied bio — "of Indian origin and speaking Hindi and Urdu". Languages
     // are ranked on (O1), so this is a matching fact, not decoration.
     languages: ["English", "Hindi", "Urdu"],
-    careAreas: ["adhd-assessment"],
+    careAreas: ["adhd-assessment", "womens-health", "cultural-background"],
+    careAreasSometimes: ["depression", "anxiety", "child-adolescent-adhd", "non-medication"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "womens-health": "Her clinical interests are ADHD, mental health, women's health and functional medicine", "cultural-background": "Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care" },
     // Interest-level claims from her bio sit at the "sometimes" grade until her interview
     // upgrades or removes them — half weight, honestly earned (O2). `non-medication` is O58's
     // addition: her stated interest in functional and lifestyle medicine plus the Focused
     // Psychological Strategies training underway is exactly that facet's territory
     // ("non-medication and psychological supports"), claimed at interest grade, not above it.
-    careAreasSometimes: ["depression", "anxiety", "child-adolescent-adhd", "non-medication"],
     // O88: her first manner claims, in her own supplied words — "values culturally sensitive,
     // holistic and patient-centred care". Culturally sensitive care from a Hindi- and
     // Urdu-speaking GP of Indian origin is culturally_attuned; holistic and patient-centred is
@@ -562,8 +569,10 @@ const founding: Clinician[] = [
     ],
     // Not published on her page; English until she names her own.
     languages: ["English"],
-    careAreas: ["autism-adhd", "trauma-informed", "non-medication"],
-    careAreasSometimes: ["emotional-regulation", "anxiety"],
+    careAreas: ["autism-adhd", "trauma-informed", "non-medication", "executive-function"],
+    careAreasSometimes: ["emotional-regulation", "anxiety", "relationships"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "executive-function": "Paula supports individuals to navigate challenges with emotional regulation, executive functioning, anxiety, self-esteem, relationships, and everyday life", "relationships": "challenges with emotional regulation, executive functioning, anxiety, self-esteem, relationships, and everyday life" },
     // Her own words: "warm, collaborative, and non-judgmental", and a practice built on helping
     // people "better understand their unique strengths, challenges, and ways of experiencing".
     manner: ["collaborative", "non_judgmental", "sense_making", "attuned"],
@@ -612,7 +621,11 @@ const founding: Clinician[] = [
       "Postgraduate Diploma in Psychology",
     ],
     languages: ["English"],
-    careAreas: ["non-medication"],
+    careAreas: ["non-medication", "social-connection"],
+    careAreasSometimes: ["study-school", "work-career", "parenting"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "social-connection": "communication, and social skills building for growing client's toolkits of practical coping strategies", "study-school": "Career counselling and post-schooling decision making", "work-career": "Career counselling and post-schooling decision making", "parenting": "supporting individuals and families through their NDIS journey to thrive" },
+    ndis: true, // in their words: "supporting individuals and families through their NDIS journey"
     // Her page names goals, wellbeing and a toolkit a person can use — motivating and
     // collaborative in the manner vocabulary, and nothing beyond what she wrote.
     manner: ["motivating", "collaborative"],
@@ -658,6 +671,9 @@ const founding: Clinician[] = [
     ],
     languages: ["English"],
     careAreas: ["trauma-informed", "non-medication"],
+    careAreasSometimes: ["parenting"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "parenting": "works collaboratively with families on psychoeducation towards their goals" },
     manner: ["collaborative", "steadying"],
     wheelchairAccessible: true,
     appointmentLength: "50-minute sessions; times set with the clinic",
@@ -699,8 +715,10 @@ const founding: Clinician[] = [
       "Bachelor of Psychological Science with Honours, University of Queensland",
     ],
     languages: ["English"],
-    careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd", "non-medication"],
-    careAreasSometimes: ["anxiety", "depression"],
+    careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd", "non-medication", "parenting"],
+    careAreasSometimes: ["anxiety", "depression", "study-school", "social-connection", "work-career"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "parenting": "provides parenting support; certified Triple P Stepping Stones Parenting Program Practitioner", "study-school": "specific learning disorders, bullying", "social-connection": "bullying, interpersonal difficulties", "work-career": "stress / burn out" },
     manner: ["non_judgmental", "motivating"],
     // O253: his page names anger among the presentations he works with, which is what this tag
     // is for. Nothing else in the expertise taxonomy matches what he published.
@@ -749,8 +767,10 @@ const founding: Clinician[] = [
     ],
     languages: ["English"],
     // Her own declaration: "perinatal mental health" is in her focus, her about and her experience.
-    careAreas: ["trauma-informed", "non-medication", "perinatal"],
-    careAreasSometimes: ["anxiety", "depression"],
+    careAreas: ["trauma-informed", "non-medication", "perinatal", "eating-body", "womens-health", "grief-life-change"],
+    careAreasSometimes: ["anxiety", "depression", "movement-exercise"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "eating-body": "Samantha is a Credentialed Eating Disorder Clinician (CEDC-MH)", "womens-health": "perinatal mental health, fertility", "grief-life-change": "major life transitions such as parenthood, injuries, retiring and personal losses", "movement-exercise": "supporting clients who are mums, new parents, athletes" },
     // "a calm, inclusive, and supportive environment" and "a strengths-based lens", her words.
     manner: ["steadying", "non_judgmental", "motivating"],
     expertise: ["regular-eating"],
@@ -797,8 +817,10 @@ const founding: Clinician[] = [
       "Master of Professional Psychology, Bond University",
     ],
     languages: ["English"],
-    careAreas: ["non-medication"],
-    careAreasSometimes: ["child-adolescent-adhd", "autism-adhd", "emotional-regulation", "anxiety", "depression", "trauma-informed"],
+    careAreas: ["non-medication", "parenting", "social-connection"],
+    careAreasSometimes: ["child-adolescent-adhd", "autism-adhd", "emotional-regulation", "anxiety", "depression", "trauma-informed", "study-school"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "parenting": "Parent-Child Interaction Therapy (PCIT) and facilitating programs relating to managing disruptive behaviours in children to strengthen family dynamics", "social-connection": "friendships & socialising", "study-school": "Home, school and community visits" },
     manner: ["collaborative", "steadying"],
     expertise: ["emotional-regulation"],
     wheelchairAccessible: true,
@@ -843,8 +865,10 @@ const founding: Clinician[] = [
       "Master of Clinical Psychology, currently completing",
     ],
     languages: ["English"],
-    careAreas: ["trauma-informed", "non-medication"],
-    careAreasSometimes: ["autism-adhd", "emotional-regulation", "anxiety", "depression"],
+    careAreas: ["trauma-informed", "non-medication", "cultural-background"],
+    careAreasSometimes: ["autism-adhd", "emotional-regulation", "anxiety", "depression", "grief-life-change"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "cultural-background": "supporting clients from culturally and linguistically diverse (CALD) backgrounds who have experienced displacement, cultural transition and complex trauma with cultural sensitivity", "grief-life-change": "adjustment difficulties; displacement, cultural transition" },
     // "cultural sensitivity to tailor interventions to their unique lived experiences" and
     // "a safe collaborative space" — her own page, and nothing read into it.
     manner: ["culturally_attuned", "collaborative", "non_judgmental"],
@@ -891,8 +915,10 @@ const founding: Clinician[] = [
       "Master of Psychology (Educational & Developmental), Queensland University of Technology",
     ],
     languages: ["English"],
-    careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd"],
-    careAreasSometimes: ["non-medication"],
+    careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd", "study-school"],
+    careAreasSometimes: ["non-medication", "late-diagnosis", "parenting"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "study-school": "Educational and developmental assessments; previously worked as a Psychologist in a school", "late-diagnosis": "discovering an enhanced understanding of their unique neurotype; working with young adults and their families", "parenting": "Circle of Security (COS)" },
     manner: ["sense_making", "collaborative", "motivating"],
     expertise: ["late-diagnosis"],
     wheelchairAccessible: true,
@@ -937,8 +963,10 @@ const founding: Clinician[] = [
       "In-clinic, home visit, kindergarten and school visit appointments",
     ],
     languages: ["English"],
-    careAreas: ["non-medication"],
-    careAreasSometimes: ["child-adolescent-adhd", "autism-adhd", "emotional-regulation"],
+    careAreas: ["non-medication", "parenting", "study-school", "social-connection"],
+    careAreasSometimes: ["child-adolescent-adhd", "autism-adhd", "emotional-regulation", "movement-exercise", "executive-function"],
+    // O261: each life-domain declaration with the clinician's own sentence behind it.
+    careEvidence: { "parenting": "paediatric occupational therapy including play therapy and parent training", "study-school": "school refusal / school can't; kindergarten and school visit appointments", "social-connection": "social and movement programs, supporting goals including social skills, teamwork", "movement-exercise": "motor development, building independence, resilience, and confidence", "executive-function": "strategies are practical, achievable and able to be easily implemented into daily routines" },
     // "a safe, supportive, creative and fun therapy environment", "family-centred practice in
     // working with caregivers", "guided by his client's interests" — his page, in the closed
     // manner vocabulary.

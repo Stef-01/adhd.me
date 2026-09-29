@@ -903,3 +903,20 @@ before it tripped the breaker on recitals alone (a vote answering "care recites 
 SchemaError, on 2 of the first 21 reads); over the whole corpus 6 of 381 reads carry one such
 vote and every one of them still read from the other votes. Every call is on record turn by turn
 under one id from its first turn (stage 5), so a call that ends in a tunnel keeps what was said.
+
+### 16m. 2026-09-30, the small hours: the life domains (O261) and the roster filter that hid the match (R17)
+
+Stage 3 of the night's RCA: thirteen care areas for what people need help with in life, an NDIS
+preference, cues in the person's words, meanings for the reader, declarations with evidence on
+every profile that says it, 51 corpus sentences, and the cultural words moved from the invisible
+manner trait to a declared, visible care area (docs/matching/RCA-NIGHT-2026-09-29.md, stage 3;
+qa/matching/life-domains.md). On the way, the first production call after stage 2 showed the
+roster narrowed by a mention of anxiety, so the lived-experience clinicians the person asked for
+were gone before ranking: a care word in the sentence orders and never narrows now (R17).
+The ladder on the life-domain prompt (be2b7fa8dc80): P0 to P4 pass, P4 for the first time over the
+whole dev split (414 requests, recall on reaches 99.8% against the lexicon's 100%, precision 93.1%,
+never violations 0.0%, C4 negation 93.7%, $0.075). Two lessons on the way: the P0 gate "every
+answer reads back as sent" is the tool that keeps a new vocabulary honest, and it found nine
+context words the first cut had let in ("paperwork", "shift work", "falling apart", "my manager",
+"high school" …), each now refused; and gpt-5-nano read a bad night or an unfinished task as an
+ask until the care rule said a description with no help asked for adds nothing.

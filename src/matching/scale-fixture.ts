@@ -45,6 +45,10 @@ import { EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
  * below staying green while measuring less than they claim.
  */
 const EVERY_CARE_AREA: Record<CareArea, true> = {
+  // O261: the life domains.
+  "executive-function": true, "work-career": true, "study-school": true, parenting: true, relationships: true,
+  "social-connection": true, "late-diagnosis": true, "grief-life-change": true, sleep: true, "eating-body": true,
+  "womens-health": true, "movement-exercise": true, "cultural-background": true,
   "adhd-assessment": true,
   "child-adolescent-adhd": true,
   titration: true,

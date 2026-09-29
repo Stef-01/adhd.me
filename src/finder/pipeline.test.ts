@@ -24,6 +24,7 @@ const DECLARES = {
   longerAppointments: (c: Clinician) => c.manner.includes("not_rushed"),
   wheelchair: (c: Clinician) => c.wheelchairAccessible,
   openBooks: (c: Clinician) => c.acceptingNewPatients,
+  ndis: (c: Clinician) => c.ndis === true,
 } as const;
 
 describe("the quick filters", () => {

@@ -207,9 +207,32 @@ function askOf(question: string | null): Ask {
 }
 const YES = /^\s*(yes|yeah|yep|yup|sure|please|ok|okay|definitely|absolutely|i would|that would|i.d like that)\b/i;
 const NO = /^\s*(no|nah|nope|not really|no thanks|no preference|none|(it )?doesn.t matter|not (at all|particularly|really))\b/i;
-const LEAD = /^\s*(yes|yeah|yep|yup|sure|please|ok|okay|definitely|absolutely|no|nah|nope|not really|no thanks|no preference|none)\b[,.! ]*/i;
+const LEAD = /^\s*(yes|yeah|yep|yup|sure|please|ok|okay|definitely|absolutely|no|nah|nope|not really|no thanks|no preference|none)\b[,.!:;—–\- ]*/i;
 const readable = (text: string) => /[a-z]{2,}/i.test(text);
+/** Written mostly in English letters: a person answering in Vietnamese or Arabic is read through the model's English request instead. */
+export function mostlyEnglish(text: string): boolean {
+  const letters = text.match(/\p{L}/gu) ?? [];
+  if (letters.length === 0) return true;
+  const plain = letters.filter((letter) => /[a-z]/i.test(letter)).length;
+  return plain / letters.length >= 0.9;
+}
 export const LIVED_ASK = "someone who has ADHD themselves";
+/** After a yes, words that say nothing more: "that would be helpful", "please", "thanks". */
+const FILLER = /^\s*(that|this|it)('s| is| would be| will be|'d be)?\s*(really |very )?(helpful|great|good|fine|ok|okay|nice|perfect|ideal|lovely|wonderful)[.!]?\s*$|^\s*(please|thanks|thank you)[.!]?\s*$/i;
+/** A yes that opens a request of its own is not an answer to the question ("Yes, please find me a GP near Penrith who bulk bills"). */
+const ASKS_ANEW = /\b(find me|please find|i want|i need|i'?m looking for|looking for|i'?d like|can you find|could you find|do you know (of |any )?(a |an |some |any )?(clinician|gp|doctor|psychologist|psychiatrist|coach|therapist|counsellor|someone|anyone)|know of (a |an |any )?(clinician|gp|doctor|psychologist|someone|anyone))\b/i;
+/** A clause that asks the assistant something ("what does bulk billing mean?", "do you mean …?") is a question, not a request part. */
+const QUESTION_TO_ASSISTANT = /^\s*(what|how|why|which|who|when|where|do you|does|did|is it|is that|is there|are you|are there|can you|could you|would you|will you|should i|would it|do i|am i|isn'?t|don'?t you|what'?s|how'?s)\b/i;
+/** The person's answer without the questions they asked the assistant in it, clause by clause. */
+export function withoutQuestions(text: string): string {
+  const clauses = text.match(/[^.;?!]+[.;?!]*/g) ?? [text];
+  const kept = clauses.filter((clause) => !(clause.trim().endsWith("?") && QUESTION_TO_ASSISTANT.test(clause.replace(/^[\s—–\-,;]+/, "")) && !ASKS_ANEW.test(clause)));
+  return kept.map((clause) => clause.trim().replace(/[\s.;:!?—–\-]+$/, "")).filter(Boolean).join(". ");
+}
+/** After a no, the rest is kept only where it turns into an ask ("no, but I'd like a woman"); "no particular language matters" restates the no. */
+const NO_THEN_ASK = /\b(but|however|although|though|i want|i need|i'?d like|i would like|i prefer|prefer|preferably|ideally|someone who|somebody who|a woman|a man|looking for|find me|do you know)\b/i;
+/** "English is fine", "just English", "no, English" as the whole answer to the language question. */
+const ENGLISH_ONLY = /^\s*(no[,.]?\s*)?(just |only )?english( is| would be| works| will do)?( fine| ok| okay| only| please| good| great)?[.!]?\s*$/i;
 
 export function requestFromTurns(turns: readonly Turn[]): { request: string; place: string } {
   const parts: string[] = [];
@@ -219,7 +242,7 @@ export function requestFromTurns(turns: readonly Turn[]): { request: string; pla
   for (const turn of turns) {
     if (turn.who === "assistant") { question = turn.text; continue; }
     if (turn.who !== "person") continue;
-    const text = turn.text.trim();
+    const text = withoutQuestions(turn.text.trim());
     if (!readable(text)) continue;
     const ask: Ask = answered ? askOf(question) : "opening";
     answered = true;
@@ -227,12 +250,22 @@ export function requestFromTurns(turns: readonly Turn[]): { request: string; pla
     const no = NO.test(text);
     const rest = text.replace(LEAD, "").replace(/^(but|and|though|although)\s+/i, "").trim();
     // After a yes the rest is usually the substance ("yes, a woman if possible"); after a no it usually
-    // restates the no ("no, English is fine", "no, that doesn't matter") unless it runs on into an ask.
-    const more = rest.split(/\s+/).filter(Boolean).length >= (no ? 6 : 3) ? rest : "";
+    // restates the no ("no, English is fine", "no particular language or cultural background matters", the eval's
+    // negation persona, 2026-09-30) unless it turns into an ask ("no, but I'd like a woman").
+    const more = rest.split(/\s+/).filter(Boolean).length >= 3 && (!no || NO_THEN_ASK.test(rest)) ? rest : "";
+    // "English" to the language question is no ask: the roster speaks it, and the ranking would read nothing from it.
+    if (ask === "language" && ENGLISH_ONLY.test(text)) continue;
     // Yes to the lived-experience question is that ask in the finder's words; any other answer to it is theirs ("a woman would be good").
-    if (ask === "lived" && yes) {
+    // A yes that goes on to ask for something else is that ask, not this one (the eval's asker persona, 2026-09-30: the
+    // model asked the question four times, the person kept asking their own, and "Yes, please find me a GP near Penrith"
+    // was written as a wish for a clinician with ADHD).
+    if (ask === "lived" && yes && !ASKS_ANEW.test(rest)) {
       parts.push(LIVED_ASK);
-      if (more) parts.push(more);
+      if (more && !FILLER.test(rest)) parts.push(more);
+      continue;
+    }
+    if (yes && ASKS_ANEW.test(rest)) {
+      parts.push(rest);
       continue;
     }
     if (ask === "place") {
@@ -240,7 +273,7 @@ export function requestFromTurns(turns: readonly Turn[]): { request: string; pla
       continue;
     }
     if (yes || no) {
-      if (more) parts.push(more);
+      if (more && !FILLER.test(rest)) parts.push(more);
       continue;
     }
     parts.push(text);
@@ -254,7 +287,10 @@ function revealFrom(state: VoiceState, args: unknown): Reveal {
   const { request, place } = parse(args);
   const own = requestFromTurns(state.turns);
   const modelWords = typeof request === "string" && request.trim() ? inTheirWords(request.trim().slice(0, MAX_REQUEST), state.said) : "";
-  const words = own.request ? inTheirWords(own.request, state.said) : modelWords || saidAsRequest(state.said);
+  // The person's words, unless they were not in English (the eval's Vietnamese persona, 2026-09-30: "nói tiếng Việt" read
+  // no language); then the model's English request is the translation the reader can use, and the transcript keeps theirs.
+  const foreign = own.request !== "" && !mostlyEnglish(own.request) && modelWords !== "";
+  const words = own.request && !foreign ? inTheirWords(own.request, state.said) : modelWords || saidAsRequest(state.said);
   return { request: words, place: placeOf(place) || own.place };
 }
 

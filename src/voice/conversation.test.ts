@@ -172,8 +172,19 @@ describe("the voice conversation", () => {
       place: "Marrickville",
     });
     expect(requestFromTurns([turns[0]!, turns[1]!, turns[4]!, { who: "person", text: "No thanks." }])).toEqual({ request: turns[1]!.text.replace(/\.$/, ""), place: "" });
+    // A yes that opens a request of its own is that request, not the lived-experience ask (the asker persona, 2026-09-30).
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[4]!, { who: "person", text: "Yes—please find me a GP near Penrith who bulk bills." }]).request)
+      .toBe(`${turns[1]!.text.replace(/\.$/, "")}. please find me a GP near Penrith who bulk bills`);
+    // A yes followed by filler is the ask alone.
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[4]!, { who: "person", text: "Yes, that would be helpful." }]).request).toBe(`${turns[1]!.text.replace(/\.$/, "")}. ${LIVED_ASK}`);
     // An answer to the lived-experience question that is neither yes nor no is theirs, however short.
     expect(requestFromTurns([turns[0]!, turns[1]!, turns[4]!, { who: "person", text: "A woman." }]).request).toBe(`${turns[1]!.text.replace(/\.$/, "")}. A woman`);
+    // A no whose rest restates the no is nothing, however long (the negation persona, 2026-09-30).
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[6]!, { who: "person", text: "No particular language or cultural background matters." }]).request).toBe(turns[1]!.text.replace(/\.$/, ""));
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[6]!, { who: "person", text: "No, nothing like that matters to me at all." }]).request).toBe(turns[1]!.text.replace(/\.$/, ""));
+    // "English is fine" as the whole answer to the language question is nothing, with or without a no.
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[6]!, { who: "person", text: "English fine." }]).request).toBe(turns[1]!.text.replace(/\.$/, ""));
+    expect(requestFromTurns([turns[0]!, turns[1]!, turns[6]!, { who: "person", text: "Just English." }]).request).toBe(turns[1]!.text.replace(/\.$/, ""));
     // After a no, a short rest restates the no ("no, English is fine"); only a rest that runs on into an ask is kept.
     expect(requestFromTurns([turns[0]!, turns[1]!, turns[6]!, { who: "person", text: "No, English is fine." }]).request).toBe(turns[1]!.text.replace(/\.$/, ""));
     // A mention of a baby, a partner or a parent is not a patient: nothing here says who it is for but the person.
@@ -192,6 +203,32 @@ describe("the voice conversation", () => {
     const after = run([...answers("a psychiatrist"), calls(SHOW_MATCHES, { request: "A psychiatrist", place: "" })], early.state);
     expect(after.state.phase).toBe("revealing");
     expect(after.state.reveal?.request).toBe("a psychiatrist");
+  });
+
+  it("leaves out the questions the person asked the assistant, and keeps a request asked as a question", () => {
+    const first = "I want an ADHD assessment for myself — telehealth is fine, and cost matters because money's tight; what does “bulk billing” mean?";
+    const turns = [
+      { who: "assistant" as const, text: `Hi. ${OPENING_QUESTION}` },
+      { who: "person" as const, text: first },
+      { who: "assistant" as const, text: "Would you like someone who has ADHD themselves?" },
+      { who: "person" as const, text: "Do you mean someone who has personal lived experience with ADHD in addition to clinical qualifications?" },
+      { who: "assistant" as const, text: "Is there a language or background that matters?" },
+      { who: "person" as const, text: "No, English only — do you know clinicians around Penrith who offer telehealth and bulk-billing options?" },
+    ];
+    expect(requestFromTurns(turns).request).toBe(
+      "I want an ADHD assessment for myself — telehealth is fine, and cost matters because money's tight. English only — do you know clinicians around Penrith who offer telehealth and bulk-billing options",
+    );
+  });
+
+  it("uses the model's English request when the person did not speak English, and keeps their words in the transcript", () => {
+    const start = run([...opened, ...answers("Tôi cần tìm bác sĩ khám ADHD nói tiếng Việt, gặp trực tiếp ở Cabramatta")]).state;
+    const done = run([calls(SHOW_MATCHES, { request: "An ADHD assessment with a Vietnamese-speaking doctor, in person in Cabramatta", place: "Cabramatta" })], start).state;
+    // The profession guard still applies: the person did not say "doctor" in English, so the model's word becomes "clinician".
+    expect(done.reveal?.request).toBe("An ADHD assessment with a Vietnamese-speaking clinician, in person in Cabramatta");
+    expect(done.reveal?.place).toBe("Cabramatta");
+    expect(done.turns.some((turn) => turn.who === "person" && turn.text.includes("tiếng Việt"))).toBe(true);
+    // Without a model request, their words stand.
+    expect(run([calls(SHOW_MATCHES, { request: "", place: "" })], start).state.reveal?.request).toContain("tiếng Việt");
   });
 
   it("is the person's own words whether the model's call is full, empty or broken", () => {

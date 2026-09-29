@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-29T13:20:15.649Z",
+  "measuredAt": "2026-09-29T14:51:59.041Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -170,7 +170,7 @@
         },
         {
           "w": 5,
-          "text": "03:19 left in this session",
+          "text": "01:28 left in this session",
           "tag": "small"
         }
       ]
@@ -456,18 +456,18 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 4,
-          "text": "write the perfect email",
-          "tag": "span"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
           "w": 2,
-          "text": "START SMALL!",
+          "text": "CLEAR ONE!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": "type ‘Hi’",
+          "w": 1,
+          "text": "0",
           "tag": "span"
         }
       ]
@@ -503,15 +503,15 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "LOCK IN!",
+          "w": 3,
+          "text": "SLEEPY? LIGHTS OUT!",
           "tag": "p"
         },
         {
@@ -521,8 +521,8 @@
         },
         {
           "w": 1,
-          "text": "slides",
-          "tag": "span"
+          "text": "Buzzing",
+          "tag": "button"
         }
       ]
     },
@@ -1124,7 +1124,7 @@
       "path": "/profile",
       "name": "/profile",
       "state": null,
-      "total": 38,
+      "total": 39,
       "fold": 32,
       "chrome": 6,
       "ratio": 1,
@@ -1934,10 +1934,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 18,
-      "fold": 18,
+      "total": 28,
+      "fold": 28,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1946,14 +1946,14 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
+          "w": 5,
+          "text": "Whatever. Sure. Guess work wins.",
+          "tag": "p"
         },
         {
-          "w": 4,
-          "text": "That came out sharp.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Ouch. I did say sorry.",
+          "tag": "p"
         }
       ]
     },
@@ -2555,10 +2555,10 @@
       "path": "/practitioner/anubhav-saxena",
       "name": "Practitioner profile",
       "state": null,
-      "total": 44,
-      "fold": 44,
+      "total": 47,
+      "fold": 47,
       "chrome": 2,
-      "ratio": 1.1,
+      "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2609,10 +2609,10 @@
       "path": "/",
       "name": "Finder profile (a GP opened)",
       "state": "finder-profile",
-      "total": 44,
-      "fold": 44,
+      "total": 47,
+      "fold": 47,
       "chrome": 2,
-      "ratio": 1.1,
+      "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2636,8 +2636,8 @@
       "path": "/",
       "name": "Finder profile, why matched open",
       "state": "finder-profile-why",
-      "total": 35,
-      "fold": 35,
+      "total": 36,
+      "fold": 36,
       "chrome": 2,
       "ratio": 0.9,
       "verdict": "target",
@@ -2663,10 +2663,10 @@
       "path": "/",
       "name": "Finder profile, why matched in their words (AI)",
       "state": "finder-profile-why-words",
-      "total": 49,
-      "fold": 49,
+      "total": 50,
+      "fold": 50,
       "chrome": 2,
-      "ratio": 1.2,
+      "ratio": 1.3,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2690,10 +2690,10 @@
       "path": "/",
       "name": "Finder profile, why matched open, two asks not in the listing",
       "state": "finder-profile-missed",
-      "total": 46,
-      "fold": 46,
+      "total": 45,
+      "fold": 45,
       "chrome": 2,
-      "ratio": 1.2,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2717,8 +2717,8 @@
       "path": "/",
       "name": "Finder profile, why matched in their words (AI), two asks not in the listing",
       "state": "finder-profile-why-words-missed",
-      "total": 60,
-      "fold": 60,
+      "total": 59,
+      "fold": 59,
       "chrome": 2,
       "ratio": 1.5,
       "verdict": "ceiling",
@@ -3074,26 +3074,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 7,
-      "fold": 7,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "POP IT!",
+          "text": "CATCH IT!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "pale",
-          "tag": "button"
         }
       ]
     },
@@ -3209,10 +3209,10 @@
       "path": "/match/prep",
       "name": "Match prep",
       "state": "intake",
-      "total": 40,
-      "fold": 40,
+      "total": 34,
+      "fold": 34,
       "chrome": 6,
-      "ratio": 1,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {
