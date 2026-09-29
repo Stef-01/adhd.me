@@ -7,7 +7,7 @@ description: ADHD.ME's own design law for building or reviewing any UI in this t
 
 The product is used by people who are tired, possibly older, possibly low-vision, describing
 a health worry. Every rule below exists because its violation was found and fixed in this
-tree once already. The record lives in `docs/DESIGN-QA.md` and `qa/`.
+tree once already. The record lives in `qa/design-qa.md` and `qa/`.
 
 Each rule below carries a stable id in `{#...}` at the end of its bullet. `src/design/taste-register.ts`
 is this law's machine-readable twin — one register entry per id, checked against this file in both
@@ -105,10 +105,10 @@ without updating the register is a build failure, not a review finding.
   order is informed; counts stand alone otherwise. {#honesty.claim-earned}
 - No testimonials, ratings, or "specialist/specialise" anywhere a patient reads. {#honesty.no-testimonials}
 - Copy about a clinician is their declaration, never our characterisation. {#honesty.clinician-declaration}
-- Every new/changed screen ships with a `qa/` capture and a `docs/DESIGN-QA.md` entry. {#honesty.qa-capture}
+- Every new/changed screen ships with a `qa/` capture and a `qa/design-qa.md` entry. {#honesty.qa-capture}
 
 ## Review procedure
 
 1. Screenshot the surface at 390×844 and desktop (Playwright against the prod build). {#review.screenshot-both-viewports}
 2. Walk the checklists above; fix in place, smallest diff. {#review.walk-fix-smallest}
-3. Re-capture, record the before/after in `docs/DESIGN-QA.md`, keep captures in `qa/`. {#review.recapture-record}
+3. Re-capture, record the before/after in `qa/design-qa.md`, keep captures in `qa/`. {#review.recapture-record}

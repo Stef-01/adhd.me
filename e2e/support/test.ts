@@ -1,4 +1,4 @@
-import { test as base, type Page, type Response } from "@playwright/test";
+import { test as base, type APIRequestContext, type Page, type Response } from "@playwright/test";
 
 /**
  * The suite's `test`: every `page.goto` also waits for React to attach (`app/hydrated.tsx` stamps
@@ -36,7 +36,33 @@ export async function hydratedUnderFakeClock(page: Page): Promise<void> {
   await page.waitForFunction(() => Number(document.documentElement.getAttribute("data-hydrated") ?? "0") >= 2, undefined, { polling: 100, timeout: 10_000 });
 }
 
+/**
+ * A fixture reset (`request.post("/api/mock/…")`) that dies with "socket hang up" is sent once
+ * more. CI lost one run in four on it (2026-09-29, results.spec's beforeEach, 8a4ad44d): a
+ * keep-alive socket the server had closed while idle was reused the instant it went, and the
+ * request died before any byte of it was answered, so a second attempt is safe for the mock
+ * routes, which reset and seed and nothing else. Other requests keep Playwright's plain behaviour.
+ */
+const RESEND = /socket hang up|ECONNRESET|EPIPE/;
+function resendingMockCalls(request: APIRequestContext): APIRequestContext {
+  for (const name of ["get", "post", "fetch", "put", "patch", "delete", "head"] as const) {
+    const original = (request[name] as (...args: unknown[]) => Promise<unknown>).bind(request);
+    (request as unknown as Record<string, unknown>)[name] = async (...args: unknown[]) => {
+      try {
+        return await original(...args);
+      } catch (error) {
+        if (!RESEND.test(String(error)) || !String(args[0]).includes("/api/mock/")) throw error;
+        return original(...args);
+      }
+    };
+  }
+  return request;
+}
+
 export const test = base.extend<{ page: Page }>({
+  request: async ({ request }, use) => {
+    await use(resendingMockCalls(request));
+  },
   page: async ({ page }, use) => {
     const goto = page.goto.bind(page);
     page.goto = async (url, options) => {
