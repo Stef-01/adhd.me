@@ -1,0 +1,86 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I already have an ADHD diagnosis and I need a GP to continue my medication.",
+    "It's for me. I'm forty one.",
+    "I'm in Parramatta, and telehealth is fine.",
+    "Bulk billing would help.",
+    "No preference.",
+    "No, nothing else."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I already have an ADHD diagnosis and I need a GP to continue my medication."
+    },
+    {
+      "who": "assistant",
+      "text": "Got it. Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "It's for me. I'm forty-one."
+    },
+    {
+      "who": "assistant",
+      "text": "Does cost matter to you?"
+    },
+    {
+      "who": "person",
+      "text": "I'm in Parramatta, and telehealth is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay, I’ll narrow this down for you. Let me think."
+    },
+    {
+      "who": "assistant",
+      "text": "Does anything about the clinician matter to you, like their approach or background?"
+    },
+    {
+      "who": "person",
+      "text": "Belg billing would help."
+    },
+    {
+      "who": "assistant",
+      "text": "How would you like a clinician to treat you?"
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Parramatta\",\"request\":\"I want someone to keep prescribing my medication by telehealth with bulk billing if possible for me, 41.\"}"
+    }
+  ],
+  "request": "I want someone to keep prescribing my medication by telehealth with bulk billing if possible for me, 41.",
+  "reads": [
+    {
+      "text": "I want someone to keep prescribing my medication by telehealth with bulk billing if possible for me, 41.",
+      "answer": {
+        "keys": [
+          "pref:telehealth-first",
+          "pref:bulk-billing",
+          "care:shared-care"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Telehealth",
+    "Bulk billing",
+    "Shared care"
+  ],
+  "results": [
+    "Dr Anubhav Saxena Shared care Beecroft & Double Bay",
+    "Erin Lysle ADHD coach Perth",
+    "Donna Italiano ADHD coach Perth",
+    "Paula Garrido Psychologist Sydney",
+    "Kate Row Psychologist Fortitude Valley"
+  ],
+  "whyMatched": "Why matched By phone or telehealth Shared care with a psychiatrist From your words: “keep prescribing my medication” Not in their listing: bulk billing. Compare with Erin Lysle",
+  "stage": "results"
+}

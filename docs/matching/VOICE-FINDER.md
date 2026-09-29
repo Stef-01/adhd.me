@@ -98,6 +98,7 @@ advice. Runs are in `qa/voice/runs/`.
 | 6 | 17/20 (each persona twice, a tenth who asks questions back) | The person may ask how things work; answers do not count toward the eight; "adult" and "ADHD" only where they belong |
 | 7 | 18/20 | No leading questions; never drop a need to fit the length |
 | 8 | 10/11, then 2/2 on the two that ask back (a postpartum persona added) | R15: questions asked in their given words with no choices in them; the manner question skipped once answered; a life stage kept in the person's own word; after one double question ("… and is telehealth better?"), one question mark a turn |
+| 9 | 11/11 (first word p50 1.15 s, p90 2.02 s; questions p50 3; $0.011 a call) | The same interviewer after O256; a live production call the same hour still added a choice to the clinician question ("like their approach or background?") and said "Let me think" once, which the text eval does not catch: the realtime model's own drift, logged in qa/voice/runs/2026-09-29T09-38-*.json |
 
 **Which model.** Twice over ten personas, same prompt:
 
