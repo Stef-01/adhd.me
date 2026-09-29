@@ -453,3 +453,51 @@ Valeria Urrutia.
 **Proof.** src/support/care-preferences.test.ts (the production sentence narrows nothing);
 e2e/finder-heard.spec.ts computes its expected order through the same function; a scripted call on
 production after the deploy.
+
+## R18 · "help at work" read as non-medication supports, 2026-09-30 · layer: the transcriber, then the lexicon, then the check
+
+The founder's call on production at 07:49 AEST (journal row 7caf49ae): "With someone that would help
+me at work … with my needs with focusing", then "In Sydney", then "Yeah, that's fine". Heard: ten
+things, "Non-medication supports" among them. His words: "This is a strong hallucination, as that
+might, in fact, include medication. Non-medication supports are when someone explicitly says, 'I
+don't want medication supports,' or 'I'm looking for less medicated options like therapy.'"
+
+**Cause, in three layers.**
+
+1. *The transcriber recited its prompt.* Stage 1 of the night before gave the transcriber the words
+   the conversation lives on ("ADHD, assessment, … coach, medication, Vyvanse, … Newtown"). On a
+   stretch of silence it returned that prompt, whole, as a person's turn, and the request carried
+   every word of it. A second call at 08:08 is nothing but the prompt.
+2. *The lexicon read help as a refusal.* "coaching", "a coach", "habits", "strategies first",
+   "psychological approaches", "alternatives" and "other options" were cues for non-medication with
+   no word about medication beside them. A person asking for a coach has declined nothing.
+3. *The check passed a sentence on the line by chance.* With the reader's prompt changed, the ladder's
+   P4 failed twice on one `never` pin each time ("flat for months, everything is heavy" read as
+   depression care; "appointments that start on time" as not_rushed). Asked five times, the check
+   refused the first five times of five and passed the second three times of five: two of three is a
+   coin.
+
+**Fix.**
+
+1. The transcriber is told the language and nothing else (src/voice/interviewer.ts, O262a, commit
+   ad1ee877).
+2. Non-medication is an explicit no to medication, or an explicit alternative to it
+   (src/matching/needs.ts): `NON_MEDICATION_HARD` holds the refusals and the alternatives that name
+   medication ("don't want medication", "don't like medication", "not keen on tablets", "less
+   medicated", "coaching before tablets", "instead of medication" …); `NON_MEDICATION_SOFT`
+   ("strategies first", "therapy instead", "psychological approaches" …) reads only in a sentence
+   that mentions medication. "I don't want medication changes" and "I don't want tablets that wear
+   off by lunch" are about the medication they take, and read nothing. "coaching" and "a coach" read
+   executive function, which is what the coaches on the roster declare. The reader's meaning for the
+   key says the same, with the founder's sentence as an example.
+3. One check that says "not asked" is enough to refuse a key the reads add
+   (src/lib/matching/llm-read.ts, `VOTING.check`). The lexicon carries the recall; the model adds a
+   key only when every read gives it and every check agrees.
+
+**Proof.** src/matching/reach.test.ts ("reads non-medication only from an explicit no to medication,
+or an explicit alternative to it": the founder's two sentences, his call's sentence, ten that must
+not reach). src/matching/corpus.ts: nine sentences from the two calls, four aspirations promoted,
+two sentences that never named medication demoted. The ladder, prompt c717a332d90e: P0 to P4 pass,
+recall 99.5%, precision 92.7%, never violations 0.0%, non-medication 19 of 19 heard and 19 of 19
+read correctly (qa/matching/reports/L1-P4-2026-09-29T22-56-16-094Z.md). Two earlier runs the same
+morning failed P4 at 1.4% and 2.6% and are kept beside it.

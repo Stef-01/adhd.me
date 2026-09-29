@@ -58,11 +58,13 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 // O261 (2026-09-30): 471 -> 520 sentences and thirteen life-domain areas in the facet space; every rate
 // moved, the shape held: N=2's null exactly degenerate, every effect within 0.005 of zero, the
 // N=2 -> N=3 dip (0 -> -0.001) still there.
-  { rosterSize: 2, k: K, total: 520, observedSeparationRate: 0.275, nullMeanSeparationRate: 0.275, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 520, observedSeparationRate: 0.196, nullMeanSeparationRate: 0.197, nullStdSeparationRate: 0.001, effect: -0.001 },
-  { rosterSize: 5, k: K, total: 520, observedSeparationRate: 0.317, nullMeanSeparationRate: 0.315, nullStdSeparationRate: 0.003, effect: 0.002 },
-  { rosterSize: 10, k: K, total: 520, observedSeparationRate: 0.292, nullMeanSeparationRate: 0.29, nullStdSeparationRate: 0.002, effect: 0.002 },
-  { rosterSize: 25, k: K, total: 520, observedSeparationRate: 0.269, nullMeanSeparationRate: 0.264, nullStdSeparationRate: 0.006, effect: 0.005 },
+// O262 (2026-09-30): 520 -> 531 sentences (non-medication reads an explicit no to medication); every rate
+// moved by a few thousandths and one effect by one (N=25, 0.005 -> 0.006).
+  { rosterSize: 2, k: K, total: 531, observedSeparationRate: 0.286, nullMeanSeparationRate: 0.286, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 531, observedSeparationRate: 0.2, nullMeanSeparationRate: 0.201, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 531, observedSeparationRate: 0.313, nullMeanSeparationRate: 0.311, nullStdSeparationRate: 0.003, effect: 0.002 },
+  { rosterSize: 10, k: K, total: 531, observedSeparationRate: 0.288, nullMeanSeparationRate: 0.286, nullStdSeparationRate: 0.002, effect: 0.002 },
+  { rosterSize: 25, k: K, total: 531, observedSeparationRate: 0.266, nullMeanSeparationRate: 0.26, nullStdSeparationRate: 0.006, effect: 0.006 },
 ];
 
 /*
@@ -83,13 +85,14 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 37,
   k: K,
-  total: 520,
+  total: 531,
+  // O262 (2026-09-30): 520 -> 531 sentences; 0.308/0.299/0.009 -> 0.303/0.295/0.008.
   // O261 (2026-09-30): 471 -> 520 sentences; 0.335/0.327/0.008 -> 0.308/0.299/0.009.
   // O260 (2026-09-29): 0.338/0.329/0.009 -> 0.335/0.327/0.008, the shared-care sentence reading one key.
-  observedSeparationRate: 0.308,
-  nullMeanSeparationRate: 0.299,
+  observedSeparationRate: 0.303,
+  nullMeanSeparationRate: 0.295,
   nullStdSeparationRate: 0.006,
-  effect: 0.009,
+  effect: 0.008,
 };
 
 describe("M5 the separation effect size, over synthetic rosters", () => {
@@ -121,11 +124,11 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
       // rate (0.154 -> 0.24), and 3 -> 2 inflates it again (0.173 -> 0.275), the direction O252
       // had seen reverse: the pair proves nothing fixed, which is the point.
       const naive = (size: number) => tieQualityReport(corpusRun(), syntheticRoster(size)).separationRate;
-      expect(naive(40)).toBe(0.165); // O261: 0.155 -> 0.165 over 520 sentences
-      expect(naive(25)).toBe(0.269); // O261
+      expect(naive(40)).toBe(0.162); // O262: 0.165 -> 0.162. O261: 0.155 -> 0.165 over 520 sentences
+      expect(naive(25)).toBe(0.266); // O262: 0.269 -> 0.266 over 531 sentences
       expect(naive(25)).toBeGreaterThan(naive(40));
-      expect(naive(3)).toBe(0.196); // O261
-      expect(naive(2)).toBe(0.275); // O261
+      expect(naive(3)).toBe(0.2); // O262
+      expect(naive(2)).toBe(0.286); // O262
       expect(naive(2)).toBeGreaterThan(naive(3));
     },
   );
@@ -208,7 +211,7 @@ describe("M5 the real roster's own effect (37 real profiles)", () => {
       "small, real, and for the first time actually measured rather than forced",
     () => {
       const report = realRosterSeparationEffect(K);
-      expect(report.effect).toBe(0.009); // O261 (2026-09-30): 0.008 -> 0.009. O260 (2026-09-29): 0.009 -> 0.008. 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
+      expect(report.effect).toBe(0.008); // O262 (2026-09-30): 0.009 -> 0.008. O261 (2026-09-30): 0.008 -> 0.009. O260 (2026-09-29): 0.009 -> 0.008. 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
       expect(report.nullStdSeparationRate).toBeGreaterThan(0);
       expect(report.observedSeparationRate).toBeGreaterThan(report.nullMeanSeparationRate);
     },

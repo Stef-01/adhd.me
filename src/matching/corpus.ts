@@ -120,7 +120,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:non-medication ──────────────────────────────────────────────────────────────────
   { text: "not just medication", reaches: ["care:non-medication"] },
   { text: "I want options that are not a script", reaches: ["care:non-medication"] },
-  { text: "coaching and habits first, tablets later if ever", reaches: ["care:non-medication"] },
+  { text: "coaching and habits first, tablets later if ever", reaches: ["care:non-medication"] }, // O262: read on "tablets later"; the soft run claims the coaching
 
   // ── manner:attuned ───────────────────────────────────────────────────────────────────────
   { text: "I want someone who won't make me feel like I'm making it up", reaches: ["manner:non_judgmental"] },
@@ -188,7 +188,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // O257: a clinician who has ADHD themselves; the person's own ADHD is never this.
   { text: "a psychologist who has ADHD herself", reaches: ["pref:lived-experience"] },
   { text: "someone who has ADHD themselves and gets it from the inside", reaches: ["pref:lived-experience"] },
-  { text: "a coach who has ADHD themselves", reaches: ["pref:lived-experience", "care:non-medication"] },
+  { text: "a coach who has ADHD themselves", reaches: ["pref:lived-experience", "care:executive-function"] }, // O262: a coach declines no medication
   // The production call of 2026-09-29 11:40: the interviewer wrote "understands ADHD from the inside", and both readers heard an assessment.
   { text: "a psychologist who understands ADHD from the inside", reaches: ["pref:lived-experience"], never: ["care:adhd-assessment"] },
   { text: "I have ADHD myself and I need an assessment for my daughter", reaches: ["care:child-adolescent-adhd", "care:adhd-assessment"], never: ["pref:lived-experience"] },
@@ -432,11 +432,23 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "borderline personality disorder plus the attention problems", reaches: ["care:adhd-assessment", "care:complex-mental-health"] },
   { text: "I hear voices sometimes and I still want this looked at", reaches: ["care:complex-mental-health"] },
 
+  // ── O262 (2026-09-30): non-medication is an explicit no to medication, or an explicit alternative to it ──
+  // The founder's definition, in his words, and the two calls it came from (journal rows 7caf49ae and 132972d8).
+  { text: "I don't want medication supports", reaches: ["care:non-medication"] },
+  { text: "I'm looking for less medicated options like therapy", reaches: ["care:non-medication"] },
+  { text: "I don't like medication treatment options", reaches: ["care:non-medication"] },
+  { text: "I'd rather not be on medication", reaches: ["care:non-medication"] },
+  { text: "I'm not interested in medication, I'd like to talk to someone", reaches: ["care:non-medication"] },
+  { text: "With someone that would help me at work. with my needs with focusing.", reaches: ["care:work-career", "care:executive-function"], never: ["care:non-medication"] },
+  { text: "I want a coach", reaches: ["care:executive-function"], never: ["care:non-medication"] },
+  { text: "therapy for my anxiety", reaches: ["care:anxiety"], never: ["care:non-medication"] },
+  { text: "someone from my own culture", reaches: ["care:cultural-background"] },
+
   // ── care:non-medication / manner:collaborative ───────────────────────────────────────────
-  { text: "coaching and skills, not another prescription", reaches: ["care:non-medication"] },
+  { text: "coaching and skills, not another prescription", reaches: ["care:non-medication", "care:executive-function"] }, // O262: the no is explicit, and coaching is the coaches'
   { text: "what can we do without medication", reaches: ["care:non-medication"] },
   { text: "I want strategies first, tablets later if ever", reaches: ["care:non-medication"] },
-  { text: "psychological approaches before anything else", reaches: ["care:non-medication"] },
+  { text: "psychological approaches before anything else", reaches: [], never: ["care:non-medication"] }, // O262: no word about medication, so nothing is declined
   { text: "treatment choices talked through with me, never over my head", reaches: ["manner:collaborative"] },
   { text: "I want a say in my own treatment plan", reaches: ["manner:collaborative"] },
   { text: "someone who works alongside me as a partner", reaches: ["manner:collaborative"] },
@@ -525,7 +537,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my drinking is part of this story", reaches: ["care:substance-history"] },
   { text: "sober two years and proud of it, keep that in mind", reaches: ["care:substance-history"] },
   { text: "skills and strategies before any script", reaches: ["care:non-medication"] },
-  { text: "I would rather not take medication if there is another way", aspires: ["care:non-medication"] },
+  { text: "I would rather not take medication if there is another way", reaches: ["care:non-medication"] }, // O262: promoted; the cue demands its run of words, so the gap that refused it (O103, O177) is gone
   { text: "my psychiatrist suggested GP shared care", reaches: ["care:shared-care"] },
   { text: "a GP willing to do the shared care paperwork", reaches: ["care:shared-care"] },
   { text: "schizoaffective and finally ready to look at the attention side", reaches: ["care:adhd-assessment", "care:complex-mental-health"] },
@@ -652,7 +664,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the ADHD clinic discharged me and I need my scripts kept going", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
   { text: "hand the prescribing back to a GP near home", reaches: ["care:shared-care"] },
   { text: "lifestyle changes before we talk prescriptions", reaches: ["care:non-medication"] },
-  { text: "I want to try the non-drug route first", aspires: ["care:non-medication"] },
+  { text: "I want to try the non-drug route first", reaches: ["care:non-medication"] }, // O262: promoted; the cue demands its run of words, so the gap that refused it (O103, O177) is gone
   { text: "what works besides medication", reaches: ["care:non-medication"] },
   { text: "help with the anger that comes out of nowhere", reaches: ["care:emotional-regulation"] },
   { text: "my moods flip fast and I say things I regret", awaitingFounder: "self-state", aspires: ["care:emotional-regulation"] },
@@ -837,7 +849,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I want help with the rage before it costs me my marriage", reaches: ["care:emotional-regulation", "care:relationships"] }, // O261
   { text: "the shame spiral after every mistake is the worst part", reaches: ["care:emotional-regulation"] },
   { text: "crying at work over nothing and I want it taken seriously", awaitingFounder: "self-state", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
-  { text: "I want a plan that is more than a prescription", aspires: ["care:non-medication"] },
+  { text: "I want a plan that is more than a prescription", reaches: ["care:non-medication"] }, // O262: promoted; the cue demands its run of words, so the gap that refused it (O103, O177) is gone
   { text: "what about diet and exercise before we go straight to stimulants", reaches: ["care:non-medication"] },
   { text: "structure and skills first, medication as a last resort", reaches: ["care:non-medication"] },
   { text: "I am on suboxone and need a GP who can work with that", reaches: ["care:substance-history"] },
@@ -954,7 +966,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // misses fixed in the same unit ("female practitioner", "immunosuppressed", "interrogated"),
   // and — the result that matters most — every G7 symptom sentence still reaching nothing.
 
-  { text: "my psychologist suggested I ask about the non-drug options", aspires: ["care:non-medication"] },
+  { text: "my psychologist suggested I ask about the non-drug options", reaches: ["care:non-medication"] }, // O262: promoted; the cue demands its run of words, so the gap that refused it (O103, O177) is gone
   { text: "the diet advice was useless, I want the actual assessment", reaches: ["care:adhd-assessment"] },
   { text: "I already do exercise and sleep hygiene, that is not the question", never: ["care:non-medication"] },
   { text: "skills first, then we can discuss whether a script helps", reaches: ["care:non-medication"] },
@@ -965,7 +977,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      regress: raising MAX_GAP, or shortening this sentence, would fire it. A cue added without its
      negative pin is a measurement somebody took once. */
   { text: "skills are fine but I want medication first", never: ["care:non-medication"] },
-  { text: "last resort is fine, I just want to know the order", reaches: ["care:non-medication"] },
+  { text: "last resort is fine, I just want to know the order", reaches: [], never: ["care:non-medication"] }, // O262: no word about medication
   { text: "walk me through what the assessment actually involves", reaches: ["care:adhd-assessment"] },
   { text: "tell me straight if I do not have it", reaches: ["manner:sense_making"] },
   { text: "I want to be talked through the options, not at", reaches: ["manner:collaborative"] },

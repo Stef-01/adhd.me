@@ -202,6 +202,11 @@ const EXECUTIVE_FUNCTION_CUES: readonly string[] = [
     "prioritise", "prioritize", "meeting deadlines", "routines", "daily routines", "build routines", "a routine",
     "structure my day", "structure to my day", "systems that work", "adhd coach", "adhd coaching", "strategies",
     "practical strategies", "tools and strategies", "skills and strategies", "everyday life skills", "life skills",
+    "coaching", "a coach", "build habits", "building habits", "better habits", "habits and routines",
+    "help with habits", "help me with focus", "help with focusing", "help focusing at work", "needs with focusing",
+    "help with my focus", "help with concentration", "help concentrating", "help me concentrate", "help with time",
+    "help with deadlines", "help with planning", "help with organising", "help getting started",
+    "help me get started", "help starting", "help with procrastinating",
 ];
 const WORK_CAREER_CUES: readonly string[] = [
     "my job", "workplace", "work adjustments", "workplace adjustments", "reasonable adjustments", "career",
@@ -213,7 +218,11 @@ const WORK_CAREER_CUES: readonly string[] = [
     "quit my job", "adhd at work", "help at work", "help with work", "at work with", "keep my job",
     "my job is on the line", "help with burnout", "recovering from burnout", "burnout recovery", "burnout at work",
     "work burnout", "adhd and work", "work and adhd", "struggling at work", "struggle at work", "cope at work",
-    "coping at work", "function at work", "functioning at work",
+    "coping at work", "function at work", "functioning at work", "help me at work", "helps me at work",
+    "help at my work", "help with my work", "help me with work", "help me with my work", "support at work",
+    "support me at work", "supports me at work", "support with work", "trouble at work", "problems at work",
+    "issues at work", "difficulties at work", "struggling with work", "help in my job", "help with my job",
+    "help me in my job", "help at my job",
 ];
 const STUDY_SCHOOL_CUES: readonly string[] = [
     "at uni", "uni", "university", "tafe", "college", "exams", "exam", "assignments", "assignment", "studying",
@@ -323,7 +332,11 @@ const CULTURAL_BACKGROUND_CUES: readonly string[] = [
     // Refused: ‘where i am from’ and ‘not my first language’ (every word a stopword or a negator). The language-like
     // nationalities (Chinese, Arabic, Greek …) are cued only with family, background, parents or community beside
     // them, because ‘speaks Arabic’ is a language ask; bare ‘faith’ would claim ‘faith in doctors’.
-    "my culture", "our culture", "culturally", "cultural background", "cultural context", "cultural identity",
+    "my culture", "our culture", "my own culture", "our own culture", "same culture", "shares my culture",
+    "my own background", "indian culture", "indian heritage", "indian community", "chinese culture", "arabic culture",
+    "greek culture", "italian culture", "vietnamese culture", "korean culture", "japanese culture", "turkish culture",
+    "persian culture", "nepali culture", "filipino culture", "lebanese culture", "african culture",
+    "culturally", "cultural background", "cultural context", "cultural identity",
     "my background", "our background", "from my background", "same background", "shares my background",
     "understands my background", "understand my background", "understands where i come from", "where i come from",
     "where my family comes from", "where my family is from", "where we come from", "my heritage", "our heritage",
@@ -366,6 +379,66 @@ const NDIS_CUES: readonly string[] = [
    old’ and ‘for our 7 year old’ name a child, and each demands its run of words. */
 const CHILD_AGE_CUES: readonly string[] = ["my two year old", "our two year old", "for my two year old", "for our two year old", "my three year old", "our three year old", "for my three year old", "for our three year old", "my four year old", "our four year old", "for my four year old", "for our four year old", "my five year old", "our five year old", "for my five year old", "for our five year old", "my six year old", "our six year old", "for my six year old", "for our six year old", "my seven year old", "our seven year old", "for my seven year old", "for our seven year old", "my eight year old", "our eight year old", "for my eight year old", "for our eight year old", "my nine year old", "our nine year old", "for my nine year old", "for our nine year old", "my ten year old", "our ten year old", "for my ten year old", "for our ten year old", "my eleven year old", "our eleven year old", "for my eleven year old", "for our eleven year old", "my twelve year old", "our twelve year old", "for my twelve year old", "for our twelve year old", "my thirteen year old", "our thirteen year old", "for my thirteen year old", "for our thirteen year old", "my fourteen year old", "our fourteen year old", "for my fourteen year old", "for our fourteen year old", "my fifteen year old", "our fifteen year old", "for my fifteen year old", "for our fifteen year old", "my sixteen year old", "our sixteen year old", "for my sixteen year old", "for our sixteen year old", "my seventeen year old", "our seventeen year old", "for my seventeen year old", "for our seventeen year old", "my 2 year old", "our 2 year old", "for my 2 year old", "for our 2 year old", "my 3 year old", "our 3 year old", "for my 3 year old", "for our 3 year old", "my 4 year old", "our 4 year old", "for my 4 year old", "for our 4 year old", "my 5 year old", "our 5 year old", "for my 5 year old", "for our 5 year old", "my 6 year old", "our 6 year old", "for my 6 year old", "for our 6 year old", "my 7 year old", "our 7 year old", "for my 7 year old", "for our 7 year old", "my 8 year old", "our 8 year old", "for my 8 year old", "for our 8 year old", "my 9 year old", "our 9 year old", "for my 9 year old", "for our 9 year old", "my 10 year old", "our 10 year old", "for my 10 year old", "for our 10 year old", "my 11 year old", "our 11 year old", "for my 11 year old", "for our 11 year old", "my 12 year old", "our 12 year old", "for my 12 year old", "for our 12 year old", "my 13 year old", "our 13 year old", "for my 13 year old", "for our 13 year old", "my 14 year old", "our 14 year old", "for my 14 year old", "for our 14 year old", "my 15 year old", "our 15 year old", "for my 15 year old", "for our 15 year old", "my 16 year old", "our 16 year old", "for my 16 year old", "for our 16 year old", "my 17 year old", "our 17 year old", "for my 17 year old", "for our 17 year old"];
 const LIFE_RUN: readonly string[] = [CHILD_AGE_CUES, EXECUTIVE_FUNCTION_CUES, WORK_CAREER_CUES, STUDY_SCHOOL_CUES, PARENTING_CUES, RELATIONSHIPS_CUES, SOCIAL_CONNECTION_CUES, LATE_DIAGNOSIS_CUES, GRIEF_LIFE_CHANGE_CUES, SLEEP_CUES, EATING_BODY_CUES, WOMENS_HEALTH_CUES, MOVEMENT_EXERCISE_CUES, CULTURAL_BACKGROUND_CUES, NDIS_CUES].flatMap((cues) => cues.filter((cue) => cue.includes(" ")));
+
+/* O262: the explicit no, and the explicit alternative. Each demands its run of words (RUN_DEMANDED), which is
+   what lets "rather not take medication", "non drug" and "more than a prescription" in: O103 and O177 refused
+   them because a cue matched across a gap ("a non stimulant drug", "talk more about my prescription"), and a
+   run has no gap. */
+const NON_MEDICATION_HARD: readonly string[] = [
+  "without medication", "no medication", "not just medication", "not a script", "without a script",
+  "besides medication", "not ready for medication", "tablets later", "dont want medication",
+  "do not want medication", "dont want to be medicated", "do not want to be medicated", "dont want meds",
+  "do not want meds", "dont want to take medication", "do not want to take medication", "dont want any medication",
+  "dont want medication supports", "rather not take medication", "rather not be medicated",
+  "prefer not to take medication", "prefer no medication", "no meds", "without meds", "no tablets",
+  "without tablets", "no pills", "without pills", "instead of medication", "instead of meds", "instead of tablets",
+  "other than medication", "rather than medication", "alternative to medication", "alternatives to medication",
+  "alternative to meds", "alternatives to meds", "less medicated", "non medication", "non-medication",
+  "non medicated", "non-medicated", "medication free", "medication-free", "drug free", "drug-free", "non drug",
+  "non-drug", "avoid medication", "avoiding medication", "not keen on medication", "more than a prescription",
+  "medication as a last resort", "meds as a last resort", "coaching before tablets", "coaching before medication",
+  "coaching before meds", "coaching before any script", "coaching before a script", "coaching before any medication",
+  "coaching before any tablets", "coaching before trying medication", "therapy before tablets",
+  "therapy before medication", "therapy before meds", "therapy before any script", "therapy before a script",
+  "therapy before any medication", "therapy before any tablets", "therapy before trying medication",
+  "strategies before tablets", "strategies before medication", "strategies before meds",
+  "strategies before any script", "strategies before a script", "strategies before any medication",
+  "strategies before any tablets", "strategies before trying medication", "skills before tablets",
+  "skills before medication", "skills before meds", "skills before any script", "skills before a script",
+  "skills before any medication", "skills before any tablets", "skills before trying medication",
+  "counselling before tablets", "counselling before medication", "counselling before meds",
+  "counselling before any script", "counselling before a script", "counselling before any medication",
+  "counselling before any tablets", "counselling before trying medication", "psychology before tablets",
+  "psychology before medication", "psychology before meds", "psychology before any script",
+  "psychology before a script", "psychology before any medication", "psychology before any tablets",
+  "psychology before trying medication", "not another prescription", "not another script", "not more medication",
+  "not more tablets", "alternatives to stimulants", "alternative to stimulants",
+  // The founder's call of 2026-09-30 08:00 AEST, "I don't like medication treatment options", and the ways a person says the same no.
+  "dont like medication", "do not like medication", "dont like meds", "dont like tablets", "dont like taking medication",
+  "dont like the idea of medication", "do not like the idea of medication", "not a fan of medication",
+  "not a fan of meds", "not keen on tablets", "not keen on meds", "not keen on pills", "rather not be on medication",
+  "rather not go on medication", "rather not use medication", "rather not have medication",
+  "dont want to go on medication", "do not want to go on medication", "dont want to be on medication",
+  "do not want to be on medication", "dont want to go on meds", "dont want to start medication",
+  "do not want to start medication", "not interested in medication", "not interested in meds", "dont want pills",
+  "do not want pills", "dont want tablets", "do not want tablets", "dont want any meds", "dont want any tablets",
+  "dont want stimulants", "do not want stimulants", "stay off medication", "staying off medication",
+  "against medication", "anything but medication",
+];
+/** Read as non-medication only in a sentence that mentions medication: on their own they decline nothing. */
+const NON_MEDICATION_SOFT: readonly string[] = [
+  "strategies first", "skills first", "last resort", "psychological approaches", "lifestyle changes",
+  "diet and exercise", "therapy instead", "therapy first", "coaching first", "coaching instead", "other options",
+  "another option", "skills and strategies first", "strategies and skills first", "coaching and habits first",
+];
+const NON_MEDICATION_CUES: readonly string[] = [...NON_MEDICATION_HARD, ...NON_MEDICATION_SOFT];
+/** "don't want medication changes / reviewed / increased": the medication stays. "don't want tablets that wear off by lunch": the no is to what these tablets do. */
+const MEDICATION_LEFT_ALONE = /\b(?:don'?t|do not) want (?:any |my )?(?:medication|meds|tablets|pills|stimulants) (?:chang\w*|review\w*|increas\w*|adjust\w*|switch\w*|touched|messed|that|which)\b/i;
+const SOFT_NON_MEDICATION = new Set(NON_MEDICATION_SOFT);
+/** The cues that count only beside a word about medication, for the test that reads every cue back. */
+export const SOFT_NON_MEDICATION_CUES: ReadonlySet<string> = SOFT_NON_MEDICATION;
+/** The words that say medication is what the sentence is about. */
+const MEDICATION_WORDS = new Set(["medication", "medications", "medicated", "medicine", "meds", "med", "tablet", "tablets", "pill", "pills", "script", "scripts", "prescription", "prescriptions", "stimulant", "stimulants", "drug", "drugs", "vyvanse", "ritalin", "concerta", "dexamphetamine", "dex"].map(stem));
 
 const LEXICON: readonly Entry[] = [
   // ── What somebody is trying to get done ───────────────────────────────────────────────────
@@ -639,69 +712,14 @@ const LEXICON: readonly Entry[] = [
     // "regulation". The clinical word and the plain phrasings people actually use, added.
     "dysregulation", "big emotions", "big feelings", "emotions take over",
   ]),
-  care("non-medication", "Non-medication supports", 26, [
-    "without medication", "no medication", "not just medication", "alternatives", "coaching", "habits",
-    // O49: the script-shaped refusal of scripts. Negators are never stopwords, so both keep
-    // two tokens; O40 does not suppress them because the negator is inside the cue's own words.
-    "not a script", "without a script",
-    /* O103 (the O64→O65 loop, run on the gap that replaced longer-appointment at the top of
-       the list): this facet was the loudest on record at ELEVEN unheard phrasings, and the
-       reason was register. Every cue above hears a REFUSAL, "without medication", "not a
-       script", and the corpus had collected two registers this facet is actually asked in
-       and neither was cued:
-
-         SEQUENCE, the ask is about ORDER, not refusal. "strategies first, tablets later",
-         "medication as a last resort". Nobody here is declining a script; they are saying
-         where it goes in the plan, which is a different sentence and a real preference.
-
-         ALTERNATIVE, the ask names the other thing. "psychological approaches", "lifestyle
-         changes", "what works besides medication".
-
-       Each keeps two content tokens (O25). */
-    "strategies first", "tablets later", "last resort",
-    /* O177: "skills first" — the SEQUENCE register O103 named, in the word the corpus actually
-       uses. O103 cued "strategies first" and "skills and strategies" but not this pair, and the
-       corpus asks it directly ("skills first, then we can discuss whether a script helps").
-       Measured before adding, both directions: it reaches three same-register sentences that are
-       NOT in the corpus, and it stays silent on "skills are fine but I want medication first"
-       (`skill`@0 to `first`@4 is a gap of three, past MAX_GAP=2) and on "first I need my skills
-       assessed for work". */
-    "skills first",
-    "psychological approaches", "skills and strategies", "lifestyle changes",
-    "diet and exercise", "besides medication", "not ready for medication",
-    /* FOUR CUES REFUSED, AND THE REASON IS MEASURED RATHER THAN ASSERTED (the O65 pattern).
-       `findCue` matches in order ACROSS intervening words, so each of these fires on a
-       sentence that means something else, checked against the real matcher before being
-       dropped, not reasoned about:
-         "non drug"              fires on "a non stimulant drug", a MEDICATION ask, the opposite
-         "more than a prescription" fires on "talk more about my prescription", titration
-         "before any script"     fires on "before my script ran out", titration
-         "another way"           fires on "explain it another way", sense-making
-       Their corpus sentences stay aspirations with this note as their reason. Precision here
-       is worth more than recall: three of the four would mislabel the ask as its opposite.
-
-       O177 RE-MEASURED ALL FOUR AND EVERY ONE STILL HOLDS, then tried to get round them and
-       could not. The remaining four aspirations on this facet are not "not yet cued", they are
-       MEASURED AND RESISTANT, which is a different fact and worth the distinction, because the
-       next unit to work this gap list would otherwise repeat the whole exercise:
-
-         "I want to try the non-drug route first", `non drug route` reaches it and every
-           same-register variant, and also fires on "the non-stimulant drug route", which is a
-           natural sentence asking for MEDICATION. `MAX_GAP = 2` is what lets `non`…`drug` skip
-           `stimulant`. Same for `non drug option` and "the non-stimulant drug option", which
-           kills the psychologist sentence too.
-         "I would rather not take medication if there is another way", `rather not take
-           medication` reaches it and three variants, and fires on "rather not have to take time
-           off for my medication": `take`@2 to `medication`@5 is a gap of two, exactly at the
-           limit.
-         "I want a plan that is more than a prescription", `plan more` fires on "we should plan
-           more appointments" and "I want to plan more of my titration"; `more prescription` is
-           O103's own refusal, unchanged.
-
-       Roughly twenty candidate forms were measured this way. One survived, above. A cue that
-       reached only its own corpus sentence was refused as well, whatever its collision count —
-       `reach.test.ts`'s law is that a corpus copied into the lexicon measures nothing. */
-  ]),
+  /* O262 (founder, 2026-09-30): "Non-medication supports are when someone explicitly says, 'I don't want
+     medication supports,' or 'I'm looking for less medicated options like therapy.'" A person who asks for
+     help at work, a coach, strategies or therapy has declined nothing, and that help may include medication.
+     So every cue here says NO to medication in its own words, or names the thing wanted in its place; the
+     softer ones ("strategies first", "psychological approaches") count only in a sentence that mentions
+     medication somewhere (SOFT_NON_MEDICATION, below). "coaching" and "habits" left for
+     care:executive-function, where the coaches declare them. */
+  care("non-medication", "Non-medication supports", 26, NON_MEDICATION_CUES),
   care("perinatal", "Pregnancy, postpartum and new parents", 26, [
     /* R15: the founder's postpartum call, which nothing in the vocabulary could hear. Single words
        are the clinical and the everyday terms, each precise on its own; the pairs keep two content
@@ -957,7 +975,7 @@ const CUES: readonly Cue[] = [...MATCHABLE_CUES].sort(
 // R15: "had a baby" collapses to [baby]; the any-pair rule is satisfied by "was a baby", so the full run is demanded.
 const RUN_DEMANDED = new Set([
   "over the phone", "in the room with me", "had a baby",
-  ...FIRST_PERSON_ASKS, ...CONTINUING_CARE, ...LIFE_RUN,
+  ...FIRST_PERSON_ASKS, ...CONTINUING_CARE, ...LIFE_RUN, ...NON_MEDICATION_CUES,
   /* O257: every lived-experience cue demands its full raw run, collapsed or not. "gp who has adhd"
      collapses to [gp, adhd] and, matched across a gap, read "a GP for my drinking history and my
      ADHD" as a wish for a GP with ADHD, taking the "adhd" the assessment cue needed. The person
@@ -1051,6 +1069,20 @@ export function readNeeds(text: string): NeedSignal[] {
         facetKey(cue.entry.facet) === "care:adhd-assessment" &&
         DISCLOSURE_WORDS.has(cue.phrase) &&
         diagnosisAlreadyMade(rawSentence)
+      ) {
+        continue;
+      }
+      /* O262: a soft non-medication cue declines nothing on its own. "strategies first, tablets later" is
+         about medication and "I want strategies first" is not, and the difference is whether the
+         sentence mentions medication at all. */
+      /* O262: "I don't want medication changes" is a person on medication asking for it to be left alone. */
+      if (facetKey(cue.entry.facet) === "care:non-medication" && MEDICATION_LEFT_ALONE.test(text)) {
+        continue;
+      }
+      if (
+        facetKey(cue.entry.facet) === "care:non-medication" &&
+        SOFT_NON_MEDICATION.has(cue.phrase) &&
+        !rawSentence.some((word) => MEDICATION_WORDS.has(word))
       ) {
         continue;
       }

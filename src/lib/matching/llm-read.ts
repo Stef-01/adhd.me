@@ -37,7 +37,7 @@ export const MEANINGS: Record<string, string> = {
   "autism-adhd": "names autism, AuDHD or being neurodivergent",
   "substance-history": "wants to be open about alcohol or other drug use, or is in recovery",
   "emotional-regulation": "names big emotions, anger, shame or rejection sensitivity as something to get help with",
-  "non-medication": "asks for options besides medication, or more than medication alone, such as skills and strategies (wanting someone to talk to, with no word about medication, is not this)",
+  "non-medication": "says they do not want medication, or asks for something other than medication in its place or before it, in words that mention medication (asking for help, coaching, strategies, skills or therapy with no word against medication is not this: that help may include medication)",
   perinatal: "names pregnancy, birth or the months after having a baby (postpartum, postnatal, a new mum or dad) as part of what they need care for or understood",
   attuned: "asks for a clinician who listens and takes them seriously",
   steadying: "asks for a clinician who is calm and reassuring",
@@ -84,6 +84,8 @@ const EXAMPLES = [
   '"I rent a flat near my work" → nothing',
   '"some days I can\'t get anything started" → nothing',
   '"I worry about everything, even on a good day" → nothing',
+  '"I have felt low since the winter" → nothing',
+  '"I lie awake half the night" → nothing',
   '"I just want to talk something through with someone" → nothing',
   '"could all of this be ADHD" → care: adhd-assessment',
   '"a clinic with no gap to pay" → prefs: bulk-billing',
@@ -99,6 +101,9 @@ const EXAMPLES = [
   '"a GP who was diagnosed with ADHD as an adult" → prefs: lived-experience',
   '"my psychiatrist retired, I\'m stable on Vyvanse and need a GP to take over prescribing" → care: shared-care',
   '"help at work with focus and getting things done" → care: executive-function, work-career',
+  '"someone that would help me at work with focusing" → care: executive-function, work-career',
+  '"I don\'t want medication, I would rather try therapy" → care: non-medication',
+  '"an ADHD coach for routines" → care: executive-function',
   '"my marriage is falling apart because of my ADHD" → care: relationships',
   '"diagnosed at forty and now I am rethinking everything" → care: late-diagnosis',
   '"someone who understands Indian families" → care: cultural-background',
@@ -167,7 +172,7 @@ export type Reading = { keys: string[]; needs: NeedSignal[]; source: "llm" | "le
 export const READS = 3;
 
 /** The voting rules, for the eval's hash: a change to them starts the ladder again. */
-export const VOTING = { add: "every read", refuse: "most reads", check: "most checks say not asked" } as const;
+export const VOTING = { add: "every read", refuse: "most reads", check: "any check says not asked" } as const;
 
 /**
  * Resolves with what has settled once `done` says the rest cannot change the outcome, or when all have
@@ -251,7 +256,13 @@ const CHECKED = FIELDS.filter((field) => field !== "languages").flatMap((field) 
 /**
  * The check: a second question, asked only of the keys the reads added beyond the lexicon. A decoy
  * ("the GP in the ad was a woman") or a feeling with no ask is read the same way by every read, so
- * voting cannot remove it; asked directly, most checks say it is not asked (qa/matching/rca.md, R5).
+ * voting cannot remove it; asked directly, the checks say it is not asked (qa/matching/rca.md, R5).
+ *
+ * ONE CHECK THAT SAYS NO IS ENOUGH (R18, 2026-09-30). The rule was "most checks", and a sentence on the
+ * line crossed it by chance: "flat for months, everything is heavy" was passed as an ask for depression
+ * care in two runs of the ladder and refused by five checks of five an hour later, and "appointments
+ * that start on time" was passed as not_rushed by three checks in five. A key the reads add stays when
+ * every read gives it; it now stays when every check agrees too. The lexicon carries the recall.
  */
 export const CHECK_CALL = {
   effort: "low",
@@ -274,6 +285,7 @@ export const CHECK_CALL = {
     '"a poster in the waiting room said they bulk bill" · pref:bulk-billing → not asked (a description)',
     '"wiped out every afternoon" · care:depression → not asked (a feeling with no ask)',
     '"the worrying wears me out" · care:anxiety → not asked (a feeling with no ask)',
+    '"an hour in the waiting room is more than I can take" · manner:not_rushed → not asked (waiting is punctuality, not the length of the appointment)',
     '"I only want someone to talk to for now" · care:non-medication → not asked (nothing said about medication)',
     '"I\'d love a doctor who explains the why behind things" · manner:sense_making → asked',
     '"please don\'t rush me through it" · manner:not_rushed → asked',
@@ -313,10 +325,10 @@ async function checkKeys(text: string, keys: readonly string[], deps: Deps): Pro
       .catch(failure),
   );
   const noes = (settled: readonly (Set<string> | Error)[], key: string) => settled.filter((said) => !(said instanceof Error) && said.has(key)).length;
-  // A key is settled once most checks said no, or once too few are left to make it so.
-  const settled = await settleUntil(tasks, (done, pending) => !deps.waitForAll && keys.every((key) => noes(done, key) * 2 > CHECKS || (noes(done, key) + pending) * 2 <= CHECKS));
+  // A key is settled once one check has said no; the rest are settled when every check is in.
+  const settled = await settleUntil(tasks, (done, pending) => !deps.waitForAll && (pending === 0 || keys.every((key) => noes(done, key) > 0)));
   const failed = settled.find((said): said is Error => said instanceof Error);
-  return { refused: new Set(keys.filter((key) => noes(settled, key) * 2 > CHECKS)), ...(failed ? { error: `${failed.name}: ${failed.message}` } : {}) };
+  return { refused: new Set(keys.filter((key) => noes(settled, key) > 0)), ...(failed ? { error: `${failed.name}: ${failed.message}` } : {}) };
 }
 
 /** The deterministic twin: what L0 reads, and what L1 falls back to. */

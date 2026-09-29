@@ -128,7 +128,27 @@ describe("readRequest", () => {
     expect(reading).toMatchObject({ keys: ["manner:not_rushed", "pref:woman-gp"], source: "llm" });
   });
 
-  it("checks only the keys the reads add beyond the lexicon, and drops one most checks say is not asked", async () => {
+  it("drops a key the reads add as soon as one check says it is not asked (R18): a sentence on the line is not an ask", async () => {
+    const text = "flat for months, everything is heavy";
+    expect(lexiconReading(text).keys).toEqual([]);
+    let check = 0;
+    const fetch = async (_url: string, init: { body: string }) => {
+      const { input } = JSON.parse(init.body) as { input: string };
+      if (input === text) return new Response(JSON.stringify(completed({ ...EMPTY, care: ["depression"] })));
+      const asks = check++ !== 1; // two checks say asked, one says not
+      return new Response(JSON.stringify(completed({ verdicts: [{ key: "care:depression", asks }] })));
+    };
+    expect((await readRequest(text, { fetch, env: ENV, waitForAll: true })).keys).toEqual([]);
+    // Every check agreeing keeps it.
+    const agreed = async (_url: string, init: { body: string }) => {
+      const { input } = JSON.parse(init.body) as { input: string };
+      if (input === text) return new Response(JSON.stringify(completed({ ...EMPTY, care: ["depression"] })));
+      return new Response(JSON.stringify(completed({ verdicts: [{ key: "care:depression", asks: true }] })));
+    };
+    expect((await readRequest(text, { fetch: agreed, env: ENV, waitForAll: true })).keys).toEqual(["care:depression"]);
+  });
+
+  it("checks only the keys the reads add beyond the lexicon, and drops one the checks say is not asked", async () => {
     const text = "it has to be bulk billed";
     expect(lexiconReading(text).keys).toEqual(["pref:bulk-billing"]);
     const inputs: string[] = [];

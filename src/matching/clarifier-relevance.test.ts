@@ -48,9 +48,9 @@ describe("M10 the co-occurrence map is derived, not authored", () => {
    */
   it("holds the measured shape of the real corpus", () => {
     const counts = cooccurrenceCounts();
-    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(108); // O261 (2026-09-30): +16 two-facet sentences among the life domains. O260: -1 ("shared care with the psychiatrist who diagnosed me" reaches shared care alone). O257: +2 (a coach who has ADHD themselves; the parent with ADHD asking for a child's assessment). O256: three continuation sentences lost their second facet (assessment). R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
+    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(110); // O262 (2026-09-30): +2, "coaching and skills, not another prescription" reads the coaching it asks for beside the refusal, and the founder's own sentence reads work and focus. O261 (2026-09-30): +16 two-facet sentences among the life domains. O260: -1 ("shared care with the psychiatrist who diagnosed me" reaches shared care alone). O257: +2 (a coach who has ADHD themselves; the parent with ADHD asking for a child's assessment). O256: three continuation sentences lost their second facet (assessment). R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
     expect(counts.size).toBe(174); // O261 (2026-09-30): 148 -> 174 ordered pairs with the life domains. R15: perinatal pairs with assessment and telehealth; 2026-09-29: attuned with perinatal, both ways
-    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(60) /* O261: 54 -> 60 with the life domains. O260: 56 -> 54, the shared-care sentence reading one key */; // R15: two perinatal pairs clear the floor
+    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(62) /* O262: 60 -> 62, non-medication beside executive function, both ways. O261: 54 -> 60 with the life domains. O260: 56 -> 54, the shared-care sentence reading one key */; // R15: two perinatal pairs clear the floor
   });
 
   it("names blind spot (1): corpus gold sets carry no language keys, so language suggests nothing yet", () => {

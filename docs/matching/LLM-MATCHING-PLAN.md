@@ -920,3 +920,13 @@ answer reads back as sent" is the tool that keeps a new vocabulary honest, and i
 context words the first cut had let in ("paperwork", "shift work", "falling apart", "my manager",
 "high school" …), each now refused; and gpt-5-nano read a bad night or an unfinished task as an
 ask until the care rule said a description with no help asked for adds nothing.
+
+### 16n. 2026-09-30, morning: non-medication means a no to medication (qa/matching/rca.md, R18)
+
+The founder's call asked for help at work and was shown "Non-medication supports". Three causes, one
+in each layer: the transcriber recited its own prompt as his words; the lexicon read "coaching" and
+"strategies" as a refusal of medication; and the check that guards keys the model adds passed a
+borderline sentence two times in three. The key now reads only from an explicit no to medication or
+an explicit alternative to it, the transcriber carries no prompt, and one refusing check is enough.
+Ladder at prompt c717a332d90e: P0 to P4 pass; recall on reaches 99.5%, precision 92.7% (91.7% under
+"most checks"), never violations 0.0%, aspirations reached 57.6%.

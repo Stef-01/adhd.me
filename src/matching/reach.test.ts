@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { clinicians, matchQuality, MATCH_QUALITY_COPY, needsFor, professionOf, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
-import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
+import { facetKey, readNeeds, LEXICON_CUES, SOFT_NON_MEDICATION_CUES } from "./needs";
 import { diagnosisAlreadyMade, selfClaimedPatient, stem, tokenise, tokeniseKeepingStopwords } from "./read";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
@@ -242,7 +242,9 @@ describe("O7 the lexicon reaches itself (F10)", () => {
    */
   it("reads every lexicon phrase back to its own facet", () => {
     for (const { phrase, key } of LEXICON_CUES) {
-      const reachedKeys = readNeeds(phrase).map((need) => facetKey(need.facet));
+      // O262: a soft non-medication cue declines nothing alone; it is read beside a word about medication.
+      const said = SOFT_NON_MEDICATION_CUES.has(phrase) ? `${phrase}, medication later` : phrase;
+      const reachedKeys = readNeeds(said).map((need) => facetKey(need.facet));
       expect(reachedKeys, `lexicon phrase "${phrase}" no longer reaches ${key}`).toContain(key);
     }
   });
@@ -383,13 +385,12 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
    * The list may shrink as the Q1 corpus re-authors cues; it must never grow silently.
    */
   const REVIEWED_SINGLE_TOKEN_PHRASES = [
-    /* Sorted, as the lexicon reports them. O260 (2026-09-29) added "be assessed", "could i have adhd", "do i have adhd",
-       "get assessed", "get diagnosed", "keep me on" and "my scripts"; O261 added the life domains' phrases ("a routine",
-       "my job", "my sleep", "my culture" …). Every one of them is in RUN_DEMANDED, so the one token never stands alone:
-       "my job" reads only where the raw words run "my job", never a bare "job" across a gap. */
-    "a routine", "an excuse", "an injury", "as a couple", "as a dad", "as a father", "as a mother", "as a mum",
-    "as a parent", "at ease", "at uni", "at work with", "be assessed", "be believed", "been fired", "been heard",
-    "believe me", "break up", "broke up", "build on what", "by phone", "by video", "conflict with my",
+    /* Sorted, as the lexicon reports them. O260 added the first-person asks and "my scripts"; O261 the life domains'
+       phrases; O262 (2026-09-30) "a coach" and the non-medication runs ("no meds", "non drug" …). Every one of them
+       is in RUN_DEMANDED, so the one token never stands alone: "my job" reads only where the raw words run "my job". */
+    "a coach", "a routine", "an excuse", "an injury", "as a couple", "as a dad", "as a father", "as a mother",
+    "as a mum", "as a parent", "at ease", "at uni", "at work with", "be assessed", "be believed", "been fired",
+    "been heard", "believe me", "break up", "broke up", "build on what", "by phone", "by video", "conflict with my",
     "could i have adhd", "death of my", "diagnose me", "diagnosed at", "do i have adhd", "figure out",
     "from my background", "get a word in", "get assessed", "get checked", "get diagnosed", "get organised",
     "get organized", "get started on", "get to sleep", "had a baby", "hear me out", "hears me out", "her behaviour",
@@ -863,12 +864,48 @@ describe("§O103 non-medication is asked in three registers, and the cues hear t
     expect(facets("lifestyle changes before we talk prescriptions")).toContain("care:non-medication");
   });
 
-  it("hears the ALTERNATIVE register — the ask names the other thing", () => {
+  it("hears the ALTERNATIVE register — the ask names the other thing, beside a word about medication", () => {
     expect(facets("what works besides medication")).toContain("care:non-medication");
-    expect(facets("psychological approaches before anything else")).toContain("care:non-medication");
+    expect(facets("psychological approaches before we talk about tablets")).toContain("care:non-medication");
     expect(facets("skills and strategies before any script")).toContain("care:non-medication");
     expect(facets("what about diet and exercise before we go straight to stimulants")).toContain("care:non-medication");
     expect(facets("not ready for medication yet, what else is there")).toContain("care:non-medication");
+  });
+
+  /**
+   * O262, THE FOUNDER'S DEFINITION (2026-09-30): "Non-medication supports are when someone explicitly
+   * says, 'I don't want medication supports,' or 'I'm looking for less medicated options like therapy.'"
+   * His call asked for help at work and was shown "Non-medication supports"; help at work may well
+   * include medication. Nothing reaches this facet without a word against medication, or for
+   * something in its place.
+   */
+  it("reads non-medication only from an explicit no to medication, or an explicit alternative to it", () => {
+    expect(facets("I don't want medication supports")).toContain("care:non-medication");
+    expect(facets("I'm looking for less medicated options like therapy")).toContain("care:non-medication");
+    expect(facets("I would rather not take medication if there is another way")).toContain("care:non-medication");
+    expect(facets("I want to try coaching before tablets")).toContain("care:non-medication");
+    // The call of 08:00 the same morning: "… help me decide what the best options are. I don't like medication treatment options."
+    expect(facets("I don't like medication treatment options")).toContain("care:non-medication");
+    expect(facets("I'm not keen on tablets")).toContain("care:non-medication");
+    expect(facets("I don't want to go on medication")).toContain("care:non-medication");
+    for (const said of [
+      "With someone that would help me at work. with my needs with focusing.",
+      "help at work with focus and getting things done",
+      "I want a coach",
+      "an ADHD coach for time management",
+      "I want strategies first",
+      "psychological approaches before anything else",
+      "therapy for my anxiety",
+      "help me build better habits",
+      "I don't want medication changes, just someone who listens",
+      "I don't want tablets that wear off by lunch",
+      "I don't like how my medication makes me feel",
+      "bloods and blood pressure done before any script",
+    ]) {
+      expect(facets(said), said).not.toContain("care:non-medication");
+    }
+    // What the founder did ask for is what is read.
+    expect(facets("With someone that would help me at work. with my needs with focusing.")).toEqual(expect.arrayContaining(["care:work-career", "care:executive-function"]));
   });
 
   it("keeps the REFUSAL register the earlier units cued", () => {
