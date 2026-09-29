@@ -24,6 +24,15 @@ describe("POST /api/finder/track", () => {
     expect(finderDbCounts()).toMatchObject({ searches: 1, calls: 1, events: 1, handoffs: 1 });
   });
 
+  it("counts every record it refuses, so a silent 400 shows on /api/health", async () => {
+    await send({ type: "search", record: { id: "x" } });
+    await send({ type: "voice", record: { id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: "many", seconds: 70, outcome: "stopped" } });
+    expect(finderDbCounts().journal.refused).toBe(2);
+    // A call that ran past the interviewer's cap is kept, bounded, not refused (2026-09-29).
+    expect((await send({ type: "voice", record: { id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 11, seconds: 240, outcome: "revealed" } })).status).toBe(204);
+    expect(finderDbCounts()).toMatchObject({ calls: 1, journal: { refused: 2 } });
+  });
+
   it("refuses an unknown type, a record that does not parse, bad JSON and an oversized body", async () => {
     expect((await send({ type: "rating", record: {} })).status).toBe(400);
     expect((await send({ type: "search", record: { id: "x" } })).status).toBe(400);

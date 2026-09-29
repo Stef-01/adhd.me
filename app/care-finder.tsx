@@ -636,8 +636,15 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     if (tracked.current) track("event", { id: newId(), searchId: tracked.current.id, kind, clinicianId });
   }
   function voiceCallEnded(call: CallSummary) {
-    if (call.outcome === "revealed") pendingCall.current = call;
-    else trackVoiceCall(call, null);
+    if (call.outcome !== "revealed") {
+      trackVoiceCall(call, null);
+      return;
+    }
+    // The list for this call's words may already be on record (the read finished before the call
+    // closed): send the call now, against that search; otherwise the search effect sends it.
+    const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+    if (tracked.current && same(tracked.current.request, call.request)) trackVoiceCall(call, tracked.current.id);
+    else pendingCall.current = call;
   }
 
   /** The voice finder's last answer: its sentence is the request, its suburb the place. */

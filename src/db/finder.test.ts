@@ -57,21 +57,27 @@ describe("parsing what the browser sends", () => {
     expect(parseSearch(null)).toBeNull();
   });
 
-  it("keeps a voice call inside the cap of questions and a sane length", () => {
+  it("keeps a voice call, its counts bounded rather than refused (a call that ran long still happened)", () => {
     const call = { id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 5, seconds: 98, outcome: "revealed" };
     expect(parseVoiceCall(call)).toMatchObject({ questions: 5, searchId: null });
-    expect(parseVoiceCall({ ...call, questions: 9 })).toBeNull();
+    // 2026-09-29: the founder's two calls with the most questions were refused whole on this bound and left no record.
+    expect(parseVoiceCall({ ...call, questions: 9 })).toMatchObject({ questions: 9 });
+    expect(parseVoiceCall({ ...call, questions: 400 })).toMatchObject({ questions: 32 });
+    expect(parseVoiceCall({ ...call, seconds: 7200.4 })).toMatchObject({ seconds: 3600 });
     expect(parseVoiceCall({ ...call, seconds: -1 })).toBeNull();
+    expect(parseVoiceCall({ ...call, questions: "five" })).toBeNull();
     expect(parseVoiceCall({ ...call, outcome: "great" })).toBeNull();
   });
 
-  it("keeps a call's transcript whole, its request and place, and refuses a malformed turn", () => {
+  it("keeps a call's transcript, its request and place; drops a turn that is not one and cuts a long one, refusing only a transcript that is not a list", () => {
     const call = { id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 5, seconds: 98, outcome: "revealed" };
     const turns = [{ who: "assistant", text: "Hi." }, { who: "person", text: "I had a baby last year" }, { who: "tool", text: "show_matches {}" }];
     const kept = parseVoiceCall({ ...call, transcript: turns, request: "An ADHD assessment, postpartum", place: "Hornsby" });
     expect(kept).toMatchObject({ transcript: turns, request: "An ADHD assessment, postpartum", place: "Hornsby" });
     expect(parseVoiceCall(call)).toMatchObject({ transcript: [], request: "", place: "" });
-    expect(parseVoiceCall({ ...call, transcript: [{ who: "narrator", text: "x" }] })).toBeNull();
+    expect(parseVoiceCall({ ...call, transcript: [{ who: "narrator", text: "x" }, ...turns] })?.transcript).toEqual(turns);
+    expect(parseVoiceCall({ ...call, transcript: [{ who: "person", text: "y".repeat(2500) }] })?.transcript[0]?.text).toHaveLength(2000);
+    expect(parseVoiceCall({ ...call, transcript: Array.from({ length: 130 }, () => turns[0]) })?.transcript).toHaveLength(120);
     expect(parseVoiceCall({ ...call, transcript: "everything" })).toBeNull();
   });
 
@@ -138,7 +144,7 @@ describe("the journal to Supabase", () => {
     expect(url).toBe("https://db.example/rest/v1/finder_searches");
     expect(init.headers).toMatchObject({ apikey: "service", authorization: "Bearer service", prefer: "resolution=merge-duplicates,return=minimal" });
     expect(JSON.parse(init.body)).toMatchObject({ id: A, request_text: search.requestText, read_source: "llm" });
-    expect(finderDbCounts().journal).toEqual({ sent: 1, failed: 1 });
+    expect(finderDbCounts().journal).toEqual({ sent: 1, failed: 1, refused: 0 });
   });
 });
 

@@ -47,7 +47,7 @@ test("/api/health names the build, the boot instant, the store and the reporter,
     store: "jsonl-file",
     reporter: "console",
     // The suite runs without Supabase: the journal is not configured and has sent nothing.
-    journal: { configured: false, sent: 0, failed: 0 },
+    journal: { configured: false, sent: 0, failed: 0, refused: 0 },
   });
   const bootedAt = Date.parse(body.bootedAt);
   expect(bootedAt).toBeLessThanOrEqual(Date.now());

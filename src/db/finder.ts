@@ -108,20 +108,28 @@ const oneOf = <T extends string>(value: unknown, allowed: readonly T[]): T | nul
   typeof value === "string" && (allowed as readonly string[]).includes(value) ? (value as T) : null;
 const phrases = (value: unknown): string[] =>
   Array.isArray(value) ? value.filter((p): p is string => typeof p === "string" && p.trim().length > 0 && p.length <= 80).map((p) => p.trim()).slice(0, MAX_UNLISTED) : [];
-/** A transcript is every turn or nothing: one malformed turn refuses the record, as any other field would. */
+/**
+ * A transcript is kept within its bounds rather than refused for them (founder, 2026-09-29: all
+ * transcripts recorded and kept; two of the founder's own calls that morning left no record). A turn
+ * that is not a turn is dropped, a long turn is cut at MAX_TEXT, a long call keeps its first
+ * MAX_TURNS turns; only a transcript that is not a list refuses the record.
+ */
 const transcript = (value: unknown): CallTurn[] | null => {
   if (value === undefined) return [];
-  if (!Array.isArray(value) || value.length > MAX_TURNS) return null;
+  if (!Array.isArray(value)) return null;
   const turns: CallTurn[] = [];
-  for (const item of value) {
+  for (const item of value.slice(0, MAX_TURNS)) {
     const o = object(item);
     const who = oneOf(o?.who, ["person", "assistant", "tool"] as const);
-    const said = text(o?.text, MAX_TEXT);
-    if (!who || said === null) return null;
-    turns.push({ who, text: said });
+    if (!who || typeof o?.text !== "string") continue;
+    turns.push({ who, text: o.text.slice(0, MAX_TEXT).trim() });
   }
   return turns;
 };
+
+/** A count within its bounds: a call with more questions than the interviewer allows is still a call that happened. */
+const bounded = (value: unknown, max: number): number | null =>
+  typeof value === "number" && Number.isFinite(value) && value >= 0 ? Math.min(Math.round(value), max) : null;
 
 export function parseSearch(input: unknown, now = new Date()): SearchRecord | null {
   const o = object(input);
@@ -154,15 +162,15 @@ export function parseVoiceCall(input: unknown, now = new Date()): VoiceCallRecor
   const deviceId = uuid(o?.deviceId);
   const outcome = oneOf(o?.outcome, ["revealed", "stopped", "failed", "urgent"] as const);
   const model = text(o?.model, 60);
-  const questions = o?.questions;
-  const seconds = o?.seconds;
-  if (!o || !id || !deviceId || !outcome || !model) return null;
-  if (!Number.isInteger(questions) || (questions as number) < 0 || (questions as number) > MAX_FOLLOW_UPS) return null;
-  if (!Number.isInteger(seconds) || (seconds as number) < 0 || (seconds as number) > 3600) return null;
+  // Bounded, not refused (2026-09-29): a call the model stretched past MAX_FOLLOW_UPS questions used
+  // to be refused whole, and the founder's calls that asked the most were exactly the ones lost.
+  const questions = bounded(o?.questions, MAX_FOLLOW_UPS * 4);
+  const seconds = bounded(o?.seconds, 3600);
+  if (!o || !id || !deviceId || !outcome || !model || questions === null || seconds === null) return null;
   const turns = transcript(o.transcript ?? o.turns);
   if (!turns) return null;
   return {
-    id, deviceId, searchId: uuid(o.searchId), createdAt: now.toISOString(), model, questions: questions as number, seconds: seconds as number, outcome,
+    id, deviceId, searchId: uuid(o.searchId), createdAt: now.toISOString(), model, questions, seconds, outcome,
     request: text(o.request, MAX_TEXT) ?? "",
     place: text(o.place, 80) ?? "",
     transcript: turns,
@@ -228,12 +236,12 @@ interface State {
   events: EventRecord[];
   handoffs: HandoffRecord[];
   ratings: Map<string, RatingRecord>;
-  journal: { sent: number; failed: number; chain: Promise<void> };
+  journal: { sent: number; failed: number; refused: number; chain: Promise<void> };
 }
 
 const holder = globalThis as { __adhdMeFinderDb?: State };
 function fresh(): State {
-  return { searches: [], calls: [], events: [], handoffs: [], ratings: new Map(), journal: { sent: 0, failed: 0, chain: Promise.resolve() } };
+  return { searches: [], calls: [], events: [], handoffs: [], ratings: new Map(), journal: { sent: 0, failed: 0, refused: 0, chain: Promise.resolve() } };
 }
 function state(): State {
   holder.__adhdMeFinderDb ??= fresh();
@@ -400,7 +408,7 @@ export function ratings(): RatingRecord[] {
 /** What this instance holds, for the tests and the ops view; no row leaves through here. */
 export function finderDbCounts() {
   const s = state();
-  return { searches: s.searches.length, calls: s.calls.length, events: s.events.length, handoffs: s.handoffs.length, ratings: s.ratings.size, journal: { sent: s.journal.sent, failed: s.journal.failed } };
+  return { searches: s.searches.length, calls: s.calls.length, events: s.events.length, handoffs: s.handoffs.length, ratings: s.ratings.size, journal: { sent: s.journal.sent, failed: s.journal.failed, refused: s.journal.refused } };
 }
 
 /**
@@ -409,9 +417,14 @@ export function finderDbCounts() {
  * empty after a live search, and no request in the API logs) is told apart from a failing write.
  * Booleans and counts only; never a value from the environment.
  */
-export function journalStatus(env: Record<string, string | undefined> = process.env): { configured: boolean; sent: number; failed: number } {
+export function journalStatus(env: Record<string, string | undefined> = process.env): { configured: boolean; sent: number; failed: number; refused: number } {
   const s = state();
-  return { configured: Boolean(env.SUPABASE_URL?.trim() && env.SUPABASE_SERVICE_ROLE_KEY?.trim()), sent: s.journal.sent, failed: s.journal.failed };
+  return { configured: Boolean(env.SUPABASE_URL?.trim() && env.SUPABASE_SERVICE_ROLE_KEY?.trim()), sent: s.journal.sent, failed: s.journal.failed, refused: s.journal.refused };
+}
+
+/** A record the track route could not parse: counted on this instance, so a silent 400 shows on /api/health. */
+export function noteRefusedRecord(): void {
+  state().journal.refused += 1;
 }
 
 /** Waits for the journal's queued writes; the tests use it. */

@@ -2,7 +2,7 @@
 // or a handoff. The browser sends it with sendBeacon, so the body may arrive as text; a record that
 // does not parse is refused whole. 204 on success; 120 a minute from one caller.
 
-import { parseEvent, parseHandoff, parseSearch, parseVoiceCall, recordEvent, recordHandoff, recordSearch, recordVoiceCall } from "@/db/finder";
+import { noteRefusedRecord, parseEvent, parseHandoff, parseSearch, parseVoiceCall, recordEvent, recordHandoff, recordSearch, recordVoiceCall } from "@/db/finder";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +49,9 @@ export async function POST(request: Request) {
   } catch {
     return Response.json({ error: "json" }, { status: 400, headers: NO_STORE });
   }
-  if (!keep(body?.type, body?.record)) return Response.json({ error: "record" }, { status: 400, headers: NO_STORE });
+  if (!keep(body?.type, body?.record)) {
+    noteRefusedRecord();
+    return Response.json({ error: "record" }, { status: 400, headers: NO_STORE });
+  }
   return new Response(null, { status: 204, headers: NO_STORE });
 }
