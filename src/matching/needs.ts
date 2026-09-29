@@ -477,6 +477,8 @@ const LEXICON: readonly Entry[] = [
     "postpartum", "postnatal", "post-natal", "perinatal", "antenatal", "pregnant", "pregnancy", "breastfeeding", "newborn", "maternity",
     "post partum", "post natal", "new mum", "new mother", "new parent", "new dad", "new baby", "had a baby", "having a baby", "expecting a baby",
     "baby came", "baby arrived", "gave birth", "giving birth", "baby brain",
+    // 2026-09-29: the voice interviewer wrote "understands new mums", and the stemmer leaves a four-letter plural alone.
+    "new mums", "new dads",
   ]),
 
   /**

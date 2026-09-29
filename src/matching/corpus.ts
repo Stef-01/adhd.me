@@ -1015,6 +1015,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "six months postpartum and everything I used to manage has fallen apart", reaches: ["care:perinatal"] },
   { text: "a clinician who relates to what postnatal life is like", reaches: ["care:perinatal"] },
   { text: "someone who understands what it's like being a new mum", reaches: ["care:perinatal"], never: ["manner:sense_making", "manner:culturally_attuned"] },
+  { text: "someone patient who listens, and understands new mums", reaches: ["manner:attuned", "care:perinatal"], never: ["manner:culturally_attuned"] },
   { text: "since the baby came I can't hold a thought, is this ADHD", reaches: ["care:perinatal", "care:adhd-assessment"] },
   { text: "expecting a baby in March and I want help lined up before then", reaches: ["care:perinatal"] },
   { text: "pregnant and unsure what this means for my medication", reaches: ["care:perinatal"] },

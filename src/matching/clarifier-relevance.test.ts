@@ -48,8 +48,8 @@ describe("M10 the co-occurrence map is derived, not authored", () => {
    */
   it("holds the measured shape of the real corpus", () => {
     const counts = cooccurrenceCounts();
-    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(93); // R15: +3 two-facet sentences
-    expect(counts.size).toBe(144); // R15: perinatal pairs with assessment and telehealth
+    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(94); // R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
+    expect(counts.size).toBe(146); // R15: perinatal pairs with assessment and telehealth; 2026-09-29: attuned with perinatal, both ways
     expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(56); // R15: two perinatal pairs clear the floor
   });
 
