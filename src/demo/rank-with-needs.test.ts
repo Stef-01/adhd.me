@@ -4,16 +4,12 @@
 
 import { describe, expect, it } from "vitest";
 import { capacityGrade, clinicians, needsFor, rankClinicians, rankCliniciansNear, rankingProfile, type Clinician } from "./clinicians";
-import { rosterFor } from "./synthetic-roster";
 import { REACH_CORPUS } from "@/matching/corpus";
 import { resolvePlace } from "@/geo/suburbs";
 import { facetKey, type NeedSignal } from "@/matching/needs";
 
 const TODAY = new Date("2026-09-27T00:00:00Z");
-const ROSTERS = [
-  { name: "real", roster: clinicians },
-  { name: "with examples", roster: rosterFor(true) },
-] as const;
+const ROSTERS = [{ name: "real", roster: clinicians }] as const;
 
 const ids = (list: readonly Clinician[]) => list.map((c) => c.id);
 const readOf = (needs: readonly NeedSignal[]) => needs.map((n) => `${facetKey(n.facet)}=${n.weight}`).sort();
@@ -69,7 +65,7 @@ describe("rankCliniciansNear with needs", () => {
   const hornsby = resolvePlace("Hornsby")!;
 
   it("ranks as before when the read is passed in, and still sorts by distance on a subset", () => {
-    const roster = rosterFor(true);
+    const roster = clinicians;
     const text = "a woman GP for an ADHD assessment";
     const read = needsFor(text, roster);
     expect(ids(rankCliniciansNear(text, hornsby, roster, TODAY, read))).toEqual(ids(rankCliniciansNear(text, hornsby, roster, TODAY)));

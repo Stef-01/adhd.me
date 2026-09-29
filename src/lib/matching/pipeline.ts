@@ -6,9 +6,9 @@
 // `Embedder`, a different condition's vocabularies behind `types.ts`, a different mechanism
 // behind the same proposer/receiver lists. This file only composes them.
 
-import { generateCandidates, type Candidate, type CandidateResult, distanceBetween, embeddingFor, narrativeEmbedding } from "./candidates";
+import { generateCandidates, type CandidateResult, narrativeEmbedding } from "./candidates";
 import { deferredAcceptance, type Proposer, type Receiver } from "./deferred-acceptance";
-import { LexicalEmbedder, cosine, sharedConcepts, type Embedder } from "./embedding";
+import { LexicalEmbedder, sharedConcepts, type Embedder } from "./embedding";
 import { gpBioText } from "./candidates";
 import { explainMatch } from "./rationale";
 import { PATIENT_WEIGHTS, rankGPsForPatient, rankPatientsForGP, type PatientCriterion, type RankedGP, type RankedPatient } from "./ranking";
@@ -16,7 +16,7 @@ import type { GP, Match, Patient } from "./types";
 
 export const PRESENTED_PER_PATIENT = 3;
 
-export interface PipelineOptions {
+interface PipelineOptions {
   embedder: Embedder;
   /** ISO datetime stamped on the match records. */
   now: string;
@@ -28,13 +28,13 @@ export interface PipelineOptions {
   matchId?: (patientId: string, gpId: string) => string;
 }
 
-export interface PresentedMatch {
+interface PresentedMatch {
   match: Match;
   gp: GP;
   distanceKm: number | null;
 }
 
-export interface MatchOutcome {
+interface MatchOutcome {
   /** The patient with the embedding filled in. */
   patient: Patient;
   shortlist: CandidateResult;
@@ -155,10 +155,5 @@ export function matchPatient(input: Patient, gps: readonly GP[], options: Pipeli
   return { patient, shortlist, patientRanking, gpRankings, presented, rounds: result.rounds, proposals: result.proposals, note };
 }
 
-/** Similarity for one pair, for surfaces that show it outside a run. */
-export function pairSimilarity(embedder: Embedder, patient: Patient, gp: GP): number {
-  return cosine(narrativeEmbedding(embedder, patient), embeddingFor(embedder, gp));
-}
 
-export type { Candidate };
-export { distanceBetween };
+

@@ -174,7 +174,7 @@ export function scrubPatientFromReferrals(patientId: string): {
   return removed;
 }
 
-export type ReturnLookup =
+type ReturnLookup =
   | { found: false }
   | { found: true; report: ReturnReport }
   /**

@@ -700,3 +700,15 @@ Without WebGL2 it is a still disc as the sphere reads at rest, pale where it fac
 toward its rim (it was a saturated blue ball, unlike the sphere it stands in for):
 
 ![The still disc without WebGL2, 390](voice-sphere-no-webgl-390.jpg)
+
+### AI or Standard, under the finder's box
+
+The founder: "the LLM interface should be an optional system that you toggle ... between LLM matching
+or standard (which is deterministic prior word matching)". One switch of two halves under the box,
+kept on the device: AI reads with the model and the microphone opens the voice finder; Standard is
+the word matcher and dictation. It shows only where the server has a key, so the suite's own server
+(no key) is unchanged. Two words added to the finder's home.
+
+| AI, 390 | Standard, 1440 |
+| --- | --- |
+| ![AI chosen, 390](finder-mode-ai-390.jpg) | ![Standard chosen, 1440](finder-mode-standard-1440.jpg) |

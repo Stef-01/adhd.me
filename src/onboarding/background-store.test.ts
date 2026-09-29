@@ -14,7 +14,7 @@ const background = (over: Partial<ClinicianBackground> = {}): ClinicianBackgroun
   readBackConfirmed: false,
   facets: [
     { key: "care:titration", kind: "care", label: "Titration", status: "accepted", decidedBy: "Reviewer", quote: "I do titration." },
-    { key: "manner:unhurried", kind: "manner", label: "Unhurried", status: "proposed" },
+    { key: "manner:not_rushed", kind: "manner", label: "Not rushed", status: "proposed" },
   ],
   ...over,
 });

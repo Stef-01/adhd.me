@@ -2,6 +2,7 @@
 // its statuses exactly once, and resets to nothing.
 
 import { beforeEach, describe, expect, it } from "vitest";
+import { rosterGPs } from "./adapters";
 import {
   allFeedback,
   checklistFor,
@@ -53,7 +54,7 @@ describe("M1 seeding", () => {
   it("seeds the roster's GPs once, allied entries left out, and keeps an edit across reads", () => {
     const state = getMatching(TODAY);
     const seeded = listGPs(state);
-    expect(seeded.length).toBeGreaterThan(10);
+    expect(seeded.length).toBe(rosterGPs(TODAY).length);
     expect(seeded.every((g) => g.conditions.includes("adhd"))).toBe(true);
     const first = seeded[0]!;
     saveGP({ ...first, credentials: { ...first.credentials, caseloadCapacityCurrent: 1 } }, state);

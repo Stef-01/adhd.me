@@ -10,7 +10,7 @@ import { deriveNeeds } from "./needs";
 import type { ManualSection, ModelRecord } from "./store";
 import type { Subdomain } from "./layers";
 
-export interface ManualSectionSpec {
+interface ManualSectionSpec {
   readonly id: ManualSection;
   readonly title: string;
   /** One line under the title: what goes here. */

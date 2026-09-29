@@ -31,7 +31,7 @@
 // is not where the inference would appear.
 
 /** Where a calendar entry came from. Every field required — an entry cannot exist without one. */
-export interface HolidayProvenance {
+interface HolidayProvenance {
   /** Enough to identify the source to somebody who wants to check it. */
   citation: string;
   url: string;
@@ -58,7 +58,7 @@ export interface CalendarDay {
   provenance: HolidayProvenance;
 }
 
-export interface CalendarRejection {
+interface CalendarRejection {
   id: string;
   reason: string;
 }

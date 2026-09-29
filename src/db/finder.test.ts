@@ -65,6 +65,22 @@ describe("parsing what the browser sends", () => {
     expect(parseVoiceCall({ ...call, outcome: "great" })).toBeNull();
   });
 
+  it("keeps a call's transcript whole, its request and place, and refuses a malformed turn", () => {
+    const call = { id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 5, seconds: 98, outcome: "revealed" };
+    const turns = [{ who: "assistant", text: "Hi." }, { who: "person", text: "I had a baby last year" }, { who: "tool", text: "show_matches {}" }];
+    const kept = parseVoiceCall({ ...call, transcript: turns, request: "An ADHD assessment, postpartum", place: "Hornsby" });
+    expect(kept).toMatchObject({ transcript: turns, request: "An ADHD assessment, postpartum", place: "Hornsby" });
+    expect(parseVoiceCall(call)).toMatchObject({ transcript: [], request: "", place: "" });
+    expect(parseVoiceCall({ ...call, transcript: [{ who: "narrator", text: "x" }] })).toBeNull();
+    expect(parseVoiceCall({ ...call, transcript: "everything" })).toBeNull();
+  });
+
+  it("keeps a search's unlisted asks, bounded, and never a key among them", () => {
+    const search = { id: A, deviceId: B, source: "voice", requestText: "help", readSource: "llm", unlisted: ["relates to postpartum", "  ", 7, "x".repeat(81), ...Array.from({ length: 12 }, (_, i) => `ask ${i}`)] };
+    expect(parseSearch(search)?.unlisted).toEqual(["relates to postpartum", ...Array.from({ length: 9 }, (_, i) => `ask ${i}`)]);
+    expect(parseSearch({ ...search, unlisted: undefined })?.unlisted).toEqual([]);
+  });
+
   it("keeps an event of a known kind for a search", () => {
     expect(parseEvent({ id: A, searchId: B, kind: "profile", clinicianId: "mei-chao" })).toMatchObject({ kind: "profile", clinicianId: "mei-chao" });
     expect(parseEvent({ id: A, searchId: B, kind: "click" })).toBeNull();
@@ -127,11 +143,11 @@ describe("the journal to Supabase", () => {
 });
 
 describe("what the ratings teach", () => {
-  const visit = (stars: number, met: boolean) => ({ stars: stars as 1 | 2 | 3 | 4 | 5, asked: ["manner:unhurried", "pref:telehealth-first"], met: met ? ["manner:unhurried"] : [] });
+  const visit = (stars: number, met: boolean) => ({ stars: stars as 1 | 2 | 3 | 4 | 5, asked: ["manner:not_rushed", "pref:telehealth-first"], met: met ? ["manner:not_rushed"] : [] });
 
   it("groups each ask's visits by whether the clinician declared it", () => {
-    const [unhurried, telehealth] = askSignals([visit(5, true), visit(3, false), visit(4, true)]);
-    expect(unhurried).toEqual({ key: "manner:unhurried", metN: 2, metStars: 4.5, unmetN: 1, unmetStars: 3 });
+    const [takesTime, telehealth] = askSignals([visit(5, true), visit(3, false), visit(4, true)]);
+    expect(takesTime).toEqual({ key: "manner:not_rushed", metN: 2, metStars: 4.5, unmetN: 1, unmetStars: 3 });
     expect(telehealth).toMatchObject({ metN: 0, unmetN: 3 });
   });
 
@@ -142,9 +158,9 @@ describe("what the ratings teach", () => {
 
   it("raises an ask that went with better visits and lowers one that went with worse, within the bound", () => {
     const better = [...Array(MIN_SAMPLES)].flatMap(() => [visit(5, true), visit(3, false)]);
-    expect(learnAskWeights(askSignals(better))).toEqual({ "manner:unhurried": 1.25 });
+    expect(learnAskWeights(askSignals(better))).toEqual({ "manner:not_rushed": 1.25 });
     const worse = [...Array(MIN_SAMPLES)].flatMap(() => [visit(1, true), visit(5, false)]);
-    expect(learnAskWeights(askSignals(worse))["manner:unhurried"]).toBe(1 - MAX_SHIFT);
+    expect(learnAskWeights(askSignals(worse))["manner:not_rushed"]).toBe(1 - MAX_SHIFT);
   });
 
   it("never keys a weight to a clinician", () => {

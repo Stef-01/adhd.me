@@ -22,13 +22,13 @@ import { CARE_NEEDS, IDENTITY_LABELS, isCareNeed, isIdentityPreference, matchesC
 // language list is `MATCHABLE_LANGUAGES`, the set the roster actually declares; wheelchair access
 // and open books are roster fields. No filter is inferred from anything a person wrote.
 
-import { isProfession, profession, type Profession } from "@/support/professions";
+import { isProfession, profession, PROFESSIONS, type Profession } from "@/support/professions";
 import { holdsPreference } from "@/matching/needs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { APPROACHES, type Approach } from "@/demo/roster";
 import type { SuburbPoint } from "@/geo/suburbs";
 
-export const FILTERS_VERSION = 1;
+const FILTERS_VERSION = 1;
 /** The localStorage key. Versioned in the name too, so two shapes never share one slot. */
 export const FILTERS_KEY = `adhdme.filters.v${FILTERS_VERSION}`;
 
@@ -207,7 +207,7 @@ export function activeFilterCount(filters: Filters): number {
 }
 
 /** One filter that is on, and the set with exactly that filter off — the way out of a list it emptied. */
-export interface Relaxation {
+interface Relaxation {
   label: string;
   filters: Filters;
 }
@@ -280,4 +280,18 @@ export function applyFilters<T extends Filterable>(
     }
     return true;
   });
+}
+
+/**
+ * The choices somebody listed can satisfy. A chip nobody on the roster answers is a dead control,
+ * so the profile offers only these, and a group with none folds away until a clinician declares it.
+ */
+export function offeredChoices(roster: readonly Filterable[]) {
+  return {
+    languages: MATCHABLE_LANGUAGES.filter((language) => roster.some((c) => c.languages.includes(language))),
+    professions: PROFESSIONS.filter((id) => roster.some((c) => (c.profession ?? "gp") === id)),
+    approaches: APPROACHES.filter((a) => roster.some((c) => c.approach?.includes(a))),
+    consultRecording: roster.some((c) => c.consultRecording !== undefined),
+    care: roster.some((c) => c.careProfile !== undefined),
+  };
 }

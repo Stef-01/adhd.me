@@ -4,14 +4,13 @@
 // never passes one who does. And a language or access ask is never outvoted by it.
 
 import { describe, expect, it } from "vitest";
-import { capacityGrade, needsFor, rankClinicians, rankCliniciansNear, rankingProfile, type Clinician, type Demonstrated } from "./clinicians";
-import { rosterFor } from "./synthetic-roster";
+import { capacityGrade, clinicians, needsFor, rankClinicians, rankCliniciansNear, rankingProfile, type Clinician, type Demonstrated } from "./clinicians";
 import { REACH_CORPUS } from "@/matching/corpus";
 import { resolvePlace } from "@/geo/suburbs";
 import { MAX_QUALITY } from "@/db/quality";
 
 const TODAY = new Date("2026-09-28T00:00:00Z");
-const roster = rosterFor(true);
+const roster = clinicians;
 const ids = (list: readonly Clinician[]) => list.map((c) => c.id);
 const BEST = 1 + MAX_QUALITY;
 const WORST = 1 - MAX_QUALITY;
@@ -69,12 +68,14 @@ describe("demonstrated quality in the order", () => {
   });
 
   it("never lifts a clinician whose books are closed past an open one level with them", () => {
+    // Everybody listed has open books today, so every fourth entry is closed here.
+    const shut = roster.map((c, i) => (i % 4 === 0 ? { ...c, acceptingNewPatients: false } : c));
     let checked = 0;
     for (const { text } of REACH_CORPUS.slice(0, 80)) {
-      const needs = needsFor(text, roster);
+      const needs = needsFor(text, shut);
       const declared = (c: Clinician) => JSON.stringify(rankingProfile(c, needs));
-      const closed = roster.filter((c) => !c.acceptingNewPatients);
-      const order = rankClinicians(text, roster, TODAY, undefined, everyone(1, Object.fromEntries(closed.map((c) => [c.id, BEST]))));
+      const closed = shut.filter((c) => !c.acceptingNewPatients);
+      const order = rankClinicians(text, shut, TODAY, undefined, everyone(1, Object.fromEntries(closed.map((c) => [c.id, BEST]))));
       for (const shut of closed) {
         const behind = order.slice(order.indexOf(shut) + 1).filter((c) => c.acceptingNewPatients && declared(c) === declared(shut));
         checked += 1;

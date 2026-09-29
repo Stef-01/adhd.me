@@ -22,7 +22,7 @@
 // Deterministic, total, dependency-free: the same text always yields the same vector, garbage
 // yields the zero vector rather than a throw, and no randomness exists anywhere in it.
 
-import { CLAUSE_BOUNDARY, stem, tokenise } from "@/matching/read";
+import { CLAUSE_BOUNDARY, tokenise } from "@/matching/read";
 import type { Embedding } from "./types";
 
 export interface Embedder {
@@ -52,7 +52,7 @@ export type ConceptId =
   | "bulk-billing"
   | "cost"
   | "stigma"
-  | "unhurried"
+  | "not-rushed"
   | "non-judgmental"
   | "collaborative"
   | "sense-making"
@@ -69,7 +69,7 @@ export type ConceptId =
   | "long-standing"
   | "school";
 
-export interface Concept {
+interface Concept {
   id: ConceptId;
   /** The patient-safe phrase a rationale may say. */
   label: string;
@@ -99,7 +99,7 @@ export const CONCEPTS: readonly Concept[] = [
   { id: "bulk-billing", label: "bulk-billing", weight: 1.2, cues: ["bulk bill", "bulk billing", "bulk billed", "no gap"] },
   { id: "cost", label: "keeping cost down", weight: 1.2, cues: ["afford", "cost", "expensive", "money", "cheap", "budget", "concession", "health care card", "pension"] },
   { id: "stigma", label: "feeling safe to be honest", weight: 1.2, cues: ["embarrass", "ashamed", "shame", "judged", "judge me", "stigma", "taken seriously", "dismissed", "believe me", "not believed"] },
-  { id: "unhurried", label: "not being rushed", weight: 1, cues: ["rushed", "unhurried", "take their time", "takes time", "time to listen", "listen"] },
+  { id: "not-rushed", label: "not being rushed", weight: 1, cues: ["rushed", "take their time", "takes time", "time to listen", "listen"] },
   { id: "non-judgmental", label: "no judgement", weight: 1, cues: ["non judgmental", "non judgemental", "without judgement", "no judgement", "safe to be honest"] },
   { id: "collaborative", label: "deciding together", weight: 1, cues: ["collaborative", "decide together", "work with me", "involved in decisions", "my say", "explains the options"] },
   { id: "sense-making", label: "helping it make sense", weight: 1, cues: ["make sense", "understand myself", "understand what is going on", "explain", "sense making"] },
@@ -117,14 +117,14 @@ export const CONCEPTS: readonly Concept[] = [
   { id: "school", label: "school", weight: 1, cues: ["school", "teacher", "classroom", "school report"] },
 ];
 
-export const CONCEPT_BY_ID: ReadonlyMap<ConceptId, Concept> = new Map(CONCEPTS.map((c) => [c.id, c]));
+const CONCEPT_BY_ID: ReadonlyMap<ConceptId, Concept> = new Map(CONCEPTS.map((c) => [c.id, c]));
 
 export function conceptLabel(id: ConceptId): string {
   return CONCEPT_BY_ID.get(id)!.label;
 }
 
 /** Dimensions: one per concept, then the hashed stem space. */
-export const HASH_DIM = 224;
+const HASH_DIM = 224;
 export const EMBEDDING_DIM = CONCEPTS.length + HASH_DIM;
 
 const PAIR_WEIGHT = 0.5;
@@ -258,5 +258,3 @@ export function sharedConcepts(embedder: Embedder, a: string, b: string): Concep
   return embedder.concepts(a).filter((id) => inB.has(id));
 }
 
-/** Stem a word the way the embedder does, for callers that need to compare a cue. */
-export const stemWord = stem;

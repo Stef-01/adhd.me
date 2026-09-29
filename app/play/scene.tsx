@@ -23,10 +23,10 @@ import type { CSSProperties, ReactNode } from "react";
 import type { Character, Mood, Prop } from "@/learn/interactive";
 import { Bean } from "./beans";
 
-export interface SceneTints { sky: string; ground: string; deep: string; mid: string; light: string; warm: string; accent: string }
+interface SceneTints { sky: string; ground: string; deep: string; mid: string; light: string; warm: string; accent: string }
 
 /** Seven tints per place, on the product's blue-navy base (ink #172033, paper #f7f8fc, blues #5065a6 and #6679b9). */
-export const SCENE_TINTS: Readonly<Record<Prop, SceneTints>> = {
+const SCENE_TINTS: Readonly<Record<Prop, SceneTints>> = {
   desk: { sky: "#e6ebf7", ground: "#c5cfe9", deep: "#3d4f8a", mid: "#6679b9", light: "#f7f8fc", warm: "#f3d9a6", accent: "#7fae8e" },
   phone: { sky: "#e2e8f8", ground: "#c2cdeb", deep: "#33447d", mid: "#6679b9", light: "#f7f8fc", warm: "#ffd9a8", accent: "#e0654d" },
   bill: { sky: "#eceff7", ground: "#cdd5ea", deep: "#4a5b9c", mid: "#8a97c7", light: "#fffdf7", warm: "#e9c9a0", accent: "#e0654d" },
@@ -44,9 +44,6 @@ export const SCENE_TINTS: Readonly<Record<Prop, SceneTints>> = {
   study: { sky: "#e1e5f2", ground: "#b9c2dd", deep: "#232c4d", mid: "#5065a6", light: "#f4f6fb", warm: "#f0b95a", accent: "#e0654d" },
   none: { sky: "#ebeefa", ground: "#d0d8ef", deep: "#5065a6", mid: "#6679b9", light: "#f7f8fc", warm: "#f3d9a6", accent: "#8fa5d6" },
 };
-
-/** The sky of each place; kept for anything that wants one colour per prop. */
-export const PROP_TINTS: Readonly<Record<Prop, string>> = Object.fromEntries(Object.entries(SCENE_TINTS).map(([k, t]) => [k, t.sky])) as Record<Prop, string>;
 
 /** Floors run far past the drawing: where a title card is wider than the art, they reach both edges. */
 const WIDE = { x: -1000, width: 2360 } as const;

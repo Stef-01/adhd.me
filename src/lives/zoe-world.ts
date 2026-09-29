@@ -4,10 +4,10 @@
  * deleted. Breathe holds the typing and the fuse for a moment. If the fuse runs out with sharp
  * words left, the message sends and a repair follows. Fictional; no message text leaves memory.
  */
-export interface Chunk { text: string; swap?: string; plan?: boolean }
-export interface Beat { from: string; zoe: Chunk[]; warm: string; hurt: string }
-export interface Scenario { name: 'Rae'; beats: [Beat, Beat, Beat]; revisit: Beat }
-export type Phase = 'typing' | 'reply' | 'repair' | 'setup' | 'revisit' | 'complete';
+interface Chunk { text: string; swap?: string; plan?: boolean }
+interface Beat { from: string; zoe: Chunk[]; warm: string; hurt: string }
+interface Scenario { name: 'Rae'; beats: [Beat, Beat, Beat]; revisit: Beat }
+type Phase = 'typing' | 'reply' | 'repair' | 'setup' | 'revisit' | 'complete';
 
 const c = (text: string, swap?: string): Chunk => ({ text, swap });
 export const SCENARIOS: Scenario[] = [

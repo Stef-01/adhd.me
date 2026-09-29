@@ -352,22 +352,10 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "W201's ADM notice, and the one module here whose copy is read by a PATIENT rather than an operator — so it answers to W192's sweep at the `patient_notice` audience, which `automated-decisions.test.ts` runs over exactly this text, and not to the advice rules. The distinction is not a dodge, it is the finding: `lintEducationCopy` bundles W6's patient-MESSAGE vocabulary, and a legal notice must say the words a message may not. Running it here flags five strings and all five are the notice refusing the thing — \"not a judgement about whether you need to be seen\", \"no diagnosis\", \"no list of who is most at risk\", \"does not read your test results\". Seventh instance of W198's pattern, and the second time the answer is the audience rather than the string. NOT_A_DECISION is reviewer-facing besides, naming decisions in order to rule them out.",
   },
   {
-    module: "src/quality/latent-findings.ts",
-    operatorCopy: [],
-    notCopy:
-      "W210's register of findings that are not yet defects. Every string is written to whoever reads the register — the defect, and the condition that would make it live — and it quotes the language of the defects it describes, PRIV-3's cross-practice reads among them.",
-  },
-  {
     module: "src/quality/order-independence.ts",
     operatorCopy: [],
     notCopy:
       "W167's fold register. Every string is a rationale addressed to whoever reads the register, and it argues about guarantees, which is why the benefit vocabulary matches it.",
-  },
-  {
-    module: "src/quality/order-regressions.ts",
-    operatorCopy: [],
-    notCopy:
-      "W178's regression corpus: the failures themselves, described to an engineer. It quotes the wording of past defects on purpose.",
   },
   {
     module: "src/reporting/model.ts",
@@ -484,12 +472,6 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports one factory, `syntheticClinician`, and is declared with an empty `operatorCopy` because every string in it is a placeholder that must never be read by anybody: the name says \"Synthetic Example\", the practice says \"Synthetic Test Practice\", the booking URL is `example.invalid`, and `about` says in full that it is a fixture and not a person. It is the deliberate opposite of `src/demo/roster.ts` next door — that module's every string is a factual claim about a named real doctor, and this one's every string is guaranteed to be about nobody. It exists so the ranking LAWS (closed books never outrank open ones at equal fit, a disclosed interest never wins a tie, staleness orders ties but costs no fit) can be tested without borrowing a real person's record as a blank, which is what made Dr Yadav's departure break fifty tests that were not about him. `realPerson` is deliberately absent, so if this ever leaked into a rendered surface the real-person checks would refuse it rather than quietly display it.",
   },
   {
-    module: "src/quality/contradictions.ts",
-    operatorCopy: [],
-    notCopy:
-      "Exports the contradiction register, two selectors over it and a pinned count. Declared with an empty `operatorCopy` because nothing here is read by an operator or a patient: every string is an INVARIANT stated in prose so a reviewer can check it against the product without reading the code, plus the reason an acceptance is accepted. It is deliberately sited away from the modules it guards — M4 exists because a guard living beside the thing it guards was deleted in the same commit as that thing, and the suite stayed green because the test had gone with the feature. A register in its own file makes removing an invariant a visible act rather than a side effect of simplifying something else.",
-  },
-  {
     module: "src/demo/emotional-fit.ts",
     operatorCopy: ["EI_QUALITIES"],
     notCopy:
@@ -506,12 +488,6 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
     operatorCopy: [],
     notCopy:
       "Exports the false-positive register, its two selectors and its type. It holds no operator copy: every string in it is a build-time note — a corpus sentence quoted verbatim, the facet it wrongly reaches, the construction family it belongs to, and where an entry is accepted, the reason. None of it is rendered to anybody. Declared with an empty `operatorCopy` for the reason src/matching/read.ts states: a module absent from this census is indistinguishable from a module nobody has checked. What it is FOR is the O84 bar — one case does not earn a matcher mechanism, two do — which the tree had been applying from memory since August because the evidence for it lived in sixteen prose comments spread across corpus.ts. The register makes the count automatic, and its own first run taught it a distinction it lacked: a reading examined and judged harmless is ACCEPTED, not queued, and collapsing the two would have made the bar demand a mechanism for a family O119 had already looked at and cleared.",
-  },
-  {
-    module: "src/demo/real-person-fields.ts",
-    operatorCopy: [],
-    notCopy:
-      "Exports the basis register for every field this tree holds about a real, named clinician, plus its type and a name list. It is declared with an empty `operatorCopy` because nothing in it renders: each entry is a build-time note saying whose claim a field is (checkable on a public register, declared by the clinician, relayed by the founder, derived by this tree, or plain plumbing) and where specifically it came from. What it is FOR is the failure it was written after. `src/directory/disclosure.ts` has done exactly this for the PUBLIC directory since W193 — and the public directory is empty behind gate G6 and renders to nobody, while `/finder` puts three real named doctors in front of patients with their sourcing recorded only in prose comments. O156 then published an unsupported relationship claim about a named doctor whose basis nobody could state because there was nowhere to state it, and it took the founder to catch it. That claim is no longer a product field. Checked both directions against the live roster — a field on a real person with no entry fails, an entry naming a field nobody carries fails — so this cannot decay into a list of what somebody remembered.",
   },
   {
     module: "src/matching/scale-fixture.ts",

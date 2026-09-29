@@ -20,14 +20,6 @@ export const LAYER_LABELS: Readonly<Record<Layer, string>> = {
   people: "People",
 };
 
-/** What each layer is, in one sentence a person can read on the map. */
-export const LAYER_BLURBS: Readonly<Record<Layer, string>> = {
-  brain: "How attention, memory, activation and emotion actually run for you, the part most explanations stop at.",
-  body: "Sleep, movement, appetite and energy: the physical conditions the brain is working under.",
-  environment: "The structure around you, deadlines, noise, workload, where you live and study and work.",
-  people: "The relationships that carry part of the load, or add to it: partner, family, manager, teachers, peers, clinicians.",
-};
-
 export type Subdomain =
   // brain
   | "activation"
@@ -59,7 +51,7 @@ export type Subdomain =
   | "peers"
   | "clinicians";
 
-export interface SubdomainEntry {
+interface SubdomainEntry {
   readonly id: Subdomain;
   readonly layer: Layer;
   readonly label: string;
@@ -108,7 +100,7 @@ export function subdomainsOf(layer: Layer): SubdomainEntry[] {
 }
 
 /** The P0 life domains a module and a need belong to (PRD §5). */
-export const DOMAINS = ["understand", "work-study", "relationships", "daily-life", "mind-emotions", "sleep-body"] as const;
+const DOMAINS = ["understand", "work-study", "relationships", "daily-life", "mind-emotions", "sleep-body"] as const;
 export type Domain = (typeof DOMAINS)[number];
 
 export const DOMAIN_LABELS: Readonly<Record<Domain, string>> = {

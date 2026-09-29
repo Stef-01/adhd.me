@@ -442,7 +442,9 @@ test("Phase A: problem fit orders allied providers by the person's top need, and
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   const first = page.locator(".clinician-row").first();
-  await expect(first).toContainText(/Works on task initiation, the thing you said is hardest/);
+  // The real roster's allied providers declare what they declare (2026-09-29): the first row says why in
+  // the person's own terms, the top need where somebody lists it, a contributor where nobody does.
+  await expect(first).toContainText(/Works on .+, (the thing you said is hardest|which is part of what you described)/);
   await first.click();
   await expect(page.getByText("Why you’re seeing them")).toBeVisible();
 });

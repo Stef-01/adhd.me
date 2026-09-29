@@ -4,7 +4,7 @@
 // An example also has to be one the list can order: "A woman GP for ADHD" tied eleven women, and
 // the fold, which never cuts a tie, opened on all eleven (76 words). A second ask breaks the tie.
 
-export interface ExampleSearch {
+interface ExampleSearch {
   /** What the chip says. */
   readonly label: string;
   /** What the box fills with. */

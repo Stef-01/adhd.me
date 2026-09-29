@@ -6,11 +6,15 @@
 
 import { createHash } from "node:crypto";
 
-export const MAX = 500;
-export const TTL_MS = 24 * 60 * 60 * 1000;
+const MAX = 500;
+const TTL_MS = 24 * 60 * 60 * 1000;
 
-interface Held {
+/** A model reading as the route answers it: the keys, and the asks no key covers. */
+export interface HeldReading {
   keys: string[];
+  unlisted: string[];
+}
+interface Held extends HeldReading {
   at: number;
 }
 
@@ -21,12 +25,12 @@ function cache(): Map<string, Held> {
 }
 
 /** Words that differ only in case, spacing or a closing full stop are the same request; the key is their hash. */
-export function readKey(text: string): string {
+function readKey(text: string): string {
   const words = text.trim().toLowerCase().replace(/\s+/g, " ").replace(/[.!]+$/, "");
   return createHash("sha256").update(words).digest("hex");
 }
 
-export function cachedKeys(text: string, now = Date.now()): string[] | null {
+export function cachedReading(text: string, now = Date.now()): HeldReading | null {
   const key = readKey(text);
   const held = cache().get(key);
   if (!held) return null;
@@ -34,14 +38,14 @@ export function cachedKeys(text: string, now = Date.now()): string[] | null {
     cache().delete(key);
     return null;
   }
-  return held.keys;
+  return { keys: held.keys, unlisted: held.unlisted };
 }
 
-export function rememberKeys(text: string, keys: readonly string[], now = Date.now()): void {
+export function rememberReading(text: string, reading: { keys: readonly string[]; unlisted?: readonly string[] }, now = Date.now()): void {
   const key = readKey(text);
   const map = cache();
   map.delete(key);
-  map.set(key, { keys: [...keys], at: now });
+  map.set(key, { keys: [...reading.keys], unlisted: [...(reading.unlisted ?? [])], at: now });
   if (map.size > MAX) map.delete(map.keys().next().value!);
 }
 

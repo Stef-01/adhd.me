@@ -9,7 +9,6 @@
 
 import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
-import { syntheticClinician } from "@/demo/synthetic-clinician";
 import {
   clinicians,
   matchEvidence,

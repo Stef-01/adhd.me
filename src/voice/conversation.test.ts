@@ -63,6 +63,26 @@ function conversation(n: number) {
   return run(actions);
 }
 
+describe("the record of the call", () => {
+  it("keeps every turn: the person's, the assistant's and the tool's, in order", () => {
+    const { state } = run([
+      { type: "connected" },
+      ...asks(`Hi. ${OPENING_QUESTION}`),
+      ...answers("I had a baby eight months ago and I think I might have ADHD"),
+      ...asks("Is this for you, or for someone else?"),
+      { type: "typed", text: "for me" },
+      calls(SHOW_MATCHES, { request: "An ADHD assessment for me, postpartum", place: "" }),
+    ]);
+    expect(state.turns).toEqual([
+      { who: "assistant", text: `Hi. ${OPENING_QUESTION}` },
+      { who: "person", text: "I had a baby eight months ago and I think I might have ADHD" },
+      { who: "assistant", text: "Is this for you, or for someone else?" },
+      { who: "person", text: "for me" },
+      { who: "tool", text: `${SHOW_MATCHES} ${JSON.stringify({ request: "An ADHD assessment for me, postpartum", place: "" })}` },
+    ]);
+  });
+});
+
 describe("the voice conversation", () => {
   it("opens on the welcome screen's question and asks it aloud once connected", () => {
     const start = initialVoice();

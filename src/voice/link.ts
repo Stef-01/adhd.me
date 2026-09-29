@@ -40,7 +40,7 @@ export function fakeVoice(): boolean {
   return typeof window !== "undefined" && (window.__adhdmeVoiceFake === true || Array.isArray(window.__adhdmeVoiceFake));
 }
 
-export async function openLink(handlers: LinkHandlers): Promise<VoiceLink> {
+async function openLink(handlers: LinkHandlers): Promise<VoiceLink> {
   if (fakeVoice()) {
     const script = window.__adhdmeVoiceFake;
     return (await import("./fake-link")).fakeLink(handlers, Array.isArray(script) ? script : []);

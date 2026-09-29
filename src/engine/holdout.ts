@@ -6,7 +6,7 @@
 
 import type { AuditEvent, Patient, Practice } from "@/domain/types";
 
-export type Arm = "holdout" | "invite";
+type Arm = "holdout" | "invite";
 
 function fnv1a32(input: string): number {
   let h = 0x811c9dc5;
@@ -45,7 +45,7 @@ export function assignArm(practiceId: string, patientId: string, holdoutRate: nu
   return assignmentUnit(practiceId, patientId) < holdoutRate ? "holdout" : "invite";
 }
 
-export interface HoldoutAssignment {
+interface HoldoutAssignment {
   /** Panel with `holdout` flags set to the computed arm (new array; input untouched). */
   patients: Patient[];
   /** One audit event per patient whose stored arm changed — the exclusion audit trail. */

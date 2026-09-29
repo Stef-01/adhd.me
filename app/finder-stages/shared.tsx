@@ -9,7 +9,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Waveform } from "@phosphor-icons/react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { createContext, type ComponentProps, type ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { type Clinician } from "@/demo/clinicians";
@@ -55,7 +54,7 @@ export const STAGE_SPRING = { type: "spring", stiffness: 380, damping: 36, mass:
  */
 export const StageDirection = createContext<1 | -1>(1);
 
-export const stageVariants: Variants = {
+const stageVariants: Variants = {
   // transitions.dev's page-slide lane: an arriving screen starts a little BLURRED and resolves,
   // which reads as the screen condensing into place rather than sliding in as a flat card. Three
   // pixels — its `--blur-medium` — cleared on the same clock as the opacity, so the blur is gone
@@ -76,7 +75,7 @@ export const stageVariants: Variants = {
   exit: { opacity: 0, transition: { duration: 0 } },
 };
 
-export const reducedStageVariants: Variants = {
+const reducedStageVariants: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.15 } },
   exit: { opacity: 0, transition: { duration: 0 } },
@@ -241,25 +240,6 @@ export function getRequestHeadline(value: string, fallback: string) {
   return fallback;
 }
 
-/** O222: the example-profile disclosure, ONE export — founder decision `synthetic-roster-tickbox`
- * says every surface that can show an invented entry labels it, and four hand-written guards with
- * three copy variants is how that promise drifts. The guard and the words live here; the class
- * stays a prop so the existing CSS (and the dead-css census) does not move. */
-// O231 (founder-directed, amending `synthetic-roster-tickbox`): the per-card and per-profile
-// "Example profile" labels are GONE from the finder's surfaces. The founder's words, 2026-09-02:
-// "If you add any weird placeholder sentences or note any profiles are synthetic you will ruin the
-// entire pitch demo day we have been invited to." A badge repeated down every row of a results
-// list is the loudest unfinished-looking thing on the screen, and the sentence under a doctor's
-// name was the first thing a reader met.
-//
-// WHAT STAYS, BECAUSE IT IS NOT A LABEL: the `synthetic` flag itself and every structural defence
-// around it — one of `realPerson`/`synthetic` on any rendered entry, `image` a credited stock
-// portrait or null so no face is generated (O242), no `url` so nothing opens a fabricated booking
-// listing, no `disclosedInterest`, the
-// practice names self-marking, and the same patient-surface linter over every rendered string.
-// The label was one of seven defences; the other six do the work that actually matters, and the
-// one truthful sentence about the roster now lives on `/story`, off the demo path entirely.
-
 export function Wordmark() {
   /* O167: `translate="no"`. The guidelines ask for it on brand names, code tokens and identifiers,
      and this one is all three, a name, a wordmark and a domain. Auto-translation renders "ADHD"
@@ -269,40 +249,6 @@ export function Wordmark() {
     <Link href="/" className="wordmark finder-wordmark" aria-label="ADHD.ME, back to main home" translate="no">
       <BrandMark />
     </Link>
-  );
-}
-
-export function FinderContext() {
-  return (
-    <aside className="finder-context">
-      {/* O233: was "Early Sydney demo. …". The product should not call itself a demo in its own
-          copy, and the sentence's real content, where it operates, and who holds the appointment
-          times, survives without the word.
-          2026-09-03: the bare "Sydney." went with it. A place name alone at the head of a
-          disclaimer reads as a coverage claim, "this product covers Sydney", and the tree no
-          longer supports that reading in either direction. The gazetteer (`src/geo/suburbs.ts`)
-          covers TWO focus areas, northern Sydney/Double Bay (NSW) and the Gold Coast (QLD), so
-          "Sydney" understates where a search resolves; but the only entries carrying `realPerson`
-          are in Beecroft and Double Bay, so naming the Gold Coast here would OVERSTATE who is
-          actually listed, the coast is populated entirely by the example personas the settings
-          sheet already labels as fictional. The honest sentence is therefore about the listed
-          doctors, not about the map, and it is the wording `/faq` was already vetted with: "The
-          current listed doctors consult in Sydney." Coverage of the gazetteer's two areas is stated
-          where it belongs, on `app/coverage-map.tsx`. */}
-      <p>
-        Listed doctors consult in Sydney; their profiles describe real clinicians. Allied providers
-        shown are example profiles. Live appointment times and directions are provided by the booking
-        destination.
-      </p>
-    </aside>
-  );
-}
-
-export function WaveformMark({ active = false }: { active?: boolean }) {
-  return (
-    <span className={`waveform-mark${active ? " is-active" : ""}`} aria-hidden="true">
-      <Waveform size={88} weight="light" />
-    </span>
   );
 }
 
@@ -338,9 +284,8 @@ function initialsOf(name: string) {
 /**
  * A clinician's portrait, or a monogram when there is none.
  *
- * The synthetic demo personas have synthetic portraits; a real clinician's likeness is theirs to
- * supply, and nothing in this tree generates a face for a real person. A monogram is a real
- * directory pattern rather than a placeholder, so the layout is correct in both states.
+ * A clinician's likeness is theirs to supply, and nothing in this tree generates a face. A monogram
+ * is a real directory pattern rather than a placeholder, so the layout is correct in both states.
  */
 export function ClinicianPortrait({
   clinician,
@@ -358,9 +303,7 @@ export function ClinicianPortrait({
    */
   eager?: boolean;
 }) {
-  // O242: an example persona's photograph is a licensed stock portrait, and the alt says so — a
-  // screen reader must not be told it is a photograph of a doctor who does not exist.
-  const alt = clinician.synthetic ? `Stock portrait standing in for the example profile ${clinician.name}` : `Portrait of ${clinician.name}`;
+  const alt = `Portrait of ${clinician.name}`;
 
   if (clinician.image) {
     return variant === "fill"

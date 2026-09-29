@@ -42,12 +42,12 @@ export interface Candidate {
   distanceKm: number | null;
 }
 
-export interface ExcludedGP {
+interface ExcludedGP {
   gpId: string;
   reasons: readonly HardFilterReason[];
 }
 
-export interface CandidateOptions {
+interface CandidateOptions {
   embedder: Embedder;
   /** How far the patient is prepared to travel for in-person care. */
   radiusKm?: number;
@@ -56,8 +56,8 @@ export interface CandidateOptions {
   max?: number;
 }
 
-export const DEFAULT_RADIUS_KM = 30;
-export const SHORTLIST_MIN = 10;
+const DEFAULT_RADIUS_KM = 30;
+const SHORTLIST_MIN = 10;
 export const SHORTLIST_MAX = 15;
 
 /** Distance between patient and GP, or null when the gazetteer cannot say. */

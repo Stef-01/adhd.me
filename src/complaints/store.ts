@@ -23,7 +23,7 @@ import {
   type IntakeInput,
 } from "./workflow";
 
-export interface ComplaintsState {
+interface ComplaintsState {
   complaints: ComplaintRecord[];
   seq: number;
 }

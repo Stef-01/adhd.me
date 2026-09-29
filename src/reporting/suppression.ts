@@ -49,7 +49,7 @@
 
 import { type Figure, type FigureKind } from "./model";
 
-export type SuppressionReason =
+type SuppressionReason =
   /** The figure itself describes fewer people than the floor allows. */
   | "value_below_floor"
   /**
@@ -59,7 +59,7 @@ export type SuppressionReason =
    */
   | "complement_below_floor";
 
-export interface Suppression {
+interface Suppression {
   kind: FigureKind;
   floor: number;
   reason: SuppressionReason;
@@ -76,7 +76,7 @@ declare const W197_SUPPRESSED: unique symbol;
  * Same device as W114's scope statement and W119's usable pathway, for the same reason: the check
  * cannot be skipped if the result of the check is the only thing downstream accepts.
  */
-export interface PublishableFigure {
+interface PublishableFigure {
   readonly [W197_SUPPRESSED]: true;
   readonly kind: FigureKind;
   readonly value: number;

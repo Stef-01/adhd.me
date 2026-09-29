@@ -4,10 +4,10 @@
  * Each trip ends at the till, where extras can go back before paying. Coins are fictional
  * tokens, never money advice, and nothing here scores the player.
  */
-export type Kind = 'need' | 'extra' | 'wish';
-export interface Product { key: string; name: string; price: number; kind: Kind }
-export interface Item { id: number; key: string; lane: number; z: number; lure: boolean }
-export type Phase = 'aisle' | 'till' | 'setup' | 'revisit' | 'revisit-till' | 'complete';
+type Kind = 'need' | 'extra' | 'wish';
+interface Product { key: string; name: string; price: number; kind: Kind }
+interface Item { id: number; key: string; lane: number; z: number; lure: boolean }
+type Phase = 'aisle' | 'till' | 'setup' | 'revisit' | 'revisit-till' | 'complete';
 
 export const PRODUCTS: Record<string, Product> = {
   milk: { key: 'milk', name: 'Milk', price: 2, kind: 'need' },
@@ -25,8 +25,8 @@ export const PRODUCTS: Record<string, Product> = {
   bike: { key: 'bike', name: 'Bike light', price: 9, kind: 'wish' },
 };
 
-export interface Trip { title: string; list: string[]; budget: number; soldOut?: { key: string; swap: string }; request?: { at: number; key: string }; extras: string[]; wish: string; speed: number; gap: number }
-export interface Scenario { trips: [Trip, Trip, Trip]; revisit: Trip; saleWish: number }
+interface Trip { title: string; list: string[]; budget: number; soldOut?: { key: string; swap: string }; request?: { at: number; key: string }; extras: string[]; wish: string; speed: number; gap: number }
+interface Scenario { trips: [Trip, Trip, Trip]; revisit: Trip; saleWish: number }
 
 export const SCENARIOS: Scenario[] = [
   {

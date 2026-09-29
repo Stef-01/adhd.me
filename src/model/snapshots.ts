@@ -121,7 +121,7 @@ export function monthName(on: string, today: Date): string {
   return years === 1 ? `${name} last year` : name;
 }
 
-export interface Compare {
+interface Compare {
   /** Day one, when it draws a different map from now. */
   readonly dayOne: MapSnapshot | null;
   /** The latest snapshot at least four weeks old after day one, when it differs from now. */

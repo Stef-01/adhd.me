@@ -11,12 +11,12 @@ import {
   VideoCamera,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
-import { useRef, type SyntheticEvent } from "react";
+import { Fragment, useRef, type SyntheticEvent } from "react";
 import {
   closedBooksNote,
   distanceTo,
   locationLabel,
-  missedAskParts,
+  missedAsksLine,
   type Clinician,
 } from "@/demo/clinicians";
 import { type NeedSignal } from "@/matching/needs";
@@ -75,6 +75,7 @@ export function ProfileStage({
   personalizedSignals,
   profileEvidence,
   profileMissed,
+  insights = [],
   request,
   origin,
   compareName,
@@ -90,6 +91,8 @@ export function ProfileStage({
   personalizedSignals: readonly string[];
   profileEvidence: readonly NeedSignal[];
   profileMissed: readonly NeedSignal[];
+  /** Why this clinician, in their own words (src/lib/matching/why.ts), or none: the keys then stand alone. */
+  insights?: readonly string[];
   request: string;
   origin: SuburbPoint | null;
   compareName: string | null;
@@ -115,7 +118,7 @@ export function ProfileStage({
     ...usefulPracticalSignals(clinician),
     !UNKNOWN_DETAIL.test(clinician.appointmentLength) ? clinician.appointmentLength : null,
     distanceTo(clinician, origin) ?? clinician.reach,
-    clinician.synthetic ? null : closedBooksNote(clinician, request),
+    closedBooksNote(clinician, request),
   ].filter((fact): fact is string => Boolean(fact));
 
   return (
@@ -142,9 +145,6 @@ export function ProfileStage({
 
           <div className="profile-identity">
             <h1 tabIndex={-1}>{clinician.name}</h1>
-            {/* O217 put "Example profile — a fictional GP…" here, directly under the name. O231
-                (founder-directed) removed it; see app/finder-stages/shared.tsx for what stays and
-                why the structural defences, not the label, are what keep this honest. */}
             <p className="clinician-meta">{professionOf(clinician) === "gp" ? shortTitle(clinician.title) : `${professionLabel(professionOf(clinician))} · ${clinician.title.split(",").slice(1).join(",").trim() || shortTitle(clinician.title)}`}</p>
             {clinician.expertise && clinician.expertise.length > 0 && (
               /* PRD §41: "Best for" — the declared expertise, in the closed taxonomy's own words. */
@@ -162,7 +162,7 @@ export function ProfileStage({
             {strengthFit && <p className="profile-best-for profile-fit"><span>And</span> {strengthFit}</p>}
             <p className="profile-location">{locationLabel(clinician)}</p>
             {publicIdentity(clinician) && <p className="profile-cultural-identity">{publicIdentity(clinician)!.identities.map(id => IDENTITY_LABELS[id]).join(" · ")}{publicIdentity(clinician)!.country && <> · Country / Nation: {publicIdentity(clinician)!.country}</>}</p>}
-            {publicCareProfile(clinician) && <details className="profile-more profile-care-declaration"><summary>Care they offer <CaretRight size={16} aria-hidden="true" /></summary><ul>{publicCareProfile(clinician)!.needs.map(need => <li key={need}>{CARE_NEEDS[need]}</li>)}</ul>{clinician.synthetic ? <p>Fictional example; not bookable.</p> : <a href={publicCareProfile(clinician)!.source} target="_blank" rel="noopener noreferrer">Clinician declaration ↗</a>}</details>}
+            {publicCareProfile(clinician) && <details className="profile-more profile-care-declaration"><summary>Care they offer <CaretRight size={16} aria-hidden="true" /></summary><ul>{publicCareProfile(clinician)!.needs.map(need => <li key={need}>{CARE_NEEDS[need]}</li>)}</ul><a href={publicCareProfile(clinician)!.source} target="_blank" rel="noopener noreferrer">Clinician declaration ↗</a></details>}
 
             {/* O184: the material-interest disclosure, back on the listing it concerns.
                 SITED IN THE IDENTITY BLOCK, because that is where a reader is deciding who this
@@ -232,31 +232,46 @@ export function ProfileStage({
               <CaretRight size={19} weight="regular" aria-hidden="true" />
             </summary>
             <div className="profile-disclosure-body">
+              {/* The sentence, the way a person would say why, in place of the key rows; without one the
+                  keys carry the person's own words, as before. */}
+              {insights.length > 0 && (
+                <ul className="fit-insights" aria-label="Why, in their words">
+                  {insights.map((sentence) => <li key={sentence}>{sentence}</li>)}
+                </ul>
+              )}
               {personalizedSignals.length > 0 ? (
                 <>
+                  {insights.length === 0 && (
                   <ul className="fit-evidence" aria-label="Why this provider is listed for you">
                     {profileEvidence.slice(0, 3).map((need) => (
                       <li key={need.label}>
                         <strong>{need.label}</strong>
-                        {/* The quote only where it says more than the label: "longer first
-                            appointment" under "A longer first appointment" said it twice. */}
-                        {!saysAgain(need.label, need.matched) && <span>From your words: &ldquo;{need.matched}&rdquo;</span>}
+                        {/* The quote only where there is one (the model's read carries the person's
+                            words only where the finder heard them too) and where it says more than
+                            the label: "longer first appointment" under "A longer first appointment"
+                            said it twice. */}
+                        {need.matched !== "" && !saysAgain(need.label, need.matched) && <span>From your words: &ldquo;{need.matched}&rdquo;</span>}
                       </li>
                     ))}
                   </ul>
+                  )}
                   {profileMissed.length > 0 && (
                     <ul className="fit-missed" aria-label="What you asked for that this provider has not declared">
-                      {profileMissed.slice(0, 2).map((need) => (
-                        <li key={need.label}>
-                          {missedAskParts(need).before}
-                          <strong>{missedAskParts(need).label}</strong>
-                          {missedAskParts(need).after}
-                        </li>
-                      ))}
+                      <li>
+                        {missedAsksLine(profileMissed.slice(0, 2)).before}
+                        {missedAsksLine(profileMissed.slice(0, 2)).asks.map((ask, i, all) => (
+                          <Fragment key={ask}>
+                            {/* A care label can hold a comma ("pregnancy, postpartum and new parents"): the list then parts with semicolons. */}
+                            {i > 0 && (all.some((one) => one.includes(",")) ? "; " : ", ")}
+                            <strong>{ask}</strong>
+                          </Fragment>
+                        ))}
+                        {missedAsksLine(profileMissed.slice(0, 2)).after}
+                      </li>
                     </ul>
                   )}
                 </>
-              ) : (
+              ) : insights.length === 0 && (
                 <p className="profile-no-match">
                   {clinician.focus}. Nothing in what you said pointed here specifically.
                 </p>
@@ -272,7 +287,7 @@ export function ProfileStage({
 
           <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
             <summary>
-              <span>Appointment and access</span>
+              <span>Appointments</span>
               <CaretRight size={19} weight="regular" aria-hidden="true" />
             </summary>
             <div className="profile-disclosure-body">
@@ -284,7 +299,7 @@ export function ProfileStage({
 
           <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
             <summary>
-              <span>Credentials and experience</span>
+              <span>Background</span>
               <CaretRight size={19} weight="regular" aria-hidden="true" />
             </summary>
             <div className="profile-disclosure-body">
@@ -299,12 +314,6 @@ export function ProfileStage({
       </div>
 
       <div className="profile-footer">
-        {/* O217 put an explanation WHERE THE ACTION GOES for an example profile, so the journey
-            ended in a sentence one tap from the booking screen. O231 (founder-directed) gives every
-            profile its action back: the screen behind it is the real booking screen, which for a
-            practice-booked GP explains the route rather than opening one. Nothing is disabled and
-            nothing opens a fabricated listing, the difference between this and O217's concern is
-            that the button leads somewhere true, not that it leads somewhere at all. */}
         <Pressable className="primary-button" type="button" onClick={onBook}>
           {clinician.booking.via === "healthengine" ? "See available times" : "How to book"}
           <ArrowRight size={17} weight="bold" aria-hidden="true" />

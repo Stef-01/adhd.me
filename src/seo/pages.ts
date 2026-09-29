@@ -66,15 +66,15 @@ export interface SeoPage {
 }
 
 /** What `app/layout.tsx`'s title template appends. Rendered length includes it. */
-export const TITLE_SUFFIX = " · ADHD.ME";
+const TITLE_SUFFIX = " · ADHD.ME";
 
 /** The window a search result shows before it truncates. Measured on the RENDERED title. */
-export const TITLE_WINDOW = { min: 50, max: 60 } as const;
+const TITLE_WINDOW = { min: 50, max: 60 } as const;
 
-export const DESCRIPTION_WINDOW = { min: 150, max: 160 } as const;
+const DESCRIPTION_WINDOW = { min: 150, max: 160 } as const;
 
 /** How far into each field a primary keyword may start and still count as leading it. */
-export const KEYWORD_HEAD = {
+const KEYWORD_HEAD = {
   /** A fraction of the rendered title — the keyword belongs in its opening half. */
   title: 0.5,
   /** Characters. A description is truncated long before this on a phone. */
@@ -189,38 +189,22 @@ export const SEO_PAGES: readonly SeoPage[] = [
   },
 ];
 
-/**
- * Whether a route is deep enough to owe the reader — and a crawler — a trail.
- *
- * TWO SEGMENTS, and the threshold is the argument. A one-level page has nothing to say that its
- * own title does not already say, and a "Home ›" crumb above the app's own header would be chrome
- * apologising for itself. At two, the parent is real information: `/privacy/counsel-review` is
- * about `/privacy`, `/clinicians/join` is the end of `/clinicians`, and a search result for either
- * is improved by the hierarchy being stated. `app/breadcrumbs.tsx` emits the visible nav and the
- * `BreadcrumbList` from one list, so the markup cannot claim a path the reader was not shown.
- *
- * A floor, not a ceiling: `/faq` and `/terms` carry trails at depth one and keep them.
- */
-export function needsBreadcrumbs(path: string): boolean {
-  return path.split("/").filter(Boolean).length >= 2;
-}
-
 /** What a search result actually shows: the page's half plus the layout's template. */
-export function renderedTitle(page: SeoPage): string {
+function renderedTitle(page: SeoPage): string {
   return `${page.title}${TITLE_SUFFIX}`;
 }
 
-export function seoPage(path: string): SeoPage | undefined {
+function seoPage(path: string): SeoPage | undefined {
   return SEO_PAGES.find((page) => page.path === path);
 }
 
 /** True when `keyword` appears at or before `within` characters, case-insensitively. */
-export function keywordLeads(text: string, keyword: string, within: number): boolean {
+function keywordLeads(text: string, keyword: string, within: number): boolean {
   const at = text.toLowerCase().indexOf(keyword.toLowerCase());
   return at >= 0 && at <= within;
 }
 
-export interface SeoFinding {
+interface SeoFinding {
   readonly path: string;
   readonly rule:
     | "title-length"

@@ -292,18 +292,6 @@ export const PROFESSIONAL_EXEMPT_RULES: Readonly<Record<string, string>> = {
     "Naming a condition to a patient targets them; naming one to a GP describes a cohort. The same words, and a different act.",
 };
 
-/** The rules a surface answers to, given its audience. Computed, never transcribed. */
-export function rulesFor(
-  audience: Audience,
-  landingRules: readonly string[],
-  messageRules: readonly string[] = [],
-): string[] {
-  if (audience === "patient") return [...new Set([...landingRules, ...messageRules])].sort();
-  // Both other classes drop the data-category rules, for different reasons argued above, and keep
-  // every marketing rule. W6 is absent from both by construction — see `sweepSurface`.
-  return landingRules.filter((rule) => !(rule in PROFESSIONAL_EXEMPT_RULES)).sort();
-}
-
 export interface SurfaceFinding extends LandingViolation {
   path: string;
 }
@@ -391,7 +379,6 @@ export const ACCEPTED_FINDINGS: readonly AcceptedFinding[] = [
 
 ];
 
-
 /**
  * Open questions that are not about a route, and therefore cannot live in `STANDING_FLAGS`.
  *
@@ -416,24 +403,6 @@ export function unaccepted(
       !accepted.some((a) => a.path === f.path && a.rule === f.rule && a.match === f.match),
   );
 }
-
-/**
- * What this sweep does NOT establish, stated so a green run is not over-read.
- *
- * Found while writing the unit: the linters hold a short vocabulary. They know "diagnosis",
- * "diabetes", "kidney" and a handful beside them; they do not know "methylphenidate",
- * "lisdexamfetamine", "DSM-5-TR" or "ASRS". A page can therefore carry clinical content and pass, which is
- * exactly what `/clinicians` mostly does — its `diagnosis` and `diabetes` are what trip, not the
- * drug names. Widening the vocabulary is a real unit and not this one; pretending the bound is
- * not there would make every future green run mean more than it does.
- *
- * The sweep also runs over RENDERED TEXT rather than source, and the reason is concrete: scanning
- * the source of /clinicians reports a `no-ratings` hit on the word "review", which turns out to be
- * the identifier `is-reviewed` in a className. A source scan measures the code; only a rendered
- * scan measures what a stranger reads.
- */
-export const VOCABULARY_BOUND =
-  "This sweep enforces the vocabulary W6 and W23 hold, not the concept of a clinical claim. Drug names, criteria names and procedure names are not in those lists, so a surface can carry clinical content and pass. Widening the vocabulary is its own unit.";
 
 /**
  * Open questions this sweep is deliberately not answering.

@@ -25,7 +25,7 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { clinicians } from "@/demo/clinicians";
 
-export interface OutboundHandoff {
+interface OutboundHandoff {
   clinicianId: string;
   surface: string;
   /** YYYY-MM-DD, practice-day granularity — deliberately no finer (see the header). */
@@ -84,7 +84,7 @@ export function listOutbound(filePath = defaultStorePath()): OutboundHandoff[] {
     });
 }
 
-export interface OutboundTally {
+interface OutboundTally {
   clinicianId: string;
   total: number;
   /** surface → count, so "where does booking intent form" is one read. */

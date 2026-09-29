@@ -6,7 +6,7 @@ import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { clinicians } from "../src/demo/clinicians";
 
-const who = clinicians.find((c) => c.booking.via !== "synthetic-none")!;
+const who = clinicians[0]!;
 const HANDOFF = "11111111-1111-4111-8111-111111111111";
 const QUESTION = `How was your visit with ${who.name}?`;
 
@@ -58,11 +58,7 @@ test("the tap on Book is remembered for a visit, and not asked about the same da
   await page.getByRole("textbox").fill("an adult ADHD assessment, telehealth");
   await page.keyboard.press("Enter");
   await page.locator(".clinician-list").waitFor();
-  // A real clinician with a booking link: the example profiles have nobody to book.
-  const bookable = clinicians.filter((c) => c.booking.via !== "synthetic-none").map((c) => c.id);
-  const row = page.locator(bookable.map((id) => `.clinician-row[data-clinician="${id}"]`).join(", ")).first();
-  for (let more = 0; more < 4 && !(await row.isVisible()); more++) await page.getByRole("button", { name: /more/i }).first().click();
-  await row.click();
+  await page.locator(".clinician-row").first().click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "profile");
   const booked = (await page.getByRole("heading", { level: 1 }).textContent())?.trim() ?? "";
   await page.locator(".profile-screen .primary-button").first().click();

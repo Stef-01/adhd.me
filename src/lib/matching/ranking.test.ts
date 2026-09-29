@@ -42,8 +42,8 @@ describe("M1 the patient side ranks the shortlist", () => {
   });
 
   it("scores the manner asked for against the manner declared", () => {
-    const p = patient({ signals: { communicationPreference: ["unhurried", "non_judgmental"] } });
-    const [ranked] = rankGPsForPatient(p, [candidate({ credentials: { communicationStyle: ["unhurried"] } })]);
+    const p = patient({ signals: { communicationPreference: ["not_rushed", "non_judgmental"] } });
+    const [ranked] = rankGPsForPatient(p, [candidate({ credentials: { communicationStyle: ["not_rushed"] } })]);
     const communication = ranked!.breakdown.find((b) => b.criterion === "communication")!;
     expect(communication.raw).toBe(0.5);
     expect(communication.sentence).toBe("Declares 1 of the 2 ways of working asked for.");

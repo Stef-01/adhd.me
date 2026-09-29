@@ -1,7 +1,7 @@
 // O118: a facet label lowered into a sentence, without breaking the words that must not be.
 
 import { describe, expect, it } from "vitest";
-import { clinicians, labelInSentence, missedAskCopy, missedAskParts, needsFor } from "@/demo/clinicians";
+import { clinicians, labelInSentence, missedAskCopy, missedAskParts, missedAsksLine, needsFor } from "@/demo/clinicians";
 import { type NeedSignal } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { EI_QUALITIES, EI_QUALITY_KEYS } from "@/demo/emotional-fit";
@@ -73,8 +73,12 @@ describe("O118 lowering a label into a sentence", () => {
 
   it("the sentence is composed once and read everywhere", () => {
     const need = needsFor("I want ADHD assessment", clinicians)[0]!;
-    expect(missedAskCopy(need)).toContain("not something they declare");
-    expect(missedAskCopy(need)).toContain("Another listing may");
+    expect(missedAskCopy(need)).toContain("Not in their listing");
+    // Two missed asks are one line, not two sentences (the profile's ceiling, 2026-09-29).
+    const two = needsFor("a woman GP who bulk bills", clinicians);
+    const line = missedAsksLine(two);
+    expect(line.asks).toHaveLength(2);
+    expect(`${line.before}${line.asks.join(", ")}${line.after}`).toBe("Not in their listing: bulk billing, a woman clinician.");
     // W193: a fact about a declaration, never a claim about ability.
     for (const forbidden of ["cannot", "unable", "does not do"]) {
       expect(missedAskCopy(need).toLowerCase()).not.toContain(forbidden);

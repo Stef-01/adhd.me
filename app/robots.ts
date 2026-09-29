@@ -18,18 +18,18 @@
 // rule refuses, and `robots.txt` would still look right at a glance because the wildcard block
 // above it would still be correct. `disallow` is built once, below, and every rule gets it.
 import type { MetadataRoute } from "next";
-import { AI_CRAWLERS, crawlersFor } from "@/seo/ai-crawlers";
+import { crawlersFor } from "@/seo/ai-crawlers";
 import { HIDDEN_FROM_CRAWLERS } from "@/security/robots";
 import { SITE_URL } from "./site";
 
 /** The operator, API and tokened prefixes — hidden since launch, independent of U7's register. */
-export const OPERATOR_DISALLOW = ["/console/", "/api/", "/book/", "/go/"];
+const OPERATOR_DISALLOW = ["/console/", "/api/", "/book/", "/go/"];
 
 /**
  * Everything no crawler of any kind may have: the operator prefixes plus the routes this
  * deployment does not publish. One list, applied to every rule this file writes.
  */
-export function crawlerDisallow(): string[] {
+function crawlerDisallow(): string[] {
   // /go/ is the outbound booking redirect (O28): an index entry for a redirect is a wrong door,
   // and crawler hits would pollute the one count the route exists to keep clean.
   return [...OPERATOR_DISALLOW, ...HIDDEN_FROM_CRAWLERS.map((route) => route.path)];
@@ -54,4 +54,4 @@ export default function robots(): MetadataRoute.Robots {
 }
 
 /** Re-exported so a reader of robots.txt can find the argument behind it. */
-export { AI_CRAWLERS };
+

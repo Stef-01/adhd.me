@@ -59,7 +59,7 @@ export type AcceptanceState =
   | "declined"
   | "handed_back";
 
-export interface AcceptanceStatus {
+interface AcceptanceStatus {
   state: AcceptanceState;
   referralId: string;
   fromPracticeId: PracticeId | null;
@@ -207,7 +207,7 @@ export function acceptedReferral(status: AcceptanceStatus): AcceptedReferral | n
  * what anybody must do for the patient. That is W114 and W121's rule, and it matters more here
  * because the word "obligation" invites the other reading.
  */
-export type ReferralObligation =
+type ReferralObligation =
   /** The patient's referral appears on the receiving practice's work list. */
   | "appears_on_receiving_worklist"
   /** W132's return report is outstanding for this referral. */
@@ -218,7 +218,7 @@ export const ALL_REFERRAL_OBLIGATIONS: readonly ReferralObligation[] = [
   "return_report_outstanding",
 ];
 
-export interface PatientLinkedObligation {
+interface PatientLinkedObligation {
   obligation: ReferralObligation;
   referralId: string;
   patientId: PatientId;
@@ -252,7 +252,3 @@ export const ACCEPTANCE_STATE_COPY: Record<AcceptanceState, string> = {
   handed_back: "Handed back. The other practice has ended their part and this practice is watching again.",
 };
 
-export const OBLIGATION_COPY: Record<ReferralObligation, string> = {
-  appears_on_receiving_worklist: "The referral is on the receiving practice's work list.",
-  return_report_outstanding: "A return report is outstanding for this referral.",
-};

@@ -37,15 +37,16 @@ export const MEANINGS: Record<string, string> = {
   "autism-adhd": "names autism, AuDHD or being neurodivergent",
   "substance-history": "wants to be open about alcohol or other drug use, or is in recovery",
   "emotional-regulation": "names big emotions, anger, shame or rejection sensitivity as something to get help with",
-  "non-medication": "asks for options besides medication, or more than medication alone, such as skills and strategies",
+  "non-medication": "asks for options besides medication, or more than medication alone, such as skills and strategies (wanting someone to talk to, with no word about medication, is not this)",
+  perinatal: "names pregnancy, birth or the months after having a baby (postpartum, postnatal, a new mum or dad) as part of what they need care for or understood",
   attuned: "asks for a clinician who listens and takes them seriously",
   steadying: "asks for a clinician who is calm and reassuring",
-  sense_making: "asks for what is going on to be explained so it makes sense",
+  sense_making: "asks for what is going on, or the plan, to be explained so it makes sense",
   motivating: "asks for a clinician who is encouraging and strengths-focused, or a plan they can act on",
-  unhurried: "asks for more time with the clinician, or not to be rushed (punctuality is not this)",
+  not_rushed: "asks for more time with the clinician, or not to be hurried through the appointment; wanting appointments to start on time, or less waiting, is punctuality and is not this",
   non_judgmental: "asks to be able to be honest without being judged",
   collaborative: "asks to make the decisions together with the clinician, or to be given choices",
-  culturally_attuned: "asks for a clinician who understands their culture, background or family",
+  culturally_attuned: "asks for a clinician who understands their culture, faith, language, background or family (a life stage or a condition is not this)",
   structured: "asks for a structured approach: a baseline, measures and scheduled reviews",
   "woman-gp": "asks for a woman clinician",
   "telehealth-first": "asks for telehealth: phone or video",
@@ -66,6 +67,8 @@ const EXAMPLES = [
   '"it has been a long week" → nothing',
   '"I rent a flat near my work" → nothing',
   '"some days I can\'t get anything started" → nothing',
+  '"I worry about everything, even on a good day" → nothing',
+  '"I just want to talk something through with someone" → nothing',
   '"could all of this be ADHD" → care: adhd-assessment',
   '"a clinic with no gap to pay" → prefs: bulk-billing',
   '"in person, not a screen" → negated: telehealth-first',
@@ -74,6 +77,7 @@ const EXAMPLES = [
   '"someone to keep prescribing my ADHD medication" → care: shared-care; negated: adhd-assessment',
   '"a clinician who speaks Tamil" → languages: tamil',
   '"a practice that runs on schedule" → unlisted: appointments that run on time',
+  '"our little one is five months and I want a GP who gets that" → care: perinatal',
 ];
 
 export const INSTRUCTIONS = [
@@ -242,8 +246,10 @@ export const CHECK_CALL = {
     '"I used to see a woman GP but it doesn\'t matter now" · pref:woman-gp → not asked (no longer wanted)',
     '"a poster in the waiting room said they bulk bill" · pref:bulk-billing → not asked (a description)',
     '"wiped out every afternoon" · care:depression → not asked (a feeling with no ask)',
+    '"the worrying wears me out" · care:anxiety → not asked (a feeling with no ask)',
+    '"I only want someone to talk to for now" · care:non-medication → not asked (nothing said about medication)',
     '"I\'d love a doctor who explains the why behind things" · manner:sense_making → asked',
-    '"please don\'t rush me through it" · manner:unhurried → asked',
+    '"please don\'t rush me through it" · manner:not_rushed → asked',
     '"my partner would feel better if I did it online" · pref:telehealth-first → asked (a wish of someone close, not refused)',
   ].join("\n"),
   schema: {
@@ -294,7 +300,7 @@ export function lexiconReading(text: string): Reading {
 
 /**
  * A list longer than this is the model reciting the menu, not reading a request: seen as all ten
- * languages and all twelve care areas. The corpus never pins more than three care or four manner
+ * languages and all thirteen care areas. The corpus never pins more than three care or four manner
  * keys; any four preferences can be asked for together, so they have no limit.
  */
 const MOST: Partial<Record<Field, number>> = { care: 6, manner: 4, languages: 5 };

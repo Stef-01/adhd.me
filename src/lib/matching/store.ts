@@ -129,7 +129,7 @@ export function allMatches(state: MatchingState = getMatching()): Match[] {
   return [...state.matches.values()];
 }
 
-export type StatusChange = { ok: true; match: Match } | { ok: false; reason: "not_found" | "not_open" };
+type StatusChange = { ok: true; match: Match } | { ok: false; reason: "not_found" | "not_open" };
 
 /**
  * Move a match to a decided status. Only a proposed match can be accepted or declined, and only

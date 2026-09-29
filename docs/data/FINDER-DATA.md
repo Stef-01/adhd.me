@@ -19,8 +19,8 @@ match_matches (0006) ────────────────── visi
 
 | Table | One row is | Written from |
 | --- | --- | --- |
-| `finder_searches` | a search whose list showed: the words, how they came in (typed, dictation, voice), the place, the filters, which reader read them, the asks it heard, the clinicians shown in order | `app/care-finder.tsx` → `POST /api/finder/track` |
-| `voice_calls` | a voice call's summary: model, questions asked (0 to 8), seconds, outcome (revealed, stopped, failed, urgent); never what was said beyond the request | `app/finder-stages/voice-stage.tsx` |
+| `finder_searches` | a search whose list showed: the words, how they came in (typed, dictation, voice), the place, the filters, which reader read them, the asks it heard, the asks the model heard that no key covers (`unlisted`), the clinicians shown in order | `app/care-finder.tsx` → `POST /api/finder/track` |
+| `voice_calls` | a voice call, whole: model, questions asked (0 to 8), seconds, outcome (revealed, stopped, failed, urgent), the request and place it wrote, and every turn (the person's, the assistant's, the tools') as `transcript` (founder, 2026-09-29: all data and transcripts kept, for this simulation phase; `scripts/voice-transcripts.mjs` reads them back) | `app/finder-stages/voice-stage.tsx` |
 | `finder_events` | a profile opened, a comparison, "more", a heard chip or a filter changed, against its search | `app/care-finder.tsx` |
 | `finder_handoffs` | the tap that leaves for the practice's booking page (`/go/<id>`), with the asks the search made and which of them this clinician declared | `app/finder-stages/booking-stage.tsx` |
 | `visit_ratings` | the stars (1 to 5) and optional words after a visit: from the finder (a handoff) or /match (a match); one per visit, a note replacing nothing but itself | `POST /api/ratings`; `/api/match/feedback` mirrors "did you feel understood?" as the stars |
@@ -67,13 +67,15 @@ still orders clinicians level in fit and standing. The numbers reach the browser
 `GET /api/finder/weights` (`quality`); no screen shows them. This is an exception to C2 and to W83's
 refusal of a quality ranking of named clinicians, recorded in `src/compliance/cdss-boundary.ts` and
 `src/privacy/automated-decisions.ts`. /match's own ordering (`src/lib/matching/ranking.ts`) does not
-take it yet: every score there carries a breakdown a reviewer can recompute (W213), and a factor that
-is never shown needs the founder's word on how it sits in one.
+take it (founder, 2026-09-29): every score there carries a breakdown a reviewer can recompute (W213),
+and a factor that is never shown has no place in one.
 
 ## Running it on Supabase
 
-Apply migrations `0001` to `0009`, and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` on the
-server. Each write then also goes to its table, in order, never delaying a person; the weights and
+Apply migrations `0001` to `0011`, and set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` on the
+server; on Vercel a variable reaches only the deployments made after it was saved, and
+`/api/health` says whether the running one holds them (`journal.configured`) and how many rows
+it has sent and failed to send since it booted. Each write then also goes to its table, in order, never delaying a person; the weights and
 the quality read every instance's ratings through the two views, which read as the caller, so only
 the service role sees through them. Without them, the record is memory
 on each server instance, capped at 5,000 of each kind, as every store here is. Row-level security is

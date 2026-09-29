@@ -13,13 +13,13 @@ import type { DashboardData } from "@/sim/dashboard-data";
 import type { GuardrailAlert, GuardrailConfig } from "@/guardrails/monitors";
 import { counterfactual, withheldCopy, type CounterfactualRefusal } from "@/outcomes/counterfactual";
 
-export interface ResultsOptions {
+interface ResultsOptions {
   /** Practice-configured billing per attended visit (AUD) — same input as W20/W21. */
   revenuePerAttendedVisit: number;
   guardrails: GuardrailConfig;
 }
 
-export interface PracticeResults {
+interface PracticeResults {
   weeks: number;
   /**
    * Appointments the practice would not have had. Null when the claim is withheld.
@@ -95,7 +95,7 @@ export function buildPracticeResults(
 }
 
 /** Weekly series in the unit the page shows: extra appointments, not a rate. */
-export interface WeeklyExtra {
+interface WeeklyExtra {
   week: number;
   weekStartIso: string;
   messagedPer100: number;

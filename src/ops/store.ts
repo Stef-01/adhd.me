@@ -7,7 +7,7 @@ import type { AuditEvent, InvitationStatus, PracticeId } from "@/domain/types";
 import { ALL_CLEAR, setKillSwitch, setPracticePaused, type OpsSwitches } from "@/ops/switches";
 import type { FeedEvidence } from "@/ops/silence";
 
-export interface OpsState {
+interface OpsState {
   switches: OpsSwitches;
   auditEvents: AuditEvent[];
   /**
@@ -39,7 +39,7 @@ export function resetOps(): OpsState {
 
 const QUEUE_STATUSES: InvitationStatus[] = ["queued", "sent", "booked", "expired", "opted_out"];
 
-export interface QueueView {
+interface QueueView {
   counts: Record<InvitationStatus, number>;
   /** The currently-outstanding offers (queued or sent) — the live queue. */
   outstanding: Array<{ id: string; patientId: string; sessionDate: string; status: InvitationStatus }>;

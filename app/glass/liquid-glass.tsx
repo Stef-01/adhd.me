@@ -37,6 +37,10 @@ function cssColor(name: string, fallback: [number, number, number]): [number, nu
     const scope = document.querySelector(".platform-shell") ?? document.body;
     const raw = getComputedStyle(scope).getPropertyValue(name).trim();
     if (!raw) return fallback;
+    // A hex token is read as it is; only anything else (a color-mix()) is painted and read back,
+    // which on an accelerated canvas stalls the GPU.
+    const hex = /^#([0-9a-f]{6})$/i.exec(raw)?.[1];
+    if (hex) return [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number];
     const c = document.createElement("canvas");
     c.width = c.height = 1;
     const ctx = c.getContext("2d");
@@ -59,7 +63,7 @@ function radiusOf(el: Element, w: number, h: number): { radius: number; roundnes
 }
 
 /** WebGL2 with float render targets, on a hardware renderer. Exported so a test can ask the same question. */
-export function canRunLiquidGlass(gl: WebGL2RenderingContext): boolean {
+function canRunLiquidGlass(gl: WebGL2RenderingContext): boolean {
   const info = gl.getExtension("WEBGL_debug_renderer_info");
   const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : String(gl.getParameter(gl.RENDERER));
   return !/swiftshader|llvmpipe|software|mesa offscreen/i.test(renderer);

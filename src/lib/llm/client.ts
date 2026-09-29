@@ -17,7 +17,7 @@ export type CallJson = {
   cacheRetention?: "24h";
 };
 export type Usage = { input: number; cached: number; output: number; reasoning: number };
-export type CallResult<T> = { data: T; usage: Usage; costUsd: number; fromCache: boolean };
+type CallResult<T> = { data: T; usage: Usage; costUsd: number; fromCache: boolean };
 export type Cached = { data: unknown; usage: Usage };
 
 type Reply = { ok: boolean; status: number; headers: { get(name: string): string | null }; json(): Promise<unknown> };
@@ -36,19 +36,19 @@ export type Deps = {
 };
 
 /** USD per million tokens, standard tier (the pricing page, 2026-09-28). Reasoning tokens are billed as output. */
-export const PRICES: Record<string, { input: number; cached: number; output: number }> = {
+const PRICES: Record<string, { input: number; cached: number; output: number }> = {
   "gpt-5-nano": { input: 0.05, cached: 0.005, output: 0.4 },
   "gpt-5-mini": { input: 0.25, cached: 0.025, output: 2 },
 };
 /** The flex tier is billed at Batch rates: half of every standard price, for both models above. */
-export const FLEX_RATE = 0.5;
-export const TIMEOUT_MS = 20_000;
+const FLEX_RATE = 0.5;
+const TIMEOUT_MS = 20_000;
 /** Flex answers more slowly and is for evals, where nobody is waiting. */
-export const FLEX_TIMEOUT_MS = 60_000;
+const FLEX_TIMEOUT_MS = 60_000;
 export const modelOf = (env: Record<string, string | undefined>) => env.ADHDME_LLM_MODEL ?? "gpt-5-nano";
-/** `ADHDME_LLM_LEVEL` in effect: 0 unless there is a key, or the e2e cassettes stand in for one. */
+/** `ADHDME_LLM_LEVEL` in effect: 1 where there is a key (or the e2e cassettes stand in for one) unless it says otherwise, 0 without. */
 export const levelOf = (env: Record<string, string | undefined>) =>
-  env.OPENAI_API_KEY || env.ADHDME_LLM_CASSETTES === "1" ? Number(env.ADHDME_LLM_LEVEL) || 0 : 0;
+  env.OPENAI_API_KEY || env.ADHDME_LLM_CASSETTES === "1" ? Number(env.ADHDME_LLM_LEVEL || 1) || 0 : 0;
 
 export class IncompleteError extends Error { name = "IncompleteError"; }
 export class RefusalError extends Error { name = "RefusalError"; }
@@ -57,7 +57,7 @@ export class TimeoutError extends Error { name = "TimeoutError"; }
 export class HttpError extends Error { name = "HttpError"; }
 
 /** The API's own error text echoes a masked key ("sk-proj-****1234"); nothing of a key stays in ours. */
-export const withoutKeys = (text: string) => text.replace(/sk-[A-Za-z0-9_*.\-]+/g, "sk-…");
+const withoutKeys = (text: string) => text.replace(/sk-[A-Za-z0-9_*.\-]+/g, "sk-…");
 
 export function costOf(usage: Usage, model: string, tier?: string): number {
   const price = PRICES[model];

@@ -12,7 +12,7 @@ import { nearestKm, professionOf, type Clinician } from "@/demo/clinicians";
 import { profession, professionsMentioned, type Profession } from "@/support/professions";
 import type { SuburbPoint } from "@/geo/suburbs";
 
-export interface CareKind {
+interface CareKind {
   id: Profession;
   count: number;
   plural: string;

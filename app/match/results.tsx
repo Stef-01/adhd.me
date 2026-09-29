@@ -8,7 +8,6 @@ import Link from "next/link";
 import { AppSettings } from "../app-settings";
 import { useEffect, useState } from "react";
 import { DECLINE_REASON_LABELS } from "@/lib/matching/labels";
-import type { PatientView } from "@/lib/matching/views";
 import { Badges, Portrait } from "./gp-bits";
 import { FROM_TAB_COPY, MATCH_STATUS_COPY, clearPatientId, clearView, fetchPatient, readPatientId, type HeldView } from "./session";
 
@@ -63,7 +62,7 @@ export function MatchResults() {
     <main id="main-content" className="me-screen life-screen app-page-with-tabs match-screen">
       <header className="life-head">
         <AppSettings />
-        <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet" : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}`}</h1>
+        <h1 tabIndex={-1}>{view.matches.length === 0 ? "Nobody fits yet." : `${view.matches.length === 1 ? "One GP" : `${view.matches.length} GPs`}`}</h1>
       </header>
 
       {view.fromTab && (

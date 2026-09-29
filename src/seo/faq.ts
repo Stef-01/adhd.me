@@ -17,7 +17,7 @@
 // clinic, a booking platform, a ratings directory. The answers say what this is not, in the same
 // breath as what it is, because that sentence is the one worth citing.
 
-export interface FaqEntry {
+interface FaqEntry {
   /** Phrased the way somebody would ask it — the heading a query is matched against. */
   readonly q: string;
   /** Self-contained: true and complete with no other answer beside it. */

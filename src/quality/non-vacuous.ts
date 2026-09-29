@@ -156,24 +156,9 @@ export const UNGUARDED_REMAINDER = 91;
 
 export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
   {
-    file: "src/quality/size-census.test.ts",
-    test: "lists the gains still to bank, if any, as entries the register accepts",
-    why: "Iterates bankable(measured, RATCHET) — the measures now under their floor. U14's law is that the floor IS the number, so the list is empty in the state the ratchet aims for: every floor banked to the tree's exact figure. Forcing it non-empty would assert that unbanked gains exist, which is the opposite of the register's goal; the over-floor direction is asserted separately over every measure.",
-  },
-  {
     file: "src/matching/known-fps.test.ts",
     test: "every FIXED entry no longer exhibits it, so a fix cannot silently regress",
     why: "Iterates KNOWN_FALSE_POSITIVES.filter(e => e.fixedBy) — the entries somebody has already fixed. It is empty exactly when nothing has been fixed yet, which is a real and unremarkable state of the register. Forcing it non-empty would assert that a fix exists, which is not this test's claim: its claim is that fixes do not regress, and over zero fixes that is vacuously true AND correct.",
-  },
-  {
-    file: "src/matching/refused-cues.test.ts",
-    test: "an owned phrase really is live on the facet that owns it",
-    why: "Iterates REFUSED_CUES.filter(x => x.ownedBy) — refusals that name another facet as the phrase's owner. A refusal register whose entries all stand on their own reasons, with none claiming an owner, is a legitimate register; the check exists to stop an OWNERSHIP claim hiding a re-add, and with no ownership claims there is nothing that could hide.",
-  },
-  {
-    file: "src/matching/refused-cues.test.ts",
-    test: "never counts a founder-blocked aspiration as open work",
-    why: "Iterates REACH_CORPUS.filter(x => x.awaitingFounder). Zero is the DESIRED end state — it is what the corpus looks like on the day the founder answers the last gated aspiration. A floor here would make answering a founder gate break the suite, which would be this tree's own founder-gate protocol turned upside down.",
   },
   {
     file: "src/matching/known-fps.test.ts",
@@ -194,31 +179,6 @@ export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
     file: "src/privacy/record-classes.test.ts",
     test: "treats 'derived' as a reviewed answer, not an exemption",
     why: "Iterates RECORD_CLASSES.filter(x => x.handling === 'derived'). A privacy register in which no class is derived — every one erased at its source — is a stricter register, not a broken one, and the day that happens this check correctly has nothing to say. The claim is about what a derived class must explain, not that any must exist.",
-  },
-  {
-    file: "src/compliance/console-honesty.test.ts",
-    test: "every entry names a console screen that exists, a rule the sweep applies, and both arguments",
-    why: "Iterates CONSOLE_ACCEPTED_FINDINGS. Empty is the DESIRED end state, and there is a founder gate whose whole purpose is to produce it: `console-honesty-wording-review` asks whether 'Best Practice' and 'specialist' remain the right words on staff screens, and answering it either way empties this register. Forcing it non-empty would mean answering a founder gate breaks the suite — the exact inversion O196 named when it declared REACH_CORPUS.awaitingFounder legitimate. The claim here is what an acceptance must carry, which over zero acceptances is vacuously true AND correct.",
-  },
-  {
-    file: "src/compliance/cdss-boundary.test.ts",
-    test: "keeps the acceptances narrow — no rule is switched off anywhere",
-    why: "Iterates ACCEPTED_COPY_FINDINGS. Its claim is that no acceptance is a wildcard — a property OF acceptances, not a claim that any exist. An education-copy linter with nothing accepted is a stricter linter, not a broken one, and it is what this register looks like on the day every accepted string has been reworded. A floor would require a live acceptance to exist before the narrowness check could be non-vacuous, which is the wrong shape: the check exists to stop a rule being switched off, and zero acceptances switches nothing off.",
-  },
-  {
-    file: "src/compliance/public-surfaces.test.ts",
-    test: "accepts by exact path, rule AND matched text — never a rule in general",
-    why: "Iterates ACCEPTED_FINDINGS, and the same argument as its console and education siblings applies: the claim is about the SHAPE an acceptance must take, which zero acceptances satisfy correctly. This register also cannot go empty unnoticed — the sibling test in this file pins its exact contents as a named set, so emptiness fails there loudly — which makes a floor here redundant as well as wrong.",
-  },
-  {
-    file: "src/design/dead-css.test.ts",
-    test: "declares no exception for a class the sheet no longer styles",
-    why: "Iterates DEAD_CSS_EXCEPTIONS, which O200 left EMPTY because it deleted all 92 dead classes rather than excepting any. Empty is the desired end state: an entry here means a class styled deliberately without appearing in this tree's source, which today is nothing. A floor would require such a class to EXIST before the census could be non-vacuous, which is the wrong shape — the sibling assertion that the dead list is empty carries the real claim, and it is proven non-vacuous by a planted fixture instead.",
-  },
-  {
-    file: "src/design/hover-gate.test.ts",
-    test: "declares no exception for a selector the sheet no longer carries",
-    why: "Iterates HOVER_EXCEPTIONS, which O199 left EMPTY on purpose: all 37 ungated hover rules were fixed rather than pinned as a remainder, because unlike this module's own 146 vacuous assertions they were mechanical and fully classified before the first edit. Empty is the desired end state, and a floor here would mean the census could only pass while at least one rule was still excepted — a check that requires a violation to exist in order to be non-vacuous. The register is kept so a future genuine exception has somewhere to be ARGUED, and the sibling assertion that the count of ungated rules is zero is the one carrying the real claim.",
   },
   {
     file: "src/audit/store.test.ts",

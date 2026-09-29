@@ -9,8 +9,7 @@
 
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
-import { needsFor, rankClinicians } from "../src/demo/clinicians";
-import { rosterFor } from "../src/demo/synthetic-roster";
+import { clinicians, needsFor, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
 import { heardChips } from "../src/finder/heard";
 import { searchRoster } from "../src/finder/pipeline";
@@ -19,10 +18,14 @@ import { lexiconReading } from "../src/lib/matching/llm-read";
 import { facetKey, needForKey, type NeedSignal } from "../src/matching/needs";
 import { POST } from "../app/api/finder/read/route";
 
+/** Why matched, in their words: what the model would write, answered by the route for this spec. */
+/** The longest sentence the screen keeps (26 words), so the walk and the budget see the worst case. */
+const WHY_SENTENCES = ["You asked for ADHD assessment by telehealth and not to be rushed; Dr Saxena says he offers telehealth for first appointments and takes time with you."];
+
 /** The C6 narrative: the model hears one facet more than the lexicon, and its weights reorder the list. */
 const NARRATIVE = CASSETTES.find((c) => c.class === "C6")!;
 const REQUEST = NARRATIVE.input;
-const roster = searchRoster(rosterFor(true), emptyFilters(), REQUEST, null);
+const roster = searchRoster(clinicians, emptyFilters(), REQUEST, null);
 const model = NARRATIVE.expect.keys.flatMap((key) => needForKey(key) ?? []);
 const topFive = (needs?: readonly NeedSignal[]) => rankClinicians(REQUEST, roster, new Date(), needs).slice(0, 5).map((c) => c.id);
 const chips = (needs: readonly NeedSignal[]) => heardChips(needs, 4).map((chip) => chip.label);
@@ -46,6 +49,7 @@ async function withEnv<T>(env: Record<string, string>, run: () => Promise<T>): P
 
 test("level 0: the finder reads the words itself and asks nothing", async ({ page }) => {
   await typeRequest(page);
+  await expect(page.getByRole("group", { name: "Matching" }), "no choice where only Standard runs").toHaveCount(0);
   // Web vitals and the like still go out, and the search's record (docs/data/FINDER-DATA.md) does,
   // once its list shows; nothing goes to the read route or anywhere else with the words.
   const asked: string[] = [];
@@ -62,7 +66,7 @@ test("level 0: the finder reads the words itself and asks nothing", async ({ pag
 
   // The route on this server answers from the lexicon.
   const reply = await page.request.post("/api/finder/read", { data: { text: REQUEST } });
-  expect(await reply.json()).toEqual({ keys: lexiconReading(REQUEST).keys, source: "lexicon" });
+  expect(await reply.json()).toEqual({ keys: lexiconReading(REQUEST).keys, source: "lexicon", unlisted: [] });
 });
 
 test("level 1: one read per search, a line and three blank rows while it runs, then the model's order", async ({ page }) => {
@@ -85,6 +89,11 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
     );
     await route.fulfill({ status: reply.status, contentType: "application/json", body: await reply.text() });
   });
+  const whyPosts: string[] = [];
+  await page.route("**/api/finder/why", async (route) => {
+    whyPosts.push(route.request().postData() ?? "");
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ sentences: WHY_SENTENCES, source: "llm" }) });
+  });
 
   await typeRequest(page);
   await page.keyboard.press("Enter");
@@ -105,6 +114,18 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   expect(await listTop(page), "the rows land where the blank rows were").toBeCloseTo(top, 0);
   expect(posts).toEqual([REQUEST]);
 
+  // The first profile says why in their words, over the keys as one line, and never a key
+  // (qa/matching/rca.md, R15). The sentences were asked for as the profile opened, once.
+  await page.locator(".clinician-row").first().click();
+  const why = page.locator("details.profile-disclosure", { hasText: "Why matched" });
+  await why.locator("summary").click();
+  await expect(why.locator(".fit-insights li")).toHaveText(WHY_SENTENCES);
+  await expect(why.locator(".fit-evidence")).toHaveCount(0);
+  expect(await why.locator(".profile-disclosure-body").innerText(), "a key shown as the person's words").not.toMatch(/(care|manner|pref|language):[a-z_-]+/);
+  expect(whyPosts.map((post) => JSON.parse(post).text)).toEqual([REQUEST]);
+  await page.goBack();
+  await expect(page.locator(".clinician-row").first()).toBeVisible();
+
   // A chip out re-ranks in the browser, with no second read.
   const withoutTelehealth = model.filter((need) => facetKey(need.facet) !== "pref:telehealth-first");
   expect(topFive(withoutTelehealth), "taking telehealth out changes the first five").not.toEqual(topFive(model));
@@ -112,6 +133,30 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   await expect.poll(() => rowIds(page)).toEqual(topFive(withoutTelehealth));
   await page.waitForTimeout(500);
   expect(posts).toEqual([REQUEST]);
+});
+
+test("level 1: AI is the default, and Standard, kept on the device, asks the model nothing", async ({ page }) => {
+  await page.route((url) => url.pathname === "/", async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).replace('\\"readLevel\\":0', '\\"readLevel\\":1') });
+  });
+  const posts: string[] = [];
+  await page.route("**/api/finder/read", async (route) => {
+    posts.push(route.request().postData() ?? "");
+    await route.fulfill({ status: 500, body: "Standard should not ask the model" });
+  });
+  await page.goto("/");
+  const modes = page.getByRole("group", { name: "Matching" });
+  await expect(modes.getByRole("button", { name: "AI" })).toHaveAttribute("aria-pressed", "true");
+  await modes.getByRole("button", { name: "Standard" }).click();
+  await page.reload();
+  await expect(modes.getByRole("button", { name: "Standard" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("textbox").fill(REQUEST);
+  await page.keyboard.press("Enter");
+  await expect.poll(() => rowIds(page), { timeout: 20000 }).toEqual(topFive());
+  await expect(page.locator(".reading-line")).toHaveCount(0);
+  await page.waitForTimeout(500);
+  expect(posts).toEqual([]);
 });
 
 test("level 1: a short request the lexicon already heard lists at once, with no read (read-policy.ts)", async ({ page }) => {

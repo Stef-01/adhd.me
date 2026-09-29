@@ -36,7 +36,7 @@ export interface PmsConditionFlag {
 }
 
 /** A practice saying "yes, this patient belongs on this register" — the second sanctioned source. */
-export interface PracticeConfirmation {
+interface PracticeConfirmation {
   patientId: PatientId;
   conditionCode: ConditionCode;
   confirmed: boolean;
@@ -187,7 +187,7 @@ export function currentMembers(
   );
 }
 
-export type MembershipReason =
+type MembershipReason =
   | "pms_condition_flag"
   | "practice_confirmed"
   | "no_condition_flag_and_no_confirmation"

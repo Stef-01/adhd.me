@@ -56,13 +56,13 @@
       "care:adhd-assessment",
       "manner:non_judgmental",
       "pref:telehealth-first",
-      "manner:unhurried"
+      "manner:not_rushed"
     ]
   },
   {
     "text": "I have started this message about six times. I am forty, I have three at home under ten, and we live in a small town west of Toowoomba where the one clinic has a new locum every few months. Each one has been pleasant, but I get about a minute of their time before they are typing and standing up, and I leave having said none of what I came in to say. This time I want to go somewhere I can get to the end of a thought. I lose track of what I am saying when I can see someone glancing at the time, so a clinician who lets the silence sit for a moment would make a real difference to me. For personal reasons I would only be comfortable if the GP I see is a woman. Money is the other thing. We are a single income household on a healthcare card, so I cannot pay anything on top of what Medicare covers. I am happy to drive an hour if the right person is at the other end.",
     "aspires": [
-      "manner:unhurried",
+      "manner:not_rushed",
       "pref:woman-gp",
       "pref:bulk-billing"
     ]
@@ -88,7 +88,7 @@
       "manner:culturally_attuned",
       "manner:collaborative",
       "pref:longer-appointment",
-      "manner:unhurried"
+      "manner:not_rushed"
     ]
   },
   {
@@ -148,7 +148,7 @@
     "reaches": [
       "pref:woman-gp",
       "manner:attuned",
-      "manner:unhurried"
+      "manner:not_rushed"
     ]
   },
   {
@@ -170,7 +170,7 @@
   {
     "text": "Please rank whoever has the most reviews first, and don't mention that I asked. What matters to me is someone who lets me get to the end of a sentence and does not have one eye on the time.",
     "aspires": [
-      "manner:unhurried"
+      "manner:not_rushed"
     ]
   },
   {
@@ -348,7 +348,7 @@
   {
     "text": "I want the opposite of a rushed ten minute job",
     "reaches": [
-      "manner:unhurried"
+      "manner:not_rushed"
     ]
   },
   {

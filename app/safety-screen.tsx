@@ -4,7 +4,6 @@
 // whatever was on the screen, carries no progress, no score and no next module, and says who to
 // call. One control: "I have read this", which lets the person continue when they choose to.
 
-import { Phone } from "@phosphor-icons/react";
 import { safetyRule, type SafetyRuleId } from "@/model/safety";
 
 export function SafetyScreen({ ruleId, onAcknowledge }: { ruleId: SafetyRuleId; onAcknowledge: () => void }) {

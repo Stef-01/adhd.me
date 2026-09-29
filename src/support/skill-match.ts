@@ -8,7 +8,7 @@ import { EXPERTISE_FOR, fitTags, problemFit, strengthFit } from "./problem-fit";
 import { EXPERTISE_LABELS, type ExpertiseTag } from "./professions";
 import type { Subdomain } from "@/model/layers";
 
-export interface SkillMatch {
+interface SkillMatch {
   provider: Clinician;
   skill: ExpertiseTag;
   label: string;
@@ -31,7 +31,7 @@ export function matchSkill(roster: readonly Clinician[], filters: Filters, recor
     const primary = EXPERTISE_FOR[need.subdomain] ?? [];
     const ranked = candidates.filter(p => p.expertise?.some(t => primary.includes(t)))
       .map(provider => ({ provider, score: problemFit(provider, need), strength: strengthFit(provider, need) }))
-      .sort((a, b) => b.score - a.score || b.strength - a.strength || Number(Boolean(a.provider.synthetic)) - Number(Boolean(b.provider.synthetic)) || Number(Boolean(b.provider.image)) - Number(Boolean(a.provider.image)) || a.provider.id.localeCompare(b.provider.id));
+      .sort((a, b) => b.score - a.score || b.strength - a.strength || Number(Boolean(b.provider.image)) - Number(Boolean(a.provider.image)) || a.provider.id.localeCompare(b.provider.id));
     const provider = ranked[0]?.provider;
     if (!provider) continue;
     const skill = fitTags(provider, need).find(t => primary.includes(t))!;

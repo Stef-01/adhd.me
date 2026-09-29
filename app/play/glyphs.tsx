@@ -11,7 +11,7 @@ import type { ReactNode } from "react";
 import type { Prop } from "@/learn/interactive";
 import type { Layer } from "@/model/layers";
 
-export type GlyphKind =
+type GlyphKind =
   | "phone" | "bubble" | "window" | "thought" | "people" | "clock" | "moon" | "play" | "sheet" | "mug" | "bowl"
   | "apple" | "egg" | "key" | "shoe" | "shirt" | "bin" | "coin" | "book" | "bottle" | "steps" | "flame" | "spark"
   | "bell" | "calendar" | "table" | "tag" | "sun";

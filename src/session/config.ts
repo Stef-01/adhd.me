@@ -11,7 +11,7 @@ import type { Appointment, AppointmentType, ClinicianId } from "@/domain/types";
 
 export const APPOINTMENT_TYPES: readonly AppointmentType[] = ["standard", "long", "telehealth"];
 
-export interface SchedulingWindow {
+interface SchedulingWindow {
   /** Inclusive local start hour (0–24). */
   startHour: number;
   /** Exclusive local end hour (0–24). */

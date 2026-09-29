@@ -35,10 +35,10 @@ which is what makes a cheap LLM programme possible: the gold labels and the metr
 
 - `readNeeds(text)` in `src/matching/needs.ts` reads a request into facets from a closed
   vocabulary with a stemmed, ordered-subsequence cue matcher (`src/matching/read.ts`). The
-  vocabulary: 12 care areas (`adhd-assessment`, `child-adolescent-adhd`, `titration`,
+  vocabulary: 13 care areas (`adhd-assessment`, `child-adolescent-adhd`, `titration`,
   `shared-care`, `depression`, `anxiety`, `trauma-informed`, `complex-mental-health`,
-  `autism-adhd`, `substance-history`, `emotional-regulation`, `non-medication`), 9 manner
-  traits (`attuned`, `steadying`, `sense_making`, `motivating`, `unhurried`, `non_judgmental`,
+  `autism-adhd`, `substance-history`, `emotional-regulation`, `non-medication`, `perinatal`), 9 manner
+  traits (`attuned`, `steadying`, `sense_making`, `motivating`, `not_rushed`, `non_judgmental`,
   `collaborative`, `culturally_attuned`, `structured`),
   4 preferences (`woman-gp`, `telehealth-first`, `longer-appointment`, `bulk-billing`) and
   spoken languages (`MATCHABLE_LANGUAGES` in `src/matching/languages.ts`).
@@ -580,7 +580,9 @@ The weak classes are exactly where the lexicon cannot hear: C7 (NDCG@3 0.467, hi
 
 **Step 2 as built.** `app/api/finder/read/route.ts` (30 lines): POST `{ text }` returns
 `{ keys, source }`. `levelOf` in `client.ts` reads `ADHDME_LLM_LEVEL` and gives 0 with no
-`OPENAI_API_KEY`, so level 1 without a key is level 0: the lexicon, no network. At 1 the route calls
+`OPENAI_API_KEY`, so level 1 without a key is level 0: the lexicon, no network. With a key and no
+level set it is 1 (founder, 2026-09-29), and the finder offers AI or Standard below its box: Standard
+is level 0 for that person, whatever the server's level. At 1 the route calls
 `readRequest` with no cache, and any failure answers with the lexicon's keys and `source: "lexicon"`.
 Text over 2,000 characters (the /match narrative's cap; the finder had none) gets a 400. After 20
 paid reads a minute from one caller it answers with the lexicon (in memory, per server instance).
@@ -714,6 +716,94 @@ always sees the same order for the same words. Two decisions are the founder's:
 Testing budget (founder, 2026-09-28): $14 for all live testing, matching and voice together
 (`TESTING_BUDGET_USD` in `src/lib/matching/eval/run.ts`); every runner refuses a run that could cross
 it.
+
+## 16f. 2026-09-29: the founder's defaults
+
+The founder took the default on every open question ("do all the default choices"):
+
+1. **The flip gate** counts care, preference and language keys; manner keys are shown beside it
+   (`src/lib/matching/eval/run.ts`). P5's 3.6% passes; its 9.4% over every key is reported, not gated.
+2. **Level 1 and voice** are on wherever there is a key (`levelOf`, `voiceOn`); `ADHDME_LLM_LEVEL=0`
+   and `ADHDME_VOICE=0` turn them off. Each person chooses AI or Standard below the finder's box
+   ("toggle between LLM matching or standard"); Standard is level 0 and dictation for them.
+3. **Labels stay as designed:** a bare "ADHD" and a past "diagnosed" read as the assessment ask, in
+   the lexicon and the corpus, so "diagnosed last year… keep my dexamphetamine going" brings
+   assessors forward beside shared care.
+4. **/match's order** keeps its recomputable breakdown and takes no quality factor (FINDER-DATA.md).
+5. **The finder's order is an automated decision** on the published notice (`finder-order` in
+   `src/privacy/automated-decisions.ts`), two of its three triggers having fired.
+6. **Supabase:** no project could be made; the free plan's two active projects are in use. Until one
+   is paused or the plan changes, the record lives in server memory.
+
+## 16g. 2026-09-29: the postpartum call (qa/matching/rca.md, R15)
+
+1. **Record everything** (founder: "all data and transcripts must be recorded and kept"). A voice
+   call's row gains its transcript (person, assistant and tool turns), the request it wrote and the
+   place; a search's row gains the reader's `unlisted` asks; the read route returns them and the
+   read cache holds the whole reading. Migration 0011. `scripts/voice-transcripts.mjs` prints the
+   last calls from Supabase for an RCA; `scripts/voice-call.mjs` keeps each scripted call under
+   `qa/voice/runs/`. The privacy page and FINDER-DATA.md say so.
+2. **Quote only words a person said.** A model-read need carries the lexicon's phrase where the
+   lexicon heard the same key, and no quote otherwise; the profile shows the label alone. An e2e
+   at level 1 asserts no "From your words" line ever holds a key.
+3. **A `perinatal` care area:** pregnancy, postpartum and new parents. In the closed vocabulary,
+   the lexicon (postpartum, postnatal, perinatal, new mum, had a baby, since the baby, breastfeeding,
+   pregnant…), the reader's meanings and an example, the clarifier, the corpus (reaches and nevers),
+   and the roster: Samantha Courtney's own declaration, and three example profiles.
+4. **The over-broad cue narrowed:** `sense_making` hears "understand what's going on / what's
+   happening / why", not "understand what it's like".
+5. **The trait renamed** (founder: "unhurried is a terrible word, remove it entirely"): id
+   `not_rushed` (its own plain name is a cue, where "takes time" is a refused one), label "Takes
+   time with you", chip "Not rushed", the word gone from cues, corpus texts and copy; historical
+   eval reports keep it as history.
+6. **The interviewer:** no examples or options in any question; the manner question is not asked
+   when they have already said how they want to be treated; show_matches keeps every condition,
+   life stage or experience in the person's own word, never paraphrased, with a postpartum example.
+7. **The reader's meanings:** culturally_attuned is culture, faith, language, background or family,
+   not a life stage or condition; sense_making is explanation of what is going on or the plan.
+8. **The ladder again** under the new prompt hash: L0 P0 and L1 P0 free, then P1 to P4 live.
+   Run 2026-09-29 (reports in qa/matching/reports): L0 P0, L1 P0, P1, P2 and P3 pass; P4 fails
+   its never gate at 1.5%, two reads of 133 nothing-asked requests ("flat for months, everything
+   is heavy" as depression, "I just want to talk to someone first" as non-medication), the same
+   1.5% the pre-change prompt measured that morning. Three prompt iterations moved WHICH two,
+   not how many: a meaning line for not_rushed (punctuality) and non-medication (someone to talk
+   to), then paraphrased examples for the read and the check. The gate sits inside gpt-5-nano's
+   run-to-run variance at this size; the next lever is structural (the check asking for the words
+   a key rests on), an RCA item rather than a fourth prompt edit. Spend for the day's rungs about
+   $0.30, ledger $5.28 of $14.
+9. **Live again:** both scripted calls on production after the deploy, the finder's e2e, and the
+   founder's own scenario. Done 2026-09-29: the postpartum call on production kept "new mum", read
+   `care:perinatal`, and ranked Samantha Courtney first; a second call asked its questions in the
+   given words; the eval sweep passes ten of eleven personas, then the two that ask back; the
+   finder's e2e and the full suite pass; and a headless walk of production with a stored personal
+   map ranks the same first four as a clean browser (qa/matching/rca.md, R15's sixth cause).
+
+### 16h. Why matched, in their words (the North Star)
+
+Founder, 2026-09-29: "sentences shown to the user for why they are matched perfectly ... the key
+insights from the clinician interview ... not overwhelming". At level 1, as a profile opens, the
+finder asks `/api/finder/why` once per (words, clinician) and shows one sentence under "Why
+matched": "You asked for ⟨the ask⟩; ⟨name⟩ says ⟨what they say about it⟩." The finder writes the
+first half itself from its own evidence, the strongest care, manner or language ask this listing
+answers (a manner as "someone who takes time with you", a language as "someone who speaks Hindi"),
+so that half is never wrong; gpt-5-mini at effort minimal writes only the clause after "says",
+within the words the frame leaves of twenty (at most twelve; the input names the number), from
+the listing alone (`src/lib/matching/why.ts`), in other words than the ask, and nothing where the
+listing says nothing about it. Nothing reaches the screen unless the clause is within its budget
+and free of any rank, promise or verdict, and the whole sentence is at most 20 words and free of
+the vocabulary's keys; the sentence stands in place of the key rows, and without one (level 0,
+Standard, a failure, nothing answered, a frame that leaves fewer than five words) the keys carry
+the person's own words as before. The cap was 26 until the profile with two asks not in the
+listing was measured under the sentence: 75 words. Twenty, the asks said in six words at most
+(`asked` on each manner quality) and the missed line as "Not in their listing: A, B." bring it
+inside the screen.
+
+Measured 2026-09-29: asked for the whole sentence, nano paired asks with the wrong words ("bulk
+billed" answered by "mixed billing") and mini wrote 25 to 32 words whatever number the instruction
+named, so the production route kept nothing; composed, five of five profiles kept at 17 to 24
+words, all from the clinician's own text, about $0.0003 each. Remembered on the instance for a day
+(never an empty answer), rate-limited per caller, inside the day's meter the read route shares
+(`src/lib/llm/daily-meter.ts`). The screen measures 59 words at its worst case.
 
 ## 17. Sources
 

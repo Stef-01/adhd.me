@@ -27,9 +27,9 @@
 import { createHash } from "node:crypto";
 import type { ConditionCode } from "@/domain/types";
 
-export type ContentKind = "guideline_interval" | "safety_rule" | "condition_description";
+type ContentKind = "guideline_interval" | "safety_rule" | "condition_description";
 
-export type ContentState = "draft" | "in_review" | "reviewed" | "signed_off" | "rejected";
+type ContentState = "draft" | "in_review" | "reviewed" | "signed_off" | "rejected";
 
 export interface ContentRecord {
   id: string;
@@ -92,13 +92,13 @@ export function draft(
   };
 }
 
-export type TransitionError =
+type TransitionError =
   | "wrong_state"
   | "reviewer_cannot_be_author"
   | "founder_signoff_requires_review"
   | "content_changed_since_review";
 
-export type TransitionResult =
+type TransitionResult =
   | { ok: true; record: ContentRecord }
   | { ok: false; error: TransitionError };
 

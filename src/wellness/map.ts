@@ -70,7 +70,7 @@ export const RUNG_REACH: Readonly<Record<Rung, number>> = {
   working: 1,
 };
 
-export interface MapPoint {
+interface MapPoint {
   readonly dimension: NwiaDimension;
   readonly rung: Rung;
   /** 0–1, what the polygon draws. */

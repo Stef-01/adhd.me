@@ -27,7 +27,7 @@ import { EI_QUALITIES } from "@/demo/emotional-fit";
 const CARE_LABELS = new Map(CARE_AREA_LABELS.map((area) => [area.id, area.label]));
 
 /** One application, said in the reviewer's register. Strings only — the page adds no words. */
-export interface ApplicationView {
+interface ApplicationView {
   id: string;
   /** Verbatim applicant text (already spreadsheet-neutralised at the writer). The page must
    *  render it under the W153 public_form attribution, as the interest register does. */

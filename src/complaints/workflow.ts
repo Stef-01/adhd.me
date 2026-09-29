@@ -94,7 +94,7 @@ export function triageComplaint(
   };
 }
 
-export type ResolveResult =
+type ResolveResult =
   | { ok: true; complaint: ComplaintRecord }
   | { ok: false; errors: FieldErrors };
 

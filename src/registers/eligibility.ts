@@ -18,9 +18,9 @@ import type { Patient } from "@/domain/types";
 import type { EligibilityResult } from "@/engine/eligibility";
 import type { CareGap } from "./caregap";
 
-export type RegisterExclusionReason = "no_care_gap";
+type RegisterExclusionReason = "no_care_gap";
 
-export type RegisterEligibilityResult =
+type RegisterEligibilityResult =
   | EligibilityResult
   | { eligible: false; reason: RegisterExclusionReason };
 

@@ -25,7 +25,7 @@ interface UniformInfo {
   };
 }
 
-export interface RenderPassConfig {
+interface RenderPassConfig {
   name: string;
   shader: ShaderSource;
   inputs?: { [uniformName: string]: string };
@@ -33,7 +33,7 @@ export interface RenderPassConfig {
 }
 
 // 着色器程序类
-export class ShaderProgram {
+class ShaderProgram {
   private gl: GL;
   private program: WebGLProgram;
   private uniforms: Map<string, UniformInfo> = new Map();
@@ -239,7 +239,7 @@ export class ShaderProgram {
 }
 
 // 帧缓冲区类
-export class FrameBuffer {
+class FrameBuffer {
   private gl: GL;
   private fbo: WebGLFramebuffer;
   private texture: WebGLTexture;
@@ -391,7 +391,7 @@ export class FrameBuffer {
 }
 
 // 渲染通道类
-export class RenderPass {
+class RenderPass {
   private gl: GL;
   private program: ShaderProgram;
   private frameBuffer: FrameBuffer | null;

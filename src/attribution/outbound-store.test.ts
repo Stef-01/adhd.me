@@ -1,6 +1,6 @@
 // W235 (O74) verify gate: the handoff store records honestly, refuses noise, and never throws
 // into the redirect that feeds it.
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";

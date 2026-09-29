@@ -12,7 +12,7 @@ export interface MeasurementWindow {
   toIso: string; // inclusive ISO date
 }
 
-export interface ArmCount {
+interface ArmCount {
   /** Panel size of the arm (intention-to-treat: opt-outs and non-responders stay in). */
   patients: number;
   /** Attended appointments by the arm's patients inside the window — organic AND generated. */

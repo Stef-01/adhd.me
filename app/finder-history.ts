@@ -33,7 +33,7 @@ function browserHost(): FinderHost {
   };
 }
 
-export interface FinderHistory {
+interface FinderHistory {
   stage: Stage;
   /**
    * Changes once, on a resumed arrival (a reload, or Back into a stage the finder left). The

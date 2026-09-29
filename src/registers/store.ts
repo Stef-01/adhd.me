@@ -21,14 +21,14 @@ import type {
   PracticeId,
 } from "@/domain/types";
 
-export interface RegisterCounts {
+interface RegisterCounts {
   /** Patients on the register (W57 populates this for real). */
   memberCount: number;
   /** Members currently past their interval (W58 computes this for real). */
   gapCount: number;
 }
 
-export interface RegisterState {
+interface RegisterState {
   conditions: Condition[];
   intervals: GuidelineInterval[];
   /** Condition codes each practice has switched off. Absent practice ⇒ nothing disabled. */
@@ -111,7 +111,7 @@ export function seedCounts(
   getRegisters().countsByPractice[practiceId] = counts;
 }
 
-export interface RegisterSummary {
+interface RegisterSummary {
   condition: Condition;
   intervals: GuidelineInterval[];
   enabled: boolean;
@@ -139,7 +139,7 @@ export function registersFor(practiceId: PracticeId): RegisterSummary[] {
     }));
 }
 
-export type SetEnabledResult =
+type SetEnabledResult =
   | { ok: true; enabled: boolean }
   | { ok: false; reason: "unknown_register" };
 

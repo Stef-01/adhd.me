@@ -3,7 +3,6 @@
 // The library and focused lessons share content and progress, but have separate layout classes.
 // Public module IDs live in the URL; answers stay in memory; device progress lives in src/learn.
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { hasInteracted, returnedByHistory } from "@/lib/interaction";

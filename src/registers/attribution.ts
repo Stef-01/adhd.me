@@ -46,12 +46,12 @@ export const MIN_ARM_PATIENTS = 30;
 
 export type WithheldReason = "no_holdout_arm" | "cohort_too_small";
 
-export interface ConditionClaim {
+interface ConditionClaim {
   incrementalPer1000: number;
   incrementalAttended: number;
 }
 
-export interface ConditionAttribution {
+interface ConditionAttribution {
   version: typeof ATTRIBUTION_VERSION;
   conditionCode: ConditionCode;
   /** Raw arm counts for the cohort — always reported, claim or no claim. */
@@ -64,7 +64,7 @@ export interface ConditionAttribution {
   withheld: WithheldReason | null;
 }
 
-export interface ConditionAttributionOptions {
+interface ConditionAttributionOptions {
   minArmPatients?: number;
 }
 

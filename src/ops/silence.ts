@@ -92,7 +92,7 @@ export const CAUSE_ORDER: readonly SilenceCause[] = [
  * without having been handed the reason for it — which is the entire defect, expressed in the
  * type rather than in a code review comment.
  */
-export type Reading =
+type Reading =
   | { kind: "some"; count: number }
   | { kind: "none"; causes: readonly SilenceCause[] };
 
@@ -145,7 +145,7 @@ export function readCount(
   return { kind: "none", causes: explainSilence(evidence, sendingHalted) };
 }
 
-export interface CauseCopy {
+interface CauseCopy {
   /** What this zero IS. */
   headline: string;
   /** Why the operator is seeing it. */

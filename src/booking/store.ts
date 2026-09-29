@@ -17,7 +17,7 @@ import {
   type ContactPreferences,
 } from "@/messaging/preferences";
 
-export interface RailStore {
+interface RailStore {
   state: RailState;
   practiceName: string;
   clinicianName: string;
@@ -36,7 +36,7 @@ export interface RailStore {
 /** W25: seed the rail with an in-person or a telehealth session (same shape). */
 export type RailScenario = "standard" | "telehealth";
 
-export const SEED_SESSION_DATE = "2026-09-01";
+const SEED_SESSION_DATE = "2026-09-01";
 
 /**
  * The practice the synthetic rail is seeded for.

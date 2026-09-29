@@ -43,7 +43,7 @@
 // decision or is declared as not being one.
 
 /** Whether the decision is actually being taken about anybody today. */
-export type DecisionStatus =
+type DecisionStatus =
   /** Live: this is happening now, wherever a practice has the feature on. */
   | "in_use"
   /** Built, and taking no decisions, because the content it needs is gated and empty. */
@@ -56,12 +56,12 @@ export type DecisionStatus =
  * `in_use` at a non-empty one. This is the check that makes `status` a fact about the tree instead
  * of a claim in a document.
  */
-export interface ContentRegistry {
+interface ContentRegistry {
   module: string;
   exportName: string;
 }
 
-export interface AutomatedDecision {
+interface AutomatedDecision {
   id: string;
   /** The bold lead-in on the page. */
   title: string;
@@ -116,6 +116,14 @@ export const AUTOMATED_DECISIONS: readonly AutomatedDecision[] = [
     title: "Who is offered a slot first.",
     what: "Patients already found eligible are put in an order using simple, explainable factors — whether your practice has flagged you for ongoing care, and how long since your last visit. It decides the order of offers, never who is more unwell.",
     decidedBy: ["src/registers/ranking.ts"],
+    status: "in_use",
+    registry: null,
+  },
+  {
+    id: "finder-order",
+    title: "Which clinicians the finder shows you first.",
+    what: "The finder puts clinicians in order, never people: by how well what each one offers fits the words you typed, where you are and the filters you chose. It also weighs, without showing them, how visits went for earlier visitors who gave stars: which asks went with good visits, and each clinician's own visits once enough have been scored. Your search, its words and the clinicians it showed are kept, and Delete in Settings removes them. Nothing is concluded about you or your health.",
+    decidedBy: ["src/demo/clinicians.ts", "src/db/learn.ts", "src/db/quality.ts"],
     status: "in_use",
     registry: null,
   },
@@ -275,7 +283,6 @@ export const NOT_A_DECISION: Readonly<Record<string, string>> = {
   "src/privacy/privacy.ts": "Access, export and erasure. Executed when somebody asks, never on the software's initiative.",
   "src/privacy/record-classes.ts": "W106's register of where patient identity can live.",
   "src/privacy/store.ts": "Storage for access, correction and erasure requests and how they were answered. A record of what people asked for.",
-  "src/quality/order-regressions.ts": "W178's corpus of past order-dependence defects. Engineering.",
   "src/referrals/acceptance.ts": "The opposite of an automated decision: it requires a receiving practice to record acceptance, and exists so that no handover is ever concluded by software.",
   "src/referrals/barriers.ts": "Records why a referral did not complete, from a reason a person entered.",
   "src/referrals/document.ts": "The referral document a GP writes. The product neither generates nor edits its clinical content.",
@@ -287,16 +294,8 @@ export const NOT_A_DECISION: Readonly<Record<string, string>> = {
   "src/capacity/recommendation.ts": "W225 states a conditional about a practice's own diary — if N more slots were opened on this weekday, this is the range that filled in the weeks recorded. It is addressed to the PRACTICE, not about any patient: no patient can enter its signature, its type or its imports, and the practice supplies the number of slots rather than the module choosing one. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first version that sizes a recommendation from who is waiting, or that names any group of patients it would be for, is a decision about people within the meaning of this register and must move to AUTOMATED_DECISIONS in the same unit.",
   "src/capacity/score.ts": "W224 scores W223's forecaster against what the practice's diary actually recorded. It is a measurement of a method, not a decision about anybody: no patient can enter it, and its only refusal is that too few weeks have been scored to report a rate.",
   "src/interop/referral-profile.ts": "W236 renders W131's structured referral to a FHIR profile and reads it back. It decides nothing: every value in the output comes from a field of the input, nothing is composed or defaulted, and the clinician's own words are carried character-identical because they are that clinician's professional responsibility rather than this product's. It carries a patient reference for the same reason W235 does, and sends nothing. THE TRIGGER: the first path that transmits a profiled referral makes G8 apply, and Q9 action 1 — whether credential detail may cross a practice boundary — is still the open question this document's shape deliberately does not answer.",
-  "src/quality/gate-state.ts":
-    "AR14's parser and claim guard for BUILD-STATE.md's gate-state line. It decides one thing — whether the BUILD LOOP may claim a new unit while the last gate run is red — and every part of that is about this tree's own process: its subjects are a commit sha, a timestamp and a failing check's name; no patient, clinician, practice or any person enters its inputs, its refusal blocks a machine session's claim rather than anything about anybody, and it retains nothing (it re-reads one line of the ledger every firing). Its outcome union (GateStatus) describes a test run, which is what the widening's *Verdict-shaped scan correctly noticed and this entry correctly classifies. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first version that gates on anything beyond the tree's own test verdicts — an operator's identity, a practice's state, anything a person did — is a decision in this register's sense and moves to AUTOMATED_DECISIONS in the same unit.",
-  "src/design/fold-bands.ts":
-    "AR19's visual-fold register: which claim+qualifier pairs on the public pages must never be separated by the initial viewport's fold, plus the pure predicate that says whether a box straddles a line. Engineering about LAYOUT: its subjects are CSS selectors, pixel coordinates and a viewport height; the register's 'claim' is a sentence on a marketing page, not anything about a person; no reader's input, identity or state enters it, it concludes nothing about anybody, and it retains nothing. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: a band whose visibility varied by WHO is reading — anything person-conditional entering the predicate — is a decision about that person and moves to AUTOMATED_DECISIONS in the same unit.",
-  "src/design/accepted-diffs.ts":
-    "AR16's acceptance register for the visual baseline: which UNIT last moved qa/baselines/manifest.json's pixels, and why. It decides one thing — whether the build may keep a manifest edit that no unit id claimed — and its whole subject is this tree's own artefacts: a file hash, a unit id, a capture count. No patient, clinician, practice or person enters its inputs; its refusal fails a test suite, not anything about anybody; it retains nothing beyond the register file itself. Its outcome union (AcceptedDiffVerdict) describes a hash comparison, which is what the *Verdict-shaped scan correctly noticed and this entry correctly classifies. THE TRIGGER THAT CHANGES THIS CLASSIFICATION: the first entry or verdict that keys on anything beyond the tree's own files — who ran the acceptance, whose screens changed — moves this to AUTOMATED_DECISIONS in the same unit.",
-  "src/quality/latent-findings.ts": "W210's register of findings that are not live YET, each carrying the condition that would make it so. Engineering. It decides nothing about anybody: its subjects are this tree's own defects, and its `FindingStatus` describes a finding rather than a person.",
   "src/quality/order-independence.ts": "W167's register of every place this tree folds a collection to one answer, with a disposition for each. Engineering. Its `Disposition` says how a tie is broken in code, not how anybody is treated.",
   "src/verticals/completeness.ts": "W158 reports what a vertical would need before it could ship, decomposed by who has to act — a reviewer, a signatory, an author, or nobody until a ruling lands. Its `MemberStatus` describes a MEMBER of a bundle (a pathway version, a content id) and never a patient: the report is about governance artefacts and their gates, and W158 bans the vocabulary of sign-off STAGES from its own output so it cannot drift into describing where a person is in a process.",
-  "src/demo/clinicians.ts": "W258 CLASSIFIED THIS AND THE READING IS ARGUABLE, SO THE ARGUMENT IS HERE RATHER THAN THE CONCLUSION ALONE. `rankClinicians` takes a person\'s free-text request on `/finder` — a public, patient-facing surface — and returns an ORDERED LIST OF NAMED CLINICIANS. Nothing about that is out of this register\'s neighbourhood, and W201\'s detector misses it only because the module names no `patientId`: the person searching is not a patient of ours, which is exactly the case a patient-id proxy cannot see. Classified as not-a-decision because of WHO the decision is about: it orders CLINICIANS rather than people, it concludes nothing about the searcher, and the only thing it reads about them is words they typed seconds earlier and can retype differently. THE LINE IT SITS NEAREST is the published notice\'s \'No inference about you. Nothing is concluded from your details that you or your practice did not record\', and the honest reading is that a query IS something they just recorded, in the moment, about what they want rather than about their health. The module already knows it is near that line: its own comment refuses to build a general relevance model because that would be \'a quality ranking of named clinicians derived from inference\', which W83 refused internally and is worse in public. THE TRIGGER THAT CHANGES THIS CLASSIFICATION, and it is three separate things, any one of which is enough: the first ranking that reads anything the searcher did not just type; the first version that RETAINS a query, a result set or anything derived from either; or the first ordering of PEOPLE rather than of clinicians. At that point this becomes an automated decision affecting a person, it belongs in AUTOMATED_DECISIONS, and the published notice gains an entry — which is a founder decision under W217\'s precedent, not a builder\'s. TWO OF THE THREE FIRED ON 2026-09-28, BOTH BY THE FOUNDER\'S DECISION: the finder now keeps each search, its words and the clinicians it showed (`src/db/finder.ts`, \'track the data and entities this process creates\'), and the order now reads what earlier visitors\' stars taught, per ask (`src/db/learn.ts`) and per clinician (`src/db/quality.ts`, \'a full ranking factor\'). It still orders clinicians and not people, and nothing it reads from others is about the searcher. The move to AUTOMATED_DECISIONS and the notice\'s entry remain the founder\'s call; the founder has said this build is a demo that will not be scaled and needs no privacy work, so the entry stays here, saying so, until that changes.",
   "src/matching/tie-quality.ts": "W234 measures how often the finder\'s ranking failed to separate the top candidates — a KPI about the PRODUCT\'s own behaviour, computed over results rather than over people. It decides nothing: no output of it reaches a person, and the number it produces is the one the clarifier exists to move.",
   "src/tenancy/tenancy.ts": "W18 is the authorization decision point for STAFF: which role may take which action in which practice, with deny as the default everywhere. It decides about a caller\'s access, never about a patient, and no patient can enter it — the same classification `src/platform/scope.ts` carries for the same reason. The SQL mirror enforces the same boundary at the row level.",
   "src/tenancy/multisite.ts": "W97 resolves a group-level membership DOWN to per-site access, and refuses to treat a group as one big practice — a membership at site A grants nothing at site B. Like W18 beside it, its subject is a staff member\'s access rather than any patient.",
@@ -331,20 +330,3 @@ export const NOT_A_DECISION: Readonly<Record<string, string>> = {
   "src/verticals/model.ts": "A content bundle, versioned as one thing.",
 };
 
-/** Every module the register accounts for, in either direction. */
-export function declaredModules(): string[] {
-  return [
-    ...AUTOMATED_DECISIONS.flatMap((d) => d.decidedBy),
-    ...Object.keys(NOT_A_DECISION),
-  ].sort();
-}
-
-/** The page's own copy, as one string, for the compliance sweep. */
-export function pageCopy(): string {
-  return [
-    ...INFORMATION_USED,
-    ...AUTOMATED_DECISIONS.flatMap((d) => [d.title, d.what]),
-    ...NEVER_AUTOMATED,
-    ...HUMAN_CONTROLS,
-  ].join("\n");
-}

@@ -43,7 +43,7 @@ import { sessionRecommendations, type RecommendationResult } from "@/capacity/re
 import type { Appointment } from "@/domain/types";
 
 /** Why the page has no capacity picture to show. Three different facts, three sentences. */
-export type CapacityEmptyReason = "no_data" | "no_capacity" | "forecaster_unscored";
+type CapacityEmptyReason = "no_data" | "no_capacity" | "forecaster_unscored";
 
 export const CAPACITY_EMPTY_COPY: Record<CapacityEmptyReason, string> = {
   no_data:
@@ -90,7 +90,7 @@ export function calendarGapFor(calendar: HolidayCalendar): string | null {
   return calendar.days.length === 0 ? CALENDAR_UNKNOWN_COPY : null;
 }
 
-export interface CapacityView {
+interface CapacityView {
   empty: CapacityEmptyReason | null;
   emptyCopy: string | null;
   sessions: readonly CapacitySessionRow[];

@@ -3,7 +3,7 @@
   "input": "I need more than fifteen minutes to get through this",
   "expect": {
     "keys": [
-      "manner:unhurried",
+      "manner:not_rushed",
       "pref:longer-appointment"
     ],
     "source": "llm"
@@ -33,7 +33,7 @@
             "type": "output_text",
             "annotations": [],
             "logprobs": [],
-            "text": "{\"care\":[],\"manner\":[\"unhurried\"],\"prefs\":[\"longer-appointment\"],\"languages\":[],\"negated\":[]}"
+            "text": "{\"care\":[],\"manner\":[\"not_rushed\"],\"prefs\":[\"longer-appointment\"],\"languages\":[],\"negated\":[]}"
           }
         ]
       }

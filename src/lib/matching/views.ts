@@ -9,7 +9,7 @@ import { conceptLabel } from "./embedding";
 import { feltUnderstoodCopy } from "./feedback";
 import { AGE_GROUPS, type AgeGroup, type BillingPreference, type ConsultStyle, type DocumentChecklist, type GP, type Match, type Patient } from "./types";
 
-export type AvailabilityGrade = "open" | "few" | "closed";
+type AvailabilityGrade = "open" | "few" | "closed";
 
 export interface GPPublicView {
   id: string;
@@ -42,7 +42,7 @@ export interface GPPublicView {
   videoIntroUrl: string | null;
 }
 
-export function availabilityOf(gp: GP): GPPublicView["availability"] {
+function availabilityOf(gp: GP): GPPublicView["availability"] {
   const open = gp.credentials.caseloadCapacityCurrent;
   const max = gp.credentials.caseloadCapacityMax;
   const grade: AvailabilityGrade = !gp.acceptingNewPatients || open <= 0 ? "closed" : max > 1 && open <= 2 ? "few" : "open";
@@ -90,7 +90,7 @@ export function gpPublicView(gp: GP): GPPublicView {
   };
 }
 
-export interface MatchView {
+interface MatchView {
   id: string;
   position: number;
   status: Match["matchStatus"];
@@ -115,7 +115,7 @@ export interface PatientView {
   note: string | null;
 }
 
-export function matchView(match: Match, gp: GP): MatchView {
+function matchView(match: Match, gp: GP): MatchView {
   return {
     id: match.id,
     position: match.position,
@@ -155,7 +155,7 @@ export function patientView(
 }
 
 /** What the GP dashboard shows about a proposed patient: the request, never the contact. */
-export interface IncomingRequestView {
+interface IncomingRequestView {
   matchId: string;
   status: Match["matchStatus"];
   position: number;
@@ -188,7 +188,7 @@ export function incomingRequestView(match: Match, patient: Patient): IncomingReq
 export const NARRATIVE_MAX = 2000;
 export const NARRATIVE_MIN = 12;
 
-export interface IntakeBody {
+interface IntakeBody {
   narrative: string;
   suburb: string;
   ageGroup: AgeGroup;
@@ -197,7 +197,7 @@ export interface IntakeBody {
   name: string;
 }
 
-export type IntakeValidation = { ok: true; body: IntakeBody } | { ok: false; error: "not_an_object" | "narrative" | "suburb" | "age_group" | "consult_style" | "billing" };
+type IntakeValidation = { ok: true; body: IntakeBody } | { ok: false; error: "not_an_object" | "narrative" | "suburb" | "age_group" | "consult_style" | "billing" };
 
 const CONSULT_STYLES: readonly ConsultStyle[] = ["telehealth", "in-person", "either"];
 const BILLING: readonly BillingPreference[] = ["bulk-billing", "medicare-gap", "private", "either"];

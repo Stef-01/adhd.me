@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Appointment, AppointmentId, ClinicianId, PracticeId } from "@/domain/types";
+import type { Appointment, AppointmentId, PracticeId } from "@/domain/types";
 import {
   buildBackfillPool,
   DEFAULT_BACKFILL_CONFIG,

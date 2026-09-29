@@ -24,7 +24,7 @@ export const LEARNING_TARGETS: Record<LearningDomain, { domain: Domain; subdomai
   self_understanding: { domain: "understand", subdomain: "attention" },
 };
 
-export interface LearningEvidence {
+interface LearningEvidence {
   domain: Domain;
   subdomain: Subdomain;
   source: string;

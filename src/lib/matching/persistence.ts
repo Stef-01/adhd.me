@@ -16,7 +16,7 @@
 import type { MatchingState } from "./store";
 import type { DocumentChecklist, Feedback, GP, Match, Patient } from "./types";
 
-export type MatchingTable = "match_patients" | "match_gps" | "match_matches" | "match_feedback" | "match_checklists";
+type MatchingTable = "match_patients" | "match_gps" | "match_matches" | "match_feedback" | "match_checklists";
 
 export interface JournalWrite {
   table: MatchingTable;
@@ -25,14 +25,14 @@ export interface JournalWrite {
   row?: Record<string, unknown>;
 }
 
-export interface JournalStats {
+interface JournalStats {
   queued: number;
   flushed: number;
   failed: number;
   hydrated: boolean;
 }
 
-export interface SupabaseEndpoint {
+interface SupabaseEndpoint {
   url: string;
   key: string;
 }

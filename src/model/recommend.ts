@@ -15,9 +15,9 @@ import { deriveNeeds, priorityScore, type Need } from "./needs";
 import { PROFESSION_ENTRIES, type Profession } from "@/support/professions";
 import { activeSafety, pendingExperiment, type ModelRecord } from "./store";
 
-export const RULE_VERSION = "2026-09-08.1";
+const RULE_VERSION = "2026-09-08.1";
 
-export type NextAction =
+type NextAction =
   | "LEARN"
   | "TRY_STRATEGY"
   | "CHANGE_ENVIRONMENT"
@@ -26,7 +26,7 @@ export type NextAction =
   | "EXPLORE_PROVIDER"
   | "URGENT_ESCALATION";
 
-export interface Explainability {
+interface Explainability {
   readonly recommendationId: string;
   readonly inputsUsed: readonly string[];
   readonly ruleTriggered: string;
@@ -35,7 +35,7 @@ export interface Explainability {
   readonly ruleVersion: typeof RULE_VERSION;
 }
 
-export interface Recommendation {
+interface Recommendation {
   readonly action: NextAction;
   readonly need: Need | null;
   readonly heading: string;
@@ -217,7 +217,7 @@ export function recommend(record: ModelRecord, now: Date = new Date()): Recommen
 }
 
 /** The PRD §26 view of the record, for My ADHD. Null before any signal. */
-export interface Summary {
+interface Summary {
   readonly need: Need | null;
   readonly contributors: ReadonlyArray<{ layer: Layer; label: string; note: string }>;
   readonly pattern: string | null;

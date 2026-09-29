@@ -126,7 +126,7 @@ export const NO_HISTORY_COPY: Record<NoHistoryReason, string> = {
  * cannot read a default out of a session nobody has observed, and the only way to guarantee that
  * is for there to be nothing there to read.
  */
-export type SessionHistory =
+type SessionHistory =
   | {
       recorded: true;
       /** Distinct past days on which this session ran. The floor W223 applies is applied to this. */

@@ -1,7 +1,8 @@
 # The voice finder
 
-Status: built 2026-09-28. On when `ADHDME_VOICE=1` and `OPENAI_API_KEY` are set; otherwise the
-finder's microphone is dictation, as before.
+Status: built 2026-09-28. On wherever `OPENAI_API_KEY` is set, unless `ADHDME_VOICE=0` (founder,
+2026-09-29: voice on by default). The finder's AI or Standard choice (below its box, kept on the
+device) decides per person: AI talks through this finder, Standard's microphone is dictation.
 
 ## What it is
 
@@ -20,6 +21,7 @@ ranks a typed one, and the results arrive where the orb was.
 | The scripted call for e2e, the text budget and audits | `src/voice/fake-link.ts` |
 | The call route: the browser's offer to OpenAI, the key never leaves | `app/api/voice/session/route.ts` |
 | The screen, the orb (the prototype's sphere visualizer, MIT, in WebGL2) | `app/finder-stages/voice-stage.tsx`, `voice-orb.tsx`, `app/voice-orb/` |
+| The record: every turn, the request, the place, how it ended (founder, 2026-09-29) | `src/db/finder.ts` (`voice_calls`), read back by `scripts/voice-transcripts.mjs`; a scripted call also lands whole under `qa/voice/runs/` |
 
 ## Guards
 
@@ -95,6 +97,7 @@ advice. Runs are in `qa/voice/runs/`.
 
 | 6 | 17/20 (each persona twice, a tenth who asks questions back) | The person may ask how things work; answers do not count toward the eight; "adult" and "ADHD" only where they belong |
 | 7 | 18/20 | No leading questions; never drop a need to fit the length |
+| 8 | 10/11, then 2/2 on the two that ask back (a postpartum persona added) | R15: questions asked in their given words with no choices in them; the manner question skipped once answered; a life stage kept in the person's own word; after one double question ("… and is telehealth better?"), one question mark a turn |
 
 **Which model.** Twice over ten personas, same prompt:
 

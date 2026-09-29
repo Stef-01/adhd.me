@@ -17,7 +17,6 @@ import { assignHoldout } from "@/engine/holdout";
 import {
   getConsole,
   onboardPractice,
-  practiceRecord,
   resetConsole,
   updateRules,
 } from "@/console/store";

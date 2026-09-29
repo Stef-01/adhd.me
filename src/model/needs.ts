@@ -22,15 +22,15 @@ import { topicSurvey } from "@/learn/surveys";
 export { needLabel } from "./labels";
 import { meanRelate, type ExperimentOutcome, type ModelRecord } from "./store";
 
-export type Confidence = "low" | "medium" | "high";
+type Confidence = "low" | "medium" | "high";
 
-export interface Contributor {
+interface Contributor {
   readonly layer: Layer;
   readonly subdomain: Subdomain;
   readonly note: string;
 }
 
-export interface StrategyOutcome {
+interface StrategyOutcome {
   readonly strategyId: string;
   readonly title: string;
   readonly outcome: ExperimentOutcome | "pending";

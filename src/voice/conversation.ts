@@ -32,6 +32,8 @@ export interface VoiceState {
   responding: boolean;
   /** What the person said or typed, in order. */
   said: string[];
+  /** Every turn, for the record (src/db/finder.ts): the person's, the assistant's and the tools'. */
+  turns: Turn[];
   /** The person's turns, counted when their audio is committed or their words are sent: a
    * transcript can arrive after the reply to it, so the count does not wait for one. */
   answers: number;
@@ -46,6 +48,12 @@ export interface VoiceState {
   muted: boolean;
   urgent: boolean;
   reveal: Reveal | null;
+}
+
+/** One turn of the call as the record keeps it. */
+export interface Turn {
+  who: "person" | "assistant" | "tool";
+  text: string;
 }
 
 export type ServerEvent = { type: string } & Record<string, unknown>;
@@ -70,6 +78,7 @@ export function initialVoice(): VoiceState {
     talking: null,
     responding: false,
     said: [],
+    turns: [],
     answers: 0,
     asked: 0,
     quiet: 0,
@@ -152,6 +161,7 @@ function heard(state: VoiceState, text: string): VoiceState {
   return {
     ...state,
     said: [...state.said, words],
+    turns: [...state.turns, { who: "person", text: words }],
     urgent: state.urgent || (rule !== null && URGENT_RULES.has(rule.id)),
   };
 }
@@ -190,7 +200,8 @@ interface OutputItem {
 function onResponseDone(state: VoiceState, event: ServerEvent): { state: VoiceState; send: ClientEvent[] } {
   const response = (event.response ?? {}) as { id?: string; status?: string; output?: OutputItem[]; metadata?: { purpose?: string } | null };
   const output = response.output ?? [];
-  let next: VoiceState = { ...state, responding: false };
+  const tools: Turn[] = output.filter((item) => item.type === "function_call").map((item) => ({ who: "tool", text: `${item.name ?? ""} ${item.arguments ?? ""}`.trim() }));
+  let next: VoiceState = { ...state, responding: false, turns: tools.length ? [...state.turns, ...tools] : state.turns };
   const send: ClientEvent[] = [];
 
   const matches = output.find((item) => item.type === "function_call" && item.name === SHOW_MATCHES);
@@ -241,7 +252,7 @@ function onServer(state: VoiceState, event: ServerEvent): { state: VoiceState; s
       const text = typeof event.transcript === "string" ? event.transcript.trim() : "";
       if (!text) return { state, send: none };
       const id = typeof event.response_id === "string" ? event.response_id : state.captionOf;
-      return { state: { ...state, caption: text, captionOf: id }, send: none };
+      return { state: { ...state, caption: text, captionOf: id, turns: [...state.turns, { who: "assistant", text }] }, send: none };
     }
     case "input_audio_buffer.speech_started":
       return { state: { ...state, talking: "person" }, send: none };

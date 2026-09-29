@@ -53,7 +53,7 @@ export const DEFAULT_STALENESS: StalenessPolicy = {
 
 export type Freshness = "current" | "stale" | "void";
 
-export interface ProvenanceVerdict {
+interface ProvenanceVerdict {
   freshness: Freshness;
   /** Plain-English, practice-facing. Every verdict explains itself. */
   reason: string;
@@ -185,14 +185,14 @@ export function competenceFreshness(
   };
 }
 
-export interface FlaggedProfile {
+interface FlaggedProfile {
   clinicianId: string;
   conditionCode: ConditionCode;
   field: "interest" | "experience" | "competence";
   verdict: ProvenanceVerdict;
 }
 
-export interface CapabilityRecords {
+interface CapabilityRecords {
   interests: readonly ClinicianInterest[];
   experience: readonly ClinicianExperience[];
   competence: readonly ClinicianCompetence[];

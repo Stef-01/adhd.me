@@ -28,7 +28,7 @@
 // U13 changed the header's NAME, not its directives: `Content-Security-Policy-Report-Only` became
 // `Content-Security-Policy`. `report-uri` stays, so an enforced block still reaches the U4 sink.
 
-export interface PolicyInputs {
+interface PolicyInputs {
   /** `NEXT_PUBLIC_GA_ID` — when set, the GA4 loader and its beacons join the policy. Dark by default. */
   gaId?: string | undefined;
   /**
@@ -39,7 +39,7 @@ export interface PolicyInputs {
 }
 
 /** Google's published CSP for gtag.js (script, image beacons, collection endpoints). */
-export const GA_HOSTS = {
+const GA_HOSTS = {
   script: ["https://*.googletagmanager.com"],
   img: ["https://*.google-analytics.com", "https://*.googletagmanager.com"],
   connect: ["https://*.google-analytics.com", "https://*.analytics.google.com", "https://*.googletagmanager.com"],
@@ -53,15 +53,15 @@ export const GA_HOSTS = {
  * name or a device location; the privacy page says so in plain words. Held to exactly this host
  * by the headers test.
  */
-export const TILE_HOSTS = { img: ["https://tile.openstreetmap.org"] } as const;
+const TILE_HOSTS = { img: ["https://tile.openstreetmap.org"] } as const;
 
 /** `@vercel/analytics` in development only; in production it is same-origin `/_vercel/insights/`. */
-export const VERCEL_DEBUG_SCRIPT = "https://va.vercel-scripts.com";
+const VERCEL_DEBUG_SCRIPT = "https://va.vercel-scripts.com";
 
 /** `next dev` only: the development runtime needs `eval`; the production bundle never does. */
-export const DEV_SCRIPT_SOURCES = ["'unsafe-eval'", VERCEL_DEBUG_SCRIPT] as const;
+const DEV_SCRIPT_SOURCES = ["'unsafe-eval'", VERCEL_DEBUG_SCRIPT] as const;
 
-export function contentSecurityPolicy({ gaId, dev }: PolicyInputs = {}): string {
+function contentSecurityPolicy({ gaId, dev }: PolicyInputs = {}): string {
   const ga = gaId ? GA_HOSTS : { script: [], img: [], connect: [] };
   const directives: Record<string, string[]> = {
     "default-src": ["'self'"],

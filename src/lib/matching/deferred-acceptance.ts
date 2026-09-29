@@ -34,13 +34,13 @@ export interface Receiver {
   capacity: number;
 }
 
-export type ProposalEvent =
+type ProposalEvent =
   | { kind: "proposed"; round: number; proposer: string; receiver: string }
   | { kind: "held"; round: number; proposer: string; receiver: string }
   | { kind: "refused"; round: number; proposer: string; receiver: string; because: "unacceptable" | "full_and_preferred_others" }
   | { kind: "released"; round: number; proposer: string; receiver: string; displacedBy: string };
 
-export interface DeferredAcceptanceResult {
+interface DeferredAcceptanceResult {
   /** Receivers each proposer holds at the end, in the proposer's own preference order. */
   held: ReadonlyMap<string, readonly string[]>;
   /** Proposers each receiver holds at the end, in the receiver's own preference order. */

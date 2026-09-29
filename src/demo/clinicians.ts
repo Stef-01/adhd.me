@@ -1,11 +1,11 @@
-import type { CareArchetype, CareArea } from "./care-archetypes";
+import type { CareArchetype } from "./care-archetypes";
+import { EI_QUALITIES } from "./emotional-fit";
 import { describeDistance, distanceKm, resolvePlace, type SuburbPoint } from "@/geo/suburbs";
 import { facetKey, holdsPreference, languageNeeds, readNeeds, type NeedSignal, type Preference } from "@/matching/needs";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 // Value import of copy tables only. `clarify.ts` imports nothing but TYPES from this module, so
 // this direction is the one that keeps the graph acyclic at runtime.
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "@/matching/clarify";
-import { type EIQuality } from "./emotional-fit";
 
 /**
  * The ranking, the copy tables and the geo helpers behind /finder and the walkthrough.
@@ -15,8 +15,7 @@ import { type EIQuality } from "./emotional-fit";
  * Both are re-exported below, so this module is still the one every consumer imports and
  * nothing outside these two files changed.
  */
-export type { Approach, CareArea, Clinician } from "./roster";
-export { APPROACHES } from "./roster";
+export type { Clinician } from "./roster";
 export { clinicians, professionOf } from "./roster";
 
 import { clinicians, type Clinician } from "./roster";
@@ -158,7 +157,7 @@ export function rankClinicians(
   });
 }
 
-export type RankingProfile = {
+type RankingProfile = {
   /** Number of distinct language and access constraints this clinician answers. */
   constraintCoverage: number;
   /** Weight of explicitly requested language and access constraints this clinician answers. */
@@ -289,8 +288,8 @@ export function facetStrength(clinician: Clinician, facet: NeedSignal["facet"]):
 /**
  * A free-text field a patient reads whose wording can assert the same real-world fact a
  * structured, closed-vocabulary field answers separately — and can therefore drift from it
- * silently (M3, F6). `appointmentLength` and the `unhurried` manner trait are one instance:
- * `interview.ts`'s "length" question and its "unhurried" question ask the same thing in two
+ * silently (M3, F6). `appointmentLength` and the `not_rushed` manner trait are one instance:
+ * `interview.ts`'s "length" question and its "not_rushed" question ask the same thing in two
  * places, and nothing before this forced their answers to agree.
  *
  * Detection only. Nothing here changes what the matcher reads — `holdsPreference` still reads
@@ -307,23 +306,6 @@ export type DisplayTwin = {
   /** The preference the matcher must then hold true. */
   preference: Preference;
 };
-
-export const DISPLAY_TWINS: readonly DisplayTwin[] = [
-  {
-    field: "appointmentLength",
-    impliesClaim: (clinician) => /\blonger?\s+(?:first\s+)?appointment/i.test(clinician.appointmentLength),
-    preference: "longer-appointment",
-  },
-];
-
-/**
- * Every display twin whose wording asserts a claim on this clinician that the matcher does not
- * hold. Empty is the healthy state; a non-empty result is the F6 shape — a promise on the page
- * the ranker cannot act on.
- */
-export function unheldDisplayClaims(clinician: Clinician): DisplayTwin[] {
-  return DISPLAY_TWINS.filter((twin) => twin.impliesClaim(clinician) && !holdsPreference(clinician, twin.preference));
-}
 
 /** Whether this clinician answers one stated need at all. Derived from `facetStrength`. */
 function answers(clinician: Clinician, need: NeedSignal): boolean {
@@ -397,26 +379,38 @@ export function labelInSentence(need: NeedSignal): string {
  * duplication this move exists to end. `missedAskCopy` joins the parts for callers that just
  * want the sentence, so there is still exactly one place the words live.
  */
-export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
+/** A preference as a person asks for it: "telehealth", not the chip's "by phone or telehealth". */
+const PREFERENCE_ASKED: Record<Preference, string> = {
+  "woman-gp": "a woman clinician",
+  "telehealth-first": "telehealth",
+  "bulk-billing": "bulk billing",
+  "longer-appointment": "a longer first appointment",
+};
+
+/** An ask as a sentence says it: a manner as someone who does it, a language as someone who speaks it. */
+export function askedFor(need: NeedSignal): string {
   const facet = need.facet;
-  let after = ", not something they declare. Another listing may.";
-  if (facet.kind === "language") {
-    after = ", not listed among the languages they consult in. Another listing may.";
-  } else if (facet.kind === "preference") {
-    // The label is already in the sentence ("You also asked for bulk billing"): the rest does not say it twice.
-    const detail: Record<typeof facet.preference, string> = {
-      "woman-gp": "this clinician does not match that preference",
-      "telehealth-first": "which this listing does not show",
-      "bulk-billing": "which this listing does not show",
-      "longer-appointment": "which this listing does not show",
-    };
-    after = `, ${detail[facet.preference]}. Another listing may.`;
-  }
-  return {
-    before: "You also asked for ",
-    label: labelInSentence(need),
-    after,
-  };
+  if (facet.kind === "manner") return EI_QUALITIES[facet.trait].asked;
+  if (facet.kind === "language") return `someone who speaks ${facet.language}`;
+  if (facet.kind === "preference") return PREFERENCE_ASKED[facet.preference];
+  return labelInSentence(need);
+}
+
+/**
+ * ONE LINE FOR EVERY MISSED ASK (2026-09-29): "Not in their listing: A, B." Two missed asks as
+ * two sentences of fifteen words put the profile at 74, over its ceiling; one line held them at
+ * 60, and with the model's sentence above it the same profile read 75 again, so the line lost its
+ * "You also asked for" (the sentence above already says what was asked). "Not in their listing"
+ * is a fact about the listing, never a claim about ability (W193). The asks come back separately
+ * so the surface can emphasise each.
+ */
+export function missedAsksLine(needs: readonly NeedSignal[]): { before: string; asks: string[]; after: string } {
+  return { before: "Not in their listing: ", asks: needs.map(askedFor), after: "." };
+}
+
+export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
+  const line = missedAsksLine([need]);
+  return { before: line.before, label: line.asks[0]!, after: line.after };
 }
 
 export function missedAskCopy(need: NeedSignal): string {
@@ -537,7 +531,7 @@ export type MatchQuality = "informed" | "tied" | "unmatched" | "unserved";
  * my anxious mum, she speaks Hindi" (both 0.33) — and the M6 ladder tally moves with them
  * (`extractor-quality.test.ts` re-pins both `informed`/`tied`).
  */
-export const INFORMED_SEPARATION_RATIO = 0.5;
+const INFORMED_SEPARATION_RATIO = 0.5;
 
 /** `separationRatio`'s computation, given needs already resolved — the shared inner step. */
 function separationRatioForNeeds(needs: readonly NeedSignal[], roster: readonly Clinician[]): number | null {
@@ -550,15 +544,6 @@ function separationRatioForNeeds(needs: readonly NeedSignal[], roster: readonly 
   return differing / askedFacets.size;
 }
 
-/**
- * The fraction of distinct facets a query reached on which the roster's declared strength
- * actually differs — the measure `matchQuality` grades `informed` against. `null` when the
- * query reached nothing. Exported so the boundary can be asserted directly rather than only
- * through the four-way label.
- */
-export function separationRatio(query: string, roster: readonly Clinician[] = clinicians): number | null {
-  return separationRatioForNeeds(needsFor(query, roster), roster);
-}
 
 export function matchQuality(query: string, roster: readonly Clinician[] = clinicians, needs: readonly NeedSignal[] = needsFor(query, roster)): MatchQuality {
   if (needs.length === 0) return "unmatched";
@@ -591,9 +576,9 @@ export function matchQuality(query: string, roster: readonly Clinician[] = clini
  * and the fitting sentence would be the finder explaining a ranking that never happened, the
  * exact defect O1 removed. The caller picks by whether the clinician has match evidence.
  */
-export const CLOSED_BOOKS_COPY =
+const CLOSED_BOOKS_COPY =
   "Their books are closed to new patients right now, shown because they fit what you asked. The practice can say when that changes.";
-export const CLOSED_BOOKS_NEUTRAL_COPY =
+const CLOSED_BOOKS_NEUTRAL_COPY =
   "Their books are closed to new patients right now. The practice can say when that changes.";
 
 /** The right closed-books sentence for this clinician and query. Empty when books are open. */
@@ -616,12 +601,11 @@ export function closedBooksNote(clinician: Clinician, query: string): string | n
  * discriminant, is the shape that let them drift — so the label and the caption are now produced
  * together, from one `switch`, and `booking-handoff.test.ts` asserts the invariant that broke: a
  * handoff mentions Healthengine in its caption if and only if it mentions Healthengine in its
- * label. Returns `null` for `synthetic-none`, which has no url and therefore no control — the
- * terminal state O231 designed, rather than a disabled button or a link to a fabricated page.
+ * label.
  */
-export type BookingHandoff = { label: string; caption: string };
+type BookingHandoff = { label: string; caption: string };
 
-export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
+export function bookingHandoff(clinician: Clinician): BookingHandoff {
   switch (clinician.booking.via) {
     case "healthengine":
       return { label: "See times on Healthengine", caption: "Opens Healthengine in a new tab." };
@@ -629,8 +613,6 @@ export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
       // The practice is named in the paragraph above this control, so the caption stays generic
       // rather than repeating it a third time on one screen (O231's rule for this screen).
       return { label: "Open the practice page", caption: "Opens the practice’s own page in a new tab." };
-    case "synthetic-none":
-      return null;
   }
 }
 
@@ -665,7 +647,7 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
  * only when it is true everywhere. Same closed-vocabulary posture as everything else — a band
  * is a fact about equal numbers, not an estimate.
  */
-export type RankBand = {
+type RankBand = {
   score: number;
   constraintCoverage: number;
   constraintScore: number;
@@ -752,7 +734,7 @@ function orderedAsks(query: string, roster: readonly Clinician[]): NeedSignal[] 
  * when it mixes kinds. The sentence about an order must name the list it is about — narrowed to
  * occupational therapists, "every listed GP" is a false statement about the screen.
  */
-export function rosterNoun(roster: readonly Clinician[]): { one: string; many: string } {
+function rosterNoun(roster: readonly Clinician[]): { one: string; many: string } {
   const kinds = new Set(roster.map((c) => c.profession ?? "gp"));
   if (kinds.size === 1) {
     const only = [...kinds][0]!;
@@ -1008,7 +990,7 @@ export function missedAsks(
   return needs.filter((need) => !answers(clinician, need));
 }
 
-export type RequestFitSummary = {
+type RequestFitSummary = {
   recognizedNeedCount: number;
   constraintCount: number;
   fullMatchCount: number;
@@ -1210,7 +1192,7 @@ export function distanceTo(clinician: Clinician, origin: SuburbPoint | null): st
  * match, per W213's explain module — rather than a directory that either advertises care it
  * cannot reach (narrowing) or inflates a "sometimes" into an "often" (the bug F5 named).
  */
-export const ELIGIBILITY_CARE_THRESHOLD = 0.5;
+const ELIGIBILITY_CARE_THRESHOLD = 0.5;
 
 /**
  * `careThreshold` defaults to the decided value and exists so M2's measurement can call this

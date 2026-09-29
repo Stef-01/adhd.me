@@ -1,6 +1,6 @@
 // The voice finder's call: POST a WebRTC offer (application/sdp) → the answer. The offer goes to
 // OpenAI's realtime calls endpoint with the interviewer's session (src/voice/interviewer.ts), so
-// the key never reaches the browser. Off (404) unless ADHDME_VOICE=1 and a key are set. Calls stop
+// the key never reaches the browser. Off (404) without a key, or with ADHDME_VOICE=0. Calls stop
 // at 8 in ten minutes from one caller and at ADHDME_VOICE_DAILY_SESSIONS a UTC day (default 40),
 // in memory on this instance. A key that fails pauses voice and the read for ten minutes.
 

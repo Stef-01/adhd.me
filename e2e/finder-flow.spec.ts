@@ -16,14 +16,10 @@ import { measured } from "./support/measured";
 import { clinicians, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
 import { searchRoster } from "../src/finder/pipeline";
-import { DEMO_REQUEST, demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/real-roster";
+import { DEMO_REQUEST, demoResults, gotoFinder } from "./support/demo-request";
 
-// O226: this file's walks assert REAL-roster facts — named rows above the fold, `rankClinicians`
-// over the real `clinicians` export, "1 of 2 listed GPs" — so the flow enters through the
-// real-roster door. The shipped default (examples ON) keeps its own coverage in the first test
-// below, which walks the scenario without touching the switch.
 async function intoResults(page: Page, place?: string) {
-  await demoResultsRealRosterOnly(page, place);
+  await demoResults(page, place);
 }
 
 test("a search reaches results without a loading screen in between", async ({ page }) => {
@@ -215,9 +211,9 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
    * O183: THE QUERY CHANGED BECAUSE THE ROSTER STOPPED PRODUCING A PARTIAL FIT FOR THE OLD ONE.
    *
    * This asked for titration + unhurried + substance history. Dr Yadav used to be the roster's
-   * `unhurried` declarer, so somebody always answered some of it and missed the rest. Two things
+   * `not_rushed` declarer, so somebody always answered some of it and missed the rest. Two things
    * then happened: he left (O179), and M3 carried Dr Anubhav's own appointment-length answer into
-   * the `unhurried` facet it also answers (F6). Against today's roster that query splits into
+   * the `not_rushed` facet it also answers (F6). Against today's roster that query splits into
    * all-four and none-of-four — Dr Anubhav answers everything, Dr Anu answers nothing — and a
    * profile with NO evidence correctly renders "nothing in what you said pointed here
    * specifically" instead of a missed list, because a missed list beside no evidence would be an
@@ -244,7 +240,7 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
     if ((await missed.count()) > 0) {
       found = true;
       // Declaration-framed, never a deficiency claim; and never contradicting the evidence list.
-      await expect(missed.first()).toContainText("not something they declare");
+      await expect(missed.first()).toContainText("Not in their listing");
       const missedLabel = (await missed.first().locator("strong").innerText()).toLowerCase();
       const evidence = (await page.locator(".fit-evidence strong").allInnerTexts()).map((t) => t.toLowerCase());
       expect(evidence).not.toContain(missedLabel);
@@ -310,7 +306,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
     await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
     await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
   };
-  await demoResultsRealRosterOnly(page);
+  await demoResults(page);
   await askAgain();
 
   const before = await page.locator(".clinician-row strong").allInnerTexts();
@@ -380,11 +376,11 @@ test("collective roster coverage is never presented as one doctor's complete fit
   await page.locator(".clinician-row").filter({ hasText: "Dr Anu Saxena" }).click();
   const why = page.locator(".profile-disclosure").filter({ hasText: "Why matched" });
   await why.locator("summary").click();
-  await expect(why).toContainText(/telehealth[^.]*, which this listing does not show\./i);
+  await expect(why).toContainText(/Not in their listing: [^.]*telehealth[^.]*\./);
 });
 
 test("and still says it when the fit really is complete (O121 non-vacuity)", async ({ page }) => {
-  await gotoFinderRealRosterOnly(page);
+  await gotoFinder(page);
   // Deliberately a query the roster SEPARATES on and serves completely: "adult ADHD
   // assessment" alone is a tie (all three declare it), and a tie renders no claim either — so
   // it would have passed this test for the wrong reason.
@@ -441,7 +437,7 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
   );
 
   for (const [i, query] of QUERIES.entries()) {
-    await gotoFinderRealRosterOnly(page);
+    await gotoFinder(page);
     await page.locator("#welcome-request").fill(query);
     await page.getByRole("button", { name: "Find support" }).click();
     await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

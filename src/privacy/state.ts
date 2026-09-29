@@ -5,7 +5,7 @@
 
 import { DEFAULT_RETENTION, type DeletionRecord, type RetentionConfig, type SuppressionEntry } from "./privacy";
 
-export interface PrivacyState {
+interface PrivacyState {
   retention: RetentionConfig;
   deletions: DeletionRecord[];
   suppressions: SuppressionEntry[];

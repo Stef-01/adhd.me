@@ -5,6 +5,7 @@
 // through, and the reporter sink in use. The store kind is a literal until U17–U19 give the tree
 // an adapter to ask; writing it here keeps the endpoint's shape stable across that change.
 
+import { journalStatus } from "@/db/finder";
 import { commitSha, selectSink } from "./reporter";
 
 export interface Health {
@@ -13,14 +14,17 @@ export interface Health {
   readonly bootedAt: string;
   readonly store: "jsonl-file";
   readonly reporter: string;
+  /** The finder's record in Supabase (docs/data/FINDER-DATA.md): whether this deployment holds the variables, and the writes since boot. */
+  readonly journal: { readonly configured: boolean; readonly sent: number; readonly failed: number };
 }
 
-export function health(now: number = Date.now(), uptimeSeconds: number = process.uptime()): Health {
+export function health(now: number = Date.now(), uptimeSeconds: number = process.uptime(), env: Record<string, string | undefined> = process.env): Health {
   return {
     ok: true,
     sha: commitSha(),
     bootedAt: new Date(now - uptimeSeconds * 1000).toISOString(),
     store: "jsonl-file",
     reporter: selectSink().name,
+    journal: journalStatus(env),
   };
 }

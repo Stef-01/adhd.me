@@ -89,16 +89,20 @@ export const EXTRA = [
   { path: "/lives/play/zoe-before-you-send", name: "Zoe: before send" },
   { path: "/lives/play/arjun-hold-the-thread", name: "Arjun: the meeting" },
   { path: "/lives/play/maya-one-thing-at-a-time", name: "Maya: the crossing" },
-  { path: "/gp/example-mei-chao", name: "GP profile" },
+  { path: "/gp/anubhav-saxena", name: "GP profile" },
   // `discoverRoutes` skips `[id]`, so a dynamic screen is only measured if it is listed here. This
   // one is patient-facing and reached from the skill-match dialog's "View full profile", and it
   // arrived without an entry — so it had no word budget and no capture.
-  { path: "/practitioner/example-mei-chao", name: "Practitioner profile" },
+  { path: "/practitioner/anubhav-saxena", name: "Practitioner profile" },
   { path: "/go/anubhav-saxena", skip: "a redirect" },
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
   // The profile with its reasons open: the bio folds while they show (2026-09-28, was 75 words).
   { path: "/", state: "finder-profile-why", name: "Finder profile, why matched open" },
+  { path: "/", state: "finder-profile-why-words", name: "Finder profile, why matched in their words (AI)" },
+  // The heaviest profile with two asks the listing does not answer, keys and sentence (2026-09-29: the AI one read 75).
+  { path: "/", state: "finder-profile-missed", name: "Finder profile, why matched open, two asks not in the listing" },
+  { path: "/", state: "finder-profile-why-words-missed", name: "Finder profile, why matched in their words (AI), two asks not in the listing" },
   // The settings sheet, from the header on every app screen: it was never measured, and read 99.
   { path: "/", state: "finder-settings", name: "Settings, open (on the finder, where it holds the most)" },
   { path: "/", state: "finder-voice", name: "Finder voice (the orb, one question)" },
@@ -353,8 +357,16 @@ export const LEARNING_RECORD = {
   experiments: [],
 };
 
+/** What the model writes under "Why matched" at level 1, as the budget measures that screen. */
+const WHY_SENTENCES = ["You asked for someone who takes time with you; Dr Saxena says he books a longer first appointment for everyone."]; // the longest the screen keeps (20 words): the worst case is what the budget measures
+/** Four asks of which this clinician's listing answers two: the missed line at its longest. */
+const MISSED_REQUEST = "an adult ADHD assessment, telehealth, bulk billing, a woman GP";
+
 export async function reach(page, route, base) {
   if (route.state === "intake") {
+    // The match store is process-wide: a spec earlier in a CI shard can fill the three GPs' places, and
+    // the results heading then reads "Nobody fits yet." instead of the count. Start from the seeded roster.
+    await page.request.post(`${base}/api/mock/matching`).catch(() => undefined);
     await page.goto(`${base}/match`);
     await page.locator("#match-narrative").fill(NARRATIVE);
     await page.locator("#match-suburb").fill("Epping");
@@ -365,6 +377,14 @@ export async function reach(page, route, base) {
     return;
   }
   if (route.state === "finder-voice") await page.addInitScript(() => { window.__adhdmeVoiceFake = true; });
+  // The AI screen without a model: the page at level 1 and the why route answering as the model would.
+  if (route.state?.startsWith("finder-profile-why-words")) {
+    await page.route((url) => url.pathname === "/", async (r) => {
+      const response = await r.fetch();
+      await r.fulfill({ response, body: (await response.text()).replace('\\"readLevel\\":0', '\\"readLevel\\":1') });
+    });
+    await page.route("**/api/finder/why", (r) => r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ sentences: WHY_SENTENCES, source: "llm" }) }));
+  }
   if (route.state === "finder-rate") {
     await page.addInitScript(() => {
       const at = Date.now() - 2 * 24 * 60 * 60 * 1000;
@@ -376,17 +396,21 @@ export async function reach(page, route, base) {
     await page.getByRole("button", { name: "Talk instead of typing" }).click();
     await page.locator(".voice-orb").waitFor({ timeout: 10000 });
   }
-  if (route.state === "finder-results" || route.state === "finder-profile" || route.state === "finder-profile-why") {
-    await page.getByRole("textbox").fill("an adult ADHD assessment, telehealth, not rushed");
+  if (route.state === "finder-results" || route.state?.startsWith("finder-profile")) {
+    const missed = route.state?.endsWith("-missed");
+    await page.getByRole("textbox").fill(missed ? MISSED_REQUEST : "an adult ADHD assessment, telehealth, not rushed");
     await page.keyboard.press("Enter");
     await page.locator(".clinician-list").waitFor({ timeout: 20000 });
     if (route.state !== "finder-results") {
-      await page.locator(".clinician-row").first().click();
+      // The missed states open the heaviest profile (a disclosure, two languages) rather than the first.
+      await (missed ? page.locator(".clinician-row", { hasText: "Dr Anubhav Saxena" }) : page.locator(".clinician-row").first()).click();
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
-    if (route.state === "finder-profile-why") {
+    if (route.state?.startsWith("finder-profile-why") || missed) {
       await page.locator(".profile-disclosure", { hasText: "Why matched" }).locator("summary").click();
       await page.locator(".profile-disclosure[open] .profile-disclosure-body").waitFor({ timeout: 8000 });
+      if (route.state?.startsWith("finder-profile-why-words")) await page.locator(".fit-insights li").first().waitFor({ timeout: 8000 });
+      if (missed) await page.locator(".fit-missed li").first().waitFor({ timeout: 8000 });
     }
   }
   if (route.state === "finder-settings") {

@@ -3,7 +3,7 @@
 // invited, whatever any later ranking layer prefers (venture brief: AI ranks only within
 // deterministic eligibility). Every exclusion returns a reason code for the audit log.
 
-import type { Clinician, ClinicianId, Patient } from "@/domain/types";
+import type { Clinician, Patient } from "@/domain/types";
 
 export interface EligibilityConfig {
   /** Practice-set floor: never invite someone seen more recently than this. */
@@ -122,4 +122,4 @@ export function eligibleForClinician(
   return { eligible, exclusionTally };
 }
 
-export type { ClinicianId };
+

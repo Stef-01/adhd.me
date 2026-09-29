@@ -1,6 +1,6 @@
 {
-  "measuredAt": "2026-09-28T13:26:46.939Z",
-  "base": "http://localhost:3100",
+  "measuredAt": "2026-09-29T08:26:05.435Z",
+  "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
     "headspaceDetail": 26,
@@ -17,8 +17,8 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 18,
-      "fold": 18,
+      "total": 20,
+      "fold": 20,
       "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
@@ -449,25 +449,25 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 13,
-      "fold": 13,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "DRAW A PATH!",
+          "w": 2,
+          "text": "POP IT!",
           "tag": "p"
         },
         {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 3,
-          "text": "Round the right",
+          "w": 1,
+          "text": "pale",
           "tag": "button"
         }
       ]
@@ -503,25 +503,25 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 7,
-      "fold": 7,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
           "w": 2,
-          "text": "LOCK IN!",
+          "text": "CATCH IT!",
           "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "slides",
           "tag": "span"
         }
       ]
@@ -1016,10 +1016,10 @@
       "path": "/practices",
       "name": "/practices",
       "state": null,
-      "total": 763,
-      "fold": 58,
+      "total": 735,
+      "fold": 55,
       "chrome": 22,
-      "ratio": 19.1,
+      "ratio": 18.4,
       "verdict": "long-form",
       "longest": [
         {
@@ -1043,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1512,
-      "fold": 246,
+      "total": 1473,
+      "fold": 267,
       "chrome": 22,
-      "ratio": 37.8,
+      "ratio": 36.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -1060,8 +1060,8 @@
           "tag": "p"
         },
         {
-          "w": 100,
-          "text": "ADHD.ME is building software that will offer available appointment times to a pr",
+          "w": 114,
+          "text": "The finder keeps a record of each search so the matching can get better: your wo",
           "tag": "p"
         }
       ]
@@ -1070,10 +1070,10 @@
       "path": "/privacy/automated-decisions",
       "name": "/privacy/automated-decisions",
       "state": null,
-      "total": 1552,
+      "total": 1643,
       "fold": 130,
       "chrome": 22,
-      "ratio": 38.8,
+      "ratio": 41.1,
       "verdict": "long-form",
       "longest": [
         {
@@ -1124,17 +1124,12 @@
       "path": "/profile",
       "name": "/profile",
       "state": null,
-      "total": 45,
+      "total": 36,
       "fold": 31,
       "chrome": 6,
-      "ratio": 1.1,
-      "verdict": "ceiling",
+      "ratio": 0.9,
+      "verdict": "target",
       "longest": [
-        {
-          "w": 4,
-          "text": "Care and cultural preferences",
-          "tag": "summary"
-        },
         {
           "w": 3,
           "text": "Where you are",
@@ -1144,6 +1139,11 @@
           "w": 3,
           "text": "Suburb or postcode",
           "tag": "label"
+        },
+        {
+          "w": 3,
+          "text": "Kind of support",
+          "tag": "summary"
         }
       ]
     },
@@ -1178,14 +1178,14 @@
       "path": "/story",
       "name": "/story",
       "state": null,
-      "total": 681,
+      "total": 688,
       "fold": 65,
       "chrome": 15,
-      "ratio": 17,
+      "ratio": 17.2,
       "verdict": "long-form",
       "longest": [
         {
-          "w": 119,
+          "w": 126,
           "text": "Beecroft, Hornsby, Cheltenham, Pennant Hills, Epping, Double Bay, Edgecliff, Ros",
           "tag": "span"
         },
@@ -1934,10 +1934,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 18,
-      "fold": 18,
+      "total": 28,
+      "fold": 28,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1946,14 +1946,14 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
+          "w": 5,
+          "text": "Whatever. Sure. Guess work wins.",
+          "tag": "p"
         },
         {
-          "w": 4,
-          "text": "That came out sharp.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Ouch. I did say sorry.",
+          "tag": "p"
         }
       ]
     },
@@ -2204,10 +2204,10 @@
       "path": "/lives/play/theo-out-the-door",
       "name": "Theo, complete",
       "state": "theo-complete",
-      "total": 37,
-      "fold": 37,
+      "total": 33,
+      "fold": 33,
       "chrome": 0,
-      "ratio": 0.9,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
@@ -2525,56 +2525,56 @@
       ]
     },
     {
-      "path": "/gp/example-mei-chao",
+      "path": "/gp/anubhav-saxena",
       "name": "GP profile",
       "state": null,
-      "total": 38,
-      "fold": 38,
+      "total": 47,
+      "fold": 47,
       "chrome": 6,
-      "ratio": 1,
-      "verdict": "target",
+      "ratio": 1.2,
+      "verdict": "ceiling",
       "longest": [
         {
+          "w": 6,
+          "text": "Structured assessment, baseline physical screening & titration.",
+          "tag": "p"
+        },
+        {
           "w": 5,
-          "text": "ADHD assessment across ages, titration.",
+          "text": "Beecroft Family & Skin Cancer Clinic",
           "tag": "p"
         },
         {
           "w": 5,
           "text": "More about how they work",
           "tag": "summary"
-        },
-        {
-          "w": 3,
-          "text": "Dr Mei Chao",
-          "tag": "h1"
         }
       ]
     },
     {
-      "path": "/practitioner/example-mei-chao",
+      "path": "/practitioner/anubhav-saxena",
       "name": "Practitioner profile",
       "state": null,
-      "total": 50,
-      "fold": 50,
+      "total": 44,
+      "fold": 44,
       "chrome": 2,
-      "ratio": 1.3,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 21,
-          "text": "Mei says she sees ADHD assessment often, in adults and in children and adolescen",
+          "w": 18,
+          "text": "Anubhav takes a measured approach to ADHD care, with a documented physical basel",
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "AI scribe, with your consent",
-          "tag": "span"
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "h1"
         },
         {
           "w": 3,
-          "text": "Dr Mei Chao",
-          "tag": "h1"
+          "text": "Beecroft & Double Bay",
+          "tag": "p"
         }
       ]
     },
@@ -2582,10 +2582,10 @@
       "path": "/",
       "name": "Finder results (after a search)",
       "state": "finder-results",
-      "total": 47,
-      "fold": 39,
+      "total": 44,
+      "fold": 35,
       "chrome": 6,
-      "ratio": 1.2,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2609,10 +2609,10 @@
       "path": "/",
       "name": "Finder profile (a GP opened)",
       "state": "finder-profile",
-      "total": 48,
-      "fold": 48,
+      "total": 44,
+      "fold": 44,
       "chrome": 2,
-      "ratio": 1.2,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2636,16 +2636,43 @@
       "path": "/",
       "name": "Finder profile, why matched open",
       "state": "finder-profile-why",
-      "total": 48,
-      "fold": 48,
+      "total": 44,
+      "fold": 44,
+      "chrome": 2,
+      "ratio": 1.1,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 4,
+          "text": "Takes time with you",
+          "tag": "strong"
+        },
+        {
+          "w": 4,
+          "text": "By phone or telehealth",
+          "tag": "strong"
+        },
+        {
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Finder profile, why matched in their words (AI)",
+      "state": "finder-profile-why-words",
+      "total": 49,
+      "fold": 49,
       "chrome": 2,
       "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 4,
-          "text": "By phone or telehealth",
-          "tag": "strong"
+          "w": 20,
+          "text": "You asked for someone who takes time with you; Dr Saxena says he books a longer ",
+          "tag": "li"
         },
         {
           "w": 3,
@@ -2661,13 +2688,67 @@
     },
     {
       "path": "/",
+      "name": "Finder profile, why matched open, two asks not in the listing",
+      "state": "finder-profile-missed",
+      "total": 46,
+      "fold": 46,
+      "chrome": 2,
+      "ratio": 1.2,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 4,
+          "text": "By phone or telehealth",
+          "tag": "strong"
+        },
+        {
+          "w": 4,
+          "text": "Not in their listing:",
+          "tag": "li"
+        },
+        {
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Finder profile, why matched in their words (AI), two asks not in the listing",
+      "state": "finder-profile-why-words-missed",
+      "total": 60,
+      "fold": 60,
+      "chrome": 2,
+      "ratio": 1.5,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 20,
+          "text": "You asked for someone who takes time with you; Dr Saxena says he books a longer ",
+          "tag": "li"
+        },
+        {
+          "w": 4,
+          "text": "Not in their listing:",
+          "tag": "li"
+        },
+        {
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/",
       "name": "Settings, open (on the finder, where it holds the most)",
       "state": "finder-settings",
-      "total": 45,
-      "fold": 45,
+      "total": 38,
+      "fold": 38,
       "chrome": 0,
-      "ratio": 1.1,
-      "verdict": "ceiling",
+      "ratio": 1,
+      "verdict": "target",
       "longest": [
         {
           "w": 9,
@@ -2680,9 +2761,9 @@
           "tag": "small"
         },
         {
-          "w": 4,
-          "text": "Fictional providers, not bookable.",
-          "tag": "small"
+          "w": 3,
+          "text": "Save a copy",
+          "tag": "strong"
         }
       ]
     },
@@ -2701,10 +2782,10 @@
       "path": "/",
       "name": "Finder home, a visit to rate",
       "state": "finder-rate",
-      "total": 28,
-      "fold": 28,
+      "total": 30,
+      "fold": 30,
       "chrome": 6,
-      "ratio": 0.7,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
@@ -3000,19 +3081,19 @@
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "I held off",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
           "tag": "button"
         },
         {
-          "w": 2,
-          "text": "DON’T SCROLL!",
-          "tag": "p"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 2,
-          "text": "ONE MORE",
-          "tag": "span"
+          "w": 1,
+          "text": "SWAT!",
+          "tag": "p"
         }
       ]
     },
@@ -3020,11 +3101,11 @@
       "path": "/match/results",
       "name": "Match results",
       "state": "intake",
-      "total": 50,
-      "fold": 33,
+      "total": 21,
+      "fold": 21,
       "chrome": 6,
-      "ratio": 1.3,
-      "verdict": "ceiling",
+      "ratio": 0.5,
+      "verdict": "target",
       "longest": [
         {
           "w": 5,
@@ -3032,14 +3113,14 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "In common: adult ADHD assessment.",
-          "tag": "p"
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "strong"
         },
         {
-          "w": 5,
-          "text": "In common: adult ADHD assessment.",
-          "tag": "p"
+          "w": 3,
+          "text": "Delete my request",
+          "tag": "button"
         }
       ]
     },
@@ -3587,10 +3668,10 @@
       "path": "/today",
       "name": "Today, the care plan: who I see",
       "state": "plan-providers",
-      "total": 29,
-      "fold": 28,
+      "total": 34,
+      "fold": 27,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {

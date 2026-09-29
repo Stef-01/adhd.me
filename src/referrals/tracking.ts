@@ -35,7 +35,7 @@ import type { CareHolder } from "./return-report";
 import type { PracticeId } from "@/domain/types";
 
 /** Who a practice is waiting on, and since when. Never a verdict about the wait. */
-export interface Outstanding {
+interface Outstanding {
   from: "referring_practice" | "receiving_practice";
   what:
     | "book_an_appointment"
@@ -46,13 +46,13 @@ export interface Outstanding {
 }
 
 /** A place the two machines disagree. Reported, never resolved — see the module note. */
-export interface TrackingConflict {
+interface TrackingConflict {
   what: string;
   clinicalChain: LeakageStage;
   professionalChain: AcceptanceState;
 }
 
-export interface ReferralTracking {
+interface ReferralTracking {
   referralId: string;
   /** W93's answer. */
   stage: LeakageStage;
@@ -128,14 +128,14 @@ export function trackReferral(
   return { referralId, stage: timeline.stage, acceptance, careHolder, outstanding, conflicts };
 }
 
-export const OUTSTANDING_COPY: Record<Outstanding["what"], string> = {
+const OUTSTANDING_COPY: Record<Outstanding["what"], string> = {
   book_an_appointment: "An appointment has not been booked.",
   answer_the_referral: "The referral has not been answered.",
   send_a_return_report: "The patient was seen and no return report has come back.",
   rebook_after_cancellation: "The appointment was cancelled and nothing has been rebooked.",
 };
 
-export const PARTY_COPY: Record<Outstanding["from"], string> = {
+const PARTY_COPY: Record<Outstanding["from"], string> = {
   referring_practice: "this practice",
   receiving_practice: "the other practice",
 };

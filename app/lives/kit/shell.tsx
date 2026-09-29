@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, Pause, SpeakerHigh, SpeakerSlash, X } from "@pho
 import { sound, type ScoreSpec } from "../sounds";
 
 /** Subscribe to the shared mute preference. */
-export function useMuted() { return useSyncExternalStore(fn => sound().subscribe(fn), () => sound().muted, () => true); }
+function useMuted() { return useSyncExternalStore(fn => sound().subscribe(fn), () => sound().muted, () => true); }
 
 const HELP: Record<string, string[]> = {
   "nw-game": ["Use arrows or swipe to steer the pen through gold words.", "Tabs and blots slow the pen; your draft stays safe.", "Between lines, try a change. Save a next step for tomorrow."],

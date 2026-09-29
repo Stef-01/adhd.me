@@ -54,7 +54,7 @@ export interface CareGap {
   basis: "interval_elapsed" | "no_recorded_visit";
 }
 
-export interface CareGapInput {
+interface CareGapInput {
   membership: RegisterMembership;
   /** Date of the last visit relevant to this register; null when none is recorded. */
   lastRelevantVisit: string | null;
@@ -154,13 +154,3 @@ export function gapCountsByCondition(gaps: readonly CareGap[]): Record<string, n
   return counts;
 }
 
-/**
- * Gaps belonging to one practice. Callers that hold gaps from more than one tenant must
- * scope before narrowing or ranking; this is the seam that makes that possible at all.
- */
-export function scopeGapsToPractice(
-  gaps: readonly CareGap[],
-  practiceId: PracticeId,
-): CareGap[] {
-  return gaps.filter((g) => g.practiceId === practiceId);
-}

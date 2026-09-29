@@ -3,7 +3,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
-import { CHECKS, lexiconReading, READS } from "@/lib/matching/llm-read";
+import { answerFor, CHECKS, lexiconReading, READS } from "@/lib/matching/llm-read";
 import { resetRateLimits } from "@/lib/rate-limit";
 import { PAUSE_MS, resetKeyPause } from "@/lib/llm/key-pause";
 import { resetReadCache } from "@/lib/matching/read-cache";
@@ -35,17 +35,25 @@ afterEach(() => {
 describe("POST /api/finder/read", () => {
   it("at level 0 reads with the lexicon and never calls fetch, with or without a key", async () => {
     const { input } = cassette("C7");
+    expect(await read(input)).toEqual({ status: 200, body: { keys: lexiconReading(input).keys, source: "lexicon", unlisted: [] } });
     vi.stubEnv("OPENAI_API_KEY", "k");
-    expect(await read(input)).toEqual({ status: 200, body: { keys: lexiconReading(input).keys, source: "lexicon" } });
     vi.stubEnv("ADHDME_LLM_LEVEL", "0");
-    await read(input);
+    expect((await read(input)).body.source).toBe("lexicon");
     expect(network).not.toHaveBeenCalled();
+  });
+
+  it("is at level 1 wherever there is a key and no level is set", async () => {
+    vi.stubEnv("OPENAI_API_KEY", "k");
+    const { input, expect: want } = cassette("C7");
+    network = vi.fn(cassetteFetch(CASSETTES, () => completed({ verdicts: [] })));
+    vi.stubGlobal("fetch", network);
+    expect((await read(input)).body).toEqual({ ...want, unlisted: [] });
   });
 
   it("at level 1 with no key reads with the lexicon and never calls fetch", async () => {
     vi.stubEnv("ADHDME_LLM_LEVEL", "1");
     const { input } = cassette("C7");
-    expect((await read(input)).body).toEqual({ keys: lexiconReading(input).keys, source: "lexicon" });
+    expect((await read(input)).body).toEqual({ keys: lexiconReading(input).keys, source: "lexicon", unlisted: [] });
     expect(network).not.toHaveBeenCalled();
   });
 
@@ -57,24 +65,38 @@ describe("POST /api/finder/read", () => {
     // Every call answered, the check too, so the reading is whole and is remembered.
     network = vi.fn(cassetteFetch(CASSETTES, () => completed({ verdicts: [] })));
     vi.stubGlobal("fetch", network);
-    expect((await read(input)).body).toEqual(want);
+    expect((await read(input)).body).toEqual({ ...want, unlisted: [] });
     // The same words, spaced and cased differently, read the same way from memory, with no call.
-    expect((await read(`  ${input.toUpperCase()}  `)).body).toEqual(want);
+    expect((await read(`  ${input.toUpperCase()}  `)).body).toEqual({ ...want, unlisted: [] });
     expect(network).toHaveBeenCalledTimes(READS + CHECKS);
+  });
+
+  it("answers with the asks no key covers, and remembers them with the keys", async () => {
+    vi.stubEnv("ADHDME_LLM_LEVEL", "1");
+    vi.stubEnv("OPENAI_API_KEY", "k");
+    const { input } = cassette("C7");
+    const said = { ...answerFor(lexiconReading(input).keys), unlisted: ["relates to postpartum"] };
+    network = vi.fn(async (_url: string, init: { body: string }) => new Response(JSON.stringify(completed(JSON.parse(init.body).input.startsWith("Request: ") ? { verdicts: [] } : said)), { status: 200 }));
+    vi.stubGlobal("fetch", network);
+    const first = await read(input);
+    expect(first.body).toMatchObject({ source: "llm", unlisted: ["relates to postpartum"] });
+    const calls = network.mock.calls.length;
+    expect((await read(input)).body).toEqual(first.body);
+    expect(network.mock.calls.length, "the second read came from memory").toBe(calls);
   });
 
   it("answers a model failure with the lexicon's keys and source lexicon", async () => {
     vi.stubEnv("ADHDME_LLM_LEVEL", "1");
     vi.stubEnv("OPENAI_API_KEY", "k");
-    expect((await read(INCOMPLETE.input)).body).toEqual({ keys: lexiconReading(INCOMPLETE.input).keys, source: "lexicon" });
+    expect((await read(INCOMPLETE.input)).body).toEqual({ keys: lexiconReading(INCOMPLETE.input).keys, source: "lexicon", unlisted: [] });
     network.mockRejectedValueOnce(new TypeError("fetch failed"));
-    expect((await read("a woman GP")).body).toEqual({ keys: ["pref:woman-gp"], source: "lexicon" });
+    expect((await read("a woman GP")).body).toEqual({ keys: ["pref:woman-gp"], source: "lexicon", unlisted: [] });
   });
 
   it("in cassette mode replays the recordings with no network, and reads other words as the lexicon does", async () => {
     vi.stubEnv("ADHDME_LLM_LEVEL", "1");
     vi.stubEnv("ADHDME_LLM_CASSETTES", "1");
-    expect((await read(cassette("C6").input)).body).toEqual(cassette("C6").expect);
+    expect((await read(cassette("C6").input)).body).toEqual({ ...cassette("C6").expect, unlisted: [] });
     const other = (await read("a woman GP who bulk bills")).body;
     expect(other.source).toBe("llm");
     expect(new Set(other.keys)).toEqual(new Set(["pref:woman-gp", "pref:bulk-billing"]));
@@ -96,7 +118,7 @@ describe("POST /api/finder/read", () => {
     const refused = vi.fn(async () => new Response(JSON.stringify({ error: { message: "Incorrect API key provided", code: "invalid_api_key" } }), { status: 401 }));
     vi.stubGlobal("fetch", refused);
     const { input } = cassette("C7");
-    const lexicon = { keys: lexiconReading(input).keys, source: "lexicon" };
+    const lexicon = { keys: lexiconReading(input).keys, source: "lexicon", unlisted: [] };
     expect((await read(input)).body).toEqual(lexicon);
     expect(refused).toHaveBeenCalledTimes(READS);
     expect((await read(input)).body).toEqual(lexicon);
@@ -112,7 +134,7 @@ describe("POST /api/finder/read", () => {
     vi.stubEnv("OPENAI_API_KEY", "k");
     vi.stubEnv("ADHDME_LLM_DAILY_USD", "0");
     const { input } = cassette("C7");
-    expect((await read(input)).body).toEqual({ keys: lexiconReading(input).keys, source: "lexicon" });
+    expect((await read(input)).body).toEqual({ keys: lexiconReading(input).keys, source: "lexicon", unlisted: [] });
     expect(network).not.toHaveBeenCalled();
   });
 

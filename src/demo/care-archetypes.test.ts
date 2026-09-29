@@ -51,7 +51,8 @@ describe("ADHD assessment demo archetypes", () => {
    */
   it("routes to every GP on the roster", () => {
     const reached = new Set(careArchetypes.map((archetype) => archetype.expectedFirstMatch));
-    const gps = clinicians.filter((clinician) => professionOf(clinician) === "gp");
+    // 2026-09-29: the GPs who declare assessment; a GP listed for shared care alone is reached from the finder.
+    const gps = clinicians.filter((clinician) => professionOf(clinician) === "gp" && clinician.careAreas.includes("adhd-assessment"));
 
     expect(gps.length).toBeGreaterThan(0);
     expect([...reached].sort()).toEqual(gps.map((clinician) => clinician.id).sort());

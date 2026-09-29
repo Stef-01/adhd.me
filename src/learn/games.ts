@@ -52,8 +52,8 @@ export const GAME_HINTS: Readonly<Record<string, string>> = {
 export type GameItem =
   | { readonly kind: "life"; readonly id: CharacterId; readonly title: string; readonly hint: string; readonly href: string }
   | { readonly kind: "run"; readonly id: string; readonly title: string; readonly hint: string };
-export type LifeGame = Extract<GameItem, { kind: "life" }>;
-export type RunGame = Extract<GameItem, { kind: "run" }>;
+type LifeGame = Extract<GameItem, { kind: "life" }>;
+type RunGame = Extract<GameItem, { kind: "run" }>;
 
 const RUNS = MODULES.filter((m) => m.kind === "run");
 

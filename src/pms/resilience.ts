@@ -37,7 +37,7 @@ export const DEFAULT_RESILIENCE: ResilienceConfig = {
   freshnessBudgetMs: 15 * 60_000,
 };
 
-export interface SlotRead {
+interface SlotRead {
   slots: Appointment[];
   health: PmsHealth;
   /** True only when the data is fresh enough to offer from (stale fails closed). */
@@ -48,7 +48,7 @@ export interface SlotRead {
   failure?: "threw" | "timeout" | "malformed" | "circuit_open";
 }
 
-export type Clock = () => number;
+type Clock = () => number;
 
 interface Snapshot {
   slots: Appointment[];
@@ -163,7 +163,7 @@ export class ResilientPmsReader {
   }
 }
 
-export interface FleetRead {
+interface FleetRead {
   practiceId: string;
   read: SlotRead;
 }

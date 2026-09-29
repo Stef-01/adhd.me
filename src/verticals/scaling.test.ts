@@ -31,9 +31,9 @@
 
 import { describe, expect, it } from "vitest";
 import { loadIntervals } from "@/registers/intervals";
-import { assessCompleteness, renderCompletenessReport, type KnownMembers } from "./completeness";
+import { renderCompletenessReport, type KnownMembers } from "./completeness";
 import { declareVertical, type DeclaredMember } from "./declare";
-import { usableVertical, verticalHash, type VerticalEvidence, type VerticalMemberKind } from "./model";
+import { verticalHash, type VerticalEvidence, type VerticalMemberKind } from "./model";
 
 const KINDS: VerticalMemberKind[] = ["pathway", "content", "education_item", "interval"];
 

@@ -26,7 +26,7 @@
  */
 export const TEAM_PAGE_PUBLIC = false;
 
-export interface Affiliation {
+interface Affiliation {
   name: string;
   logo: string | null;
   href: string;

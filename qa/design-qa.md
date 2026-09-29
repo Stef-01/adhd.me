@@ -228,3 +228,42 @@ A separate cropped comparison was not needed: the 800 × 844 combined image rend
 ## Follow-up polish
 
 - No required follow-up. The earlier About position is the only intentional visual deviation from the source target and directly serves the stated usability goal.
+
+# The profile under the sentence — two asks not in the listing (O255, 2026-09-29)
+
+The budget instrument measured the AI "Why matched" screen with nothing missed (57 words) and
+the keys screen with two asks missed (59), and called the profile within its ceiling. The state
+a person meets most, four asks of which the listing answers two and the model's sentence above
+the missed line, was never reached: probed across five requests and the first six rows of each,
+it read 67 to 75 on the heaviest profile (a disclosure, two languages, a three-word name to
+compare with).
+
+## What changed
+
+- The missed line is "Not in their listing: **bulk billing**, **a woman clinician**." (four words
+  and the asks) in place of "You also asked for … and …, not in their listing." (eight and the
+  asks): the sentence above it already says what was asked. Semicolons part the asks when one
+  holds a comma. It is 14px now, not 12, with a little room under the sentence (O14: the reader
+  may be tired or low-vision).
+- Every manner is asked for in six words at most (`asked` on each quality in
+  `src/demo/emotional-fit.ts`): "a structured approach", not "someone who works to a documented
+  baseline and follows up on a schedule" (13 words, which alone put a missed line at 24).
+- The why sentence is at most 20 words, not 26: the model's clause gets what the frame leaves
+  (never more than twelve; the input names the number), and a frame that leaves fewer than five
+  words makes no call.
+- The two lower folds are "Appointments" and "Background", one word each, in place of
+  "Appointment and access" and "Credentials and experience".
+- Two states join the instrument and the e2e gate: the keys and the sentence over the same
+  heaviest profile with two asks not in the listing.
+
+## Evidence
+
+Captures in `qa/roster-o254/`: `profile-missed-keys-{390,1280}.png` (46 words),
+`profile-missed-words-{390,1280}.png` (60), `why-words-{390,1280}.png` (49, was 57). The probe
+across the five requests: worst 60 (was 75), every other row 52 to 59.
+
+## Verification
+
+- `pnpm typecheck` — passed. `pnpm vitest run` — 4678 passed, 1 skipped.
+- Text budget over every screen: 142 screens measured, 127 of 127 app screens within their ceiling, 0 over, median 29 words (90 at or under the 40-word target). The finder profile states: 44, 44, 49, 46 and 60.
+- e2e: finder-flow, finder-read, compare, matching-verification, profile-layout, text-budget and headings specs — 42 passed (12.2 min) on the production build.

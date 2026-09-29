@@ -14,7 +14,7 @@ import { lintEducationCopy } from "@/education/advice-lint";
 import { ALL_REFERRAL_REASONS, ALL_REFERRAL_REQUESTS, type ReferralDocument } from "@/referrals/document";
 import { DEFAULT_SIM_CONFIG, runSim } from "@/sim/harness";
 import { codeSystemsIn } from "./contract";
-import { APPOINTMENT_TYPE_MAP, appointmentToFhir } from "./fhir";
+import { appointmentToFhir } from "./fhir";
 import { referralToProfile } from "./referral-profile";
 import * as mod from "./terminology";
 import {

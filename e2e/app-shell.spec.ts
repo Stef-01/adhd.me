@@ -107,8 +107,6 @@ test("O233: the bar holds destinations, and what is consulted once lives in sett
   for (const name of [/Search filters/, /About ADHD\.ME/, /^Help & answers/, /Worked examples/, /^Privacy/]) {
     await expect(settings.getByRole("link", { name })).toBeVisible();
   }
-  // The finder's own switch rides in the same sheet, so there is one settings surface.
-  await expect(settings.locator(".finder-demo-toggle input")).toBeVisible();
 });
 
 test("O233: settings reaches About, and the bar does not claim it", async ({ page }) => {
@@ -213,8 +211,9 @@ test("the sheet's handle is a control, not an ornament, the drag has a tap equiv
 
   // Every gesture needs a tap equivalent: the grabber cycles the detents for anybody who cannot
   // drag, which is Material's own accessibility rule for this exact component.
+  // To the whole pixel: a box read while the sheet settles can come back a hair under (47.99999).
   const handleBox = (await shrink.boundingBox())!;
-  expect(handleBox.height, "the handle is under the 48px floor its own guidance sets").toBeGreaterThanOrEqual(48);
+  expect(Math.round(handleBox.height), "the handle is under the 48px floor its own guidance sets").toBeGreaterThanOrEqual(48);
   await shrink.click();
   await expect.poll(async () => (await sheet.boundingBox())!.height).toBeLessThan(full - 1);
 
@@ -271,13 +270,10 @@ for (const [name, viewport] of [["a phone", { width: 390, height: 844 }], ["a de
   });
 }
 
-test("the switch inside the sheet still changes the roster it names", async ({ page }) => {
+test("the finder is still operable after the sheet closes", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Settings" }).click();
-  const toggle = page.locator(".finder-demo-toggle input");
-  await expect(toggle).toBeChecked();
-  await toggle.uncheck();
-  await expect(toggle).not.toBeChecked();
+  await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
   await page.keyboard.press("Escape");
   // The finder is still operable after a modal detour — the thing a sheet most often breaks.
   await expect(page.getByRole("button", { name: "Adult ADHD assessment" })).toBeVisible();
@@ -288,21 +284,16 @@ test("the switch inside the sheet still changes the roster it names", async ({ p
 test("the profile's filters narrow the finder, are said on the results, and clear from there", async ({ page }) => {
   await page.goto("/profile");
   // Each filter group is a tap; open the three this test uses.
-  for (const name of ["Distance", "Languages", "How they work"]) await page.locator("summary", { hasText: name }).click();
+  for (const name of ["Distance", "Languages"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.getByRole("switch", { name: /Woman clinician/ }).check();
   await page.getByRole("switch", { name: /New patients/ }).check();
   await expect(page.getByText("2 on", { exact: true })).toBeVisible();
   // A language chip is a pressed button whose name stays the language — the tick is not in it.
-  await page.getByRole("button", { name: "Tamil", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Tamil", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "Hindi", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Hindi", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByText("3 on", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Tamil", exact: true }).click();
-  await expect(page.getByText("2 on", { exact: true })).toBeVisible();
-  // O248: a way of working is a filter like any other, and says so on results.
-  await page.getByRole("button", { name: "Open to wearable data", exact: true }).click();
-  await expect(page.getByText("3 on", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Open to wearable data", exact: true }).click();
+  await page.getByRole("button", { name: "Hindi", exact: true }).click();
   await expect(page.getByText("2 on", { exact: true })).toBeVisible();
 
   // The place set here is the finder's place, with no ?place= on the link.
@@ -345,7 +336,7 @@ test("a resolved place draws the nearby map, whose markers key the rows and find
   // The place comes from the profile (or a link), never from a field on results.
   await page.goto("/profile");
   // Each filter group is a tap; open the three this test uses.
-  for (const name of ["Distance", "Languages", "How they work"]) await page.locator("summary", { hasText: name }).click();
+  for (const name of ["Distance", "Languages"]) await page.locator("summary", { hasText: name }).click();
   await page.getByLabel("Suburb or postcode").fill("Beecroft");
   await page.goto("/");
   await page.getByRole("textbox").fill("a woman GP who speaks Tamil");
@@ -398,7 +389,7 @@ test("filters nobody answers say so and give both ways out", async ({ page }) =>
     await page.getByRole("switch", { name }).check();
   }
   await page.locator("summary", { hasText: "Languages" }).click();
-  for (const language of ["Arabic", "Igbo", "Urdu"]) await page.getByRole("button", { name: language, exact: true }).click();
+  for (const language of ["Hindi", "Mandarin", "Urdu"]) await page.getByRole("button", { name: language, exact: true }).click();
   await page.goto("/");
   await page.getByRole("textbox").fill("someone who can do the whole assessment");
   await page.keyboard.press("Enter");

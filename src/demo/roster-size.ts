@@ -14,7 +14,7 @@ import { clinicians } from "./clinicians";
 
 const SPELLED = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 
-export const ROSTER_SIZE = clinicians.length;
+const ROSTER_SIZE = clinicians.length;
 
 export function rosterSizeInWords(size: number = ROSTER_SIZE): string {
   return SPELLED[size] ?? String(size);

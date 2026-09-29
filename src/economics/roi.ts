@@ -41,7 +41,7 @@ export const BRIEF_ASSUMPTIONS: RoiAssumptions = {
   adhdMeMonthlyFee: 990,
 };
 
-export interface RoiResult {
+interface RoiResult {
   openSlotsPerWeek: number;
   generatedBookingsPerWeek: number;
   attendedPerWeek: number;

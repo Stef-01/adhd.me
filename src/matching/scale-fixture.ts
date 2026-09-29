@@ -57,6 +57,7 @@ const EVERY_CARE_AREA: Record<CareArea, true> = {
   "substance-history": true,
   "emotional-regulation": true,
   "non-medication": true,
+  perinatal: true,
 };
 const CARE_AREAS: readonly CareArea[] = Object.keys(EVERY_CARE_AREA) as CareArea[];
 

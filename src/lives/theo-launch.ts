@@ -1,6 +1,6 @@
 import { seededRng } from "./random";
 
-export const THEO_ITEMS = {
+const THEO_ITEMS = {
   keys: { label: "Keys", temptation: "" }, phone: { label: "Phone", temptation: "" }, shoes: { label: "Shoes", temptation: "" },
   wallet: { label: "Wallet", temptation: "" }, pass: { label: "Travel pass", temptation: "" },
   book: { label: "Book", temptation: "Just one chapter…" }, plant: { label: "Plant", temptation: "Maybe repot it first?" },
@@ -8,8 +8,8 @@ export const THEO_ITEMS = {
   coffee: { label: "Coffee", temptation: "Time to try that new recipe?" }, controller: { label: "Controller", temptation: "One level. Famous last words." },
 } as const;
 export type TheoItem = keyof typeof THEO_ITEMS;
-export interface TheoPlan { essentials: TheoItem[]; objects: TheoItem[]; duration: number }
-export interface TheoState { packed: TheoItem[]; detours: TheoItem[]; outcome: "playing" | "success" | "failure"; message: string }
+interface TheoPlan { essentials: TheoItem[]; objects: TheoItem[]; duration: number }
+interface TheoState { packed: TheoItem[]; detours: TheoItem[]; outcome: "playing" | "success" | "failure"; message: string }
 export const freshTheoState = (): TheoState => ({ packed: [], detours: [], outcome: "playing", message: "Drag or tap to pack." });
 
 export function createTheoPlan(seed: number, level: number): TheoPlan {

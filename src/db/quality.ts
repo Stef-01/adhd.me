@@ -14,11 +14,11 @@ import type { RatingRecord } from "./finder";
 /** Rated visits a clinician needs before their visits count at all. */
 export const MIN_VISITS = 8;
 /** Imaginary average visits each clinician's mean starts from, so a few real ones barely move it. */
-export const PRIOR_VISITS = 8;
+const PRIOR_VISITS = 8;
 /** The most quality can move a clinician's fit, up or down. */
 export const MAX_QUALITY = 0.15;
 /** The multiplier moves in steps this size. */
-export const STEP = 0.05;
+const STEP = 0.05;
 /** Everybody's mean starts from twenty imaginary four-star visits, so early ratings cannot set it. */
 const GLOBAL_PRIOR = { visits: 20, stars: 4 };
 

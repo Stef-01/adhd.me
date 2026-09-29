@@ -39,7 +39,7 @@ export function publicCareProfile(provider: CareProvider): CareDeclaration | und
 }
 export function publicIdentity(provider: CareProvider) { const profile = publicCareProfile(provider); return profile?.identity?.publish ? profile.identity : undefined; }
 const LEGACY_AREAS: Partial<Record<CareNeed, string>> = { anxiety: "anxiety", depression: "depression", trauma: "trauma-informed", autism: "autism-adhd", "substance-use": "substance-history" };
-export function declaresCareNeed(provider: CareProvider, need: CareNeed): boolean {
+function declaresCareNeed(provider: CareProvider, need: CareNeed): boolean {
   return publicCareProfile(provider)?.needs.includes(need) === true
     || (need === "whole-person" && provider.approach?.includes("holistic") === true)
     || (need === "university-adjustments" && provider.expertise?.includes("university-adhd") === true)

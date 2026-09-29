@@ -1,0 +1,74 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I'm six months postpartum and I think I have ADHD. I need a clinician who relates to what postpartum is like.",
+    "Just me.",
+    "Telehealth.",
+    "Someone patient who has been through it or treats a lot of mums.",
+    "No, that's all."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "assistant",
+      "text": "Okay, is this for you?"
+    },
+    {
+      "who": "person",
+      "text": "I'm six months postpartum and I think I have ADHD. I need a clinician who relates to what postpartum is like."
+    },
+    {
+      "who": "person",
+      "text": "Just me."
+    },
+    {
+      "who": "assistant",
+      "text": "Is this an ADHD assessment, or help with treatment?"
+    },
+    {
+      "who": "person",
+      "text": "Telehealth"
+    },
+    {
+      "who": "assistant",
+      "text": "How would you like a clinician to work with you? For example, someone who listens slowly and clearly, or someone who keeps things structured and actionable."
+    },
+    {
+      "who": "person",
+      "text": "Someone patient who has been through it or treats a lot of mums."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"\",\"request\":\"An ADHD assessment via telehealth with someone patient who understands or treats a lot of mums and relates to postpartum.\"}"
+    }
+  ],
+  "request": "An ADHD assessment via telehealth with someone patient who understands or treats a lot of mums and relates to postpartum.",
+  "reads": [
+    {
+      "text": "An ADHD assessment via telehealth with someone patient who understands or treats a lot of mums and relates to postpartum.",
+      "answer": {
+        "keys": [
+          "care:adhd-assessment",
+          "pref:telehealth-first"
+        ],
+        "source": "llm"
+      }
+    }
+  ],
+  "heard": [
+    "Telehealth",
+    "ADHD assessment"
+  ],
+  "results": [
+    "AC Dr Ash ColemanExample Robina",
+    "JR Dr Jordan ReyesExample Broadbeach",
+    "Dr Owen HartleyExample Southport",
+    "Dr Anubhav Saxena Beecroft & Double Bay",
+    "Dr Chloe BennettExample Double Bay"
+  ],
+  "whyMatched": "Why matched ADHD assessment From your words: “care:adhd-assessment” By phone or telehealth From your words: “pref:telehealth-first” Compare with Dr Reyes",
+  "stage": "results"
+}

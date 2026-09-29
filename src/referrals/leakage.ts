@@ -47,7 +47,7 @@ export type LeakageStage =
   | "completed" // the chain finished
   | "withdrawn"; // the referral itself was cancelled
 
-export interface ReferralTimeline {
+interface ReferralTimeline {
   referralId: string;
   practiceId: PracticeId;
   patientId: PatientId;

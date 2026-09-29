@@ -12,7 +12,7 @@ export const SETUP_STEPS = [
 
 export type SetupStepSlug = (typeof SETUP_STEPS)[number]["slug"];
 
-export const SETUP_STEP_SLUGS = SETUP_STEPS.map((s) => s.slug) as readonly SetupStepSlug[];
+const SETUP_STEP_SLUGS = SETUP_STEPS.map((s) => s.slug) as readonly SetupStepSlug[];
 
 export function isSetupStep(value: string): value is SetupStepSlug {
   return (SETUP_STEP_SLUGS as readonly string[]).includes(value);

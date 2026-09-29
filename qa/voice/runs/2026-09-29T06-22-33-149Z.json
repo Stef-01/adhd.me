@@ -1,0 +1,89 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I think I might have ADHD and I want to get assessed.",
+    "It's for me.",
+    "Newtown, in person is fine.",
+    "Cost doesn't really matter.",
+    "[pause 8]",
+    "Someone who explains things properly and doesn't judge me.",
+    "[pause 25]"
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I think I might have ADHD and I want to get assessed."
+    },
+    {
+      "who": "assistant",
+      "text": "Is this for you, or for someone else?"
+    },
+    {
+      "who": "person",
+      "text": "It's for me."
+    },
+    {
+      "who": "assistant",
+      "text": "Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "Newtown, in person is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Does cost matter to you?"
+    },
+    {
+      "who": "person",
+      "text": "Course doesn't really matter."
+    },
+    {
+      "who": "assistant",
+      "text": "Does anything about the clinician matter to you?"
+    },
+    {
+      "who": "person",
+      "text": "Someone who explains things properly and doesn't judge me."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Newtown\",\"request\":\"I'm looking for an ADHD assessment for me, in person in Newtown, with someone who explains things properly and doesn't judge me.\"}"
+    }
+  ],
+  "request": "I'm looking for an ADHD assessment for me, in person in Newtown, with someone who explains things properly and doesn't judge me.",
+  "reads": [
+    {
+      "text": "I'm looking for an ADHD assessment for me, in person in Newtown, with someone who explains things properly and doesn't judge me.",
+      "answer": {
+        "keys": [
+          "care:adhd-assessment",
+          "manner:sense_making",
+          "manner:non_judgmental",
+          "manner:collaborative"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "ADHD assessment",
+    "Making sense",
+    "Non-judgmental",
+    "Shared decisions"
+  ],
+  "results": [
+    "Dr Anubhav Saxena Making sense Beecroft & Double Bay",
+    "Meera Lakhani Psychologist · Making sense Fortitude Valley",
+    "Lachlan Avent Psychologist · Non-judgmental Fortitude Valley",
+    "Dr Anu Saxena Double Bay & Hornsby",
+    "Valeria Urrutia Psychologist Benowa"
+  ],
+  "whyMatched": "Why matched ADHD assessment Helps it make sense Non-judgmental From your words: “judged” You also asked for someone who explains the options and decides them with you, not something they declare. Another listing may. Compare with Meera Lakhani",
+  "stage": "results"
+}

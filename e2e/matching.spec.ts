@@ -6,7 +6,7 @@
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
-import { DEMO_REQUEST } from "./support/real-roster";
+import { DEMO_REQUEST } from "./support/demo-request";
 
 const NARRATIVE =
   "I think I have had ADHD my whole life. I want an adult assessment with someone who will not rush me. I have anxiety too, and telehealth would be easier.";
@@ -54,8 +54,8 @@ test("the request lives in the tab, not the address bar, and a fresh tab has not
 
 test("a GP profile says declared and checked as different things, and shows no score", async ({ page, request }) => {
   await request.post("/api/mock/matching?seedFeedback=1");
-  await page.goto("/gp/example-mei-chao");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Dr Mei Chao");
+  await page.goto("/gp/anubhav-saxena");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Dr Anubhav Saxena");
   await expect(page.locator("summary", { hasText: "Credentials" })).toBeVisible();
   await expect(page.getByTestId("felt-understood")).toContainText(/Of 7 people matched here/);
   const body = await page.locator("main").innerText();
@@ -87,8 +87,8 @@ test("the GP dashboard receives the request, takes a capacity, and accepts it; t
   await expect(request).toBeVisible();
   await expect(request.locator("blockquote")).toContainText("whole life");
 
-  // Capacity slider writes the declared places.
-  await gpPage.getByTestId("capacity-slider").fill("2");
+  // Capacity slider writes the declared places: a real person's list is one place, open or closed.
+  await gpPage.getByTestId("capacity-slider").fill("1");
   await gpPage.getByTestId("capacity-save").click();
   await expect(gpPage.getByTestId("gp-saved")).toContainText("Capacity saved");
   await expect(gpPage.getByRole("heading", { name: /Capacity/ })).toBeVisible();

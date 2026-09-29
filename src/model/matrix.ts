@@ -28,7 +28,7 @@
 import { INTERACTIVE_MODULES, type InteractiveModule } from "@/learn/interactive";
 import type { LearningProfile } from "@/lives/types";
 import { RUNG_REACH, type Rung } from "@/wellness/map";
-import { DOMAIN_LABELS, type Domain, type Subdomain } from "./layers";
+import { DOMAIN_LABELS, type Subdomain } from "./layers";
 import { deriveNeeds, priorityScore, type Need } from "./needs";
 import type { ModelRecord } from "./store";
 
@@ -231,7 +231,7 @@ export function statusFor(needs: readonly Need[], touchedByContributor: boolean)
 
 /* -------------------------------------------------------------------- cells */
 
-export interface Cell {
+interface Cell {
   readonly area: Area;
   readonly aspect: Aspect;
   readonly status: CellStatus;
@@ -399,7 +399,7 @@ export function axes(record: ModelRecord | null, profile: LearningProfile | null
 
 /* ---------------------------------------------------------------- the views */
 
-export interface AspectView {
+interface AspectView {
   readonly aspect: Aspect;
   readonly point: AxisPoint;
   /** The five areas, in `AREAS` order. */

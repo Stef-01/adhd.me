@@ -45,13 +45,13 @@ export type PatientRequest = {
   insuranceType: string;
   /** The patient's own stated timing preference — a want, never a triage judgement. */
   urgency: Urgency;
-  /** Manner-vocabulary words the patient asked for, e.g. ["unhurried", "sense_making"]. */
+  /** Manner-vocabulary words the patient asked for, e.g. ["not_rushed", "sense_making"]. */
   communicationPreference: readonly string[];
   /** Optional stated care asks (care-area ids). Absent means "no further asks stated". */
   statedNeeds?: readonly string[];
 };
 
-export type Urgency = "this-week" | "this-month" | "whenever";
+type Urgency = "this-week" | "this-month" | "whenever";
 
 /** A doctor's declared record. Every field is the doctor's own declaration. */
 export type DoctorRecord = {
@@ -73,9 +73,9 @@ export type DoctorRecord = {
   careAreas?: readonly string[];
 };
 
-export type RefusalReason = "insurance_not_accepted" | "at_capacity" | "specialty_mismatch";
+type RefusalReason = "insurance_not_accepted" | "at_capacity" | "specialty_mismatch";
 
-export type Criterion = "clinicalFit" | "availability" | "proximity" | "costMatch" | "communicationFit";
+type Criterion = "clinicalFit" | "availability" | "proximity" | "costMatch" | "communicationFit";
 
 /**
  * The five weights, exactly as directed: clinical fit 30%, availability 25%, proximity 20%,
@@ -94,13 +94,13 @@ export const CRITERION_WEIGHTS: Readonly<Record<Criterion, number>> = {
 export const PROXIMITY_CAP_KM = 50;
 
 /** The stated horizons behind each urgency word, in days. "whenever" binds nothing. */
-export const URGENCY_HORIZON_DAYS: Readonly<Record<Urgency, number | null>> = {
+const URGENCY_HORIZON_DAYS: Readonly<Record<Urgency, number | null>> = {
   "this-week": 7,
   "this-month": 30,
   whenever: null,
 };
 
-export type CriterionScore = {
+type CriterionScore = {
   criterion: Criterion;
   weight: number;
   /** Normalised 0–1 before weighting, by the stated formula for this criterion. */
@@ -111,16 +111,16 @@ export type CriterionScore = {
   sentence: string;
 };
 
-export type PairScore = {
+type PairScore = {
   doctorRef: string;
   /** Weighted sum of the breakdown, rounded. Equals the printed evidence by construction. */
   total: number;
   breakdown: readonly CriterionScore[];
 };
 
-export type ExcludedPair = { doctorRef: string; reasons: readonly RefusalReason[] };
+type ExcludedPair = { doctorRef: string; reasons: readonly RefusalReason[] };
 
-export type PatientMatches = {
+type PatientMatches = {
   patientRef: string;
   /** Top matches, best first, at most MATCHES_PER_PATIENT. Ties break on doctorRef, which is arbitrary and says so. */
   matches: readonly PairScore[];
@@ -132,7 +132,7 @@ export type PatientMatches = {
 
 export const MATCHES_PER_PATIENT = 3;
 
-export type AllocationConfig = {
+type AllocationConfig = {
   /** The specialty the whole run requires. The cohort is ADHD patients seeking a prescriber. */
   requiredSpecialty: string;
 };

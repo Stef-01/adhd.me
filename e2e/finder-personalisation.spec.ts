@@ -31,7 +31,7 @@ import type { ModelRecord } from "../src/model/store";
 import { topNeed } from "../src/model/needs";
 import { fitTags } from "../src/support/problem-fit";
 import { EXPERTISE_LABELS } from "../src/support/professions";
-import { rosterFor } from "../src/demo/synthetic-roster";
+import { clinicians } from "../src/demo/clinicians";
 
 const MODEL_KEY = "adhdme.model.v1";
 
@@ -64,9 +64,10 @@ test("the row says why this person is seeing them, in the words of their own map
   await search(page, ALLIED_SENTENCE);
 
   // `fitReason`'s two forms: the need's own subdomain is "the thing you said is hardest", a
-  // contributor's is "part of what you described". At least one row earns the first.
+  // contributor's is "part of what you described". At least one row earns one of them; which one
+  // depends on what the real roster's allied providers declare in their own listings (2026-09-29).
   const rows = page.locator(".clinician-row .row-focus");
-  await expect(rows.filter({ hasText: "the thing you said is hardest" }).first()).toBeVisible();
+  await expect(rows.filter({ hasText: /the thing you said is hardest|part of what you described/ }).first()).toBeVisible();
 
   // The line is ABOUT the person and must never put a number on them — the law the whole tab is
   // built on, held here because this is the first sentence on the finder that reads their record.
@@ -82,8 +83,8 @@ test("the profile's chips are the person's own cells, not the provider's sales l
   await expect(page.locator(".profile-screen")).toBeVisible();
 
   const name = (await page.getByRole("heading", { level: 1 }).innerText()).trim();
-  const clinician = rosterFor(true).find((c) => c.name === name);
-  expect(clinician, `the opened profile "${name}" is on the default roster`).toBeTruthy();
+  const clinician = clinicians.find((c) => c.name === name);
+  expect(clinician, `the opened profile "" is on the roster`).toBeTruthy();
 
   // THE ASSERTION THIS FILE IS FOR. The expected chips are derived from the seeded record, not
   // from the provider's declared expertise — `fitTags` returns only the tags the person's own

@@ -11,7 +11,7 @@ import type { ModelRecord } from "./store";
 
 export const MAX_CONSECUTIVE_QUESTIONS = 10;
 
-export interface Fatigue {
+interface Fatigue {
   /** 0–1. */
   score: number;
   /** Above this, optional questions are withheld. */

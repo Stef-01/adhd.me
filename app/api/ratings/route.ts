@@ -5,13 +5,13 @@
 // one caller.
 
 import { parseRating, rateVisit } from "@/db/finder";
-import { rosterFor } from "@/demo/synthetic-roster";
+import { clinicians } from "@/demo/clinicians";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 const NO_STORE = { "Cache-Control": "no-store" };
-const KNOWN = new Set(rosterFor(true).map((c) => c.id));
+const KNOWN = new Set(clinicians.map((c) => c.id));
 
 export async function POST(request: Request) {
   const caller = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";

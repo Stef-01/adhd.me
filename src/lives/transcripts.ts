@@ -2,13 +2,13 @@
 // renderer reads it aloud on the screen until an asset exists, and the validator refuses an audio
 // block whose transcript is not here. Nothing in this file assumes a recording.
 
-export interface Transcript {
+interface Transcript {
   readonly id: string;
   /** Short lines, one breath each, in the order they are spoken. */
   readonly lines: readonly string[];
 }
 
-export const TRANSCRIPTS: readonly Transcript[] = [
+const TRANSCRIPTS: readonly Transcript[] = [
   {
     id: "sixty_second_reset",
     lines: [

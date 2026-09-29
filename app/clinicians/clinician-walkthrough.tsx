@@ -97,7 +97,7 @@ const resources = [
   },
 ];
 
-export function ClinicianWalkthrough() {
+export function ClinicianWalkthrough({ demo }: { demo: boolean }) {
   const [stage, setStage] = useState<Stage>("goal");
   const [target, setTarget] = useState(30);
   const [selectedConditions, setSelectedConditions] = useState<string[]>(["adhd-assessment"]);
@@ -150,7 +150,7 @@ export function ClinicianWalkthrough() {
       <div className="cv2-shell">
         <header className="cv2-header">
           <div className="cv2-brand">
-            <DemoNavigator />
+            <DemoNavigator demo={demo} />
             <span>for clinicians</span>
           </div>
           <Link href="/" className="cv2-exit">

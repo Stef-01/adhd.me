@@ -23,9 +23,9 @@ export type SafetyRuleId =
   | "cardiac"
   | "danger";
 
-export type Severity = "emergency" | "urgent-support" | "support";
+type Severity = "emergency" | "urgent-support" | "support";
 
-export interface SafetyRule {
+interface SafetyRule {
   readonly id: SafetyRuleId;
   readonly trigger: RegExp;
   readonly severity: Severity;

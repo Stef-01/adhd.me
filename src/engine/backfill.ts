@@ -9,7 +9,7 @@ import { eligibleForClinician, type EligibilityConfig } from "@/engine/eligibili
 import { batchSize, rankCandidates, type PoolConfig } from "@/engine/pool";
 import { isOfferable, type SessionConfig } from "@/session/config";
 
-export interface BackfillConfig {
+interface BackfillConfig {
   /** A cancellation within this many hours of the slot's start counts as late. */
   lateWindowHours: number;
 }
@@ -29,7 +29,7 @@ export function isLateCancellation(
   return hoursUntilStart >= 0 && hoursUntilStart <= config.lateWindowHours;
 }
 
-export interface BackfillPoolResult {
+interface BackfillPoolResult {
   invitations: Invitation[];
   /** Why no invitations were produced, when they weren't. */
   skipped: "slot_not_offerable" | "no_eligible_patients" | null;

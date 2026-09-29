@@ -107,7 +107,7 @@ export type ReturnRejection =
   | "narrative_unattributed"
   | "narrative_empty";
 
-export type ReturnResult =
+type ReturnResult =
   | { ok: true; report: ReturnReport }
   | { ok: false; errors: ReturnRejection[] };
 

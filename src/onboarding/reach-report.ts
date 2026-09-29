@@ -19,7 +19,7 @@
 
 import { reviewQueue, type StoredBackground } from "./background-store";
 
-export type ReachReportEntry = {
+type ReachReportEntry = {
   clinicianId: string;
   displayName: string;
   savedAt: string;

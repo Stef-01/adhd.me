@@ -18,8 +18,7 @@ import { CareFinder } from "../care-finder";
 // door should not also break every link that pointed at it.
 //
 // U7 FOLLOWS THE PRODUCT. The finder is hidden from crawlers because this deployment is for
-// testing and its roster defaults to invented example profiles; moving it to `/` moves that
-// reasoning to `/`, and `src/security/robots.ts` now says so for the root. The alternative — a
+// testing; moving it to `/` moves that reasoning to `/`, and `src/security/robots.ts` now says so for the root. The alternative — a
 // root that is indexed while the thing it renders may not be — is the exact inconsistency U7's
 // both-directions test exists to catch.
 // IN A ROUTE GROUP, AND THE E2E IS WHY. `loading.tsx` beside this file is the finder's streaming

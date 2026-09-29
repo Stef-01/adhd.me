@@ -65,11 +65,11 @@ export interface PracticeRecord {
   billingPerVisitAud?: number;
 }
 
-export const DEFAULT_BILLING_PER_VISIT_AUD = 80;
-export const BILLING_PER_VISIT_MIN_AUD = 1;
-export const BILLING_PER_VISIT_MAX_AUD = 1000;
+const DEFAULT_BILLING_PER_VISIT_AUD = 80;
+const BILLING_PER_VISIT_MIN_AUD = 1;
+const BILLING_PER_VISIT_MAX_AUD = 1000;
 
-export interface ConsoleState {
+interface ConsoleState {
   practices: PracticeRecord[];
   auditEvents: AuditEvent[];
   memberships: Membership[]; // W18, whoever onboards becomes owner
@@ -77,7 +77,7 @@ export interface ConsoleState {
   nextPracticeSeq: number;
 }
 
-export interface FieldErrors {
+interface FieldErrors {
   [field: string]: string;
 }
 
@@ -189,7 +189,7 @@ export function resetConsole(): ConsoleState {
   return globalStore.__adhdMeConsole;
 }
 
-export interface OnboardingInput {
+interface OnboardingInput {
   name: string;
   timezone: string;
   holdoutPercent: number; // 0-50, UI-facing; stored as a 0..1 rate
@@ -462,7 +462,7 @@ export function saveSessionConfig(
 }
 
 /** The checks a practice must satisfy before the loop may run for it. */
-export interface SetupReadiness {
+interface SetupReadiness {
   practice: boolean;
   clinicians: boolean;
   sessions: boolean;

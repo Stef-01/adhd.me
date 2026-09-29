@@ -40,7 +40,7 @@ export type EIQuality =
   /** MSCEIT: using emotion — works from strengths and leaves you with a plan you can act on. */
   | "motivating"
   /** Gives you time; the first appointment is not run against a stopwatch. */
-  | "unhurried"
+  | "not_rushed"
   /** Safe to be honest — no shame about drinking, coping, or how past care went. */
   | "non_judgmental"
   /** Explains the options and decides them WITH you, not for you. */
@@ -64,6 +64,12 @@ interface EIQualityDef {
   short?: string;
   /** The reason fragment when it matches, addressed to the reader. */
   matchLine: string;
+  /**
+   * The quality as the person asked for it, after "You asked for": six words at most, so the why
+   * sentence and the "not in their listing" line fit the screen (2026-09-29; the match line ran to
+   * eleven words there, and a profile read 75).
+   */
+  asked: string;
   /** Words that EXPRESS a preference for this quality. Preference, never a diagnosis of the reader. */
   cues: readonly string[];
 }
@@ -73,6 +79,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Listens and takes you seriously",
     short: "Taken seriously",
     matchLine: "listens and takes you seriously",
+    asked: "someone who listens",
     cues: [
       /* O123: this facet's cues are all CARE-EXPERIENCE — "feel heard", "dismissed", "brushed
          off", "not believed", a register about how appointments have gone. "I need someone who
@@ -129,6 +136,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Calm and steadying",
     short: "Calm",
     matchLine: "has a calm, steadying manner",
+    asked: "someone calm",
     cues: [
       /* O128: "interrogated" as well as O125's "interrogation" — stem() takes them to
          "interrogat" and "interrogation", which do not meet. The VERB is how people say it
@@ -143,6 +151,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Helps it make sense",
     short: "Making sense",
     matchLine: "helps you make sense of what is going on",
+    asked: "someone who helps it make sense",
     cues: [
       /* O139 WROTE "what adhd actually is" HERE AND THE PINS REVERSED IT — SPAN THEFT, the third
          instance of this exact failure. The cue strips to [adhd, actually] and CONSUMES the
@@ -156,7 +165,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       /* O113: the CONCRETE ways this is asked for. The facet knew abstract nouns for itself and
          none of the phrasings people use, being walked through something in order, being told
          straight, wanting the mechanism rather than the instruction. */
-      "step by step", "line by line", "tell me straight", "sugar coating", "the mechanism", "explain the plan", "my own brain", "make sense", "understand what", "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
+      "step by step", "line by line", "tell me straight", "sugar coating", "the mechanism", "explain the plan", "my own brain", "make sense",
+      /* R15: "understand what" collapsed to [understand] under the O45 skeleton, and the skeleton
+         "understand what" is also how "understands what it's like being a new mum" begins, so a
+         clinician who understands a LIFE read as an ask to have things EXPLAINED. Each replacement
+         names the object: what is going on, what is happening, why, or one's own brain. */
+      "understand what's going on", "understand what is going on", "understand what's happening", "understand what is happening", "understand why", "understand my brain",
+      "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
       // O30 psychographics: the plain-language ask is a values statement about how somebody
       // wants medicine spoken to them. Every cue keeps two content tokens (the O25 law);
       // "without"/"no" survive stripping because negations are never stopwords.
@@ -168,6 +183,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   motivating: {
     label: "Strengths-focused",
     matchLine: "works from your strengths, not only the problems",
+    asked: "someone who works from your strengths",
     // "a plan i can" degenerated to the single token "plan" once stopwords were stripped, which
     // made ANY mention of a plan read as a strengths preference — including the structured
     // clarifier's own answer. The O7 self-reach pin caught it; the cue now keeps its verb.
@@ -185,13 +201,14 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // O49: "a plan I can actually act on" — the verb kept, per this list's own header.
       "plan i can act"],
   },
-  unhurried: {
-    label: "Unhurried first appointment",
-    short: "Unhurried",
-    matchLine: "gives you an unhurried first appointment",
+  not_rushed: {
+    label: "Takes time with you",
+    short: "Not rushed",
+    matchLine: "takes time with you",
+    asked: "someone who takes time with you",
     cues: [
       /* O116: the clock, and the full appointment as opposed to the doorway version. */
-      "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
+      "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       /* O210: "a doctor with patience" reached NOTHING, which a probe of eighteen plain phrasings
          found alongside two others. Safe because `stem("patience")` is "patience" and
          `stem("patient")` is "patient", checked before the cue was written, because "patient" is
@@ -202,13 +219,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
          "take their time" are the most natural phrasings of all, and both are UNSAFE: "their" is a
          stopword, so the phrase degenerates to "take time" and matched "the wait takes time", "an
          ADHD assessment takes time" and "getting a diagnosis takes time", a reader stating a fact
-         about how long the process takes, read as asking for an unhurried doctor. That is a false
+         about how long the process takes, read as asking for a doctor who takes time. That is a false
          read of a patient's words, which is worse than not reading them. Same shape as O7's
          self-reach finding, where "in and out" tokenised to nothing because every word was a
          stopword: this facet's cue list is where stopword collapse keeps biting. Measured, not
          guessed, the phrasing stays unread until somebody finds a form that survives tokenisation. */
       "with patience",
-      // W221 probe: none of these reached `unhurried`, and every one of them is somebody
+      // W221 probe: none of these reached `not_rushed`, and every one of them is somebody
       // describing being rushed without using the word.
       // "in and out" was removed by O7's self-reach pin: every word in it is a stopword, so it
       // tokenised to nothing and had been structurally dead since W222 — main's rebuild kept it
@@ -226,7 +243,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       "rushes", "rushing", "hurried", "hurry me",
       // O13 considered and REFUSED "takes their time": "their" is a stopword, so it survives
       // as the same [take, time] W223 dropped for firing on "take time off work". The recall
-      // it would add is already carried by "not rushed", "unhurried" and "rushes".
+      // it would add is already carried by "not rushed" and "rushes".
       // W223: "take my time" was dropped. "my" is a stopword, so it matched [take, time] — and
       // "I can take time off work" is a sentence this product puts in its OWN barrier list on the
       // landing page. Recall lost is nil: "not rushed", "rushes", "hurried", "enough time" and
@@ -236,6 +253,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   non_judgmental: {
     label: "Non-judgmental",
     matchLine: "is non-judgmental, so you can be honest",
+    asked: "someone non-judgmental",
     cues: [
       /* O125: the sex-based dismissal women describe. It takes no span `manner:attuned` reads —
          that facet's cue is "not believed", a different pair.
@@ -266,6 +284,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Explains and decides with you",
     short: "Shared decisions",
     matchLine: "explains the options and decides them with you",
+    asked: "shared decisions",
     // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
     cues: [
       /* O140: asking to be IN the decisions, which is this facet's own label read back. It also
@@ -297,6 +316,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Understands your background",
     short: "Your background",
     matchLine: "understands your background and family",
+    asked: "someone who understands your background",
     // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
     cues: [
       /* O139: naming English as a second language is how the ask arrives when somebody is not
@@ -347,6 +367,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "A structured, measured approach",
     short: "Structured",
     matchLine: "works to a documented baseline and follows up on a schedule",
+    asked: "a structured approach",
     // O13: "methodical" is the plain word for this way of working and missed (kept through the
     // merge alongside main's continuity family below).
     cues: [
@@ -394,26 +415,4 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
 /** The qualities, as a stable list. Exported so the matcher and the interview iterate one order. */
 export const EI_QUALITY_KEYS = Object.keys(EI_QUALITIES) as EIQuality[];
 
-/** How much a single matched facet is worth. Comparable to a language or gender preference (18), a
- *  touch lower so clinical fit still leads and EI reorders within it rather than overturning it. */
-const EI_FACET_WEIGHT = 12;
 
-const ALL_QUALITIES = Object.keys(EI_QUALITIES) as EIQuality[];
-
-/** The qualities a reader's words EXPRESS a preference for. Not a profile of the reader. */
-export function preferredQualities(query: string): EIQuality[] {
-  const words = query.toLowerCase();
-  return ALL_QUALITIES.filter((quality) => EI_QUALITIES[quality].cues.some((cue) => words.includes(cue)));
-}
-
-/** The EI contribution to a clinician's score: their DECLARED qualities that the reader ASKED for. */
-export function emotionalFitScore(query: string, declared: readonly EIQuality[]): number {
-  const wanted = new Set(preferredQualities(query));
-  return declared.reduce((total, quality) => total + (wanted.has(quality) ? EI_FACET_WEIGHT : 0), 0);
-}
-
-/** The reader-facing signals for the EI facets that matched, in the clinician's declared order. */
-export function emotionalFitSignals(query: string, declared: readonly EIQuality[]): string[] {
-  const wanted = new Set(preferredQualities(query));
-  return declared.filter((quality) => wanted.has(quality)).map((quality) => EI_QUALITIES[quality].label);
-}

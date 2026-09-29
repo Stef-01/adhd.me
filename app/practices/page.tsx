@@ -2,12 +2,16 @@ import Link from "next/link";
 import { PublicHeader } from "../public-header";
 import { SiteFooter } from "../site-footer";
 import type { Metadata } from "next";
+import { demoEnabled } from "@/lib/demo-guard";
 import { seoMetadata } from "@/seo/pages";
 
 export const metadata: Metadata = seoMetadata("/practices");
 import { LANDING_COPY as C } from "@/compliance/landing-copy";
 
 export default function PracticesPage() {
+  // /demo fails closed in production unless ADHDME_ENABLE_DEMO=1 (src/lib/demo-guard.ts), so its
+  // two ways in show only where it answers.
+  const demo = demoEnabled();
   return (
     <div className="min-h-screen bg-white text-stone-900">
       {/*
@@ -56,9 +60,11 @@ export default function PracticesPage() {
           <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">{C.hero.heading}</h1>
           <p className="mt-5 max-w-2xl text-lg text-stone-600">{C.hero.sub}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/demo" className="t-tint rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
-              {C.hero.primaryCta}
-            </Link>
+            {demo && (
+              <Link href="/demo" className="t-tint rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
+                {C.hero.primaryCta}
+              </Link>
+            )}
             <Link href="/console/signin" className="t-tint rounded-lg border border-stone-300 px-6 py-3 font-medium text-stone-800 hover:border-stone-500">
               {C.hero.secondaryCta}
             </Link>
@@ -157,16 +163,7 @@ export default function PracticesPage() {
               ))}
             </div>
 
-            <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">
-              {C.practiceStory.evidenceNote}{" "}
-              <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/fampra/cmu028">
-                Gibson-Helm et al.
-              </a>{" "}
-              and{" "}
-              <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://doi.org/10.1093/humrep/deab101">
-                Fernandez et al.
-              </a>
-            </p>
+            <p className="mt-4 max-w-md text-xs leading-5 text-stone-500">{C.practiceStory.evidenceNote}</p>
           </div>
 
           <div className="mt-12 grid gap-8 rounded-2xl border border-stone-200 p-7 sm:p-9 lg:grid-cols-[0.8fr_1.2fr]">
@@ -185,7 +182,7 @@ export default function PracticesPage() {
                   RACGP Specific Interests 2026
                 </a>{" "}
                 and{" "}
-                <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://mycollege.acrrm.org.au/search?clive=acrrm~ds-events-public&collection=acrrm~sp-search-public&query=polycystic%20ovarian%20syndrome">
+                <a className="t-tint underline underline-offset-2 hover:text-stone-900" href="https://mycollege.acrrm.org.au/search?clive=acrrm~ds-events-public&collection=acrrm~sp-search-public&query=ADHD">
                   ACRRM learning search
                 </a>.
               </p>
@@ -224,13 +221,15 @@ export default function PracticesPage() {
           <p className="mt-4 max-w-xl text-stone-600">{C.compliance.body}</p>
         </section>
 
-        <section className="border-t border-stone-100 py-20">
-          <h2 className="text-2xl font-semibold tracking-tight">{C.cta.heading}</h2>
-          <p className="mt-3 max-w-xl text-stone-600">{C.cta.body}</p>
-          <Link href="/demo" className="t-tint mt-6 inline-block rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
-            {C.cta.button}
-          </Link>
-        </section>
+        {demo && (
+          <section className="border-t border-stone-100 py-20">
+            <h2 className="text-2xl font-semibold tracking-tight">{C.cta.heading}</h2>
+            <p className="mt-3 max-w-xl text-stone-600">{C.cta.body}</p>
+            <Link href="/demo" className="t-tint mt-6 inline-block rounded-lg bg-stone-900 px-6 py-3 font-medium text-white hover:bg-stone-700">
+              {C.cta.button}
+            </Link>
+          </section>
+        )}
       </main>
 
       {/*

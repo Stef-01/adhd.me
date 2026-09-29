@@ -45,7 +45,7 @@ export type SpineEvent =
   | { kind: "holdout_assigned"; at: string; patientId: PatientId; arm: "holdout" | "invite" }
   | { kind: "config_changed"; at: string; key: string; value: string };
 
-export type LogEntry = SpineEvent & { readonly seq: number };
+type LogEntry = SpineEvent & { readonly seq: number };
 export type EventLog = readonly LogEntry[];
 
 export const EMPTY_LOG: EventLog = Object.freeze([]);
@@ -151,7 +151,7 @@ export function bookingEvents(
 }
 
 /** State reconstructable from the spine alone. */
-export interface ReplayedState {
+interface ReplayedState {
   /** Latest known state of every invitation that ever entered the log. */
   invitations: Map<InvitationId, Invitation>;
   /** Generated bookings: appointment → who filled it via which invitation. */

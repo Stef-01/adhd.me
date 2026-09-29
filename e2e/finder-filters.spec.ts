@@ -5,14 +5,13 @@
 
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
-import { rosterFor } from "../src/demo/synthetic-roster";
-import { professionOf } from "../src/demo/clinicians";
+import { clinicians, professionOf } from "../src/demo/clinicians";
 import { BOOLEAN_FILTER_KEYS, BOOLEAN_FILTER_LABELS, emptyFilters, type BooleanFilterKey, type Filters } from "../src/finder/filters";
 import { searchRoster, waysOut } from "../src/finder/pipeline";
 import { resolvePlace } from "../src/geo/suburbs";
 
 const REQUEST = "someone who can do the whole assessment";
-const roster = rosterFor(true);
+const roster = clinicians;
 const hornsby = resolvePlace("Hornsby")!;
 const byId = new Map(roster.map((c) => [c.id, c]));
 const count = (filters: Filters) => searchRoster(roster, filters, REQUEST, hornsby).length;
@@ -126,15 +125,14 @@ test("an empty list names each way out with the number it brings back, and a tap
 
 test("the profile's other filters ride on the Filters pill, narrow the list, and clear from it", async ({ page }) => {
   await page.goto("/profile");
-  for (const name of ["Languages", "Distance", "Consult notes"]) await page.locator("summary", { hasText: name }).click();
+  for (const name of ["Languages", "Distance"]) await page.locator("summary", { hasText: name }).click();
   await page.getByRole("button", { name: "Spanish", exact: true }).click();
   await page.getByRole("button", { name: "20 km", exact: true }).click();
-  await page.getByRole("button", { name: "No AI", exact: true }).click();
-  await expect(page.getByText("3 on", { exact: true })).toBeVisible();
+  await expect(page.getByText("2 on", { exact: true })).toBeVisible();
   await search(page);
   const strip = page.getByRole("group", { name: "Your filters" });
-  await expect(strip.getByRole("link", { name: /Filters/ })).toContainText("3");
-  const held: Filters = { ...emptyFilters(), languages: ["Spanish"], withinKm: 20, consultRecording: "no-ai" };
+  await expect(strip.getByRole("link", { name: /Filters/ })).toContainText("2");
+  const held: Filters = { ...emptyFilters(), languages: ["Spanish"], withinKm: 20 };
   const expected = count(held);
   if (expected === 0) {
     await expect(page.locator(".results-empty")).toBeVisible();
@@ -143,7 +141,7 @@ test("the profile's other filters ride on the Filters pill, narrow the list, and
     for (const rowId of await rowIds(page)) expect(byId.get(rowId)!.languages).toContain("Spanish");
   }
   await page.getByRole("button", { name: /^Clear/ }).first().click();
-  await expect(strip.getByRole("link", { name: /Filters/ })).not.toContainText("3");
+  await expect(strip.getByRole("link", { name: /Filters/ })).not.toContainText("2");
   await expect.poll(() => total(page)).toBe(count(emptyFilters()));
 });
 

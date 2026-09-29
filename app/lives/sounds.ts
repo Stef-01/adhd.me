@@ -6,7 +6,7 @@
  */
 const KEY = "adhdme.sound";
 type Bus = "music" | "sfx";
-export type SfxName = "pop" | "stamp" | "thud" | "click" | "whoosh" | "scribble" | "rustle" | "notification" | "phone_buzz" | "till" | "zip" | "plate" | "honk" | "bike_bell" | "bark" | "footstep" | "keytap" | "chime" | "tick" | "error_buzz";
+type SfxName = "pop" | "stamp" | "thud" | "click" | "whoosh" | "scribble" | "rustle" | "notification" | "phone_buzz" | "till" | "zip" | "plate" | "honk" | "bike_bell" | "bark" | "footstep" | "keytap" | "chime" | "tick" | "error_buzz";
 export interface ScoreSpec { bpm: number; root: number; scale: number[]; chords: number[][]; melody: (number | null)[]; bass: "root" | "walk"; lead: OscillatorType; pad: OscillatorType }
 
 /** A MIDI note to Hz. */

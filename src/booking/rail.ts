@@ -12,7 +12,7 @@ export interface RailState {
   auditEvents: AuditEvent[];
 }
 
-export type BookingRefusal =
+type BookingRefusal =
   | "not_found"
   | "already_booked"
   | "expired"

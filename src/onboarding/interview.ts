@@ -42,7 +42,7 @@ export const FREQUENCIES: readonly Frequency[] = ["often", "sometimes", "not-me"
  * disclosure. They are marked as such so the completeness test can tell "this question fills no
  * facet on purpose" from "somebody added a question that changes nothing".
  */
-export type QuestionTarget =
+type QuestionTarget =
   | { kind: "care"; area: CareArea }
   | { kind: "manner"; trait: MannerTrait }
   | { kind: "access"; field: "languages" | "telehealthFirstAppointment" | "appointmentLength" | "billing" | "wheelchairAccessible" }
@@ -86,6 +86,7 @@ const CARE_QUESTIONS: ReadonlyArray<{ area: CareArea; ask: string }> = [
   { area: "substance-history", ask: "Taking a substance history as part of the safety picture?" },
   { area: "emotional-regulation", ask: "Rejection sensitivity and emotional regulation?" },
   { area: "non-medication", ask: "Patients who want options other than medication?" },
+  { area: "perinatal", ask: "People through pregnancy, or in the year after a baby?" },
 ];
 
 /**
@@ -103,7 +104,7 @@ const MANNER_QUESTIONS: ReadonlyArray<{ trait: MannerTrait; ask: string }> = [
   { trait: "steadying", ask: "If somebody is anxious or overwhelmed at the start, what do you do first?" },
   { trait: "sense_making", ask: "Do you help people join the dots on what has been going on, or focus on the decision in front of you?" },
   { trait: "motivating", ask: "Do people usually leave with a plan they can act on, and does it build on what already works for them?" },
-  { trait: "unhurried", ask: "Do you book a longer first appointment for this, and roughly how long?" },
+  { trait: "not_rushed", ask: "Do you book a longer first appointment for this, and roughly how long?" },
   { trait: "non_judgmental", ask: "How do you open the substance and coping questions?" },
   { trait: "collaborative", ask: "Do you talk through the options and decide with the patient, or recommend and explain if asked?" },
   { trait: "culturally_attuned", ask: "Do family and language usually come into the room with the patient in your practice?" },
@@ -164,25 +165,6 @@ export function interviewMinutes(): number {
   // on float representation rather than on the interview being too long.
   return Math.round(INTERVIEW.reduce((total, question) => total + question.minutes, 0) * 10) / 10;
 }
-
-/**
- * WHAT ONBOARDING PRODUCES — the profile the matcher consumes, and nothing beyond it.
- *
- * Deliberately NOT the full `Clinician` record: `about`, `matchLine`, `fitSignals` and the rest
- * are surface copy authored elsewhere and reviewed, and letting an interview write them would put
- * an unlinted paragraph about a named clinician into the tree through the side door W183 shut.
- */
-export type ClinicianMatchProfile = {
-  clinicianId: string;
-  careAreas: ReadonlyArray<{ area: CareArea; frequency: Frequency }>;
-  manner: ReadonlyArray<{ trait: MannerTrait; frequency: Frequency }>;
-  languages: readonly string[];
-  telehealthFirstAppointment: boolean;
-  wheelchairAccessible: boolean;
-  /** Declared, never checked. Rendered as a declaration on every surface. */
-  nswAdhdTrained: boolean;
-  readBackConfirmed: boolean;
-};
 
 /**
  * The facets a completed interview must be able to fill.

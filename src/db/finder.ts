@@ -1,5 +1,7 @@
-// The finder's record (supabase/migrations/0008_finder.sql, docs/data/FINDER-DATA.md): searches, voice
-// calls, what a person did with a list, the handoff to a practice, and the stars after the visit.
+// The finder's record (supabase/migrations/0008_finder.sql and 0011, docs/data/FINDER-DATA.md): searches,
+// voice calls with every turn (founder, 2026-09-29: all data and transcripts recorded and kept, for
+// this simulation phase), what a person did with a list, the handoff to a practice, and the stars
+// after the visit.
 //
 // Every write arrives from the browser as JSON, so each kind has a parser that returns a typed
 // record or null: nothing unchecked reaches the store. The store is memory on this instance, capped,
@@ -12,9 +14,9 @@ import { MAX_FOLLOW_UPS } from "@/voice/interviewer";
 
 export type SearchSource = "typed" | "dictation" | "voice";
 export type EventKind = "profile" | "compare" | "more" | "heard" | "filter";
-export type CallOutcome = "revealed" | "stopped" | "failed" | "urgent";
+type CallOutcome = "revealed" | "stopped" | "failed" | "urgent";
 
-export interface SearchRecord {
+interface SearchRecord {
   id: string;
   deviceId: string;
   createdAt: string;
@@ -24,10 +26,17 @@ export interface SearchRecord {
   filters: Record<string, unknown>;
   readSource: "lexicon" | "llm";
   asked: string[];
+  /** What the model reader heard that no key covers, in its words: the needs the vocabulary lacks. */
+  unlisted: string[];
   shown: string[];
 }
 
-export interface VoiceCallRecord {
+export interface CallTurn {
+  who: "person" | "assistant" | "tool";
+  text: string;
+}
+
+interface VoiceCallRecord {
   id: string;
   deviceId: string;
   searchId: string | null;
@@ -36,9 +45,12 @@ export interface VoiceCallRecord {
   questions: number;
   seconds: number;
   outcome: CallOutcome;
+  request: string;
+  place: string;
+  transcript: CallTurn[];
 }
 
-export interface EventRecord {
+interface EventRecord {
   id: string;
   searchId: string;
   createdAt: string;
@@ -46,7 +58,7 @@ export interface EventRecord {
   clinicianId: string | null;
 }
 
-export interface HandoffRecord {
+interface HandoffRecord {
   id: string;
   searchId: string | null;
   deviceId: string;
@@ -79,6 +91,9 @@ const KEY = /^[a-z]+:[a-z0-9_-]{1,40}$/;
 const MAX_TEXT = 2000;
 const MAX_FEEDBACK = 1000;
 const MAX_LIST = 40;
+/** A call is at most 6 minutes; its turns never near this. */
+const MAX_TURNS = 120;
+const MAX_UNLISTED = 10;
 
 type Json = Record<string, unknown>;
 const object = (value: unknown): Json | null => (value && typeof value === "object" && !Array.isArray(value) ? (value as Json) : null);
@@ -90,6 +105,22 @@ const ids = (value: unknown): string[] =>
   Array.isArray(value) ? value.filter((k): k is string => typeof k === "string" && ID.test(k)).slice(0, MAX_LIST) : [];
 const oneOf = <T extends string>(value: unknown, allowed: readonly T[]): T | null =>
   typeof value === "string" && (allowed as readonly string[]).includes(value) ? (value as T) : null;
+const phrases = (value: unknown): string[] =>
+  Array.isArray(value) ? value.filter((p): p is string => typeof p === "string" && p.trim().length > 0 && p.length <= 80).map((p) => p.trim()).slice(0, MAX_UNLISTED) : [];
+/** A transcript is every turn or nothing: one malformed turn refuses the record, as any other field would. */
+const transcript = (value: unknown): CallTurn[] | null => {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.length > MAX_TURNS) return null;
+  const turns: CallTurn[] = [];
+  for (const item of value) {
+    const o = object(item);
+    const who = oneOf(o?.who, ["person", "assistant", "tool"] as const);
+    const said = text(o?.text, MAX_TEXT);
+    if (!who || said === null) return null;
+    turns.push({ who, text: said });
+  }
+  return turns;
+};
 
 export function parseSearch(input: unknown, now = new Date()): SearchRecord | null {
   const o = object(input);
@@ -111,6 +142,7 @@ export function parseSearch(input: unknown, now = new Date()): SearchRecord | nu
     filters,
     readSource,
     asked: keys(o.asked),
+    unlisted: phrases(o.unlisted),
     shown: ids(o.shown),
   };
 }
@@ -126,7 +158,14 @@ export function parseVoiceCall(input: unknown, now = new Date()): VoiceCallRecor
   if (!o || !id || !deviceId || !outcome || !model) return null;
   if (!Number.isInteger(questions) || (questions as number) < 0 || (questions as number) > MAX_FOLLOW_UPS) return null;
   if (!Number.isInteger(seconds) || (seconds as number) < 0 || (seconds as number) > 3600) return null;
-  return { id, deviceId, searchId: uuid(o.searchId), createdAt: now.toISOString(), model, questions: questions as number, seconds: seconds as number, outcome };
+  const turns = transcript(o.transcript ?? o.turns);
+  if (!turns) return null;
+  return {
+    id, deviceId, searchId: uuid(o.searchId), createdAt: now.toISOString(), model, questions: questions as number, seconds: seconds as number, outcome,
+    request: text(o.request, MAX_TEXT) ?? "",
+    place: text(o.place, 80) ?? "",
+    transcript: turns,
+  };
 }
 
 export function parseEvent(input: unknown, now = new Date()): EventRecord | null {
@@ -229,7 +268,7 @@ function journal(table: Table, row: Record<string, unknown>, env: Record<string,
   });
 }
 
-export interface Deps {
+interface Deps {
   env?: Record<string, string | undefined>;
   fetch?: FetchLike;
 }
@@ -238,7 +277,7 @@ export function recordSearch(record: SearchRecord, deps: Deps = {}): void {
   capped(state().searches, record);
   journal("finder_searches", {
     id: record.id, device_id: record.deviceId, created_at: record.createdAt, source: record.source, request_text: record.requestText,
-    place: record.place, filters: record.filters, read_source: record.readSource, asked: record.asked, shown: record.shown,
+    place: record.place, filters: record.filters, read_source: record.readSource, asked: record.asked, unlisted: record.unlisted, shown: record.shown,
   }, deps.env ?? process.env, deps.fetch);
 }
 
@@ -247,6 +286,7 @@ export function recordVoiceCall(record: VoiceCallRecord, deps: Deps = {}): void 
   journal("voice_calls", {
     id: record.id, device_id: record.deviceId, search_id: record.searchId, created_at: record.createdAt,
     model: record.model, questions: record.questions, seconds: record.seconds, outcome: record.outcome,
+    request: record.request, place: record.place, transcript: record.transcript,
   }, deps.env ?? process.env, deps.fetch);
 }
 
@@ -343,6 +383,17 @@ export function ratings(): RatingRecord[] {
 export function finderDbCounts() {
   const s = state();
   return { searches: s.searches.length, calls: s.calls.length, events: s.events.length, handoffs: s.handoffs.length, ratings: s.ratings.size, journal: { sent: s.journal.sent, failed: s.journal.failed } };
+}
+
+/**
+ * Whether this deployment can reach the tables, and how the writes have gone since it booted: for
+ * /api/health, so a deploy made before the Supabase variables were saved (2026-09-29: every table
+ * empty after a live search, and no request in the API logs) is told apart from a failing write.
+ * Booleans and counts only; never a value from the environment.
+ */
+export function journalStatus(env: Record<string, string | undefined> = process.env): { configured: boolean; sent: number; failed: number } {
+  const s = state();
+  return { configured: Boolean(env.SUPABASE_URL?.trim() && env.SUPABASE_SERVICE_ROLE_KEY?.trim()), sent: s.journal.sent, failed: s.journal.failed };
 }
 
 /** Waits for the journal's queued writes; the tests use it. */

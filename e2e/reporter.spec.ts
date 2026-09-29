@@ -46,6 +46,8 @@ test("/api/health names the build, the boot instant, the store and the reporter,
     bootedAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/),
     store: "jsonl-file",
     reporter: "console",
+    // The suite runs without Supabase: the journal is not configured and has sent nothing.
+    journal: { configured: false, sent: 0, failed: 0 },
   });
   const bootedAt = Date.parse(body.bootedAt);
   expect(bootedAt).toBeLessThanOrEqual(Date.now());

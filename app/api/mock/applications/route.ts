@@ -19,7 +19,7 @@ export async function POST() {
     practiceSuburb: "Beecroft",
     practiceName: "Fixture Family Practice",
     careAreas: ["adhd-assessment"],
-    manner: ["unhurried"],
+    manner: ["not_rushed"],
     languages: [],
     nswAdhdTrained: true,
     acceptingNewPatients: true,

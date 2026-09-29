@@ -16,7 +16,7 @@
 // GP (C2).
 
 import { PATIENT_WEIGHTS, type PatientCriterion } from "./ranking";
-import type { Feedback, GP, Match, Rating, RatingAggregate, ScoredCriterion } from "./types";
+import type { Feedback, Match, Rating, RatingAggregate, ScoredCriterion } from "./types";
 
 export const MIN_SAMPLES = 8;
 /** A weight may move by at most this share of itself per learning pass. */
@@ -103,7 +103,7 @@ function correlation(xs: readonly number[], ys: readonly number[]): number {
   return num / Math.sqrt(dx * dy);
 }
 
-export interface LearnedWeights {
+interface LearnedWeights {
   weights: Readonly<Record<PatientCriterion, number>>;
   /** Per criterion, the correlation the shift was based on. Empty when nothing was learned. */
   evidence: Readonly<Partial<Record<PatientCriterion, number>>>;
@@ -144,7 +144,3 @@ export function learnWeights(
   };
 }
 
-/** A GP with its aggregate attached, for the profile and dashboard. */
-export function withAggregate(gp: GP, matches: readonly Match[], records: readonly Feedback[]): GP {
-  return { ...gp, ratingAggregate: aggregateFeedback(feedbackForGP(gp.id, matches, records)) };
-}

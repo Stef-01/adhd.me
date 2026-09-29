@@ -82,14 +82,6 @@ export interface ClinicianApplication {
   status: "received";
 }
 
-export interface ClinicianFormState {
-  status: "idle" | "error" | "success";
-  message: string;
-  fieldErrors?: Partial<
-    Record<"fullName" | "ahpraRegistrationNumber" | "email" | "practiceSuburb" | "practiceName" | "careAreas" | "manner" | "languages" | "desiredMixPercent" | "consent", string>
-  >;
-}
-
 /**
  * The mix values the hero can express, shared with the store's validator so the two cannot
  * drift: 10–50 in steps of 10. The ceiling is deliberate — a hero that let a GP ask for 100%
@@ -117,7 +109,6 @@ export const OFFERED_LANGUAGES = MATCHABLE_LANGUAGES;
 
 /** The three headings the care areas sit under, in display order. Mental health, streamlined. */
 export type CareAreaGroup = "ADHD" | "Depression and anxiety" | "Other mental health";
-export const CARE_AREA_GROUPS: readonly CareAreaGroup[] = ["ADHD", "Depression and anxiety", "Other mental health"];
 
 /**
  * Care areas as a GP would read them, grouped, paired with the union member the finder matches on.
@@ -140,6 +131,7 @@ export const CARE_AREA_LABELS: ReadonlyArray<{ id: CareArea; label: string; grou
   { id: "substance-history", label: "Substance use", group: "Other mental health" },
   { id: "emotional-regulation", label: "Emotional regulation", group: "Other mental health" },
   { id: "non-medication", label: "Non-medication and psychological supports", group: "Other mental health" },
+  { id: "perinatal", label: "Pregnancy, postpartum and new parents", group: "Other mental health" },
 ];
 
 /**
@@ -163,7 +155,7 @@ const MANNER_ASKS: Record<EIQuality, string> = {
   steadying: "I'm comfortable settling and managing anxious or distressed patients.",
   sense_making: "I help patients understand what's going on, not just manage today's problem.",
   motivating: "I build management plans around the patient's existing strengths and routines.",
-  unhurried: "I offer longer first appointments for complex presentations.",
+  not_rushed: "I offer longer first appointments for complex presentations.",
   non_judgmental: "I take substance-use and lifestyle histories without judgement.",
   collaborative: "I make decisions together with the patient, not for them.",
   culturally_attuned: "I work comfortably with family involvement and cultural or language context.",

@@ -45,9 +45,9 @@ export const CREDENTIAL_GATES = {
 /** Whether the credential gate is open. Shut, and this constant is the only thing that says so. */
 export const G1_OPEN = false;
 
-export type CredentialRefusal = "gate_shut" | "no_credential_supplied" | "credential_in_source";
+type CredentialRefusal = "gate_shut" | "no_credential_supplied" | "credential_in_source";
 
-export const CREDENTIAL_REFUSAL_COPY: Record<CredentialRefusal, string> = {
+const CREDENTIAL_REFUSAL_COPY: Record<CredentialRefusal, string> = {
   gate_shut: `No live integration can be configured. G1 covers ${CREDENTIAL_GATES.G1.covers}, it is shut, and it is the blocker for anything live regardless of what else has been ruled on — a credential being present changes nothing while it is.`,
   no_credential_supplied:
     "No credential was supplied. Recorded as its own refusal rather than folded into the gate one, because 'the gate is shut' and 'nobody passed anything' are different situations and a reader who cannot tell them apart will go looking in the wrong place.",
@@ -61,11 +61,9 @@ export const CREDENTIAL_REFUSAL_COPY: Record<CredentialRefusal, string> = {
  * W215's one-member-union shape: a second source is a visible widening of a declared type rather
  * than an option somebody passes.
  */
-export type CredentialSource = "process_environment";
+type CredentialSource = "process_environment";
 
-export const ALL_CREDENTIAL_SOURCES: readonly CredentialSource[] = ["process_environment"];
-
-export interface CredentialRequest {
+interface CredentialRequest {
   /** Which integration. Named so a refusal says what was refused. */
   integration: string;
   /** The value, from wherever the caller got it. This module does not read the environment itself. */
@@ -73,7 +71,7 @@ export interface CredentialRequest {
   source: CredentialSource | "source_literal";
 }
 
-export type CredentialResult =
+type CredentialResult =
   | { configured: true; integration: string }
   | { configured: false; why: CredentialRefusal; copy: string; integration: string };
 

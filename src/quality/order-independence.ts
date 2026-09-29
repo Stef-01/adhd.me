@@ -122,18 +122,6 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
-    // AR16: latestAccepted's [length - 1] is a fold to the last entry. Position IS the meaning
-    // here — the register is an append-only chain and "latest" is defined as the most recently
-    // appended entry, so there is no tie to break: two entries cannot both be last, and the
-    // duplicate-hash test keeps two entries from claiming the same manifest state.
-    module: "src/design/accepted-diffs.ts",
-    folds: 1,
-    disposition: {
-      kind: "rationale",
-      why: "The fold selects the LAST element of an append-only register, where recency is the definition of the answer, not an accident of iteration order; duplicate manifest hashes are separately pinned impossible, so no two entries can compete for latest.",
-    },
-  },
-  {
     // W188: a same-day join/leave pair is a real tie on a day-granular date, and the tie-break
     // is a safety decision rather than a guess — see the test.
     module: "src/directory/membership.ts",
@@ -299,25 +287,6 @@ export const FOLD_SITES: readonly FoldSite[] = [
     disposition: {
       kind: "rationale",
       why: "Folds to the maximum capturedAt VALUE, not to the record holding it. Two records sharing the maximum produce the same string either way round.",
-    },
-  },
-  {
-    // W178: the register caught the corpus on its first run — the corpus's own pre-fix
-    // reconstructions are folds, because they are copies of folds. Declared rather than
-    // excluded by name: an excluded file is a place to hide something (W168's rule).
-    module: "src/quality/order-regressions.ts",
-    folds: 5,
-    disposition: {
-      kind: "tie_break_test",
-      test: "src/quality/order-regressions.test.ts :: W178 the fixture still discriminates the fix (every entry, both orders)",
-    },
-  },
-  {
-    module: "src/quality/size-census-read.ts",
-    folds: 2,
-    disposition: {
-      kind: "rationale",
-      why: "U14: both folds are sums — `sum` adds `wc -l` line counts over a file list, and the `goto` count adds per-spec match counts. Addition is commutative, each term is read from its own file rather than from its position, and each produces one scalar for the whole tree; no file can be preferred by the order the walk returned it.",
     },
   },
   {

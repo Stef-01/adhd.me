@@ -20,7 +20,7 @@
 
 import type { Header } from "./headers";
 
-export interface HiddenRoute {
+interface HiddenRoute {
   /** The census path, exactly as `PUBLIC_SURFACES` spells it. */
   path: string;
   /** Why a crawler must not have it — the reason a reader of the register needs. */
@@ -37,7 +37,7 @@ export const HIDDEN_FROM_CRAWLERS: readonly HiddenRoute[] = [];
 export const ROBOTS_META = { index: true, follow: true } as const;
 
 /** The header value, the same instruction as the meta tag for crawlers that never read the page. */
-export const X_ROBOTS_TAG = "noindex, nofollow";
+const X_ROBOTS_TAG = "noindex, nofollow";
 
 export function isHiddenFromCrawlers(path: string): boolean {
   return HIDDEN_FROM_CRAWLERS.some((route) => route.path === path);

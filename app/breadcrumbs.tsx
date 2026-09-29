@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { SITE_URL } from "./site";
 
-export type Crumb = { label: string; href: string };
+type Crumb = { label: string; href: string };
 
 export function Breadcrumbs({ trail }: { trail: readonly Crumb[] }) {
   const jsonLd = {

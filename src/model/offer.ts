@@ -6,7 +6,7 @@ import { surveyFatigue } from "./fatigue";
 import { deriveNeeds } from "./needs";
 import type { ModelRecord } from "./store";
 
-export interface SurveyOffer {
+interface SurveyOffer {
   readonly survey: TopicSurvey;
   readonly why: string;
   readonly rule: "need.persisted" | "wants.professional" | "would.sharpen" | "would.drive";
@@ -15,7 +15,7 @@ export interface SurveyOffer {
 }
 
 /** Every deeper question answered. Deeper answers share the survey's own store, `d-` prefixed. */
-export function deeperComplete(record: ModelRecord, survey: TopicSurvey): boolean {
+function deeperComplete(record: ModelRecord, survey: TopicSurvey): boolean {
   if (!survey.deeper?.length) return false;
   const answers = record.surveys[survey.id]?.answers ?? {};
   return survey.deeper.every((q) => answers[q.id] !== undefined);

@@ -6,7 +6,7 @@
 
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { getConsole, setupReadiness } from "@/console/store";
+import { setupReadiness } from "@/console/store";
 import { isSetupStep, SETUP_STEPS, stepIndex, type SetupStepSlug } from "@/console/setup-steps";
 import { APPOINTMENT_TYPES } from "@/session/config";
 import { requirePracticeOptional } from "../../guard";
@@ -92,7 +92,6 @@ export default async function SetupStepPage({
   const { step } = await params;
   if (!isSetupStep(step)) notFound();
   const { error } = await searchParams;
-  const state = getConsole();
   const definition = SETUP_STEPS[stepIndex(step)]!;
 
   // Every step after the first needs a practice to attach to.

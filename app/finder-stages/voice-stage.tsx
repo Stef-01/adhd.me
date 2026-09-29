@@ -12,7 +12,7 @@ import { ChatCircleText, Phone } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { contact, type CrisisContactId } from "@/model/crisis-contacts";
-import { initialVoice, saidAsRequest, step, type Action, type ClientEvent, type Reveal, type VoiceState } from "@/voice/conversation";
+import { initialVoice, saidAsRequest, step, type Action, type ClientEvent, type Reveal, type VoiceState, type Turn } from "@/voice/conversation";
 import { claimLink, failureOf, type VoiceLink } from "@/voice/link";
 import { FINDER_COPY } from "../finder-copy";
 import { Sheet } from "../sheet";
@@ -21,12 +21,16 @@ import { VoiceOrb } from "./voice-orb";
 
 const COPY = FINDER_COPY.voice;
 
-/** How a call ended, for the finder's record (src/db/finder.ts): never what was said. */
+/** The call, for the finder's record (src/db/finder.ts): how it went, and every turn of it. */
 export interface CallSummary {
   model: string;
   questions: number;
   seconds: number;
   outcome: "revealed" | "stopped" | "failed" | "urgent";
+  /** The request the call wrote, and the place, when it reached its reveal. */
+  request: string;
+  place: string;
+  turns: Turn[];
 }
 /** A call that runs this long is wound up: the answers so far are enough to rank on. */
 const MAX_CALL_MS = 6 * 60_000;
@@ -87,6 +91,9 @@ export function VoiceStage({
       questions: s.asked,
       seconds: Math.round((Date.now() - began.current) / 1000),
       outcome: outcome === "revealed" || outcome === "failed" ? outcome : s.urgent ? "urgent" : outcome,
+      request: s.reveal?.request ?? "",
+      place: s.reveal?.place ?? "",
+      turns: s.turns,
     });
   }, []);
 

@@ -58,6 +58,14 @@ export const SUBURBS: readonly SuburbPoint[] = [
   // Focus area 4 — inner Brisbane, QLD (O252): GOALS Psychology, Fortitude Valley. Brisbane City
   // already sat in the Gold Coast table as a place people type; this is a room somebody visits.
   { suburb: "Fortitude Valley", postcode: "4006", lat: -27.4570, lon: 153.0340 },
+  // R15 (2026-09-29): the rooms of the clinicians brought over from revamped-adhd.me. Centroids are
+  // OpenStreetMap's, read once through Nominatim and committed here, as gold-coast.ts's are.
+  { suburb: "Ashgrove", postcode: "4060", lat: -27.4449, lon: 152.9853 },
+  { suburb: "Bateau Bay", postcode: "2261", lat: -33.3852, lon: 151.4780 },
+  { suburb: "Glenbrook", postcode: "2773", lat: -33.7669, lon: 150.6204 },
+  { suburb: "Sutherland", postcode: "2232", lat: -34.0310, lon: 151.0580 },
+  { suburb: "Jindabyne", postcode: "2627", lat: -36.4150, lon: 148.6230 },
+  { suburb: "Perth", postcode: "6000", lat: -31.9523, lon: 115.8613 },
 ];
 
 const byName = new Map(SUBURBS.map((s) => [s.suburb.toLowerCase(), s]));

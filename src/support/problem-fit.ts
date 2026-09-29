@@ -55,7 +55,7 @@ export const EXPERTISE_FOR: Partial<Record<Subdomain, readonly ExpertiseTag[]>> 
   peers: ["workplace-adjustments", "university-adhd"],
 };
 
-export interface Fittable {
+interface Fittable {
   readonly profession?: string | undefined;
   readonly expertise?: readonly ExpertiseTag[] | undefined;
 }
@@ -127,18 +127,35 @@ const isGp = (p: Fittable) => (p.profession ?? "gp") === "gp";
 /**
  * Reorder the allied entries among the positions they already hold, by fit descending (stable),
  * leaving every GP exactly where the engine ranked it. With no need, the list is returned as is.
+ *
+ * ONLY AMONG ENTRIES LEVEL ON WHAT THE PERSON ASKED (R15, 2026-09-29). The map used to reorder
+ * every allied entry: a person who asked for someone who understands being a new mum, with a map
+ * from weeks of playing the app, saw an occupational therapist who "works on household
+ * organisation" above the psychologist who declares postpartum care. The request is the person
+ * speaking now; the map is what they said before. So `evidence` (the engine's own score against
+ * the asks) partitions the allied entries into runs of equal evidence, and fit reorders within a
+ * run and never across one. Without `evidence` every entry is level, as the tests that only hold
+ * fit's own order supply it.
  */
-export function orderByProblemFit<T extends Fittable>(ranked: readonly T[], need: Need | null): T[] {
+export function orderByProblemFit<T extends Fittable>(ranked: readonly T[], need: Need | null, evidence: (p: T) => number = () => 0): T[] {
   if (!need) return [...ranked];
   const alliedPositions = ranked.map((p, i) => (isGp(p) ? -1 : i)).filter((i) => i >= 0);
-  const allied = alliedPositions.map((i) => ranked[i]!);
-  // Problem fit first, then the one strength signal as a tiebreak, then the engine's own order.
-  const sorted = allied
-    .map((p, i) => ({ p, i, fit: problemFit(p, need), strength: strengthFit(p, need) }))
-    .sort((a, b) => b.fit - a.fit || b.strength - a.strength || a.i - b.i)
-    .map((x) => x.p);
   const out = [...ranked];
-  alliedPositions.forEach((pos, k) => { out[pos] = sorted[k]!; });
+  let run: number[] = [];
+  const place = () => {
+    // Problem fit first, then the one strength signal as a tiebreak, then the engine's own order.
+    const sorted = run
+      .map((pos, i) => ({ p: ranked[pos]!, i, fit: problemFit(ranked[pos]!, need), strength: strengthFit(ranked[pos]!, need) }))
+      .sort((a, b) => b.fit - a.fit || b.strength - a.strength || a.i - b.i)
+      .map((x) => x.p);
+    run.forEach((pos, k) => { out[pos] = sorted[k]!; });
+    run = [];
+  };
+  for (const pos of alliedPositions) {
+    if (run.length && evidence(ranked[run[0]!]!) !== evidence(ranked[pos]!)) place();
+    run.push(pos);
+  }
+  place();
   return out;
 }
 

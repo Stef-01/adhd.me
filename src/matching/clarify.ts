@@ -28,8 +28,6 @@
 // still say "you said this" about every signal it acted on, including the ones it prompted.
 
 import type { Clinician } from "@/demo/clinicians";
-import { EI_QUALITIES } from "@/demo/emotional-fit";
-import { CARE_AREA_LABELS } from "@/onboarding/types";
 import { requestSuggests } from "./clarifier-relevance";
 import { facetKey, holdsPreference, readNeeds, type Facet, type Preference } from "./needs";
 
@@ -38,7 +36,7 @@ import { facetKey, holdsPreference, readNeeds, type Facet, type Preference } fro
  *
  * `answer` is phrased as the READER would say it, not as a facet name, because it is appended to
  * their sentence and then re-read. "I want a longer first appointment" is a thing somebody says;
- * "manner:unhurried" is not, and would reach nothing when read back.
+ * "manner:not_rushed" is not, and would reach nothing when read back.
  */
 export type Clarifier = {
   facetKey: string;
@@ -103,6 +101,10 @@ export const CARE_PROMPTS: Record<string, { prompt: string; answer: string }> = 
     prompt: "Do you want options beyond medication?",
     answer: "I want alternatives, not just medication",
   },
+  "care:perinatal": {
+    prompt: "Is this around pregnancy or a new baby?",
+    answer: "this is since having a baby",
+  },
 };
 
 /**
@@ -114,7 +116,7 @@ export const CARE_PROMPTS: Record<string, { prompt: string; answer: string }> = 
  * linter's reach, which the W200 census caught on the first run.
  */
 export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> = {
-  "manner:unhurried": {
+  "manner:not_rushed": {
     prompt: "Do you need a longer first appointment?",
     answer: "I want a longer first appointment and not to be rushed",
   },
@@ -166,7 +168,7 @@ export const MANNER_PROMPTS: Record<string, { prompt: string; answer: string }> 
  * the most-stated preference in real directory search. The module's own principle ("a question
  * earns its place only if the answer changes the order") selects FOR them.
  *
- * `pref:longer-appointment` is deliberately not here: `manner:unhurried` already asks that
+ * `pref:longer-appointment` is deliberately not here: `manner:not_rushed` already asks that
  * question in its own words, and two prompts for one answer is the drift this file exists to
  * prevent.
  */
@@ -258,7 +260,7 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
      product's commonest dead end. The moment one facet is heard, the gate is live.
 
      ZERO QUESTIONS IS A DESIGNED OUTCOME, not a failure state. Measured on the real roster:
-     "English is my second language and appointments move too fast" reaches unhurried and
+     "English is my second language and appointments move too fast" reaches not_rushed and
      culturally-attuned, everything it suggests is already heard, and the only splitting
      facets left are anxiety, shared care and child assessment. Before this gate the reader
      got those three; now they get none, and none is correct. */
@@ -276,7 +278,7 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
     })
     .filter((entry): entry is Clarifier => entry !== null)
     /* M10 FOUND THIS LATENT, THE GATE DID NOT CAUSE IT. An answer is re-read by readNeeds, and
-       some answers reach more than their own facet: manner:unhurried's answer contains "a longer
+       some answers reach more than their own facet: manner:not_rushed's answer contains "a longer
        first appointment", which is pref:longer-appointment's own phrase, the file already calls
        those two questions twins where PREF_PROMPTS declines to duplicate the prompt. The key-level
        alreadyAsked check above cannot see that, so "never asks about something the reader already
@@ -319,19 +321,3 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
   return picked;
 }
 
-/** Human-readable labels, so the console can show which facet a question is about. */
-export function facetLabel(key: string): string {
-  const care = CARE_AREA_LABELS.find((area) => `care:${area.id}` === key);
-  if (care) return care.label;
-  const preference = PREF_LABELS[key];
-  if (preference) return preference;
-  const trait = key.startsWith("manner:") ? key.slice("manner:".length) : null;
-  return trait && trait in EI_QUALITIES ? EI_QUALITIES[trait as keyof typeof EI_QUALITIES].label : key;
-}
-
-/** Console-facing names for the preference facets, matching the lexicon's own labels. */
-const PREF_LABELS: Record<string, string> = {
-  "pref:woman-gp": "A woman clinician",
-  "pref:telehealth-first": "By phone or telehealth",
-  "pref:bulk-billing": "Bulk billing",
-};

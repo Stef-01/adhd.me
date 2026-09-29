@@ -183,9 +183,9 @@ export interface RegisterMembership {
  * a self-reported record cannot be assigned where a derived one is expected: conflating the
  * three fails to typecheck rather than merely being discouraged.
  */
-export type InterestSource = "clinician_self_reported";
-export type ExperienceSource = "derived_case_mix";
-export type CompetenceSource = "external_verification";
+type InterestSource = "clinician_self_reported";
+type ExperienceSource = "derived_case_mix";
+type CompetenceSource = "external_verification";
 
 /** What a clinician says they want more of. A preference, never a capability. */
 export interface ClinicianInterest {
@@ -250,8 +250,6 @@ export const DOMAIN_TABLES = [
   "clinician_competence", // W79
 ] as const;
 
-export type DomainTable = (typeof DOMAIN_TABLES)[number];
-
 /**
  * National clinical guidance, identical for every practice, so NOT practice-scoped:
  * readable by any staff identity, writable by none (rows change by migration).
@@ -263,10 +261,3 @@ export type DomainTable = (typeof DOMAIN_TABLES)[number];
  */
 export const REFERENCE_TABLES = ["conditions", "guideline_intervals"] as const;
 
-export type ReferenceTable = (typeof REFERENCE_TABLES)[number];
-
-/** Every domain table that holds one practice's data and must be membership-scoped. */
-export const PRACTICE_SCOPED_TABLES = DOMAIN_TABLES.filter(
-  (table): table is Exclude<DomainTable, ReferenceTable> =>
-    !(REFERENCE_TABLES as readonly string[]).includes(table),
-);

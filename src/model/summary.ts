@@ -69,13 +69,13 @@ export const SECTION_ORDER: readonly SectionKey[] = [
   "ownWords",
 ];
 
-export interface TriedRow {
+interface TriedRow {
   readonly title: string;
   readonly outcome: ExperimentOutcome | "pending";
 }
 
 /** The care-plan section's facts. Every field is the record's own or a label the app already shows. */
-export interface PlanSection {
+interface PlanSection {
   /** Zero until the person has entered their numbers. */
   readonly allows: number;
   readonly used: number;

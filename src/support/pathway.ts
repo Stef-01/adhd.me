@@ -51,7 +51,7 @@ export const STAGE_LABELS: Readonly<Record<CareStage, string>> = {
   "day-to-day": "The day-to-day is hard",
 };
 
-export interface Pathway {
+interface Pathway {
   readonly for: CareFor;
   readonly stage: CareStage;
   /** The heading on the answer: where this goes, in a few words. */

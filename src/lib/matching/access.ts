@@ -10,7 +10,7 @@
 import type { MatchingState } from "./store";
 import type { GP } from "./types";
 
-export type GPAccess = "manage" | "claim" | "none";
+type GPAccess = "manage" | "claim" | "none";
 
 export interface Viewer {
   practiceId: string | null;
@@ -26,7 +26,7 @@ export function gpAccessFor(gp: Pick<GP, "practiceId">, viewer: Viewer): GPAcces
   return owner === viewer.practiceId ? "manage" : "none";
 }
 
-export type ClaimResult = { ok: true; gp: GP } | { ok: false; reason: "not_found" | "claimed" };
+type ClaimResult = { ok: true; gp: GP } | { ok: false; reason: "not_found" | "claimed" };
 
 export function claimGP(gpId: string, viewer: Viewer & { practiceId: string }, state: MatchingState): ClaimResult {
   const gp = state.gps.get(gpId);
@@ -50,7 +50,7 @@ export function releaseGP(gpId: string, viewer: Viewer, state: MatchingState): C
  * and accepted or not. Staff only; a practice cannot verify its own GP. The record keeps who and
  * when, which is what the public profile reads back as "checked on".
  */
-export type VerificationOutcome = "verified" | "rejected";
+type VerificationOutcome = "verified" | "rejected";
 
 export function recordVerification(gp: GP, viewer: Viewer & { email: string }, outcome: VerificationOutcome, on: string): { ok: true; gp: GP } | { ok: false; reason: "not_staff" | "no_evidence" } {
   if (!viewer.staff) return { ok: false, reason: "not_staff" };

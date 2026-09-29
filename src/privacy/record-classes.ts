@@ -137,8 +137,14 @@ export const RECORD_CLASSES: readonly RecordClass[] = [
     rationale: "2026-09-28: the same words read the same way and a repeated search costs nothing. The words themselves are never held, only a SHA-256 of them, lower-cased and trimmed, beside the facet keys the model read; no id, device or person is attached, and nothing leaves the process. At most 500 entries, each for 24 hours, gone on restart.",
   },
   {
+    module: "src/lib/matching/why.ts",
+    what: "Why a clinician fits, in their own words: the model's two sentences, remembered for a day under a hash of the request's words and the clinician's id",
+    handling: "no_patient_identity",
+    rationale: "2026-09-29 (the North Star): the sentences address the person but name nobody; the words themselves are never held, only a SHA-256 of them with the clinician's id, beside the sentences, on this instance, for a day.",
+  },
+  {
     module: "src/db/finder.ts",
-    what: "The finder's record: searches (the words a person typed or said, the place, the filters, what was read and shown), voice call summaries, what they did with a list, handoffs to a practice, and the stars and words after a visit",
+    what: "The finder's record: searches (the words a person typed or said, the place, the filters, what was read and shown, the asks no key covers), voice calls with every turn of their transcript, what they did with a list, handoffs to a practice, and the stars and words after a visit",
     handling: "stored",
     rationale: "2026-09-28 (docs/data/FINDER-DATA.md): the words of a search are health information in a person's own voice, so the record is stored patient data even though no row names anybody. Every row is keyed by random ids the browser makes and a device id it keeps; `exportFinderDevice` returns every row one device made for an access request, and `eraseFinderDevice` removes them all, the searches' events with them. WHERE IT GOES WHEN CONFIGURED: with SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY set, every write is mirrored to the `0008_finder.sql` tables under the service role (row-level security on, no policy), and erasure issues the same deletes there by device id; unset, nothing leaves the process. Ratings are never shown to anyone: `src/db/learn.ts` turns them into weights per ask, never per clinician.",
   },

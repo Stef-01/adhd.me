@@ -59,3 +59,11 @@ whether I had passed rather than whether the person could breathe.
   instruction, the provenance paragraphs as a requirement, the footer on app screens.
 - Every screen over 60 is redesigned to one job: a heading and the thing to do. Lists become
   names; sentences become taps.
+
+## Since then
+
+- 2026-09-29: the same failure in a smaller shape. The instrument reached the AI "Why matched"
+  screen with nothing missed and the keys screen with two asks missed, and called the profile
+  within its ceiling; the state a person meets most, the sentence over two asks the listing does
+  not answer, was never reached, and read 75. A state is only measured when the instrument's
+  route list names it; the two states are in the list now (`qa/design-qa.md`, O255).

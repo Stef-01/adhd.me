@@ -139,14 +139,14 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "someone strengths focused, not deficit focused", reaches: ["manner:motivating"] },
   { text: "a doctor who is neurodiversity affirming", reaches: ["manner:motivating"] },
 
-  // ── manner:unhurried ─────────────────────────────────────────────────────────────────────
-  { text: "I can never get a word in before the appointment is over", reaches: ["manner:unhurried"] },
-  { text: "she rushed me out the door in ten minutes", reaches: ["manner:unhurried"] },
+  // ── manner:not_rushed ─────────────────────────────────────────────────────────────────────
+  { text: "I can never get a word in before the appointment is over", reaches: ["manner:not_rushed"] },
+  { text: "she rushed me out the door in ten minutes", reaches: ["manner:not_rushed"] },
   /* O119 KNOWN FALSE POSITIVE, pinned as today's truth (the O68 pattern).
      WHO IS DOING THE EXPLAINING. `collaborative` means the CLINICIAN explains and decides with
      you; here the patient is the one explaining. Subject-blind cue — see the O119 note. */
   { text: "a longer first appointment so I can actually explain", reaches: ["pref:longer-appointment", "manner:collaborative"] },
-  { text: "my GP is next door to the chemist", never: ["manner:unhurried"] },
+  { text: "my GP is next door to the chemist", never: ["manner:not_rushed"] },
 
   // ── manner:non_judgmental ────────────────────────────────────────────────────────────────
   { text: "no lectures, I have heard them all", reaches: ["manner:non_judgmental"] },
@@ -186,7 +186,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "bulk billed if at all possible", reaches: ["pref:bulk-billing"] },
   { text: "I cannot afford gap fees", reaches: ["pref:bulk-billing"] },
   /* O116, sanctioned reclassification: this entry and "can I ask for a longer appointment
-     when I book" moved manner:unhurried → pref:longer-appointment. "longer appointment" was
+     when I book" moved manner:not_rushed → pref:longer-appointment. "longer appointment" was
      cued by BOTH facets; the stemmer entry teaching the reader that "longer" is "long" made
      the two cues collide, and FIRST_CLAIM allows a phrase exactly one owner. The facet whose
      LABEL is the phrase owns it. The corpus agreed in advance: both entries already carried
@@ -206,7 +206,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "no interest in titration at all", never: ["care:titration"] },
   { text: "my GP won't do titration and I need someone who will", reaches: ["care:titration"] },
   { text: "I've never had an assessment and I want one", reaches: ["care:adhd-assessment"] },
-  { text: "I don't want to feel rushed", reaches: ["manner:unhurried"] },
+  { text: "I don't want to feel rushed", reaches: ["manner:not_rushed"] },
 
   // ── collapse discipline (O45) ────────────────────────────────────────────────────────────
   { text: "the practice name is on the sign", never: ["manner:sense_making"] },
@@ -314,7 +314,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "sick of being brushed off", reaches: ["manner:attuned"] },
   { text: "I shake in waiting rooms, I need calm", reaches: ["manner:steadying"] },
   { text: "someone reassuring, I arrive overwhelmed", reaches: ["manner:steadying"] },
-  { text: "a calm voice and no rushing", reaches: ["manner:steadying", "manner:unhurried"] },
+  { text: "a calm voice and no rushing", reaches: ["manner:steadying", "manner:not_rushed"] },
   { text: "explain what ADHD actually is, properly", reaches: ["care:adhd-assessment", "manner:collaborative"], aspires: ["manner:sense_making"] },
   { text: "help me understand my own brain", reaches: ["manner:sense_making"] },
   { text: "the whole picture in plain english", reaches: ["manner:sense_making"] },
@@ -324,8 +324,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "strengths first, please", reaches: ["manner:motivating"] },
   // Promoted by O65: heard since the cue set grew past its single three-token phrase.
   { text: "a double appointment from the start", reaches: ["pref:longer-appointment"] },
-  { text: "time to actually talk", reaches: ["manner:unhurried"] },
-  { text: "not shoved out the door in twelve minutes", reaches: ["manner:unhurried"] },
+  { text: "time to actually talk", reaches: ["manner:not_rushed"] },
+  { text: "not shoved out the door in twelve minutes", reaches: ["manner:not_rushed"] },
   { text: "no shame about how I have coped", reaches: ["manner:non_judgmental"] },
   { text: "somewhere safe to say the ugly bits out loud", reaches: ["manner:non_judgmental"] },
   { text: "explain my options and let me choose", reaches: ["manner:collaborative"] },
@@ -355,9 +355,9 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── discipline mixes: negation, collapse and clause scope in one breath ─────────────────
   { text: "I don't want medication changes, just someone who listens", never: ["care:titration"], reaches: ["manner:attuned"] },
   { text: "not looking for an assessment. my dose needs looking at", never: ["care:adhd-assessment"], reaches: ["care:titration"] },
-  { text: "next door to the pharmacy there is a clinic", never: ["manner:unhurried", "manner:culturally_attuned"] },
+  { text: "next door to the pharmacy there is a clinic", never: ["manner:not_rushed", "manner:culturally_attuned"] },
   { text: "the sign on the practice door says closed", never: ["manner:sense_making"] },
-  { text: "she was quick to judge and rushed me out the door", reaches: ["manner:non_judgmental", "manner:unhurried"] },
+  { text: "she was quick to judge and rushed me out the door", reaches: ["manner:non_judgmental", "manner:not_rushed"] },
 
   // ═══ TRANCHE THREE (O64, 2026-08-19): the thin floors fed first. ═══════════════════════
   // Authored against the floors as they stood (longer-appointment at ONE, woman-gp 3,
@@ -374,8 +374,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // Still only unhurried MANNER: "more than fifteen minutes" is deliberately uncued — it
   // strips to [fifteen, minute], which is also distance talk, and that precision is not
   // worth this recall. The standing aspiration is the record of that decision.
-  { text: "I need more than fifteen minutes to get through this", reaches: ["manner:unhurried"], aspires: ["pref:longer-appointment"] },
-  { text: "an extended appointment so nothing gets cut off", reaches: ["manner:unhurried", "pref:longer-appointment"] },
+  { text: "I need more than fifteen minutes to get through this", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },
+  { text: "an extended appointment so nothing gets cut off", reaches: ["manner:not_rushed", "pref:longer-appointment"] },
 
   // ── O65 leak pins: long-words-without-the-ask must stay silent to this facet ────────────
   { text: "the waiting list at that clinic is long", never: ["pref:longer-appointment"] },
@@ -457,13 +457,13 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my teenager is falling apart at school", reaches: ["care:child-adolescent-adhd"] },
   { text: "our ten year old needs an assessment", reaches: ["care:adhd-assessment"], aspires: ["care:child-adolescent-adhd"] },
 
-  // ── manner breadth: culturally_attuned, attuned, non_judgmental, unhurried, structured ──
+  // ── manner breadth: culturally_attuned, attuned, non_judgmental, not_rushed, structured ──
   { text: "someone who understands where my family comes from", reaches: ["manner:culturally_attuned"] },
   { text: "a doctor who gets cultural context, mine is complicated", reaches: ["manner:culturally_attuned"] },
   { text: "I want to be believed the first time I say it", reaches: ["manner:attuned"] },
   { text: "somewhere I will not be judged for how long I left this", reaches: ["manner:non_judgmental"] },
   { text: "no lectures, I know the history looks bad", reaches: ["manner:non_judgmental"] },
-  { text: "I do not want to be rushed out the door again", reaches: ["manner:unhurried"] },
+  { text: "I do not want to be rushed out the door again", reaches: ["manner:not_rushed"] },
   { text: "a methodical workup done properly", reaches: ["manner:structured"] },
 
   // ── anchors: titration and assessment phrasings not yet in the set ──────────────────────
@@ -481,14 +481,14 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // measurement as always: reaches = heard, aspires = the to-do list, never = the boundary.
 
   // ── compounds: two and three asks in one breath ─────────────────────────────────────────
-  { text: "a woman GP who bulk bills and won't rush me", reaches: ["pref:woman-gp", "pref:bulk-billing", "manner:unhurried"] },
+  { text: "a woman GP who bulk bills and won't rush me", reaches: ["pref:woman-gp", "pref:bulk-billing", "manner:not_rushed"] },
   { text: "a female doctor for an ADHD assessment, by video if possible", reaches: ["care:adhd-assessment", "pref:woman-gp", "pref:telehealth-first"] },
-  { text: "bulk billed titration review with someone patient", reaches: ["care:titration", "pref:bulk-billing"], aspires: ["manner:unhurried"] },
+  { text: "bulk billed titration review with someone patient", reaches: ["care:titration", "pref:bulk-billing"], aspires: ["manner:not_rushed"] },
   { text: "a calm woman doctor who understands anxiety", reaches: ["care:anxiety", "manner:steadying", "pref:woman-gp"] },
   { text: "telehealth assessment and I speak Hindi at home", reaches: ["care:adhd-assessment", "pref:telehealth-first"] },
   { text: "a gentle GP who takes trauma seriously and bulk bills", reaches: ["manner:attuned", "manner:steadying", "pref:bulk-billing", "care:trauma-informed"] },
-  { text: "shared care with my psychiatrist, and don't rush the appointments", reaches: ["care:shared-care", "manner:unhurried"] },
-  { text: "an unhurried structured assessment with the heart checks done first", reaches: ["care:adhd-assessment", "manner:structured", "manner:unhurried"] },
+  { text: "shared care with my psychiatrist, and don't rush the appointments", reaches: ["care:shared-care", "manner:not_rushed"] },
+  { text: "a structured assessment, not rushed, with the heart checks done first", reaches: ["care:adhd-assessment", "manner:structured", "manner:not_rushed"] },
   { text: "my teenager needs an assessment and we want a woman doctor", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd", "pref:woman-gp"] },
   { text: "a non-judgmental GP for my drinking history and my ADHD", reaches: ["care:adhd-assessment", "care:substance-history", "manner:non_judgmental"] },
   { text: "someone strengths focused who also handles the depression side", reaches: ["care:depression", "manner:motivating"] },
@@ -525,8 +525,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my desk is buried and so am I", never: ["care:adhd-assessment"] },
 
   // ── logistics with shared vocabulary, pinned silent where they could leak ───────────────
-  { text: "the practice is next to the train station", never: ["manner:unhurried"] },
-  { text: "I park behind the chemist on Tuesdays", never: ["manner:unhurried"] },
+  { text: "the practice is next to the train station", never: ["manner:not_rushed"] },
+  { text: "I park behind the chemist on Tuesdays", never: ["manner:not_rushed"] },
   { text: "my last GP retired in March", never: ["care:adhd-assessment"] },
   { text: "the referral letter is dated last week", never: ["care:shared-care"] },
 
@@ -602,7 +602,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I am at uni and my study is falling apart, I want this assessed", reaches: ["care:adhd-assessment"] },
   { text: "fifty years old and finally sorting this out properly", reaches: ["care:adhd-assessment"] },
   { text: "shift work means I can only do phone appointments", reaches: ["pref:telehealth-first"] },
-  { text: "a new baby at home, everything has to be online for now", reaches: ["pref:telehealth-first"] },
+  // R15: the new baby is why it has to be online; a clinician who sees new parents is a fit, so it is declared.
+  { text: "a new baby at home, everything has to be online for now", reaches: ["pref:telehealth-first", "care:perinatal"] },
   { text: "I am a nurse and I need someone who will not treat me like I should know better", aspires: ["manner:non_judgmental"] },
   { text: "I am immunocompromised so clinic visits are a risk", reaches: ["pref:telehealth-first"] },
 
@@ -615,7 +616,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── compounds, continued from tranche four ───────────────────────────────────────────────
   { text: "a woman GP for my daughter's assessment, bulk billed if possible", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd", "pref:woman-gp", "pref:bulk-billing"] },
   { text: "titration by telehealth because I live remote", reaches: ["care:titration", "pref:telehealth-first"] },
-  { text: "a structured assessment, explained in plain english, with no rushing", reaches: ["care:adhd-assessment", "manner:structured", "manner:sense_making", "manner:unhurried", "manner:collaborative"] },
+  { text: "a structured assessment, explained in plain english, with no rushing", reaches: ["care:adhd-assessment", "manner:structured", "manner:sense_making", "manner:not_rushed", "manner:collaborative"] },
   { text: "shared care and someone calm, my psychiatrist can be blunt", reaches: ["care:shared-care", "manner:steadying"] },
   { text: "an autism aware doctor who bulk bills", reaches: ["care:autism-adhd", "pref:bulk-billing"] },
   { text: "someone collaborative about the dose, it is my body", reaches: ["manner:collaborative", "care:titration"] },
@@ -657,7 +658,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      `attuned` reads not-being-believed BY THE DOCTOR. Here the family is the disbeliever, and
      the ask is help navigating them. */
   { text: "my family does not believe in ADHD and I need help navigating that", reaches: ["manner:culturally_attuned", "manner:attuned", "care:adhd-assessment"] },
-  { text: "English is my second language and appointments move too fast", reaches: ["manner:unhurried", "manner:culturally_attuned"] },
+  { text: "English is my second language and appointments move too fast", reaches: ["manner:not_rushed", "manner:culturally_attuned"] },
   { text: "I rehearse what to say and still leave unheard", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
   { text: "believe women when they describe this", reaches: ["manner:non_judgmental"] },
   { text: "I need the appointment to not feel like an interrogation", reaches: ["manner:steadying"] },
@@ -667,16 +668,16 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "run the options past me first", reaches: ["manner:collaborative"] },
   { text: "someone who sees what is right with me too", reaches: ["manner:motivating"] },
   { text: "less what is wrong with you, more what we can build", aspires: ["manner:motivating"] },
-  { text: "the good doctors never make you watch the clock", reaches: ["manner:unhurried"] },
+  { text: "the good doctors never make you watch the clock", reaches: ["manner:not_rushed"] },
   // O210: three plain phrasings a probe found reaching NOTHING, each now cued and pinned here so the
   // cue cannot be removed without a corpus entry going red. The fourth and most natural phrasing —
   // "a GP who takes their time" — is deliberately absent: "their" is a stopword, so the cue would
   // degenerate to [take time] and read "an ADHD assessment takes time" as an unhurried ask. That
   // phrasing stays unread until somebody finds a form that survives tokenisation.
-  { text: "I just want a doctor with patience", reaches: ["manner:unhurried"] },
+  { text: "I just want a doctor with patience", reaches: ["manner:not_rushed"] },
   { text: "a GP who hears me out", reaches: ["manner:attuned"] },
   { text: "someone who will hear me out about all of it", reaches: ["manner:attuned"] },
-  { text: "give me the full appointment, not the doorway version", reaches: ["manner:unhurried"] },
+  { text: "give me the full appointment, not the doorway version", reaches: ["manner:not_rushed"] },
   { text: "a female GP for personal reasons", reaches: ["pref:woman-gp"] },
   { text: "medicare only, I cannot pay extra", reaches: ["pref:bulk-billing"] },
   { text: "does it cost anything out of pocket", reaches: ["pref:bulk-billing"] },
@@ -690,10 +691,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the laundry sits there for weeks", never: ["care:adhd-assessment"] },
 
   // ── logistics noise with shared vocabulary, pinned silent ────────────────────────────────
-  { text: "my last appointment ran late by an hour", never: ["manner:unhurried"] },
+  { text: "my last appointment ran late by an hour", never: ["manner:not_rushed"] },
   { text: "the clinic phone rings out every time I call", never: ["pref:telehealth-first"] },
   { text: "reception said to bring the referral in person", never: ["care:shared-care"] },
-  { text: "the car park behind the clinic is always full", never: ["manner:unhurried"] },
+  { text: "the car park behind the clinic is always full", never: ["manner:not_rushed"] },
 
   // ── O72 discipline: bare negators and the not-just veto, walked further ─────────────────
   { text: "not shared care, I want someone to own the whole thing", never: ["care:shared-care"] },
@@ -776,7 +777,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "um yeah so basically my dose stopped working around lunch", reaches: ["care:titration"] },
   { text: "look I just need someone to listen properly for once", reaches: ["manner:attuned"] },
   { text: "sorry this is rambling but I need an assessment and maybe the anxiety looked at too", reaches: ["care:adhd-assessment", "care:anxiety"] },
-  { text: "you know how it is, doctors rush you, I want the opposite", reaches: ["manner:unhurried"] },
+  { text: "you know how it is, doctors rush you, I want the opposite", reaches: ["manner:not_rushed"] },
 
   // ── history and self-recognition ─────────────────────────────────────────────────────────
   // The son sentence straddles: the family history is genuine context and the child reach is
@@ -844,8 +845,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "bring me into every decision about my own brain", reaches: ["manner:sense_making", "manner:collaborative"] },
   // Punctuality is not the unhurried facet: wanting appointments to START on time is a
   // different ask from wanting them not to be rushed once they start.
-  { text: "I need appointments that start on time, waiting destroys me", never: ["manner:unhurried"] },
-  { text: "I dissociate when doctors rush me", awaitingFounder: "experience", reaches: ["manner:unhurried"], aspires: ["care:trauma-informed"] },
+  { text: "I need appointments that start on time, waiting destroys me", never: ["manner:not_rushed"] },
+  { text: "I dissociate when doctors rush me", awaitingFounder: "experience", reaches: ["manner:not_rushed"], aspires: ["care:trauma-informed"] },
   { text: "meltdowns after appointments unless things are predictable", aspires: ["care:autism-adhd", "manner:structured"] },
   { text: "my file says borderline and doors close", reaches: ["care:complex-mental-health"] },
   { text: "psych ward admissions in my twenties, stable for years now", reaches: ["care:complex-mental-health"] },
@@ -874,7 +875,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── compounds, round three ───────────────────────────────────────────────────────────────
   { text: "a woman GP who does assessments and speaks to teenagers without talking down", reaches: ["pref:woman-gp", "care:adhd-assessment", "care:child-adolescent-adhd"] },
   { text: "bulk billed telehealth titration, I am rural and broke", reaches: ["pref:bulk-billing", "pref:telehealth-first", "care:titration"] },
-  { text: "an unhurried structured assessment for my autistic teenager", reaches: ["care:adhd-assessment", "manner:structured", "manner:unhurried", "care:child-adolescent-adhd", "care:autism-adhd"] },
+  { text: "a structured assessment, not rushed, for my autistic teenager", reaches: ["care:adhd-assessment", "manner:structured", "manner:not_rushed", "care:child-adolescent-adhd", "care:autism-adhd"] },
   { text: "shared care plus depression support under one roof", reaches: ["care:shared-care", "care:depression"] },
   // The on-behalf boundary holding inside a compound: the mum is the patient, so the
   // family word stays silent while her asks reach (O77's rule earning its keep).
@@ -889,7 +890,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "our daughter cries over homework every single night", never: ["care:adhd-assessment", "care:child-adolescent-adhd"] },
 
   // ── logistics noise ──────────────────────────────────────────────────────────────────────
-  { text: "the receptionist said the doctor is running an hour behind", never: ["manner:unhurried"] },
+  { text: "the receptionist said the doctor is running an hour behind", never: ["manner:not_rushed"] },
   { text: "my referral expired before I could use it", never: ["care:shared-care"] },
   { text: "parking near the clinic costs a fortune", never: ["pref:bulk-billing"] },
   /**
@@ -958,7 +959,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I would prefer a female practitioner for this", reaches: ["pref:woman-gp"] },
   { text: "my wife is a doctor and she says get assessed", reaches: ["care:adhd-assessment"] },
   { text: "the lady at the desk said to ask", never: ["pref:woman-gp"] },
-  { text: "can I get a longer appointment than the standard ten minutes", reaches: ["pref:longer-appointment", "manner:unhurried"] },
+  { text: "can I get a longer appointment than the standard ten minutes", reaches: ["pref:longer-appointment", "manner:not_rushed"] },
   { text: "my daughter's school wants a report", reaches: ["care:child-adolescent-adhd"] },
   { text: "my sons are both like this and so am I", reaches: ["care:child-adolescent-adhd"] },
   { text: "the longest wait I have had was eight months", never: ["pref:longer-appointment"] },
@@ -1008,6 +1009,23 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I need my prescription continued after moving from Perth", aspires: ["care:shared-care"] },
   { text: "a GP who can do the assessment and keep the scripts going", reaches: ["care:adhd-assessment"] },
   { text: "somewhere near Beecroft that takes new patients", never: ["care:adhd-assessment"] },
+
+  // ── R15: the postpartum call. The founder's own scenario, in the phrasings a new parent uses. ──
+  { text: "I had a baby eight months ago and I think I might have ADHD, I want someone who gets the postpartum experience", reaches: ["care:perinatal", "care:adhd-assessment"] },
+  { text: "six months postpartum and everything I used to manage has fallen apart", reaches: ["care:perinatal"] },
+  { text: "a clinician who relates to what postnatal life is like", reaches: ["care:perinatal"] },
+  { text: "someone who understands what it's like being a new mum", reaches: ["care:perinatal"], never: ["manner:sense_making", "manner:culturally_attuned"] },
+  { text: "someone patient who listens, and understands new mums", reaches: ["manner:attuned", "care:perinatal"], never: ["manner:culturally_attuned"] },
+  { text: "since the baby came I can't hold a thought, is this ADHD", reaches: ["care:perinatal", "care:adhd-assessment"] },
+  { text: "expecting a baby in March and I want help lined up before then", reaches: ["care:perinatal"] },
+  { text: "pregnant and unsure what this means for my medication", reaches: ["care:perinatal"] },
+  { text: "still breastfeeding so I need someone careful about what I can take", reaches: ["care:perinatal"] },
+  { text: "a new dad who cannot keep up and wants it looked at properly", reaches: ["care:perinatal"] },
+  { text: "perinatal mental health experience, please", reaches: ["care:perinatal"] },
+  // The words that must not reach it: a relative, a figure of speech, a childhood.
+  { text: "my baby brother was diagnosed last year and I recognised myself", reaches: ["care:adhd-assessment"], never: ["care:perinatal"] },
+  { text: "baby steps, I just want to talk to someone first", never: ["care:perinatal"] },
+  { text: "I have been like this since I was a baby", never: ["care:perinatal"] },
 
 ];
 
@@ -1093,6 +1111,8 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // gap — they name what happened to the person, and whether this product may read that is a
   // founder call, raised in the ledger.
   "care:trauma-informed": 13,
+  // R15: the postpartum call. Eleven sentences reach it on the day it is added (the floor is the number).
+  "care:perinatal": 11,
   // O123 raised 19→22: this facet's cues are all care-EXPERIENCE ("dismissed", "brushed off",
   // "not believed"), and leaving an appointment unheard sits squarely in that register. The one
   // that stays — "I cry in the car after every appointment" — names the reader's emotional
@@ -1125,7 +1145,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // pref:longer-appointment in the reclassification above, and three arrived (the clock, the
   // full appointment, appointments moving too fast). Written out because a floor that only
   // shows the net would make a reclassification look like growth.
-  "manner:unhurried": 21,
+  "manner:not_rushed": 21,
   // bulk-billing lowered 12→11 by O72: the count lost the KNOWN FALSE POSITIVE ("not bulk
   // billing…" retagged reaches→never when the bare-not rule landed) — a correction, not a
   // hearing lost. The ratchet law forbids lowering to pass; lowering because an entry was
@@ -1136,7 +1156,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // in (out of pocket, gap fees, Medicare-only, "does it cost anything"); it had known three
   // sayings of its own name and no synonym for the thing it is about.
   "pref:bulk-billing": 29,
-  // O116 raised 6→10. Two of those are the sanctioned reclassification from manner:unhurried:
+  // O116 raised 6→10. Two of those are the sanctioned reclassification from manner:not_rushed:
   // the stemmer entry teaching the reader that "longer" is "long" collided two facets' cues on
   // one phrase, and the facet named after the phrase owns it. Both entries already carried this
   // facet as their aspiration.

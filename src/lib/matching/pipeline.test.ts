@@ -86,7 +86,7 @@ describe("M1 contested capacity goes through deferred acceptance", () => {
   const one = gp({ id: "only", credentials: { caseloadCapacityCurrent: 1, caseloadCapacityMax: 1 } });
 
   it("holds the patient the GP prefers when two want the last place", () => {
-    const preferred = patient({ id: "a", narrativeText: "adult ADHD assessment, unhurried, titration on a schedule", signals: { comorbidities: ["anxiety"] } });
+    const preferred = patient({ id: "a", narrativeText: "adult ADHD assessment, not rushed, titration on a schedule", signals: { comorbidities: ["anxiety"] } });
     const other = patient({ id: "b", narrativeText: "I want to talk about parking", signals: { ageGroup: "older-adults" } });
     const forA = matchPatient(preferred, [one], { embedder, now: NOW, openPatients: [other] });
     const forB = matchPatient(other, [one], { embedder, now: NOW, openPatients: [preferred] });

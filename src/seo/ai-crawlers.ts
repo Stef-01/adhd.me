@@ -21,13 +21,13 @@
 // look correct at a glance, because the wildcard block above would still say the right thing.
 // So the disallow list is built once and every rule gets it.
 
-export type CrawlerPurpose =
+type CrawlerPurpose =
   /** Fetches to answer a question now, and cites the source. The trade is worth taking. */
   | "retrieval"
   /** Fetches to build a training corpus. No citation, no reader, nothing offered back. */
   | "training";
 
-export interface AiCrawler {
+interface AiCrawler {
   /** The `User-agent` token, exactly as the operator publishes it. */
   readonly agent: string;
   /** The product a reader would recognise. */

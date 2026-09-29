@@ -10,16 +10,15 @@ import {
   getPersonalizedMatch,
   matchEvidence,
   matchQuality,
-  needsFor,
   orderNote,
   rankBands,
   rankCliniciansNear,
+  scoreAgainst,
   topTieNote,
   missedAsks,
   type Clinician,
   type Demonstrated,
 } from "@/demo/clinicians";
-import { rosterFor } from "@/demo/synthetic-roster";
 import { profession, professionsMentioned, type Profession } from "@/support/professions";
 import { EXPERTISE_LABELS } from "@/support/professions";
 import { fitReason, fitTags, orderByProblemFit, strengthReason } from "@/support/problem-fit";
@@ -28,7 +27,7 @@ import { readModel } from "@/model/store";
 import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
-import { facetKey, needForKey, shortLabel, type NeedSignal } from "@/matching/needs";
+import { facetKey, shortLabel } from "@/matching/needs";
 import { heardChips } from "@/finder/heard";
 import { FINDER_COPY } from "./finder-copy";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
@@ -57,9 +56,9 @@ import { getRequestHeadline, type Stage } from "./finder-stages/shared";
 import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
+import { useFinderMode, useModelRead, useWhyMatched } from "./finder-read";
 import { fakeVoice, startLink } from "@/voice/link";
 import { handOff, newId, track, trackSearch, trackVoiceCall } from "@/finder/track";
-import { worthReading } from "@/finder/read-policy";
 import type { EventKind, SearchSource } from "@/db/finder";
 import type { CallSummary } from "./finder-stages/voice-stage";
 import type { Reveal } from "@/voice/conversation";
@@ -85,8 +84,6 @@ import { BookingStage } from "./finder-stages/booking-stage";
 
 const defaultArchetype = careArchetypes[0]!;
 const exampleRequest = defaultArchetype.request;
-/** At level 1, how long the results wait for the read before ranking on the finder's own. */
-const READ_TIMEOUT_MS = 12_000;
 /** What `/api/finder/weights` serves, and the request whose list was on screen when it landed. */
 type Taught = { weights: Record<string, number>; quality: Demonstrated; heldFor: string | null };
 const UNTAUGHT: Taught = { weights: {}, quality: {}, heldFor: null };
@@ -99,18 +96,9 @@ const LISTLESS: ReadonlySet<Stage> = new Set(["welcome", "listening", "voice", "
  */
 export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: number; voice?: boolean }) {
   const reducedMotion = useReducedMotion();
+  const { mode, chooseMode, level, talks } = useFinderMode(readLevel, voice);
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
-  /**
-   * O217 (founder decision `synthetic-roster-tickbox`): whether the ranking includes the
-   * invented example profiles. Default OFF — the real roster is the product; the personas are
-   * an explicit opt-in for testing, and every derived read (quality, bands, tie notes, the
-   * compare table) threads the SAME roster so no sentence on the screen describes a list the
-   * ranking did not run over.
-   */
-  /** O226 (founder-amended): the example roster ships ON — this is a testing deployment, and the
-   * switch (relocated to the welcome screen's folded testing options) is the way OFF. */
-  const [includeSynthetic, setIncludeSynthetic] = useState(true);
   /**
    * O234: the device's filters (`src/finder/filters.ts`), read on arrival and applied to the roster
    * BEFORE ranking — a filter narrows, the sentence orders, and every derived read below threads the
@@ -137,7 +125,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    * the tests that hold every chip to the engine. Every derived read below threads THIS roster,
    * so no sentence describes a list the ranking did not run over.
    */
-  const roster = useMemo(() => searchRoster(rosterFor(includeSynthetic), effectiveFilters, request, origin), [includeSynthetic, effectiveFilters, request, origin]);
+  const roster = useMemo(() => searchRoster(clinicians, effectiveFilters, request, origin), [effectiveFilters, request, origin]);
   /**
    * THE KINDS OF CARE THIS SEARCH REACHES (Charmaine Bernie, occupational therapist and
    * service-access researcher, 2026-09-11). She named identification and navigation — "helping
@@ -157,7 +145,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    * professions are the roster's own, and the order is the person's words first, then how many
    * of each the search found. `careKindsFor` in `src/finder/pipeline.ts` is the reading.
    */
-  const careKinds = useMemo(() => careKindsFor(rosterFor(includeSynthetic), effectiveFilters, request, origin), [includeSynthetic, effectiveFilters, request, origin]);
+  const careKinds = useMemo(() => careKindsFor(clinicians, effectiveFilters, request, origin), [effectiveFilters, request, origin]);
   const { stage, arrivalKey, direction, goTo, backTo, remember, rememberPlace } = useFinderHistory((arrival) => {
     // O234: the filters the device holds, and the place it holds when the address bar carries
     // none — a search started from the front door reads back what the profile set. A place on
@@ -178,7 +166,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     setRequest(words);
     setDraft(record.draft);
     const resumedOrigin = resolvePlace(arrivedPlace);
-    const resumedRoster = searchRoster(rosterFor(includeSynthetic), { ...held, ...combineCarePreferences(held, carePreferencesFromRequest(words)) }, words, resumedOrigin);
+    const resumedRoster = searchRoster(clinicians, { ...held, ...combineCarePreferences(held, carePreferencesFromRequest(words)) }, words, resumedOrigin);
     const found = rankCliniciansNear(words, resumedOrigin, resumedRoster).findIndex((item) => item.id === record.matchId);
     setMatchIndex(Math.max(0, found));
   });
@@ -205,43 +193,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    */
   const [removedHeard, setRemovedHeard] = useState<{ request: string; keys: readonly string[] }>({ request: "", keys: [] });
   const removed = useMemo(() => new Set(removedHeard.request === request ? removedHeard.keys : []), [removedHeard, request]);
-  /**
-   * Level 1: the results ask `/api/finder/read` once for each new set of words and wait for it.
-   * Its keys are the read everything below runs on; with no answer, or the lexicon's, it is the
-   * finder's own read, exactly the level 0 list.
-   */
-  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
-  /** Only where it helps (src/finder/read-policy.ts): a short request the lexicon already heard lists at once. */
-  const modelReads = useMemo(() => readLevel >= 1 && worthReading(request, needsFor(request, roster).length), [readLevel, request, roster]);
-  const reading = modelReads && (routeRead.request !== request || !routeRead.done);
-  /** Asks the route to read these words; the answer lands only while they are still the ones read. */
-  const readWords = useCallback((words: string) => {
-    setRouteRead({ request: words, done: false });
-    const body = JSON.stringify({ text: words });
-    fetch("/api/finder/read", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
-      .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string }>) : null))
-      .catch(() => null)
-      .then((answer) => setRouteRead((held) => held.request !== words ? held : {
-        request: words,
-        done: true,
-        needs: answer?.source === "llm" ? answer.keys.flatMap((key) => needForKey(key) ?? []) : undefined,
-      }));
-  }, []);
-  useEffect(() => {
-    if (!modelReads || stage !== "results" || routeRead.request === request) return;
-    readWords(request);
-  }, [modelReads, stage, request, routeRead.request, readWords]);
-  /**
-   * The voice finder's sentence is read the moment the model writes it, while its last words are
-   * still being said, so the matches arrive with the read done rather than behind "Reading what you
-   * asked". The same trim `findMatches` applies, so the results find it as theirs.
-   */
-  const readAhead = useCallback((words: string) => {
-    const trimmed = words.trim();
-    if (readLevel >= 1 && trimmed && worthReading(trimmed, needsFor(trimmed, roster).length)) readWords(trimmed);
-  }, [readLevel, readWords, roster]);
-  const modelNeeds = routeRead.request === request ? routeRead.needs : undefined;
-  const read = useMemo(() => modelNeeds ?? needsFor(request, roster), [modelNeeds, request, roster]);
+  const { reading, modelNeeds, heard: ownRead, unlisted, readAhead } = useModelRead(level, request, roster, stage === "results");
+  const read = modelNeeds ?? ownRead;
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
   const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
   /** A removed facet is no reason for a row or a profile either. */
@@ -274,10 +227,11 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   );
   /** Undefined is the lexicon's own path, with its weighting, when nothing is taken out or learned. */
   const rankNeeds = learned ?? (removed.size === 0 && !modelNeeds ? undefined : kept);
-  const matches = useMemo(
-    () => orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds, live.quality), need),
-    [request, origin, roster, need, rankNeeds, live.quality],
-  );
+  // The map reorders allied entries only among those level on the asks (problem-fit.ts, R15).
+  const matches = useMemo(() => {
+    const asked = rankNeeds ?? kept;
+    return orderByProblemFit(rankCliniciansNear(request, origin, roster, undefined, rankNeeds, live.quality), need, (c) => scoreAgainst(c, asked));
+  }, [request, origin, roster, need, rankNeeds, kept, live.quality]);
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // The matched tags, in the taxonomy's own order, capped at the three Calm Clarity allows in a
   // row. These are the person's own map read back to them.
@@ -289,8 +243,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    * sentence's own care asks go with "Clear the filters", as they always did.
    */
   const ways = useMemo<WayOut[]>(
-    () => (matches.length > 0 ? [] : waysOutOf(rosterFor(includeSynthetic), filters, request, origin, withRequestCare)),
-    [matches.length, includeSynthetic, filters, request, origin, withRequestCare],
+    () => (matches.length > 0 ? [] : waysOutOf(clinicians, filters, request, origin, withRequestCare)),
+    [matches.length, filters, request, origin, withRequestCare],
   );
   /** With nothing on, the kind the sentence named is what emptied the list, and the screen says which. */
   const emptyKind = useMemo(() => {
@@ -362,6 +316,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   // through the others is gone (PLAN.md W6b), and /examples keeps the long archetypes.
   const archetype = defaultArchetype;
   const clinician = matches[matchIndex] ?? clinicians[0]!;
+  /** Why this clinician, in their own words: asked as the profile opens, shown under "Why matched". */
+  const insights = useWhyMatched(level, request, stage === "profile" ? clinician.id : null);
 
   const focusOnArrival = moved.current || stage !== arrivalStage.current;
   useEffect(() => {
@@ -669,6 +625,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
       filters: effectiveFilters as unknown as Record<string, unknown>,
       readSource: modelNeeds ? "llm" : "lexicon",
       asked: kept.map((n) => facetKey(n.facet)),
+      unlisted,
       shown: matches.slice(0, visibleCount).map((c) => c.id),
     });
     if (pendingCall.current) trackVoiceCall(pendingCall.current, id);
@@ -706,19 +663,6 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     setRequest(archetype.request);
     setMatchIndex(0);
     dispatchBanner({ type: "cleared" });
-  }
-
-  /**
-   * O217: the tickbox's own handler — re-ranks in place with the roster the choice implies, the
-   * same shape as a suburb edit or a clarifier answer: the list changes where the reader is
-   * looking, nobody is sent back a step.
-   */
-  function toggleSynthetic(next: boolean) {
-    setIncludeSynthetic(next);
-    // The list re-ranks by derivation the moment the state lands — the stale-state hazard this
-    // handler used to work around is gone with the setter.
-    setMatchIndex(0);
-    setMore(0);
   }
 
   /** RADIANT: one yes/no filter switched from the results chips; written to the device like the profile does. */
@@ -812,10 +756,10 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             setDraft={setDraft}
             reducedMotion={reducedMotion}
             onSearch={findMatches}
-            includeSynthetic={includeSynthetic}
-            onToggleSynthetic={toggleSynthetic}
+            mode={mode}
+            onMode={chooseMode}
             onTalk={() => {
-              if (!voice && !fakeVoice()) return startListening();
+              if (!talks && !fakeVoice()) return startListening();
               // The call starts in the tap, while the screen arrives.
               startLink();
               goTo("voice");
@@ -937,6 +881,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             personalizedSignals={personalizedMatch.signals}
             profileEvidence={profileEvidence}
             profileMissed={profileMissed}
+            insights={insights}
             request={request}
             origin={origin}
             compareName={compareRows.length > 0 && compareWith ? compareWith.shortName : null}

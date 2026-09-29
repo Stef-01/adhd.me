@@ -1,10 +1,10 @@
 /** The standalone morning simulation. All durations are seconds; no wall clock or storage. */
 export type Room = "hall" | "kitchen" | "bedroom" | "living" | "door";
 export type Essential = "keys" | "phone" | "bottle";
-export type Place = Room | "hand" | "bag";
-export type Demand = "laundry" | "plant" | "email";
+type Place = Room | "hand" | "bag";
+type Demand = "laundry" | "plant" | "email";
 export type Command = Essential | "bag" | "shoes" | "door" | "spill" | "later" | "breathe" | "message" | "umbrella" | Demand;
-export type MorningPhase = "morning" | "departure" | "evening" | "revisit" | "complete";
+type MorningPhase = "morning" | "departure" | "evening" | "revisit" | "complete";
 export const ESSENTIALS: Essential[] = ["keys", "phone", "bottle"];
 export const ROOMS: Room[] = ["hall", "kitchen", "bedroom", "living", "door"];
 export const POINTS: Record<Room, { x: number; y: number }> = {
@@ -13,7 +13,7 @@ export const POINTS: Record<Room, { x: number; y: number }> = {
 };
 export const ROOM_NAMES: Record<Room, string> = { hall: "Hall", kitchen: "Kitchen", bedroom: "Bedroom", living: "Living room", door: "Door" };
 export const ITEM_NAMES: Record<Essential, string> = { keys: "Keys", phone: "Phone", bottle: "Water" };
-export const DEMANDS: Record<Demand, { at: number; room: Room; title: string }> = {
+const DEMANDS: Record<Demand, { at: number; room: Room; title: string }> = {
   laundry: { at: 11, room: "bedroom", title: "Fold laundry" },
   plant: { at: 28, room: "living", title: "Water plant" },
   email: { at: 43, room: "kitchen", title: "Check email" },
@@ -49,8 +49,8 @@ export function createMorning(attempt = 0, still = false): TheoMorning {
 export const isMorning = (s: TheoMorning) => s.phase === "morning" || s.phase === "revisit";
 export const carrying = (s: TheoMorning) => ESSENTIALS.filter(k => s.items[k] === "hand");
 export const packed = (s: TheoMorning) => ESSENTIALS.filter(k => s.items[k] === "bag");
-export const canLeave = (s: TheoMorning) => packed(s).length === 3 && s.shoes && (s.phase !== "revisit" || s.umbrella);
-export function destination(s: TheoMorning, command: Command): Room {
+const canLeave = (s: TheoMorning) => packed(s).length === 3 && s.shoes && (s.phase !== "revisit" || s.umbrella);
+function destination(s: TheoMorning, command: Command): Room {
   if (ESSENTIALS.includes(command as Essential)) {
     const place = s.items[command as Essential];
     return place === "hand" || place === "bag" ? s.node : place;
@@ -170,7 +170,7 @@ export function advance(s: TheoMorning, seconds: number): TheoMorning {
   for (let remaining = Math.min(seconds, 360); remaining > .00001; remaining -= .1) next = step(next, Math.min(.1, remaining));
   return next;
 }
-export type MorningAction = { type: "tick"; seconds: number } | { type: "choose"; command: Command } | { type: "pause"; paused: boolean } | { type: "still"; still: boolean } | { type: "evening" } | { type: "home"; item: Essential; room: Room } | { type: "cue" } | { type: "note" } | { type: "tomorrow" } | { type: "restart" };
+type MorningAction = { type: "tick"; seconds: number } | { type: "choose"; command: Command } | { type: "pause"; paused: boolean } | { type: "still"; still: boolean } | { type: "evening" } | { type: "home"; item: Essential; room: Room } | { type: "cue" } | { type: "note" } | { type: "tomorrow" } | { type: "restart" };
 export function morningReducer(s: TheoMorning, action: MorningAction): TheoMorning {
   switch (action.type) {
     case "tick": return s.still ? s : advance(s, action.seconds);

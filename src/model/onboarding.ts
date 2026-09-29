@@ -9,16 +9,16 @@
 
 import type { Domain, Subdomain } from "./layers";
 
-export type Stage = "have-assessment" | "being-assessed" | "think-so" | "supporting" | "learning";
-export type Hardest =
+type Stage = "have-assessment" | "being-assessed" | "think-so" | "supporting" | "learning";
+type Hardest =
   | "starting" | "finishing" | "work" | "study" | "relationships" | "organisation" | "emotions"
   | "sleep" | "exercise" | "food" | "money" | "medication" | "overwhelmed";
-export type Familiar = "cannot-start" | "forget" | "rely-on-deadlines" | "distracted" | "overwhelmed" | "motivation" | "none";
-export type Affects = "work" | "study" | "home" | "relationships" | "health" | "wellbeing" | "several";
-export type Easier = "urgent" | "interested" | "structure" | "alongside" | "slept" | "exercise" | "clear" | "not-really" | "not-sure";
-export type Medication = "yes" | "no" | "previously" | "prefer-not";
-export type LookingFor = "understand" | "try" | "professional" | "unsure";
-export type Depth = "short" | "medium" | "deep";
+type Familiar = "cannot-start" | "forget" | "rely-on-deadlines" | "distracted" | "overwhelmed" | "motivation" | "none";
+type Affects = "work" | "study" | "home" | "relationships" | "health" | "wellbeing" | "several";
+type Easier = "urgent" | "interested" | "structure" | "alongside" | "slept" | "exercise" | "clear" | "not-really" | "not-sure";
+type Medication = "yes" | "no" | "previously" | "prefer-not";
+type LookingFor = "understand" | "try" | "professional" | "unsure";
+type Depth = "short" | "medium" | "deep";
 
 export interface OnboardingAnswers {
   stage?: Stage;
@@ -37,12 +37,12 @@ export interface OnboardingAnswers {
   completedAt?: string;
 }
 
-export interface Option<T extends string = string> {
+interface Option<T extends string = string> {
   readonly id: T;
   readonly label: string;
 }
 
-export interface OnboardingQuestion {
+interface OnboardingQuestion {
   readonly key: keyof Omit<OnboardingAnswers, "completedAt">;
   readonly prompt: string;
   readonly kind: "single" | "multi" | "scale";
@@ -54,7 +54,7 @@ export interface OnboardingQuestion {
   readonly note?: string;
 }
 
-export const HARDEST_OPTIONS: readonly Option<Hardest>[] = [
+const HARDEST_OPTIONS: readonly Option<Hardest>[] = [
   { id: "starting", label: "Starting things" },
   { id: "finishing", label: "Finishing things" },
   { id: "work", label: "Work" },
@@ -70,7 +70,7 @@ export const HARDEST_OPTIONS: readonly Option<Hardest>[] = [
   { id: "overwhelmed", label: "Feeling overwhelmed" },
 ];
 
-export const FAMILIAR_OPTIONS: readonly Option<Familiar>[] = [
+const FAMILIAR_OPTIONS: readonly Option<Familiar>[] = [
   { id: "cannot-start", label: "I know what to do but cannot start" },
   { id: "forget", label: "I forget things constantly" },
   { id: "rely-on-deadlines", label: "I rely on deadlines" },
@@ -80,7 +80,7 @@ export const FAMILIAR_OPTIONS: readonly Option<Familiar>[] = [
   { id: "none", label: "None of these quite fit" },
 ];
 
-export const AFFECTS_OPTIONS: readonly Option<Affects>[] = [
+const AFFECTS_OPTIONS: readonly Option<Affects>[] = [
   { id: "work", label: "Work" },
   { id: "study", label: "Study" },
   { id: "home", label: "Home" },
@@ -90,7 +90,7 @@ export const AFFECTS_OPTIONS: readonly Option<Affects>[] = [
   { id: "several", label: "Several equally" },
 ];
 
-export const EASIER_OPTIONS: readonly Option<Easier>[] = [
+const EASIER_OPTIONS: readonly Option<Easier>[] = [
   { id: "urgent", label: "When something is due right now" },
   { id: "interested", label: "When I am interested" },
   { id: "structure", label: "When somebody gives me structure" },
@@ -163,7 +163,7 @@ export const QUESTIONS: readonly OnboardingQuestion[] = [
  * A goal a person might choose first — generated from Q2–Q5 (PRD §9 Q7). Each carries the
  * domain and subdomain it is about, which is what lets the goal become the model's first need.
  */
-export interface ImproveOption extends Option {
+interface ImproveOption extends Option {
   readonly domain: Domain;
   readonly subdomain: Subdomain;
 }
@@ -208,7 +208,3 @@ export function isComplete(answers: OnboardingAnswers | null | undefined): answe
   return Boolean(answers?.completedAt);
 }
 
-/** How many of the ten have an answer (skips count as passed only once the flow moved on). */
-export function questionIndexFor(key: OnboardingQuestion["key"]): number {
-  return QUESTIONS.findIndex((q) => q.key === key);
-}

@@ -25,11 +25,10 @@
 import type {
   ConditionCode,
   GuidelineInterval,
-  GuidelineIntervalId,
   IntervalProvenance,
 } from "@/domain/types";
 
-export interface IntervalRejection {
+interface IntervalRejection {
   id: string;
   reason: string;
 }
@@ -147,4 +146,4 @@ export function citedSources(catalogue: IntervalCatalogue): string[] {
   return [...new Set(catalogue.intervals.map((i) => i.provenance.url))].sort();
 }
 
-export type { GuidelineInterval, GuidelineIntervalId };
+

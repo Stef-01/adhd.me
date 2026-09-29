@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { carePreferencesFromRequest, matchesCare, publicIdentity, type CareProvider } from "./care-preferences";
-import { BASE_EXAMPLE_CLINICIANS, EXPANDED_CARE_CLINICIANS, rosterFor } from "@/demo/synthetic-roster";
-import { applyFilters, emptyFilters, readFilters, FILTERS_KEY } from "@/finder/filters";
+import { emptyFilters, readFilters, FILTERS_KEY } from "@/finder/filters";
 const declared: CareProvider = { careProfile: { needs: ["spiritual-wellbeing", "university-adjustments"], source: "https://example.org/clinician-declaration", declaredAt: "2026-09-14", identity: { identities: ["aboriginal"], country: "Wiradjuri", publish: true } } };
 describe("declared care matching", () => {
   it("keeps declared occasional care eligible without promoting its ranking grade", () => {
@@ -39,15 +38,5 @@ describe("declared care matching", () => {
     const held = readFilters({ getItem: key => key === FILTERS_KEY ? raw : null });
     expect(held.careNeeds).toEqual(["university-adjustments"]);
     expect(held.clinicianIdentity).toBe("aboriginal");
-  });
-  it("quadruples example profiles while preserving real-only mode and non-bookable examples", () => {
-    expect(EXPANDED_CARE_CLINICIANS).toHaveLength(BASE_EXAMPLE_CLINICIANS.length * 3);
-    expect(new Set(rosterFor(true).map(p => p.id)).size).toBe(rosterFor(true).length);
-    expect(rosterFor(false).every(p => !p.synthetic)).toBe(true);
-    expect(EXPANDED_CARE_CLINICIANS.every(p => p.synthetic && !p.realPerson && p.image === null && p.booking.via === "synthetic-none" && !("url" in p.booking))).toBe(true);
-    const ot = applyFilters(rosterFor(true), { ...emptyFilters(), professions: ["occupational-therapist"], careNeeds: ["university-adjustments"] }, null, () => null);
-    const ep = applyFilters(rosterFor(true), { ...emptyFilters(), professions: ["exercise-physiologist"], careNeeds: ["university-adjustments"] }, null, () => null);
-    expect(ot.length).toBeGreaterThan(0); expect(ep.length).toBeGreaterThan(0);
-    expect(applyFilters(rosterFor(false), { ...emptyFilters(), clinicianIdentity: "aboriginal", careNeeds: ["spiritual-wellbeing"] }, null, () => null)).toEqual([]);
   });
 });

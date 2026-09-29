@@ -4,14 +4,13 @@
 import { describe, expect, it } from "vitest";
 import { FINDER_COPY } from "./finder-copy";
 import { clinicians, labelInSentence } from "@/demo/clinicians";
-import { rosterFor } from "@/demo/synthetic-roster";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { languageNeeds, NEED_SHORT_LABELS, shortLabel, type NeedSignal } from "@/matching/needs";
 
 /** The text budget's own count (scripts/text-budget-lib.mjs): a word is a run with a letter or digit. */
 const words = (text: string) => text.trim().split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w)).length;
 
-const languages = [...new Set([...MATCHABLE_LANGUAGES, ...rosterFor(true).flatMap((c) => c.languages), ...clinicians.flatMap((c) => c.languages)])]
+const languages = [...new Set([...MATCHABLE_LANGUAGES, ...clinicians.flatMap((c) => c.languages)])]
   .filter((l) => l.toLowerCase() !== "english")
   .flatMap((l) => languageNeeds(`I speak ${l}`, [l]));
 

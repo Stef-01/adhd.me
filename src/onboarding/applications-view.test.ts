@@ -13,7 +13,7 @@ const application = (overrides: Partial<ClinicianApplication> = {}): ClinicianAp
   practiceSuburb: "Beecroft",
   practiceName: "Example Family Practice",
   careAreas: ["adhd-assessment", "titration"],
-  manner: ["unhurried"],
+  manner: ["not_rushed"],
   languages: ["English", "Hindi"],
   nswAdhdTrained: true,
   acceptingNewPatients: true,
@@ -65,7 +65,7 @@ describe("W233 every sentence reports a declaration; none vouches", () => {
     // the words a patient would be matched by, not internal ids.
     expect(view.careAreaLabels.some((label) => /assessment/i.test(label))).toBe(true);
     expect(view.mannerLabels).toHaveLength(1);
-    expect(view.mannerLabels[0]).toBe("Unhurried first appointment");
+    expect(view.mannerLabels[0]).toBe("Takes time with you");
     // Verbatim fields stay verbatim — the page renders them under the W153 attribution.
     expect(view.fullName).toBe("Dr Example Applicant");
     expect(view.practiceLine).toBe("Example Family Practice, Beecroft");

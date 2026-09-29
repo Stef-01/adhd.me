@@ -5,7 +5,6 @@
 // "due by the practice's schedule", not that a patient needs anything — the clinical
 // boundary W58 types is also a copy boundary here.
 
-import { redirect } from "next/navigation";
 import { getConsole } from "@/console/store";
 import { toViewIntervals } from "@/registers/provenance";
 import { registersFor } from "@/registers/store";

@@ -17,7 +17,7 @@ import {
 } from "./privacy";
 import { getPrivacy } from "./state";
 
-export { getPrivacy, resetPrivacy, type PrivacyState } from "./state";
+export { getPrivacy, resetPrivacy } from "./state";
 
 function railDataset(): PrivacyDataset {
   const rail = getStore();
@@ -29,7 +29,7 @@ function railDataset(): PrivacyDataset {
   };
 }
 
-export interface ConsoleExport extends PatientExport {
+interface ConsoleExport extends PatientExport {
   suppressed: boolean;
   /** W51: complaints live in their own store; an access request covers them too. */
   complaints: ComplaintRecord[];

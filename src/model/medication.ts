@@ -5,7 +5,7 @@
 
 import type { MedicationField, ModelRecord } from "./store";
 
-export interface MedicationFieldSpec {
+interface MedicationFieldSpec {
   readonly id: MedicationField;
   readonly title: string;
   readonly prompt: string;

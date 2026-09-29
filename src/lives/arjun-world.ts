@@ -4,14 +4,14 @@
  * drift past too; parking them keeps his attention in the room. Fictional play, never a measure.
  */
 export type Speaker = 'noor' | 'rae' | 'sam' | 'arjun';
-export type Kind = 'fact' | 'aside' | 'idea';
-export interface Line { speaker: Speaker; text: string; kind: Kind; q?: number }
-export interface Question { ask: string; decision: string; facts: [Speaker, string][] }
-export interface RoundDef { questions: Question[]; asides: [Speaker, string][]; idea?: string; changeAt?: number }
-export interface Scenario { rounds: [RoundDef, RoundDef, RoundDef]; revisit: RoundDef & { constraint: [Speaker, string] } }
-export interface Remark { id: number; line: number; born: number; life: number; slow?: boolean }
-export interface Pin { line: number; stale?: boolean }
-export type Phase = 'round' | 'decided' | 'recap' | 'setup' | 'revisit' | 'complete';
+type Kind = 'fact' | 'aside' | 'idea';
+interface Line { speaker: Speaker; text: string; kind: Kind; q?: number }
+interface Question { ask: string; decision: string; facts: [Speaker, string][] }
+interface RoundDef { questions: Question[]; asides: [Speaker, string][]; idea?: string; changeAt?: number }
+interface Scenario { rounds: [RoundDef, RoundDef, RoundDef]; revisit: RoundDef & { constraint: [Speaker, string] } }
+interface Remark { id: number; line: number; born: number; life: number; slow?: boolean }
+interface Pin { line: number; stale?: boolean }
+type Phase = 'round' | 'decided' | 'recap' | 'setup' | 'revisit' | 'complete';
 
 export interface ArjunWorld {
   support: 'anchor' | 'space' | null; paused: boolean; still: boolean;
@@ -75,7 +75,7 @@ export const SCENARIOS: Scenario[] = [
 const LIFE = [8200, 7200, 6400, 7400];
 const GAP = [1900, 1600, 1350, 1650];
 export const MEETING = [42000, 44000, 50000, 44000];
-export const STREAM_MAX = 4;
+const STREAM_MAX = 4;
 
 /** Every line a round can say, in a stable order: facts per question, asides, then Arjun's idea. */
 export function lines(s: Pick<ArjunWorld, 'scenario' | 'round'>): Line[] {
@@ -87,7 +87,7 @@ export function lines(s: Pick<ArjunWorld, 'scenario' | 'round'>): Line[] {
   if (idea) out.push({ speaker: 'arjun', text: idea, kind: 'idea', q: s.round === 3 ? 0 : undefined });
   return out;
 }
-export function roundDef(s: Pick<ArjunWorld, 'scenario' | 'round'>): RoundDef {
+function roundDef(s: Pick<ArjunWorld, 'scenario' | 'round'>): RoundDef {
   const c = SCENARIOS[s.scenario]!;
   return s.round === 3 ? c.revisit : c.rounds[s.round]!;
 }
@@ -282,5 +282,4 @@ function step(s: ArjunWorld): ArjunWorld {
 export function ready(s: ArjunWorld) { return s.anchor && s.pocket.includes(SCENARIOS[s.scenario]!.rounds[0].idea!) && Boolean(s.owner && s.when); }
 export function name(p: Speaker) { return p === 'noor' ? 'Noor' : p === 'rae' ? 'Rae' : p === 'sam' ? 'Sam' : 'Arjun'; }
 export function remarkX(s: ArjunWorld, r: Remark) { return r.life === Number.POSITIVE_INFINITY ? null : Math.min(1, Math.max(0, (s.t - r.born) / r.life)); }
-export function remaining(s: ArjunWorld) { return Math.max(0, Math.ceil((MEETING[s.round]! - s.t) / 1000)); }
 export function running(s: ArjunWorld) { return s.phase === 'round' || s.phase === 'revisit'; }

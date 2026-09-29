@@ -5,14 +5,15 @@
 
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
-import { needsFor, rankClinicians } from "../src/demo/clinicians";
-import { rosterFor } from "../src/demo/synthetic-roster";
+import { clinicians, needsFor, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
+import { heardChips } from "../src/finder/heard";
 import { searchRoster } from "../src/finder/pipeline";
+import { carePreferencesFromRequest, combineCarePreferences } from "../src/support/care-preferences";
 import { facetKey, type NeedSignal } from "../src/matching/needs";
 
 const REQUEST = "an adult ADHD assessment, telehealth, not rushed";
-const roster = searchRoster(rosterFor(true), emptyFilters(), REQUEST, null);
+const roster = searchRoster(clinicians, emptyFilters(), REQUEST, null);
 const topFive = (keep: (need: NeedSignal) => boolean) =>
   rankClinicians(REQUEST, roster, new Date(), needsFor(REQUEST, roster).filter(keep)).slice(0, 5).map((c) => c.id);
 const rowIds = (page: Page) => page.locator(".clinician-row").evaluateAll((rows) => rows.map((r) => r.getAttribute("data-clinician")));
@@ -28,8 +29,8 @@ test("a heard chip comes out, the list re-ranks with no request, and the chip pu
   await search(page, REQUEST);
   const heard = page.getByRole("group", { name: "What we heard" });
   const chips = heard.getByRole("button");
-  await expect(chips).toHaveText(["Telehealth", "ADHD assessment", "Unhurried"]);
-  for (const name of ["Remove telehealth", "Remove ADHD assessment", "Remove unhurried"]) {
+  await expect(chips).toHaveText(["Telehealth", "ADHD assessment", "Not rushed"]);
+  for (const name of ["Remove telehealth", "Remove ADHD assessment", "Remove not rushed"]) {
     // The layout box, not the painted one: the screen's arrival scales it for a moment.
     const box = await heard.getByRole("button", { name, exact: true }).evaluate((el: HTMLElement) => ({ width: el.offsetWidth, height: el.offsetHeight }));
     expect(box.height, `${name} clears the touch floor`).toBeGreaterThanOrEqual(44);
@@ -72,7 +73,7 @@ test("with every heard chip out, the list stops claiming to be matches", async (
   const heading = page.locator(".results-list-head h2");
   await expect(heading).toHaveText("Matches");
   const heard = page.getByRole("group", { name: "What we heard" });
-  for (const name of ["telehealth", "ADHD assessment", "unhurried"]) await heard.getByRole("button", { name: `Remove ${name}`, exact: true }).click();
+  for (const name of ["telehealth", "ADHD assessment", "not rushed"]) await heard.getByRole("button", { name: `Remove ${name}`, exact: true }).click();
   await expect(heading).toHaveText("All listed providers");
   await expect(page.locator(".clinician-row.is-lead")).toHaveCount(0);
   await heard.getByRole("button", { name: "Put back ADHD assessment", exact: true }).click();
@@ -80,11 +81,13 @@ test("with every heard chip out, the list stops claiming to be matches", async (
 });
 
 test("five facets heard, four chips shown: the strongest, in the ranker's order", async ({ page }) => {
-  await search(page, "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment");
-  await expect(page.getByRole("group", { name: "What we heard" }).getByRole("button")).toHaveText([
-    "Hindi-speaking",
-    "Bulk billing",
-    "Longer appointment",
-    "Woman clinician",
-  ]);
+  const text = "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment";
+  // The order comes from the engine over the roster the search runs over: the sentence's kind (a GP)
+  // and its care asks (anxiety) narrow the roster before the weights are read, as the finder does.
+  const held = emptyFilters();
+  const searched = searchRoster(clinicians, { ...held, ...combineCarePreferences(held, carePreferencesFromRequest(text)) }, text, null);
+  const needs = needsFor(text, searched);
+  expect(new Set(needs.map((need) => facetKey(need.facet))).size).toBe(5);
+  await search(page, text);
+  await expect(page.getByRole("group", { name: "What we heard" }).getByRole("button")).toHaveText(heardChips(needs, 4).map((chip) => chip.label));
 });

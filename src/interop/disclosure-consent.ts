@@ -46,7 +46,7 @@ export interface DisclosureConsent {
   readonly withdrawnAtIso: string | null;
 }
 
-export type ConsentRecordRejection =
+type ConsentRecordRejection =
   | "no_patient"
   | "no_recipient"
   | "no_statement"
@@ -64,7 +64,7 @@ export const CONSENT_RECORD_REJECTION_COPY: Record<ConsentRecordRejection, strin
     "The record expires before it was made. Refused rather than corrected: a date nobody can explain is a record nobody should rely on.",
 };
 
-export type ConsentRecordResult =
+type ConsentRecordResult =
   | { recorded: true; consent: DisclosureConsent }
   | { recorded: false; why: ConsentRecordRejection; copy: string };
 
@@ -136,7 +136,7 @@ export function recordDisclosureConsent(input: DisclosureConsentInput): ConsentR
  * earliest withdrawal now wins, and a later one is a no-op rather than an error: a patient saying
  * "I withdraw" twice has not done anything wrong.
  */
-export type WithdrawalResult =
+type WithdrawalResult =
   | { withdrawn: true; consent: DisclosureConsent }
   | { withdrawn: false; why: "unreadable_date"; copy: string };
 
@@ -154,7 +154,7 @@ export function withdrawDisclosureConsent(consent: DisclosureConsent, atIso: str
   return { withdrawn: true, consent: { ...consent, withdrawnAtIso: effective } as DisclosureConsent };
 }
 
-export type DisclosureConsentStatus =
+type DisclosureConsentStatus =
   /** Recorded, given, in date, not withdrawn, and for this recipient. */
   | "given"
   /** The patient said no. A decision, to be honoured and not re-asked as though nothing happened. */

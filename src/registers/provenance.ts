@@ -15,7 +15,7 @@
 import type { GuidelineInterval } from "@/domain/types";
 import { wholeMonthsBetween } from "./caregap";
 
-export interface ProvenanceView {
+interface ProvenanceView {
   /** Who published it — shown verbatim, never paraphrased. */
   citation: string;
   url: string;
@@ -25,7 +25,7 @@ export interface ProvenanceView {
   reviewedAgo: string;
 }
 
-export interface ViewInterval {
+interface ViewInterval {
   id: string;
   name: string;
   /** "every 12 months" — the schedule, never a recommendation about a patient. */
@@ -97,7 +97,7 @@ export function toViewInterval(interval: GuidelineInterval, now: Date): ViewInte
   };
 }
 
-export interface ViewIntervals {
+interface ViewIntervals {
   /** Renderable intervals — every one carries a complete provenance line. */
   shown: ViewInterval[];
   /** How many were withheld for unusable provenance. Surfaced, never silent. */

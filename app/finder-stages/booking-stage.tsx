@@ -4,7 +4,7 @@
 
 import { ArrowLeft } from "@phosphor-icons/react";
 import { track } from "@vercel/analytics";
-import { bookingHandoff, locationLabel, type Clinician } from "@/demo/clinicians";
+import { bookingHandoff, type Clinician } from "@/demo/clinicians";
 import { bookingAnnouncement } from "@/finder/announce";
 import { MotionScreen, StatusLine, Wordmark } from "./shared";
 
@@ -47,7 +47,7 @@ export function BookingStage({
             The heading carries its own weight; a label that repeats its first word is noise. */}
         <h1 tabIndex={-1}>
           {clinician.booking.via === "healthengine"
-            ? `Book with ${clinician.shortName} on Healthengine`
+            ? `Book with ${clinician.shortName}`
             : `Booking ${clinician.shortName}`}
         </h1>
 
@@ -56,27 +56,14 @@ export function BookingStage({
             {/* O44: "his practice" was written when Dr Anubhav Saxena was the only
                 online-bookable GP, and misgendered every clinician added after him.
                 The practice holds the times; no pronoun is needed to say so. */}
+            {/* 2026-09-29: this screen measured 83 words against a ceiling of 60 (the budget
+                instrument had never reached it). The same facts in half the words. */}
             <p>
-              {clinician.shortName}’s live appointment times are held by the practice on
-              Healthengine. We send you straight there, so the time you pick is a time that
-              is genuinely open.
+              {clinician.shortName}’s live times are held by the practice on Healthengine, so the
+              time you pick there is open.
             </p>
             <p className="booking-note">
-              You book with {clinician.practice} on Healthengine. ADHD.ME does not see your
-              booking and no medical details are entered here.
-            </p>
-          </>
-        ) : clinician.booking.via === "synthetic-none" ? (
-          /* O231: said ONCE. The first draft rendered the route in the note and again in the
-             paragraph under it ("arranged by phone" / "takes these appointments by phone"), with
-             the practice name repeated a third time in a block at the bottom of an otherwise empty
-             screen, caught in the screenshot pass, not by a test. The practice sits with the
-             sentence it belongs to and the screen ends where the reading ends. */
-          <>
-            <p>{clinician.booking.note}</p>
-            <p className="booking-practice">
-              <span className="booking-practice-name">{clinician.practice}</span>
-              <span>{locationLabel(clinician)}</span>
+              ADHD.ME does not see your booking with {clinician.practice}.
             </p>
           </>
         ) : (
@@ -97,12 +84,6 @@ export function BookingStage({
         )}
       </div>
 
-      {/* O231: the outbound control exists only where there is somewhere real to go. A
-          practice-booked entry with no listing ends on the route itself, which is a true terminal
-          state and a designed one, not a disabled button, and not a link to a fabricated page.
-          `bookingHandoff` returns null for exactly that case, so the absence of the control and
-          the words on it are now one decision rather than two reads of `via` that could diverge. */}
-      {handoff === null ? null : (
       <div className="bottom-action">
         {/* Routed through /go/<id> (O28): outbound booking intent becomes countable per
             clinician from this domain's own logs, with nothing stored, see the route's
@@ -137,10 +118,9 @@ export function BookingStage({
             patients how they heard about the practice, and the practice sees the
             answer. One factual sentence, no incentive, no claim. */}
         {clinician.booking.via === "healthengine" && (
-          <p className="booking-heard">If the booking asks how you heard about the practice, you can say ADHD.ME.</p>
+          <p className="booking-heard">If asked how you heard about the practice, say ADHD.ME.</p>
         )}
       </div>
-      )}
     </MotionScreen>
   );
 }

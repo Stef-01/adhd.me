@@ -18,7 +18,7 @@ const SERIES = {
   holdout: { label: "Holdout arm", color: "var(--chart-holdout)" }, // categorical slot 2
 } as const;
 
-export interface ChartLabels {
+interface ChartLabels {
   invite: string;
   holdout: string;
   /** Sentence under the plot; also the SVG's accessible name. */

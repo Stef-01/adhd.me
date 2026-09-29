@@ -9,8 +9,8 @@ export const JOURNEYS: readonly { says: string; hears: readonly string[] }[] = [
   { says: "someone to keep prescribing my ADHD medication", hears: ["care:shared-care"] },
   { says: "my medication wears off by lunchtime", hears: ["care:titration"] },
   { says: "a woman GP who bulk bills near Hornsby", hears: ["pref:woman-gp", "pref:bulk-billing"] },
-  { says: "a clinician who speaks Arabic", hears: ["language:arabic"] },
+  { says: "a clinician who speaks Mandarin", hears: ["language:mandarin"] },
   { says: "no medication, I want coaching and strategies", hears: ["care:non-medication"] },
-  { says: "I need longer appointments, I don't want to be rushed", hears: ["pref:longer-appointment", "manner:unhurried"] },
+  { says: "I need longer appointments, I don't want to be rushed", hears: ["pref:longer-appointment", "manner:not_rushed"] },
   { says: "someone who understands autism and ADHD", hears: ["care:autism-adhd"] },
 ];

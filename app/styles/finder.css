@@ -1,5 +1,3 @@
-.platform-shell .finder-doors { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 0; font-size: 0.875rem; font-weight: 700; }
-.platform-shell .finder-doors a { color: var(--accent-deep); min-height: 44px; display: inline-flex; align-items: center; }
 .platform-shell .finder-getting-started { padding: 32px; border-radius: 24px; background: var(--stone); color: var(--ink); }
 .platform-shell .finder-getting-started h2 { max-width: 20ch; margin: 12px 0 20px; font-size: 27px; line-height: 1.25; letter-spacing: -.035em; }
 .platform-shell .finder-getting-started > p:not(.learning-overline) { color: var(--muted); font-size: 15px; }
@@ -22,8 +20,6 @@
 @media (max-width: 767px) {
   .platform-shell .me-sticky { position: sticky; bottom: calc(var(--app-tabs-h) + env(safe-area-inset-bottom)); z-index: 5; margin: 8px calc(-1 * var(--shell-gutter)) 0; padding: 12px var(--shell-gutter) 10px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 96%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 }
-.platform-shell .me-segmented button[aria-pressed="true"] { color: var(--accent); }
-.platform-shell .results-summary-words { padding: 24px; border: 1px solid var(--line); }
 .platform-shell .patient-v2 .clinician-list { display: grid; grid-template-columns: minmax(0, 1fr); }
 .platform-shell .results-screen { max-width: 1200px; margin-inline: auto; }
 .platform-shell .clinician-card { min-width: 0; }
@@ -48,7 +44,6 @@
   /* Left-aligned inside the centred column, as the reference sets its hero copy: the question,
      the box and the example link keep one left edge (app-shell.spec holds them to it). */
   .platform-shell .voice-screen .voice-actions { grid-column: 1; grid-row: 2; max-width: none; margin: 0; }
-  .platform-shell .voice-screen .finder-context { grid-column: 1; grid-row: 3; margin: 24px 0 0; text-align: left; }
   .platform-shell .finder-getting-started { grid-column: 1; grid-row: 4; }
 }
 @media (max-width: 1049px) {
@@ -139,7 +134,6 @@
 .platform-shell .results-screen .results-list-head h2 { font-family: inherit; font-size: 24px; font-weight: 700; margin: 0; }
 .platform-shell .results-screen .results-list-head h2 em { font-style: normal; color: inherit; font-weight: inherit; }
 .platform-shell .results-list-tools { gap: 14px; flex-wrap: wrap; }
-.platform-shell .finder-match-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-deep); font-size: 13px; font-weight: 650; text-underline-offset: 4px; }
 .platform-shell .results-browser { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 24px; }
 .platform-shell .patient-v2 .results-browser .clinician-list { padding: 0; gap: 0; min-width: 0; border-top: 1px solid var(--line); }
 .platform-shell .patient-v2 .results-browser .clinician-row { grid-template-columns: 80px minmax(0, 1fr) 20px; gap: 24px; padding: 28px 16px; min-height: 152px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; background: transparent; }
@@ -150,7 +144,6 @@
 .platform-shell .patient-v2 .results-browser .row-copy { min-width: 0; display: grid; gap: 7px; }
 /* An invented profile says so beside its name, on the row, before any other fact about it: plain
    muted text, not a pill, because nearly every row carries it. */
-.platform-shell .patient-v2 .row-example { margin-left: 8px; color: var(--muted); font-size: 13px; font-weight: 400; letter-spacing: 0; }
 .platform-shell .patient-v2 .results-browser .row-focus { font-size: 14px; line-height: 1.5; margin: 0; }
 .platform-shell .patient-v2 .results-browser .row-location { margin: 0; font-size: 13px; line-height: 1.5; }
 .platform-shell .patient-v2 .results-browser .row-availability { max-width: 64ch; line-height: 1.5; }
@@ -182,11 +175,10 @@
   .platform-shell .results-browser .row-skeleton { grid-template-columns: 56px minmax(0, 1fr); gap: 14px; min-height: 124px; padding: 22px 0; }
   .platform-shell .results-browser .row-skeleton::before { height: 56px; }
 }
-.platform-shell .finder-count-number { color: inherit; letter-spacing: inherit; }
 .platform-shell .results-summary-text { font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", sans-serif; }
 .platform-shell .patient-v2 .results-browser .clinician-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
 
-.platform-shell .care-preference-fields { display: grid; gap: 12px; padding-top: 16px; }
+.platform-shell .care-preference-fields { display: grid; padding-top: 16px; }
 .platform-shell .care-preference-fields label { font-size: 14px; font-weight: 600; }
 .platform-shell .care-preference-fields label span { color: var(--muted); font-weight: 400; }
 .platform-shell .care-preference-fields [data-slot="native-select-wrapper"] { width: 100%; }
@@ -194,7 +186,7 @@
 .platform-shell .care-preference-fields :is(select,input):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .platform-shell .care-preference-fields a { font-size: 14px; line-height: 1.5; text-underline-offset: 3px; }
 .platform-shell .finder-care-summary { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-.platform-shell .finder-care-summary summary { cursor: pointer; min-height: 28px; }
+.platform-shell .finder-care-summary summary { cursor: pointer; }
 .platform-shell .row-cultural-identity, .platform-shell .profile-cultural-identity { color: var(--muted); font-size: 14px; line-height: 1.5; }
 .platform-shell .profile-care-declaration { margin-block: 12px; font-size: 14px; line-height: 1.6; }
 
@@ -217,6 +209,12 @@
 .platform-shell .finder-care-summary summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 @media (hover: hover) { .platform-shell .care-preference-fields :is(input,select):hover { border-color: var(--accent); } }
 @media (prefers-reduced-motion: reduce) { .platform-shell .care-preference-fields :is(input,select), .platform-shell .finder-care-summary summary::after { transition: none; } }
+
+/* AI or Standard, under the box: one switch of two halves, so it never reads as two more examples;
+   the chosen half in the accent. */
+.platform-shell .patient-v2 .finder-mode { display: flex; margin: 14px 0 0; padding: 3px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--paper); }
+.platform-shell .patient-v2 .finder-mode .finder-example { border-color: transparent; }
+.platform-shell .patient-v2 .finder-mode [aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
 
 /* W6b: four example requests under the finder's box, each a 44px chip on paper. */
 .platform-shell .patient-v2 .finder-examples { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }

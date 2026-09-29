@@ -1,0 +1,92 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I had a baby eight months ago and I think my ADHD has got a lot worse since.",
+    "It's for me.",
+    "Hornsby, or telehealth while the baby is small.",
+    "Cost matters a bit.",
+    "Someone who understands what it's like being a new mum, and doesn't rush me.",
+    "[pause 25]"
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I had a baby eight months ago and I think my ADHD has got a lot worse since."
+    },
+    {
+      "who": "assistant",
+      "text": "Got it—is this for you or for someone else?"
+    },
+    {
+      "who": "person",
+      "text": "It's for me."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay. Where are you located, or would telehealth work for you?"
+    },
+    {
+      "who": "person",
+      "text": "hornsby, or telehealth while the baby is small."
+    },
+    {
+      "who": "assistant",
+      "text": "Does cost matter to you?"
+    },
+    {
+      "who": "person",
+      "text": "Cost matters a bit."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay. What kind of support do you prefer in style—clear, gentle, or very direct?"
+    },
+    {
+      "who": "person",
+      "text": "Someone who understands what it's like being a new mum and doesn't rush me."
+    },
+    {
+      "who": "assistant",
+      "text": "Got it, let me pull this together and find options that match."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Hornsby\",\"request\":\"I want an ADHD assessment with someone who understands being a new mum and doesn't rush, near Hornsby or telehealth; cost matters a bit.\"}"
+    }
+  ],
+  "request": "I want an ADHD assessment with someone who understands being a new mum and doesn't rush, near Hornsby or telehealth; cost matters a bit.",
+  "reads": [
+    {
+      "text": "I want an ADHD assessment with someone who understands being a new mum and doesn't rush, near Hornsby or telehealth; cost matters a bit.",
+      "answer": {
+        "keys": [
+          "care:adhd-assessment",
+          "care:perinatal",
+          "manner:not_rushed",
+          "pref:telehealth-first"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Telehealth",
+    "Postpartum",
+    "ADHD assessment",
+    "Not rushed"
+  ],
+  "results": [
+    "Samantha Courtney Psychologist · Postpartum Fortitude Valley, by telehealth",
+    "Dr Anubhav Saxena ADHD assessment Beecroft & Double Bay, by telehealth",
+    "Lachlan Avent Psychologist · ADHD assessment Fortitude Valley, by telehealth",
+    "Chantelle Pin Psychologist · ADHD assessment Benowa, by telehealth",
+    "Valeria Urrutia Psychologist · ADHD assessment Benowa, by telehealth"
+  ],
+  "whyMatched": "Why matched Pregnancy, postpartum and new parents From your words: “new mum” By phone or telehealth You also asked for ADHD assessment, not something they declare. Another listing may. You also asked for takes time with you, not something they declare. Another listing may. Compare with Dr Saxena",
+  "stage": "results"
+}

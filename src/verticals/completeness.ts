@@ -74,7 +74,7 @@ export interface KnownMembers {
   intervalIds: readonly string[];
 }
 
-export type MemberStatus =
+type MemberStatus =
   /** Passed its own gate. Nothing outstanding. */
   | "ready"
   /** It exists, and something in its gate is still outstanding. Which stage is not asked. */
@@ -99,7 +99,7 @@ export const REMAINING_CHAIN: Record<VerticalMemberKind, string> = {
   interval: "the G5 ruling on guideline values — nobody can act before it",
 };
 
-export interface MemberAssessment {
+interface MemberAssessment {
   member: VerticalMemberRef;
   status: MemberStatus;
 }
@@ -164,7 +164,7 @@ function intervalsOf(catalogue: IntervalCatalogue): string[] {
  * still gets a report — with `REMAINING_CHAIN` standing in, which is the coarser answer and now
  * says so rather than pretending to be the only one.
  */
-export type DeclaredActs = Readonly<Record<string, string>>;
+type DeclaredActs = Readonly<Record<string, string>>;
 
 export function assessCompleteness(
   spec: VerticalSpec,

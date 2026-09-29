@@ -3,5 +3,8 @@
   "framework": "nextjs",
   "ignoreCommand": "[ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ]",
   "buildCommand": "pnpm build",
-  "installCommand": "pnpm install --frozen-lockfile"
+  "installCommand": "pnpm install --frozen-lockfile",
+  "regions": [
+    "syd1"
+  ]
 }

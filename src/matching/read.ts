@@ -88,7 +88,7 @@ function suffixStem(word: string): string {
  *                   base word itself never reduces to: believed→believ but believe→believe,
  *                   judged→judg but judge→judge, minutes→minut but minute→minute. So
  *                   "nobody ever believes me" could not satisfy the authored pair of
- *                   "believe me", and the unhurried list carries "ten minutes" AND
+ *                   "believe me", and the not_rushed list carries "ten minutes" AND
  *                   "ten minute" as two cues for one phrase.
  *
  * KEYED BY SUFFIX-STEMMED FORM and applied as stem()'s last step, so every caller — cues,
@@ -288,7 +288,7 @@ function splitWordsKeepingCommas(text: string): string[] {
     .filter((word) => word.length > 0);
 }
 
-export function isStopword(word: string): boolean {
+function isStopword(word: string): boolean {
   return STOPWORDS.has(word);
 }
 
@@ -418,7 +418,7 @@ const MAX_NEGATION_LEAD = 3;
  * lost bulk-billing). Binding is now done once per trigger, over all candidate spans, in
  * `suppressedByDesireNegation` below.
  */
-export function desireNegationEnds(sentence: readonly string[]): number[] {
+function desireNegationEnds(sentence: readonly string[]): number[] {
   const ends = new Set<number>();
   for (const phrase of DESIRE_NEGATIONS) {
     for (let start = 0; start < sentence.length; start++) {
@@ -530,7 +530,7 @@ export function suppressedByDesireNegation(
  * The set was {no, not} at O72, every exclusion a pinned lesson:
  *   - "never" excluded — history and complaint, not refusal ("never had an assessment").
  *   - contracted verb negators excluded — "won't do titration" is a complaint, i.e. a want.
- * MANNER stays exempt at the call site exactly as O40: "not rushed" is the unhurried ask.
+ * MANNER stays exempt at the call site exactly as O40: "not rushed" is the not_rushed ask.
  * A cue whose own phrase begins with a negator is untouched — this looks BEFORE the span.
  *
  * "WITHOUT" JOINED AT O91, and the original exclusion turned out to be protecting nothing.

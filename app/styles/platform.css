@@ -83,7 +83,6 @@ body:has(.platform-shell) :is(.consent-read,.consent-agree):focus-visible { outl
 .platform-shell .dual-input textarea { font-size: 17px; line-height: 1.6; min-height: 150px; background: transparent; color: var(--ink); }
 .platform-shell .patient-v2 .voice-actions .dual-input { background: var(--paper); border-color: var(--line-strong); box-shadow: 0 8px 32px color-mix(in srgb, var(--ink) 3%, transparent); }
 .platform-shell .patient-v2 .voice-actions .dual-input-field { font-family: inherit; font-size: 17px; background: var(--paper); border-color: var(--line-strong); }
-.platform-shell .voice-screen .finder-context { margin: 24px auto 56px; padding: 0; max-width: 640px; }
 .platform-shell .patient-v2 .clinician-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .platform-shell .clinician-card { border: 1px solid var(--line); border-radius: 16px; background: var(--paper); box-shadow: 0 2px 8px color-mix(in srgb, var(--ink) 1%, transparent); }
 .platform-shell .results-summary-words { border-radius: 16px; background: var(--paper); }
