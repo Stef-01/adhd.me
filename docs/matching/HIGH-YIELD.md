@@ -113,7 +113,7 @@ The questions, and the split each makes on this roster:
 1. **What would you like help with?** Assessment (6) · medication continued or reviewed (3) ·
    therapy, coaching or skills (19) · a child's care (7). Already asked; the keys behind it gain
    `prescribing` (titration, shared care and continuation as one capability), `coaching-skills`,
-   `eating-disorders`, `ndis`.
+   `ndis` (and `eating-disorders` once more than two say it).
 2. **Is this for you, or for someone else? How old are they?** Child · teen · adult: 15 / 16 / 15,
    overlapping. Already asked; the roster gains `agesSeen` so an adult never sees a paediatric-only
    profile first and a parent never sees an adults-only one.

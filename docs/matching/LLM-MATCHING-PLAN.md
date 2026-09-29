@@ -851,6 +851,6 @@ example "a psychologist who has ADHD herself, not one who just treats it" failed
 negation class, the "not … just" in it teaching the model to read a key past a refusal; without those
 words P3 passed with the class at 100%. A first P4 tripped the breaker on 23 cached answers that
 recited the whole menu; purged, the rerun passed. The interviewer's text eval passes 12 of 12 with a `lived` persona. Left: `agesSeen`,
-the thirteen first-person bios, the remaining keys (neuro-affirming, eating disorders, NDIS,
-prescribing, coaching), manner out of the evidence and the filters, and a question gated on the
+the thirteen first-person bios, the remaining keys (neuro-affirming, NDIS, prescribing, coaching;
+eating disorders once more than two say it), manner out of the evidence and the filters, and a question gated on the
 split it makes.
