@@ -15,5 +15,7 @@ the finder's own matches ("You asked for …; <name> says …", at most 26 words
 own words as before.
 
 Captures at 390 and 1280: the settings sheet, results for "An adult ADHD assessment,
-telehealth, not rushed", the first profile, the profile's filters, and the AI why-matched screen
-(`why-words-*.png`, the page at level 1 with the why route answered as the budget answers it).
+telehealth, not rushed", the first profile, the profile's filters, the AI why-matched screen
+(`why-words-*.png`, the page at level 1 with the why route answered as the budget answers it), and
+the Healthengine booking screen (`booking-*.png`), which measured 83 words before the budget
+instrument reached it and 56 to 57 after.
