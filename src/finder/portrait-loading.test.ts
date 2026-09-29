@@ -6,9 +6,9 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { ClinicianPortrait } from "../../app/finder-stages/shared";
-import { SYNTHETIC_CLINICIANS } from "../demo/synthetic-roster";
+import { clinicians } from "../demo/clinicians";
 
-const withImage = SYNTHETIC_CLINICIANS.find((c) => c.image)!;
+const withImage = clinicians.find((c) => c.image)!;
 
 describe("ClinicianPortrait thumb loading", () => {
   it("loads eagerly when told the row is in the first viewport", () => {

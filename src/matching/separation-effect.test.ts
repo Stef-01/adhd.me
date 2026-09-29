@@ -44,11 +44,19 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 // matters is untouched: N=2's null is still exactly degenerate, every netted effect on the curve
 // is still within 0.003 of zero, and the N=5 -> N=10 dip that makes the tolerance non-vacuous is
 // still there (0.003 -> 0). Re-derived in the commit that earned it.
-  { rosterSize: 2, k: K, total: 451, observedSeparationRate: 0.135, nullMeanSeparationRate: 0.135, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 451, observedSeparationRate: 0.215, nullMeanSeparationRate: 0.214, nullStdSeparationRate: 0.002, effect: 0.001 },
-  { rosterSize: 5, k: K, total: 451, observedSeparationRate: 0.224, nullMeanSeparationRate: 0.221, nullStdSeparationRate: 0.002, effect: 0.003 },
-  { rosterSize: 10, k: K, total: 451, observedSeparationRate: 0.16, nullMeanSeparationRate: 0.16, nullStdSeparationRate: 0.005, effect: 0 },
-  { rosterSize: 25, k: K, total: 451, observedSeparationRate: 0.204, nullMeanSeparationRate: 0.203, nullStdSeparationRate: 0.005, effect: 0.001 },
+// R15: every `total` 451 -> 462 and the rates move with it: eleven perinatal sentences joined the
+// corpus and a thirteenth care area joined the facet space the synthetic rosters draw from. The
+// shape is as O252 left it: N=2's null exactly degenerate, every effect within 0.003 of zero, the
+// N=5 -> N=10 dip still there.
+// 2026-09-29: the real roster is 37 profiles (roster-network.ts), so every synthetic roster is drawn
+// from new rates and the whole curve moved again. The shape holds: N=2's null exactly degenerate,
+// every effect within 0.003 of zero, and a dip (N=5 -> N=10, 0.003 -> 0.002) that keeps the
+// tolerance non-vacuous.
+  { rosterSize: 2, k: K, total: 462, observedSeparationRate: 0.275, nullMeanSeparationRate: 0.275, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 462, observedSeparationRate: 0.173, nullMeanSeparationRate: 0.174, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 462, observedSeparationRate: 0.301, nullMeanSeparationRate: 0.298, nullStdSeparationRate: 0.003, effect: 0.003 },
+  { rosterSize: 10, k: K, total: 462, observedSeparationRate: 0.242, nullMeanSeparationRate: 0.24, nullStdSeparationRate: 0.002, effect: 0.002 },
+  { rosterSize: 25, k: K, total: 462, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.237, nullStdSeparationRate: 0.006, effect: 0.003 },
 ];
 
 /*
@@ -62,14 +70,18 @@ const PINNED_CURVE: SeparationEffectReport[] = [
  * shuffled between people, which is the smallest honest version of the claim M5 exists to test,
  * and it was not previously available at any size.
  */
+// R15: 451 -> 462; the observed rate and the null's mean both rise by 0.017 and the effect holds at 0.01.
+// 2026-09-29: thirty-seven profiles. The observed rate is 0.346, the null's mean 0.338 with a spread
+// of 0.006, and the effect 0.008: still a little over one null standard deviation, still small,
+// still measured rather than forced.
 const PINNED_REAL: SeparationEffectReport = {
-  rosterSize: 11,
+  rosterSize: 37,
   k: K,
-  total: 451,
-  observedSeparationRate: 0.273,
-  nullMeanSeparationRate: 0.263,
-  nullStdSeparationRate: 0.008,
-  effect: 0.01,
+  total: 462,
+  observedSeparationRate: 0.346,
+  nullMeanSeparationRate: 0.338,
+  nullStdSeparationRate: 0.006,
+  effect: 0.008,
 };
 
 describe("M5 the separation effect size, over synthetic rosters", () => {
@@ -97,13 +109,16 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
        * no longer does, because a reader who only saw the first would conclude that shrinking
        * always inflates the number, which is the neater and wronger story.
        */
+      // 2026-09-29: redrawn from the 37-profile roster's rates. 40 -> 25 still inflates the naive
+      // rate (0.154 -> 0.24), and 3 -> 2 inflates it again (0.173 -> 0.275), the direction O252
+      // had seen reverse: the pair proves nothing fixed, which is the point.
       const naive = (size: number) => tieQualityReport(corpusRun(), syntheticRoster(size)).separationRate;
-      expect(naive(40)).toBe(0.04);
-      expect(naive(25)).toBe(0.204);
+      expect(naive(40)).toBe(0.154);
+      expect(naive(25)).toBe(0.24);
       expect(naive(25)).toBeGreaterThan(naive(40));
-      expect(naive(3)).toBe(0.215);
-      expect(naive(2)).toBe(0.135);
-      expect(naive(2)).toBeLessThan(naive(3));
+      expect(naive(3)).toBe(0.173);
+      expect(naive(2)).toBe(0.275);
+      expect(naive(2)).toBeGreaterThan(naive(3));
     },
   );
 
@@ -116,7 +131,7 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
     () => {
       const size3 = curve.find((point) => point.rosterSize === 3)!;
       const size2 = curve.find((point) => point.rosterSize === 2)!;
-      expect(size3.effect).toBe(0.001);
+      expect(size3.effect).toBe(-0.001); // 2026-09-29: 0.001 -> -0.001, one null standard deviation below zero
       expect(size2.effect).toBe(0);
       // O252: stated over the whole curve rather than one pair, now that the pair that
       // demonstrates the raw artefact has moved once and may move again.
@@ -166,11 +181,11 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
     const size2 = curve.find((point) => point.rosterSize === 2)!;
     const size3 = curve.find((point) => point.rosterSize === 3)!;
     expect(size2.nullStdSeparationRate).toBe(0);
-    expect(size3.nullStdSeparationRate).toBe(0.002);
+    expect(size3.nullStdSeparationRate).toBe(0.001); // 2026-09-29: 0.002 -> 0.001 from the redrawn rates
   });
 });
 
-describe("M5 the real roster's own effect (post-O252, eleven clinicians)", () => {
+describe("M5 the real roster's own effect (37 real profiles)", () => {
   it("holds the measured baseline exactly", () => {
     expect(realRosterSeparationEffect(K)).toEqual(PINNED_REAL);
   });
@@ -185,7 +200,7 @@ describe("M5 the real roster's own effect (post-O252, eleven clinicians)", () =>
       "small, real, and for the first time actually measured rather than forced",
     () => {
       const report = realRosterSeparationEffect(K);
-      expect(report.effect).toBe(0.01);
+      expect(report.effect).toBe(0.008); // 2026-09-29: 0.01 -> 0.008 on the 37-profile roster
       expect(report.nullStdSeparationRate).toBeGreaterThan(0);
       expect(report.observedSeparationRate).toBeGreaterThan(report.nullMeanSeparationRate);
     },

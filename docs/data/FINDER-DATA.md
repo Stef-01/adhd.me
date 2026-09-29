@@ -19,8 +19,8 @@ match_matches (0006) ────────────────── visi
 
 | Table | One row is | Written from |
 | --- | --- | --- |
-| `finder_searches` | a search whose list showed: the words, how they came in (typed, dictation, voice), the place, the filters, which reader read them, the asks it heard, the clinicians shown in order | `app/care-finder.tsx` → `POST /api/finder/track` |
-| `voice_calls` | a voice call's summary: model, questions asked (0 to 8), seconds, outcome (revealed, stopped, failed, urgent); never what was said beyond the request | `app/finder-stages/voice-stage.tsx` |
+| `finder_searches` | a search whose list showed: the words, how they came in (typed, dictation, voice), the place, the filters, which reader read them, the asks it heard, the asks the model heard that no key covers (`unlisted`), the clinicians shown in order | `app/care-finder.tsx` → `POST /api/finder/track` |
+| `voice_calls` | a voice call, whole: model, questions asked (0 to 8), seconds, outcome (revealed, stopped, failed, urgent), the request and place it wrote, and every turn (the person's, the assistant's, the tools') as `transcript` (founder, 2026-09-29: all data and transcripts kept, for this simulation phase; `scripts/voice-transcripts.mjs` reads them back) | `app/finder-stages/voice-stage.tsx` |
 | `finder_events` | a profile opened, a comparison, "more", a heard chip or a filter changed, against its search | `app/care-finder.tsx` |
 | `finder_handoffs` | the tap that leaves for the practice's booking page (`/go/<id>`), with the asks the search made and which of them this clinician declared | `app/finder-stages/booking-stage.tsx` |
 | `visit_ratings` | the stars (1 to 5) and optional words after a visit: from the finder (a handoff) or /match (a match); one per visit, a note replacing nothing but itself | `POST /api/ratings`; `/api/match/feedback` mirrors "did you feel understood?" as the stars |

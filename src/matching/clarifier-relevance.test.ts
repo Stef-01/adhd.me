@@ -48,9 +48,9 @@ describe("M10 the co-occurrence map is derived, not authored", () => {
    */
   it("holds the measured shape of the real corpus", () => {
     const counts = cooccurrenceCounts();
-    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(90);
-    expect(counts.size).toBe(140);
-    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(54);
+    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(93); // R15: +3 two-facet sentences
+    expect(counts.size).toBe(144); // R15: perinatal pairs with assessment and telehealth
+    expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(56); // R15: two perinatal pairs clear the floor
   });
 
   it("names blind spot (1): corpus gold sets carry no language keys, so language suggests nothing yet", () => {
@@ -79,7 +79,9 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
    * sentence zeroed, and it is now stated about the list it was always about.
    */
   it("holds the pinned offer distribution over every tied corpus query", () => {
-    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+    // 2026-09-29: a third GP declares shared care and no assessment, so the GP list itself orders;
+    // the two-person list these numbers were measured on is the GPs who both declare assessment.
+    const gps = clinicians.filter((c) => professionOf(c) === "gp" && c.careAreas.includes("adhd-assessment"));
     let zero = 0;
     let partial = 0;
     let full = 0;
@@ -103,7 +105,7 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
     // top-3 cut matters here: an external filter over the old top three would have zeroed two of
     // these readers, where the integrated gate promotes a suggested candidate from further down
     // the ranking instead.
-    expect(full).toBe(54);
+    expect(full).toBe(57); // R15: 54 -> 57, three more tied readers keep a full offer
     expect(partial).toBe(2);
     expect(zero).toBe(1);
     expect(zeroed).toEqual(["a calm doctor for my anxious mum, she speaks Hindi"]);

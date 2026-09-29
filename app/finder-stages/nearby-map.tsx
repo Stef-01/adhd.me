@@ -55,8 +55,8 @@ function stopLabel(stop: MapStop): string {
  *
  * O251 (founder-directed, "make the GP faces live too"): the marker is the first GP's portrait
  * when there is one, with the row key as a badge, so the map reads as people rather than pins.
- * Only portraits the roster already carries — a credited stock portrait on an example profile, or
- * one a real clinician supplied — are ever drawn; nothing here generates a face. The `alt` is
+ * Only portraits the roster already carries, supplied by the clinician, are ever drawn; nothing
+ * here generates a face. The `alt` is
  * empty because the marker's own accessible name (`stopLabel`) already says who and where.
  */
 function stopIcon(stop: MapStop, image: string | null): L.DivIcon {

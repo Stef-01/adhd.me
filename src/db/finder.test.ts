@@ -65,6 +65,22 @@ describe("parsing what the browser sends", () => {
     expect(parseVoiceCall({ ...call, outcome: "great" })).toBeNull();
   });
 
+  it("keeps a call's transcript whole, its request and place, and refuses a malformed turn", () => {
+    const call = { id: A, deviceId: D, model: "gpt-realtime-2.1-mini", questions: 5, seconds: 98, outcome: "revealed" };
+    const turns = [{ who: "assistant", text: "Hi." }, { who: "person", text: "I had a baby last year" }, { who: "tool", text: "show_matches {}" }];
+    const kept = parseVoiceCall({ ...call, transcript: turns, request: "An ADHD assessment, postpartum", place: "Hornsby" });
+    expect(kept).toMatchObject({ transcript: turns, request: "An ADHD assessment, postpartum", place: "Hornsby" });
+    expect(parseVoiceCall(call)).toMatchObject({ transcript: [], request: "", place: "" });
+    expect(parseVoiceCall({ ...call, transcript: [{ who: "narrator", text: "x" }] })).toBeNull();
+    expect(parseVoiceCall({ ...call, transcript: "everything" })).toBeNull();
+  });
+
+  it("keeps a search's unlisted asks, bounded, and never a key among them", () => {
+    const search = { id: A, deviceId: B, source: "voice", requestText: "help", readSource: "llm", unlisted: ["relates to postpartum", "  ", 7, "x".repeat(81), ...Array.from({ length: 12 }, (_, i) => `ask ${i}`)] };
+    expect(parseSearch(search)?.unlisted).toEqual(["relates to postpartum", ...Array.from({ length: 9 }, (_, i) => `ask ${i}`)]);
+    expect(parseSearch({ ...search, unlisted: undefined })?.unlisted).toEqual([]);
+  });
+
   it("keeps an event of a known kind for a search", () => {
     expect(parseEvent({ id: A, searchId: B, kind: "profile", clinicianId: "mei-chao" })).toMatchObject({ kind: "profile", clinicianId: "mei-chao" });
     expect(parseEvent({ id: A, searchId: B, kind: "click" })).toBeNull();

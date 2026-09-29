@@ -16,14 +16,10 @@ import { measured } from "./support/measured";
 import { clinicians, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
 import { searchRoster } from "../src/finder/pipeline";
-import { DEMO_REQUEST, demoResultsRealRosterOnly, gotoFinderRealRosterOnly } from "./support/real-roster";
+import { DEMO_REQUEST, demoResults, gotoFinder } from "./support/demo-request";
 
-// O226: this file's walks assert REAL-roster facts — named rows above the fold, `rankClinicians`
-// over the real `clinicians` export, "1 of 2 listed GPs" — so the flow enters through the
-// real-roster door. The shipped default (examples ON) keeps its own coverage in the first test
-// below, which walks the scenario without touching the switch.
 async function intoResults(page: Page, place?: string) {
-  await demoResultsRealRosterOnly(page, place);
+  await demoResults(page, place);
 }
 
 test("a search reaches results without a loading screen in between", async ({ page }) => {
@@ -310,7 +306,7 @@ test("a clarifier answer visibly re-sorts the same rows, not a new list (O52)", 
     await expect(page.getByRole("dialog", { name: "Improve my matches" })).toBeVisible();
     await expect(page.locator(".clarify-chip").first()).toBeVisible({ timeout: 20000 });
   };
-  await demoResultsRealRosterOnly(page);
+  await demoResults(page);
   await askAgain();
 
   const before = await page.locator(".clinician-row strong").allInnerTexts();
@@ -384,7 +380,7 @@ test("collective roster coverage is never presented as one doctor's complete fit
 });
 
 test("and still says it when the fit really is complete (O121 non-vacuity)", async ({ page }) => {
-  await gotoFinderRealRosterOnly(page);
+  await gotoFinder(page);
   // Deliberately a query the roster SEPARATES on and serves completely: "adult ADHD
   // assessment" alone is a tie (all three declare it), and a tie renders no claim either — so
   // it would have passed this test for the wrong reason.
@@ -441,7 +437,7 @@ test("the typed journey ends in the engine's own ranking, both ways round (AR38)
   );
 
   for (const [i, query] of QUERIES.entries()) {
-    await gotoFinderRealRosterOnly(page);
+    await gotoFinder(page);
     await page.locator("#welcome-request").fill(query);
     await page.getByRole("button", { name: "Find support" }).click();
     await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

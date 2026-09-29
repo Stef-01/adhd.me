@@ -38,6 +38,7 @@ export const MEANINGS: Record<string, string> = {
   "substance-history": "wants to be open about alcohol or other drug use, or is in recovery",
   "emotional-regulation": "names big emotions, anger, shame or rejection sensitivity as something to get help with",
   "non-medication": "asks for options besides medication, or more than medication alone, such as skills and strategies",
+  perinatal: "names pregnancy, birth or the months after having a baby (postpartum, postnatal, a new mum or dad) as part of what they need care for or understood",
   attuned: "asks for a clinician who listens and takes them seriously",
   steadying: "asks for a clinician who is calm and reassuring",
   sense_making: "asks for what is going on to be explained so it makes sense",
@@ -74,6 +75,7 @@ const EXAMPLES = [
   '"someone to keep prescribing my ADHD medication" → care: shared-care; negated: adhd-assessment',
   '"a clinician who speaks Tamil" → languages: tamil',
   '"a practice that runs on schedule" → unlisted: appointments that run on time',
+  '"our little one is five months and I want a GP who gets that" → care: perinatal',
 ];
 
 export const INSTRUCTIONS = [
@@ -294,7 +296,7 @@ export function lexiconReading(text: string): Reading {
 
 /**
  * A list longer than this is the model reciting the menu, not reading a request: seen as all ten
- * languages and all twelve care areas. The corpus never pins more than three care or four manner
+ * languages and all thirteen care areas. The corpus never pins more than three care or four manner
  * keys; any four preferences can be asked for together, so they have no limit.
  */
 const MOST: Partial<Record<Field, number>> = { care: 6, manner: 4, languages: 5 };

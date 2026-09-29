@@ -172,13 +172,20 @@ describe("M8: auditSeparation — the module header's claim, pinned against the 
     // header's warning stands where it was aimed — an UNDECLARED facet is still ambiguous, and
     // 426 of these comparisons still are — but the claim that everything provable traces to
     // gender was a fact about roster size, and is re-measured rather than restated.
-    expect(result.valueDiffers).toBe(519);
-    expect(result.intervalSeparates).toBe(93);
-    expect(result.ambiguous).toBe(426);
+    // R15: 519 -> 533, four profiles declare the thirteenth area. 2026-09-29: 533 -> 562,
+    // intervalSeparates 93 -> 159 and ambiguous 440 -> 403 on the 37-profile roster: more pairs
+    // hold two exact, different grades, and four more care areas separate without a negative.
+    expect(result.valueDiffers).toBe(562);
+    expect(result.intervalSeparates).toBe(159);
+    expect(result.ambiguous).toBe(403);
     expect(result.separatingFacetKeys).toEqual([
+      "care:anxiety",
       "care:autism-adhd",
       "care:child-adolescent-adhd",
+      "care:depression",
+      "care:emotional-regulation",
       "care:non-medication",
+      "care:substance-history",
       "care:trauma-informed",
       "pref:woman-gp",
     ]);

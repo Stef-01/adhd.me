@@ -588,12 +588,11 @@ export function closedBooksNote(clinician: Clinician, query: string): string | n
  * discriminant, is the shape that let them drift — so the label and the caption are now produced
  * together, from one `switch`, and `booking-handoff.test.ts` asserts the invariant that broke: a
  * handoff mentions Healthengine in its caption if and only if it mentions Healthengine in its
- * label. Returns `null` for `synthetic-none`, which has no url and therefore no control — the
- * terminal state O231 designed, rather than a disabled button or a link to a fabricated page.
+ * label.
  */
 type BookingHandoff = { label: string; caption: string };
 
-export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
+export function bookingHandoff(clinician: Clinician): BookingHandoff {
   switch (clinician.booking.via) {
     case "healthengine":
       return { label: "See times on Healthengine", caption: "Opens Healthengine in a new tab." };
@@ -601,8 +600,6 @@ export function bookingHandoff(clinician: Clinician): BookingHandoff | null {
       // The practice is named in the paragraph above this control, so the caption stays generic
       // rather than repeating it a third time on one screen (O231's rule for this screen).
       return { label: "Open the practice page", caption: "Opens the practice’s own page in a new tab." };
-    case "synthetic-none":
-      return null;
   }
 }
 

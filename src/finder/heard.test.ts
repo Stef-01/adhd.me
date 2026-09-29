@@ -1,11 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { matchQuality, needsFor } from "@/demo/clinicians";
-import { rosterFor } from "@/demo/synthetic-roster";
+import { clinicians, matchQuality, needsFor } from "@/demo/clinicians";
 import { REACH_CORPUS } from "@/matching/corpus";
 import { facetKey } from "@/matching/needs";
 import { heardChips } from "./heard";
 
-const roster = rosterFor(true);
+const roster = clinicians;
 const chipsFor = (text: string) => heardChips(needsFor(text, roster), 4);
 
 describe("heardChips", () => {
@@ -18,7 +17,7 @@ describe("heardChips", () => {
   it("shows the four strongest of five, in the ranker's order, and nothing else", () => {
     const text = "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment";
     expect(new Set(needsFor(text, roster).map((n) => facetKey(n.facet))).size).toBe(5);
-    expect(chipsFor(text).map((c) => c.label)).toEqual(["Hindi-speaking", "Bulk billing", "Longer appointment", "Woman clinician"]);
+    expect(chipsFor(text).map((c) => c.label)).toEqual(["Hindi-speaking", "Bulk billing", "Woman clinician", "Longer appointment"]);
   });
 
   it("gives a long label its short one", () => {

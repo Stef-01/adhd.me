@@ -3,11 +3,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { ratings, resetFinderDb } from "@/db/finder";
 import { resetRateLimits } from "@/lib/rate-limit";
-import { rosterFor } from "@/demo/synthetic-roster";
+import { clinicians } from "@/demo/clinicians";
 import { POST } from "./route";
 
 const HANDOFF = "11111111-1111-4111-8111-111111111111";
-const clinicianId = rosterFor(true)[0]!.id;
+const clinicianId = clinicians[0]!.id;
 const rate = (body: unknown, caller = "203.0.113.9") =>
   POST(new Request("http://local/api/ratings", { method: "POST", headers: { "content-type": "application/json", "x-forwarded-for": caller }, body: JSON.stringify(body) }));
 

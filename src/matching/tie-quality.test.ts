@@ -177,7 +177,11 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
    order. So the rate dropping by forty points is the size artefact `separation-effect.ts` was
    built to see through (a full separation of eleven is a far higher bar than of two), while
    every column underneath it moved the way a bigger, more varied roster should move it. */
-const PINNED = { total: 451, separated: 123, partialTie: 299, unseparated: 29 };
+// R15: 451 -> 462, separated 123 -> 134: the eleven perinatal sentences separate the roster,
+// because the four profiles that declare the area are not the same four on anything else.
+// 2026-09-29: 37 real profiles, separated 134 -> 160 and unseparated 29 -> 11: the network answers
+// more of what the corpus asks, and answers it differently from the founding eleven.
+const PINNED = { total: 462, separated: 160, partialTie: 291, unseparated: 11 };
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
@@ -203,8 +207,8 @@ describe("W234 the tie-quality KPI over the corpus run", () => {
     // unseparated here only when the reader HEARD the request (corpusRun excludes unheard).
     expect(tieOutcome("my dose wears off and needs titration reviewed")).toBe("separated");
     expect(tieOutcome("zzz qqq")).toBe("unseparated");
-    // O252: eleven, and the middle outcome exists again because of it (see the pin above).
-    expect(clinicians.length).toBe(11);
+    // O252: eleven, and the middle outcome exists again because of it; 2026-09-29: thirty-seven.
+    expect(clinicians.length).toBe(37);
   });
 
   it("survives roster growth without redefinition: outcomes are relative to roster size", () => {

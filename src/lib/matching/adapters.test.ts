@@ -1,5 +1,5 @@
-// M1 verify gate: the roster adapter invents nothing for a real person, declares deterministic
-// examples for synthetic entries, and the intake reader takes only what the person stated.
+// M1 verify gate: the roster adapter invents nothing for a real person, and the intake reader takes
+// only what the person stated.
 
 import { describe, expect, it } from "vitest";
 import { clinicians as everyRealEntry, professionOf } from "@/demo/roster";
@@ -12,7 +12,6 @@ import { clinicians as everyRealEntry, professionOf } from "@/demo/roster";
  * lists differ and the one these assertions are about is named.
  */
 const clinicians = everyRealEntry.filter((c) => professionOf(c) === "gp");
-import { demoRoster } from "@/demo/synthetic-roster";
 import { gpFromClinician, patientFromIntake, readStructuredSignals, rosterGPs, statedDurationMonths } from "./adapters";
 import { embedder } from "./test-fixtures";
 
@@ -21,7 +20,7 @@ const TODAY = new Date("2026-09-09T00:00:00.000Z");
 describe("M1 the roster becomes GPs", () => {
   it("maps every GP and leaves allied entries out", () => {
     const gps = rosterGPs(TODAY);
-    const rosterGpCount = demoRoster.filter((c) => c.profession === undefined || c.profession === "gp").length;
+    const rosterGpCount = everyRealEntry.filter((c) => c.profession === undefined || c.profession === "gp").length;
     expect(gps.length).toBe(rosterGpCount);
     expect(gps.every((g) => g.conditions.includes("adhd"))).toBe(true);
   });
@@ -40,29 +39,17 @@ describe("M1 the roster becomes GPs", () => {
     }
   });
 
-  it("declares examples deterministically for synthetic entries, and the same way every run", () => {
-    const synthetic = demoRoster.filter((c) => c.synthetic && (c.profession === undefined || c.profession === "gp"));
-    expect(synthetic.length).toBeGreaterThan(5);
-    for (const c of synthetic) {
-      const a = gpFromClinician(c, TODAY)!;
-      const b = gpFromClinician(c, TODAY)!;
-      expect(a).toEqual(b);
-      expect(a.realPerson).toBe(false);
-      expect(a.credentials.yearsTreatingAdhd).not.toBeNull();
-      expect(a.credentials.prescribingPhilosophy).not.toBeNull();
-    }
-  });
 
   it("reads capacity from the roster's grade, age groups from care areas, and billing from signals", () => {
     // O252: ... and a GP, for the same reason — the roster's first child-and-adolescent entry
     // is now a psychologist, whom this adapter correctly declines to turn into a GP.
-    const child = demoRoster.find(
-      (c) => c.careAreas.includes("child-adolescent-adhd") && c.acceptingNewPatients && (c.profession === undefined || c.profession === "gp"),
+    const child = everyRealEntry.find(
+      (c) => [...c.careAreas, ...(c.careAreasSometimes ?? [])].includes("child-adolescent-adhd") && c.acceptingNewPatients && (c.profession === undefined || c.profession === "gp"),
     )!;
     const gp = gpFromClinician(child, TODAY)!;
     expect(gp.credentials.ageGroupsTreated).toEqual(["children", "adolescents", "adults"]);
     expect(gp.credentials.caseloadCapacityCurrent).toBeGreaterThan(0);
-    const closed = demoRoster.find((c) => !c.acceptingNewPatients && (c.profession === undefined || c.profession === "gp"));
+    const closed = everyRealEntry.find((c) => !c.acceptingNewPatients && (c.profession === undefined || c.profession === "gp"));
     if (closed) expect(gpFromClinician(closed, TODAY)!.credentials.caseloadCapacityCurrent).toBe(0);
     // A real person gets no invented count: one place, open or closed, and a bio of sentences.
     for (const real of clinicians) {
@@ -74,11 +61,11 @@ describe("M1 the roster becomes GPs", () => {
       expect(gp.credentials.bioLongText).toMatch(new RegExp(`${focus}[.!?] `));
     }
     // Years are never negative: the derivation uses unsigned shifts.
-    for (const c of demoRoster) {
+    for (const c of everyRealEntry) {
       const gp = gpFromClinician(c, TODAY);
       if (gp?.credentials.yearsTreatingAdhd !== null && gp) expect(gp.credentials.yearsTreatingAdhd).toBeGreaterThanOrEqual(3);
     }
-    const mixed = demoRoster.find((c) => c.practicalSignals.some((s) => /mixed/i.test(s)) && (c.profession === undefined || c.profession === "gp"))!;
+    const mixed = everyRealEntry.find((c) => c.practicalSignals.some((s) => /mixed/i.test(s)) && (c.profession === undefined || c.profession === "gp"))!;
     expect(gpFromClinician(mixed, TODAY)!.preferences.billingAccepted).toContain("bulk-billing");
   });
 });

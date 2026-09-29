@@ -63,13 +63,18 @@ export function trackSearch(record: {
   filters: Record<string, unknown>;
   readSource: "lexicon" | "llm";
   asked: string[];
+  /** Asks the model reader heard that no key covers, in its words. */
+  unlisted: string[];
   shown: string[];
 }): void {
   track("search", { ...record, deviceId: deviceId() });
 }
 
-/** A voice call's summary (src/voice): how it went, never what was said. */
-export function trackVoiceCall(call: { model: string; questions: number; seconds: number; outcome: "revealed" | "stopped" | "failed" | "urgent" }, searchId: string | null): void {
+/** A voice call (src/voice): how it went, the request it wrote, and every turn. */
+export function trackVoiceCall(
+  call: { model: string; questions: number; seconds: number; outcome: "revealed" | "stopped" | "failed" | "urgent"; request: string; place: string; turns: { who: string; text: string }[] },
+  searchId: string | null,
+): void {
   track("voice", { id: newId(), deviceId: deviceId(), searchId, ...call });
 }
 

@@ -58,12 +58,12 @@ export const DYNAMIC_ROUTE_PLAN: Readonly<Record<string, { sample: string } | { 
       "A booking page renders only for a token minted against a seeded invitation, and `e2e/booking.spec.ts` mints one and drives the whole flow. Visiting it with a made-up token sweeps an error state, which is a page this rule has nothing to say about. Covered there, deliberately not here.",
   },
   "/gp/[id]": {
-    sample: "/gp/example-mei-chao",
+    sample: "/gp/anubhav-saxena",
   },
   "/practitioner/[id]": {
     // The screen the skill-match dialog's "View full profile" opens. Same roster as `/gp/[id]`,
     // a different template, and it arrived undeclared — which is the case this record exists for.
-    sample: "/practitioner/example-mei-chao",
+    sample: "/practitioner/anubhav-saxena",
   },
   "/lives/play/[journey]": {
     // Every character's own game. Maya's carries the most in one screen — a drawn scene, a timer,
@@ -72,7 +72,7 @@ export const DYNAMIC_ROUTE_PLAN: Readonly<Record<string, { sample: string } | { 
     sample: "/lives/play/maya-the-crossing",
   },
   "/console/gp/[id]": {
-    sample: "/console/gp/example-mei-chao",
+    sample: "/console/gp/anubhav-saxena",
   },
   "/console/setup/[step]": {
     excluded:

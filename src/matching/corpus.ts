@@ -602,7 +602,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I am at uni and my study is falling apart, I want this assessed", reaches: ["care:adhd-assessment"] },
   { text: "fifty years old and finally sorting this out properly", reaches: ["care:adhd-assessment"] },
   { text: "shift work means I can only do phone appointments", reaches: ["pref:telehealth-first"] },
-  { text: "a new baby at home, everything has to be online for now", reaches: ["pref:telehealth-first"] },
+  // R15: the new baby is why it has to be online; a clinician who sees new parents is a fit, so it is declared.
+  { text: "a new baby at home, everything has to be online for now", reaches: ["pref:telehealth-first", "care:perinatal"] },
   { text: "I am a nurse and I need someone who will not treat me like I should know better", aspires: ["manner:non_judgmental"] },
   { text: "I am immunocompromised so clinic visits are a risk", reaches: ["pref:telehealth-first"] },
 
@@ -1009,6 +1010,22 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a GP who can do the assessment and keep the scripts going", reaches: ["care:adhd-assessment"] },
   { text: "somewhere near Beecroft that takes new patients", never: ["care:adhd-assessment"] },
 
+  // ── R15: the postpartum call. The founder's own scenario, in the phrasings a new parent uses. ──
+  { text: "I had a baby eight months ago and I think I might have ADHD, I want someone who gets the postpartum experience", reaches: ["care:perinatal", "care:adhd-assessment"] },
+  { text: "six months postpartum and everything I used to manage has fallen apart", reaches: ["care:perinatal"] },
+  { text: "a clinician who relates to what postnatal life is like", reaches: ["care:perinatal"] },
+  { text: "someone who understands what it's like being a new mum", reaches: ["care:perinatal"], never: ["manner:sense_making", "manner:culturally_attuned"] },
+  { text: "since the baby came I can't hold a thought, is this ADHD", reaches: ["care:perinatal", "care:adhd-assessment"] },
+  { text: "expecting a baby in March and I want help lined up before then", reaches: ["care:perinatal"] },
+  { text: "pregnant and unsure what this means for my medication", reaches: ["care:perinatal"] },
+  { text: "still breastfeeding so I need someone careful about what I can take", reaches: ["care:perinatal"] },
+  { text: "a new dad who cannot keep up and wants it looked at properly", reaches: ["care:perinatal"] },
+  { text: "perinatal mental health experience, please", reaches: ["care:perinatal"] },
+  // The words that must not reach it: a relative, a figure of speech, a childhood.
+  { text: "my baby brother was diagnosed last year and I recognised myself", reaches: ["care:adhd-assessment"], never: ["care:perinatal"] },
+  { text: "baby steps, I just want to talk to someone first", never: ["care:perinatal"] },
+  { text: "I have been like this since I was a baby", never: ["care:perinatal"] },
+
 ];
 
 /** Per-facet reach over the corpus: entries that name the facet in `reaches` or `aspires`. */
@@ -1093,6 +1110,8 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // gap — they name what happened to the person, and whether this product may read that is a
   // founder call, raised in the ledger.
   "care:trauma-informed": 13,
+  // R15: the postpartum call. Eleven sentences reach it on the day it is added (the floor is the number).
+  "care:perinatal": 11,
   // O123 raised 19→22: this facet's cues are all care-EXPERIENCE ("dismissed", "brushed off",
   // "not believed"), and leaving an appointment unheard sits squarely in that register. The one
   // that stays — "I cry in the car after every appointment" — names the reader's emotional

@@ -6,7 +6,7 @@
 import { expect } from "@playwright/test";
 import { test } from "./support/test";
 import { MANAGER_EMAIL, signInAndOnboard } from "./support/session";
-import { DEMO_REQUEST } from "./support/real-roster";
+import { DEMO_REQUEST } from "./support/demo-request";
 
 const NARRATIVE =
   "I think I have had ADHD my whole life. I want an adult assessment with someone who will not rush me. I have anxiety too, and telehealth would be easier.";
@@ -54,8 +54,8 @@ test("the request lives in the tab, not the address bar, and a fresh tab has not
 
 test("a GP profile says declared and checked as different things, and shows no score", async ({ page, request }) => {
   await request.post("/api/mock/matching?seedFeedback=1");
-  await page.goto("/gp/example-mei-chao");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Dr Mei Chao");
+  await page.goto("/gp/anubhav-saxena");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Dr Anubhav Saxena");
   await expect(page.locator("summary", { hasText: "Credentials" })).toBeVisible();
   await expect(page.getByTestId("felt-understood")).toContainText(/Of 7 people matched here/);
   const body = await page.locator("main").innerText();

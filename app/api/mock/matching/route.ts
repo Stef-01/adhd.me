@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   const url = new URL(request.url);
   if (url.searchParams.get("seedFeedback") === "1") {
     const state = getMatching();
-    const gp = gpById("example-mei-chao", state);
+    const gp = gpById("anubhav-saxena", state);
     if (gp) {
       const fits: Rating[] = [5, 4, 5, 2, 4, 5, 3];
       const records: Feedback[] = fits.map((fit, i) => ({

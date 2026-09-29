@@ -149,9 +149,11 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
    * and must say so when it cannot.
    */
   it("orders the commonest query where it can, and admits the tie where it cannot", () => {
-    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+    // 2026-09-29: a third GP declares shared care and no assessment, so the GP list orders too; the
+    // tie is between the two who both declare assessment, where nothing in the words can choose.
+    const assessing = clinicians.filter((c) => professionOf(c) === "gp" && c.careAreas.includes("adhd-assessment"));
     expect(matchQuality("I think I might have ADHD")).toBe("informed");
-    expect(matchQuality("I think I might have ADHD", gps)).toBe("tied");
+    expect(matchQuality("I think I might have ADHD", assessing)).toBe("tied");
   });
 
   it("names a care area nobody declares instead of returning a silent list", () => {
@@ -172,9 +174,10 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
    * facets nobody declares today are bulk-billing, steadying and motivating, which is why
    * those three are the cases here: they are the live ones, not invented examples.
    */
-  it("names an unanswered PREFERENCE, which is where this roster's real gap is", () => {
-    const [said] = unservedAsks("I want a GP who bulk bills");
-    expect(said).toContain("Bulk billing is not something any provider listed today declares");
+  it("names an unanswered LANGUAGE, which is where this roster's real gap is", () => {
+    // 2026-09-29: bulk billing is declared on the network roster; Arabic is spoken by nobody listed.
+    const [said] = unservedAsks("a clinician who speaks Arabic");
+    expect(said).toContain("Arabic-speaking is not something any provider listed today declares");
     expect(said).toContain("a gap in our listing, not in what you asked for");
   });
 
@@ -206,7 +209,7 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
   });
 
   it("stays a fact about a declaration, never a claim about ability (W193)", () => {
-    const said = unservedAsks("I want a GP who bulk bills")[0]!;
+    const said = unservedAsks("a clinician who speaks Arabic")[0]!;
     expect(said).toContain("is not something any provider listed today declares");
     for (const forbidden of ["cannot", "unable", "does not do", "no GP can"]) {
       expect(said.toLowerCase()).not.toContain(forbidden);
@@ -381,6 +384,8 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // / "over video" in the raw stream and the innocent sentence is refused.
     "by video", "diagnose me", "figure out",
     "get a word in", "get checked",
+    // R15: [baby] alone is a relative or a figure of speech; the skeleton "had a baby" is the ask.
+    "had a baby",
     // O210: reviewed and DELIBERATE, the same device as "in recovery" and "by video" above. Both
     // tenses collapse to [hear] — `stem("hears")` is "hear" — and bare [hear] would fire on "I hear
     // the wait is long" and "from what I hear the clinic is busy". Authored as pairs, the O45
@@ -406,7 +411,7 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     "out of pocket", "out the door", "over the phone",
     // O108: see "by video" above — same phrase, other preposition.
     "over video", "really listen", "right with me", "the mechanism",
-    "understand what", "what is going on",
+    "what is going on",
     // O210: collapses to [patience], and reviewed as safe on BOTH sides. Bare [patience] fires on
     // "she ran out of patience" and "waiting rooms test your patience", so the pair demand is what
     // makes it precise. And the word it does NOT collide with is the one that matters most here:
@@ -1210,8 +1215,8 @@ describe("§O111 the finder does not say it could not read what it read perfectl
    * each other, and the false one louder.
    */
   it("separates a request nobody answers from a request nobody could read", () => {
-    expect(matchQuality("gap fees are why I stopped going, I need a GP who bulk bills")).toBe("unserved");
-    // O252: the calm-and-steadying ask is answered now; the bipolar ask is the live one.
+    // 2026-09-29: bulk billing is answered on the network roster; Arabic and bipolar are the live gaps.
+    expect(matchQuality("a clinician who speaks Arabic")).toBe("unserved");
     expect(matchQuality("I have bipolar as well")).toBe("unserved");
     // The genuine no-read case keeps the value and the sentence that were always true of it.
     expect(matchQuality("zzz qqq")).toBe("unmatched");
@@ -1225,15 +1230,15 @@ describe("§O111 the finder does not say it could not read what it read perfectl
   });
 
   it("the banner and the gap line agree, on the query that exposed the disagreement", () => {
-    const said = "gap fees are why I stopped going, I need a GP who bulk bills";
+    const said = "a clinician who speaks Arabic";
     expect(MATCH_QUALITY_COPY[matchQuality(said)]).toContain("Nobody listed today answers it");
-    expect(unservedAsks(said)[0]).toContain("Bulk billing is not something any provider listed today declares");
+    expect(unservedAsks(said)[0]).toContain("Arabic-speaking is not something any provider listed today declares");
   });
 
   it("nothing that branches on an earned order changes: unserved is not informed either", () => {
     // Every honesty branch in the UI asks `quality !== "informed"`, so the new value must sit
     // on the same side of that line as the one it split from.
-    for (const said of ["gap fees are why I stopped going", "zzz qqq", "I have bipolar as well"]) {
+    for (const said of ["a clinician who speaks Arabic", "zzz qqq", "I have bipolar as well"]) {
       expect(matchQuality(said)).not.toBe("informed");
     }
     // And a request the roster genuinely answers is still informed.

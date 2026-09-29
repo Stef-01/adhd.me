@@ -54,7 +54,8 @@ describe("O117 what patients are told, enumerated for the clinician", () => {
   });
 
   it("the reason sentence is the finder's own, not a copy of it", () => {
-    for (const clinician of eachOf(clinicians, "the roster")) {
+    // Two therapy assistants are listed with nothing matchable declared yet, so they have no reason line.
+    for (const clinician of eachOf(clinicians.filter((c) => reasonsPatientsCanSee(c).length > 0), "clinicians with a reason")) {
       const first = reasonsPatientsCanSee(clinician)[0]!;
       const said = sentencesPatientsSee(clinician).map((line) => line.said);
       expect(said).toContain(getPersonalizedMatch(clinician, first.said.toLowerCase()).reason);

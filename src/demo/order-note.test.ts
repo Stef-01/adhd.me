@@ -4,7 +4,7 @@
 // rather than to a fixed string: the copy may be rewritten freely, the claims may not.
 
 import { describe, expect, it } from "vitest";
-import { clinicians, matchQuality, needsFor, orderNote } from "./clinicians";
+import { clinicians, matchQuality, needsFor, orderNote, professionOf } from "./clinicians";
 
 /** Queries chosen to land on all four `MatchQuality` values against the real roster. */
 const QUERIES = [
@@ -14,6 +14,7 @@ const QUERIES = [
   "hello",
   "i want someone steadying who bulk bills",
   "telehealth, i work nights",
+  "I have bipolar as well",
 ];
 
 describe("orderNote", () => {
@@ -73,21 +74,14 @@ describe("orderNote", () => {
 });
 
 describe("orderNote names the list it is about", () => {
-  it("says GP for the GP roster, the profession for a list narrowed to one kind, and provider for a mix", async () => {
-    const { ALLIED_CLINICIANS, demoRoster } = await import("./synthetic-roster");
-    const { professionOf } = await import("./roster");
-    const ots = ALLIED_CLINICIANS.filter((c) => c.profession === "occupational-therapist");
-    expect(ots.length).toBeGreaterThan(0);
-    // O252: the real roster is no longer GPs only, so the GP case is the GP-narrowed list —
-    // which is what the finder actually shows a reader who asks for a GP, and what this
-    // assertion was always about. The mixed case below is now the real roster too, and is
-    // asserted on it rather than only on the synthetic one.
-    const realGps = clinicians.filter((c) => professionOf(c) === "gp");
-    expect(realGps.length).toBeGreaterThan(0);
-    expect(orderNote("help with adjustments at work", realGps)).toContain("every listed GP");
+  it("says GP for the GP roster, the profession for a list narrowed to one kind, and provider for a mix", () => {
+    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+    const psychologists = clinicians.filter((c) => professionOf(c) === "psychologist");
+    expect(gps.length).toBeGreaterThan(0);
+    expect(psychologists.length).toBeGreaterThan(0);
+    expect(orderNote("help with adjustments at work", gps)).toContain("every listed GP");
     expect(orderNote("help with adjustments at work", clinicians)).toContain("every listed provider");
-    expect(orderNote("help with adjustments at work", ots)).toContain("every listed occupational therapist");
-    expect(orderNote("help with adjustments at work", ots)).not.toMatch(/\bGP\b/);
-    expect(orderNote("help with adjustments at work", demoRoster)).toContain("every listed provider");
+    expect(orderNote("help with adjustments at work", psychologists)).toContain("every listed psychologist");
+    expect(orderNote("help with adjustments at work", psychologists)).not.toMatch(/\bGP\b/);
   });
 });

@@ -7,7 +7,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { needsFor, type Clinician } from "@/demo/clinicians";
 import { worthReading } from "@/finder/read-policy";
-import { needForKey, type NeedSignal } from "@/matching/needs";
+import { facetKey, needForKey } from "@/matching/needs";
 import { MODE_KEY, type FinderMode } from "./finder-stages/welcome-stage";
 
 /** At level 1, how long the results wait for the read before ranking on the finder's own. */
@@ -53,19 +53,22 @@ export function useFinderMode(readLevel: number, voice: boolean) {
  * @param active The results are on screen, so a read is wanted now.
  */
 export function useModelRead(level: number, request: string, roster: readonly Clinician[], active: boolean) {
-  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: NeedSignal[] }>({ request: "", done: true });
-  const modelReads = useMemo(() => level >= 1 && worthReading(request, needsFor(request, roster).length), [level, request, roster]);
+  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; keys?: string[]; unlisted: string[] }>({ request: "", done: true, unlisted: [] });
+  /** The finder's own reading of these words: the fallback, and the words each key was heard in. */
+  const heard = useMemo(() => needsFor(request, roster), [request, roster]);
+  const modelReads = useMemo(() => level >= 1 && worthReading(request, heard.length), [level, request, heard]);
   /** Asks the route to read these words; the answer lands only while they are still the ones read. */
   const readWords = useCallback((words: string) => {
-    setRouteRead({ request: words, done: false });
+    setRouteRead({ request: words, done: false, unlisted: [] });
     const body = JSON.stringify({ text: words });
     fetch("/api/finder/read", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
-      .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string }>) : null))
+      .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string; unlisted?: string[] }>) : null))
       .catch(() => null)
       .then((answer) => setRouteRead((held) => held.request !== words ? held : {
         request: words,
         done: true,
-        needs: answer?.source === "llm" ? answer.keys.flatMap((key) => needForKey(key) ?? []) : undefined,
+        keys: answer?.source === "llm" ? answer.keys : undefined,
+        unlisted: answer?.source === "llm" && Array.isArray(answer.unlisted) ? answer.unlisted.filter((p): p is string => typeof p === "string") : [],
       }));
   }, []);
   useEffect(() => {
@@ -81,11 +84,25 @@ export function useModelRead(level: number, request: string, roster: readonly Cl
     const trimmed = words.trim();
     if (level >= 1 && trimmed && worthReading(trimmed, needsFor(trimmed, roster).length)) readWords(trimmed);
   }, [level, readWords, roster]);
+  const landed = level >= 1 && routeRead.request === request;
+  /**
+   * The model's needs for these words, or undefined where the finder's own read stands. A need's
+   * quote is the words the lexicon heard the same key in, and nothing where it heard none: the model
+   * returns keys, not the person's words, and a key is never shown as one (qa/matching/rca.md, R15).
+   */
+  const modelNeeds = useMemo(() => {
+    if (!landed || !routeRead.keys) return undefined;
+    const spoken = new Map(heard.map((need) => [facetKey(need.facet), need.matched]));
+    return routeRead.keys.flatMap((key) => needForKey(key, spoken.get(key) ?? "") ?? []);
+  }, [landed, routeRead.keys, heard]);
   return {
     /** A read is wanted for these words and has not landed. */
     reading: modelReads && (routeRead.request !== request || !routeRead.done),
-    /** The model's needs for these words, or undefined where the finder's own read stands. */
-    modelNeeds: level >= 1 && routeRead.request === request ? routeRead.needs : undefined,
+    modelNeeds,
+    /** The finder's own reading, which stands wherever the model's does not. */
+    heard,
+    /** Asks the model heard that no key covers, kept with the search's record. */
+    unlisted: landed ? routeRead.unlisted : [],
     readAhead,
   };
 }

@@ -240,25 +240,6 @@ export function getRequestHeadline(value: string, fallback: string) {
   return fallback;
 }
 
-/** O222: the example-profile disclosure, ONE export — founder decision `synthetic-roster-tickbox`
- * says every surface that can show an invented entry labels it, and four hand-written guards with
- * three copy variants is how that promise drifts. The guard and the words live here; the class
- * stays a prop so the existing CSS (and the dead-css census) does not move. */
-// O231 (founder-directed, amending `synthetic-roster-tickbox`): the per-card and per-profile
-// "Example profile" labels are GONE from the finder's surfaces. The founder's words, 2026-09-02:
-// "If you add any weird placeholder sentences or note any profiles are synthetic you will ruin the
-// entire pitch demo day we have been invited to." A badge repeated down every row of a results
-// list is the loudest unfinished-looking thing on the screen, and the sentence under a doctor's
-// name was the first thing a reader met.
-//
-// WHAT STAYS, BECAUSE IT IS NOT A LABEL: the `synthetic` flag itself and every structural defence
-// around it — one of `realPerson`/`synthetic` on any rendered entry, `image` a credited stock
-// portrait or null so no face is generated (O242), no `url` so nothing opens a fabricated booking
-// listing, no `disclosedInterest`, the
-// practice names self-marking, and the same patient-surface linter over every rendered string.
-// The label was one of seven defences; the other six do the work that actually matters, and the
-// one truthful sentence about the roster now lives on `/story`, off the demo path entirely.
-
 export function Wordmark() {
   /* O167: `translate="no"`. The guidelines ask for it on brand names, code tokens and identifiers,
      and this one is all three, a name, a wordmark and a domain. Auto-translation renders "ADHD"
@@ -303,9 +284,8 @@ function initialsOf(name: string) {
 /**
  * A clinician's portrait, or a monogram when there is none.
  *
- * The synthetic demo personas have synthetic portraits; a real clinician's likeness is theirs to
- * supply, and nothing in this tree generates a face for a real person. A monogram is a real
- * directory pattern rather than a placeholder, so the layout is correct in both states.
+ * A clinician's likeness is theirs to supply, and nothing in this tree generates a face. A monogram
+ * is a real directory pattern rather than a placeholder, so the layout is correct in both states.
  */
 export function ClinicianPortrait({
   clinician,
@@ -323,9 +303,7 @@ export function ClinicianPortrait({
    */
   eager?: boolean;
 }) {
-  // O242: an example persona's photograph is a licensed stock portrait, and the alt says so — a
-  // screen reader must not be told it is a photograph of a doctor who does not exist.
-  const alt = clinician.synthetic ? `Stock portrait standing in for the example profile ${clinician.name}` : `Portrait of ${clinician.name}`;
+  const alt = `Portrait of ${clinician.name}`;
 
   if (clinician.image) {
     return variant === "fill"

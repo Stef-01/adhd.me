@@ -5,14 +5,13 @@
 
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
-import { needsFor, rankClinicians } from "../src/demo/clinicians";
-import { rosterFor } from "../src/demo/synthetic-roster";
+import { clinicians, needsFor, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
 import { searchRoster } from "../src/finder/pipeline";
 import { facetKey, type NeedSignal } from "../src/matching/needs";
 
 const REQUEST = "an adult ADHD assessment, telehealth, not rushed";
-const roster = searchRoster(rosterFor(true), emptyFilters(), REQUEST, null);
+const roster = searchRoster(clinicians, emptyFilters(), REQUEST, null);
 const topFive = (keep: (need: NeedSignal) => boolean) =>
   rankClinicians(REQUEST, roster, new Date(), needsFor(REQUEST, roster).filter(keep)).slice(0, 5).map((c) => c.id);
 const rowIds = (page: Page) => page.locator(".clinician-row").evaluateAll((rows) => rows.map((r) => r.getAttribute("data-clinician")));

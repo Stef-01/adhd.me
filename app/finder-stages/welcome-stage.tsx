@@ -25,8 +25,6 @@ export function WelcomeStage({
   focusOnArrival,
   onSearch,
   onTalk,
-  includeSynthetic,
-  onToggleSynthetic,
   mode,
   onMode,
 }: {
@@ -37,11 +35,6 @@ export function WelcomeStage({
   focusOnArrival: boolean;
   onSearch: (value: string) => void;
   onTalk: () => void;
-  /** O226: the example-roster switch lives HERE now, folded away — configuration belongs at the
-   * door, not between a reader and their results (founder-directed; the harmony review agreed:
-   * the toggle card was the loudest block on a screen whose one job is the list). */
-  includeSynthetic: boolean;
-  onToggleSynthetic: (next: boolean) => void;
   /** The chosen mode, or null where this server offers only Standard. */
   mode: FinderMode | null;
   onMode: (mode: FinderMode) => void;
@@ -54,30 +47,8 @@ export function WelcomeStage({
         <Wordmark />
         {/* O233 (founder-directed): the settings control, top right. About and Questions live in
             its sheet, things consulted once do not belong in a bar meant for destinations
-            somebody returns to. The finder's own testing options ride in the same sheet, so the
-            app has one settings surface rather than two that look alike. */}
-        <AppSettings>
-          <label className="finder-demo-toggle">
-            <input
-              type="checkbox"
-              checked={includeSynthetic}
-              onChange={(event) => onToggleSynthetic(event.target.checked)}
-            />
-            {/* transitions.dev checkbox check: the native input stays — it is what the label
-                toggles, what the keyboard focuses and what the spec unchecks, and is only moved
-                off-screen; this drawn box is its face. The box fills, then the tick strokes in
-                along its own path; unchecking reverses the stroke rather than snapping. */}
-            <span className="t-check" aria-hidden="true">
-              <svg viewBox="0 0 10.1668 10.1668" fill="none">
-                <path d="M1 5.52L3.92 9.17L9.17 1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-            <span>
-              <strong>Include example profiles</strong>
-              <small>Fictional providers, not bookable.</small>
-            </span>
-          </label>
-        </AppSettings>
+            somebody returns to. */}
+        <AppSettings />
       </header>
 
       {/* O233 (founder-directed): the tagline is gone. "ADHD assessment that takes you seriously"

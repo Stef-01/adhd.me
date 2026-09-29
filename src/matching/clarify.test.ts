@@ -27,8 +27,9 @@ describe("W225 a question only earns its place if the answer changes the order",
     },
   );
 
-  it("still breaks the tie on the list a reader asking for a GP is shown", () => {
-    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+  it("still breaks the tie between the GPs who both declare assessment", () => {
+    // 2026-09-29: a third GP declares shared care and no assessment, so the GP list orders on its own.
+    const gps = clinicians.filter((c) => professionOf(c) === "gp" && c.careAreas.includes("adhd-assessment"));
     const before = "I think I might have ADHD";
     expect(matchQuality(before, gps)).toBe("tied");
     const offered = clarifiers(before, gps);

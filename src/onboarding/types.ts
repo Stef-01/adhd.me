@@ -131,6 +131,7 @@ export const CARE_AREA_LABELS: ReadonlyArray<{ id: CareArea; label: string; grou
   { id: "substance-history", label: "Substance use", group: "Other mental health" },
   { id: "emotional-regulation", label: "Emotional regulation", group: "Other mental health" },
   { id: "non-medication", label: "Non-medication and psychological supports", group: "Other mental health" },
+  { id: "perinatal", label: "Pregnancy, postpartum and new parents", group: "Other mental health" },
 ];
 
 /**

@@ -20,24 +20,23 @@ describe("the gazetteer covers what the roster claims", () => {
     expect(new Set(SUBURBS.map((s) => s.suburb)).size).toBe(SUBURBS.length);
   });
 
-  it("keeps every point inside one of the three focus areas, so a typo in a coordinate is caught", () => {
-    // Tight boxes, not one: a single box spanning Beecroft to the Gold Coast is ~700km tall and
-    // would wave through a Sydney point mistyped into the Queensland range. Each suburb must sit
-    // inside the northern-Sydney box, the eastern-suburbs box (O34: Double Bay), OR the Gold
-    // Coast box.
-    const inSydney = (s: SuburbPoint) =>
-      s.lat > -33.9 && s.lat < -33.6 && s.lon > 150.9 && s.lon < 151.2;
-    const inEasternSuburbs = (s: SuburbPoint) =>
-      s.lat > -33.95 && s.lat < -33.83 && s.lon > 151.2 && s.lon < 151.31;
-    // O251: the whole local-government area, Yatala to Coolangatta and the hinterland to
-    // Springbrook and Tamborine Mountain, plus Tweed Heads over the border and Brisbane City.
-    const inGoldCoast = (s: SuburbPoint) =>
-      s.lat > -28.3 && s.lat < -27.7 && s.lon > 153.15 && s.lon < 153.6;
-    // O252: inner Brisbane, where GOALS Psychology is. Brisbane City used to be the single named
-    // exception; a box is the same guard once there is more than one point in it.
-    const inBrisbane = (s: SuburbPoint) => s.lat > -27.6 && s.lat < -27.35 && s.lon > 152.9 && s.lon < 153.2;
+  it("keeps every point inside one of the focus areas, so a typo in a coordinate is caught", () => {
+    // Tight boxes, not one: a single box spanning Sydney to Perth would wave through a Sydney
+    // point mistyped into the Queensland range. Each suburb sits in an area the roster consults in.
+    const AREAS: Record<string, [number, number, number, number]> = {
+      "northern Sydney": [-33.9, -33.6, 150.9, 151.2],
+      "eastern suburbs": [-33.95, -33.83, 151.2, 151.31],
+      "southern Sydney": [-34.1, -33.95, 150.95, 151.15],
+      "Blue Mountains": [-33.8, -33.7, 150.55, 150.7],
+      "Central Coast": [-33.5, -33.3, 151.3, 151.55],
+      "Snowy Mountains": [-36.5, -36.3, 148.5, 148.7],
+      "Gold Coast": [-28.3, -27.7, 153.15, 153.6],
+      Brisbane: [-27.6, -27.35, 152.9, 153.2],
+      Perth: [-32.1, -31.8, 115.75, 116],
+    };
+    const inside = (s: SuburbPoint, [south, north, west, east]: [number, number, number, number]) => s.lat > south && s.lat < north && s.lon > west && s.lon < east;
     for (const s of SUBURBS) {
-      expect(inSydney(s) || inEasternSuburbs(s) || inGoldCoast(s) || inBrisbane(s), `${s.suburb} is outside every focus area`).toBe(true);
+      expect(Object.values(AREAS).some((box) => inside(s, box)), `${s.suburb} is outside every focus area`).toBe(true);
       expect(s.postcode).toMatch(/^\d{4}$/);
     }
   });

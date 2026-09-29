@@ -101,6 +101,10 @@ export const CARE_PROMPTS: Record<string, { prompt: string; answer: string }> = 
     prompt: "Do you want options beyond medication?",
     answer: "I want alternatives, not just medication",
   },
+  "care:perinatal": {
+    prompt: "Is this around pregnancy or a new baby?",
+    answer: "this is since having a baby",
+  },
 };
 
 /**

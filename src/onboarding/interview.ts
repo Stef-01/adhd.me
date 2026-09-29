@@ -86,6 +86,7 @@ const CARE_QUESTIONS: ReadonlyArray<{ area: CareArea; ask: string }> = [
   { area: "substance-history", ask: "Taking a substance history as part of the safety picture?" },
   { area: "emotional-regulation", ask: "Rejection sensitivity and emotional regulation?" },
   { area: "non-medication", ask: "Patients who want options other than medication?" },
+  { area: "perinatal", ask: "People through pregnancy, or in the year after a baby?" },
 ];
 
 /**

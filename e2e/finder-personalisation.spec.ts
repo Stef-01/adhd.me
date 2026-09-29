@@ -31,7 +31,7 @@ import type { ModelRecord } from "../src/model/store";
 import { topNeed } from "../src/model/needs";
 import { fitTags } from "../src/support/problem-fit";
 import { EXPERTISE_LABELS } from "../src/support/professions";
-import { rosterFor } from "../src/demo/synthetic-roster";
+import { clinicians } from "../src/demo/clinicians";
 
 const MODEL_KEY = "adhdme.model.v1";
 
@@ -82,8 +82,8 @@ test("the profile's chips are the person's own cells, not the provider's sales l
   await expect(page.locator(".profile-screen")).toBeVisible();
 
   const name = (await page.getByRole("heading", { level: 1 }).innerText()).trim();
-  const clinician = rosterFor(true).find((c) => c.name === name);
-  expect(clinician, `the opened profile "${name}" is on the default roster`).toBeTruthy();
+  const clinician = clinicians.find((c) => c.name === name);
+  expect(clinician, `the opened profile "" is on the roster`).toBeTruthy();
 
   // THE ASSERTION THIS FILE IS FOR. The expected chips are derived from the seeded record, not
   // from the provider's declared expertise — `fitTags` returns only the tags the person's own

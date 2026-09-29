@@ -60,12 +60,11 @@ open in the code and had never been surfaced here; the seventh is a deploy switc
    `app/clinicians/clinician-walkthrough.tsx` links out to AADPA, NICE and the TGA rather than
    restating their content. The URLs are landing pages rather than deep links, and none has been
    opened from this tree.
-5. **Only subject-supplied portraits are used for real people.** The roster includes supplied
-   portraits for Dr Anubhav Saxena and Dr Anu Saxena (`realPerson` entries in
-   `src/demo/roster.ts`), and the team register in `app/about/team.ts` holds supplied founder
-   portraits. Synthetic profiles always use typographic monograms, or a credited stock photograph
-   registered in `src/demo/portrait-credits.ts`; nothing in this tree generates or substitutes a
-   face for a real person.
+5. **Only subject-supplied portraits are used for real people.** Every listed clinician is a real
+   person (`src/demo/roster.ts` and `src/demo/roster-network.ts`, from revamped-adhd.me), shown
+   with the portrait from their own public listing or a monogram, and the team register in
+   `app/about/team.ts` holds supplied founder portraits. Nothing in this tree generates or
+   substitutes a face for a real person.
 
 A sixth question is open in the code but has never been in this list, so it is added here rather
 than left to whoever next reads that file: whether ADHD.ME should publish clinical guidance to
@@ -91,8 +90,8 @@ it. See the `/clinicians` entry in `STANDING_FLAGS` (`src/compliance/public-surf
 - `src/compliance/` — the copy linters and the public-surface sweep
 - `ROADMAP.md`, `AESTHETIC.md` — the whole of the planning surface
 
-Synthetic data only, except where marked: `realPerson` in `src/demo/roster.ts` flags the two entries
-that describe actual clinicians.
+Synthetic data only, except the clinician roster: every entry in `src/demo/roster.ts` and
+`src/demo/roster-network.ts` describes an actual clinician, from their own public listing.
 
 Verify gate: `pnpm verify` (`typecheck && test && build` — the `audit:gate`, `perf:gate` and
 `gate:accounting` steps went with the strip and no longer exist). End-to-end: `pnpm e2e`, or

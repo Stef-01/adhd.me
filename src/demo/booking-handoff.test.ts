@@ -17,27 +17,20 @@
 
 import { describe, expect, it } from "vitest";
 import { bookingHandoff, clinicians, type Clinician } from "./clinicians";
-import { SYNTHETIC_CLINICIANS } from "./synthetic-roster";
 
 /** A `via` of each shape the type admits, so the sweep does not depend on the live roster. */
 function withVia(via: Clinician["booking"]["via"]): Clinician {
   const base = clinicians.find((c) => c.booking.via === "healthengine")!;
-  if (via === "healthengine") return base;
-  if (via === "practice") {
-    return { ...base, booking: { via: "practice", url: "https://example.invalid/book", note: "By phone." } };
-  }
-  return { ...base, booking: { via: "synthetic-none", note: "Nobody to book." } };
+  return via === "healthengine" ? base : { ...base, booking: { via: "practice", url: "https://example.invalid/book", note: "By phone." } };
 }
 
-const VIAS = ["healthengine", "practice", "synthetic-none"] as const;
+const VIAS = ["healthengine", "practice"] as const;
 
 describe("bookingHandoff", () => {
   it("covers every `via` the type admits, so a new route cannot fall through silently", () => {
-    // Non-vacuity for the sweep below: if a fourth variant is added to `Clinician["booking"]`
+    // Non-vacuity for the sweep below: if a third variant is added to `Clinician["booking"]`
     // without a case here, `VIAS` stops matching the type and this list is where it is noticed.
-    const seen = VIAS.map((via) => bookingHandoff(withVia(via)));
-    expect(seen).toHaveLength(3);
-    expect(seen.filter((h) => h === null)).toHaveLength(1);
+    expect(VIAS.map((via) => bookingHandoff(withVia(via)))).toHaveLength(2);
   });
 
   it("names Healthengine in the caption if and only if it names Healthengine in the label", () => {
@@ -45,7 +38,6 @@ describe("bookingHandoff", () => {
     // the bug was not a typo in one sentence — it was two sentences derived independently.
     for (const via of VIAS) {
       const handoff = bookingHandoff(withVia(via));
-      if (handoff === null) continue;
       expect(
         /healthengine/i.test(handoff.caption),
         `the ${via} caption says "${handoff.caption}" under the label "${handoff.label}"`,
@@ -56,7 +48,7 @@ describe("bookingHandoff", () => {
   it("does not send a practice-route reader to Healthengine in words", () => {
     // The specific regression, kept as its own named case so a failure reads as the bug and not
     // as an abstract invariant violation.
-    const handoff = bookingHandoff(withVia("practice"))!;
+    const handoff = bookingHandoff(withVia("practice"));
     expect(handoff.label).not.toMatch(/healthengine/i);
     expect(handoff.caption).not.toMatch(/healthengine/i);
     expect(handoff.caption).toMatch(/new tab/i);
@@ -67,27 +59,8 @@ describe("bookingHandoff", () => {
     // this line exists to remove, so it is not optional on any route.
     for (const via of VIAS) {
       const handoff = bookingHandoff(withVia(via));
-      if (handoff === null) continue;
       expect(handoff.caption, `${via} caption`).toMatch(/new tab/i);
       expect(handoff.label.length, `${via} label`).toBeGreaterThan(0);
-    }
-  });
-
-  it("gives the synthetic examples no control at all, rather than a disabled one", () => {
-    // O231/O217's terminal state, asserted on the real synthetic fixtures and not just a spread.
-    expect(SYNTHETIC_CLINICIANS.length).toBeGreaterThan(0);
-    for (const clinician of SYNTHETIC_CLINICIANS) {
-      expect(bookingHandoff(clinician), clinician.id).toBeNull();
-    }
-  });
-
-  it("agrees with the live roster: every listed clinician with a url has a handoff", () => {
-    // Ties the pure function back to the data it describes, so a roster edit that adds a route
-    // the function does not handle fails here rather than rendering an empty exit screen.
-    for (const clinician of clinicians) {
-      const handoff = bookingHandoff(clinician);
-      const hasUrl = "url" in clinician.booking && Boolean(clinician.booking.url);
-      expect(handoff !== null, `${clinician.id} (${clinician.booking.via})`).toBe(hasUrl);
     }
   });
 });

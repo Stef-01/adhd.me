@@ -11,13 +11,13 @@ import { test } from "./support/test";
 import { clinicians } from "../src/demo/clinicians";
 import { EI_QUALITIES } from "../src/demo/emotional-fit";
 import { clarifiers } from "../src/matching/clarify";
-import { DEMO_REQUEST, gotoFinderRealRosterOnly } from "./support/real-roster";
+import { DEMO_REQUEST, gotoFinder } from "./support/demo-request";
 
 const shot = (name: string) => ({ path: `qa/_runs/matching-o10/${name}.png`, fullPage: true as const });
 
 async function searchFor(page: Page, query: string, place?: string) {
   // O226: these are REAL-roster ranking laws, so the examples are switched off at the door.
-  await gotoFinderRealRosterOnly(page, place);
+  await gotoFinder(page, place);
   await page.getByRole("textbox").fill(DEMO_REQUEST);
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });

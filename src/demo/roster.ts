@@ -22,6 +22,7 @@ import type { ExpertiseTag, Profession } from "@/support/professions";
 // `Clinician` type below is written in terms of it.
 export type { CareArea };
 import { type EIQuality } from "./emotional-fit";
+import { NETWORK_CLINICIANS } from "./roster-network";
 
 /**
  * The roster behind /finder and the walkthrough.
@@ -40,7 +41,7 @@ import { type EIQuality } from "./emotional-fit";
  * performed, and the surfaces say so.
  *
  * WHY `careAreas` IS A CLOSED VOCABULARY AND NOT FREE TEXT. Matching reads these, and a free
- * string would let a demo persona claim an area the archetypes cannot express, which produces
+ * string would let an entry claim an area the archetypes cannot express, which produces
  * a finder that appears to work and silently cannot match. `CareArea` is therefore a union, and
  * an archetype requiring an area no clinician holds is a type error rather than an empty result.
  *
@@ -69,7 +70,8 @@ export type Clinician = {
    */
   expertise?: readonly ExpertiseTag[];
   shortName: string;
-  gender: "woman" | "man" | "non-binary";
+  /** As declared, through their pronouns; `undeclared` where a profile gives none, and matched as neither. */
+  gender: "woman" | "man" | "non-binary" | "undeclared";
   pronouns: string;
   title: string;
   suburb: string;
@@ -85,9 +87,8 @@ export type Clinician = {
   /**
    * A portrait, or null.
    *
-   * Null is a supported state, not a gap to fill later: the demo personas are synthetic and their
-   * portraits are too, and a real clinician's likeness is theirs to supply. Surfaces render a
-   * monogram when this is null. Nothing in this tree generates a face for a real person.
+   * Null is a supported state, not a gap to fill later: a clinician's likeness is theirs to supply.
+   * Surfaces render a monogram when this is null. Nothing in this tree generates a face.
    */
   image: string | null;
   /** The practice these rooms belong to, as the practice writes it. */
@@ -122,16 +123,7 @@ export type Clinician = {
         url: string;
         note: string;
       }
-    | {
-        /**
-         * O217: a synthetic example profile — there is nobody to book, and the variant says so
-         * in the type. Deliberately carries NO url: a fabricated booking route under an invented
-         * doctor is exactly the mock the persona purge removed, so a surface holding one of
-         * these renders an explanation instead of a control, and `/go/` has nothing to read.
-         */
-        via: "synthetic-none";
-        note: string;
-      };
+;
   acceptingNewPatients: boolean;
   /**
    * When the books declaration was last made or reconfirmed (O56, year plan Q2 item 7).
@@ -196,9 +188,8 @@ export type Clinician = {
    * with the patient's consent asked each time; "no-ai" means notes are written without any AI
    * recording or transcription. Absent means undeclared, which the filter treats as neither: a
    * person who asks for one or the other is shown only GPs who have said. A practice fact, not a
-   * clinical one — it says nothing about the care — and a real clinician carries it only when
-   * they or their practice have stated it (the real-person law), so today only the example
-   * profiles do.
+   * clinical one — it says nothing about the care — and a clinician carries it only when they or
+   * their practice have stated it (the real-person law).
    */
   consultRecording?: "ai-scribe" | "no-ai";
   /**
@@ -206,8 +197,8 @@ export type Clinician = {
    * them, closed vocabulary, filterable. "holistic": takes a whole-person view (sleep, work,
    * relationships) alongside the assessment. "functional": open to functional-health approaches
    * alongside standard care. "wearables": happy to look at data from a wearable the person brings.
-   * Each is a statement about the GP's own way of working, never a claim about outcomes, and a real
-   * clinician carries it only when they have said so — today only the example profiles do.
+   * Each is a statement about the GP's own way of working, never a claim about outcomes, and a
+   * clinician carries it only when they have said so.
    */
   approach?: readonly Approach[];
   appointmentLength: string;
@@ -277,26 +268,15 @@ export type Clinician = {
   disclosedInterest?: string;
   disclosedInterestLabel?: string;
   /**
-   * Set when the entry describes a real, identifiable clinician rather than a demo persona.
-   *
-   * The finder shows synthetic and real entries side by side, and a reader cannot tell them apart
-   * from the copy. Holding it as data means a surface can say which is which, and means nobody
-   * later mistakes a real person's record for one they may freely edit.
+   * Set when the entry describes a real, identifiable clinician (every listed one does; the engine's
+   * measurement fixtures, src/matching/scale-fixture.ts, leave it out), so nobody later mistakes a
+   * real person's record for one they may freely edit.
    */
   realPerson?: true;
-  /**
-   * O217 (founder decision `synthetic-roster-tickbox`): set on an invented example profile.
-   *
-   * Exactly one of `realPerson`/`synthetic` must be set on any entry a surface renders —
-   * `synthetic-roster.test.ts` enforces the exclusivity, and every surface that can show a
-   * synthetic entry labels it out loud ("Example profile"). The `clinicians` export stays
-   * real-only; synthetic entries live in `synthetic-roster.ts` and reach a ranking only through
-   * the finder's own opt-in tickbox.
-   */
-  synthetic?: true;
 };
 
-export const clinicians: Clinician[] = [
+/** The eleven listed first, with the declarations their interviews added. */
+const founding: Clinician[] = [
   {
     id: "anubhav-saxena",
     name: "Dr Anubhav Saxena",
@@ -766,7 +746,8 @@ export const clinicians: Clinician[] = [
       "Bachelor of Social Science in Psychology (First Class Honours), University of the Sunshine Coast",
     ],
     languages: ["English"],
-    careAreas: ["trauma-informed", "non-medication"],
+    // Her own declaration: "perinatal mental health" is in her focus, her about and her experience.
+    careAreas: ["trauma-informed", "non-medication", "perinatal"],
     careAreasSometimes: ["anxiety", "depression"],
     // "a calm, inclusive, and supportive environment" and "a strengths-based lens", her words.
     manner: ["steadying", "non_judgmental", "motivating"],
@@ -972,6 +953,13 @@ export const clinicians: Clinician[] = [
     realPerson: true,
   },
 ];
+
+/**
+ * Every clinician the finder can show: the founding eleven and the network brought over from
+ * revamped-adhd.me (roster-network.ts). All real people, each listed from their own description;
+ * the example profiles that once stood beside them are gone (founder, 2026-09-29).
+ */
+export const clinicians: Clinician[] = [...founding, ...NETWORK_CLINICIANS];
 
 /** The profession an entry carries, with the roster's original meaning — no profession is a GP. */
 export function professionOf(clinician: Pick<Clinician, "profession">): Profession {

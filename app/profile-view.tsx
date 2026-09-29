@@ -24,11 +24,10 @@ import Link from "next/link";
 import { CarePreferenceFields } from "./care-preference-fields";
 import { useEffect, useState } from "react";
 import { ArrowRight, MapPin, Quotes, Trash, X } from "@phosphor-icons/react";
-import { nearestKm } from "@/demo/clinicians";
-import { rosterFor } from "@/demo/synthetic-roster";
+import { clinicians, nearestKm } from "@/demo/clinicians";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { clearRecord, readRecord, placeFrom, type FinderRecord } from "@/finder/state";
-import { APPROACHES, type Approach } from "@/demo/roster";
+import type { Approach } from "@/demo/roster";
 import {
   activeFilterCount,
   applyFilters,
@@ -36,6 +35,7 @@ import {
   CONSULT_RECORDING_CHOICES,
   DISTANCE_CHOICES,
   emptyFilters,
+  offeredChoices,
   readFilters,
   writeFilters,
   type BooleanFilterKey,
@@ -44,7 +44,6 @@ import {
   type Filters,
 } from "@/finder/filters";
 import { resolvePlace, suggestPlaces } from "@/geo/suburbs";
-import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { PROFESSION_ENTRIES, type Profession } from "@/support/professions";
 import { AppSettings } from "./app-settings";
 import { BrandMark } from "./brand-wordmark";
@@ -62,6 +61,9 @@ const SWITCHES: ReadonlyArray<{ key: BooleanFilterKey; title: string; detail: st
 const SPRING = { type: "spring", stiffness: 380, damping: 36, mass: 0.85 } as const;
 /** SMOOTH: the segment thumb slides between choices — firm, no bounce, a control not a toy. */
 const SEGMENT_SPRING = { type: "spring", stiffness: 520, damping: 42, mass: 0.7 } as const;
+
+/** The filter choices somebody listed can satisfy; a group nobody declares folds away. */
+const OFFERED = offeredChoices(clinicians);
 
 export function ProfileView() {
   // O243: every entrance here waits for `ready` — the server render carries no opacity: 0 — and
@@ -130,13 +132,8 @@ export function ProfileView() {
   };
   const held = ready && (words.length > 0 || place.length > 0);
   const onCount = activeFilterCount(filters);
-  /**
-   * RADIANT: the live count on the sticky bar — the listed GPs these filters leave, measured from
-   * the suburb above. Over the listed roster with its example profiles, which is what the finder
-   * shows unless the examples switch on its welcome screen is off; that switch is the finder's
-   * own state and this tab cannot see it, so the number here is the listed count.
-   */
-  const shownCount = applyFilters(rosterFor(true), filters, origin, (c) => (origin ? nearestKm(c, origin) : null)).length;
+  /** RADIANT: the live count on the sticky bar — the listed clinicians these filters leave, measured from the suburb above. */
+  const shownCount = applyFilters(clinicians, filters, origin, (c) => (origin ? nearestKm(c, origin) : null)).length;
 
   const toggleProfession = (p: Profession): void => {
     const has = filters.professions.includes(p);
@@ -277,7 +274,7 @@ export function ProfileView() {
         <details className="me-group me-fold">
           <summary id="me-languages-title">Languages</summary>
           <ul className="me-chips">
-            {MATCHABLE_LANGUAGES.map((language) => {
+            {OFFERED.languages.map((language) => {
               const on = filters.languages.includes(language);
               return (
                 <li key={language}>
@@ -334,7 +331,7 @@ export function ProfileView() {
         <details className="me-group me-fold">
           <summary id="me-profession-title">Kind of support</summary>
           <ul className="me-chips">
-            {PROFESSION_ENTRIES.map((entry) => {
+            {PROFESSION_ENTRIES.filter((entry) => OFFERED.professions.includes(entry.id)).map((entry) => {
               const on = filters.professions.includes(entry.id);
               return (
                 <li key={entry.id}>
@@ -356,15 +353,15 @@ export function ProfileView() {
           <p className="me-group-note">Leave all off to see everyone.</p>
         </details>
 
-        <CarePreferenceFields value={filters} onChange={update} />
+        {OFFERED.care && <CarePreferenceFields value={filters} onChange={update} />}
 
         {/* O248 (founder-directed): how the GP works — whole-person, functional-health, wearables —
             as the GP declares it. Each chip requires the declaration; GPs who have not said are
             left out of a chosen chip rather than assumed. Nothing here is a claim about outcomes. */}
-        <details className="me-group me-fold">
+        {OFFERED.approaches.length > 0 && <details className="me-group me-fold">
           <summary id="me-approach-title">How they work</summary>
           <ul className="me-chips">
-            {APPROACHES.map((a) => {
+            {OFFERED.approaches.map((a) => {
               const on = filters.approach.includes(a);
               return (
                 <li key={a}>
@@ -384,12 +381,12 @@ export function ProfileView() {
             })}
           </ul>
           <p className="me-group-note">As the provider declares it.</p>
-        </details>
+        </details>}
 
         {/* O236 (founder-directed): a fact modern patients ask about first — whether the consult is
             recorded and transcribed by AI. A declared practice fact, filtered like the others;
             GPs who have not said are left out of either choice rather than assumed. */}
-        <details className="me-group me-fold">
+        {OFFERED.consultRecording && <details className="me-group me-fold">
           <summary>Consult notes</summary>
           <div className="me-segments me-segments-3" role="group" aria-label="Notes during the consult">
             {CONSULT_RECORDING_CHOICES.map((choice: ConsultRecordingChoice) => {
@@ -410,7 +407,7 @@ export function ProfileView() {
             })}
           </div>
           <p className="me-group-note">An AI scribe with consent, or none.</p>
-        </details>
+        </details>}
         </div>
 
         {onCount > 0 && (

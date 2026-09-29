@@ -35,9 +35,9 @@ which is what makes a cheap LLM programme possible: the gold labels and the metr
 
 - `readNeeds(text)` in `src/matching/needs.ts` reads a request into facets from a closed
   vocabulary with a stemmed, ordered-subsequence cue matcher (`src/matching/read.ts`). The
-  vocabulary: 12 care areas (`adhd-assessment`, `child-adolescent-adhd`, `titration`,
+  vocabulary: 13 care areas (`adhd-assessment`, `child-adolescent-adhd`, `titration`,
   `shared-care`, `depression`, `anxiety`, `trauma-informed`, `complex-mental-health`,
-  `autism-adhd`, `substance-history`, `emotional-regulation`, `non-medication`), 9 manner
+  `autism-adhd`, `substance-history`, `emotional-regulation`, `non-medication`, `perinatal`), 9 manner
   traits (`attuned`, `steadying`, `sense_making`, `motivating`, `unhurried`, `non_judgmental`,
   `collaborative`, `culturally_attuned`, `structured`),
   4 preferences (`woman-gp`, `telehealth-first`, `longer-appointment`, `bulk-billing`) and

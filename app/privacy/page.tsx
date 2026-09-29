@@ -75,7 +75,8 @@ export default function PrivacyPolicyPage() {
             the suburb and filters, what it showed you, the practice you went on to, and the stars
             you give a visit afterwards. It is kept under a random id your browser makes, never your
             name, and no rating is ever shown to anyone. When the model reader or the voice finder
-            is on, your words, or your voice, go to OpenAI to be understood. Delete, in settings,
+            is on, your words, or your voice, go to OpenAI to be understood, and a voice call is kept
+            as a transcript, every turn of it, so we can see where it went wrong. Delete, in settings,
             removes all of it, from this browser and from us.
           </p>
           <p className="mt-2 text-sm leading-6">

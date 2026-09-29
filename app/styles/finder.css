@@ -144,7 +144,6 @@
 .platform-shell .patient-v2 .results-browser .row-copy { min-width: 0; display: grid; gap: 7px; }
 /* An invented profile says so beside its name, on the row, before any other fact about it: plain
    muted text, not a pill, because nearly every row carries it. */
-.platform-shell .patient-v2 .row-example { margin-left: 8px; color: var(--muted); font-size: 13px; font-weight: 400; letter-spacing: 0; }
 .platform-shell .patient-v2 .results-browser .row-focus { font-size: 14px; line-height: 1.5; margin: 0; }
 .platform-shell .patient-v2 .results-browser .row-location { margin: 0; font-size: 13px; line-height: 1.5; }
 .platform-shell .patient-v2 .results-browser .row-availability { max-width: 64ch; line-height: 1.5; }

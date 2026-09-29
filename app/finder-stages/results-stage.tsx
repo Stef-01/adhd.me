@@ -539,18 +539,7 @@ export function ResultsStage({
               >
                 <ClinicianPortrait clinician={item} variant="thumb" eager={index < 5} />
               </motion.span>
-              {/* O217: an invented entry says so ON THE ROW, before any other fact about it —
-                  the label is the disclosure mechanism, not the name or the copy.
-                  RESTORED 2026-09-21. It was removed as "repeated Example result badges", which is
-                  a fair reading of the noise — 140 of the 151 entries are synthetic, so almost
-                  every row wore one — but the row is the only place a person scanning a list can
-                  learn which of these people exist. With it gone, the list showed four named
-                  clinicians under "Matches", three of them fabricated, with no disclosure in view;
-                  the profile and compare screens still disclosed, but only after a tap. The
-                  aesthetic complaint is real and the answer to it is not silence: making this
-                  quieter, or moving it to something list-level that still says WHICH rows, is a
-                  deliberate change. `holistic-care.spec.ts` asserts it and was red without it. */}
-              <span className="row-copy"><strong>{item.name}{item.synthetic && <span className="row-example">Example</span>}</strong>
+              <span className="row-copy"><strong>{item.name}</strong>
                 {publicIdentity(item) && <small className="row-cultural-identity">{publicIdentity(item)!.identities.map(id => IDENTITY_LABELS[id]).join(" · ")}{publicIdentity(item)!.country && <> · {publicIdentity(item)!.country}</>}</small>}
                 {rowLine && <small className="row-focus">{rowLine}</small>}
                 {/* O85: every place they consult, one label — a second location is a
@@ -569,7 +558,7 @@ export function ResultsStage({
                     either, the row says why somebody unactionable is still here (O4).
                     The "they fit what you asked" sentence only renders when a fit was
                     actually computed; otherwise the neutral fact stands alone. */}
-                {!item.synthetic && !item.acceptingNewPatients && closedBooksNote(item, request) && (
+                {!item.acceptingNewPatients && closedBooksNote(item, request) && (
                   <small className="row-availability">{closedBooksNote(item, request)}</small>
                 )}
               </span>

@@ -25,6 +25,10 @@ export const PROFESSIONS = [
   "relationship-counsellor",
   "sleep-clinician",
   "university-support",
+  // R15 (2026-09-29): the kinds the network's real profiles carry that the list did not have.
+  "physiotherapist",
+  "therapy-assistant",
+  "neurotherapy-practitioner",
 ] as const;
 export type Profession = (typeof PROFESSIONS)[number];
 
@@ -162,6 +166,36 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
     typicallyFor: "Study adjustments on paper, extensions, exam arrangements, note-taking, through the accessibility or disability service every university runs.",
     whenToExplore: "You are studying, deadlines or exams are where it falls apart, and the adjustment exists but you have not asked.",
     cues: ["university support", "student support", "disability services", "disability service", "accessibility services", "accessibility service"],
+  },
+  {
+    id: "physiotherapist",
+    label: "Physiotherapist",
+    inAWord: "Movement and pain",
+    plural: "physiotherapists",
+    aName: "a physiotherapist",
+    typicallyFor: "Movement, pain and injury, and a graded return to activity when the body is part of what is getting in the way.",
+    whenToExplore: "Pain, an injury or a body that will not do what you ask is what stops the rest.",
+    cues: ["physiotherapist", "physio", "physiotherapy"],
+  },
+  {
+    id: "therapy-assistant",
+    label: "Therapy assistant",
+    inAWord: "Practice between sessions",
+    plural: "therapy assistants",
+    aName: "a therapy assistant",
+    typicallyFor: "Working through a psychologist's plan between sessions: practice, routines and support at home or in the community, under that clinician's direction.",
+    whenToExplore: "You have a plan from a psychologist and need help doing it between appointments.",
+    cues: ["therapy assistant", "support worker"],
+  },
+  {
+    id: "neurotherapy-practitioner",
+    label: "Neurotherapy practitioner",
+    inAWord: "Neurofeedback training",
+    plural: "neurotherapy practitioners",
+    aName: "a neurotherapy practitioner",
+    typicallyFor: "Neurofeedback and brain-training programs, offered alongside, never instead of, assessment and care by a registered clinician.",
+    whenToExplore: "You want a training-based approach to attention beside the care you already have.",
+    cues: ["neurotherapy", "neurofeedback"],
   },
 ];
 

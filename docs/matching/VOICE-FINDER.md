@@ -21,6 +21,7 @@ ranks a typed one, and the results arrive where the orb was.
 | The scripted call for e2e, the text budget and audits | `src/voice/fake-link.ts` |
 | The call route: the browser's offer to OpenAI, the key never leaves | `app/api/voice/session/route.ts` |
 | The screen, the orb (the prototype's sphere visualizer, MIT, in WebGL2) | `app/finder-stages/voice-stage.tsx`, `voice-orb.tsx`, `app/voice-orb/` |
+| The record: every turn, the request, the place, how it ended (founder, 2026-09-29) | `src/db/finder.ts` (`voice_calls`), read back by `scripts/voice-transcripts.mjs`; a scripted call also lands whole under `qa/voice/runs/` |
 
 ## Guards
 

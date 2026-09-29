@@ -1,33 +1,27 @@
 import { describe, expect, it } from "vitest";
 import { eachOf } from "@/quality/non-vacuous";
 import { lintLandingCopy } from "@/compliance/landing";
-import { matchQuality, rankBands } from "@/demo/clinicians";
-import { rosterFor } from "@/demo/synthetic-roster";
+import { clinicians, matchQuality, rankBands } from "@/demo/clinicians";
 import { emptyFilters } from "./filters";
 import { searchRoster } from "./pipeline";
 import { EXAMPLE_SEARCHES } from "./examples";
 
 describe("the finder's example chips", () => {
-  it("each request produces an informed order, on the real roster and with the examples on", () => {
+  it("each request produces an informed order on the roster", () => {
     for (const example of eachOf(EXAMPLE_SEARCHES, "the examples")) {
-      for (const synthetic of [false, true]) {
-        const roster = searchRoster(rosterFor(synthetic), emptyFilters(), example.request, null);
-        expect(matchQuality(example.request, roster), `${example.label}, examples ${synthetic ? "on" : "off"}`).toBe("informed");
-      }
+      const roster = searchRoster(clinicians, emptyFilters(), example.request, null);
+      expect(matchQuality(example.request, roster), example.label).toBe("informed");
     }
   });
 
   it("each opens on a list the fold can hold: its tied first band is at most eight rows", () => {
     // The fold never cuts a tied band, so an example whose first band is eleven opens on eleven
     // rows ("A woman GP for ADHD" did: 76 words). A row is about six words, so eight rows is what
-    // keeps an example's screen under the 60-word ceiling. Measured 2026-09-28 with the example
-    // profiles on: 3, 7, 5 and 8.
+    // keeps an example's screen under the 60-word ceiling.
     for (const example of eachOf(EXAMPLE_SEARCHES, "the examples")) {
-      for (const synthetic of [false, true]) {
-        const roster = searchRoster(rosterFor(synthetic), emptyFilters(), example.request, null);
-        const first = rankBands(example.request, roster)[0]?.clinicians.length ?? 0;
-        expect(first, `${example.label}, examples ${synthetic ? "on" : "off"}: a first band of ${first}`).toBeLessThanOrEqual(8);
-      }
+      const roster = searchRoster(clinicians, emptyFilters(), example.request, null);
+      const first = rankBands(example.request, roster)[0]?.clinicians.length ?? 0;
+      expect(first, `: a first band of `).toBeLessThanOrEqual(8);
     }
   });
 

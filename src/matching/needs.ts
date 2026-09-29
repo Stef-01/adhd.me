@@ -468,6 +468,16 @@ const LEXICON: readonly Entry[] = [
        reached only its own corpus sentence was refused as well, whatever its collision count —
        `reach.test.ts`'s law is that a corpus copied into the lexicon measures nothing. */
   ]),
+  care("perinatal", "Pregnancy, postpartum and new parents", 26, [
+    /* R15: the founder's postpartum call, which nothing in the vocabulary could hear. Single words
+       are the clinical and the everyday terms, each precise on its own; the pairs keep two content
+       tokens (O25), and "had a baby" collapses to [baby] under the O45 skeleton demand, so bare
+       "baby" ("my baby brother", "baby steps") never reaches here. "mum" alone is never cued: family
+       presence ("my mum in the room") belongs to manner:culturally_attuned. */
+    "postpartum", "postnatal", "post-natal", "perinatal", "antenatal", "pregnant", "pregnancy", "breastfeeding", "newborn", "maternity",
+    "post partum", "post natal", "new mum", "new mother", "new parent", "new dad", "new baby", "had a baby", "having a baby", "expecting a baby",
+    "baby came", "baby arrived", "gave birth", "giving birth", "baby brain",
+  ]),
 
   /**
    * ── How somebody wants to be treated while it happens ──────────────────────────────────────
@@ -679,7 +689,8 @@ const CUES: readonly Cue[] = [...MATCHABLE_CUES].sort(
  * behind this same signature and everything downstream is unchanged, because what crosses the
  * boundary is a closed vocabulary rather than a similarity score.
  */
-const RUN_DEMANDED = new Set(["over the phone", "in the room with me"]);
+// R15: "had a baby" collapses to [baby]; the any-pair rule is satisfied by "was a baby", so the full run is demanded.
+const RUN_DEMANDED = new Set(["over the phone", "in the room with me", "had a baby"]);
 
 export function readNeeds(text: string): NeedSignal[] {
   const sentence = tokenise(text);
@@ -948,6 +959,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   "care:complex-mental-health": "Complex care",
   "care:autism-adhd": "Autism",
   "care:substance-history": "Substances, safely",
+  "care:perinatal": "Postpartum",
   "pref:woman-gp": "Woman clinician",
   "pref:telehealth-first": "Telehealth",
   "pref:longer-appointment": "Longer appointment",

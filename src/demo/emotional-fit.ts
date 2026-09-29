@@ -156,7 +156,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       /* O113: the CONCRETE ways this is asked for. The facet knew abstract nouns for itself and
          none of the phrasings people use, being walked through something in order, being told
          straight, wanting the mechanism rather than the instruction. */
-      "step by step", "line by line", "tell me straight", "sugar coating", "the mechanism", "explain the plan", "my own brain", "make sense", "understand what", "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
+      "step by step", "line by line", "tell me straight", "sugar coating", "the mechanism", "explain the plan", "my own brain", "make sense",
+      /* R15: "understand what" collapsed to [understand] under the O45 skeleton, and the skeleton
+         "understand what" is also how "understands what it's like being a new mum" begins, so a
+         clinician who understands a LIFE read as an ask to have things EXPLAINED. Each replacement
+         names the object: what is going on, what is happening, why, or one's own brain. */
+      "understand what's going on", "understand what is going on", "understand what's happening", "understand what is happening", "understand why", "understand my brain",
+      "figure out", "what is going on", "what's going on", "clarity", "join the dots", "name it", "confusing",
       // O30 psychographics: the plain-language ask is a values statement about how somebody
       // wants medicine spoken to them. Every cue keeps two content tokens (the O25 law);
       // "without"/"no" survive stripping because negations are never stopwords.

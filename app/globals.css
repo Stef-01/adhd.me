@@ -4596,41 +4596,6 @@ a focus ring that is not the browser default removed {
 .clarify-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .clarify-chip { transition: none; } }
 
-/* ── O217/O226: the example-profile machinery (founder decision `synthetic-roster-tickbox`,
-   amended) ── The switch lives on the WELCOME screen now, folded away — configuration belongs at
-   the door, not between a reader and their results, and the roster ships with the examples ON
-   for this testing deployment. Muted, not accent: a signpost. Tokens only — the ratchet holds. */
-/* O230's `.finder-demo-trigger` (a button on the welcome screen that opened its own sheet) went
-   with O233's settings sheet: the switch it opened now sits inside the one settings surface, so
-   the welcome screen has nothing on it but the question and the box. */
-
-.finder-demo-toggle {
-  display: grid;
-  grid-template-columns: 22px 1fr;
-  gap: 10px;
-  align-items: start;
-  max-width: 340px;
-  margin: 0 auto;
-  text-align: left;
-  padding: 8px 2px 10px;
-  min-height: 44px;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-.finder-demo-toggle input {
-  accent-color: var(--accent);
-}
-.finder-demo-toggle input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.finder-demo-toggle strong,
-.finder-demo-toggle small { display: block; }
-.finder-demo-toggle strong { color: var(--ink); font-size: 0.875rem; font-weight: 600; }
-.finder-demo-toggle small { margin-top: 3px; color: var(--muted); font-size: 0.78125rem; line-height: 1.5; }
-
-/* O231 removed the example-profile marks from every finder surface (the row tag, the compare
-   column tag, the profile's sentence and the booking bar's replacement text), so their rules went
-   with them — a stylesheet that keeps the CSS for deleted markup is how a revert happens by
-   accident. `app/finder-stages/shared.tsx` holds the reasoning and what stays in its place. */
-
 /* Save control on the review editor. */
 .be-save { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
 .be-save-button { min-height: 44px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--ground);
@@ -7059,9 +7024,6 @@ button.settings-row { width: 100%; border: 0; border-bottom: 1px solid var(--lin
 
 .settings-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 10px; }
 
-/* The settings sheet's one control that is not a link keeps the sheet's rhythm. */
-.settings-list .finder-demo-toggle { max-width: none; margin: 14px 0 0; padding-top: 16px; border-top: 1px solid var(--line); }
-
 /* ── Profile ──────────────────────────────────────────────────────────────────────────────── */
 
 .me-screen {
@@ -8348,9 +8310,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 /* ── The second transitions.dev pass (see the ledger at the top of the first block). ── */
 
 :root {
-  /* Checkbox check: fill first, then the tick draws; unchecking reverses over a shorter beat. */
-  --check-len: 15;
-  --check-delay: 60ms;
   /* Learn-more hover: the chevron shifts and its arms open about the apex. */
   --learn-shift: 3px;
   --learn-spread: 12deg;
@@ -8359,60 +8318,6 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
   --badge-offset-y: 6px;
   --badge-blur: 2px;
   --badge-pop-ease: cubic-bezier(0.34, 1.36, 0.64, 1);
-}
-
-/* ── Checkbox check — the settings tickbox. The native input IS the box (appearance: none), so
-   the label still toggles it, the keyboard still focuses it, and a spec's `uncheck()` still lands
-   on a real 20px control; the drawn tick sits over it in the same grid cell, pointer-events off. */
-.finder-demo-toggle { grid-template-rows: auto; }
-
-.finder-demo-toggle input {
-  grid-column: 1;
-  grid-row: 1;
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  margin: 1px 0 0;
-  border-radius: 6px;
-  border: 1.5px solid var(--line-strong, var(--line));
-  background: var(--surface-raised);
-  cursor: pointer;
-  transition: background var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui);
-}
-
-.finder-demo-toggle input:checked {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.finder-demo-toggle > span:last-child { grid-column: 2; grid-row: 1; }
-
-.t-check {
-  grid-column: 1;
-  grid-row: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  margin-top: 1px;
-  color: var(--on-accent);
-  pointer-events: none;
-}
-
-.t-check svg { width: 12px; height: 12px; overflow: visible; }
-
-.t-check svg path {
-  stroke-dasharray: var(--check-len);
-  stroke-dashoffset: var(--check-len);
-  transition: stroke-dashoffset var(--dur-tap) var(--ease-ui);
-}
-
-/* The tick waits one beat for the fill, then draws along its own path. */
-.finder-demo-toggle input:checked + .t-check svg path {
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset var(--dur-enter) var(--ease-soft) var(--check-delay);
 }
 
 /* ── Learn-more hover — the story page's arrow links. The existing translateX on hover stays;
@@ -8450,8 +8355,7 @@ button.me-primary { border: 0; font: inherit; font-size: 0.9375rem; font-weight:
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-check, .t-check svg path, .t-learn-arm { transition: none !important; }
-  .finder-demo-toggle input:checked + .t-check svg path { stroke-dashoffset: 0; }
+  .t-learn-arm { transition: none !important; }
   .t-learn-arm { transform: none !important; }
 }
 

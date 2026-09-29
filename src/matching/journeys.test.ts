@@ -1,16 +1,14 @@
 // The matching promise, as a person meets it: one sentence in, and the first clinician the finder
 // shows answers what they asked. For each journey (./journeys.ts) the asks are heard, and the first
 // clinician answers as many of them as anyone on the roster does: all of them, whenever anyone can.
-// On the finder's own roster (real clinicians and the example profiles it ships with), at level 0,
-// so it is free and runs on every change.
+// On the finder's roster, at level 0, so it is free and runs on every change.
 
 import { describe, expect, it } from "vitest";
-import { matchEvidence, needsFor, rankClinicians, type Clinician } from "@/demo/clinicians";
-import { rosterFor } from "@/demo/synthetic-roster";
+import { clinicians, matchEvidence, needsFor, rankClinicians, type Clinician } from "@/demo/clinicians";
 import { JOURNEYS } from "./journeys";
 import { facetKey } from "./needs";
 
-const roster = rosterFor(true);
+const roster = clinicians;
 const TODAY = new Date("2026-09-28T00:00:00Z");
 
 /** How many of the asks this clinician declares, by the same evidence the finder shows. */

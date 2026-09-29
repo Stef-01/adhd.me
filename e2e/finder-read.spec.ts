@@ -9,8 +9,7 @@
 
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
-import { needsFor, rankClinicians } from "../src/demo/clinicians";
-import { rosterFor } from "../src/demo/synthetic-roster";
+import { clinicians, needsFor, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
 import { heardChips } from "../src/finder/heard";
 import { searchRoster } from "../src/finder/pipeline";
@@ -22,7 +21,7 @@ import { POST } from "../app/api/finder/read/route";
 /** The C6 narrative: the model hears one facet more than the lexicon, and its weights reorder the list. */
 const NARRATIVE = CASSETTES.find((c) => c.class === "C6")!;
 const REQUEST = NARRATIVE.input;
-const roster = searchRoster(rosterFor(true), emptyFilters(), REQUEST, null);
+const roster = searchRoster(clinicians, emptyFilters(), REQUEST, null);
 const model = NARRATIVE.expect.keys.flatMap((key) => needForKey(key) ?? []);
 const topFive = (needs?: readonly NeedSignal[]) => rankClinicians(REQUEST, roster, new Date(), needs).slice(0, 5).map((c) => c.id);
 const chips = (needs: readonly NeedSignal[]) => heardChips(needs, 4).map((chip) => chip.label);
@@ -63,7 +62,7 @@ test("level 0: the finder reads the words itself and asks nothing", async ({ pag
 
   // The route on this server answers from the lexicon.
   const reply = await page.request.post("/api/finder/read", { data: { text: REQUEST } });
-  expect(await reply.json()).toEqual({ keys: lexiconReading(REQUEST).keys, source: "lexicon" });
+  expect(await reply.json()).toEqual({ keys: lexiconReading(REQUEST).keys, source: "lexicon", unlisted: [] });
 });
 
 test("level 1: one read per search, a line and three blank rows while it runs, then the model's order", async ({ page }) => {
@@ -105,6 +104,16 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   await expect(line).toHaveCount(0);
   expect(await listTop(page), "the rows land where the blank rows were").toBeCloseTo(top, 0);
   expect(posts).toEqual([REQUEST]);
+
+  // The first profile's reasons quote words the person said, never a key (qa/matching/rca.md, R15).
+  await page.locator(".clinician-row").first().click();
+  const why = page.locator("details.profile-disclosure", { hasText: "Why matched" });
+  await why.locator("summary").click();
+  const reasons = await why.locator(".fit-evidence li").allInnerTexts();
+  expect(reasons.length).toBeGreaterThan(0);
+  for (const reason of reasons) expect(reason, "a key shown as the person's words").not.toMatch(/(care|manner|pref|language):[a-z_-]+/);
+  await page.goBack();
+  await expect(page.locator(".clinician-row").first()).toBeVisible();
 
   // A chip out re-ranks in the browser, with no second read.
   const withoutTelehealth = model.filter((need) => facetKey(need.facet) !== "pref:telehealth-first");

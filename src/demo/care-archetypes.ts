@@ -49,7 +49,13 @@ export type CareArea =
   /** Emotional dysregulation and rejection sensitivity, which are what people describe first. */
   | "emotional-regulation"
   /** Non-medication and psychological supports — the half of the plan that is not a script. */
-  | "non-medication";
+  | "non-medication"
+  // ── Life stages ────────────────────────────────────────────────────────────────
+  /**
+   * Pregnancy, the postpartum year and new parenthood, where ADHD is often first noticed or first
+   * unmanageable (qa/matching/rca.md, R15: the founder's call asked for it and nothing could hear it).
+   */
+  | "perinatal";
 
 export type CareArchetype = {
   id: string;

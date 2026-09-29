@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, X } from "@phosphor-icons/react";
 import { motion, useReducedMotion } from "motion/react";
-import { rosterFor } from "@/demo/synthetic-roster";
+import { clinicians } from "@/demo/clinicians";
 import { readFilters, emptyFilters } from "@/finder/filters";
 import { matchSkill } from "@/support/skill-match";
 import { profession } from "@/support/professions";
@@ -24,7 +24,7 @@ export function SkillRecommendation({ context }: { context?: Subdomain }) {
     read(); window.addEventListener("storage", read);
     return () => window.removeEventListener("storage", read);
   }, []);
-  const match = record ? matchSkill(rosterFor(true), filters, record, context) : null;
+  const match = record ? matchSkill(clinicians, filters, record, context) : null;
   if (!match) return null;
   const { provider, label } = match;
   const close = () => { dialog.current?.close(); trigger.current?.focus(); };

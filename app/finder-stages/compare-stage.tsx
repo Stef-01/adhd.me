@@ -86,7 +86,6 @@ export function CompareStage({
               <ClinicianPortrait clinician={left} variant="thumb" />
             </span>
             <strong>{left.shortName}</strong>
-            {/* O217: a column belonging to an invented profile says so in its own head. */}
           </div>
           <div className="compare-head">
             <span className="compare-portrait">

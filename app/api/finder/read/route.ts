@@ -1,4 +1,6 @@
-// The finder's read (docs/matching/LLM-MATCHING-PLAN.md §6, §15): POST { text } → { keys, source }.
+// The finder's read (docs/matching/LLM-MATCHING-PLAN.md §6, §15): POST { text } → { keys, source, unlisted }:
+// the keys the ranking runs on, whose reading they are, and the asks the model heard that no key
+// covers (kept with the search, so a need the vocabulary lacks is seen rather than lost).
 // At level 0 (ADHDME_LLM_LEVEL=0, or no key) the lexicon reads and nothing leaves the server; with a
 // key and no level set it is 1. At 1 the model reads, once per request text (read-cache.ts), and any failure answers with the lexicon's keys and
 // `source: "lexicon"`. ADHDME_LLM_CASSETTES=1 is for e2e: the committed cassettes answer instead of
@@ -12,7 +14,7 @@ import { levelOf } from "@/lib/llm/client";
 import { keyPaused, noteKeyFailure } from "@/lib/llm/key-pause";
 import { BudgetMeter } from "@/lib/llm/meter";
 import { answerFor, lexiconReading, readRequest } from "@/lib/matching/llm-read";
-import { cachedKeys, rememberKeys } from "@/lib/matching/read-cache";
+import { cachedReading, rememberReading } from "@/lib/matching/read-cache";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +42,12 @@ export async function POST(request: Request) {
   if (typeof text !== "string" || text.length > MAX_CHARS) return Response.json({ error: "text" }, { status: 400, headers: NO_STORE });
   const env = process.env;
   // The same words read the same way, and a repeated search costs nothing (src/lib/matching/read-cache.ts).
-  const held = levelOf(env) >= 1 ? cachedKeys(text) : null;
-  if (held) return Response.json({ keys: held, source: "llm" }, { headers: NO_STORE });
+  const held = levelOf(env) >= 1 ? cachedReading(text) : null;
+  if (held) return Response.json({ ...held, source: "llm" }, { headers: NO_STORE });
   const caller = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   const paid = levelOf(env) >= 1 && !keyPaused() && rateLimit("finder-read", caller, { limit: 20, windowMs: 60_000 });
   const reading = paid ? await readRequest(text, { ...(env.ADHDME_LLM_CASSETTES === "1" ? replay : {}), meter: todaysMeter(env) }) : lexiconReading(text);
   noteKeyFailure(reading.error);
-  if (reading.source === "llm" && !reading.error) rememberKeys(text, reading.keys);
-  return Response.json({ keys: reading.keys, source: reading.source }, { headers: NO_STORE });
+  if (reading.source === "llm" && !reading.error) rememberReading(text, reading);
+  return Response.json({ keys: reading.keys, source: reading.source, unlisted: reading.unlisted ?? [] }, { headers: NO_STORE });
 }
