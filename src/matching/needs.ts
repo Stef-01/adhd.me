@@ -37,7 +37,7 @@
 import type { CareArea } from "@/demo/care-archetypes";
 import { EI_QUALITIES, EI_QUALITY_KEYS, type EIQuality } from "@/demo/emotional-fit";
 import { MATCHABLE_LANGUAGES } from "./languages";
-import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, commaBreaksBefore, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, selfClaimedPatient, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
+import { bareNegatorBefore, collapsedCueRunPresent, collapsedCueSatisfied, commaBreaksBefore, diagnosisAlreadyMade, findCue, isTightNegator, lackingNotDeclining, onBehalfBefore, reportedRefusal, selfClaimedPatient, softenedNotJust, stem, suppressedByDesireNegation, tokenise, tokeniseKeepingStopwords, withinHedge } from "./read";
 
 /**
  * How a clinician works, as opposed to what they see.
@@ -164,6 +164,8 @@ const LEXICON: readonly Entry[] = [
     // "diagnose" in an unrelated clause does not. "get checked" collapses to [check] and is
     // safe the same way; its raw pair also hears "getting checked" through the stemmer.
     "diagnose me", "get checked",
+    // O256: the adult diagnosed as a child who wants it done again; said as itself.
+    "reassessment", "reassessed",
   ]),
   // ── G7 BOUNDARY — DO NOT ADD SYMPTOM DESCRIPTIONS TO ANY CARE FACET ──────────────────────────
   // A prior probe read "my brain has never let me finish anything" as a recall gap and closed it by
@@ -230,6 +232,16 @@ const LEXICON: readonly Entry[] = [
        their prescribing to be CONTINUED or HANDED BACK, none of which the facet could hear. */
     "hand the prescribing back", "scripts managed", "continue my prescriptions", "between pharmacies",
     "shared care", "psychiatrist", "already diagnosed", "existing prescription",
+    /* O256: the continuation register in the words people use for it. "I already have a diagnosis
+       and need my ADHD medication continued" reached nothing here and care:adhd-assessment twice
+       over (on "diagnosis" and on "adhd"), so the GP who continues medication for people already
+       diagnosed, and says he does not assess, ranked behind the assessing GPs and showed the one
+       person who never asked for an assessment "Not in their listing: ADHD assessment". */
+    "already have a diagnosis", "continue my medication", "medication continued",
+    /* "keep prescribing" was written here and REFUSED on measurement: "they keep prescribing me the
+       wrong dose" is a titration complaint, and the P0 dry run read it as shared care as well. The
+       phrase stays a sign that the diagnosis is made (read.ts, diagnosisAlreadyMade), which is all
+       it says for certain. */
     // O49: the paediatric half of shared care, both spellings — the corpus ask names the
     // clinician to be shared WITH, exactly like "psychiatrist" above.
     "paediatrician", "pediatrician",
@@ -694,6 +706,9 @@ const CUES: readonly Cue[] = [...MATCHABLE_CUES].sort(
 // R15: "had a baby" collapses to [baby]; the any-pair rule is satisfied by "was a baby", so the full run is demanded.
 const RUN_DEMANDED = new Set(["over the phone", "in the room with me", "had a baby"]);
 
+/** O256: the assessment cues that merely name the condition or the diagnosis; disclosure once the diagnosis is said to exist. */
+const DISCLOSURE_WORDS = new Set(["adhd", "diagnosis", "diagnosed"]);
+
 export function readNeeds(text: string): NeedSignal[] {
   const sentence = tokenise(text);
   // The same words with the function words kept, for the collapse-aware rule only (O45).
@@ -762,6 +777,20 @@ export function readNeeds(text: string): NeedSignal[] {
       if (
         facetKey(cue.entry.facet) === "care:child-adolescent-adhd" &&
         selfClaimedPatient(rawSentence)
+      ) {
+        continue;
+      }
+      /* O256: a diagnosis the reader already has is disclosure, not an assessment ask. "I already
+         have a diagnosis and need my ADHD medication continued" reached care:adhd-assessment on
+         "diagnosis" and on "adhd", and the shared-care GP who continues medication, and says he does
+         not assess, showed "Not in their listing: ADHD assessment" to the one person who never asked
+         for one. Only the bare words stand down, and only once the raw words say the diagnosis is
+         made (`diagnosisAlreadyMade`); an assessment asked for in its own words still reaches, as
+         O120's adult does ("after my son was diagnosed … I want my own assessment"). */
+      if (
+        facetKey(cue.entry.facet) === "care:adhd-assessment" &&
+        DISCLOSURE_WORDS.has(cue.phrase) &&
+        diagnosisAlreadyMade(rawSentence)
       ) {
         continue;
       }

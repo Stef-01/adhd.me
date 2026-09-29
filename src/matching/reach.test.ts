@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { clinicians, matchQuality, MATCH_QUALITY_COPY, needsFor, professionOf, rankClinicians, scoreAgainst, unservedAsks } from "@/demo/clinicians";
 import { facetKey, readNeeds, LEXICON_CUES } from "./needs";
-import { selfClaimedPatient, stem, tokenise, tokeniseKeepingStopwords } from "./read";
+import { diagnosisAlreadyMade, selfClaimedPatient, stem, tokenise, tokeniseKeepingStopwords } from "./read";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
 
@@ -1607,5 +1607,45 @@ describe("§O124 clinic anxiety is heard, and the line about the doctor still is
     // "panic in the waiting" is [panic, wait]; this sentence has them the other way round.
     expect(facets("I had to wait and then panic set in about the cost")).not.toContain("care:anxiety");
     expect(facets("the waiting room was full")).toEqual([]);
+  });
+});
+
+describe("§O256 a diagnosis already made is not an assessment ask", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("the person already diagnosed, asking for their medication to continue, is heard as shared care and not as an assessment", () => {
+    for (const text of [
+      "I already have a diagnosis and need my ADHD medication continued, by telehealth",
+      "already diagnosed, I need my ADHD scripts kept going",
+      "I have ADHD, continue my prescriptions",
+      "my psychiatrist discharged me and I need a GP to keep prescribing my ADHD meds",
+    ]) {
+      const heard = facets(text);
+      expect(heard, text).toContain("care:shared-care");
+      expect(heard, text).not.toContain("care:adhd-assessment");
+    }
+  });
+
+  it("an assessment asked for in its own words still reaches, diagnosis or not", () => {
+    expect(facets("after my son was diagnosed I recognised myself and now I want my own assessment")).toContain("care:adhd-assessment");
+    expect(facets("I was diagnosed as a kid and want an adult reassessment")).toContain("care:adhd-assessment");
+    expect(facets("I think I have ADHD and want to get assessed")).toContain("care:adhd-assessment");
+    expect(facets("can a GP diagnose me or do I need a psychiatrist")).toContain("care:adhd-assessment");
+  });
+
+  it("the bare words keep reaching where nothing says the reader's own diagnosis is made", () => {
+    expect(facets("ADHD, telehealth please")).toContain("care:adhd-assessment");
+    expect(facets("I want a diagnosis")).toContain("care:adhd-assessment");
+    // A relative's diagnosis is the reader recognising themselves, not a diagnosis they hold.
+    expect(facets("my baby brother was diagnosed last year and I recognised myself")).toContain("care:adhd-assessment");
+  });
+
+  it("reads the raw stream the way it is stemmed", () => {
+    expect(diagnosisAlreadyMade(tokeniseKeepingStopwords("I already have a diagnosis"))).toBe(true);
+    expect(diagnosisAlreadyMade(tokeniseKeepingStopwords("I was diagnosed in 2019"))).toBe(true);
+    expect(diagnosisAlreadyMade(tokeniseKeepingStopwords("my sister was diagnosed last year and I recognised myself"))).toBe(false);
+    expect(diagnosisAlreadyMade(tokeniseKeepingStopwords("a GP to take over my scripts"))).toBe(true);
+    expect(diagnosisAlreadyMade(tokeniseKeepingStopwords("I want to be diagnosed"))).toBe(false);
+    expect(diagnosisAlreadyMade(tokeniseKeepingStopwords("is it ADHD or anxiety"))).toBe(false);
   });
 });

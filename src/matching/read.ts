@@ -728,6 +728,37 @@ export function selfClaimedPatient(rawSentence: readonly string[]): boolean {
   return false;
 }
 
+/**
+ * The reader saying the diagnosis is already made (O256): "already diagnosed", "I already have a
+ * diagnosis", "was / been / got diagnosed", "existing" or "my diagnosis", or treatment that already
+ * exists ("my scripts", "my medication", "existing prescription", "take over my scripts", "scripts
+ * kept going", "keep prescribing", "continue my …"). In such a sentence a bare "ADHD", "diagnosis"
+ * or "diagnosed" is disclosure, not an ask for an assessment (needs.ts, care:adhd-assessment); an
+ * assessment asked for in its own words ("assessment", "assessed", "reassessment", "diagnose me",
+ * "get checked") still reaches, as O120's adult does. FIRST PERSON ONLY for the diagnosis itself:
+ * "my sister was diagnosed last year and I recognised myself" is the reader asking, and the first
+ * cut of this rule, which took any "was diagnosed", silenced it (the corpus caught it, 2026-09-29).
+ * Stemmed like the raw stream it reads.
+ */
+const DIAGNOSIS_MADE: readonly (readonly string[])[] = [
+  // The reader's own diagnosis, in the first person: "my sister was diagnosed last year and I recognised myself" is an ask.
+  "i have been diagnosed", "ive been diagnosed", "i was diagnosed", "i got diagnosed", "i am already diagnosed", "im already diagnosed", "already diagnosed",
+  "i have a diagnosis", "already have a diagnosis", "existing diagnosis", "my diagnosis",
+  // Treatment the reader already has.
+  "existing prescription", "my scripts", "my script", "my prescriptions", "my prescription", "my medication", "my meds",
+  "my adhd scripts", "my adhd script", "my adhd meds", "my adhd medication", "my adhd prescriptions", "my adhd prescription",
+  "continue my", "take over my scripts", "scripts kept going", "keep prescribing", "medication continued",
+].map((phrase) => phrase.split(" ").map(stem));
+
+export function diagnosisAlreadyMade(rawSentence: readonly string[]): boolean {
+  return DIAGNOSIS_MADE.some((pattern) => {
+    for (let i = 0; i + pattern.length <= rawSentence.length; i++) {
+      if (pattern.every((word, k) => rawSentence[i + k] === word)) return true;
+    }
+    return false;
+  });
+}
+
 export function onBehalfBefore(
   sentence: readonly string[],
   rawSentence: readonly string[],

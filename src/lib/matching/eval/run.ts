@@ -156,12 +156,13 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
 
   // Gates (§7 for L1, P0's own for the dry run) and the lifting rule's (b) to (d).
   const gates: [string, string, boolean][] = [];
+  /** P0: the entries whose reading is not what the dry run sent, named in the report (a count alone sent somebody hunting, 2026-09-29). */
+  const wantOf = (d: Done) => CASSETTES.find((c) => c.input === d.entry.text)?.expect ?? { keys: oracleKeys(d.entry.text), source: "llm" as const };
+  const off = phase === "P0" && level !== "L0"
+    ? done.filter((d) => { const want = wantOf(d); return d.reading.source !== want.source || [...d.reading.keys].sort().join() !== [...want.keys].sort().join(); })
+    : [];
   if (level === "L0") gates.push(["L0 is measured, not gated", `${done.length} entries read`, done.length > 0]);
   else if (phase === "P0") {
-    const off = done.filter((d) => {
-      const want = CASSETTES.find((c) => c.input === d.entry.text)?.expect ?? { keys: oracleKeys(d.entry.text), source: "llm" };
-      return d.reading.source !== want.source || [...d.reading.keys].sort().join() !== [...want.keys].sort().join();
-    });
     gates.push(["every answer reads back as sent", `${off.length} differ`, off.length === 0]);
   } else {
     gates.push(["schema-valid answers", pct(valid), phase <= "P2" ? valid === 1 : valid >= 0.995]);
@@ -246,6 +247,16 @@ export async function runEval(options: EvalOptions): Promise<Outcome> {
             const some = [...new Set(runs.flat())].filter((k) => !every.includes(k));
             return some.length ? [`| ${d.entry.cls} | ${d.entry.text.slice(0, 90).replace(/\|/g, "/")} | ${some.join(", ")} |`] : [];
           }),
+          "",
+        ]
+      : []),
+    ...(off.length
+      ? [
+          "Did not read back as sent (P0): the entry, the keys the dry run sent, and the keys the reader returned.",
+          "",
+          "| Class | Request | Sent | Read |",
+          "| --- | --- | --- | --- |",
+          ...off.map((d) => `| ${d.entry.cls} | ${d.entry.text.slice(0, 90).replace(/\|/g, "/")} | ${[...wantOf(d).keys].sort().join(", ") || "nothing"} | ${[...d.reading.keys].sort().join(", ") || "nothing"} (${d.reading.source}) |`),
           "",
         ]
       : []),

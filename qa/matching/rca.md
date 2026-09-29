@@ -368,3 +368,45 @@ reordered EVERY allied entry by the person's stored map, so what they said weeks
 they asked for now; the founder's phone held such a map too, which is the "generic results" the
 scripted calls in clean browsers never reproduced. The map now reorders allied entries only among
 those level on the request's own evidence (`scoreAgainst`), never across, and the request wins.
+
+## R16 · the person already diagnosed, read as an assessment ask, 2026-09-29 · layer: the lexicon, then the reader
+
+Checking the why sentence on production for Dr Yogesh Kalra, the GP who continues ADHD medication
+for people already diagnosed and says he does not assess, with "I already have a diagnosis and need
+my ADHD medication continued, by telehealth": the finder had nothing to say for him. Probed,
+the lexicon read `care:adhd-assessment` from the bare "diagnosis" and again from "adhd", and no
+shared care at all; "continue my ADHD medication", "already diagnosed, I need my ADHD scripts kept
+going" and "my psychiatrist discharged me and I need a GP to keep prescribing my ADHD meds" all
+read assessment. The model reader on production (level 1, three votes and a check) read the same
+request as `pref:telehealth-first, care:adhd-assessment`, and the heard chips said "Telehealth ·
+ADHD assessment" to the one person who never asked for one. The assessing GPs ranked for them, and
+the continuation GP's profile would have said "Not in their listing: ADHD assessment".
+
+**Cause, in the lexicon.** `care:adhd-assessment` reaches on the bare words "adhd", "diagnosis" and
+"diagnosed", which is right for "could all of this be ADHD" and wrong once the reader has said the
+diagnosis is made; and the continuation register ("already have a diagnosis", "continue my
+medication", "medication continued") had no cue. "already diagnosed" is a shared-care cue, but a
+facet already claimed by an earlier cue ("scripts kept going") claims no more words (O106), so the
+bare "diagnosed" still went to assessment.
+
+**Fix (O256).** `diagnosisAlreadyMade` (src/matching/read.ts) reads the raw stream for the reader's
+own diagnosis in the FIRST PERSON ("I already have a diagnosis", "I was diagnosed", "already
+diagnosed", "my diagnosis") or treatment they already have ("my scripts", "my medication", "take
+over my scripts", "continue my …", "keep prescribing"); in such a sentence the three bare
+assessment cues stand down, and an assessment asked for in its own words ("assessment",
+"assessed", "reassessment", "diagnose me", "get checked") still reaches. The first cut took any
+"was diagnosed" and silenced "my sister was diagnosed last year and I recognised myself" (the
+corpus and the eval probes caught it, twice), which is why it is first person only. Shared care
+gained "already have a diagnosis", "continue my medication" and "medication continued"; "keep
+prescribing" was refused as a cue ("they keep prescribing me the wrong dose" is a dose complaint,
+and the P0 dry run read it as shared care as well). Three corpus sentences about scripts and
+prescriptions lost an assessment pin they should never have carried, three joined, and two eval
+probes lost a stale `mentions`. The reader's meaning for `adhd-assessment` now says the same thing
+in one clause, with the request above as an example (prompt hash changed; the ladder was run
+again, P1 to P4 pass under prompt d00890b423d1 on 2026-09-29: P4 never violations 0.0%, C4 negation correct 93.3%, recall on reaches 99.2% against the lexicon's 100%, precision 93.3%, $0.000064 a call (qa/matching/reports/L1-P4-2026-09-29T09-33-44-020Z.md)).
+
+**What the counts did.** Corpus 463 → 466 graded sentences, all parsed; tie quality 161 → 158
+separated (three continuation sentences are level now where assessment used to split them);
+the clarifier's two-facet sentences 94 → 91; the offer distribution 57 → 58; the separation
+curve within a thousandth. P0 on the cassettes passes, and its report now names an entry that does
+not read back as sent instead of counting it.

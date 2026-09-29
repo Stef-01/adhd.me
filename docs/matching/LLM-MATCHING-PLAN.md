@@ -825,3 +825,13 @@ words, all from the clinician's own text, about $0.0003 each. Remembered on the 
   [Position bias in listwise LLM reranking](https://arxiv.org/abs/2608.03091).
 - Evals in TypeScript: [evalite](https://github.com/mattpocock/evalite),
   [vitest-evals](https://github.com/getsentry/vitest-evals); TS reranker: [rerank-ts](https://github.com/tensorlakeai/rerank-ts).
+
+### 16i. 2026-09-29: the diagnosis already made (qa/matching/rca.md, R16)
+
+"I already have a diagnosis and need my ADHD medication continued" read as an assessment ask in the
+lexicon and in the model reader alike, so the GP who continues medication for people already
+diagnosed had nothing said for him and the assessing GPs ranked first. The lexicon stands its bare
+assessment cues down once the reader says, in the first person, that the diagnosis is made or names
+treatment they already have (O256, `diagnosisAlreadyMade`); the reader's meaning for
+`adhd-assessment` carries the same clause and an example. Prompt hash changed; P0 passes on the
+cassettes; P1 to P4 pass under prompt d00890b423d1 (P4: never 0.0%, C4 93.3%, recall 99.2% vs 100%, precision 93.3%; qa/matching/reports/L1-P4-2026-09-29T09-33-44-020Z.md).

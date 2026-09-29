@@ -1,0 +1,92 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I already have an ADHD diagnosis and I need a GP to continue my medication.",
+    "It's for me. I'm forty one.",
+    "I'm in Parramatta, and telehealth is fine.",
+    "Bulk billing would help.",
+    "No preference.",
+    "No, nothing else."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I already have an ADHD diagnosis and I need a GP to continue my medication."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay. Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "It's for me. I'm forty-one."
+    },
+    {
+      "who": "assistant",
+      "text": "Does cost matter to you?"
+    },
+    {
+      "who": "person",
+      "text": "I'm in Parramatta, and telehealth is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay. Does anything matter to you about the clinician?"
+    },
+    {
+      "who": "person",
+      "text": "Belgdeling would help."
+    },
+    {
+      "who": "assistant",
+      "text": "Got it. How would you like the clinician to treat you?"
+    },
+    {
+      "who": "assistant",
+      "text": "Okay, I’ll take that into account. Let me think about the next step."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Parramatta, or telehealth\",\"request\":\"Someone to keep prescribing my ADHD medication for me, 41, near Parramatta or telehealth, bulk billed.\"}"
+    },
+    {
+      "who": "person",
+      "text": "no preference"
+    }
+  ],
+  "request": "Someone to keep prescribing my ADHD medication for me, 41, near Parramatta or telehealth, bulk billed.",
+  "reads": [
+    {
+      "text": "Someone to keep prescribing my ADHD medication for me, 41, near Parramatta or telehealth, bulk billed.",
+      "answer": {
+        "keys": [
+          "care:shared-care",
+          "pref:telehealth-first",
+          "pref:bulk-billing",
+          "care:adhd-assessment"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Telehealth",
+    "Bulk billing",
+    "Shared care",
+    "ADHD assessment"
+  ],
+  "results": [
+    "Dr Anubhav Saxena Shared care Beecroft & Double Bay",
+    "Meera Lakhani Psychologist Fortitude Valley",
+    "Chantelle Pin Psychologist Benowa",
+    "Valeria Urrutia Psychologist Benowa",
+    "Lachlan Avent Psychologist Fortitude Valley"
+  ],
+  "whyMatched": "Why matched Shared care with a psychiatrist From your words: “keep prescribing my medication” By phone or telehealth ADHD assessment Not in their listing: bulk billing. Compare with Meera Lakhani",
+  "stage": "results"
+}

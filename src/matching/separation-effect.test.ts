@@ -51,12 +51,13 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 // 2026-09-29: the real roster is 37 profiles (roster-network.ts), so every synthetic roster is drawn
 // from new rates and the whole curve moved again. The shape holds: N=2's null exactly degenerate,
 // every effect within 0.004 of zero, and a dip (N=2 -> N=3, 0 -> -0.001) that keeps the
-// tolerance non-vacuous. Re-measured once more for the "new mums" sentence (462 -> 463).
-  { rosterSize: 2, k: K, total: 463, observedSeparationRate: 0.276, nullMeanSeparationRate: 0.276, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 463, observedSeparationRate: 0.175, nullMeanSeparationRate: 0.176, nullStdSeparationRate: 0.001, effect: -0.001 },
-  { rosterSize: 5, k: K, total: 463, observedSeparationRate: 0.3, nullMeanSeparationRate: 0.298, nullStdSeparationRate: 0.003, effect: 0.002 },
-  { rosterSize: 10, k: K, total: 463, observedSeparationRate: 0.242, nullMeanSeparationRate: 0.24, nullStdSeparationRate: 0.002, effect: 0.002 },
-  { rosterSize: 25, k: K, total: 463, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.236, nullStdSeparationRate: 0.006, effect: 0.004 },
+// tolerance non-vacuous. Re-measured once more for the "new mums" sentence (462 -> 463), and
+// again for O256 (463 -> 466: three continuation sentences added, three assessment reads gone).
+  { rosterSize: 2, k: K, total: 466, observedSeparationRate: 0.275, nullMeanSeparationRate: 0.275, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 466, observedSeparationRate: 0.174, nullMeanSeparationRate: 0.175, nullStdSeparationRate: 0.001, effect: -0.001 },
+  { rosterSize: 5, k: K, total: 466, observedSeparationRate: 0.298, nullMeanSeparationRate: 0.296, nullStdSeparationRate: 0.003, effect: 0.002 },
+  { rosterSize: 10, k: K, total: 466, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.238, nullStdSeparationRate: 0.002, effect: 0.002 },
+  { rosterSize: 25, k: K, total: 466, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.237, nullStdSeparationRate: 0.006, effect: 0.003 },
 ];
 
 /*
@@ -77,9 +78,9 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 37,
   k: K,
-  total: 463,
-  observedSeparationRate: 0.348,
-  nullMeanSeparationRate: 0.34,
+  total: 466,
+  observedSeparationRate: 0.339,
+  nullMeanSeparationRate: 0.331,
   nullStdSeparationRate: 0.006,
   effect: 0.008,
 };
@@ -113,11 +114,11 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
       // rate (0.154 -> 0.24), and 3 -> 2 inflates it again (0.173 -> 0.275), the direction O252
       // had seen reverse: the pair proves nothing fixed, which is the point.
       const naive = (size: number) => tieQualityReport(corpusRun(), syntheticRoster(size)).separationRate;
-      expect(naive(40)).toBe(0.153);
+      expect(naive(40)).toBe(0.152);
       expect(naive(25)).toBe(0.24);
       expect(naive(25)).toBeGreaterThan(naive(40));
-      expect(naive(3)).toBe(0.175);
-      expect(naive(2)).toBe(0.276);
+      expect(naive(3)).toBe(0.174);
+      expect(naive(2)).toBe(0.275);
       expect(naive(2)).toBeGreaterThan(naive(3));
     },
   );

@@ -78,6 +78,10 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "shared care with my psychiatrist", reaches: ["care:shared-care"] },
   { text: "my psychiatrist wants my GP to take over the scripts", reaches: ["care:shared-care"] },
   { text: "a GP who will work with my paediatrician", reaches: ["care:shared-care"] },
+  // O256: the diagnosis already made. The bare "ADHD" and "diagnosis" are disclosure here, not an ask.
+  { text: "I already have a diagnosis and need my ADHD medication continued", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
+  { text: "already diagnosed, I need my ADHD scripts kept going", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
+  { text: "I was diagnosed as a kid and want an adult reassessment", reaches: ["care:adhd-assessment"] },
 
   // ── care:depression ──────────────────────────────────────────────────────────────────────
   { text: "low mood most days", reaches: ["care:depression"] },
@@ -260,7 +264,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:shared-care ─────────────────────────────────────────────────────────────────────
   { text: "my psychiatrist discharged me back to GP care", reaches: ["care:shared-care"] },
   { text: "co-manage with the paediatrician", reaches: ["care:shared-care"] },
-  { text: "take over my scripts from the ADHD clinic", reaches: ["care:shared-care", "care:adhd-assessment"] },
+  // O256: "my scripts" says the diagnosis is made; "ADHD" names the clinic, not an ask (it reached assessment until 2026-09-29).
+  { text: "take over my scripts from the ADHD clinic", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
   { text: "the shared care agreement paperwork needs a GP", reaches: ["care:shared-care"] },
 
   // ── care:depression / care:anxiety ───────────────────────────────────────────────────────
@@ -635,7 +640,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "burnt out and flat, and I want both taken seriously", reaches: ["manner:attuned"] },
   { text: "the generic brand hits different and nobody will discuss it", reaches: ["care:titration"] },
   { text: "review whether this is still the right medication for me", reaches: ["care:titration"] },
-  { text: "the ADHD clinic discharged me and I need my scripts kept going", reaches: ["care:adhd-assessment", "care:shared-care"] },
+  // O256: "my scripts" says the diagnosis is made; "ADHD" names the clinic (assessment reached here until 2026-09-29).
+  { text: "the ADHD clinic discharged me and I need my scripts kept going", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
   { text: "hand the prescribing back to a GP near home", reaches: ["care:shared-care"] },
   { text: "lifestyle changes before we talk prescriptions", reaches: ["care:non-medication"] },
   { text: "I want to try the non-drug route first", aspires: ["care:non-medication"] },
@@ -807,7 +813,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "no medication please, I want strategies", reaches: ["care:non-medication"] },
   { text: "coaching first, without a script if we can", reaches: ["care:non-medication"] },
   { text: "my script keeps bouncing between pharmacies, I need someone who can manage that", reaches: ["care:shared-care"] },
-  { text: "just moved to Sydney and I need a new GP to continue my ADHD prescriptions", reaches: ["care:adhd-assessment", "care:shared-care"] },
+  // O256: "continue my … prescriptions" is continuation, and the person is diagnosed (assessment reached here until 2026-09-29).
+  { text: "just moved to Sydney and I need a new GP to continue my ADHD prescriptions", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
   { text: "my prescriber retired and nobody will take over the script", reaches: ["care:shared-care"] },
   { text: "the afternoon rebound is worse than the mornings ever were", reaches: ["care:titration"] },
 

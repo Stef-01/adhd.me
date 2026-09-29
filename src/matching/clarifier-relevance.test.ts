@@ -48,7 +48,7 @@ describe("M10 the co-occurrence map is derived, not authored", () => {
    */
   it("holds the measured shape of the real corpus", () => {
     const counts = cooccurrenceCounts();
-    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(94); // R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
+    expect(REACH_CORPUS.filter((e) => new Set(e.reaches ?? []).size >= 2).length).toBe(91); // O256: three continuation sentences lost their second facet (assessment). R15: +3 two-facet sentences; 2026-09-29: +1 ("new mums", attuned with perinatal)
     expect(counts.size).toBe(146); // R15: perinatal pairs with assessment and telehealth; 2026-09-29: attuned with perinatal, both ways
     expect([...counts.values()].filter((n) => n >= MIN_COOCCURRENCE).length).toBe(56); // R15: two perinatal pairs clear the floor
   });
@@ -105,7 +105,7 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
     // top-3 cut matters here: an external filter over the old top three would have zeroed two of
     // these readers, where the integrated gate promotes a suggested candidate from further down
     // the ranking instead.
-    expect(full).toBe(57); // R15: 54 -> 57, three more tied readers keep a full offer
+    expect(full).toBe(58); // O256: 57 -> 58, one more tied reader keeps a full offer. R15: 54 -> 57, three more tied readers keep a full offer
     expect(partial).toBe(2);
     expect(zero).toBe(1);
     expect(zeroed).toEqual(["a calm doctor for my anxious mum, she speaks Hindi"]);

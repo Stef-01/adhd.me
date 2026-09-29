@@ -403,9 +403,6 @@
     "text": "a female psychiatrist for my ADHD medication",
     "reaches": [
       "pref:woman-gp"
-    ],
-    "mentions": [
-      "care:adhd-assessment"
     ]
   },
   {
@@ -450,9 +447,6 @@
     "text": "someone to keep prescribing my ADHD medication",
     "reaches": [
       "care:shared-care"
-    ],
-    "mentions": [
-      "care:adhd-assessment"
     ]
   },
   {
