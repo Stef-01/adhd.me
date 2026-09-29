@@ -1,0 +1,93 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I had a baby eight months ago and I think I might have ADHD. I want someone who gets the postpartum experience.",
+    "It's for me.",
+    "Telehealth would be best.",
+    "Cost doesn't really matter.",
+    "Someone who understands what it's like being a new mum.",
+    "No, that's everything."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "Baby eight months ago and I think I might have ADHD. I want someone who gets the postpartum experience."
+    },
+    {
+      "who": "assistant",
+      "text": "Is that an assessment, or help with treatment or care?"
+    },
+    {
+      "who": "person",
+      "text": "It's for me."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay. Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "assistant",
+      "text": "Does cost matter to you?"
+    },
+    {
+      "who": "person",
+      "text": "Telehealth would be best."
+    },
+    {
+      "who": "person",
+      "text": "Course doesn't really matter."
+    },
+    {
+      "who": "assistant",
+      "text": "How would you like a clinician to treat you, for example, with clear plans, plenty of listening, or a steady pace?"
+    },
+    {
+      "who": "person",
+      "text": "Someone who understands what it's like being a new mum."
+    },
+    {
+      "who": "assistant",
+      "text": "Does clinician gender, language, or cultural fit matter to you?"
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"\",\"request\":\"I want an ADHD assessment for me, with someone who understands what it's like being a new mum, by telehealth.\"}"
+    },
+    {
+      "who": "person",
+      "text": "No, that's everything."
+    }
+  ],
+  "request": "I want an ADHD assessment for me, with someone who understands what it's like being a new mum, by telehealth.",
+  "reads": [
+    {
+      "text": "I want an ADHD assessment for me, with someone who understands what it's like being a new mum, by telehealth.",
+      "answer": {
+        "keys": [
+          "care:adhd-assessment",
+          "pref:telehealth-first",
+          "manner:sense_making"
+        ],
+        "source": "llm"
+      }
+    }
+  ],
+  "heard": [
+    "Telehealth",
+    "ADHD assessment",
+    "Making sense"
+  ],
+  "results": [
+    "Dr Anubhav Saxena Making sense Beecroft & Double Bay",
+    "Meera Lakhani Psychologist · Making sense Fortitude Valley",
+    "Dr Owen HartleyExample Southport",
+    "JR Dr Jordan ReyesExample Broadbeach",
+    "Dr Chloe BennettExample Double Bay"
+  ],
+  "whyMatched": "Why matched ADHD assessment From your words: “care:adhd-assessment” By phone or telehealth From your words: “pref:telehealth-first” Helps it make sense From your words: “manner:sense_making” Compare with Meera Lakhani",
+  "stage": "results"
+}

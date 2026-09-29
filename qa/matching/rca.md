@@ -284,3 +284,54 @@ three in 7 of 8.
 - **Voice, live:** three calls connect and speak; the first word 6.0 to 10.5 s from the tap on a
   fresh headless browser, almost all of it WebRTC and OpenAI's session (docs/matching/VOICE-FINDER.md).
 
+
+## R15 · the founder's postpartum call: keys shown as words, a trait nobody asked for, a need with no name, 2026-09-29
+
+The founder ran the voice finder on a phone (screenshots kept in this conversation's record): a
+person some months after having a baby, asking for a clinician who relates to the postpartum
+experience. The profiles that came back said `From your words: "care:adhd-assessment"`, listed
+"Unhurried first appointment" as an ask, showed "understands your background" as the ask no one
+met, and matched nothing postpartum. "These were so generic."
+
+**Reproduced on production the same day**, with two scripted calls (`scripts/voice-call.mjs`, which
+now keeps each call whole under `qa/voice/runs/`: every turn both ways, the tool call, the route's
+read, the chips, the first five and the first profile's reasons):
+
+- A: "I had a baby eight months ago and I think I might have ADHD. I want someone who gets the
+  postpartum experience" → the agent wrote *"I want an ADHD assessment for me, with someone who
+  understands what it's like being a new mum, by telehealth"* → read `adhd-assessment`,
+  `telehealth-first`, `sense_making`. Nothing postpartum; a manner nobody asked for.
+- B: "I'm six months postpartum… a clinician who relates to what postpartum is like… someone patient
+  who… treats a lot of mums" → the agent wrote *"…someone patient who understands or treats a lot of
+  mums and relates to postpartum"* → read `adhd-assessment`, `telehealth-first`. Postpartum dropped.
+
+**Root causes, each with the evidence:**
+
+1. **Keys quoted as words.** `needForKey(key)` defaults its `matched` to the key, and the profile
+   quotes `need.matched` for every need. On the lexicon path `matched` is the phrase it heard; on
+   the model path it is `care:adhd-assessment`. No level-1 test read the profile's quote.
+2. **A trait from a word the agent offered.** The interviewer asked its manner question with
+   options twice in two live calls ("clear and calm, patient, or structured?"; "someone who listens
+   slowly and clearly, or…"), against its own rule. A person repeats an offered word; "patient" and
+   "with patience" cue the trait (O210), and its meaning and check example point the model there
+   too. Its label then says "Unhurried first appointment", a word the person never used, so a
+   stretch reads as an invention. The founder's call: remove the word entirely.
+3. **No name for the need.** Nothing in the tree knew perinatal care: not a care area, a cue, a
+   meaning or a clinician's declaration, though one real profile (Samantha Courtney) states
+   "perinatal mental health" in her own text. The agent's rule to keep the person's own words was
+   not kept: "gets the postpartum experience" became "understands what it's like being a new mum",
+   which lost the one word that named the need. The lexicon then read "understand what" (O113, an
+   over-broad cue) as `sense_making`, and the model agreed. The reader had put "postpartum" in its
+   `unlisted` list, which the route drops and nothing stores, so the miss was invisible.
+4. **Generic results follow.** With no key for the ask, the ranking ran on assessment and
+   telehealth, which nearly every profile declares, so the order fell to capacity, standing and
+   distance ties: the same handful for anyone.
+5. **Nothing to go back to.** A voice call's record held its outcome and never its words, by
+   design, so the founder's call could not be replayed and this RCA began from screenshots. The
+   founder's rule now: every call and every read is recorded and kept, for this simulation phase.
+
+**The fix, in stages** (docs/matching/LLM-MATCHING-PLAN.md §16g): record every call and read;
+quote only words a person said; a `perinatal` care area, declared by the profiles that hold it;
+the over-broad cue narrowed; the trait renamed `takes_time`, "Takes time with you"; the interviewer
+held to questions without options and to the person's own words for any condition or life stage;
+the reader's meanings sharpened; the eval ladder rerun under the new prompt; the two calls again.

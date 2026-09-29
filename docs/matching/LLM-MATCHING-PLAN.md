@@ -735,6 +735,36 @@ The founder took the default on every open question ("do all the default choices
 6. **Supabase:** no project could be made; the free plan's two active projects are in use. Until one
    is paused or the plan changes, the record lives in server memory.
 
+## 16g. 2026-09-29: the postpartum call (qa/matching/rca.md, R15)
+
+1. **Record everything** (founder: "all data and transcripts must be recorded and kept"). A voice
+   call's row gains its transcript (person, assistant and tool turns), the request it wrote and the
+   place; a search's row gains the reader's `unlisted` asks; the read route returns them and the
+   read cache holds the whole reading. Migration 0011. `scripts/voice-transcripts.mjs` prints the
+   last calls from Supabase for an RCA; `scripts/voice-call.mjs` keeps each scripted call under
+   `qa/voice/runs/`. The privacy page and FINDER-DATA.md say so.
+2. **Quote only words a person said.** A model-read need carries the lexicon's phrase where the
+   lexicon heard the same key, and no quote otherwise; the profile shows the label alone. An e2e
+   at level 1 asserts no "From your words" line ever holds a key.
+3. **A `perinatal` care area:** pregnancy, postpartum and new parents. In the closed vocabulary,
+   the lexicon (postpartum, postnatal, perinatal, new mum, had a baby, since the baby, breastfeeding,
+   pregnant…), the reader's meanings and an example, the clarifier, the corpus (reaches and nevers),
+   and the roster: Samantha Courtney's own declaration, and three example profiles.
+4. **The over-broad cue narrowed:** `sense_making` hears "understand what's going on / what's
+   happening / why", not "understand what it's like".
+5. **The trait renamed** (founder: "unhurried is a terrible word, remove it entirely"): id
+   `takes_time`, label "Takes time with you", chip "Takes time", the word gone from cues, corpus
+   texts and copy; historical eval reports keep it as history.
+6. **The interviewer:** no examples or options in any question; the manner question is not asked
+   when they have already said how they want to be treated; show_matches keeps every condition,
+   life stage or experience in the person's own word, never paraphrased, with a postpartum example.
+7. **The reader's meanings:** culturally_attuned is culture, faith, language, background or family,
+   not a life stage or condition; sense_making is explanation of what is going on or the plan.
+8. **The ladder again** under the new prompt hash: L0 P0 and L1 P0 free, then P1 to P4 live
+   (about $0.63), and the results here.
+9. **Live again:** both scripted calls on production after the deploy, the finder's e2e, and the
+   founder's own scenario.
+
 ## 17. Sources
 
 - OpenAI pricing and model facts (gpt-5-nano $0.05 / $0.005 cached / $0.40 per million tokens,

@@ -207,3 +207,5 @@
 {"time":"2026-09-28T02:46:32.555Z","kind":"eval","persona":"crisis","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.019,"pass":true}
 {"time":"2026-09-28T22:59:24.813Z","kind":"spoken","lines":5,"seconds":70,"tokens":{"text_in":11305,"audio_in":395,"cached":7488,"text_out":495,"audio_out":390},"costUsd":0.018005,"stage":"results"}
 {"time":"2026-09-28T23:21:23.343Z","kind":"spoken","lines":4,"seconds":56,"tokens":{"text_in":11181,"audio_in":293,"cached":7488,"text_out":532,"audio_out":356},"costUsd":0.015619,"stage":"results"}
+{"time":"2026-09-29T01:57:55.877Z","kind":"spoken","lines":6,"seconds":98,"tokens":{"text_in":13260,"audio_in":746,"cached":12544,"text_out":606,"audio_out":425},"costUsd":0.019393,"stage":"results"}
+{"time":"2026-09-29T01:59:49.221Z","kind":"spoken","lines":5,"seconds":73,"tokens":{"text_in":9310,"audio_in":429,"cached":7552,"text_out":448,"audio_out":346},"costUsd":0.015098,"stage":"results"}

@@ -9,7 +9,7 @@
 //   NO_WEBGL=1 ...       the orb's still disc, so a software renderer does not skew the timings
 import { chromium } from "@playwright/test";
 import { execFileSync } from "node:child_process";
-import { appendFileSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -84,7 +84,10 @@ await context.addInitScript(() => {
     if (read) window.__marks.readStart ??= Date.now();
     const r = await f(url, init);
     if (voice) window.__marks.answerBack = Date.now();
-    if (read) r.clone().text().then(() => { window.__marks.readDone ??= Date.now(); });
+    if (read) r.clone().json().then((answer) => {
+      window.__marks.readDone ??= Date.now();
+      try { window.__reads = [...(window.__reads ?? []), { text: JSON.parse(String(init?.body ?? "{}")).text, answer }]; } catch {}
+    }).catch(() => {});
     return r;
   };
   // The document does not exist yet when this runs: watch the stage once it does.
@@ -135,6 +138,23 @@ for (const e of ev) {
 const stops = ev.filter((e) => e.type === "input_audio_buffer.speech_stopped").map((e) => e.t);
 const lat = stops.map((s) => { const d = ev.find((e) => e.t > s && e.type === "response.output_audio_transcript.delta"); return d ? d.t - s : null; }).filter((x) => x !== null);
 console.log(`stage ${stage} · request: ${request}`);
+// What the finder made of it: the read route's answer, the chips, the first five, and the first's reasons.
+await page.locator(".reading-line").waitFor({ state: "detached", timeout: 20_000 }).catch(() => undefined);
+await page.waitForTimeout(800);
+const reads = await page.evaluate(() => window.__reads ?? []);
+const heardChips = await page.getByRole("group", { name: "What we heard" }).getByRole("button").allTextContents().catch(() => []);
+const rows = await page.locator(".clinician-row").evaluateAll((els) => els.slice(0, 5).map((el) => el.innerText.replace(/\s+/g, " ").slice(0, 140)));
+let whyMatched = "";
+if (stage === "results" && rows.length) {
+  await page.locator(".clinician-row").first().click().catch(() => undefined);
+  const why = page.locator("details.profile-disclosure", { hasText: "Why matched" });
+  await why.locator("summary").click().catch(() => undefined);
+  whyMatched = (await why.innerText().catch(() => "")).replace(/\s+/g, " ").slice(0, 400);
+}
+for (const r of reads) console.log(`read       ${JSON.stringify(r.text)} -> ${JSON.stringify(r.answer)}`);
+console.log(`heard      ${heardChips.join(" | ")}`);
+rows.forEach((row, i) => console.log(`  ${i + 1}.       ${row}`));
+console.log(`why        ${whyMatched}`);
 console.log(`reply after speech stops: ${lat.map((m) => (m / 1000).toFixed(1)).join("/")} s`);
 // gpt-realtime-2.1-mini, USD per 1M tokens.
 const P = { ti: 0.6, tc: 0.06, ai: 10, ac: 0.3, to: 2.4, ao: 20 };
@@ -149,5 +169,13 @@ for (const e of ev.filter((e) => e.type === "response.done")) {
 const seconds = Math.round((Date.now() - t0) / 1000);
 const transcribe = (seconds / 60) * 0.003;
 console.log(`call ${seconds} s · tokens ${JSON.stringify(tokens)} · $${usd.toFixed(4)} + about $${transcribe.toFixed(4)} transcription`);
+// The whole call, for going back to it: every turn both ways, the request, the read and the results.
+const turns = ev.flatMap((e) =>
+  e.type === "response.output_audio_transcript.done" ? [{ who: "assistant", text: e.transcript }]
+  : e.type === "conversation.item.input_audio_transcription.completed" ? [{ who: "person", text: e.transcript }]
+  : e.type === "response.done" ? (e.response?.output ?? []).filter((o) => o.type === "function_call").map((o) => ({ who: "tool", text: `${o.name} ${o.arguments}` }))
+  : []);
+mkdirSync("qa/voice/runs", { recursive: true });
+writeFileSync(`qa/voice/runs/${new Date().toISOString().replace(/[:.]/g, "-")}.json`, JSON.stringify({ base: BASE, lines, turns, request, reads, heard: heardChips, results: rows, whyMatched, stage }, null, 2));
 appendFileSync("qa/voice/ledger.jsonl", `${JSON.stringify({ time: new Date().toISOString(), kind: "spoken", lines: lines.length, seconds, tokens, costUsd: Number((usd + transcribe).toFixed(6)), stage })}\n`);
 await browser.close();
