@@ -64,9 +64,10 @@ test("the row says why this person is seeing them, in the words of their own map
   await search(page, ALLIED_SENTENCE);
 
   // `fitReason`'s two forms: the need's own subdomain is "the thing you said is hardest", a
-  // contributor's is "part of what you described". At least one row earns the first.
+  // contributor's is "part of what you described". At least one row earns one of them; which one
+  // depends on what the real roster's allied providers declare in their own listings (2026-09-29).
   const rows = page.locator(".clinician-row .row-focus");
-  await expect(rows.filter({ hasText: "the thing you said is hardest" }).first()).toBeVisible();
+  await expect(rows.filter({ hasText: /the thing you said is hardest|part of what you described/ }).first()).toBeVisible();
 
   // The line is ABOUT the person and must never put a number on them — the law the whole tab is
   // built on, held here because this is the first sentence on the finder that reads their record.

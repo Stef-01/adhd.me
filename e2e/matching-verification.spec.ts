@@ -39,9 +39,9 @@ test("a language ask is ranked on and explained, not just printed (O1)", async (
   // Both current clinicians declare Urdu, so language evidence is computed and shown while the
   // full-list tie is said plainly rather than dressed as an earned order.
   await expect(page.locator(".clinician-row strong").first()).toHaveText(/Saxena/);
-  // O237: the full-list tie is no longer a sentence — both listed GPs declare Urdu, so the words
-  // produced no order, and the heading says so ("All listed GPs") rather than dressing it as one.
-  await expect(page.locator(".results-list-head h2")).toHaveText("All listed providers");
+  // O237 pinned the full-list tie here when both listed GPs declared Urdu. 2026-09-29: thirty-seven
+  // real profiles, a few of whom speak Urdu, so the words produce an order and the heading says so.
+  await expect(page.locator(".results-list-head h2")).toHaveText("Matches");
   await page.screenshot(shot("02-urdu-ranked-and-earned"));
   // And the profile says the reason in the closed vocabulary.
   await page.locator(".clinician-row").first().click();

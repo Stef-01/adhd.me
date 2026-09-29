@@ -87,8 +87,8 @@ test("the GP dashboard receives the request, takes a capacity, and accepts it; t
   await expect(request).toBeVisible();
   await expect(request.locator("blockquote")).toContainText("whole life");
 
-  // Capacity slider writes the declared places.
-  await gpPage.getByTestId("capacity-slider").fill("2");
+  // Capacity slider writes the declared places: a real person's list is one place, open or closed.
+  await gpPage.getByTestId("capacity-slider").fill("1");
   await gpPage.getByTestId("capacity-save").click();
   await expect(gpPage.getByTestId("gp-saved")).toContainText("Capacity saved");
   await expect(gpPage.getByRole("heading", { name: /Capacity/ })).toBeVisible();

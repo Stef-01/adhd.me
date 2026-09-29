@@ -34,11 +34,9 @@ export const BARE_HEADINGS: Readonly<Record<string, string>> = {
   "What ADHD is": "The name of a learning module, shown as the module page's own title.",
 
   // A person. Never punctuated, on any screen.
-  "Dr Mei Chao": "A person's name.",
   "Dr Anubhav Saxena": "A person's name.",
 
   // A count. The number is the heading.
-  "3 GPs": "A count of results, which is a label and not a sentence.",
   "One GP": "A count of results, which is a label and not a sentence (the real roster has one GP for some asks).",
 };
 

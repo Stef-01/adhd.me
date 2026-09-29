@@ -80,10 +80,11 @@ test("with every heard chip out, the list stops claiming to be matches", async (
 
 test("five facets heard, four chips shown: the strongest, in the ranker's order", async ({ page }) => {
   await search(page, "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment");
+  // The ranker's order on the real roster (src/finder/heard.test.ts pins the same four).
   await expect(page.getByRole("group", { name: "What we heard" }).getByRole("button")).toHaveText([
     "Hindi-speaking",
     "Bulk billing",
-    "Longer appointment",
     "Woman clinician",
+    "Longer appointment",
   ]);
 });
