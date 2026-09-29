@@ -39,6 +39,7 @@ export const BARE_HEADINGS: Readonly<Record<string, string>> = {
 
   // A count. The number is the heading.
   "3 GPs": "A count of results, which is a label and not a sentence.",
+  "One GP": "A count of results, which is a label and not a sentence (the real roster has one GP for some asks).",
 };
 
 /**

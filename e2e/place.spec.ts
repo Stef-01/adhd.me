@@ -3,6 +3,18 @@
 // a half-typed name chosen from the list. And the map has to show the coast, with faces.
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
+import { clinicians } from "../src/demo/clinicians";
+import { distanceKm, resolvePlace } from "../src/geo/suburbs";
+
+/** The roster's distinct consulting suburbs within reach of a place: what the map has to draw (2026-09-29: real people only, two rooms on the coast). */
+function roomsNear(place: string, km = 30): number {
+  const at = resolvePlace(place)!;
+  const rooms = clinicians.flatMap((c) => [c.suburb, ...(c.alsoConsultsAt ?? [])]).filter((s) => {
+    const p = resolvePlace(s);
+    return p !== null && distanceKm(p, at) <= km;
+  });
+  return new Set(rooms).size;
+}
 
 async function searchFrom(page: Page, place: string) {
   await page.goto("/profile");
@@ -24,7 +36,8 @@ test("a postcode is a place: 4220 measures from Burleigh Heads and draws the coa
   const map = page.locator(".nearby-map");
   await expect(map.locator(".leaflet-container")).toBeVisible({ timeout: 20000 });
   const markers = map.locator(".leaflet-marker-icon.nearby-marker:not(.is-you)");
-  expect(await markers.count()).toBeGreaterThanOrEqual(3);
+  expect(roomsNear("4220")).toBeGreaterThan(0);
+  expect(await markers.count()).toBeGreaterThanOrEqual(roomsNear("4220"));
   // The rows say how far, as a straight line, from the postcode's suburb.
   await expect(page.locator(".clinician-row").first()).toContainText(/km away|in your suburb|telehealth/);
 });
@@ -76,7 +89,8 @@ test("the coast is populated, and the markers are faces where the roster has one
   const map = page.locator(".nearby-map");
   await expect(map.locator(".leaflet-container")).toBeVisible({ timeout: 20000 });
   const markers = map.locator(".leaflet-marker-icon.nearby-marker:not(.is-you)");
-  expect(await markers.count()).toBeGreaterThanOrEqual(4);
+  expect(roomsNear("Surfers Paradise")).toBeGreaterThan(0);
+  expect(await markers.count()).toBeGreaterThanOrEqual(roomsNear("Surfers Paradise"));
   // A face where the roster carries a portrait; the row key stays as a badge on it.
   const faces = map.locator(".nearby-marker-pin.has-face img");
   expect(await faces.count()).toBeGreaterThanOrEqual(1);

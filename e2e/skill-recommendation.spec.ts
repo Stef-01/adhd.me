@@ -3,10 +3,12 @@ import { emptyModel } from "../src/model/store";
 import { emptyProfile } from "../src/lives/profile";
 import { expectNoViolations } from "./support/a11y";
 
+// 2026-09-29: the roster is real people only, and a card exists only where somebody declares the
+// skill in their own listing. Sleep is one such need (sleep-routine); starting is not, yet.
 for (const width of [390,1440]) test(`skill recommendation opens the exact profile at ${width}px`, async ({ page }) => {
   await page.setViewportSize({width,height:900});
   await page.addInitScript(record => localStorage.setItem("adhdme.model.v1",JSON.stringify(record)), {
-    ...emptyModel(), resonance:{starting:{cost:8,priority:"yes",at:"2026-09-21"}},answers:{"starting.what-helps-start":["person"]}
+    ...emptyModel(), resonance:{sleep:{cost:8,priority:"yes",at:"2026-09-21"}}
   });
   await page.goto("/support");
   const card=page.locator("[data-skill-match]").first();
@@ -34,8 +36,8 @@ test("game recognition reaches support, retracts immediately and never uses a sc
   await expect(page.locator("[data-skill-match]")).toHaveCount(0);
   await page.evaluate(profile=>{localStorage.setItem("adhdme.lives.v1",JSON.stringify(profile));window.dispatchEvent(new Event("adhdme:personalisation"));},{...emptyProfile(),highScore:999});
   await expect(page.locator("[data-skill-match]")).toHaveCount(0);
-  await page.evaluate(profile=>{localStorage.setItem("adhdme.lives.v1",JSON.stringify(profile));window.dispatchEvent(new Event("adhdme:personalisation"));},{...emptyProfile(),resonanceSignals:[{sourceType:"character",sourceId:"nina",response:"this_is_me",createdAt:1}]});
+  await page.evaluate(profile=>{localStorage.setItem("adhdme.lives.v1",JSON.stringify(profile));window.dispatchEvent(new Event("adhdme:personalisation"));},{...emptyProfile(),resonanceSignals:[{sourceType:"character",sourceId:"leo",response:"this_is_me",createdAt:1}]});
   await expect(page.locator("[data-skill-match]")).toBeVisible();
-  await page.evaluate(profile=>{localStorage.setItem("adhdme.lives.v1",JSON.stringify(profile));window.dispatchEvent(new Event("adhdme:personalisation"));},{...emptyProfile(),resonanceSignals:[{sourceType:"character",sourceId:"nina",response:"not_me",createdAt:2}]});
+  await page.evaluate(profile=>{localStorage.setItem("adhdme.lives.v1",JSON.stringify(profile));window.dispatchEvent(new Event("adhdme:personalisation"));},{...emptyProfile(),resonanceSignals:[{sourceType:"character",sourceId:"leo",response:"not_me",createdAt:2}]});
   await expect(page.locator("[data-skill-match]")).toHaveCount(0);
 });
