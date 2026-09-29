@@ -863,7 +863,11 @@ meaning (ff68a930e1e1): P0 to P3 pass; P4 read `care:depression` on one symptom 
 months, everything is heavy", a never pin of the G7 kind) at 1.4% of its never population and
 failed the gate; that request's six cached answers were dropped and it was read again live
 ("nothing"), and P4 passed (never 0.0%, C4 95.1%, recall 99.5% against the lexicon's 100%,
-precision 93.2%). Left: `agesSeen`,
+precision 93.2%). Live again after that deploy (11:58): the interviewer's request began "I was
+diagnosed last year and want a psychologist who has ADHD themselves", the place was the suburb
+alone, the readers heard lived experience and telehealth and nothing else, and the typed request
+"someone who has ADHD themselves and gets it from the inside" listed exactly the three who say it:
+Chantelle Pin, Alex Lawson, Trisha Harris. Left: `agesSeen`,
 the thirteen first-person bios, the remaining keys (neuro-affirming, NDIS, prescribing, coaching;
 eating disorders once more than two say it), manner out of the evidence and the filters, and a question gated on the
 split it makes.
