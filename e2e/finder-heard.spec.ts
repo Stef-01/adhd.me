@@ -7,7 +7,9 @@ import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { clinicians, needsFor, rankClinicians } from "../src/demo/clinicians";
 import { emptyFilters } from "../src/finder/filters";
+import { heardChips } from "../src/finder/heard";
 import { searchRoster } from "../src/finder/pipeline";
+import { carePreferencesFromRequest, combineCarePreferences } from "../src/support/care-preferences";
 import { facetKey, type NeedSignal } from "../src/matching/needs";
 
 const REQUEST = "an adult ADHD assessment, telehealth, not rushed";
@@ -79,12 +81,13 @@ test("with every heard chip out, the list stops claiming to be matches", async (
 });
 
 test("five facets heard, four chips shown: the strongest, in the ranker's order", async ({ page }) => {
-  await search(page, "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment");
-  // The ranker's order on the real roster (src/finder/heard.test.ts pins the same four).
-  await expect(page.getByRole("group", { name: "What we heard" }).getByRole("button")).toHaveText([
-    "Hindi-speaking",
-    "Bulk billing",
-    "Woman clinician",
-    "Longer appointment",
-  ]);
+  const text = "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment";
+  // The order comes from the engine over the roster the search runs over: the sentence's kind (a GP)
+  // and its care asks (anxiety) narrow the roster before the weights are read, as the finder does.
+  const held = emptyFilters();
+  const searched = searchRoster(clinicians, { ...held, ...combineCarePreferences(held, carePreferencesFromRequest(text)) }, text, null);
+  const needs = needsFor(text, searched);
+  expect(new Set(needs.map((need) => facetKey(need.facet))).size).toBe(5);
+  await search(page, text);
+  await expect(page.getByRole("group", { name: "What we heard" }).getByRole("button")).toHaveText(heardChips(needs, 4).map((chip) => chip.label));
 });
