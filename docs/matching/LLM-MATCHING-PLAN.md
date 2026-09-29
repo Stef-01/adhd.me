@@ -835,3 +835,22 @@ assessment cues down once the reader says, in the first person, that the diagnos
 treatment they already have (O256, `diagnosisAlreadyMade`); the reader's meaning for
 `adhd-assessment` carries the same clause and an example. Prompt hash changed; P0 passes on the
 cassettes; P1 to P4 pass under prompt d00890b423d1 (P4: never 0.0%, C4 93.3%, recall 99.2% vs 100%, precision 93.3%; qa/matching/reports/L1-P4-2026-09-29T09-33-44-020Z.md).
+
+### 16j. 2026-09-29: the vocabulary starts to earn its place (docs/matching/HIGH-YIELD.md)
+
+The founder's two calls this morning asked questions that changed nothing ("How would you like a
+clinician to treat you?", against a roster where 22 of 37 declare "strengths-focused" and one
+declares "not rushed") and heard manner traits four to a request. HIGH-YIELD.md inventories what
+the 37 profiles declare and what they say in their own words that no key could hear, and proposes
+seven questions that each change the list. The first slice (O257): `pref:lived-experience`, a
+clinician who has ADHD themselves, through the lexicon, the reader, the roster (three say it),
+the filters and the clarifier; the two manner questions out of the interviewer and two questions
+that split the roster in their place; gender declared for the seven whose bios say it. Prompt hash e3f9d2e1809d: P0 to P4 pass (P4 over 381 requests: never 0.0%, C4 93.4%, recall 99.2%
+against the lexicon's 100%, precision 93.2%, $0.000065 a call). One lesson on the way: the reader's
+example "a psychologist who has ADHD herself, not one who just treats it" failed P3 twice on the
+negation class, the "not … just" in it teaching the model to read a key past a refusal; without those
+words P3 passed with the class at 100%. A first P4 tripped the breaker on 23 cached answers that
+recited the whole menu; purged, the rerun passed. The interviewer's text eval passes 12 of 12 with a `lived` persona. Left: `agesSeen`,
+the thirteen first-person bios, the remaining keys (neuro-affirming, eating disorders, NDIS,
+prescribing, coaching), manner out of the evidence and the filters, and a question gated on the
+split it makes.

@@ -7,6 +7,10 @@
 
 import type { Clinician } from "./roster";
 
+// Gender and pronouns are declared only where the clinician's own public words say them (O257,
+// 2026-09-29: seven profiles whose bios say "he" or "she" of themselves; the thirteen written in the
+// first person stay undeclared until they say). A woman is one of the finder's high-yield asks
+// (docs/matching/HIGH-YIELD.md), and it is only fair to ask when the roster can answer.
 export const NETWORK_CLINICIANS: Clinician[] = [
   {
     id: "yogesh-kalra",
@@ -38,6 +42,7 @@ export const NETWORK_CLINICIANS: Clinician[] = [
   },
   {
     id: "trisha-harris",
+    livedExperience: true,
     name: "Trisha Harris",
     shortName: "Trisha",
     profession: "counsellor",
@@ -326,6 +331,7 @@ export const NETWORK_CLINICIANS: Clinician[] = [
   },
   {
     id: "chantelle-pin",
+    livedExperience: true,
     name: "Chantelle Pin",
     shortName: "Chantelle",
     profession: "psychologist",
@@ -576,8 +582,8 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     name: "Bart Traynor",
     shortName: "Bart",
     profession: "psychologist",
-    gender: "undeclared",
-    pronouns: "",
+    gender: "man",
+    pronouns: "he/him",
     title: "Clinical psychologist",
     suburb: "Bundall",
     practice: "Atlantis Recovery Centre",
@@ -607,8 +613,8 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     name: "Jeff Leech",
     shortName: "Jeff",
     profession: "psychologist",
-    gender: "undeclared",
-    pronouns: "",
+    gender: "man",
+    pronouns: "he/him",
     title: "Clinical psychologist, MClinPsych BPsychSc(Hons)",
     suburb: "Bundall",
     practice: "Atlantis Recovery Centre",
@@ -636,8 +642,8 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     name: "Michael Rehardt",
     shortName: "Michael",
     profession: "psychologist",
-    gender: "undeclared",
-    pronouns: "",
+    gender: "man",
+    pronouns: "he/him",
     title: "Provisional psychologist",
     suburb: "Bundall",
     practice: "Atlantis Recovery Centre",
@@ -666,8 +672,8 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     shortName: "Sarah",
     profession: "exercise-physiologist",
     expertise: ["exercise-adherence"],
-    gender: "undeclared",
-    pronouns: "",
+    gender: "woman",
+    pronouns: "she/her",
     title: "Exercise physiologist, BExSc GradDipExSc",
     suburb: "Bundall",
     practice: "Atlantis Recovery Centre",
@@ -697,8 +703,8 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     name: "Dr Yuri Lima",
     shortName: "Yuri",
     profession: "physiotherapist",
-    gender: "undeclared",
-    pronouns: "",
+    gender: "man",
+    pronouns: "he/him",
     title: "Physiotherapist, PhD, Master in Rehabilitation Sciences",
     suburb: "Bundall",
     practice: "Atlantis Recovery Centre",
@@ -728,8 +734,8 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     name: "Tom Hissey",
     shortName: "Tom",
     profession: "physiotherapist",
-    gender: "undeclared",
-    pronouns: "",
+    gender: "man",
+    pronouns: "he/him",
     title: "Physiotherapist",
     suburb: "Bundall",
     practice: "Atlantis Recovery Centre",
@@ -759,8 +765,8 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     name: "Lester Rafanan",
     shortName: "Lester",
     profession: "physiotherapist",
-    gender: "undeclared",
-    pronouns: "",
+    gender: "man",
+    pronouns: "he/him",
     title: "Physiotherapist, Doctor of Physiotherapy, Bond University",
     suburb: "Bundall",
     practice: "Atlantis Recovery Centre",
@@ -786,6 +792,7 @@ export const NETWORK_CLINICIANS: Clinician[] = [
   },
   {
     id: "alex-lawson",
+    livedExperience: true,
     name: "Alex Lawson",
     shortName: "Alex",
     profession: "adhd-coach",

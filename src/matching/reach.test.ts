@@ -1649,3 +1649,24 @@ describe("§O256 a diagnosis already made is not an assessment ask", () => {
     expect(diagnosisAlreadyMade(tokeniseKeepingStopwords("is it ADHD or anxiety"))).toBe(false);
   });
 });
+
+describe("§O257 a clinician who has ADHD themselves", () => {
+  const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
+
+  it("is asked for as the clinician's own ADHD, in several words", () => {
+    for (const text of ["a psychologist who has ADHD herself", "someone who has ADHD themselves", "a coach with lived experience of ADHD", "a GP who has ADHD"]) {
+      expect(facets(text), text).toContain("pref:lived-experience");
+    }
+  });
+
+  it("is never the person's own ADHD, nor the ADHD of the person they ask for", () => {
+    for (const text of ["I have ADHD myself and want an assessment", "my son has ADHD and needs a paediatrician", "help for someone with ADHD, my brother", "I was diagnosed with ADHD last year"]) {
+      expect(facets(text), text).not.toContain("pref:lived-experience");
+    }
+  });
+
+  it("is held by the clinicians who say it of themselves, and by nobody else", () => {
+    const held = clinicians.filter((c) => c.livedExperience).map((c) => c.id).sort();
+    expect(held).toEqual(["alex-lawson", "chantelle-pin", "trisha-harris"]);
+  });
+});

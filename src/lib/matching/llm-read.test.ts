@@ -23,7 +23,7 @@ describe("one vocabulary (F8, F9)", () => {
     const corpusKeys = [
       ...CARE_AREA_LABELS.map((area) => `care:${area.id}`),
       ...EI_QUALITY_KEYS.map((trait) => `manner:${trait}`),
-      "pref:woman-gp", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing",
+      "pref:woman-gp", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience",
     ];
     const languages = MATCHABLE_LANGUAGES.map((name) => `language:${name.toLowerCase()}`);
     expect(new Set(schemaKeys())).toEqual(new Set([...lexicon, ...languages]));
@@ -81,12 +81,12 @@ describe("fromModel", () => {
     expect(fromModel(answerFor([])).keys).toEqual([]);
   });
 
-  it("treats a recited list as a malformed answer, and allows any four preferences", () => {
+  it("treats a recited list as a malformed answer, and allows every preference at once (five)", () => {
     const care = VOCABULARY.care.ids;
     expect(() => fromModel({ ...answerFor([]), care: care.slice(0, 7) })).toThrow(/care recites 7 keys/);
     expect(() => fromModel({ ...answerFor([]), languages: VOCABULARY.languages.ids })).toThrow(/languages recites/);
     expect(fromModel({ ...answerFor([]), care: care.slice(0, 3) }).keys).toHaveLength(3);
-    expect(fromModel({ ...answerFor([]), prefs: VOCABULARY.prefs.ids }).keys).toHaveLength(4);
+    expect(fromModel({ ...answerFor([]), prefs: VOCABULARY.prefs.ids }).keys).toHaveLength(5);
   });
 
   it("keeps every key the lexicon hears in the request, unless the model marked it refused", () => {

@@ -267,3 +267,12 @@ across the five requests: worst 60 (was 75), every other row 52 to 59.
 - `pnpm typecheck` — passed. `pnpm vitest run` — 4678 passed, 1 skipped.
 - Text budget over every screen: 142 screens measured, 127 of 127 app screens within their ceiling, 0 over, median 29 words (90 at or under the 40-word target). The finder profile states: 44, 44, 49, 46 and 60.
 - e2e: finder-flow, finder-read, compare, matching-verification, profile-layout, text-budget and headings specs — 42 passed (12.2 min) on the production build.
+
+# The filters screen gains a switch that changes the list (O257, 2026-09-29)
+
+"Lived experience" joins the switches on `/profile`, second, after "Woman clinician", with the
+line "Clinicians who say they have ADHD." under it: three of the 37 say it of themselves, and the
+founder named it as the kind of question that should be asked (docs/matching/HIGH-YIELD.md). The
+switch, its chip and the heard chip share the two words (the chip cap), so a screen reader hears
+one name for one thing. The screen measures 38 words at 390 and at 1280, under the
+40-word target; captures `qa/roster-o254/filters-lived-{390,1280}.png`.

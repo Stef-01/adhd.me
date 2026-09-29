@@ -185,6 +185,11 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── preferences ──────────────────────────────────────────────────────────────────────────
   { text: "I would prefer a woman GP", reaches: ["pref:woman-gp"] },
   { text: "a female doctor please", reaches: ["pref:woman-gp"] },
+  // O257: a clinician who has ADHD themselves; the person's own ADHD is never this.
+  { text: "a psychologist who has ADHD herself", reaches: ["pref:lived-experience"] },
+  { text: "someone who has ADHD themselves and gets it from the inside", reaches: ["pref:lived-experience"] },
+  { text: "a coach who has ADHD themselves", reaches: ["pref:lived-experience", "care:non-medication"] },
+  { text: "I have ADHD myself and I need an assessment for my daughter", reaches: ["care:child-adolescent-adhd", "care:adhd-assessment"], never: ["pref:lived-experience"] },
   { text: "can the first appointment be over the phone", reaches: ["pref:telehealth-first"] },
   { text: "telehealth to start, I am rural", reaches: ["pref:telehealth-first"] },
   { text: "bulk billed if at all possible", reaches: ["pref:bulk-billing"] },
@@ -1183,4 +1188,5 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // women doctors. The two left were refused on measurement ("not a man" fires on the idiom
   // "not a man of many words"; "a she not a he" collapses to the bare token [not]).
   "pref:woman-gp": 25,
+  "pref:lived-experience": 3, // O257, 2026-09-29
 };

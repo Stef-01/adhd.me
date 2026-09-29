@@ -52,12 +52,14 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 // from new rates and the whole curve moved again. The shape holds: N=2's null exactly degenerate,
 // every effect within 0.004 of zero, and a dip (N=2 -> N=3, 0 -> -0.001) that keeps the
 // tolerance non-vacuous. Re-measured once more for the "new mums" sentence (462 -> 463), and
-// again for O256 (463 -> 466: three continuation sentences added, three assessment reads gone).
-  { rosterSize: 2, k: K, total: 466, observedSeparationRate: 0.275, nullMeanSeparationRate: 0.275, nullStdSeparationRate: 0, effect: 0 },
-  { rosterSize: 3, k: K, total: 466, observedSeparationRate: 0.174, nullMeanSeparationRate: 0.175, nullStdSeparationRate: 0.001, effect: -0.001 },
-  { rosterSize: 5, k: K, total: 466, observedSeparationRate: 0.298, nullMeanSeparationRate: 0.296, nullStdSeparationRate: 0.003, effect: 0.002 },
-  { rosterSize: 10, k: K, total: 466, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.238, nullStdSeparationRate: 0.002, effect: 0.002 },
-  { rosterSize: 25, k: K, total: 466, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.237, nullStdSeparationRate: 0.006, effect: 0.003 },
+// again for O256 (463 -> 466: three continuation sentences added, three assessment reads gone),
+// and for O257 (466 -> 470: four lived-experience sentences and a fifth preference; the synthetic
+// roster draws gender at the real roster's rate, and seven profiles declared theirs the same day).
+  { rosterSize: 2, k: K, total: 470, observedSeparationRate: 0.274, nullMeanSeparationRate: 0.274, nullStdSeparationRate: 0, effect: 0 },
+  { rosterSize: 3, k: K, total: 470, observedSeparationRate: 0.174, nullMeanSeparationRate: 0.176, nullStdSeparationRate: 0.001, effect: -0.002 },
+  { rosterSize: 5, k: K, total: 470, observedSeparationRate: 0.298, nullMeanSeparationRate: 0.295, nullStdSeparationRate: 0.003, effect: 0.003 },
+  { rosterSize: 10, k: K, total: 470, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.238, nullStdSeparationRate: 0.002, effect: 0.002 },
+  { rosterSize: 25, k: K, total: 470, observedSeparationRate: 0.24, nullMeanSeparationRate: 0.235, nullStdSeparationRate: 0.006, effect: 0.005 },
 ];
 
 /*
@@ -78,9 +80,9 @@ const PINNED_CURVE: SeparationEffectReport[] = [
 const PINNED_REAL: SeparationEffectReport = {
   rosterSize: 37,
   k: K,
-  total: 466,
-  observedSeparationRate: 0.339,
-  nullMeanSeparationRate: 0.331,
+  total: 470,
+  observedSeparationRate: 0.338,
+  nullMeanSeparationRate: 0.33,
   nullStdSeparationRate: 0.006,
   effect: 0.008,
 };
@@ -114,11 +116,11 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
       // rate (0.154 -> 0.24), and 3 -> 2 inflates it again (0.173 -> 0.275), the direction O252
       // had seen reverse: the pair proves nothing fixed, which is the point.
       const naive = (size: number) => tieQualityReport(corpusRun(), syntheticRoster(size)).separationRate;
-      expect(naive(40)).toBe(0.152);
+      expect(naive(40)).toBe(0.155);
       expect(naive(25)).toBe(0.24);
       expect(naive(25)).toBeGreaterThan(naive(40));
       expect(naive(3)).toBe(0.174);
-      expect(naive(2)).toBe(0.275);
+      expect(naive(2)).toBe(0.274);
       expect(naive(2)).toBeGreaterThan(naive(3));
     },
   );
@@ -132,7 +134,7 @@ describe("M5 the separation effect size, over synthetic rosters", () => {
     () => {
       const size3 = curve.find((point) => point.rosterSize === 3)!;
       const size2 = curve.find((point) => point.rosterSize === 2)!;
-      expect(size3.effect).toBe(-0.001); // 2026-09-29: 0.001 -> -0.001, one null standard deviation below zero
+      expect(size3.effect).toBe(-0.002); // 2026-09-29: 0.001 -> -0.001, one null standard deviation below zero
       expect(size2.effect).toBe(0);
       // O252: stated over the whole curve rather than one pair, now that the pair that
       // demonstrates the raw artefact has moved once and may move again.

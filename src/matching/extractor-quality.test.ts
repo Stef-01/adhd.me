@@ -43,14 +43,14 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
     // R15: 451 -> 462 and 563 -> 577. Eleven corpus sentences arrived with the thirteenth care area
     // (perinatal): the postpartum call's phrasings, three carrying a second gold facet. Every one
     // parses exactly, so precision and recall stay at 1.
-      sampleSize: 466,
-      goldFacetCount: 579,
-      hitCount: 579,
+      sampleSize: 470,
+      goldFacetCount: 585,
+      hitCount: 585,
       recall: 1,
-      extractedCount: 579,
+      extractedCount: 585,
       extraCount: 0,
       precision: 1,
-      correctlyParsedCount: 466,
+      correctlyParsedCount: 470,
       correctlyParsedRate: 1,
     });
   });
@@ -59,7 +59,7 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
     // Same filter as `tie-quality.ts`'s `corpusRun` (any entry with a non-empty `reaches`), so a
     // reader comparing the two reports is comparing the same denominator, not two silently
     // different corpora wearing the same "447".
-    expect(gradedEntries().length).toBe(466); // O210: +3 corpus sentences; R15: +11 (perinatal); 2026-09-29: +1 ("new mums"); O256: +3 (the diagnosis already made)
+    expect(gradedEntries().length).toBe(470); // O210: +3 corpus sentences; R15: +11 (perinatal); 2026-09-29: +1 ("new mums"); O256: +3 (the diagnosis already made); O257: +4 (lived experience)
   });
 
   it("the ranking ladder split is IDENTICAL today, and that identity is itself the finding", () => {
@@ -85,9 +85,9 @@ describe("M6 the parser's own report, apart from any ranking outcome", () => {
     // because four profiles now declare the area they name.
     // 2026-09-29: the roster is 37 real profiles (roster-network.ts), informed 433 -> 451 and
     // unserved 29 -> 11: the network declares eighteen more of the asks the corpus names.
-    expect(all).toEqual({ total: 466, informed: 455, tied: 0, unmatched: 0, unserved: 11 });
+    expect(all).toEqual({ total: 470, informed: 459, tied: 0, unmatched: 0, unserved: 11 });
     expect(parsed).toEqual(all);
-    expect(parsed.informed).toBe(455);
+    expect(parsed.informed).toBe(459);
     expect(parsed.tied + parsed.unmatched + parsed.unserved).toBe(11);
   });
 });

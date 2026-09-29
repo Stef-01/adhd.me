@@ -155,11 +155,21 @@ to you about the clinician?" (the two that produced the noise in both calls).
 
 ## 6. Order of work
 
-1. Record every call (done today: bounded parser, refusals on health, immediate send).
-2. Interviewer: drop the two manner questions; add lived experience and language gated on the
-   split. Small.
+1. Record every call. Done 2026-09-29: bounded parser, refusals on health, immediate send.
+2. Interviewer: drop the two manner questions; add lived experience and language. Done
+   2026-09-29 (O257): the questions are gone, "Would you like someone who has ADHD themselves?" and
+   "Is there a language or a background that matters?" stand in their place, and the voice eval
+   passes 12 of 12 with a `lived` persona. Gating a question on the split it makes is not built
+   yet: the interviewer asks all seven unless the answer is already known.
 3. Roster: `livedExperience` and `agesSeen` from the profiles' own words; declare gender for the
-   20 who do not. Medium, and the founder confirms each.
+   20 who do not. Half done 2026-09-29: `livedExperience` on the three who say it of themselves
+   (Trisha, Chantelle, Alex; Lana's "lived experience" names no condition and is left for her to
+   say), and gender for the seven whose bios say "he" or "she" of themselves (13 / 11 / 13 now).
+   `agesSeen` and the thirteen first-person bios remain, and the founder confirms each.
 4. Vocabulary: the new keys in the lexicon and the reader, with corpus and probe pins; manner
    out of evidence and filters. Large; the count pins move and are re-pinned as O256's were.
+   Begun 2026-09-29 with `pref:lived-experience`: cues that name the clinician, each demanding its
+   full run of words ("a psychologist who has ADHD herself"; "GP … my ADHD" across a gap read as
+   one until the run was demanded), the reader's meaning, a filter switch (38 words on the
+   filters screen), the clarifier's question, four corpus sentences and two probes.
 5. Screens: chips, why, compare, filters follow the vocabulary. Medium.

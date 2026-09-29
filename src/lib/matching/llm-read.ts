@@ -8,7 +8,7 @@ import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, languageNeeds, needForKey, readNeeds, type NeedSignal, type Preference } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 
-const PREFERENCES: Record<Preference, 1> = { "woman-gp": 1, "telehealth-first": 1, "longer-appointment": 1, "bulk-billing": 1 };
+const PREFERENCES: Record<Preference, 1> = { "woman-gp": 1, "telehealth-first": 1, "longer-appointment": 1, "bulk-billing": 1, "lived-experience": 1 };
 
 /** Schema field → enum values (bare ids) and the facet-key prefix they take. */
 export const VOCABULARY = {
@@ -49,6 +49,7 @@ export const MEANINGS: Record<string, string> = {
   culturally_attuned: "asks for a clinician who understands their culture, faith, language, background or family (a life stage or a condition is not this)",
   structured: "asks for a structured approach: a baseline, measures and scheduled reviews",
   "woman-gp": "asks for a woman clinician",
+  "lived-experience": "asks for a clinician who has ADHD themselves (the person having ADHD is not this)",
   "telehealth-first": "asks for telehealth: phone or video",
   "longer-appointment": "asks for a longer or double appointment, or more time than a standard one",
   "bulk-billing": "asks for bulk billing: Medicare covers it, with no gap or extra fee",
@@ -77,6 +78,7 @@ const EXAMPLES = [
   '"someone to keep prescribing my ADHD medication" → care: shared-care; negated: adhd-assessment',
   '"I already have a diagnosis and need my ADHD medication continued" → care: shared-care; negated: adhd-assessment',
   '"a clinician who speaks Tamil" → languages: tamil',
+  '"a psychologist who has ADHD herself" → prefs: lived-experience',
   '"a practice that runs on schedule" → unlisted: appointments that run on time',
   '"our little one is five months and I want a GP who gets that" → care: perinatal',
 ];

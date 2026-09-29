@@ -50,6 +50,7 @@ const PREFERENCE_LABELS: Readonly<Record<Preference, string>> = {
   "telehealth-first": "By phone or telehealth",
   "bulk-billing": "Bulk billing",
   "longer-appointment": "A longer first appointment",
+  "lived-experience": "Has ADHD themselves",
 };
 
 const PREFERENCE_SOURCE: Readonly<Record<Preference, string>> = {
@@ -57,6 +58,7 @@ const PREFERENCE_SOURCE: Readonly<Record<Preference, string>> = {
   "telehealth-first": "telehealthFirstAppointment",
   "bulk-billing": "practicalSignals",
   "longer-appointment": "manner (not_rushed)",
+  "lived-experience": "livedExperience",
 };
 
 /**

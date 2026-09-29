@@ -64,7 +64,7 @@ export type Facet = { kind: "care"; area: CareArea } | { kind: "manner"; trait: 
  * A preference that is a hard filter or a strong lift rather than a facet — the things somebody
  * says that are about access rather than about the care itself.
  */
-export type Preference = "woman-gp" | "telehealth-first" | "bulk-billing" | "longer-appointment";
+export type Preference = "woman-gp" | "telehealth-first" | "bulk-billing" | "longer-appointment" | "lived-experience";
 
 /**
  * One thing the reader asked for, with the words to say it back to them.
@@ -237,7 +237,7 @@ const LEXICON: readonly Entry[] = [
        over (on "diagnosis" and on "adhd"), so the GP who continues medication for people already
        diagnosed, and says he does not assess, ranked behind the assessing GPs and showed the one
        person who never asked for an assessment "Not in their listing: ADHD assessment". */
-    "already have a diagnosis", "continue my medication", "medication continued",
+    "already have a diagnosis", "continue my medication", "medication continued", "continue my scripts", "scripts continued",
     /* "keep prescribing" was written here and REFUSED on measurement: "they keep prescribing me the
        wrong dose" is a titration complaint, and the P0 dry run read it as shared care as well. The
        phrase stays a sign that the diagnosis is made (read.ts, diagnosisAlreadyMade), which is all
@@ -538,6 +538,16 @@ const LEXICON: readonly Entry[] = [
     "woman clinician", "female clinician", "woman psychologist", "female psychologist",
     "woman psychiatrist", "female psychiatrist", "woman counsellor", "female counsellor",
     "woman therapist", "female therapist", "woman paediatrician", "female paediatrician"]),
+  /* O257 (founder, 2026-09-29, docs/matching/HIGH-YIELD.md): a clinician who has ADHD themselves.
+     Three of 37 say so in their own words; people ask for it, and it changes who they see. Every
+     cue names the CLINICIAN: "I have ADHD myself" is the person and reaches nothing here, and
+     "someone with ADHD" was left out because a carer says it of the person they are asking for. */
+  pref("lived-experience", "Has ADHD themselves", 30, [
+    "clinician with adhd", "clinician who has adhd", "gp with adhd", "gp who has adhd", "psychologist with adhd", "psychologist who has adhd",
+    "coach with adhd", "coach who has adhd", "therapist with adhd", "therapist who has adhd", "counsellor with adhd",
+    "has adhd themselves", "has adhd herself", "has adhd himself", "have adhd themselves", "adhd themselves", "adhd herself", "adhd himself",
+    "lived experience", "been through it themselves", "knows it from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
+  ]),
   pref("telehealth-first", "By phone or telehealth", 28, [
     /* O128: "immunosuppressed" beside O125's "immunocompromised". They are the same reason in
        two words people use interchangeably, and stemming does not bridge them, a reader does
@@ -704,7 +714,14 @@ const CUES: readonly Cue[] = [...MATCHABLE_CUES].sort(
  * boundary is a closed vocabulary rather than a similarity score.
  */
 // R15: "had a baby" collapses to [baby]; the any-pair rule is satisfied by "was a baby", so the full run is demanded.
-const RUN_DEMANDED = new Set(["over the phone", "in the room with me", "had a baby"]);
+const RUN_DEMANDED = new Set([
+  "over the phone", "in the room with me", "had a baby",
+  /* O257: every lived-experience cue demands its full raw run, collapsed or not. "gp who has adhd"
+     collapses to [gp, adhd] and, matched across a gap, read "a GP for my drinking history and my
+     ADHD" as a wish for a GP with ADHD, taking the "adhd" the assessment cue needed. The person
+     saying it says it in one breath: "a psychologist who has ADHD herself". */
+  "clinician with adhd", "clinician who has adhd", "gp with adhd", "gp who has adhd", "psychologist with adhd", "psychologist who has adhd", "coach with adhd", "coach who has adhd", "therapist with adhd", "therapist who has adhd", "counsellor with adhd", "has adhd themselves", "has adhd herself", "has adhd himself", "have adhd themselves", "adhd themselves", "adhd herself", "adhd himself", "lived experience", "been through it themselves", "knows it from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
+]);
 
 /** O256: the assessment cues that merely name the condition or the diagnosis; disclosure once the diagnosis is said to exist. */
 const DISCLOSURE_WORDS = new Set(["adhd", "diagnosis", "diagnosed"]);
@@ -739,7 +756,7 @@ export function readNeeds(text: string): NeedSignal[] {
        the run hears the presence ask while staying silent on "with someone", waiting
        rooms and cold rooms. A cue with a contraction form must never join this set. */
     if (
-      cue.collapsed &&
+      (cue.collapsed || RUN_DEMANDED.has(cue.phrase)) &&
       !(RUN_DEMANDED.has(cue.phrase)
         ? collapsedCueRunPresent(rawSentence, cue.raw)
         : collapsedCueSatisfied(rawSentence, cue.raw))
@@ -893,6 +910,7 @@ export function holdsPreference(
   clinician: {
     gender: string;
     telehealthFirstAppointment?: boolean;
+    livedExperience?: boolean;
     manner: readonly string[];
     practicalSignals: readonly string[];
   },
@@ -901,6 +919,8 @@ export function holdsPreference(
   switch (preference) {
     case "woman-gp":
       return clinician.gender === "woman";
+    case "lived-experience":
+      return clinician.livedExperience === true;
     case "telehealth-first":
       return clinician.telehealthFirstAppointment === true;
     case "longer-appointment":
@@ -992,6 +1012,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   "care:substance-history": "Substances, safely",
   "care:perinatal": "Postpartum",
   "pref:woman-gp": "Woman clinician",
+  "pref:lived-experience": "Lived experience",
   "pref:telehealth-first": "Telehealth",
   "pref:longer-appointment": "Longer appointment",
 };

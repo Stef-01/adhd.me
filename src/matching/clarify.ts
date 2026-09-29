@@ -185,10 +185,15 @@ export const PREF_PROMPTS: Record<string, { prompt: string; answer: string }> = 
     prompt: "Does the appointment need to be bulk billed?",
     answer: "it needs to be bulk billed",
   },
+  // O257: the one question about the clinician that changes the list (3 of 37 hold it).
+  "pref:lived-experience": {
+    prompt: "Would you like someone who has ADHD themselves?",
+    answer: "someone who has ADHD themselves",
+  },
 };
 
 /** The preferences a clarifier may ask about. Derived from the prompt table, never wider. */
-const ASKABLE_PREFERENCES: readonly Preference[] = ["woman-gp", "telehealth-first", "bulk-billing"];
+const ASKABLE_PREFERENCES: readonly Preference[] = ["woman-gp", "telehealth-first", "bulk-billing", "lived-experience"];
 
 function promptFor(key: string): { prompt: string; answer: string } | null {
   return CARE_PROMPTS[key] ?? MANNER_PROMPTS[key] ?? PREF_PROMPTS[key] ?? null;

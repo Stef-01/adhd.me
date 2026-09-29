@@ -18,6 +18,7 @@ const ids = (list: readonly { id: string }[]) => list.map((c) => c.id);
 /** What each chip means, stated once here so the test cannot quietly agree with a wrong filter. */
 const DECLARES = {
   womanGp: (c: Clinician) => c.gender === "woman",
+  livedExperience: (c: Clinician) => c.livedExperience === true,
   telehealth: (c: Clinician) => c.telehealthFirstAppointment === true,
   bulkBilling: (c: Clinician) => c.practicalSignals.some((s) => /bulk/i.test(s)),
   longerAppointments: (c: Clinician) => c.manner.includes("not_rushed"),

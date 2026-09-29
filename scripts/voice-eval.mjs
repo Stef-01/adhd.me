@@ -47,6 +47,12 @@ export const PERSONAS = {
     expect: ["care:shared-care", "pref:telehealth-first", "pref:bulk-billing"],
     never: ["care:adhd-assessment"],
   },
+  lived: {
+    brief: "You are 29, in Marrickville, diagnosed last year. You want a psychologist who has ADHD themselves, someone who gets it from the inside. Telehealth or in person, both fine. Cost is not an issue.",
+    style: "Direct, a bit wary.",
+    expect: ["pref:lived-experience"],
+    never: ["care:adhd-assessment"],
+  },
   rambler: {
     brief: "You are 41. You want help with your ADHD medication dose, it wears off by 2pm. You'd like more time in appointments, a longer appointment. You're in Newtown, in person or telehealth both fine. You'd like someone who explains things clearly.",
     style: "You ramble: long answers that wander into your work, your kids and your day, and sometimes answer a different question than the one asked. Stay in character.",

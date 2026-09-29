@@ -175,9 +175,9 @@ describe("M8: auditSeparation — the module header's claim, pinned against the 
     // R15: 519 -> 533, four profiles declare the thirteenth area. 2026-09-29: 533 -> 562,
     // intervalSeparates 93 -> 159 and ambiguous 440 -> 403 on the 37-profile roster: more pairs
     // hold two exact, different grades, and four more care areas separate without a negative.
-    expect(result.valueDiffers).toBe(564); // 2026-09-29: +2 for the "new mums" sentence
-    expect(result.intervalSeparates).toBe(159);
-    expect(result.ambiguous).toBe(405);
+    expect(result.valueDiffers).toBe(570); // O257 (2026-09-29): +6 for the lived-experience preference and its four sentences; before that +2 for the "new mums" sentence
+    expect(result.intervalSeparates).toBe(161);
+    expect(result.ambiguous).toBe(409);
     expect(result.separatingFacetKeys).toEqual([
       "care:anxiety",
       "care:autism-adhd",

@@ -225,6 +225,8 @@ export type Clinician = {
    * ranking rule would collapse that difference silently.
    */
   telehealthFirstAppointment?: true;
+  /** The clinician says they have ADHD themselves (O257): in their own public words, never inferred. */
+  livedExperience?: true;
   /**
    * The clinician says they have completed the training NSW requires to carry ADHD care without
    * ongoing psychiatrist involvement.

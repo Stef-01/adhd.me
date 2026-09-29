@@ -457,5 +457,21 @@
     "never": [
       "care:shared-care"
     ]
+  },
+  {
+    "text": "a psychologist who has ADHD herself, not one who just treats it",
+    "reaches": [
+      "pref:lived-experience"
+    ]
+  },
+  {
+    "text": "I have ADHD myself, diagnosed years ago, and I need my scripts continued",
+    "reaches": [
+      "care:shared-care"
+    ],
+    "never": [
+      "pref:lived-experience",
+      "care:adhd-assessment"
+    ]
   }
 ]
