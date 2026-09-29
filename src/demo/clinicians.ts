@@ -379,11 +379,20 @@ export function labelInSentence(need: NeedSignal): string {
  * duplication this move exists to end. `missedAskCopy` joins the parts for callers that just
  * want the sentence, so there is still exactly one place the words live.
  */
+/** A preference as a person asks for it: "telehealth", not the chip's "by phone or telehealth". */
+const PREFERENCE_ASKED: Record<Preference, string> = {
+  "woman-gp": "a woman clinician",
+  "telehealth-first": "telehealth",
+  "bulk-billing": "bulk billing",
+  "longer-appointment": "a longer first appointment",
+};
+
 /** An ask as a sentence says it: a manner as someone who does it, a language as someone who speaks it. */
 export function askedFor(need: NeedSignal): string {
   const facet = need.facet;
   if (facet.kind === "manner") return `someone who ${EI_QUALITIES[facet.trait].matchLine}`;
   if (facet.kind === "language") return `someone who speaks ${facet.language}`;
+  if (facet.kind === "preference") return PREFERENCE_ASKED[facet.preference];
   return labelInSentence(need);
 }
 

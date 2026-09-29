@@ -258,14 +258,14 @@ export function ProfileStage({
                   {profileMissed.length > 0 && (
                     <ul className="fit-missed" aria-label="What you asked for that this provider has not declared">
                       <li>
-                        {missedAsksLine(profileMissed.slice(0, 3)).before}
-                        {missedAsksLine(profileMissed.slice(0, 3)).asks.map((ask, i, all) => (
+                        {missedAsksLine(profileMissed.slice(0, 2)).before}
+                        {missedAsksLine(profileMissed.slice(0, 2)).asks.map((ask, i, all) => (
                           <Fragment key={ask}>
                             {i > 0 && (i === all.length - 1 ? " and " : ", ")}
                             <strong>{ask}</strong>
                           </Fragment>
                         ))}
-                        {missedAsksLine(profileMissed.slice(0, 3)).after}
+                        {missedAsksLine(profileMissed.slice(0, 2)).after}
                       </li>
                     </ul>
                   )}
