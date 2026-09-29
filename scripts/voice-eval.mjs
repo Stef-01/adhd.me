@@ -32,7 +32,7 @@ export const PERSONAS = {
   adult: {
     brief: "You are 34, in Hornsby, and think you might have ADHD. You want an assessment. Telehealth is fine. Money is tight so bulk billing matters. You'd like a woman. You've been brushed off before and don't want to be rushed. You also have anxiety.",
     style: "Plain and cooperative.",
-    expect: ["care:adhd-assessment", "pref:bulk-billing", "pref:woman-gp", "manner:unhurried"],
+    expect: ["care:adhd-assessment", "pref:bulk-billing", "pref:woman-gp", "manner:not_rushed"],
     never: ["care:child-adolescent-adhd"],
   },
   parent: {

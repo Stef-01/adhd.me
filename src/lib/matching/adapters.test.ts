@@ -86,7 +86,7 @@ describe("M1 the intake reader", () => {
     );
     expect(s.careAsks).toContain("adhd-assessment");
     expect(s.comorbidities).toEqual(["anxiety"]);
-    expect(s.communicationPreference).toContain("unhurried");
+    expect(s.communicationPreference).toContain("not_rushed");
     expect(s.stigmaSensitive).toBe(true);
     expect(s.financialConstraint).toBe(false);
     expect(s.priorAssessment).toBe(false);

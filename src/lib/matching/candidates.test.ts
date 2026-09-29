@@ -62,7 +62,7 @@ describe("M1 the shortlist", () => {
   const roster = Array.from({ length: 30 }, (_, i) =>
     gp({
       id: `gp-${String(i).padStart(2, "0")}`,
-      credentials: { bioLongText: i % 3 === 0 ? "Adult ADHD assessment, unhurried, titration on a schedule." : "General practice, skin checks, travel medicine." },
+      credentials: { bioLongText: i % 3 === 0 ? "Adult ADHD assessment, not rushed, titration on a schedule." : "General practice, skin checks, travel medicine." },
     }),
   );
 

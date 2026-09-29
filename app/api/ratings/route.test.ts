@@ -19,9 +19,9 @@ beforeEach(() => {
 describe("POST /api/ratings", () => {
   it("records the stars, then the note, as one rating", async () => {
     expect((await rate({ handoffId: HANDOFF, clinicianId, stars: 4, asked: ["pref:woman-gp"], met: ["pref:woman-gp"] })).status).toBe(204);
-    expect((await rate({ handoffId: HANDOFF, clinicianId, stars: 4, feedback: "Unhurried and kind." })).status).toBe(204);
+    expect((await rate({ handoffId: HANDOFF, clinicianId, stars: 4, feedback: "Patient and kind." })).status).toBe(204);
     expect(ratings()).toHaveLength(1);
-    expect(ratings()[0]).toMatchObject({ source: "finder", stars: 4, feedback: "Unhurried and kind.", met: ["pref:woman-gp"] });
+    expect(ratings()[0]).toMatchObject({ source: "finder", stars: 4, feedback: "Patient and kind.", met: ["pref:woman-gp"] });
   });
 
   it("refuses a clinician the finder does not list, stars off the scale, and a body that is not a rating", async () => {

@@ -20,7 +20,7 @@ const DECLARES = {
   womanGp: (c: Clinician) => c.gender === "woman",
   telehealth: (c: Clinician) => c.telehealthFirstAppointment === true,
   bulkBilling: (c: Clinician) => c.practicalSignals.some((s) => /bulk/i.test(s)),
-  longerAppointments: (c: Clinician) => c.manner.includes("unhurried"),
+  longerAppointments: (c: Clinician) => c.manner.includes("not_rushed"),
   wheelchair: (c: Clinician) => c.wheelchairAccessible,
   openBooks: (c: Clinician) => c.acceptingNewPatients,
 } as const;

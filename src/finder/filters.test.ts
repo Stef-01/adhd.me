@@ -45,7 +45,7 @@ const gp = (id: string, over: Partial<Fixture> = {}): Fixture => ({
 const roster: Fixture[] = [
   gp("a", { gender: "woman", languages: ["English", "Tamil"], wheelchairAccessible: true, practicalSignals: ["Bulk billed"] }),
   gp("b", { telehealthFirstAppointment: true, suburb: "Southport" }),
-  gp("c", { manner: ["unhurried"], acceptingNewPatients: false }),
+  gp("c", { manner: ["not_rushed"], acceptingNewPatients: false }),
   gp("d", { suburb: "Nowhere" }),
   gp("e", { consultRecording: "ai-scribe" }),
   gp("f", { consultRecording: "no-ai" }),

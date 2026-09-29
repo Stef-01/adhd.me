@@ -10,7 +10,7 @@ const doctor = (overrides: Partial<DoctorRecord> & { doctorRef: string }): Docto
   location: "Beecroft",
   capacity: { booked: 2, limit: 10 },
   insuranceAccepted: ["bulk-billing", "medicare-gap"],
-  communicationStyle: ["unhurried", "sense_making"],
+  communicationStyle: ["not_rushed", "sense_making"],
   careAreas: ["adhd-assessment", "titration"],
   ...overrides,
 });
@@ -19,7 +19,7 @@ const patient = (overrides: Partial<PatientRequest> & { patientRef: string }): P
   location: "Epping",
   insuranceType: "bulk-billing",
   urgency: "this-month",
-  communicationPreference: ["unhurried"],
+  communicationPreference: ["not_rushed"],
   ...overrides,
 });
 
@@ -156,7 +156,7 @@ describe("W236 each criterion prices the declared fact it names", () => {
 
   it("communication: the share of stated preferences; unstated cannot separate and says so", () => {
     const half = scorePair(
-      patient({ patientRef: "p", communicationPreference: ["unhurried", "steadying"] }),
+      patient({ patientRef: "p", communicationPreference: ["not_rushed", "steadying"] }),
       doctor({ doctorRef: "a" }),
     ).breakdown.find((b) => b.criterion === "communicationFit")!;
     expect(half.raw).toBe(0.5);
@@ -246,7 +246,7 @@ describe("O132 the allocator reads a patient the way the finder does", () => {
 
   it("derives exactly what readNeeds produces — no facet added, none dropped", () => {
     for (const words of [
-      "a woman GP who bulk bills, unhurried, and can do adult ADHD assessment and titration",
+      "a woman GP who bulk bills, won't rush me, and can do adult ADHD assessment and titration",
       "someone who explains things properly and does shared care with my psychiatrist",
       "hindi speaking GP who takes time",
     ]) {

@@ -140,7 +140,7 @@ describe("Q3 item 10's premise", () => {
    * questions collapse into two distinct reorderings: most of the questions are, in effect,
    * the same question. At twenty every one is distinct.
    *
-   * Fourteen until M3 (F6): anubhav-saxena's `unhurried` declaration was the missing half of his
+   * Fourteen until M3 (F6): anubhav-saxena's `not_rushed` declaration was the missing half of his
    * own appointmentLength answer, and adding it makes "a longer first appointment" a real
    * splitting question on this roster again (one holds it, one does not) — one more candidate,
    * same two-signature shape (roster.ts's M3 comment; O179's "the day a GP declares

@@ -9,9 +9,9 @@ describe("W221 what it proposes", () => {
     const { proposed } = readTranscript([
       clinician("I always book a longer first appointment because you cannot do this in fifteen minutes."),
     ]);
-    const unhurried = proposed.find((p) => p.kind === "manner" && p.trait === "unhurried");
-    expect(unhurried).toBeDefined();
-    expect(unhurried!.quote).toContain("longer first appointment");
+    const takesTime = proposed.find((p) => p.kind === "manner" && p.trait === "not_rushed");
+    expect(takesTime).toBeDefined();
+    expect(takesTime!.quote).toContain("longer first appointment");
   });
 
   it("proposes each facet once however often it is mentioned", () => {
@@ -61,7 +61,7 @@ describe("W221 the two ways this could do real harm", () => {
   it("reads nothing from the interviewer, who names every facet by asking", () => {
     const { proposed, ignoredInterviewerTurns } = readTranscript([
       interviewer("Do you do titration, the baseline physical screening, and do you see children?"),
-      interviewer("And are you unhurried, do you book longer first appointments?"),
+      interviewer("And do you take your time, do you book longer first appointments?"),
     ]);
     expect(proposed).toEqual([]);
     expect(ignoredInterviewerTurns).toBe(2);

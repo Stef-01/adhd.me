@@ -155,7 +155,7 @@ const MANNER_ASKS: Record<EIQuality, string> = {
   steadying: "I'm comfortable settling and managing anxious or distressed patients.",
   sense_making: "I help patients understand what's going on, not just manage today's problem.",
   motivating: "I build management plans around the patient's existing strengths and routines.",
-  unhurried: "I offer longer first appointments for complex presentations.",
+  not_rushed: "I offer longer first appointments for complex presentations.",
   non_judgmental: "I take substance-use and lifestyle histories without judgement.",
   collaborative: "I make decisions together with the patient, not for them.",
   culturally_attuned: "I work comfortably with family involvement and cultural or language context.",

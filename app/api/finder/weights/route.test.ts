@@ -15,7 +15,7 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 const visit = (i: number, stars: number, met: boolean, clinicianId = "mei-chao") =>
-  rateVisit(parseRating({ handoffId: `11111111-1111-4111-8111-${String(i).padStart(12, "0")}`, clinicianId, stars, asked: ["manner:unhurried"], met: met ? ["manner:unhurried"] : [] })!);
+  rateVisit(parseRating({ handoffId: `11111111-1111-4111-8111-${String(i).padStart(12, "0")}`, clinicianId, stars, asked: ["manner:not_rushed"], met: met ? ["manner:not_rushed"] : [] })!);
 
 describe("GET /api/finder/weights", () => {
   it("teaches nothing with no visits", async () => {
@@ -27,7 +27,7 @@ describe("GET /api/finder/weights", () => {
       visit(i, 5, true);
       visit(100 + i, 3, false);
     }
-    expect(await (await GET()).json()).toEqual({ weights: { "manner:unhurried": 1.25 }, visits: 2 * MIN_SAMPLES, quality: {} });
+    expect(await (await GET()).json()).toEqual({ weights: { "manner:not_rushed": 1.25 }, visits: 2 * MIN_SAMPLES, quality: {} });
   });
 
   it("moves a clinician whose visits went better than everybody's, once they have enough", async () => {

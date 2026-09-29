@@ -40,7 +40,7 @@ export type EIQuality =
   /** MSCEIT: using emotion — works from strengths and leaves you with a plan you can act on. */
   | "motivating"
   /** Gives you time; the first appointment is not run against a stopwatch. */
-  | "unhurried"
+  | "not_rushed"
   /** Safe to be honest — no shame about drinking, coping, or how past care went. */
   | "non_judgmental"
   /** Explains the options and decides them WITH you, not for you. */
@@ -191,13 +191,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       // O49: "a plan I can actually act on" — the verb kept, per this list's own header.
       "plan i can act"],
   },
-  unhurried: {
-    label: "Unhurried first appointment",
-    short: "Unhurried",
-    matchLine: "gives you an unhurried first appointment",
+  not_rushed: {
+    label: "Takes time with you",
+    short: "Not rushed",
+    matchLine: "takes time with you",
     cues: [
       /* O116: the clock, and the full appointment as opposed to the doorway version. */
-      "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "unhurried", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
+      "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
       /* O210: "a doctor with patience" reached NOTHING, which a probe of eighteen plain phrasings
          found alongside two others. Safe because `stem("patience")` is "patience" and
          `stem("patient")` is "patient", checked before the cue was written, because "patient" is
@@ -208,13 +208,13 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
          "take their time" are the most natural phrasings of all, and both are UNSAFE: "their" is a
          stopword, so the phrase degenerates to "take time" and matched "the wait takes time", "an
          ADHD assessment takes time" and "getting a diagnosis takes time", a reader stating a fact
-         about how long the process takes, read as asking for an unhurried doctor. That is a false
+         about how long the process takes, read as asking for a doctor who takes time. That is a false
          read of a patient's words, which is worse than not reading them. Same shape as O7's
          self-reach finding, where "in and out" tokenised to nothing because every word was a
          stopword: this facet's cue list is where stopword collapse keeps biting. Measured, not
          guessed, the phrasing stays unread until somebody finds a form that survives tokenisation. */
       "with patience",
-      // W221 probe: none of these reached `unhurried`, and every one of them is somebody
+      // W221 probe: none of these reached `not_rushed`, and every one of them is somebody
       // describing being rushed without using the word.
       // "in and out" was removed by O7's self-reach pin: every word in it is a stopword, so it
       // tokenised to nothing and had been structurally dead since W222 — main's rebuild kept it
@@ -232,7 +232,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
       "rushes", "rushing", "hurried", "hurry me",
       // O13 considered and REFUSED "takes their time": "their" is a stopword, so it survives
       // as the same [take, time] W223 dropped for firing on "take time off work". The recall
-      // it would add is already carried by "not rushed", "unhurried" and "rushes".
+      // it would add is already carried by "not rushed" and "rushes".
       // W223: "take my time" was dropped. "my" is a stopword, so it matched [take, time] — and
       // "I can take time off work" is a sentence this product puts in its OWN barrier list on the
       // landing page. Recall lost is nil: "not rushed", "rushes", "hurried", "enough time" and

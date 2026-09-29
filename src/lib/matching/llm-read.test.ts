@@ -93,7 +93,7 @@ describe("fromModel", () => {
     const text = "a woman GP who bulk bills";
     expect(lexiconReading(text).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
     expect(fromModel(answerFor([]), text).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
-    expect(fromModel(answerFor(["manner:unhurried", "pref:woman-gp"]), text).keys).toEqual(["manner:unhurried", "pref:woman-gp", "pref:bulk-billing"]);
+    expect(fromModel(answerFor(["manner:not_rushed", "pref:woman-gp"]), text).keys).toEqual(["manner:not_rushed", "pref:woman-gp", "pref:bulk-billing"]);
     expect(fromModel({ ...answerFor([]), negated: ["bulk-billing"] }, text).keys).toEqual(["pref:woman-gp"]);
   });
 });
@@ -113,9 +113,9 @@ describe("readRequest", () => {
 
   it(`reads ${READS} times at once, and keeps a key only when every read gives it`, async () => {
     const answers = [
-      { ...EMPTY, prefs: ["woman-gp"], manner: ["attuned", "unhurried"] },
-      { ...EMPTY, prefs: ["woman-gp"], manner: ["unhurried"] },
-      { ...EMPTY, prefs: ["woman-gp"], manner: ["unhurried", "steadying"] },
+      { ...EMPTY, prefs: ["woman-gp"], manner: ["attuned", "not_rushed"] },
+      { ...EMPTY, prefs: ["woman-gp"], manner: ["not_rushed"] },
+      { ...EMPTY, prefs: ["woman-gp"], manner: ["not_rushed", "steadying"] },
     ];
     let [reads, checks] = [0, 0];
     const fetch = async (_url: string, init: { body: string }) => {
@@ -125,7 +125,7 @@ describe("readRequest", () => {
     };
     const reading = await readRequest("someone patient", { fetch, env: ENV });
     expect([reads, checks]).toEqual([READS, CHECKS]);
-    expect(reading).toMatchObject({ keys: ["manner:unhurried", "pref:woman-gp"], source: "llm" });
+    expect(reading).toMatchObject({ keys: ["manner:not_rushed", "pref:woman-gp"], source: "llm" });
   });
 
   it("checks only the keys the reads add beyond the lexicon, and drops one most checks say is not asked", async () => {
@@ -166,7 +166,7 @@ describe("readRequest", () => {
 
   it("waits for the third read when the first two add a key, which the third can take away", async () => {
     let n = 0;
-    const added = { ...EMPTY, manner: ["unhurried"] };
+    const added = { ...EMPTY, manner: ["not_rushed"] };
     const fetch = async () => {
       const at = n++;
       if (at === 2) await new Promise((resolve) => setTimeout(resolve, 30));
@@ -195,14 +195,14 @@ describe("readRequest", () => {
         return new Response(JSON.stringify(completed({ verdicts: [] })));
       }
       const at = read++;
-      if (at < 2) return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["unhurried", "attuned"] })));
+      if (at < 2) return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["not_rushed", "attuned"] })));
       await new Promise((resolve) => setTimeout(resolve, 50));
       events.push("third read");
-      return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["unhurried"] })));
+      return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["not_rushed"] })));
     };
     const reading = await readRequest("someone patient", { fetch, env: ENV });
     expect(events.indexOf("check")).toBeLessThan(events.indexOf("third read"));
-    expect(reading.keys).toEqual(["manner:unhurried"]);
+    expect(reading.keys).toEqual(["manner:not_rushed"]);
   });
 
   it("makes no check when the reads add nothing beyond the lexicon", async () => {

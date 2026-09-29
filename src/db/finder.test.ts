@@ -143,11 +143,11 @@ describe("the journal to Supabase", () => {
 });
 
 describe("what the ratings teach", () => {
-  const visit = (stars: number, met: boolean) => ({ stars: stars as 1 | 2 | 3 | 4 | 5, asked: ["manner:unhurried", "pref:telehealth-first"], met: met ? ["manner:unhurried"] : [] });
+  const visit = (stars: number, met: boolean) => ({ stars: stars as 1 | 2 | 3 | 4 | 5, asked: ["manner:not_rushed", "pref:telehealth-first"], met: met ? ["manner:not_rushed"] : [] });
 
   it("groups each ask's visits by whether the clinician declared it", () => {
-    const [unhurried, telehealth] = askSignals([visit(5, true), visit(3, false), visit(4, true)]);
-    expect(unhurried).toEqual({ key: "manner:unhurried", metN: 2, metStars: 4.5, unmetN: 1, unmetStars: 3 });
+    const [takesTime, telehealth] = askSignals([visit(5, true), visit(3, false), visit(4, true)]);
+    expect(takesTime).toEqual({ key: "manner:not_rushed", metN: 2, metStars: 4.5, unmetN: 1, unmetStars: 3 });
     expect(telehealth).toMatchObject({ metN: 0, unmetN: 3 });
   });
 
@@ -158,9 +158,9 @@ describe("what the ratings teach", () => {
 
   it("raises an ask that went with better visits and lowers one that went with worse, within the bound", () => {
     const better = [...Array(MIN_SAMPLES)].flatMap(() => [visit(5, true), visit(3, false)]);
-    expect(learnAskWeights(askSignals(better))).toEqual({ "manner:unhurried": 1.25 });
+    expect(learnAskWeights(askSignals(better))).toEqual({ "manner:not_rushed": 1.25 });
     const worse = [...Array(MIN_SAMPLES)].flatMap(() => [visit(1, true), visit(5, false)]);
-    expect(learnAskWeights(askSignals(worse))["manner:unhurried"]).toBe(1 - MAX_SHIFT);
+    expect(learnAskWeights(askSignals(worse))["manner:not_rushed"]).toBe(1 - MAX_SHIFT);
   });
 
   it("never keys a weight to a clinician", () => {

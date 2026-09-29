@@ -287,8 +287,8 @@ export function facetStrength(clinician: Clinician, facet: NeedSignal["facet"]):
 /**
  * A free-text field a patient reads whose wording can assert the same real-world fact a
  * structured, closed-vocabulary field answers separately — and can therefore drift from it
- * silently (M3, F6). `appointmentLength` and the `unhurried` manner trait are one instance:
- * `interview.ts`'s "length" question and its "unhurried" question ask the same thing in two
+ * silently (M3, F6). `appointmentLength` and the `not_rushed` manner trait are one instance:
+ * `interview.ts`'s "length" question and its "not_rushed" question ask the same thing in two
  * places, and nothing before this forced their answers to agree.
  *
  * Detection only. Nothing here changes what the matcher reads — `holdsPreference` still reads

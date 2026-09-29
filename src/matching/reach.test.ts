@@ -15,7 +15,7 @@ import { CARE_PROMPTS, MANNER_PROMPTS, PREF_PROMPTS } from "./clarify";
  * and it quietly stops understanding anybody.
  *
  * THE CORPUS IS FIRST-PERSON AND DELIBERATELY NOT WRITTEN FROM THE LEXICON. Half of it is how
- * people actually describe these things: not "unhurried" but "I can never get a word in". If the
+ * people actually describe these things: not "not_rushed" but "I can never get a word in". If the
  * corpus were written by reading the lexicon it would measure nothing except that somebody can
  * copy a list, which is the trap that makes most coverage numbers meaningless.
  *
@@ -189,7 +189,7 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     // sentence follows the list it is about, which is the other half of what changed.
     const psychologists = clinicians.filter((c) => professionOf(c) === "psychologist");
     expect(unservedAsks("I don't want to feel rushed", psychologists)[0])
-      .toContain("Unhurried first appointment is not something any psychologist listed today declares");
+      .toContain("Takes time with you is not something any psychologist listed today declares");
     expect(unservedAsks("someone calm who can steady me")).toEqual([]);
   });
 
@@ -289,10 +289,10 @@ describe("O13 every manner facet is reachable by its plain name", () => {
     ["manner:non_judgmental", "not judgemental please"],
     ["manner:non_judgmental", "she was so judgmental about it"],
     ["manner:non_judgmental", "without judgement"],
-    ["manner:unhurried", "unhurried"],
-    ["manner:unhurried", "not rushed"],
+    ["manner:not_rushed", "not_rushed"],
+    ["manner:not_rushed", "not rushed"],
     // O210: three plain phrasings a probe of eighteen found reaching NOTHING, now cued.
-    ["manner:unhurried", "a doctor with patience"],
+    ["manner:not_rushed", "a doctor with patience"],
     ["manner:attuned", "a doctor who hears me out"],
     ["manner:attuned", "I want someone who will hear me out"],
     ["manner:structured", "structured"],
@@ -432,7 +432,7 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     // read of a patient's words, which is worse than not reading them at all.
     //
     // Pinned as behaviour rather than as prose: these three sentences must stay unread by
-    // `manner:unhurried` until somebody finds a form that survives tokenisation.
+    // `manner:not_rushed` until somebody finds a form that survives tokenisation.
     const facets = (text: string) => readNeeds(text).map((n) => facetKey(n.facet));
     for (const sentence of [
       "the wait takes time",
@@ -441,12 +441,12 @@ describe("O25 a multi-word cue must not quietly become a one-word cue", () => {
     ]) {
       expect(
         facets(sentence),
-        `"${sentence}" now reaches unhurried — a cue that collapses to [take time] has been added ` +
+        `"${sentence}" now reaches not_rushed — a cue that collapses to [take time] has been added ` +
           `back. See the refusal recorded in src/demo/emotional-fit.ts.`,
-      ).not.toContain("manner:unhurried");
+      ).not.toContain("manner:not_rushed");
     }
     // And the phrasing that motivated the refusal is still unread, which is the honest cost of it.
-    expect(facets("a GP who takes their time")).not.toContain("manner:unhurried");
+    expect(facets("a GP who takes their time")).not.toContain("manner:not_rushed");
   });
 
   it("freezes the set of phrases that ship as one token", () => {
@@ -526,8 +526,8 @@ describe("O40 negation clauses", () => {
 
   it.each([
     // MANNER IS EXEMPT BY DESIGN: patients state manner wants through negation — this sentence
-    // IS the unhurried ask, and suppressing it would silence the facet's own vocabulary.
-    ["I don't want to feel rushed", "Unhurried first appointment"],
+    // IS the not_rushed ask, and suppressing it would silence the facet's own vocabulary.
+    ["I don't want to feel rushed", "Takes time with you"],
     // A bare negator is not a trigger: a complaint about somebody ELSE refusing is a want.
     ["my GP won't do titration and I need someone who will", "Titration and dose review"],
     // "never had" is history, not refusal.
@@ -554,7 +554,7 @@ describe("O40 negation clauses", () => {
 describe("O45 a collapsed cue must look like its authored phrase", () => {
   it.each([
     // The year plan's named false positives, dead.
-    ["my GP is next door to the chemist", "Unhurried first appointment"],
+    ["my GP is next door to the chemist", "Takes time with you"],
     ["the practice name is on the sign", "Helps it make sense"],
     ["the school is on the edge of town", "Calm and steadying"],
     // The one the corpus itself was propping up: "…not GOING to…" is not "what is going on".
@@ -565,8 +565,8 @@ describe("O45 a collapsed cue must look like its authored phrase", () => {
 
   it.each([
     // The intended sentences the plan said a naive per-cue fix would lose.
-    ["I can never get a word in before the appointment is over", "Unhurried first appointment"],
-    ["she rushed me out the door in ten minutes", "Unhurried first appointment"],
+    ["I can never get a word in before the appointment is over", "Takes time with you"],
+    ["she rushed me out the door in ten minutes", "Takes time with you"],
     ["I'm always on edge in waiting rooms", "Calm and steadying"],
     // A contraction elides the middle of the authored phrase; any surviving pair suffices.
     ["I just want to understand what's going on", "Helps it make sense"],
@@ -752,7 +752,7 @@ describe("§O81 a desire negation spends itself on the nearest ask — consume-o
   it("a manner object SPENDS the negation without being suppressed", () => {
     // The negation's object is the rushing; the dose is the topic, not the refusal.
     const heard = facets("I don't want to feel rushed about the dose");
-    expect(heard).toContain("manner:unhurried");
+    expect(heard).toContain("manner:not_rushed");
     expect(heard).toContain("care:titration");
   });
 
@@ -796,7 +796,7 @@ describe("§O78 suppression is per-occurrence: a refused clause does not silence
 
   it("a collapse refusal is sentence-global and does NOT retry — the pair test already read the whole stream", () => {
     // Two occurrences of a collapsed cue's word, neither beside its authored pair: still silent.
-    expect(facets("next door to the chemist, and another door past that")).not.toContain("manner:unhurried");
+    expect(facets("next door to the chemist, and another door past that")).not.toContain("manner:not_rushed");
   });
 });
 
@@ -855,7 +855,7 @@ describe("§O72 a bare negator adjacent to a care/pref cue is a refusal — with
     // A cue whose OWN phrase begins with a negator is untouched — the check looks before the span.
     expect(facets("not just medication")).toContain("care:non-medication");
     // Manner stays exempt (O40): the negated phrasing IS the ask.
-    expect(facets("I don't want to feel rushed")).toContain("manner:unhurried");
+    expect(facets("I don't want to feel rushed")).toContain("manner:not_rushed");
     // "never" is history and complaint, not refusal.
     expect(facets("I have never had a proper assessment")).toContain("care:adhd-assessment");
     // Adjacency only: a gap between negator and cue is not the idiom.
@@ -1006,8 +1006,8 @@ describe("§O105 a comma ends a negation's scope, and ends nothing else", () => 
   });
 
   it("manner stays exempt, and a comma does not change that", () => {
-    expect(facets("I don't want to feel rushed")).toContain("manner:unhurried");
-    expect(facets("I don't want to feel rushed, and I want bulk billing")).toContain("manner:unhurried");
+    expect(facets("I don't want to feel rushed")).toContain("manner:not_rushed");
+    expect(facets("I don't want to feel rushed, and I want bulk billing")).toContain("manner:not_rushed");
   });
 
   /**
@@ -1064,7 +1064,7 @@ describe("§O106 a cue claims the words it matched, not the words it straddled",
   it("the whole existing rule family reads exactly as it did", () => {
     // Spot-checks across the suppression rules, all of which run on spans and positions.
     expect(facets("not bulk billing, I am happy to pay for time")).not.toContain("pref:bulk-billing");
-    expect(facets("I don't want to feel rushed")).toContain("manner:unhurried");
+    expect(facets("I don't want to feel rushed")).toContain("manner:not_rushed");
     expect(facets("help me make sense of thirty years, if that makes sense")).toContain("manner:sense_making");
     expect(facets("this is for my teenager")).toContain("care:child-adolescent-adhd");
   });
@@ -1426,7 +1426,7 @@ describe("§O116 the comparative reaches, and four facets learn their registers"
   /**
    * THE COLLISION THE STEMMER ENTRY EXPOSED, resolved deliberately.
    *
-   * "longer appointment" was cued by BOTH manner:unhurried and pref:longer-appointment. While
+   * "longer appointment" was cued by BOTH manner:not_rushed and pref:longer-appointment. While
    * "longer" and "long" were different tokens the two cues never met; once they were the same
    * token they collided, and FIRST_CLAIM allows a phrase exactly one owner. The facet whose
    * LABEL is the phrase owns it — and the corpus had said so in advance, carrying
@@ -1443,17 +1443,17 @@ describe("§O116 the comparative reaches, and four facets learn their registers"
    * three onboarding tests. Pinned from both sides so the next edit has to choose deliberately.
    */
   it("the clinician-side reader keeps the phrase the patient-side reader gives away", () => {
-    expect(EI_QUALITIES.unhurried.cues).toContain("longer appointment");
+    expect(EI_QUALITIES.not_rushed.cues).toContain("longer appointment");
     expect(readNeeds("a longer appointment booked from the start").map((n) => facetKey(n.facet)))
-      .not.toContain("manner:unhurried");
+      .not.toContain("manner:not_rushed");
   });
 
   it("the phrase belongs to the facet named after it", () => {
     expect(facets("a longer appointment booked from the start")).toContain("pref:longer-appointment");
-    // Unhurried keeps every cue that is actually about not being rushed.
-    expect(facets("I do not want to feel rushed")).toContain("manner:unhurried");
-    expect(facets("the good doctors never make you watch the clock")).toContain("manner:unhurried");
-    expect(facets("give me the full appointment, not the doorway version")).toContain("manner:unhurried");
+    // not_rushed keeps every cue that is actually about not being rushed.
+    expect(facets("I do not want to feel rushed")).toContain("manner:not_rushed");
+    expect(facets("the good doctors never make you watch the clock")).toContain("manner:not_rushed");
+    expect(facets("give me the full appointment, not the doorway version")).toContain("manner:not_rushed");
   });
 
   it("titration hears how a dose review is actually asked for", () => {

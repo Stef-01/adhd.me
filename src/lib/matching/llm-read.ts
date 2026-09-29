@@ -43,7 +43,7 @@ export const MEANINGS: Record<string, string> = {
   steadying: "asks for a clinician who is calm and reassuring",
   sense_making: "asks for what is going on to be explained so it makes sense",
   motivating: "asks for a clinician who is encouraging and strengths-focused, or a plan they can act on",
-  unhurried: "asks for more time with the clinician, or not to be rushed (punctuality is not this)",
+  not_rushed: "asks for more time with the clinician, or not to be rushed (punctuality is not this)",
   non_judgmental: "asks to be able to be honest without being judged",
   collaborative: "asks to make the decisions together with the clinician, or to be given choices",
   culturally_attuned: "asks for a clinician who understands their culture, background or family",
@@ -245,7 +245,7 @@ export const CHECK_CALL = {
     '"a poster in the waiting room said they bulk bill" · pref:bulk-billing → not asked (a description)',
     '"wiped out every afternoon" · care:depression → not asked (a feeling with no ask)',
     '"I\'d love a doctor who explains the why behind things" · manner:sense_making → asked',
-    '"please don\'t rush me through it" · manner:unhurried → asked',
+    '"please don\'t rush me through it" · manner:not_rushed → asked',
     '"my partner would feel better if I did it online" · pref:telehealth-first → asked (a wish of someone close, not refused)',
   ].join("\n"),
   schema: {

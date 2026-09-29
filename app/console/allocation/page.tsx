@@ -29,7 +29,7 @@ import { ConsoleShell } from "../ui";
 
 /** The words a synthetic patient wrote. Everything below is derived from these. */
 const PATIENT_WORDS =
-  "I want an unhurried GP who bulk bills, does adult ADHD assessment and can review my dose";
+  "I want a GP who won't rush me, bulk bills, does adult ADHD assessment and can review my dose";
 
 const PATIENT = requestFromWords(
   {
@@ -53,7 +53,7 @@ const DOCTORS: readonly DoctorRecord[] = [
     capacity: { booked: 40, limit: 60 },
     waitDays: 14,
     insuranceAccepted: ["bulk-billing", "medicare-gap"],
-    communicationStyle: ["unhurried", "sense_making"],
+    communicationStyle: ["not_rushed", "sense_making"],
     careAreas: ["adhd-assessment", "titration"],
   },
   {
@@ -73,7 +73,7 @@ const DOCTORS: readonly DoctorRecord[] = [
     capacity: { booked: 60, limit: 60 },
     waitDays: 7,
     insuranceAccepted: ["private"],
-    communicationStyle: ["unhurried"],
+    communicationStyle: ["not_rushed"],
     careAreas: ["adhd-assessment", "titration"],
   },
 ];

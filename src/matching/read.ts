@@ -88,7 +88,7 @@ function suffixStem(word: string): string {
  *                   base word itself never reduces to: believed→believ but believe→believe,
  *                   judged→judg but judge→judge, minutes→minut but minute→minute. So
  *                   "nobody ever believes me" could not satisfy the authored pair of
- *                   "believe me", and the unhurried list carries "ten minutes" AND
+ *                   "believe me", and the not_rushed list carries "ten minutes" AND
  *                   "ten minute" as two cues for one phrase.
  *
  * KEYED BY SUFFIX-STEMMED FORM and applied as stem()'s last step, so every caller — cues,
@@ -530,7 +530,7 @@ export function suppressedByDesireNegation(
  * The set was {no, not} at O72, every exclusion a pinned lesson:
  *   - "never" excluded — history and complaint, not refusal ("never had an assessment").
  *   - contracted verb negators excluded — "won't do titration" is a complaint, i.e. a want.
- * MANNER stays exempt at the call site exactly as O40: "not rushed" is the unhurried ask.
+ * MANNER stays exempt at the call site exactly as O40: "not rushed" is the not_rushed ask.
  * A cue whose own phrase begins with a negator is untouched — this looks BEFORE the span.
  *
  * "WITHOUT" JOINED AT O91, and the original exclusion turned out to be protecting nothing.

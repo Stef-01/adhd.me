@@ -104,7 +104,7 @@ const MANNER_QUESTIONS: ReadonlyArray<{ trait: MannerTrait; ask: string }> = [
   { trait: "steadying", ask: "If somebody is anxious or overwhelmed at the start, what do you do first?" },
   { trait: "sense_making", ask: "Do you help people join the dots on what has been going on, or focus on the decision in front of you?" },
   { trait: "motivating", ask: "Do people usually leave with a plan they can act on, and does it build on what already works for them?" },
-  { trait: "unhurried", ask: "Do you book a longer first appointment for this, and roughly how long?" },
+  { trait: "not_rushed", ask: "Do you book a longer first appointment for this, and roughly how long?" },
   { trait: "non_judgmental", ask: "How do you open the substance and coping questions?" },
   { trait: "collaborative", ask: "Do you talk through the options and decide with the patient, or recommend and explain if asked?" },
   { trait: "culturally_attuned", ask: "Do family and language usually come into the room with the patient in your practice?" },

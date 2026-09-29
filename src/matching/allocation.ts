@@ -45,7 +45,7 @@ export type PatientRequest = {
   insuranceType: string;
   /** The patient's own stated timing preference — a want, never a triage judgement. */
   urgency: Urgency;
-  /** Manner-vocabulary words the patient asked for, e.g. ["unhurried", "sense_making"]. */
+  /** Manner-vocabulary words the patient asked for, e.g. ["not_rushed", "sense_making"]. */
   communicationPreference: readonly string[];
   /** Optional stated care asks (care-area ids). Absent means "no further asks stated". */
   statedNeeds?: readonly string[];

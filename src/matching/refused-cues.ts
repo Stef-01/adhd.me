@@ -160,7 +160,7 @@ export const REFUSED_CUES: readonly RefusedCue[] = [
   },
   {
     phrase: "someone patient",
-    facet: "manner:unhurried",
+    facet: "manner:not_rushed",
     refusedBy: "the patient is waiting in room three",
     because:
       "it turns on the word PATIENT, which on this product means the reader — a cue that fires on the name for the person using it cannot stay narrow",

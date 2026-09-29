@@ -127,7 +127,7 @@ const pref = (preference: Preference, label: string, weight: number, phrases: re
 /**
  * Phrases a PREFERENCE facet owns, even though a manner quality also lists them (O116).
  *
- * `manner:unhurried` and `pref:longer-appointment` both cue "longer appointment". While
+ * `manner:not_rushed` and `pref:longer-appointment` both cue "longer appointment". While
  * `stem("longer")` was "longer" the two never met, so the collision sat here unseen since both
  * were authored. O116 taught the stemmer that "longer" is "long" — correctly, since the facet
  * whose LABEL is "A longer first appointment" could not otherwise hear its own adjective — and
@@ -802,7 +802,7 @@ export function readNeeds(text: string): NeedSignal[] {
      NEAREST following span, and only that one, "I don't want a woman GP, bulk billing
      matters more" refuses the woman GP and keeps the bulk-billing ask, where O40's
      everything-in-lead scope suppressed both. MANNER stays exempt exactly as O40 designed
-     ("I don't want to feel rushed" IS the unhurried ask) but now also SPENDS the trigger,
+     ("I don't want to feel rushed" IS the not_rushed ask) but now also SPENDS the trigger,
      so a care ask sitting behind a manner object is no longer swallowed. Scope per trigger
      is unchanged: forward, within the lead, never across a clause boundary. */
   const negated = suppressedByDesireNegation(
@@ -873,7 +873,7 @@ export function holdsPreference(
     case "telehealth-first":
       return clinician.telehealthFirstAppointment === true;
     case "longer-appointment":
-      return clinician.manner.includes("unhurried");
+      return clinician.manner.includes("not_rushed");
     case "bulk-billing":
       return clinician.practicalSignals.some((signal) => /bulk/i.test(signal));
   }

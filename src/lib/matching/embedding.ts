@@ -52,7 +52,7 @@ export type ConceptId =
   | "bulk-billing"
   | "cost"
   | "stigma"
-  | "unhurried"
+  | "not-rushed"
   | "non-judgmental"
   | "collaborative"
   | "sense-making"
@@ -99,7 +99,7 @@ export const CONCEPTS: readonly Concept[] = [
   { id: "bulk-billing", label: "bulk-billing", weight: 1.2, cues: ["bulk bill", "bulk billing", "bulk billed", "no gap"] },
   { id: "cost", label: "keeping cost down", weight: 1.2, cues: ["afford", "cost", "expensive", "money", "cheap", "budget", "concession", "health care card", "pension"] },
   { id: "stigma", label: "feeling safe to be honest", weight: 1.2, cues: ["embarrass", "ashamed", "shame", "judged", "judge me", "stigma", "taken seriously", "dismissed", "believe me", "not believed"] },
-  { id: "unhurried", label: "not being rushed", weight: 1, cues: ["rushed", "unhurried", "take their time", "takes time", "time to listen", "listen"] },
+  { id: "not-rushed", label: "not being rushed", weight: 1, cues: ["rushed", "take their time", "takes time", "time to listen", "listen"] },
   { id: "non-judgmental", label: "no judgement", weight: 1, cues: ["non judgmental", "non judgemental", "without judgement", "no judgement", "safe to be honest"] },
   { id: "collaborative", label: "deciding together", weight: 1, cues: ["collaborative", "decide together", "work with me", "involved in decisions", "my say", "explains the options"] },
   { id: "sense-making", label: "helping it make sense", weight: 1, cues: ["make sense", "understand myself", "understand what is going on", "explain", "sense making"] },

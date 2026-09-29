@@ -10,8 +10,8 @@ const chipsFor = (text: string) => heardChips(needsFor(text, roster), 4);
 describe("heardChips", () => {
   it("reads the text budget's request as three chips, access first, then care, then manner", () => {
     const chips = chipsFor("an adult ADHD assessment, telehealth, not rushed");
-    expect(chips.map((c) => c.label)).toEqual(["Telehealth", "ADHD assessment", "Unhurried"]);
-    expect(chips.map((c) => c.spoken)).toEqual(["telehealth", "ADHD assessment", "unhurried"]);
+    expect(chips.map((c) => c.label)).toEqual(["Telehealth", "ADHD assessment", "Not rushed"]);
+    expect(chips.map((c) => c.spoken)).toEqual(["telehealth", "ADHD assessment", "not rushed"]);
   });
 
   it("shows the four strongest of five, in the ranker's order, and nothing else", () => {

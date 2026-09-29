@@ -65,7 +65,7 @@ export const MANNER_LABELS: Readonly<Record<EIQuality, string>> = {
   steadying: "Keeps things settled",
   sense_making: "Helps it make sense",
   motivating: "Leaves you with a plan",
-  unhurried: "Gives you time",
+  not_rushed: "Gives you time",
   non_judgmental: "No judgement",
   collaborative: "Decides with you",
   culturally_attuned: "Understands your background",

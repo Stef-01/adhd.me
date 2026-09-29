@@ -56,7 +56,7 @@ const PREFERENCE_SOURCE: Readonly<Record<Preference, string>> = {
   "woman-gp": "gender",
   "telehealth-first": "telehealthFirstAppointment",
   "bulk-billing": "practicalSignals",
-  "longer-appointment": "manner (unhurried)",
+  "longer-appointment": "manner (not_rushed)",
 };
 
 /**

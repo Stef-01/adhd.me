@@ -27,8 +27,8 @@ test("a heard chip comes out, the list re-ranks with no request, and the chip pu
   await search(page, REQUEST);
   const heard = page.getByRole("group", { name: "What we heard" });
   const chips = heard.getByRole("button");
-  await expect(chips).toHaveText(["Telehealth", "ADHD assessment", "Unhurried"]);
-  for (const name of ["Remove telehealth", "Remove ADHD assessment", "Remove unhurried"]) {
+  await expect(chips).toHaveText(["Telehealth", "ADHD assessment", "Not rushed"]);
+  for (const name of ["Remove telehealth", "Remove ADHD assessment", "Remove not rushed"]) {
     // The layout box, not the painted one: the screen's arrival scales it for a moment.
     const box = await heard.getByRole("button", { name, exact: true }).evaluate((el: HTMLElement) => ({ width: el.offsetWidth, height: el.offsetHeight }));
     expect(box.height, `${name} clears the touch floor`).toBeGreaterThanOrEqual(44);
@@ -71,7 +71,7 @@ test("with every heard chip out, the list stops claiming to be matches", async (
   const heading = page.locator(".results-list-head h2");
   await expect(heading).toHaveText("Matches");
   const heard = page.getByRole("group", { name: "What we heard" });
-  for (const name of ["telehealth", "ADHD assessment", "unhurried"]) await heard.getByRole("button", { name: `Remove ${name}`, exact: true }).click();
+  for (const name of ["telehealth", "ADHD assessment", "not rushed"]) await heard.getByRole("button", { name: `Remove ${name}`, exact: true }).click();
   await expect(heading).toHaveText("All listed providers");
   await expect(page.locator(".clinician-row.is-lead")).toHaveCount(0);
   await heard.getByRole("button", { name: "Put back ADHD assessment", exact: true }).click();

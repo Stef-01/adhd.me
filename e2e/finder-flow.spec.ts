@@ -211,9 +211,9 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
    * O183: THE QUERY CHANGED BECAUSE THE ROSTER STOPPED PRODUCING A PARTIAL FIT FOR THE OLD ONE.
    *
    * This asked for titration + unhurried + substance history. Dr Yadav used to be the roster's
-   * `unhurried` declarer, so somebody always answered some of it and missed the rest. Two things
+   * `not_rushed` declarer, so somebody always answered some of it and missed the rest. Two things
    * then happened: he left (O179), and M3 carried Dr Anubhav's own appointment-length answer into
-   * the `unhurried` facet it also answers (F6). Against today's roster that query splits into
+   * the `not_rushed` facet it also answers (F6). Against today's roster that query splits into
    * all-four and none-of-four — Dr Anubhav answers everything, Dr Anu answers nothing — and a
    * profile with NO evidence correctly renders "nothing in what you said pointed here
    * specifically" instead of a missed list, because a missed list beside no evidence would be an

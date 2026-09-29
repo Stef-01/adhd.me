@@ -45,7 +45,7 @@ describe("M8: declarationState", () => {
   it("is 'undeclared', never 'declared-no', for every facet kind except gender", () => {
     const silent = syntheticClinician({ careAreas: [], careAreasSometimes: [], manner: [], languages: ["English"] });
     expect(declarationState(silent, careNeed("depression").facet)).toBe("undeclared");
-    expect(declarationState(silent, { kind: "manner", trait: "unhurried" })).toBe("undeclared");
+    expect(declarationState(silent, { kind: "manner", trait: "not_rushed" })).toBe("undeclared");
     expect(declarationState(silent, { kind: "language", language: "Tamil" })).toBe("undeclared");
     // Not every absent preference is a gender check — telehealth-first, bulk-billing and
     // longer-appointment all read an optional field that can only ever be silent, never "no".

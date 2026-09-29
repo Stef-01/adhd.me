@@ -10,7 +10,7 @@ describe("O22 the interview transcript is read by the patient's own reader", () 
     const labels = proposals.map((p) => p.label);
     expect(labels).toContain("Titration and dose review");
     expect(labels).toContain("Substance history held safely");
-    expect(labels).toContain("Unhurried first appointment");
+    expect(labels).toContain("Takes time with you");
     for (const proposal of proposals) {
       expect(proposal.heard.length).toBeGreaterThan(0);
       expect(proposal.toConfirm).toContain(proposal.heard);
