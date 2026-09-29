@@ -84,7 +84,8 @@ describe("O117 what patients are told, enumerated for the clinician", () => {
     for (const clinician of eachOf(clinicians, "the roster")) {
       for (const line of notDeclaredFrames(clinician)) {
         checked.saw();
-        expect(line.said.toLowerCase()).toContain("declare");
+        // "not something they declare", or "not in their listing" (2026-09-29): both name the declaration, not the person.
+        expect(line.said.toLowerCase()).toMatch(/declare|listing/);
         for (const forbidden of ["cannot", "unable", "does not do", "not qualified", "no good"]) {
           expect(line.said.toLowerCase()).not.toContain(forbidden);
         }

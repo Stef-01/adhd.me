@@ -8,7 +8,7 @@
 // wrote 25 to 32 words whatever number the instruction named, 2026-09-29.)
 
 import { createHash } from "node:crypto";
-import { clinicians as roster, labelInSentence, matchEvidence } from "@/demo/clinicians";
+import { askedFor, clinicians as roster, matchEvidence } from "@/demo/clinicians";
 import { EI_QUALITIES } from "@/demo/emotional-fit";
 import type { Clinician } from "@/demo/roster";
 import { professionOf } from "@/demo/roster";
@@ -64,13 +64,7 @@ export function clinicianInWords(clinician: Clinician): string {
   return lines.filter(Boolean).join("\n");
 }
 
-/** The ask, as the sentence says it: a manner as someone who does it, a language as someone who speaks it. */
-export function askedFor(need: NeedSignal): string {
-  const facet = need.facet;
-  if (facet.kind === "manner") return `someone who ${EI_QUALITIES[facet.trait].matchLine}`;
-  if (facet.kind === "language") return `someone who speaks ${facet.language}`;
-  return labelInSentence(need);
-}
+export { askedFor };
 
 export function whyInput(text: string, clinician: Clinician, asked: string): string {
   return `Person asked: "${text.trim()}"\n\n${clinicianInWords(clinician)}\n\nThe thing they asked that this listing answers: ${asked}.\nFinish: "You asked for ${asked}; ${clinician.shortName} says"`;

@@ -379,28 +379,27 @@ export function labelInSentence(need: NeedSignal): string {
  * duplication this move exists to end. `missedAskCopy` joins the parts for callers that just
  * want the sentence, so there is still exactly one place the words live.
  */
-export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
+/** An ask as a sentence says it: a manner as someone who does it, a language as someone who speaks it. */
+export function askedFor(need: NeedSignal): string {
   const facet = need.facet;
-  let after = ", not something they declare. Another listing may.";
-  // A manner label is a verb phrase ("Takes time with you"), so the sentence asks for someone who does it.
-  if (facet.kind === "manner") return { before: "You also asked for someone who ", label: EI_QUALITIES[facet.trait].matchLine, after };
-  if (facet.kind === "language") {
-    after = ", not listed among the languages they consult in. Another listing may.";
-  } else if (facet.kind === "preference") {
-    // The label is already in the sentence ("You also asked for bulk billing"): the rest does not say it twice.
-    const detail: Record<typeof facet.preference, string> = {
-      "woman-gp": "this clinician does not match that preference",
-      "telehealth-first": "which this listing does not show",
-      "bulk-billing": "which this listing does not show",
-      "longer-appointment": "which this listing does not show",
-    };
-    after = `, ${detail[facet.preference]}. Another listing may.`;
-  }
-  return {
-    before: "You also asked for ",
-    label: labelInSentence(need),
-    after,
-  };
+  if (facet.kind === "manner") return `someone who ${EI_QUALITIES[facet.trait].matchLine}`;
+  if (facet.kind === "language") return `someone who speaks ${facet.language}`;
+  return labelInSentence(need);
+}
+
+/**
+ * ONE LINE FOR EVERY MISSED ASK (2026-09-29): "You also asked for A and B, not in their listing."
+ * Two missed asks as two sentences of fifteen words put the profile at 74, over its ceiling; one
+ * line holds them at 60. "Not in their listing" is a fact about the listing, never a claim about
+ * ability (W193). The asks come back separately so the surface can emphasise each.
+ */
+export function missedAsksLine(needs: readonly NeedSignal[]): { before: string; asks: string[]; after: string } {
+  return { before: "You also asked for ", asks: needs.map(askedFor), after: ", not in their listing." };
+}
+
+export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {
+  const line = missedAsksLine([need]);
+  return { before: line.before, label: line.asks[0]!, after: line.after };
 }
 
 export function missedAskCopy(need: NeedSignal): string {

@@ -240,7 +240,7 @@ test("a profile names what you asked for that this GP has not declared (O51)", a
     if ((await missed.count()) > 0) {
       found = true;
       // Declaration-framed, never a deficiency claim; and never contradicting the evidence list.
-      await expect(missed.first()).toContainText("not something they declare");
+      await expect(missed.first()).toContainText("not in their listing");
       const missedLabel = (await missed.first().locator("strong").innerText()).toLowerCase();
       const evidence = (await page.locator(".fit-evidence strong").allInnerTexts()).map((t) => t.toLowerCase());
       expect(evidence).not.toContain(missedLabel);
@@ -376,7 +376,7 @@ test("collective roster coverage is never presented as one doctor's complete fit
   await page.locator(".clinician-row").filter({ hasText: "Dr Anu Saxena" }).click();
   const why = page.locator(".profile-disclosure").filter({ hasText: "Why matched" });
   await why.locator("summary").click();
-  await expect(why).toContainText(/telehealth[^.]*, which this listing does not show\./i);
+  await expect(why).toContainText(/telehealth[^.]*, not in their listing\./i);
 });
 
 test("and still says it when the fit really is complete (O121 non-vacuity)", async ({ page }) => {

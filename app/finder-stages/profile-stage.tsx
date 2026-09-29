@@ -11,12 +11,12 @@ import {
   VideoCamera,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
-import { useRef, type SyntheticEvent } from "react";
+import { Fragment, useRef, type SyntheticEvent } from "react";
 import {
   closedBooksNote,
   distanceTo,
   locationLabel,
-  missedAskParts,
+  missedAsksLine,
   type Clinician,
 } from "@/demo/clinicians";
 import { type NeedSignal } from "@/matching/needs";
@@ -257,13 +257,16 @@ export function ProfileStage({
                   )}
                   {profileMissed.length > 0 && (
                     <ul className="fit-missed" aria-label="What you asked for that this provider has not declared">
-                      {profileMissed.slice(0, 2).map((need) => (
-                        <li key={need.label}>
-                          {missedAskParts(need).before}
-                          <strong>{missedAskParts(need).label}</strong>
-                          {missedAskParts(need).after}
-                        </li>
-                      ))}
+                      <li>
+                        {missedAsksLine(profileMissed.slice(0, 3)).before}
+                        {missedAsksLine(profileMissed.slice(0, 3)).asks.map((ask, i, all) => (
+                          <Fragment key={ask}>
+                            {i > 0 && (i === all.length - 1 ? " and " : ", ")}
+                            <strong>{ask}</strong>
+                          </Fragment>
+                        ))}
+                        {missedAsksLine(profileMissed.slice(0, 3)).after}
+                      </li>
                     </ul>
                   )}
                 </>
