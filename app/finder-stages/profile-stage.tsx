@@ -154,14 +154,6 @@ export function ProfileStage({
           <div className="profile-identity">
             <h1 tabIndex={-1}>{clinician.name}</h1>
             <p className="clinician-meta">{professionOf(clinician) === "gp" ? shortTitle(clinician.title) : `${professionLabel(professionOf(clinician))} · ${clinician.title.split(",").slice(1).join(",").trim() || shortTitle(clinician.title)}`}</p>
-            {worksWith.length > 0 && (
-              /* O261 (founder, 2026-09-29: "key pill tags"): what they declare they work with, in the chips' own
-                 words, the ones this person asked for first, at most three. Replaces PRD §41's "Best for" line,
-                 whose expertise tags now sit inside the care areas. */
-              <ul className="profile-fit-tags profile-works-with" aria-label="Works with">
-                {worksWith.map((tag) => <li key={tag}>{tag}</li>)}
-              </ul>
-            )}
             {problemFit && <p className="profile-best-for profile-fit"><span>Why you’re seeing them</span> {problemFit}</p>}
             {/* WHY THIS MATCH, MADE TRACEABLE (founder, 2026-09-19). These are the same expertise
                 tags that filled the person's own map, shown here as the things they have in
@@ -196,6 +188,15 @@ export function ProfileStage({
             )}
           </div>
         </div>
+        {worksWith.length > 0 && (
+          /* O261 (founder, 2026-09-29: "key pill tags"): what they declare they work with, in the chips' own words,
+             the ones this person asked for first, at most three. Replaces PRD §41's "Best for" line, whose expertise
+             tags now sit inside the care areas. Under the intro at full width: inside the identity column, three pills
+             wrapped onto three lines at 390px and pushed the bio below the fold (profile-layout.spec.ts). */
+          <ul className="profile-works-with" aria-label="Works with">
+            {worksWith.map((tag) => <li key={tag}>{tag}</li>)}
+          </ul>
+        )}
 
         <ul className="profile-facts" aria-label="Profile highlights">
           {facts.map((fact) => {

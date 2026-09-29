@@ -1,0 +1,78 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I need help at work with focus and getting things done.",
+    "Parramatta, but telehealth is fine.",
+    "No thanks.",
+    "No, English is fine.",
+    "I already have a diagnosis, I just want a coach.",
+    "No, that's everything."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I need help at work with focus and getting things done."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay. Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "Parramatta, but telehealth is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "assistant",
+      "text": "Is there a language or background that matters to you?"
+    },
+    {
+      "who": "person",
+      "text": "No thanks."
+    },
+    {
+      "who": "person",
+      "text": "No, English is fine."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Parramatta\",\"request\":\"I need help at work with focus and getting things done, in Parramatta or telehealth.\"}"
+    }
+  ],
+  "request": "I need help at work with focus and getting things done. Parramatta, but telehealth is fine",
+  "reads": [
+    {
+      "text": "I need help at work with focus and getting things done. Parramatta, but telehealth is fine",
+      "answer": {
+        "keys": [
+          "care:executive-function",
+          "pref:telehealth-first",
+          "care:work-career"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Telehealth",
+    "Getting organised",
+    "At work"
+  ],
+  "results": [
+    "Alex Lawson ADHD coach · At work Sutherland",
+    "Donna Italiano ADHD coach · At work Perth",
+    "Kate Dallimore ADHD coach · At work Perth",
+    "Fiona Alexander ADHD coach Perth",
+    "Romney Taylor ADHD coach Perth"
+  ],
+  "whyMatched": "Why matched Focus and getting things done By phone or telehealth Work and career From your words: “help at work” Compare",
+  "stage": "results"
+}

@@ -9,8 +9,10 @@
 // Problem fit is the highest-weighted factor among allied providers, as §42 asks; scope
 // (profession) stays a hard constraint handled by the filters; nothing paid exists to alter it.
 
+import type { CareArea } from "@/demo/care-archetypes";
 import type { Need } from "@/model/needs";
 import type { Subdomain } from "@/model/layers";
+import { needForKey } from "@/matching/needs";
 import { EXPERTISE_LABELS, type ExpertiseTag } from "./professions";
 
 /** Which declared expertise answers a subdomain — the problem-side of the §40 taxonomy. */
@@ -55,31 +57,95 @@ export const EXPERTISE_FOR: Partial<Record<Subdomain, readonly ExpertiseTag[]>> 
   peers: ["workplace-adjustments", "university-adhd"],
 };
 
+/**
+ * O261 (2026-09-30): which declared CARE AREA answers a subdomain. The expertise tags above are a legacy
+ * vocabulary on seven profiles; the life domains are declared on every profile that says it in its own
+ * words (qa/matching/life-domains.md), so the map's need reaches the whole roster through them.
+ */
+export const CARE_FOR: Partial<Record<Subdomain, readonly CareArea[]>> = {
+  activation: ["executive-function"],
+  time: ["executive-function"],
+  switching: ["executive-function", "work-career"],
+  attention: ["executive-function"],
+  memory: ["executive-function"],
+  inhibition: ["emotional-regulation"],
+  "emotional-regulation": ["emotional-regulation"],
+  sleep: ["sleep"],
+  movement: ["movement-exercise"],
+  appetite: ["eating-body"],
+  energy: ["sleep", "movement-exercise"],
+  "medication-experience": ["titration", "shared-care"],
+  structure: ["executive-function"],
+  workload: ["work-career", "executive-function"],
+  "deadline-design": ["executive-function", "study-school"],
+  "living-environment": ["executive-function"],
+  "study-context": ["study-school"],
+  "workplace-context": ["work-career"],
+  partner: ["relationships"],
+  family: ["relationships", "parenting"],
+  manager: ["work-career"],
+  teachers: ["study-school"],
+  clinicians: ["late-diagnosis", "shared-care"],
+  noise: ["work-career"],
+  peers: ["social-connection", "study-school"],
+};
+
+/** A fit key: a legacy expertise tag, or a care area as `care:<area>`. */
+export type FitKey = ExpertiseTag | `care:${CareArea}`;
+
 interface Fittable {
   readonly profession?: string | undefined;
   readonly expertise?: readonly ExpertiseTag[] | undefined;
+  readonly careAreas?: readonly CareArea[] | undefined;
+  readonly careAreasSometimes?: readonly CareArea[] | undefined;
 }
 
-/** Tags that match the need's own subdomain score 2; its contributors' subdomains score 1. */
+const careKeys = (subdomain: Subdomain): FitKey[] => (CARE_FOR[subdomain] ?? []).map((area): FitKey => `care:${area}`);
+const expertiseKeys = (subdomain: Subdomain): FitKey[] => [...(EXPERTISE_FOR[subdomain] ?? [])];
+/** Every key that answers a subdomain, the taxonomy's tags first, then the care areas. */
+const keysFor = (subdomain: Subdomain): FitKey[] => [...expertiseKeys(subdomain), ...careKeys(subdomain)];
+/** How strongly a provider holds a key: 1 for a declared tag or an area declared often, 0.5 for one declared sometimes, 0 otherwise. */
+function holds(provider: Fittable, key: FitKey): number {
+  if (key.startsWith("care:")) {
+    const area = key.slice(5) as CareArea;
+    if (provider.careAreas?.includes(area)) return 1;
+    return provider.careAreasSometimes?.includes(area) ? 0.5 : 0;
+  }
+  return provider.expertise?.includes(key as ExpertiseTag) ? 1 : 0;
+}
+
+/** Keys that match the need's own subdomain score 2; its contributors' subdomains score 1; a "sometimes" area half. */
 export function problemFit(provider: Fittable, need: Need | null): number {
-  if (!need || !provider.expertise?.length) return 0;
-  const primary = new Set(EXPERTISE_FOR[need.subdomain] ?? []);
-  const secondary = new Set(need.contributors.flatMap((c) => EXPERTISE_FOR[c.subdomain] ?? []));
+  if (!need) return 0;
+  const primary = new Set(keysFor(need.subdomain));
+  const secondary = new Set(need.contributors.flatMap((c) => keysFor(c.subdomain)));
   let score = 0;
-  for (const tag of provider.expertise) {
-    if (primary.has(tag)) score += 2;
-    else if (secondary.has(tag)) score += 1;
+  for (const key of new Set([...primary, ...secondary])) {
+    const strength = holds(provider, key);
+    if (strength === 0) continue;
+    score += (primary.has(key) ? 2 : 1) * strength;
   }
   return score;
 }
 
-/** The matched tags, primary first, for the reason on a card. */
-export function fitTags(provider: Fittable, need: Need | null): ExpertiseTag[] {
-  if (!need || !provider.expertise?.length) return [];
+/** The matched keys, primary first, for the reason on a card. */
+export function fitTags(provider: Fittable, need: Need | null): FitKey[] {
+  if (!need) return [];
   // In the taxonomy's own order — the most specific answer to the need is listed first there.
-  const primary = (EXPERTISE_FOR[need.subdomain] ?? []).filter((t) => provider.expertise!.includes(t));
-  const secondary = need.contributors.flatMap((c) => EXPERTISE_FOR[c.subdomain] ?? []).filter((t) => provider.expertise!.includes(t) && !primary.includes(t));
+  const primary = keysFor(need.subdomain).filter((key) => holds(provider, key) > 0);
+  const secondary = need.contributors.flatMap((c) => keysFor(c.subdomain)).filter((key) => holds(provider, key) > 0 && !primary.includes(key));
   return [...new Set([...primary, ...secondary])];
+}
+
+/** A fit key as the screen says it: the taxonomy's label for a tag, the lexicon's for a care area. */
+export function fitLabel(key: FitKey): string {
+  if (key.startsWith("care:")) return needForKey(key)?.label ?? key.slice(5);
+  return EXPERTISE_LABELS[key as ExpertiseTag];
+}
+
+/** The matched keys as labels, primary first. */
+export function fitLabels(provider: Fittable, need: Need | null): string[] {
+  return fitTags(provider, need).map(fitLabel);
 }
 
 /**
@@ -112,10 +178,10 @@ export function bestFitFor<T extends Fittable>(providers: readonly T[], need: Ne
 export function fitReason(provider: Fittable, need: Need | null): string | null {
   const tags = fitTags(provider, need);
   if (tags.length === 0 || !need) return null;
-  const primary = new Set(EXPERTISE_FOR[need.subdomain] ?? []);
+  const primary = new Set<FitKey>(keysFor(need.subdomain));
   const lead = tags[0]!;
   // Lower-case the first letter unless the word is an acronym — "ADHD at work" keeps its case.
-  const raw = EXPERTISE_LABELS[lead];
+  const raw = fitLabel(lead);
   const label = /^[A-Z]{2,}/.test(raw) ? raw : raw.replace(/^\w/, (c) => c.toLowerCase());
   return primary.has(lead)
     ? `Works on ${label}, the thing you said is hardest.`

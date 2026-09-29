@@ -29,8 +29,7 @@ import { test } from "./support/test";
 import { LIVED_RECORD } from "../scripts/text-budget-lib.mjs";
 import type { ModelRecord } from "../src/model/store";
 import { topNeed } from "../src/model/needs";
-import { fitTags } from "../src/support/problem-fit";
-import { EXPERTISE_LABELS } from "../src/support/professions";
+import { fitLabels } from "../src/support/problem-fit";
 import { clinicians } from "../src/demo/clinicians";
 
 const MODEL_KEY = "adhdme.model.v1";
@@ -89,7 +88,7 @@ test("the profile's chips are the person's own cells, not the provider's sales l
   // THE ASSERTION THIS FILE IS FOR. The expected chips are derived from the seeded record, not
   // from the provider's declared expertise — `fitTags` returns only the tags the person's own
   // need and its contributors reach, in the taxonomy's order, and the screen shows the first three.
-  const expected = fitTags(clinician!, need).slice(0, 3).map((t) => EXPERTISE_LABELS[t]);
+  const expected = fitLabels(clinician!, need).slice(0, 3); // O261: a care area the map's need reaches counts as an answer too
   expect(expected.length, "the first allied result answers this need").toBeGreaterThan(0);
   await expect(page.locator(".profile-fit-tags li")).toHaveText(expected);
 

@@ -316,3 +316,11 @@ information; closed books still say so on the row) and the compare button's visi
 (node scripts/text-budget.mjs, final build): the finder profile 47, with "Why matched" open 36, in
 the clinician's words 50, with two asks not in the listing 45 and 59; the filters screen holds the
 NDIS switch within its ceiling; 127 of 127 app screens within their ceiling, median 32.
+CI (2026-09-30) then caught what the local runs had not: inside the identity column the three
+pills wrapped onto three lines at 390px, which pushed the bio below the half-viewport line
+(profile-layout.spec.ts) and the last section under the fixed booking bar, where axe read its
+summary as a target with three visible pixels. The pills now sit under the intro at full width, one
+line of three. And the map's problem fit (`src/support/problem-fit.ts`) reads the life-domain
+areas beside the legacy expertise tags, so "help me start work tasks" from a person whose map says
+starting is hardest now finds the coaches, who declare focus and getting things done, not only the
+seven profiles with expertise tags.

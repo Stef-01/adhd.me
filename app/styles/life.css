@@ -185,6 +185,10 @@
 
 /* ── Finder: the allied providers' "Best for" line (PRD §41) ─────────────────────────────── */
 .profile-best-for { margin: 4px 0 0; color: var(--ink); font-size: 0.875rem; line-height: 1.5; }
+/* O261: what the clinician declares they work with, as pills; its own class, because `.profile-fit-tags` is the
+   person's own map cells and the personalisation tests read it as such. */
+.profile-works-with { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: 0.25rem 0 0; padding: 0; list-style: none; }
+.profile-works-with li { padding: 1px 0.625rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); font-size: 0.75rem; font-weight: 600; line-height: 1.4; color: var(--ink); }
 /* The words that lead the line, in the line's own size and case: no 11px uppercase eyebrow. */
 .profile-best-for span { color: var(--muted); }
 .voice-reflection { display: grid; gap: 8px; margin-top: 10px; }

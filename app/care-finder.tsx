@@ -20,8 +20,7 @@ import {
   type Demonstrated,
 } from "@/demo/clinicians";
 import { profession, professionsMentioned, type Profession } from "@/support/professions";
-import { EXPERTISE_LABELS } from "@/support/professions";
-import { fitReason, fitTags, orderByProblemFit, strengthReason } from "@/support/problem-fit";
+import { fitLabels, fitReason, orderByProblemFit, strengthReason } from "@/support/problem-fit";
 import { deviceLearningStorage } from "@/learn/cursor";
 import { readModel } from "@/model/store";
 import { topNeed, type Need } from "@/model/needs";
@@ -238,7 +237,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   const fitFor = useCallback((c: Clinician) => fitReason(c, need), [need]);
   // The matched tags, in the taxonomy's own order, capped at the three Calm Clarity allows in a
   // row. These are the person's own map read back to them.
-  const tagsFor = useCallback((c: Clinician) => fitTags(c, need).slice(0, 3).map((t) => EXPERTISE_LABELS[t]), [need]);
+  const tagsFor = useCallback((c: Clinician) => fitLabels(c, need).slice(0, 3), [need]);
   const strengthFor = useCallback((c: Clinician) => strengthReason(c, need), [need]);
   /**
    * The ways out of an empty list: each held filter that, dropped on its own, brings somebody

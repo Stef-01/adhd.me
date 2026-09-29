@@ -34,7 +34,8 @@ export function matchSkill(roster: readonly Clinician[], filters: Filters, recor
       .sort((a, b) => b.score - a.score || b.strength - a.strength || Number(Boolean(b.provider.image)) - Number(Boolean(a.provider.image)) || a.provider.id.localeCompare(b.provider.id));
     const provider = ranked[0]?.provider;
     if (!provider) continue;
-    const skill = fitTags(provider, need).find(t => primary.includes(t))!;
+    // This path is the legacy expertise taxonomy's: candidates were filtered on a tag above, so the lead key is one.
+    const skill = fitTags(provider, need).find((t): t is ExpertiseTag => (primary as readonly string[]).includes(t))!;
     return { provider, skill, label: EXPERTISE_LABELS[skill], subdomain: need.subdomain,
       sources: need.sources, basis: need.sources.length ? "your-answers" : "this-practice" };
   }
