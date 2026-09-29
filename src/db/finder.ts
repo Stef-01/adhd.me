@@ -10,6 +10,7 @@
 // with its row. Ratings are never shown to anyone: src/db/learn.ts turns them into bounded weights
 // per ask, never per clinician.
 
+import { after } from "next/server";
 import { MAX_FOLLOW_UPS } from "@/voice/interviewer";
 
 export type SearchSource = "typed" | "dictation" | "voice";
@@ -251,7 +252,22 @@ function capped<T>(list: T[], item: T): void {
 
 type FetchLike = (url: string, init: { method: string; headers: Record<string, string>; body: string }) => Promise<{ ok: boolean }>;
 
-/** Sends one row to its table when Supabase is configured; in order, never awaited by a request. */
+/**
+ * A write the request does not wait for, held open past the response. On Vercel a function is
+ * frozen once it has answered, so a write still in flight is lost: the first day with the tables
+ * connected (2026-09-29) kept two typed searches, whose instances a following request kept warm,
+ * and lost every profile event and the voice call that came last. `after` hands the promise to the
+ * platform to wait on; outside a request (tests, scripts) there is no scope and nothing to hold.
+ */
+function heldOpen(work: Promise<void>): void {
+  try {
+    after(work);
+  } catch {
+    // No request scope: the promise runs on its own, as it always did.
+  }
+}
+
+/** Sends one row to its table when Supabase is configured; in order, never awaited by a request, held open by the platform. */
 function journal(table: Table, row: Record<string, unknown>, env: Record<string, string | undefined>, fetchFn: FetchLike = fetch): void {
   const url = env.SUPABASE_URL?.trim().replace(/\/$/, "");
   const key = env.SUPABASE_SERVICE_ROLE_KEY?.trim();
@@ -266,6 +282,7 @@ function journal(table: Table, row: Record<string, unknown>, env: Record<string,
     if (reply.ok) s.journal.sent += 1;
     else s.journal.failed += 1;
   });
+  heldOpen(s.journal.chain);
 }
 
 interface Deps {
@@ -373,6 +390,7 @@ export function eraseFinderDevice(deviceId: string, deps: Deps = {}): void {
       else s.journal.failed += 1;
     });
   }
+  heldOpen(s.journal.chain);
 }
 
 export function ratings(): RatingRecord[] {
