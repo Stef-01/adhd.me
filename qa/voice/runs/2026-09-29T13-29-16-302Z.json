@@ -1,0 +1,96 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I think I might have ADHD and I'd like to get assessed.",
+    "Marrickville, but telehealth is fine.",
+    "Yes please.",
+    "No, English is fine.",
+    "I have anxiety as well.",
+    "No, that's everything."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I think I might have ADHD and I'd like to get assessed."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay, that’s clear. Next, we’ll sort out where you are or if telehealth works, then move on."
+    },
+    {
+      "who": "assistant",
+      "text": "Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "Marrickville, but telehealth is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "Yes, please."
+    },
+    {
+      "who": "assistant",
+      "text": "Is there a language or a background that matters to you?"
+    },
+    {
+      "who": "person",
+      "text": "No, English is fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Okay, thanks for that. One more detail, then we can wrap this up."
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    },
+    {
+      "who": "person",
+      "text": "I have anxiety as well."
+    },
+    {
+      "who": "tool",
+      "text": "show_matches {\"place\":\"Marrickville or telehealth\",\"request\":\"I want an ADHD assessment with someone who has ADHD themselves, based in Marrickville or telehealth, and I have anxiety as well.\"}"
+    }
+  ],
+  "request": "I think I might have ADHD and I'd like to get assessed. Marrickville, but telehealth is fine. someone who has ADHD themselves. I have anxiety as well",
+  "reads": [
+    {
+      "text": "I think I might have ADHD and I'd like to get assessed. Marrickville, but telehealth is fine. someone who has ADHD themselves. I have anxiety as well",
+      "answer": {
+        "keys": [
+          "care:adhd-assessment",
+          "care:anxiety",
+          "pref:telehealth-first",
+          "pref:lived-experience"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Lived experience",
+    "Telehealth",
+    "Anxiety",
+    "ADHD assessment"
+  ],
+  "results": [
+    "Valeria Urrutia Psychologist · ADHD assessment Benowa",
+    "Lachlan Avent Psychologist · ADHD assessment Fortitude Valley",
+    "Sarah Bibo Psychologist Benowa",
+    "Jessica Katsamatsas Psychologist Ashgrove",
+    "Samantha Courtney Psychologist Fortitude Valley"
+  ],
+  "whyMatched": "Why matched ADHD assessment From your words: “i might have adhd” Anxiety By phone or telehealth Not in their listing: someone who has ADHD themselves. Compare with Lachlan Avent",
+  "stage": "results"
+}

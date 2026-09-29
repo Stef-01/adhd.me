@@ -325,3 +325,4 @@
 {"time":"2026-09-29T13:07:07.015Z","kind":"eval","persona":"asker","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0142,"pass":true}
 {"time":"2026-09-29T13:07:07.015Z","kind":"eval","persona":"postpartum","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0098,"pass":true}
 {"time":"2026-09-29T13:07:07.015Z","kind":"eval","persona":"crisis","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0103,"pass":true}
+{"time":"2026-09-29T13:29:16.305Z","kind":"spoken","lines":6,"seconds":75,"tokens":{"text_in":13188,"audio_in":460,"cached":9280,"text_out":840,"audio_out":478},"costUsd":0.021655,"stage":"results"}

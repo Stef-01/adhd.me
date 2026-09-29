@@ -9,16 +9,22 @@ describe("declared care matching", () => {
   });
   it("requires identity and spiritual-care experience independently", () => {
     const preferences = carePreferencesFromRequest("I want an Aboriginal clinician who understands spiritual health and ADHD");
-    expect(preferences).toEqual({ clinicianIdentity: "aboriginal", careNeeds: ["spiritual-wellbeing"] });
+    // R17: the topic ("spiritual health") orders the list through the lexicon and never narrows it; the identity stays a filter.
+    expect(preferences).toEqual({ clinicianIdentity: "aboriginal", careNeeds: [] });
     expect(matchesCare(declared, preferences)).toBe(true);
     expect(matchesCare({}, preferences)).toBe(false);
-    expect(matchesCare({ careProfile: { ...declared.careProfile!, needs: [] } }, preferences)).toBe(false);
+    // The identity alone is the sentence's filter now; a SAVED care need still narrows on its own.
+    expect(matchesCare({ careProfile: { ...declared.careProfile!, needs: [] } }, preferences)).toBe(true);
+    expect(matchesCare({ careProfile: { ...declared.careProfile!, needs: [] } }, { ...preferences, careNeeds: ["spiritual-wellbeing"] })).toBe(false);
   });
   it("never infers clinician identity from the patient's identity or negated wording", () => {
     expect(carePreferencesFromRequest("I am Aboriginal and need help").clinicianIdentity).toBe("any");
     expect(carePreferencesFromRequest("a non-Aboriginal clinician").clinicianIdentity).toBe("any");
     expect(carePreferencesFromRequest("I do not need an Aboriginal clinician").clinicianIdentity).toBe("any");
-    expect(carePreferencesFromRequest("No anxiety support, but spiritual wellbeing matters").careNeeds).toEqual(["spiritual-wellbeing"]);
+    expect(carePreferencesFromRequest("No anxiety support, but spiritual wellbeing matters").careNeeds).toEqual([]);
+    // R17 (production, 2026-09-29): "I have anxiety as well" narrowed the roster to the twelve who declare anxiety and
+    // dropped every clinician who has ADHD themselves, for a person who had asked for one.
+    expect(carePreferencesFromRequest("an assessment, someone who has ADHD themselves, I have anxiety as well").careNeeds).toEqual([]);
   });
   it("handles either identity without collapsing Torres Strait Islander into Aboriginal", () => {
     expect(carePreferencesFromRequest("Aboriginal or Torres Strait Islander clinician").clinicianIdentity).toBe("either");

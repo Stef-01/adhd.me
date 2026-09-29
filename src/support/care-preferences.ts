@@ -55,22 +55,6 @@ export function matchesCare(provider: CareProvider, preferences: CarePreferences
   if (country && identity?.country?.trim().toLocaleLowerCase() !== country) return false;
   return true;
 }
-const CUES: Partial<Record<CareNeed, RegExp>> = {
-  "whole-person": /\b(?:holistic|whole[- ]person)\b/i,
-  "spiritual-wellbeing": /\bspiritual(?:ity| health| wellbeing)?\b/i,
-  "social-emotional-wellbeing": /\b(?:social and emotional wellbeing|sewb)\b/i,
-  "family-community": /\b(?:family involvement|community support)\b/i,
-  "connection-country": /\bconnection to country\b/i,
-  "university-adjustments": /\b(?:university|uni|study|exam) (?:accommodations?|accomodations?|adjustments?|support)\b/i,
-  "workplace-adjustments": /\b(?:workplace|work) (?:accommodations?|adjustments?)\b/i,
-  autism: /\b(?:autism|autistic|audhd)\b/i, "sensory-needs": /\bsensory (?:needs|overload|support)\b/i,
-  "learning-differences": /\b(?:dyslexia|dyscalculia|learning differences)\b/i,
-  anxiety: /\banxiety\b/i, depression: /\b(?:depression|low mood)\b/i, trauma: /\b(?:trauma|ptsd)\b/i,
-  ocd: /\bocd\b/i, bipolar: /\bbipolar\b/i, tics: /\b(?:tics|tourette'?s?)\b/i,
-  "substance-use": /\b(?:substance use|addiction)\b/i, "eating-concerns": /\b(?:eating disorder|disordered eating|arfid)\b/i,
-  sleep: /\b(?:insomnia|sleep apnea|sleep apnoea|sleep difficulties)\b/i,
-  "chronic-pain": /\b(?:chronic pain|persistent pain)\b/i, fatigue: /\b(?:chronic fatigue|fatigue support)\b/i,
-};
 /** Extract stated care topics, not a diagnosis or an assumption about the patient's identity. */
 export function carePreferencesFromRequest(request: string): CarePreferences {
   const clauses = request.split(/[.!?;\n]|\bbut\b/i);
@@ -83,7 +67,14 @@ export function carePreferencesFromRequest(request: string): CarePreferences {
   if (positive(new RegExp("\\b(?:Aboriginal or Torres Strait Islander|First Nations|Indigenous) " + role + "\\b", "i"))) clinicianIdentity = "either";
   else if (positive(new RegExp("\\bAboriginal " + role + "\\b", "i"))) clinicianIdentity = "aboriginal";
   else if (positive(new RegExp("\\bTorres Strait Islander " + role + "\\b", "i"))) clinicianIdentity = "torres-strait-islander";
-  return { clinicianIdentity, careNeeds: Object.entries(CUES).filter(([, pattern]) => positive(pattern!)).map(([need]) => need as CareNeed) };
+  /* R17 (qa/matching/rca.md, 2026-09-29): a care word in the sentence ORDERS the list and never narrows it.
+     Until tonight "anxiety", "depression", "trauma", "autism" and a dozen more in the request became hard
+     filters here, so "an assessment … someone who has ADHD themselves … I have anxiety as well" ran over the
+     twelve clinicians who declare anxiety and none of the three who have ADHD themselves. The lexicon already
+     reads every one of those words as a weighted need; a filter is a choice a person makes on the filters
+     screen or in their saved preferences, not a topic they mentioned. The clinician's identity stays: "an
+     Aboriginal clinician" names the clinician, not a topic. */
+  return { clinicianIdentity, careNeeds: [] };
 }
 export function combineCarePreferences(saved: CarePreferences, request: CarePreferences): CarePreferences {
   return { clinicianIdentity: saved.clinicianIdentity && saved.clinicianIdentity !== "any" ? saved.clinicianIdentity : request.clinicianIdentity,

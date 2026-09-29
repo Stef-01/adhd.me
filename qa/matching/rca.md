@@ -424,3 +424,32 @@ among clinicians who answer at least one care ask (a prescriber without teleheal
 psychologist with it, for a person who needs scripts continued); or treat telehealth as a lift
 rather than a tier when nobody answers both. The corpus pins on tie quality and separation move
 with any of the last two, and are re-pinned the way O256's were.
+
+## R17 · a care word in the sentence narrowed the roster, 2026-09-29 · layer: the finder's roster, before ranking
+
+The first scripted call on production after the person's-words request landed (13:35, commit
+5b7d6674): "I think I might have ADHD and I'd like to get assessed. Marrickville, but telehealth is
+fine. someone who has ADHD themselves. I have anxiety as well." Heard: Lived experience · Telehealth ·
+Anxiety · ADHD assessment. Shown: Valeria Urrutia, Lachlan Avent, Sarah Bibo, Jessica Katsamatsas,
+Samantha Courtney. Not one of the three clinicians who say they have ADHD themselves, for the one
+ask the person had answered yes to. Locally the ranker put Chantelle Pin first (assessment, lived
+experience and telehealth: constraint coverage 2, care 10.4).
+
+**Cause.** `carePreferencesFromRequest` (src/support/care-preferences.ts) turned a mention of
+anxiety, depression, low mood, trauma, PTSD, autism, OCD, bipolar, tics, substance use, an eating
+disorder, insomnia, chronic pain or fatigue in the sentence into a HARD care filter, applied to the
+roster before the ranking ran (O234, "a filter narrows, the sentence orders"). "I have anxiety as
+well" narrowed 37 to the 12 who declare anxiety; Chantelle, Alex and Trisha declare no anxiety and
+were gone before a weight was read. The lexicon reads the same words as weighted needs, so the
+filter added nothing the ranking did not already have, and took away everyone who answered the
+rest of the sentence.
+
+**Fix.** A care word in the sentence orders and never narrows: `carePreferencesFromRequest`
+returns no care needs, only the clinician's identity ("an Aboriginal clinician" names the
+clinician, not a topic). A care filter is a choice made on the filters screen or in saved
+preferences. The same request now lists Chantelle first, then Alex Lawson and Trisha Harris, then
+Valeria Urrutia.
+
+**Proof.** src/support/care-preferences.test.ts (the production sentence narrows nothing);
+e2e/finder-heard.spec.ts computes its expected order through the same function; a scripted call on
+production after the deploy.
