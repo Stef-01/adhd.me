@@ -5,7 +5,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { clinicians, matchEvidence } from "@/demo/clinicians";
 import { completed } from "@/lib/llm/cassettes";
-import { askedFor, askToWrite, cachedWhy, clinicianInWords, keepClause, MAX_CLAUSE_WORDS, MAX_WORDS, resetWhyCache, whyInput, whyMatched, whySentence } from "./why";
+import { EI_QUALITIES } from "@/demo/emotional-fit";
+import { askedFor, askToWrite, cachedWhy, clauseBudget, clinicianInWords, keepClause, MAX_CLAUSE_WORDS, MAX_WORDS, MIN_CLAUSE_WORDS, resetWhyCache, whyInput, whyMatched, whySentence } from "./why";
 
 const anubhav = clinicians.find((c) => c.id === "anubhav-saxena")!;
 const REQUEST = "an ADHD assessment by telehealth, and I don't want to be rushed";
@@ -18,7 +19,7 @@ describe("what the model is given", () => {
   it("is the person's words, the clinician's own listing and the one thing to finish, and nothing else", () => {
     const input = whyInput(REQUEST, anubhav, "telehealth");
     expect(input.startsWith(`Person asked: "${REQUEST}"`)).toBe(true);
-    expect(input.endsWith(`Finish: "You asked for telehealth; ${anubhav.shortName} says"`)).toBe(true);
+    expect(input.endsWith(`Finish, in at most 12 words: "You asked for telehealth; ${anubhav.shortName} says"`)).toBe(true);
     const words = clinicianInWords(anubhav);
     for (const piece of [anubhav.name, anubhav.focus, anubhav.about, "Takes time with you", "Hindi"]) expect(words).toContain(piece);
     expect(words).not.toMatch(/manner:|care:|pref:/);
@@ -38,6 +39,24 @@ describe("what the model is given", () => {
     expect(said).toContain("ADHD assessment");
     expect(said).toContain("someone who speaks Hindi");
     expect(said).toContain("someone who takes time with you");
+  });
+
+  it("asks for every manner in six words or fewer, in words a sentence can carry", () => {
+    for (const [trait, quality] of Object.entries(EI_QUALITIES)) {
+      const count = quality.asked.trim().split(/\s+/).length;
+      expect(count, `${trait}: "${quality.asked}"`).toBeLessThanOrEqual(6);
+      expect(quality.asked, trait).toMatch(/^[a-z]/);
+    }
+  });
+
+  it("gives the clause what the frame leaves of the sentence, never more than the clause's own bound", () => {
+    expect(clauseBudget("ADHD assessment", anubhav)).toBe(MAX_CLAUSE_WORDS);
+    const kalra = clinicians.find((c) => c.id === "yogesh-kalra")!;
+    expect(clauseBudget("someone who takes time with you", kalra)).toBe(MAX_WORDS - 4 - 6 - kalra.shortName.split(" ").length);
+    expect(clauseBudget("someone who takes time with you", kalra)).toBeGreaterThanOrEqual(MIN_CLAUSE_WORDS);
+    // A clause over its budget is refused even when it is under the clause's own bound.
+    expect(keepClause("he books a longer first appointment and takes time with you", anubhav, 7)).toBeNull();
+    expect(keepClause("he books a longer first appointment", anubhav, 7)).toBe("he books a longer first appointment");
   });
 });
 

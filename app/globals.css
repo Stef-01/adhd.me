@@ -939,7 +939,9 @@ summary:focus-visible {
   padding: 0;
   list-style: none;
   color: var(--muted);
-  font-size: 0.75rem;
+  /* 14px, not 12 (2026-09-29): under the model's sentence the line read as a footnote, and the
+     profile is read by tired and low-vision people (O14). The asks in it stay bold. */
+  font-size: 0.875rem;
   line-height: 1.45;
   max-width: 52ch;
 }
@@ -5027,6 +5029,11 @@ button.notfound-primary { border: 0; cursor: pointer; font: inherit; font-size: 
   margin: 0 0 16px;
   padding: 0;
   list-style: none;
+}
+
+/* After the sentence, the line is a second thought and stands a little apart from it. */
+.profile-disclosure .fit-insights + .fit-missed {
+  margin-top: 10px;
 }
 
 .profile-disclosure .fit-evidence li,

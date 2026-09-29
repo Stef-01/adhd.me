@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-29T06:07:51.109Z",
+  "measuredAt": "2026-09-29T08:26:05.435Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -17,8 +17,8 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 18,
-      "fold": 18,
+      "total": 20,
+      "fold": 20,
       "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
@@ -152,7 +152,7 @@
       "path": "/approach/meditate",
       "name": "/approach/meditate",
       "state": null,
-      "total": 40,
+      "total": 39,
       "fold": 24,
       "chrome": 6,
       "ratio": 1,
@@ -169,9 +169,9 @@
           "tag": "p"
         },
         {
-          "w": 5,
-          "text": "00:29 left in this session",
-          "tag": "small"
+          "w": 4,
+          "text": "A little less doing.",
+          "tag": "h1"
         }
       ]
     },
@@ -503,21 +503,21 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 9,
+      "fold": 9,
       "chrome": 0,
       "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 2,
-          "text": "GET OUT!",
-          "tag": "p"
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
         },
         {
           "w": 2,
-          "text": "open drawer",
-          "tag": "span"
+          "text": "CATCH IT!",
+          "tag": "p"
         },
         {
           "w": 1,
@@ -1016,10 +1016,10 @@
       "path": "/practices",
       "name": "/practices",
       "state": null,
-      "total": 756,
-      "fold": 58,
+      "total": 735,
+      "fold": 55,
       "chrome": 22,
-      "ratio": 18.9,
+      "ratio": 18.4,
       "verdict": "long-form",
       "longest": [
         {
@@ -1043,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1533,
+      "total": 1473,
       "fold": 267,
       "chrome": 22,
-      "ratio": 38.3,
+      "ratio": 36.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -1934,6 +1934,33 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
+      "total": 28,
+      "fold": 28,
+      "chrome": 0,
+      "ratio": 0.7,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Whatever. Sure. Guess work wins.",
+          "tag": "p"
+        },
+        {
+          "w": 5,
+          "text": "Ouch. I did say sorry.",
+          "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, reply",
+      "state": "zoe-reply",
       "total": 18,
       "fold": 18,
       "chrome": 0,
@@ -1952,35 +1979,8 @@
         },
         {
           "w": 4,
-          "text": "That came out sharp.",
+          "text": "Said what you meant.",
           "tag": "h1"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/zoe-before-you-send",
-      "name": "Zoe, reply",
-      "state": "zoe-reply",
-      "total": 30,
-      "fold": 30,
-      "chrome": 0,
-      "ratio": 0.8,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 8,
-          "text": "Oh, that’s a shame. Sure. Is Friday free?",
-          "tag": "p"
-        },
-        {
-          "w": 7,
-          "text": "Can we move dinner? Work ran late.",
-          "tag": "p"
-        },
-        {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
         }
       ]
     },
@@ -2555,10 +2555,10 @@
       "path": "/practitioner/anubhav-saxena",
       "name": "Practitioner profile",
       "state": null,
-      "total": 48,
-      "fold": 48,
+      "total": 44,
+      "fold": 44,
       "chrome": 2,
-      "ratio": 1.2,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2609,10 +2609,10 @@
       "path": "/",
       "name": "Finder profile (a GP opened)",
       "state": "finder-profile",
-      "total": 48,
-      "fold": 48,
+      "total": 44,
+      "fold": 44,
       "chrome": 2,
-      "ratio": 1.2,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2636,10 +2636,10 @@
       "path": "/",
       "name": "Finder profile, why matched open",
       "state": "finder-profile-why",
-      "total": 48,
-      "fold": 48,
+      "total": 44,
+      "fold": 44,
       "chrome": 2,
-      "ratio": 1.2,
+      "ratio": 1.1,
       "verdict": "ceiling",
       "longest": [
         {
@@ -2663,15 +2663,15 @@
       "path": "/",
       "name": "Finder profile, why matched in their words (AI)",
       "state": "finder-profile-why-words",
-      "total": 59,
-      "fold": 59,
+      "total": 49,
+      "fold": 49,
       "chrome": 2,
-      "ratio": 1.5,
+      "ratio": 1.2,
       "verdict": "ceiling",
       "longest": [
         {
-          "w": 26,
-          "text": "You asked for ADHD assessment by telehealth and not to be rushed; Dr Saxena says",
+          "w": 20,
+          "text": "You asked for someone who takes time with you; Dr Saxena says he books a longer ",
           "tag": "li"
         },
         {
@@ -2683,6 +2683,60 @@
           "w": 3,
           "text": "Beecroft & Double Bay",
           "tag": "p"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Finder profile, why matched open, two asks not in the listing",
+      "state": "finder-profile-missed",
+      "total": 46,
+      "fold": 46,
+      "chrome": 2,
+      "ratio": 1.2,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 4,
+          "text": "By phone or telehealth",
+          "tag": "strong"
+        },
+        {
+          "w": 4,
+          "text": "Not in their listing:",
+          "tag": "li"
+        },
+        {
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "name": "Finder profile, why matched in their words (AI), two asks not in the listing",
+      "state": "finder-profile-why-words-missed",
+      "total": 60,
+      "fold": 60,
+      "chrome": 2,
+      "ratio": 1.5,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 20,
+          "text": "You asked for someone who takes time with you; Dr Saxena says he books a longer ",
+          "tag": "li"
+        },
+        {
+          "w": 4,
+          "text": "Not in their listing:",
+          "tag": "li"
+        },
+        {
+          "w": 3,
+          "text": "Dr Anubhav Saxena",
+          "tag": "h1"
         }
       ]
     },
@@ -2728,10 +2782,10 @@
       "path": "/",
       "name": "Finder home, a visit to rate",
       "state": "finder-rate",
-      "total": 28,
-      "fold": 28,
+      "total": 30,
+      "fold": 30,
       "chrome": 6,
-      "ratio": 0.7,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
@@ -3020,26 +3074,26 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 13,
-      "fold": 13,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "WRITE THE LINE!",
+          "w": 6,
+          "text": "Skip this one (costs a life)",
+          "tag": "button"
+        },
+        {
+          "w": 1,
+          "text": "0",
+          "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "SWAT!",
           "tag": "p"
-        },
-        {
-          "w": 3,
-          "text": "Round the left",
-          "tag": "button"
-        },
-        {
-          "w": 3,
-          "text": "Round the right",
-          "tag": "button"
         }
       ]
     },
@@ -3155,10 +3209,10 @@
       "path": "/match/prep",
       "name": "Match prep",
       "state": "intake",
-      "total": 34,
-      "fold": 34,
+      "total": 40,
+      "fold": 40,
       "chrome": 6,
-      "ratio": 0.9,
+      "ratio": 1,
       "verdict": "target",
       "longest": [
         {

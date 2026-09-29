@@ -786,13 +786,17 @@ finder asks `/api/finder/why` once per (words, clinician) and shows one sentence
 matched": "You asked for ⟨the ask⟩; ⟨name⟩ says ⟨what they say about it⟩." The finder writes the
 first half itself from its own evidence, the strongest care, manner or language ask this listing
 answers (a manner as "someone who takes time with you", a language as "someone who speaks Hindi"),
-so that half is never wrong; gpt-5-mini at effort minimal writes only the clause after "says", at
-most twelve words, from the listing alone (`src/lib/matching/why.ts`), in other words than the
-ask, and nothing where the listing says nothing about it. Nothing reaches the screen unless the
-clause is within the bound and free of any rank, promise or verdict, and the whole sentence is at
-most 26 words and free of the vocabulary's keys; the sentence stands in place of the key rows, and
-without one (level 0, Standard, a failure, nothing answered) the keys carry the person's own words
-as before.
+so that half is never wrong; gpt-5-mini at effort minimal writes only the clause after "says",
+within the words the frame leaves of twenty (at most twelve; the input names the number), from
+the listing alone (`src/lib/matching/why.ts`), in other words than the ask, and nothing where the
+listing says nothing about it. Nothing reaches the screen unless the clause is within its budget
+and free of any rank, promise or verdict, and the whole sentence is at most 20 words and free of
+the vocabulary's keys; the sentence stands in place of the key rows, and without one (level 0,
+Standard, a failure, nothing answered, a frame that leaves fewer than five words) the keys carry
+the person's own words as before. The cap was 26 until the profile with two asks not in the
+listing was measured under the sentence: 75 words. Twenty, the asks said in six words at most
+(`asked` on each manner quality) and the missed line as "Not in their listing: A, B." bring it
+inside the screen.
 
 Measured 2026-09-29: asked for the whole sentence, nano paired asks with the wrong words ("bulk
 billed" answered by "mixed billing") and mini wrote 25 to 32 words whatever number the instruction

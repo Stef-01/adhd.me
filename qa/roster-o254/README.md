@@ -11,8 +11,9 @@ group until a clinician declares one. The manner trait `unhurried` is `not_rushe
 with you", chip "Not rushed").
 
 Under "Why matched", at level 1, one sentence gpt-5-mini wrote from the request, the listing and
-the finder's own matches ("You asked for …; <name> says …", at most 26 words), in place of the key rows; at level 0, or with nothing to say, the keys carry the person's
-own words as before.
+the finder's own matches ("You asked for …; <name> says …", at most 20 words), in place of the key rows; at level 0, or with nothing to say, the keys carry the person's
+own words as before. What the person asked that the listing does not answer is one line under
+it, "Not in their listing: bulk billing, a woman clinician." (`profile-missed-*.png`, both levels).
 
 Captures at 390 and 1280: the settings sheet, results for "An adult ADHD assessment,
 telehealth, not rushed", the first profile, the profile's filters, the AI why-matched screen

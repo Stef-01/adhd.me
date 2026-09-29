@@ -390,20 +390,22 @@ const PREFERENCE_ASKED: Record<Preference, string> = {
 /** An ask as a sentence says it: a manner as someone who does it, a language as someone who speaks it. */
 export function askedFor(need: NeedSignal): string {
   const facet = need.facet;
-  if (facet.kind === "manner") return `someone who ${EI_QUALITIES[facet.trait].matchLine}`;
+  if (facet.kind === "manner") return EI_QUALITIES[facet.trait].asked;
   if (facet.kind === "language") return `someone who speaks ${facet.language}`;
   if (facet.kind === "preference") return PREFERENCE_ASKED[facet.preference];
   return labelInSentence(need);
 }
 
 /**
- * ONE LINE FOR EVERY MISSED ASK (2026-09-29): "You also asked for A and B, not in their listing."
- * Two missed asks as two sentences of fifteen words put the profile at 74, over its ceiling; one
- * line holds them at 60. "Not in their listing" is a fact about the listing, never a claim about
- * ability (W193). The asks come back separately so the surface can emphasise each.
+ * ONE LINE FOR EVERY MISSED ASK (2026-09-29): "Not in their listing: A, B." Two missed asks as
+ * two sentences of fifteen words put the profile at 74, over its ceiling; one line held them at
+ * 60, and with the model's sentence above it the same profile read 75 again, so the line lost its
+ * "You also asked for" (the sentence above already says what was asked). "Not in their listing"
+ * is a fact about the listing, never a claim about ability (W193). The asks come back separately
+ * so the surface can emphasise each.
  */
 export function missedAsksLine(needs: readonly NeedSignal[]): { before: string; asks: string[]; after: string } {
-  return { before: "You also asked for ", asks: needs.map(askedFor), after: ", not in their listing." };
+  return { before: "Not in their listing: ", asks: needs.map(askedFor), after: "." };
 }
 
 export function missedAskParts(need: NeedSignal): { before: string; label: string; after: string } {

@@ -261,7 +261,8 @@ export function ProfileStage({
                         {missedAsksLine(profileMissed.slice(0, 2)).before}
                         {missedAsksLine(profileMissed.slice(0, 2)).asks.map((ask, i, all) => (
                           <Fragment key={ask}>
-                            {i > 0 && (i === all.length - 1 ? " and " : ", ")}
+                            {/* A care label can hold a comma ("pregnancy, postpartum and new parents"): the list then parts with semicolons. */}
+                            {i > 0 && (all.some((one) => one.includes(",")) ? "; " : ", ")}
                             <strong>{ask}</strong>
                           </Fragment>
                         ))}
@@ -286,7 +287,7 @@ export function ProfileStage({
 
           <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
             <summary>
-              <span>Appointment and access</span>
+              <span>Appointments</span>
               <CaretRight size={19} weight="regular" aria-hidden="true" />
             </summary>
             <div className="profile-disclosure-body">
@@ -298,7 +299,7 @@ export function ProfileStage({
 
           <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
             <summary>
-              <span>Credentials and experience</span>
+              <span>Background</span>
               <CaretRight size={19} weight="regular" aria-hidden="true" />
             </summary>
             <div className="profile-disclosure-body">

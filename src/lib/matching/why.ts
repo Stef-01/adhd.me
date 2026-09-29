@@ -2,10 +2,12 @@
 // the user for why they are matched perfectly ... the key insights from the clinician interview").
 // One sentence under "Why matched" at level 1: "You asked for …; <name> says …". The finder writes
 // the first half itself, from the strongest ask this clinician answers, so it is never wrong; the
-// model writes only the second half, in at most twelve words, from what the clinician has said
-// about themselves, and nothing it writes reaches the screen unless it is short, free of any rank,
-// promise or verdict, and free of the vocabulary's keys. (Asked for the whole sentence, gpt-5-mini
-// wrote 25 to 32 words whatever number the instruction named, 2026-09-29.)
+// model writes only the second half, within the words the frame leaves of twenty (at most twelve),
+// from what the clinician has said about themselves, and nothing it writes reaches the screen
+// unless it is within that budget, free of any rank, promise or verdict, and free of the
+// vocabulary's keys. (Asked for the whole sentence, gpt-5-mini wrote 25 to 32 words whatever
+// number the instruction named, 2026-09-29. At 26 words the profile with two asks not in the
+// listing read 75; at 20 it fits the screen.)
 
 import { createHash } from "node:crypto";
 import { askedFor, clinicians as roster, matchEvidence } from "@/demo/clinicians";
@@ -19,11 +21,13 @@ import { callJson, type Deps } from "@/lib/llm/client";
 
 /** The clinician's half of the sentence, at most this many words; the whole sentence, at most MAX_WORDS. */
 export const MAX_CLAUSE_WORDS = 12;
-export const MAX_WORDS = 26;
+export const MAX_WORDS = 20;
+/** Under this many words a clause cannot say a thing; the finder keeps the keys instead of asking. */
+export const MIN_CLAUSE_WORDS = 5;
 
 const INSTRUCTIONS = `You finish one sentence about a clinician, for ADHD.ME, a service in Australia that lists clinicians for ADHD care. You are given what a person asked, what the clinician says about themselves, and the one thing the person asked that the clinician's listing answers.
 
-The sentence begins "You asked for <that thing>; <clinician> says". Return only the words that follow "says", beginning with "he", "she" or "they": what the clinician says about exactly that thing, in their own words rather than the words of the ask, in plain Australian English, in at most ${MAX_CLAUSE_WORDS} words. For example: "he books a longer first appointment and takes time with you", or "she works with pregnancy, postpartum and new parents".
+The sentence begins "You asked for <that thing>; <clinician> says". Return only the words that follow "says", beginning with "he", "she" or "they": what the clinician says about exactly that thing, in their own words rather than the words of the ask, in plain Australian English, within the number of words the input allows. For example: "he books a longer first appointment and takes time with you", or "she works with pregnancy, postpartum and new parents".
 
 Only what is given: never a fact, quality, outcome or comparison the clinician did not state, never a question, never the clinician's name. If the listing says nothing about that thing, return an empty string rather than something else about them. Never rate, rank, recommend or promise. Never write "specialist", "best", "expert", "treat", "cure" or "diagnose", and never give health advice.`;
 
@@ -66,29 +70,35 @@ export function clinicianInWords(clinician: Clinician): string {
 
 export { askedFor };
 
-export function whyInput(text: string, clinician: Clinician, asked: string): string {
-  return `Person asked: "${text.trim()}"\n\n${clinicianInWords(clinician)}\n\nThe thing they asked that this listing answers: ${asked}.\nFinish: "You asked for ${asked}; ${clinician.shortName} says"`;
+const words = (sentence: string) => sentence.trim().split(/\s+/).filter(Boolean).length;
+
+/** The frame the finder writes; the clause has what it leaves of MAX_WORDS, never more than MAX_CLAUSE_WORDS. */
+export const frameOf = (asked: string, clinician: Pick<Clinician, "shortName">) => `You asked for ${asked}; ${clinician.shortName} says`;
+export function clauseBudget(asked: string, clinician: Pick<Clinician, "shortName">): number {
+  return Math.min(MAX_CLAUSE_WORDS, MAX_WORDS - words(frameOf(asked, clinician)));
 }
 
-const words = (sentence: string) => sentence.trim().split(/\s+/).filter(Boolean).length;
+export function whyInput(text: string, clinician: Clinician, asked: string, budget = clauseBudget(asked, clinician)): string {
+  return `Person asked: "${text.trim()}"\n\n${clinicianInWords(clinician)}\n\nThe thing they asked that this listing answers: ${asked}.\nFinish, in at most ${budget} words: "${frameOf(asked, clinician)}"`;
+}
 const KEY = /(care|manner|pref|language):[a-z_-]+/;
 /** What the finder's own voice never says of a clinician, whatever the model wrote: a rank, a promise, a verdict. */
 const NEVER = /\b(specialist|best|expert|top|recommend\w*|guarantee\w*|promise\w*|cure\w*|diagnose|diagnoses|diagnosing|success\w*|improve\w*|outcome\w*)\b/i;
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-/** The clinician's half as the screen may show it: short, clean, never a key, without a name or "says" the model repeated. */
-export function keepClause(raw: unknown, clinician: Pick<Clinician, "shortName" | "name">): string | null {
+/** The clinician's half as the screen may show it: within its budget, clean, never a key, without a name or "says" the model repeated. */
+export function keepClause(raw: unknown, clinician: Pick<Clinician, "shortName" | "name">, budget = MAX_CLAUSE_WORDS): string | null {
   if (typeof raw !== "string") return null;
   let clause = raw.trim().replace(/^["“”']+|["“”'.]+$/g, "").trim();
   for (const lead of [clinician.name, clinician.shortName]) clause = clause.replace(new RegExp(`^${escape(lead)}\\s+`, "i"), "");
   clause = clause.replace(/^says\s+/i, "").trim();
-  if (!clause || words(clause) > MAX_CLAUSE_WORDS || KEY.test(clause) || NEVER.test(clause)) return null;
+  if (!clause || words(clause) > Math.min(budget, MAX_CLAUSE_WORDS) || KEY.test(clause) || NEVER.test(clause)) return null;
   return clause;
 }
 
 /** The whole sentence, or nothing where the two halves together would not fit the screen. */
 export function whySentence(asked: string, clinician: Pick<Clinician, "shortName">, clause: string): string | null {
-  const sentence = `You asked for ${asked}; ${clinician.shortName} says ${clause}.`;
+  const sentence = `${frameOf(asked, clinician)} ${clause}.`;
   return words(sentence) <= MAX_WORDS && !KEY.test(sentence) ? sentence : null;
 }
 
@@ -141,9 +151,11 @@ export async function whyMatched(text: string, clinician: Clinician, deps: Deps 
   const held = cachedWhy(text, clinician.id);
   if (held) return { sentences: held, source: "llm" };
   const asked = askedFor(strongest);
+  const budget = clauseBudget(asked, clinician);
+  if (budget < MIN_CLAUSE_WORDS) return { sentences: [], source: "none" };
   try {
-    const { data } = await callJson<{ says?: unknown }>({ ...WHY_CALL, input: whyInput(text, clinician, asked) }, deps);
-    const clause = keepClause(data?.says, clinician);
+    const { data } = await callJson<{ says?: unknown }>({ ...WHY_CALL, input: whyInput(text, clinician, asked, budget) }, deps);
+    const clause = keepClause(data?.says, clinician, budget);
     const sentence = clause ? whySentence(asked, clinician, clause) : null;
     const sentences = sentence ? [sentence] : [];
     // An empty answer is not remembered: the next tap may draw a clause that fits.

@@ -64,6 +64,12 @@ interface EIQualityDef {
   short?: string;
   /** The reason fragment when it matches, addressed to the reader. */
   matchLine: string;
+  /**
+   * The quality as the person asked for it, after "You asked for": six words at most, so the why
+   * sentence and the "not in their listing" line fit the screen (2026-09-29; the match line ran to
+   * eleven words there, and a profile read 75).
+   */
+  asked: string;
   /** Words that EXPRESS a preference for this quality. Preference, never a diagnosis of the reader. */
   cues: readonly string[];
 }
@@ -73,6 +79,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Listens and takes you seriously",
     short: "Taken seriously",
     matchLine: "listens and takes you seriously",
+    asked: "someone who listens",
     cues: [
       /* O123: this facet's cues are all CARE-EXPERIENCE — "feel heard", "dismissed", "brushed
          off", "not believed", a register about how appointments have gone. "I need someone who
@@ -129,6 +136,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Calm and steadying",
     short: "Calm",
     matchLine: "has a calm, steadying manner",
+    asked: "someone calm",
     cues: [
       /* O128: "interrogated" as well as O125's "interrogation" — stem() takes them to
          "interrogat" and "interrogation", which do not meet. The VERB is how people say it
@@ -143,6 +151,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Helps it make sense",
     short: "Making sense",
     matchLine: "helps you make sense of what is going on",
+    asked: "someone who helps it make sense",
     cues: [
       /* O139 WROTE "what adhd actually is" HERE AND THE PINS REVERSED IT — SPAN THEFT, the third
          instance of this exact failure. The cue strips to [adhd, actually] and CONSUMES the
@@ -174,6 +183,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   motivating: {
     label: "Strengths-focused",
     matchLine: "works from your strengths, not only the problems",
+    asked: "someone who works from your strengths",
     // "a plan i can" degenerated to the single token "plan" once stopwords were stripped, which
     // made ANY mention of a plan read as a strengths preference — including the structured
     // clarifier's own answer. The O7 self-reach pin caught it; the cue now keeps its verb.
@@ -195,6 +205,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Takes time with you",
     short: "Not rushed",
     matchLine: "takes time with you",
+    asked: "someone who takes time with you",
     cues: [
       /* O116: the clock, and the full appointment as opposed to the doorway version. */
       "watch the clock", "the full appointment", "move too fast", "not rushed", "won't rush", "wont rush", "longer appointment", "longer first", "feel rushed", "always rushed", "enough time", "time to explain", "not a number",
@@ -242,6 +253,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
   non_judgmental: {
     label: "Non-judgmental",
     matchLine: "is non-judgmental, so you can be honest",
+    asked: "someone non-judgmental",
     cues: [
       /* O125: the sex-based dismissal women describe. It takes no span `manner:attuned` reads —
          that facet's cue is "not believed", a different pair.
@@ -272,6 +284,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Explains and decides with you",
     short: "Shared decisions",
     matchLine: "explains the options and decides them with you",
+    asked: "shared decisions",
     // O13: the facet's own name was not a cue — "a collaborative GP" reached nothing.
     cues: [
       /* O140: asking to be IN the decisions, which is this facet's own label read back. It also
@@ -303,6 +316,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "Understands your background",
     short: "Your background",
     matchLine: "understands your background and family",
+    asked: "someone who understands your background",
     // O13: "culturally sensitive" missed — "culturally" does not stem to "culture".
     cues: [
       /* O139: naming English as a second language is how the ask arrives when somebody is not
@@ -353,6 +367,7 @@ export const EI_QUALITIES: Record<EIQuality, EIQualityDef> = {
     label: "A structured, measured approach",
     short: "Structured",
     matchLine: "works to a documented baseline and follows up on a schedule",
+    asked: "a structured approach",
     // O13: "methodical" is the plain word for this way of working and missed (kept through the
     // merge alongside main's continuity family below).
     cues: [

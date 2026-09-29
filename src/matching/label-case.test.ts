@@ -73,12 +73,12 @@ describe("O118 lowering a label into a sentence", () => {
 
   it("the sentence is composed once and read everywhere", () => {
     const need = needsFor("I want ADHD assessment", clinicians)[0]!;
-    expect(missedAskCopy(need)).toContain("not in their listing");
+    expect(missedAskCopy(need)).toContain("Not in their listing");
     // Two missed asks are one line, not two sentences (the profile's ceiling, 2026-09-29).
     const two = needsFor("a woman GP who bulk bills", clinicians);
     const line = missedAsksLine(two);
     expect(line.asks).toHaveLength(2);
-    expect(`${line.before}${line.asks.join(" and ")}${line.after}`).toBe("You also asked for bulk billing and a woman clinician, not in their listing.");
+    expect(`${line.before}${line.asks.join(", ")}${line.after}`).toBe("Not in their listing: bulk billing, a woman clinician.");
     // W193: a fact about a declaration, never a claim about ability.
     for (const forbidden of ["cannot", "unable", "does not do"]) {
       expect(missedAskCopy(need).toLowerCase()).not.toContain(forbidden);
