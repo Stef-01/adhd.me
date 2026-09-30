@@ -78,6 +78,7 @@
 .first-steps ol { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; counter-reset: step; }
 .first-steps li { display: grid; grid-template-columns: 20px minmax(0, 1fr); font-size: 15px; line-height: 1.45; color: var(--ink); counter-increment: step; }
 .first-steps li::before { content: counter(step); color: var(--accent-deep); font-weight: 600; font-variant-numeric: tabular-nums; }
+@media (min-width: 1024px) { .first-steps ol { grid-template-columns: repeat(3, auto); justify-content: start; column-gap: 40px; } .first-steps li { white-space: nowrap; } }
 /* What we heard: the strongest facets of the words above, as chips. A tap takes one out (struck
    through, dashed) and a second puts it back, in place, so nothing on the row moves. */
 .heard-row { margin: 12px 0 0; }
