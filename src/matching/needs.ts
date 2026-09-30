@@ -990,9 +990,13 @@ const RUN_DEMANDED = new Set([
 const DISCLOSURE_WORDS = new Set(["adhd", "diagnosis", "diagnosed"]);
 /** "understands ADHD", "knows about adult ADHD", "experienced with ADHD in women": the clinician's knowledge, not the person's ask. */
 const KNOWS_ADHD = /\b(?:understands?|understanding|understood|knows?|gets|familiar with|experienced? (?:with|in)|works? with|good with|trained in|knowledge of)\s+(?:about\s+)?(?:adult\s+|adults with\s+|women'?s\s+|women with\s+|childhood\s+|my\s+)?adhd\b/gi;
+/** A reassessment named as the thing to avoid. */
+const REASSESSMENT_SPARED = /\b(?:minimal|minimum|less|little|avoid\w*|skip\w*|spare\w*|(?:don'?t|do not|didn'?t) (?:need|want)|no need (?:for|to)|rather not|without|instead of)\s+(?:(?:a|an|any|another|the|more|further|to be|being|having|going through)\s+)*reassess/i;
+/** "ADHD coaching", "ADHD medication", "ADHD strategies": the help is named, and it is not an assessment. */
+const ADHD_HELP = /\badhd\s+(?:coach(?:ing|es)?|medications?|meds|medicine|scripts?|prescriptions?|therap(?:y|ist|ists)|counsell?(?:ing|or|ors)|strateg(?:y|ies)|skills?|management)\b/gi;
 function adhdOnlyAsWhatTheyKnow(text: string): boolean {
   const named = text.match(/\badhd\b/gi)?.length ?? 0;
-  return named > 0 && (text.match(KNOWS_ADHD)?.length ?? 0) >= named;
+  return named > 0 && (text.match(KNOWS_ADHD)?.length ?? 0) + (text.match(ADHD_HELP)?.length ?? 0) >= named;
 }
 
 export function readNeeds(text: string): NeedSignal[] {
@@ -1080,11 +1084,17 @@ export function readNeeds(text: string): NeedSignal[] {
       ) {
         continue;
       }
-      /* O263: ADHD named only as what the clinician should know is no assessment ask. "someone who
-         understands adult ADHD from personal experience" (a simulated patient, 2026-09-30) was read as an
-         ADHD assessment for a person diagnosed the year before. The bare word stands down when every
-         "ADHD" in the sentence is governed that way; an assessment asked for in its own words still reaches. */
+      /* O263: ADHD named only as what the clinician should know, or as the kind of coaching, medication
+         or therapy wanted, is no assessment ask. "someone who understands adult ADHD from personal
+         experience" and "ADHD coaching focused on work" (simulated patients, 2026-09-30) were read as an
+         ADHD assessment for people diagnosed years before. The bare word stands down when every "ADHD"
+         in the sentence is governed that way; an assessment asked for in its own words still reaches. */
       if (facetKey(cue.entry.facet) === "care:adhd-assessment" && cue.phrase === "adhd" && adhdOnlyAsWhatTheyKnow(text)) {
+        continue;
+      }
+      /* O263: "minimal reassessment", "I don't need to be reassessed": the reassessment is what they are
+         asking to be spared (a simulated patient on stable scripts, 2026-09-30). */
+      if (facetKey(cue.entry.facet) === "care:adhd-assessment" && (cue.phrase === "reassessment" || cue.phrase === "reassessed") && REASSESSMENT_SPARED.test(text)) {
         continue;
       }
       /* O262: a soft non-medication cue declines nothing on its own. "strategies first, tablets later" is
@@ -1147,6 +1157,8 @@ export function readNeeds(text: string): NeedSignal[] {
     sentence,
     candidates.map((candidate) => ({
       from: candidate.from,
+      to: candidate.to,
+      tight: candidate.to - candidate.from + 1 === candidate.at.length,
       negatable:
         candidate.cue.entry.facet.kind === "care" || candidate.cue.entry.facet.kind === "preference",
     })),

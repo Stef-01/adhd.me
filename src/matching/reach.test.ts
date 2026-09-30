@@ -911,6 +911,29 @@ describe("§O103 non-medication is asked in three registers, and the cues hear t
     expect(facets("With someone that would help me at work. with my needs with focusing.")).toEqual(expect.arrayContaining(["care:work-career", "care:executive-function"]));
   });
 
+  it("does not read an assessment they say they do not need as an assessment ask (O263)", () => {
+    for (const said of ["I don't need an assessment", "I do not need an assessment", "we don't need another assessment", "I don't want an assessment, just coaching", "I was diagnosed two years ago and I don't need an assessment"]) {
+      expect(facets(said), said).not.toContain("care:adhd-assessment");
+    }
+    expect(facets("I need an assessment")).toContain("care:adhd-assessment");
+    expect(facets("I don't need a referral, I need an assessment")).toContain("care:adhd-assessment");
+  });
+
+  it("does not read ADHD named as the kind of help as an assessment ask (O263)", () => {
+    expect(facets("ADHD coaching focused on work-related focus and getting things done")).not.toContain("care:adhd-assessment");
+    expect(facets("help with my ADHD medication")).not.toContain("care:adhd-assessment");
+    expect(facets("ADHD coaching, and I think I have ADHD too")).toContain("care:adhd-assessment");
+  });
+
+  it("does not read a reassessment they ask to be spared as an assessment ask (O263)", () => {
+    expect(facets("I need continuation of prescriptions and minimal reassessment")).not.toContain("care:adhd-assessment");
+    expect(facets("I don't need to be reassessed, just my scripts")).not.toContain("care:adhd-assessment");
+    expect(facets("without another reassessment if possible")).not.toContain("care:adhd-assessment");
+    // Asked for, it still reaches.
+    expect(facets("I was diagnosed as a child and want a reassessment")).toContain("care:adhd-assessment");
+    expect(facets("can I be reassessed as an adult")).toContain("care:adhd-assessment");
+  });
+
   it("does not read ADHD named as what the clinician should know as an assessment ask (O263)", () => {
     expect(facets("I'd prefer someone who understands adult ADHD from personal experience")).not.toContain("care:adhd-assessment");
     expect(facets("a psychologist who knows about ADHD")).not.toContain("care:adhd-assessment");

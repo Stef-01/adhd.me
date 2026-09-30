@@ -474,7 +474,12 @@ function desireNegationEnds(sentence: readonly string[]): number[] {
  */
 export function suppressedByDesireNegation(
   sentence: readonly string[],
-  spans: readonly { from: number; negatable: boolean }[],
+  /**
+   * `to` is the span's last token, and `tight` says its words sit side by side, where the caller
+   * knows them: a cue inside another's words is the same object, and only a tight cue can begin on
+   * the negated verb itself.
+   */
+  spans: readonly { from: number; to?: number; tight?: boolean; negatable: boolean }[],
   /**
    * O105: content-token positions a comma sits before, from `commaBreaksBefore`. Optional so
    * every existing caller and test keeps its exact behaviour; omitted means "no commas known",
@@ -486,7 +491,13 @@ export function suppressedByDesireNegation(
   for (const end of desireNegationEnds(sentence)) {
     let nearestFrom = Infinity;
     for (const span of spans) {
-      if (span.from <= end) continue;
+      /* O263: a cue that BEGINS with the negated verb is that negation's object. "want an assessment"
+         and "need an assessment" became cues at O260, and "I don't need an assessment" then reached the
+         assessment: the trigger [dont, need] ends on the token the cue starts on, and a span had to
+         start after it to be seen. Only a cue whose words sit side by side: "I don't need a referral,
+         I need an assessment" also matches [need … assessment] from the first "need", across the
+         referral, and that match is the matcher's reach, not the sentence's object. */
+      if (span.from < end || (span.from === end && !span.tight)) continue;
       if (span.from - end - 1 > MAX_NEGATION_LEAD) continue;
       let boundaryBetween = false;
       for (let k = end + 1; k <= span.from; k++) {
@@ -510,8 +521,12 @@ export function suppressedByDesireNegation(
       if (span.from < nearestFrom) nearestFrom = span.from;
     }
     if (nearestFrom === Infinity) continue;
+    /* O263: the object runs as far as the longest cue that starts it. "I don't need an assessment"
+       matches "need an assessment" and, inside it, the bare "assessment": one thing refused, said by
+       two cues, and the second used to reach because it starts one token later. */
+    const nearestTo = Math.max(...spans.filter((span) => span.from === nearestFrom).map((span) => span.to ?? span.from));
     spans.forEach((span, index) => {
-      if (span.from === nearestFrom && span.negatable) suppressed.add(index);
+      if (span.from >= nearestFrom && span.from <= nearestTo && span.negatable) suppressed.add(index);
     });
   }
   return suppressed;

@@ -257,6 +257,19 @@ describe("the request the answers make", () => {
     expect(languagesNamed("someone who speaks Hindi")).toEqual(["Hindi"]);
   });
 
+  it("asks for nothing when their own culture is the one most of the roster shares", () => {
+    expect(compose([answer("culture", "Yes."), answer("which-culture", "Australian")]).request).toBe("");
+    expect(compose([answer("culture", "Yes, Australian.")]).request).toBe("");
+    expect(compose([answer("culture", "English-speaking, preferably Australian background.")]).request).toBe("");
+    expect(compose([answer("culture", "Yes please"), answer("which-culture", "Just Aussie, thanks")]).request).toBe("");
+    // The first peoples' cultures are asked for by name, and another culture beside it is an ask.
+    expect(compose([answer("culture", "Yes."), answer("which-culture", "Aboriginal Australian")]).request).toBe(`${CULTURE_ASK}, Aboriginal Australian`);
+    // A word that is a people and a language asks for both: "Greek" is who they are, and what they may want spoken.
+    expect(compose([answer("culture", "Yes."), answer("which-culture", "Greek Australian")]).request).toBe(`${CULTURE_ASK}, Greek Australian. someone who speaks Greek`);
+    expect(compose([answer("culture", "Yes, Vietnamese.")]).request).toBe(`${CULTURE_ASK}, Vietnamese. someone who speaks Vietnamese`);
+    expect(keys(`${CULTURE_ASK}, Aboriginal Australian`)).toEqual(["care:cultural-background"]);
+  });
+
   it("keeps their own sentence about culture, and adds the ask only where theirs does not read as one", () => {
     const theirs = "I'd like to understand traditional Indian culture and be able to speak Hindi.";
     expect(compose([answer("culture", theirs)]).request).toBe("I'd like to understand traditional Indian culture and be able to speak Hindi");

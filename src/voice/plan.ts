@@ -383,7 +383,7 @@ function rest(text: string): string {
 }
 
 /** The words around a name in a short answer: "my background is Indian", "someone who speaks Hindi please". */
-const AROUND_A_NAME = /\b(and|or|a|an|the|my|own|our|culture|cultural|background|language|languages|someone|somebody|who|speaks?|speaking|from|is|i'?m|i am|we'?re|we are|family|heritage|please|would|be|good|great|ideal|preferably|if possible|maybe|probably|mainly|mostly|just|thanks)\b/gi;
+const AROUND_A_NAME = /\b(and|or|a|an|the|my|own|our|culture|cultural|background|language|languages|someone|somebody|who|speaks?|speaking|from|is|i'?m|i am|we'?re|we are|family|heritage|please|would|be|good|great|ideal|fine|preferably|prefer|if possible|maybe|probably|mainly|mostly|just|only|thanks|born|raised)\b/gi;
 
 /**
  * A culture or a language named in a short answer, in the finder's words; nothing when it names neither.
@@ -394,18 +394,40 @@ function cultureParts(text: string, question: QuestionId): string[] {
   const left = text.replace(LEAD, "").trim();
   const languages = languagesNamed(left).filter((language) => language !== "English");
   const parts = languages.map((language) => `someone who speaks ${language}`);
-  const named = left
-    .replace(new RegExp(`\\b(${LANGUAGES.join("|")}|english)\\b`, "gi"), " ")
-    .replace(AROUND_A_NAME, " ")
-    .replace(/[^\p{L}\s-]/gu, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  const names = named.split(" ").filter(Boolean);
+  const names = namesIn(left);
   const written = names.every((name) => /^\p{Lu}/u.test(name));
   if (names.length >= 1 && names.length <= 3 && (written || question === "which-culture")) {
     parts.unshift(`${CULTURE_ASK}, ${names.map((name) => name.charAt(0).toUpperCase() + name.slice(1)).join(" ")}`);
   }
   return parts;
+}
+
+/** Languages that name no people: "Hindi" is spoken, "Greek" is spoken and is also who somebody is. */
+const LANGUAGE_ONLY = ["English", "Hindi", "Urdu", "Mandarin", "Cantonese", "Shanghainese", "Tagalog", "Farsi", "Dari", "Swahili", "Amharic", "Hebrew", "Auslan"];
+
+/** The names left in a short answer once the languages that are only languages, and the words around a name, are out. */
+function namesIn(text: string): string[] {
+  return text
+    .replace(new RegExp(`\\b(${LANGUAGE_ONLY.join("|")})\\b`, "gi"), " ")
+    .replace(AROUND_A_NAME, " ")
+    .replace(/[^\p{L}\s-]/gu, " ")
+    .split(/\s+/)
+    .map((word) => word.replace(/^-+|-+$/g, ""))
+    .filter((word) => /\p{L}/u.test(word));
+}
+
+/**
+ * The culture most of the roster shares: "Australian", "just English", "Anglo". An answer that names
+ * it and nothing else asks for nothing the list can use, and "works with cultural background" on a
+ * listing means other cultures than this one (a simulated patient, 2026-09-30: "preferably Australian
+ * background"). Aboriginal and Torres Strait Islander cultures are asked for by their own names.
+ */
+const PLAIN_CULTURE = /^(australian|aussie|anglo|english|western|white|caucasian)$/i;
+const FIRST_PEOPLES = /\b(aboriginal|indigenous|torres strait|first nations|koori|murri|noongar|wiradjuri)\b/i;
+function plainCulture(text: string): boolean {
+  if (FIRST_PEOPLES.test(text) || languagesNamed(text).some((language) => language !== "English")) return false;
+  const words = text.replace(LEAD, "").replace(AROUND_A_NAME, " ").replace(/[^\p{L}\s-]/gu, " ").split(/\s+/).map((word) => word.replace(/^-+|-+$/g, "")).filter((word) => /\p{L}/u.test(word));
+  return words.length > 0 && words.length <= 3 && words.every((word) => PLAIN_CULTURE.test(word));
 }
 
 /** True when the words ask for a culture or a language in a way the finder reads. */
@@ -418,6 +440,7 @@ function readsCulture(text: string): boolean {
 export function compose(answers: readonly Answer[]): { request: string; place: string } {
   const parts: string[] = [];
   let place = "";
+  let plain = false;
   for (const answer of answers) {
     const text = withoutQuestions(answer.text.trim());
     if (!readable(text)) continue;
@@ -448,6 +471,11 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         break;
       case "culture":
       case "which-culture": {
+        if (plainCulture(text)) {
+          // Their own culture is the one most of the roster shares: the yes before it asks for nothing either.
+          plain = true;
+          break;
+        }
         if (ENGLISH_ONLY.test(text) || (no && !more)) break;
         const named = cultureParts(text, answer.question);
         const theirs = yes || no ? more : text;
@@ -472,7 +500,7 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
   const named = parts.some((part) => part.startsWith(`${CULTURE_ASK}, `));
   const unique = parts
     .map((part) => part.replace(/[\s.,;:!?]+$/, ""))
-    .filter((part, at, all) => part && all.indexOf(part) === at && !(named && part === CULTURE_ASK));
+    .filter((part, at, all) => part && all.indexOf(part) === at && !((named || plain) && part === CULTURE_ASK));
   if (!place) place = placeIn(textOf(answers));
   // What they named as hard, in the finder's words, where their own words do not already read as it.
   const readSoFar = keysOf(unique.join(". "));
