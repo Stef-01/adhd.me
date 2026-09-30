@@ -77,8 +77,7 @@ export function BookingStage({
           <>
             <p>{clinician.booking.note}</p>
             <p className="booking-note">
-              You book with {clinician.practice}. ADHD.ME does not see your booking and no
-              medical details are entered here.
+              You book with {clinician.practice}. ADHD.ME never sees it.
             </p>
           </>
         )}

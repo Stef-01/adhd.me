@@ -226,3 +226,10 @@
 }
 .platform-shell .patient-v2 .finder-example:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) { .platform-shell .patient-v2 .finder-example:hover { border-color: var(--accent); } }
+
+/* Booking sits on the same grid and type as the profile it came from: the shell's gutter, not a
+   second inset inside it, and the name at the profile's size rather than a display headline. */
+.platform-shell .booking-content { padding: 20px 0 20px; }
+.platform-shell .booking-content h1 { font-family: inherit; font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -.025em; text-wrap: balance; }
+.platform-shell .booking-content h1 + p { margin-top: 12px; }
+.platform-shell .booking-screen .bottom-action { padding-inline: 0; }

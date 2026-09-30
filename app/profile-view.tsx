@@ -472,7 +472,8 @@ export function ProfileView() {
           for, with the count the filters leave. It goes to the finder, which resumes the search. */}
       <div className="me-sticky">
         <Link className="me-show" href="/">
-          Show <span key={shownCount} className="t-digit">{shownCount}</span> provider{shownCount === 1 ? "" : "s"}
+          {/* One label, so the flex gap sits only between it and the arrow. */}
+          <span>Show <span key={shownCount} className="t-digit">{shownCount}</span> provider{shownCount === 1 ? "" : "s"}</span>
           <ArrowRight size={16} weight="bold" aria-hidden="true" />
         </Link>
       </div>
