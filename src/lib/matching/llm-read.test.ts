@@ -159,3 +159,10 @@ describe("readRequest", () => {
     expect(await pending).toMatchObject({ keys: lexicon.keys, source: "lexicon", error: expect.stringMatching(/^TimeoutError/) });
   });
 });
+
+describe("a quote shown as the person's words", () => {
+  it("leaves out the label the voice finder wrote before the answer", () => {
+    const text = "My child's age: She's nine. Hardest for my child: She cries over homework";
+    expect(grounded([{ key: "care:child-adolescent-adhd", quote: "My child's age: She's nine." }, { key: "care:study-school", quote: "Hardest for my child: She cries over homework" }], text).map((n) => n.quote)).toEqual(["She's nine.", "She cries over homework"]);
+  });
+});
