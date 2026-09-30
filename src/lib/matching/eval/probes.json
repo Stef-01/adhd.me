@@ -641,5 +641,93 @@
     "never": [
       "care:non-medication"
     ]
+  },
+  {
+    "text": "since my periods stopped I can't hold a thought, I'm 53 and wondering if it's ADHD",
+    "reaches": [
+      "care:womens-health",
+      "care:adhd-assessment"
+    ],
+    "never": [
+      "care:child-adolescent-adhd"
+    ]
+  },
+  {
+    "text": "night sweats, no sleep and now I forget everything at work, could this be ADHD",
+    "reaches": [
+      "care:adhd-assessment"
+    ],
+    "aspires": [
+      "care:womens-health"
+    ]
+  },
+  {
+    "text": "my Vyvanse stopped working when perimenopause hit",
+    "reaches": [
+      "care:womens-health"
+    ],
+    "aspires": [
+      "care:titration"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "I'm on HRT and still foggy, I'd like a woman doctor who gets ADHD in midlife",
+    "reaches": [
+      "care:womens-health",
+      "pref:woman-gp"
+    ]
+  },
+  {
+    "text": "a female GP who can look at menopause and ADHD in the same appointment, I speak Arabic",
+    "reaches": [
+      "care:womens-health",
+      "pref:woman-gp",
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "in my family you don't see a doctor about your head, but the change has made everything so much harder",
+    "aspires": [
+      "care:womens-health"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "I'm autistic and think I have ADHD as well",
+    "reaches": [
+      "care:autism-adhd",
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "AuDHD, burnt out from masking at work, need someone who gets both",
+    "reaches": [
+      "care:autism-adhd"
+    ],
+    "aspires": [
+      "care:work-career"
+    ]
+  },
+  {
+    "text": "loud waiting rooms are too much for me, I need someone who understands sensory stuff and ADHD",
+    "reaches": [
+      "care:autism-adhd"
+    ]
+  },
+  {
+    "text": "my autistic son might have ADHD too, the school says he can't focus",
+    "reaches": [
+      "care:autism-adhd",
+      "care:adhd-assessment"
+    ],
+    "aspires": [
+      "care:child-adolescent-adhd",
+      "care:study-school"
+    ]
   }
 ]

@@ -206,7 +206,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   const read = modelNeeds ?? ownRead;
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
   /** For a parent, three first steps above the list (src/finder/first-steps.ts); the list then opens on three rows. */
-  const steps = useMemo(() => (reading ? null : firstSteps(heardFacets.map((chip) => chip.key).filter((key) => !removed.has(key)))), [reading, heardFacets, removed]);
+  const steps = useMemo(() => (reading ? null : firstSteps(heardFacets.map((chip) => chip.key).filter((key) => !removed.has(key)), request)), [reading, heardFacets, removed, request]);
   const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
   /** A removed facet is no reason for a row or a profile either. */
   const removedLabels = useMemo(() => {

@@ -17,10 +17,11 @@
 
 import { facetKey, readNeeds } from "@/matching/needs";
 import { said as number } from "@/model/crisis-contacts";
+import { MIDLIFE } from "@/finder/first-steps";
 import { OPENING_QUESTION } from "./interviewer";
 
 /** What a person can be asked. "detail" is one question said one of six ways. */
-export type QuestionId = "opening" | "detail" | "age" | "raised" | "place" | "lived" | "culture" | "which-culture" | "extra" | "carry-on";
+export type QuestionId = "opening" | "detail" | "age" | "raised" | "first-look" | "woman" | "place" | "lived" | "culture" | "which-culture" | "extra" | "carry-on";
 
 /** Every sentence the finder says itself. Each is recorded once (public/voice, scripts/voice-clips.mjs). */
 export const SAY_IDS = [
@@ -35,6 +36,8 @@ export const SAY_IDS = [
   "detail-child",
   "age",
   "raised",
+  "first-look",
+  "woman",
   "place",
   "lived",
   "culture",
@@ -69,6 +72,9 @@ export const SENTENCES: Record<SayId, Sentence> = {
   "detail-child": { text: "What's hardest for them right now?" },
   age: { text: "How old are they?" },
   raised: { text: "Has anyone raised ADHD with you before?" },
+  // For a woman at midlife (docs/matching/MIDLIFE-FLOW.md).
+  "first-look": { text: "A first look, or care you already have?" },
+  woman: { text: "Would you prefer a woman clinician?" },
   place: { text: "Where are you, or would telehealth suit you?" },
   lived: { text: "Would you like someone who has ADHD themselves?" },
   culture: { text: "Would you like someone from your own culture?" },
@@ -196,10 +202,10 @@ export function formFrom(text: string): Form {
  * next question need not wait on the model ("Yes.", "No thanks.", "Yeah, that'd be great.").
  */
 const PLAIN = /^\s*(yes|yeah|yep|yup|sure|no|nope|nah)[,.!]?(\s+(please|thanks|thank you|not really|that would be (great|good|nice|lovely)|that'?d be (great|good|nice|lovely)|that'?s fine))?[.!]?\s*$/i;
-const YES_OR_NO: readonly QuestionId[] = ["lived", "culture", "raised", "carry-on"];
+const YES_OR_NO: readonly QuestionId[] = ["lived", "culture", "raised", "woman", "carry-on"];
 export const plainAnswer = (question: QuestionId, text: string): Form | null => (YES_OR_NO.includes(question) && PLAIN.test(text) ? formFrom(text) : null);
 
-const ASKS_YES_OR_NO: readonly QuestionId[] = ["place", "lived", "culture", "raised", "carry-on"];
+const ASKS_YES_OR_NO: readonly QuestionId[] = ["place", "lived", "culture", "raised", "woman", "carry-on"];
 
 /**
  * A form as it stands for the question it answers: a yes to "…or would telehealth suit you?" is
@@ -257,7 +263,7 @@ export function withoutQuestions(text: string): string {
 // ── The plan ─────────────────────────────────────────────────────────────────────────────────────
 
 /** The questions, in the order they are asked. "carry-on" is asked only after urgent help. */
-const ORDER: readonly QuestionId[] = ["opening", "detail", "age", "raised", "place", "lived", "culture", "which-culture", "extra"];
+const ORDER: readonly QuestionId[] = ["opening", "detail", "age", "raised", "first-look", "woman", "place", "lived", "culture", "which-culture", "extra"];
 
 /**
  * The part of life a first answer names, by the plain mention of it, and the sentence that asks what is
@@ -304,6 +310,12 @@ export const aboutChild = (answers: readonly Answer[]) => of(answers, "opening")
 const AGED = /\b\d{1,2}\b|\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen)\b|\b(toddler|kindy|kindergarten|preschool|daycare|primary|high school|teenager|teen)\b/i;
 /** ADHD raised by someone, or a diagnosis, already said. */
 const RAISED = /\b(teacher|school|daycare|kindy|paediatrician|pediatrician|psychologist|doctor|gp)\b.{0,40}\b(said|says|thinks|think|raised|mentioned|suggested|told|wants|reckons)\b|\b(diagnos\w*|assessed|medication|meds|tablets|dose|ritalin|vyvanse|concerta|dexamphetamine|dex)\b|\b(with|has|have) adhd\b/i;
+/** Midlife heard in the first answer: the change itself, or an age in the late forties or fifties. */
+export const atMidlife = (answers: readonly Answer[]) => !aboutChild(answers) && of(answers, "opening").some((answer) => MIDLIFE.test(answer.text));
+/** Care she already has, or an assessment she asks for: a first look or not, already said. */
+const KNOWN = /\b(diagnos\w*|my (medication|meds|dose|script|prescription|prescriber|psychiatrist)|vyvanse|ritalin|concerta|dexamphetamine|stimulants?|assess\w*|could (this|it) be adhd|is (this|it) adhd|might (have|be) adhd)\b/i;
+/** A woman asked for, or said not to matter. */
+const WOMAN = /\b(woman|women|female|lady|gender|man|male)\b/i;
 const opening = (answers: readonly Answer[]) => of(answers, "opening", "carry-on").map((answer) => answer.text).join(". ");
 
 /**
@@ -335,6 +347,10 @@ function sayFor(question: QuestionId, answers: readonly Answer[]): SayId | null 
       return aboutChild(answers) && !AGED.test(opening(answers)) ? "age" : null;
     case "raised":
       return aboutChild(answers) && !RAISED.test(opening(answers)) ? "raised" : null;
+    case "first-look":
+      return atMidlife(answers) && !KNOWN.test(opening(answers)) ? "first-look" : null;
+    case "woman":
+      return atMidlife(answers) && !answers.some((answer) => WOMAN.test(answer.text)) ? "woman" : null;
     case "place":
       return answers.some((answer) => answer.form.place || answer.form.telehealth) ? null : "place";
     case "lived":
@@ -365,6 +381,7 @@ export function nextQuestion(answers: readonly Answer[], done: readonly Question
 
 export const LIVED_ASK = "someone who has ADHD themselves";
 export const CULTURE_ASK = "someone from my own culture";
+export const WOMAN_ASK = "a woman clinician";
 export const TELEHEALTH_ASK = "telehealth is fine";
 export const MAX_REQUEST = 2000;
 /** An answer to a yes-or-no question this long says more than yes or no, and is kept as it was said. */
@@ -401,6 +418,13 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         break;
       case "raised":
         if (readable(text) && !(form.yes_no === "no" && !more)) (theirs = true), said(form.yes_no === "yes" && !more ? "Someone has raised ADHD about my child before" : `Whether ADHD was raised before: ${text}`);
+        break;
+      case "first-look":
+        if (readable(text)) (theirs = true), said(`A first look at ADHD, or care I already have: ${text}`);
+        break;
+      case "woman":
+        if (form.yes_no === "yes" && settledOn(answers, "woman") === "yes") parts.push(...(more && WOMAN.test(more) ? [more] : [WOMAN_ASK, ...(more ? [more] : [])]));
+        else if (more && form.yes_no !== "yes") parts.push(more);
         break;
       case "place":
         if (more && !form.place && !form.telehealth) parts.push(more);

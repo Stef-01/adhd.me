@@ -552,3 +552,10 @@
 {"time":"2026-09-30T15:32:13.849Z","kind":"eval","persona":"priya","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0025,"pass":true}
 {"time":"2026-09-30T15:32:13.850Z","kind":"eval","persona":"dan","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0017,"pass":false}
 {"time":"2026-09-30T15:32:13.850Z","kind":"eval","persona":"refusal","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0011,"pass":false}
+{"time":"2026-09-30T16:30:13.116Z","kind":"eval","persona":"mei","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0013,"pass":true}
+{"time":"2026-09-30T16:30:13.116Z","kind":"eval","persona":"fatima","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0017,"pass":true}
+{"time":"2026-09-30T16:30:13.117Z","kind":"eval","persona":"audhd","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0019,"pass":false}
+{"time":"2026-09-30T16:30:13.122Z","kind":"eval","persona":"adult","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0016,"pass":true}
+{"time":"2026-09-30T16:30:13.123Z","kind":"eval","persona":"postpartum","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0018,"pass":true}
+{"time":"2026-09-30T16:30:28.265Z","kind":"clips","model":"gpt-realtime-2.1-mini","voice":"marin","recorded":2,"costUsd":0.0026}
+{"time":"2026-09-30T16:30:51.400Z","kind":"clips","model":"gpt-realtime-2.1-mini","voice":"marin","recorded":1,"costUsd":0.0013}

@@ -118,6 +118,25 @@ export const PERSONAS = {
     never: [],
     urgent: true,
   },
+  // Midlife and AuDHD (2026-10-01).
+  mei: {
+    brief: "You are 51, in Chatswood. Since perimenopause began your memory and focus have fallen apart and you wonder if it is ADHD; you have never been assessed. You would prefer a woman. You speak Mandarin and would like a Mandarin-speaking clinician. Telehealth is fine.",
+    style: "Polite, a little hesitant.",
+    expect: ["care:womens-health", "care:adhd-assessment", "pref:woman-gp", "language:mandarin"],
+    never: ["care:child-adolescent-adhd"],
+  },
+  fatima: {
+    brief: "You are 54, diagnosed with ADHD years ago; your medication stopped working well since menopause. You want a woman doctor, it matters a lot to you. You are in Auburn, in person.",
+    style: "Direct.",
+    expect: ["care:womens-health", "care:titration", "pref:woman-gp"],
+    never: ["care:adhd-assessment"],
+  },
+  audhd: {
+    brief: "You are 30, diagnosed autistic at 25, and now think you have ADHD too. You are burnt out from masking at work. Busy waiting rooms overwhelm you, so telehealth. You live in Newcastle.",
+    style: "Precise, literal.",
+    expect: ["care:autism-adhd", "care:adhd-assessment"],
+    never: ["care:child-adolescent-adhd"],
+  },
   // Child flows (docs/matching/CHILD-FLOWS.md, 2026-10-01).
   priya: {
     brief: "Your daughter is seven. You are not sure it is ADHD: she cries over homework every night, loses everything and cannot finish her work. Nobody has raised ADHD with you; you just want to know where to start. You are in Blacktown; telehealth is fine. Only say these things when asked.",

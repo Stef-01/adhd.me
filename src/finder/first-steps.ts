@@ -1,11 +1,12 @@
 // First steps for a parent (docs/matching/CHILD-FLOWS.md): above the list, three short steps chosen
 // by what a request about a child was read as asking for. The steps are about what to do, never
 // about the child, and each is grounded in the plan's sources (AADPA guideline, NCCD, Medicare).
-// Nothing shows when the request is not about a child.
+// Also for a woman at midlife (docs/matching/MIDLIFE-FLOW.md) and for someone autistic as well as
+// ADHD. Nothing shows for any other request.
 
 const CHILD = "care:child-adolescent-adhd";
 
-export type Scenario = "wears-off" | "assessment" | "worry" | "friends" | "sensory" | "behaviour" | "focus" | "school" | "start";
+export type Scenario = "wears-off" | "assessment" | "worry" | "friends" | "sensory" | "behaviour" | "focus" | "school" | "start" | "midlife-find" | "midlife-medication" | "midlife-days" | "audhd-assessment" | "audhd";
 
 export interface FirstSteps {
   scenario: Scenario;
@@ -25,12 +26,25 @@ const STEPS: Record<Scenario, FirstSteps["steps"]> = {
   focus: ["Ask for chunked, written tasks", "A coach builds study routines", "Short homework blocks, one place"],
   school: ["Request a learning support meeting", "Start with a GP visit", BALANCED],
   start: ["Start with a GP visit", "Ask what school sees", BALANCED],
+  // Midlife: the GP menopause health assessment (MBS 695, from 1 July 2025) is the visit both questions fit in.
+  "midlife-find": ["Ask for the menopause health check", "Ask about ADHD in that visit", "Note what changed, and when"],
+  "midlife-medication": ["Ask your prescriber for a review", "Book the menopause health check", "Ask them to share care"],
+  "midlife-days": ["Raise sleep with your GP", "A psychologist who knows midlife ADHD", "One thing off the list"],
+  "audhd-assessment": ["Ask for an assessment covering both", "Ask for a quiet appointment", "Bring notes, ask for writing"],
+  audhd: ["Ask for a quiet appointment", "Ask for answers in writing", "Pace sessions around your energy"],
 };
 
-/** The scenario a child request's keys fit, most specific first; null when it is not about a child. */
-export function scenarioFor(keys: readonly string[]): Scenario | null {
+/** Midlife said in the words: the change itself, or an age in the late forties or fifties. */
+export const MIDLIFE = /\b(peri-?menopaus\w*|menopaus\w*|post-?menopaus\w*|the change|hot flush\w*|night sweats|hrt|mht|periods? (have |has )?(stopped|changed)|in my (late )?(forties|fifties)|(4[5-9]|5\d)(?! ?(km|min\w*|hours?|\$|dollars))\b)/i;
+
+/** The scenario a request's keys (and, for midlife, its words) fit, most specific first; null when none does. */
+export function scenarioFor(keys: readonly string[], words = ""): Scenario | null {
   const has = (tag: string) => keys.includes(`care:${tag}`);
-  if (!keys.includes(CHILD)) return null;
+  if (!keys.includes(CHILD)) {
+    if (has("womens-health") && MIDLIFE.test(words)) return has("titration") || has("shared-care") ? "midlife-medication" : has("adhd-assessment") ? "midlife-find" : "midlife-days";
+    if (has("autism-adhd")) return has("adhd-assessment") ? "audhd-assessment" : "audhd";
+    return null;
+  }
   if (has("titration")) return "wears-off";
   if (has("adhd-assessment")) return "assessment";
   if (has("anxiety")) return "worry";
@@ -42,7 +56,7 @@ export function scenarioFor(keys: readonly string[]): Scenario | null {
   return "start";
 }
 
-export function firstSteps(keys: readonly string[]): FirstSteps | null {
-  const scenario = scenarioFor(keys);
+export function firstSteps(keys: readonly string[], words = ""): FirstSteps | null {
+  const scenario = scenarioFor(keys, words);
   return scenario ? { scenario, steps: STEPS[scenario] } : null;
 }

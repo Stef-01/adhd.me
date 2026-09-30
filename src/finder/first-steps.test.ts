@@ -28,6 +28,26 @@ describe("first steps for a parent", () => {
     }
   });
 
+  it("reads midlife from the words, and never for a request about periods alone", () => {
+    const keys = (...tags: string[]) => tags.map((tag) => `care:${tag}`);
+    expect(scenarioFor(keys("womens-health", "adhd-assessment"), "since my periods stopped, I'm 53")).toBe("midlife-find");
+    expect(scenarioFor(keys("womens-health", "titration"), "my Vyvanse stopped working in perimenopause")).toBe("midlife-medication");
+    expect(scenarioFor(keys("womens-health"), "hot flushes and brain fog")).toBe("midlife-days");
+    expect(scenarioFor(keys("womens-health"), "PMDD every month")).toBeNull();
+    expect(scenarioFor(keys("womens-health"), "a 45 minute drive")).toBeNull();
+  });
+
+  it("reads an autistic adult as AuDHD", () => {
+    expect(scenarioFor(["care:autism-adhd", "care:adhd-assessment"])).toBe("audhd-assessment");
+    expect(scenarioFor(["care:autism-adhd"])).toBe("audhd");
+  });
+
+  it("keeps every adult step to six words", () => {
+    for (const [keys, words] of [[["care:womens-health", "care:adhd-assessment"], "menopause"], [["care:womens-health", "care:titration"], "menopause"], [["care:womens-health"], "menopause"], [["care:autism-adhd", "care:adhd-assessment"], ""], [["care:autism-adhd"], ""]] as const) {
+      for (const step of firstSteps(keys, words)!.steps) expect(step.split(/\s+/).length, step).toBeLessThanOrEqual(6);
+    }
+  });
+
   it("says medication is weighed with other help, never as the answer", () => {
     expect(firstSteps(child("adhd-assessment"))!.steps).toContain("Skills and medication, weighed together");
   });

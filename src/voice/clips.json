@@ -68,6 +68,18 @@
       "bytes": 20204,
       "sha": "3617f5fe42eb"
     },
+    "first-look": {
+      "text": "A first look, or care you already have?",
+      "seconds": 2.84,
+      "bytes": 23468,
+      "sha": "b19123de5a9a"
+    },
+    "woman": {
+      "text": "Would you prefer a woman clinician?",
+      "seconds": 2.03,
+      "bytes": 16940,
+      "sha": "f586a9d23e40"
+    },
     "place": {
       "text": "Where are you, or would telehealth suit you?",
       "seconds": 2.75,

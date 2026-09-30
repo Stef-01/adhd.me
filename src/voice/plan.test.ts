@@ -372,3 +372,27 @@ describe("what a parent has already said about ADHD", () => {
     expect(formOf({ understood: true, language: "not specified" })).toEqual({ understood: true });
   });
 });
+
+describe("a woman at midlife (docs/matching/MIDLIFE-FLOW.md)", () => {
+  it("asks whether it is a first look and whether a woman matters, and writes a yes as a woman clinician", () => {
+    const { asked, request } = call({
+      opening: ["Since menopause I can't keep track of anything"],
+      "first-look": ["A first look, I've never been assessed"],
+      woman: ["Yes please", { yes_no: "yes" }],
+      place: ["Telehealth", { telehealth: true }],
+      lived: ["No", { yes_no: "no" }],
+      culture: ["No", { yes_no: "no" }],
+      extra: ["No", { yes_no: "no" }],
+    });
+    expect(asked.slice(0, 3)).toEqual(["opening", "first-look", "woman"]);
+    expect(request).toContain("A first look at ADHD, or care I already have: A first look, I've never been assessed");
+    expect(request).toContain("a woman clinician");
+    expect(keys(request)).toContain("pref:woman-gp");
+  });
+
+  it("skips both when her first answer said them", () => {
+    const { asked } = call({ opening: ["I'm 52 and my Vyvanse stopped working in perimenopause, I'd like a female GP"], place: ["Telehealth", { telehealth: true }] });
+    expect(asked).not.toContain("first-look");
+    expect(asked).not.toContain("woman");
+  });
+});
