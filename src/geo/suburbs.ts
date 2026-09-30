@@ -55,6 +55,13 @@ export const SUBURBS: readonly SuburbPoint[] = [
   { suburb: "Sydney", postcode: "2000", lat: -33.8688, lon: 151.2093 },
   // Focus area 2 — the Gold Coast, QLD: every suburb, from `./gold-coast` (O251).
   ...GOLD_COAST,
+  // O267 (2026-09-30): "I'm in Gold Coast" and "Brisbane" are what people SAY to the voice finder (a
+  // caller of 05:34 AEST said the first and the list ranked as if nowhere), and each is a place the
+  // roster consults in: Benowa is on the Gold Coast, Fortitude Valley and Ashgrove are Brisbane. The
+  // region resolves to its centre (Southport; Brisbane's GPO), the same rule as "Sydney" above. After
+  // the suburb tables, so a bare postcode still resolves to the suburb that holds it.
+  { suburb: "Gold Coast", postcode: "4215", lat: -27.9688, lon: 153.4067 },
+  { suburb: "Brisbane", postcode: "4000", lat: -27.4703, lon: 153.0258 },
   // Focus area 4 — inner Brisbane, QLD (O252): GOALS Psychology, Fortitude Valley. Brisbane City
   // already sat in the Gold Coast table as a place people type; this is a room somebody visits.
   { suburb: "Fortitude Valley", postcode: "4006", lat: -27.4570, lon: 153.0340 },

@@ -281,6 +281,14 @@ describe("the request the answers make", () => {
     expect(compose(long).request).toBe("Someone who will understand my needs as a mother. Hardest at home: Mornings in Brisbane, getting three kids out the door before school");
   });
 
+  it("writes a short last answer that only names a language in the finder's words, not the transcriber's (a caller of 05:34, 'Indi is my first language')", () => {
+    const heard = [answer("opening", "I am looking for a ADHD GP who speaks Hindi.", { language: "Hindi" }), answer("lived", "Yes.", { yes_no: "yes" }), answer("extra", "Indi is my first language.", { language: "Hindi" })];
+    expect(compose(heard).request).toBe(`I am looking for a ADHD GP who speaks Hindi. ${LIVED_ASK}. someone who speaks Hindi`);
+    // Said at length, their words stand, and the language is not said again when they are in it.
+    const long = [heard[0]!, answer("extra", "My parents will come along and they are more comfortable in Hindi than English.", { language: "Hindi" })];
+    expect(compose(long).request).toBe("I am looking for a ADHD GP who speaks Hindi. My parents will come along and they are more comfortable in Hindi than English");
+  });
+
   it("asks for a culture or a language in the finder's words", () => {
     expect(compose([answer("culture", "Yes, Indian.", { yes_no: "yes", culture: "Indian" })]).request).toBe(`${CULTURE_ASK}, Indian`);
     expect(compose([answer("culture", "Yes please.", { yes_no: "yes" }), answer("which-culture", "Indian, and Hindi", { culture: "Indian", language: "Hindi" })]).request).toBe(`${CULTURE_ASK}, Indian. someone who speaks Hindi`);

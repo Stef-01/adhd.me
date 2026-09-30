@@ -53,6 +53,11 @@ describe("O251 the Gold Coast, as a room of Gold Coast GPs would type it", () =>
   });
   it("ignores a state name, a comma and doubled spaces", () => {
     expect(resolvePlace("Southport QLD")?.suburb).toBe("Southport");
+    // O267: the regions people say to the voice finder resolve to their centres, as "Sydney" does.
+    expect(resolvePlace("Gold Coast")?.suburb).toBe("Gold Coast");
+    expect(resolvePlace("gold coast qld")?.postcode).toBe("4215");
+    expect(resolvePlace("Brisbane")?.suburb).toBe("Brisbane");
+    expect(resolvePlace("Queensland")).toBeNull();
     expect(resolvePlace("Coolangatta, 4225")?.suburb).toBe("Coolangatta");
     expect(resolvePlace("  helensvale   queensland ")?.suburb).toBe("Helensvale");
     expect(resolvePlace("Tweed Heads NSW")?.postcode).toBe("2485");

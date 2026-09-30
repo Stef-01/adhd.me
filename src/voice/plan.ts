@@ -382,7 +382,9 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         break;
       case "extra":
       case "carry-on":
-        if (readable(text) && !(form.yes_no && !more)) (theirs = true), said(text);
+        // A short answer that only names a language or a culture ("Indi is my first language", written
+        // down as the transcriber heard it) is asked for in the finder's words below, not in those.
+        if (readable(text) && !(form.yes_no && !more) && !(names && !more)) (theirs = true), said(text);
         break;
     }
     // Named in an answer, a culture, a language and telehealth are asked for in the finder's words,
