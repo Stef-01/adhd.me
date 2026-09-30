@@ -1,3 +1,4 @@
+import { localDay } from "@/lib/dates";
 // The personal model, held to the PRD's own tests (§67, §72, §73) — every boundary, every safety
 // variant, and two synthetic people who must get meaningfully different experiences.
 
@@ -153,7 +154,7 @@ describe("survey fatigue (§21)", () => {
   it("rises with questions answered today and abandons this week, and withholds optional questions when high", () => {
     const base = emptyModel();
     expect(surveyFatigue(base).score).toBe(0);
-    const day = new Date().toISOString().slice(0, 10);
+    const day = localDay(); // the day the code counts in: local, not UTC
     const busy: ModelRecord = { ...base, survey: { day, answeredToday: 14, abandons: [`${day}:work`], lastLongAt: null } };
     expect(surveyFatigue(busy).high).toBe(true);
     expect(mayAskOptional(busy, 0)).toBe(false);

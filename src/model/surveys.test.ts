@@ -1,3 +1,4 @@
+import { localDay } from "@/lib/dates";
 // The topic surveys (PRD §22–§23, §60) and their scorer, held to §67: valid, skipped,
 // contradictory, empty and incomplete answers; and the offer rule (§20) that never launches.
 
@@ -146,7 +147,7 @@ describe("the offer rule (§20 level 4)", () => {
     expect(offered?.survey.id).toBe("work-study");
     expect(offered?.rule).toBe("need.persisted");
     expect(lintLandingCopy(offered!.why)).toEqual([]);
-    const day = new Date().toISOString().slice(0, 10);
+    const day = localDay(); // the day the code counts in: local, not UTC
     const tired: ModelRecord = { ...readModel(s), survey: { day, answeredToday: 20, abandons: [], lastLongAt: null } };
     expect(offerSurvey(tired)).toBeNull();
     completeSurvey(s, "work-study");
