@@ -154,7 +154,9 @@ export function VoiceStage({
     const turn = ++plays.current;
     playing.current = { turn, began: performance.now(), firm: say.firm };
     void call.say(say.id).then((heard) => {
-      if (playing.current?.turn === turn) playing.current = null;
+      // A sentence another has taken the place of, or one the screen has left, has nothing to report.
+      if (plays.current !== turn || !link.current) return;
+      playing.current = null;
       act({ type: "said", say: say.id, heard });
     });
   }, [act]);

@@ -1,4 +1,4 @@
-// How far the live interviewer drifts from its given questions, over the calls on record: the runs
+// How far what the call says drifts from the app's given questions, over the calls on record: the runs
 // under qa/voice/runs (scripts/voice-call.mjs) and, with SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY,
 // the voice_calls table. The text eval (scripts/voice-eval.mjs) simulates the model in text and
 // passed 11 of 11 on 2026-09-29 while a live call the same hour added a choice to a question and
@@ -11,7 +11,8 @@
 // says what it is about to do ("let me", "one moment", "I'll narrow"); or runs past 15 words.
 import { readdirSync, readFileSync } from "node:fs";
 
-const GIVEN = [...readFileSync("src/voice/interviewer.ts", "utf8").matchAll(/"([^"\n]{8,120}\?)"/g)].map((m) => m[1].toLowerCase());
+// The app's own sentences (src/voice/plan.ts): since O263 the model says one only where its recording has not arrived.
+const GIVEN = [...readFileSync("src/voice/plan.ts", "utf8").matchAll(/text: [`"]([^`"\n]{8,120}\?)[`"]/g)].map((m) => m[1].replace("${OPENING_QUESTION}", "What kind of support are you looking for?").toLowerCase());
 const norm = (s) => s.toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim();
 const given = (text) => GIVEN.some((q) => norm(text).includes(q.replace(/[’']/g, "'")));
 const words = (s) => s.trim().split(/\s+/).filter(Boolean).length;
