@@ -63,7 +63,7 @@ test("level 0: the finder reads the words itself and asks nothing", async ({ pag
   await page.keyboard.press("Enter");
   await expect.poll(() => rowIds(page), { timeout: 20000 }).toEqual(topFive());
   await expect(page.getByRole("group", { name: "What we heard" }).getByRole("button")).toHaveText(chips(needsFor(REQUEST, roster)));
-  await expect(page.locator(".reading-line, .row-skeleton")).toHaveCount(0);
+  await expect(page.locator(".reading-line")).toHaveCount(0);
   await page.waitForTimeout(500);
   expect(asked, "no request for the words").toEqual([]);
 
@@ -72,7 +72,7 @@ test("level 0: the finder reads the words itself and asks nothing", async ({ pag
   expect(await reply.json()).toEqual(lexicon(REQUEST));
 });
 
-test("level 1: one read per search, a line and three blank rows while it runs, then the model's order", async ({ page }) => {
+test("level 1: one read per search; the finder's own order at once with a line where the chips go, then the model's order in place", async ({ page }) => {
   await page.route((url) => url.pathname === "/", async (route) => {
     const response = await route.fetch();
     const html = await response.text();
@@ -102,8 +102,8 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   await page.keyboard.press("Enter");
   const line = page.locator(".reading-line");
   await expect(line).toHaveText("Reading what you asked", { timeout: 20000 });
-  await expect(page.locator(".row-skeleton")).toHaveCount(3);
-  await expect(page.locator(".clinician-row")).toHaveCount(0);
+  // The list is there at once, in the finder's own order (the founder, 2026-09-30: "show me the results, then re-sort when the read lands").
+  await expect.poll(() => rowIds(page)).toEqual(topFive());
   await expect(page.getByRole("group", { name: "What we heard" })).toHaveCount(0);
   await expect(line).toContainText("A few more seconds", { timeout: 8000 });
   const top = await listTop(page);
@@ -114,7 +114,7 @@ test("level 1: one read per search, a line and three blank rows while it runs, t
   const heard = page.getByRole("group", { name: "What we heard" });
   await expect(heard.getByRole("button")).toHaveText(chips(model));
   await expect(line).toHaveCount(0);
-  expect(await listTop(page), "the rows land where the blank rows were").toBeCloseTo(top, 0);
+  expect(Math.abs((await listTop(page)) - top), "the list stays where it was when the chips take the line's place").toBeLessThanOrEqual(24);
   expect(posts).toEqual([REQUEST]);
 
   // The first profile says why in their words, over the keys as one line, and never a key

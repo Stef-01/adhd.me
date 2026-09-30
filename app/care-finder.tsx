@@ -629,8 +629,9 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   }
 
   /**
-   * The finder's record (src/db/finder.ts): one search once its list shows, what the person does
-   * with it, the handoff, and a voice call's summary. Sent and forgotten; nothing here waits.
+   * The finder's record (src/db/finder.ts): one search once its list has settled (the read landed,
+   * or there was none), what the person does with it, the handoff, and a voice call's summary.
+   * Sent and forgotten; nothing here waits.
    */
   const requestSource = useRef<SearchSource>("typed");
   const tracked = useRef<{ request: string; id: string } | null>(null);

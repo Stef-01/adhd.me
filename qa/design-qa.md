@@ -377,3 +377,17 @@ The quote is what the model read the tag from, so it is the person's own words e
 before it was the lexicon's phrase when the lexicon happened to hear the same key and nothing when
 it did not (R15). Short requests are read by the model too; the rule that skipped them is gone. Text
 budget: 127 of 127 app screens within their ceiling, median 32, no screen over.
+
+# The list first, the read after (R21, 2026-09-30)
+
+The founder (2026-09-30): "Show me the results, then re-sort when the read lands." The model's read
+takes four to five seconds (docs/matching/SIMPLE.md §6), and the results used to hold three blank
+rows for it. Now the list is on screen at once, in the finder's own order, with "Reading what you
+asked" where the chips go (qa/matching/r21-finder-results-reading-390.png); when the read lands the
+chips fade into that line's place and the rows glide into the model's order, the O52 re-sort, no
+row moving under reduced motion (qa/matching/r21-finder-results-read-390.png). For "I need help at
+work with focus and getting things done, telehealth is fine" the first three names do not change
+(Alex Lawson, Donna Italiano, Kate Dallimore); the fourth and fifth do. The screen reader's live
+line says "Reading what you asked", then the count with "Re-ranked". The search's record still
+waits for the read, so `shown` is the settled list. Text budget: finder results 34 words (target
+40), 127 of 127 app screens within their ceiling, median 32.

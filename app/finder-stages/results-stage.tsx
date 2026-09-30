@@ -125,7 +125,7 @@ export function ResultsStage({
   heard: readonly HeardChip[];
   removedHeard: ReadonlySet<string>;
   onToggleHeard: (key: string) => void;
-  /** The read route is still reading the words: the chips' place says so and three blank rows hold the list's. */
+  /** The read route is still reading the words: the list is the finder's own order for now, and the chips' place says so. */
   reading?: boolean;
 }) {
   /** The filters the strip cannot show — a language, a distance, a way of working — as a count on the Filters pill. The kind has its own pill. */
@@ -138,15 +138,15 @@ export function ResultsStage({
   // the place, and "Re-ranked:" once the list is not the one the screen arrived with — `matches`
   // is derived from (request, origin, roster), so a new identity IS a re-rank, and the counter
   // re-announces a re-rank that repeats the same count.
-  // The list arrives when the read does, so a list ranked while the read ran is no arrival.
+  // The list arrives at once, in the finder's own order; the read landing is a re-rank like any other
+  // (the founder, 2026-09-30: "show me the results, then re-sort when the read lands").
   const arrivalMatches = useRef<readonly Clinician[] | null>(null);
   const [reranks, setReranks] = useState(0);
   useEffect(() => {
-    if (reading) return;
     arrivalMatches.current ??= matches;
     if (matches === arrivalMatches.current) return;
     setReranks((n) => n + 1);
-  }, [matches, reading]);
+  }, [matches]);
   const line = reading ? FINDER_COPY.reading.text : resultsAnnouncement({ count: matches.length, suburb: origin?.suburb ?? null, reranked: reranks > 0 });
 
   /**
@@ -156,15 +156,8 @@ export function ResultsStage({
    * they did not choose from a number; finding the row lets them read it first.
    */
   const list = useRef<HTMLDivElement | null>(null);
-  /** Arrival focus lands on the list's heading, not a row: a ring on the first row read as a top pick. It waits for the rows when the read held them back. */
+  /** Arrival focus lands on the list's heading, not a row: a ring on the first row read as a top pick. */
   const listHeading = useRef<HTMLHeadingElement | null>(null);
-  const heldArrival = useRef(reading && focusOnArrival);
-  useEffect(() => {
-    if (reading || !heldArrival.current) return;
-    heldArrival.current = false;
-    const active = document.activeElement;
-    if (!active || active === document.body || active.matches("h1")) listHeading.current?.focus({ preventScroll: true });
-  }, [reading]);
   /** "N more": focus moves to the first row it revealed, so a keyboard carries on from there. */
   const revealFrom = useRef<number | null>(null);
   useEffect(() => {
@@ -243,7 +236,13 @@ export function ResultsStage({
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
-        {!empty && (reading ? <ReadingLine /> : <HeardRow chips={heard} removed={removedHeard} onToggle={onToggleHeard} />)}
+        {/* The chips' place says the read is running; the chips take it, faded in, when it lands. The
+            list below is on screen the whole time, in the finder's own order, and glides into the model's. */}
+        {!empty && (reading ? <ReadingLine /> : (
+          <motion.div key="heard" initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+            <HeardRow chips={heard} removed={removedHeard} onToggle={onToggleHeard} />
+          </motion.div>
+        ))}
       </div>
 
       {/* O244: the questions, in the sheet. Tapping one appends the answer in the reader's own
@@ -368,7 +367,6 @@ export function ResultsStage({
       <>
       <motion.div
         className="results-list-head"
-        style={reading ? { visibility: "hidden" } : undefined}
         initial={reducedMotion ? false : { opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
@@ -483,8 +481,7 @@ export function ResultsStage({
             physiologists left an occupational therapist standing at the top of the list of
             exercise physiologists, reproduced one run in three. A wrong row on screen for
             good is worse than a missing 160ms fade, so the rows carry no exit. */}
-        {reading && [0, 1, 2].map((n) => <div key={n} className="row-skeleton" aria-hidden="true" />)}
-        {!reading && shown.map((item, index) => {
+        {shown.map((item, index) => {
           // `shown` is always a prefix slice of `matches`, so the indices align.
           const itemMatch = personalized[index]!;
           const away = distanceTo(item, origin);
@@ -572,7 +569,7 @@ export function ResultsStage({
       </div>
 
       </div>
-      {!reading && matches.length > shown.length && (
+      {matches.length > shown.length && (
         <motion.button
           className="show-all"
           type="button"
