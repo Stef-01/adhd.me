@@ -360,3 +360,20 @@ at work?", where (Sydney), lived experience (no), culture (yes), "Which culture 
 (Indian), anything else; heard as Getting organised, At work, Cultural background; Alex Lawson, Kate
 Dallimore, Donna Italiano, Dr Anu Saxena, Fiona Alexander.
 
+
+# From your words, in their words (R19, 2026-09-30)
+
+The founder (2026-09-30): "this should be very simple, not overengineered … explicitly name what the
+failures are." The reader behind the finder is now one model call that must quote the person for
+every tag it reads, and a tag it cannot quote is not read (docs/matching/SIMPLE.md). No screen
+changes shape; two change what they say. The results for "I need help at work with focus and
+getting things done, telehealth is fine" (qa/matching/r19-finder-results-390.png, 34 words) list
+Alex Lawson, Donna Italiano, Kate Dallimore: the coaches who declare work and getting organised,
+and nothing about medication, because nothing about medication was said. Alex Lawson's profile
+(qa/matching/r19-finder-profile-from-your-words-390.png, 47 words) says under Why matched: Work and
+career, "From your words: 'help at work'"; Focus and getting things done, "From your words: 'with
+focus and getting things done'"; By phone or telehealth, "From your words: 'telehealth is fine'".
+The quote is what the model read the tag from, so it is the person's own words every time, where
+before it was the lexicon's phrase when the lexicon happened to hear the same key and nothing when
+it did not (R15). Short requests are read by the model too; the rule that skipped them is gone. Text
+budget: 127 of 127 app screens within their ceiling, median 32, no screen over.
