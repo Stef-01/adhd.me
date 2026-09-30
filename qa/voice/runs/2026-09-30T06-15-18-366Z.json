@@ -1,0 +1,82 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I am looking for an ADHD GP who speaks Hindi.",
+    "I'm in Gold Coast.",
+    "Yes.",
+    "Hindi is my first language."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I am looking for an ADHD GP who speaks Hindi."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":1,\"understood\":true,\"language\":\"Hindi\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "I'm in Gold Coast."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.99,\"understood\":true,\"place\":\"Gold Coast\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "Yes."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.94,\"understood\":true,\"yes_no\":\"yes\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    }
+  ],
+  "request": "I am looking for an ADHD GP who speaks Hindi. someone who has ADHD themselves. someone who speaks Hindi",
+  "reads": [
+    {
+      "text": "I am looking for an ADHD GP who speaks Hindi. someone who has ADHD themselves. someone who speaks Hindi",
+      "answer": {
+        "needs": [
+          {
+            "key": "pref:lived-experience",
+            "quote": "has ADHD themselves"
+          },
+          {
+            "key": "language:hindi",
+            "quote": "speaks Hindi"
+          }
+        ],
+        "unlisted": [],
+        "source": "llm"
+      }
+    }
+  ],
+  "heard": [
+    "Lived experience",
+    "Hindi-speaking"
+  ],
+  "results": [
+    "Dr Anubhav Saxena Beecroft & Double Bay, by telehealth",
+    "Dr Anu Saxena Double Bay & Hornsby, about 675 km away (their Hornsby rooms)",
+    "Dr Yogesh Kalra Bateau Bay, about 630 km away"
+  ],
+  "whyMatched": "Why matched Hindi-speaking From your words: “speaks Hindi” Not in their listing: someone who has ADHD themselves. Compare",
+  "stage": "results"
+}
