@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-30T05:41:44.067Z",
+  "measuredAt": "2026-09-30T14:58:39.182Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -17,8 +17,8 @@
       "path": "/",
       "name": "/",
       "state": null,
-      "total": 18,
-      "fold": 18,
+      "total": 20,
+      "fold": 20,
       "chrome": 6,
       "ratio": 0.5,
       "verdict": "target",
@@ -233,26 +233,26 @@
       "path": "/demo",
       "name": "/demo",
       "state": null,
-      "total": 32,
-      "fold": 32,
-      "chrome": 0,
-      "ratio": 0.8,
+      "total": 15,
+      "fold": 15,
+      "chrome": 22,
+      "ratio": 0.4,
       "verdict": "target",
       "longest": [
         {
-          "w": 18,
-          "text": ", one open session, three invited patients. No real patient data, no live SMS, t",
+          "w": 6,
+          "text": "That link is old or mistyped.",
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "A scripted synthetic practice:",
-          "tag": "p"
+          "w": 5,
+          "text": "That page does not exist.",
+          "tag": "h1"
         },
         {
-          "w": 3,
-          "text": "Demo Family Practice",
-          "tag": "p"
+          "w": 2,
+          "text": "Find support",
+          "tag": "a"
         }
       ]
     },
@@ -449,26 +449,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 18,
-      "fold": 18,
+      "total": 7,
+      "fold": 7,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
-          "w": 3,
-          "text": "HOLD THE LID!",
+          "w": 2,
+          "text": "POP IT!",
           "tag": "p"
         },
         {
-          "w": 2,
-          "text": ". Then, at",
-          "tag": "p"
+          "w": 1,
+          "text": "0",
+          "tag": "span"
         },
         {
-          "w": 2,
-          "text": "it stops",
-          "tag": "p"
+          "w": 1,
+          "text": "pale",
+          "tag": "button"
         }
       ]
     },
@@ -503,10 +503,10 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 12,
-      "fold": 12,
+      "total": 8,
+      "fold": 8,
       "chrome": 0,
-      "ratio": 0.3,
+      "ratio": 0.2,
       "verdict": "target",
       "longest": [
         {
@@ -515,14 +515,14 @@
           "tag": "button"
         },
         {
-          "w": 3,
-          "text": "TURN IT DOWN!",
-          "tag": "p"
-        },
-        {
           "w": 1,
           "text": "0",
           "tag": "span"
+        },
+        {
+          "w": 1,
+          "text": "SWAT!",
+          "tag": "p"
         }
       ]
     },
@@ -1016,10 +1016,10 @@
       "path": "/practices",
       "name": "/practices",
       "state": null,
-      "total": 756,
-      "fold": 58,
+      "total": 735,
+      "fold": 55,
       "chrome": 22,
-      "ratio": 18.9,
+      "ratio": 18.4,
       "verdict": "long-form",
       "longest": [
         {
@@ -1043,10 +1043,10 @@
       "path": "/privacy",
       "name": "/privacy",
       "state": null,
-      "total": 1533,
+      "total": 1473,
       "fold": 267,
       "chrome": 22,
-      "ratio": 38.3,
+      "ratio": 36.8,
       "verdict": "long-form",
       "longest": [
         {
@@ -1178,14 +1178,14 @@
       "path": "/story",
       "name": "/story",
       "state": null,
-      "total": 688,
+      "total": 691,
       "fold": 65,
       "chrome": 15,
-      "ratio": 17.2,
+      "ratio": 17.3,
       "verdict": "long-form",
       "longest": [
         {
-          "w": 126,
+          "w": 129,
           "text": "Beecroft, Hornsby, Cheltenham, Pennant Hills, Epping, Double Bay, Edgecliff, Ros",
           "tag": "span"
         },
@@ -1934,44 +1934,12 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 28,
-      "fold": 28,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
-        {
-          "w": 7,
-          "text": "Can we move dinner? Work ran late.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Whatever. Sure. Guess work wins.",
-          "tag": "p"
-        },
-        {
-          "w": 5,
-          "text": "Ouch. I did say sorry.",
-          "tag": "p"
-        }
-      ]
-    },
-    {
-      "path": "/lives/play/zoe-before-you-send",
-      "name": "Zoe, reply",
-      "state": "zoe-reply",
-      "total": 30,
-      "fold": 30,
-      "chrome": 0,
-      "ratio": 0.8,
-      "verdict": "target",
-      "longest": [
-        {
-          "w": 8,
-          "text": "Oh, that’s a shame. Sure. Is Friday free?",
-          "tag": "p"
-        },
         {
           "w": 7,
           "text": "Can we move dinner? Work ran late.",
@@ -1981,6 +1949,38 @@
           "w": 4,
           "text": "Zoe · Before you send",
           "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "That came out sharp.",
+          "tag": "h1"
+        }
+      ]
+    },
+    {
+      "path": "/lives/play/zoe-before-you-send",
+      "name": "Zoe, reply",
+      "state": "zoe-reply",
+      "total": 18,
+      "fold": 18,
+      "chrome": 0,
+      "ratio": 0.5,
+      "verdict": "target",
+      "longest": [
+        {
+          "w": 7,
+          "text": "Can we move dinner? Work ran late.",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "Zoe · Before you send",
+          "tag": "span"
+        },
+        {
+          "w": 4,
+          "text": "Said what you meant.",
+          "tag": "h1"
         }
       ]
     },
@@ -2607,6 +2607,33 @@
     },
     {
       "path": "/",
+      "name": "Finder results for a parent (first steps)",
+      "state": "finder-results-child",
+      "total": 57,
+      "fold": 51,
+      "chrome": 6,
+      "ratio": 1.4,
+      "verdict": "ceiling",
+      "longest": [
+        {
+          "w": 10,
+          "text": "My son needs an ADHD assessment, his teacher raised it.",
+          "tag": "span"
+        },
+        {
+          "w": 5,
+          "text": "Ask school for written notes",
+          "tag": "li"
+        },
+        {
+          "w": 5,
+          "text": "A GP, then a paediatrician",
+          "tag": "li"
+        }
+      ]
+    },
+    {
+      "path": "/",
       "name": "Finder profile (a GP opened)",
       "state": "finder-profile",
       "total": 47,
@@ -2782,10 +2809,10 @@
       "path": "/",
       "name": "Finder home, a visit to rate",
       "state": "finder-rate",
-      "total": 28,
-      "fold": 28,
+      "total": 30,
+      "fold": 30,
       "chrome": 6,
-      "ratio": 0.7,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
         {
@@ -3074,20 +3101,20 @@
       "path": "/lives/play",
       "name": "The Chaos Run, first round",
       "state": "lives-run",
-      "total": 9,
-      "fold": 9,
+      "total": 12,
+      "fold": 12,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
+          "w": 3,
+          "text": "Skip this round",
           "tag": "button"
         },
         {
           "w": 2,
-          "text": "DELETE DRAFTS!",
+          "text": "GET IT!",
           "tag": "p"
         },
         {
@@ -3209,10 +3236,10 @@
       "path": "/match/prep",
       "name": "Match prep",
       "state": "intake",
-      "total": 40,
-      "fold": 40,
+      "total": 34,
+      "fold": 34,
       "chrome": 6,
-      "ratio": 1,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
         {

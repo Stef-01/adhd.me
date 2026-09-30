@@ -70,7 +70,7 @@ export function oracleGains(gold: readonly string[], roster: readonly Clinician[
   const needs = gold.flatMap((key) => needForKey(key) ?? []);
   const tiers = roster.map((clinician) => {
     const p = rankingProfile(clinician, needs);
-    return { id: clinician.id, answers: p.coverage > 0, tier: [p.constraintCoverage, p.constraintScore, p.careScore, p.mannerScore, p.coverage] };
+    return { id: clinician.id, answers: p.coverage > 0, tier: [p.constraintCoverage, p.constraintScore, p.scopeScore, p.careScore, p.mannerScore, p.coverage] };
   });
   const bands = [...new Set(tiers.filter((t) => t.answers).map((t) => t.tier.join()))]
     .map((joined) => joined.split(",").map(Number))

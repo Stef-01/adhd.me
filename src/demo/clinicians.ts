@@ -111,6 +111,16 @@ export function rankClinicians(
      * is STRONG, manner is CONTRIBUTORY, and a contributory tier is never allowed to buy its
      * way past a strong one by piling up.
      */
+    /*
+     * SCOPE BEFORE THE REST OF CARE, FOR A CHILD (child flows, 2026-10-01). An assessment, a dose
+     * review and shared prescribing are things only some clinicians can do at all. A parent whose child's
+     * teacher raised ADHD had two coaches listed above the psychologists who assess, because the
+     * coaches answered the school and focus words the story also held. What the appointment is FOR
+     * is compared before what else it may touch.
+     */
+    const byScope = bProfile.scopeScore - aProfile.scopeScore;
+    if (byScope !== 0) return byScope;
+
     const byCare = bProfile.careScore * bStanding - aProfile.careScore * aStanding;
     if (byCare !== 0) return byCare;
 
@@ -162,6 +172,8 @@ type RankingProfile = {
   constraintCoverage: number;
   /** Weight of explicitly requested language and access constraints this clinician answers. */
   constraintScore: number;
+  /** Weighted overlap on the asks only some clinicians can do: assessment, dose review, shared care. */
+  scopeScore: number;
   /** Weighted overlap on care-area facets and lived experience — the STRONG tier (M9/F9, R20). */
   careScore: number;
   /** Weighted overlap on manner facets alone — the CONTRIBUTORY tier (M9/F9). */
@@ -192,9 +204,20 @@ type RankingProfile = {
  * each its own sum, so `rankClinicians` can compare them as separate steps — strong before
  * contributory — instead of letting a contributory tier buy its way past a strong one.
  */
+/**
+ * What the appointment is for, when only some clinicians can do it. Held apart for a child only: a
+ * child's care starts with an assessment or the prescriber (AADPA), while an adult's assessment ask
+ * sits beside their other care, as the simulated patients pin (postpartum, trauma, lived experience).
+ */
+const SCOPE: ReadonlySet<string> = new Set(["adhd-assessment", "titration", "shared-care"]);
+
 export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[]): RankingProfile {
   let constraintCoverage = 0;
   let constraintScore = 0;
+  let scopeScore = 0;
+  // An assessment of a child is done by someone who sees children: an adults-only assessor answers it no better than a coach.
+  const child = needs.some((need) => need.facet.kind === "care" && need.facet.area === "child-adolescent-adhd");
+  const seesChildren = child && facetStrength(clinician, { kind: "care", area: "child-adolescent-adhd" }) > 0;
   let careScore = 0;
   let mannerScore = 0;
   let weightedScore = 0;
@@ -215,7 +238,8 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
       // needs (the founder's call of 02:34). A language, telehealth, a woman, bulk billing, NDIS and
       // a longer appointment decide whether an appointment can happen at all; who the clinician is
       // decides how well it goes, beside what they declare they work with.
-      careScore += contribution;
+      if (seesChildren && need.facet.kind === "care" && SCOPE.has(need.facet.area)) scopeScore += contribution;
+      else careScore += contribution;
     } else {
       mannerScore += contribution;
     }
@@ -223,6 +247,7 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
   return {
     constraintCoverage,
     constraintScore: roundScore(constraintScore),
+    scopeScore: roundScore(scopeScore),
     careScore: roundScore(careScore),
     mannerScore: roundScore(mannerScore),
     weightedScore: roundScore(weightedScore),
@@ -659,6 +684,7 @@ type RankBand = {
   score: number;
   constraintCoverage: number;
   constraintScore: number;
+  scopeScore: number;
   /** Care-tier score (M9). Part of the band key: a care-score difference is a real tie-break,
    *  not the arbitrary kind bands are meant to absorb. */
   careScore: number;
@@ -681,6 +707,7 @@ export function rankBands(query: string, roster: readonly Clinician[] = clinicia
       last.score === profile.weightedScore &&
       last.constraintCoverage === profile.constraintCoverage &&
       last.constraintScore === profile.constraintScore &&
+      last.scopeScore === profile.scopeScore &&
       last.careScore === profile.careScore &&
       last.mannerScore === profile.mannerScore &&
       last.coverage === profile.coverage
@@ -691,6 +718,7 @@ export function rankBands(query: string, roster: readonly Clinician[] = clinicia
         score: profile.weightedScore,
         constraintCoverage: profile.constraintCoverage,
         constraintScore: profile.constraintScore,
+        scopeScore: profile.scopeScore,
         careScore: profile.careScore,
         mannerScore: profile.mannerScore,
         coverage: profile.coverage,
@@ -1100,7 +1128,7 @@ export function rankCliniciansNear(
   const tieKey = (c: Clinician) => {
     const profile = rankingProfile(c, read);
     const q = standing(demonstrated, c);
-    return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.careScore * q}|${profile.mannerScore * q}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}|${q}`;
+    return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.scopeScore}|${profile.careScore * q}|${profile.mannerScore * q}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}|${q}`;
   };
   let start = 0;
   while (start < out.length) {

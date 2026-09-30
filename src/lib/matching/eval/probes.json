@@ -505,5 +505,141 @@
     "never": [
       "care:adhd-assessment"
     ]
+  },
+  {
+    "text": "his teacher pulled me aside and said she thinks he has ADHD, the school wants a report",
+    "reaches": [
+      "care:child-adolescent-adhd",
+      "care:adhd-assessment",
+      "care:study-school"
+    ]
+  },
+  {
+    "text": "my son keeps calling out in class and now they are talking about a behaviour plan",
+    "reaches": [
+      "care:child-adolescent-adhd"
+    ],
+    "aspires": [
+      "care:study-school",
+      "care:emotional-regulation"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "homework takes three hours every night and she loses everything, her pencil case, her hat, her lunch",
+    "aspires": [
+      "care:child-adolescent-adhd",
+      "care:study-school",
+      "care:executive-function"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "my eight year old is two years behind in reading and nobody can tell me why",
+    "reaches": [
+      "care:child-adolescent-adhd"
+    ],
+    "aspires": [
+      "care:study-school"
+    ]
+  },
+  {
+    "text": "our son cries every morning and refuses to get in the car for school",
+    "aspires": [
+      "care:child-adolescent-adhd",
+      "care:anxiety",
+      "care:study-school"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "my daughter eats lunch alone every day and says she has no friends",
+    "reaches": [
+      "care:child-adolescent-adhd",
+      "care:social-connection"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "he was diagnosed last year and the school knows, but nothing has changed in the classroom",
+    "aspires": [
+      "care:child-adolescent-adhd",
+      "care:study-school"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "my son is fine on his tablets until lunch, then the teacher says he is gone",
+    "reaches": [
+      "care:child-adolescent-adhd",
+      "care:study-school"
+    ],
+    "aspires": [
+      "care:titration"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "she starts high school next year and I am worried she will not cope with all the subjects",
+    "aspires": [
+      "care:child-adolescent-adhd",
+      "care:study-school"
+    ]
+  },
+  {
+    "text": "he can't stand the noise at school and his handwriting is so hard for him",
+    "aspires": [
+      "care:child-adolescent-adhd",
+      "care:autism-adhd",
+      "care:study-school"
+    ]
+  },
+  {
+    "text": "I don't know if my daughter has ADHD or if she is just being nine, I just want to know where to start",
+    "reaches": [
+      "care:child-adolescent-adhd",
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "my four year old is so full on that daycare rings me most weeks",
+    "reaches": [
+      "care:child-adolescent-adhd"
+    ],
+    "never": [
+      "care:adhd-assessment"
+    ]
+  },
+  {
+    "text": "our fifteen year old can't meet a single assignment deadline, we want a coach for him",
+    "reaches": [
+      "care:child-adolescent-adhd",
+      "care:study-school",
+      "care:executive-function"
+    ],
+    "never": [
+      "care:non-medication"
+    ]
+  },
+  {
+    "text": "we want a doctor for our son who won't just reach for tablets but won't rule them out either",
+    "aspires": [
+      "care:child-adolescent-adhd"
+    ],
+    "never": [
+      "care:non-medication"
+    ]
   }
 ]

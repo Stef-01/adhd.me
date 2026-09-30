@@ -96,6 +96,7 @@ export const EXTRA = [
   { path: "/practitioner/anubhav-saxena", name: "Practitioner profile" },
   { path: "/go/anubhav-saxena", skip: "a redirect" },
   { path: "/", state: "finder-results", name: "Finder results (after a search)" },
+  { path: "/", state: "finder-results-child", name: "Finder results for a parent (first steps)" },
   { path: "/", state: "finder-profile", name: "Finder profile (a GP opened)" },
   // The profile with its reasons open: the bio folds while they show (2026-09-28, was 75 words).
   { path: "/", state: "finder-profile-why", name: "Finder profile, why matched open" },
@@ -396,12 +397,14 @@ export async function reach(page, route, base) {
     await page.getByRole("button", { name: "Talk instead of typing" }).click();
     await page.locator(".voice-orb").waitFor({ timeout: 10000 });
   }
-  if (route.state === "finder-results" || route.state?.startsWith("finder-profile")) {
+  if (route.state?.startsWith("finder-results") || route.state?.startsWith("finder-profile")) {
     const missed = route.state?.endsWith("-missed");
-    await page.getByRole("textbox").fill(missed ? MISSED_REQUEST : "an adult ADHD assessment, telehealth, not rushed");
+    const child = route.state === "finder-results-child";
+    await page.getByRole("textbox").fill(missed ? MISSED_REQUEST : child ? "my son needs an ADHD assessment, his teacher raised it" : "an adult ADHD assessment, telehealth, not rushed");
     await page.keyboard.press("Enter");
     await page.locator(".clinician-list").waitFor({ timeout: 20000 });
-    if (route.state !== "finder-results") {
+    if (child) await page.locator(".first-steps").waitFor({ timeout: 8000 });
+    if (!route.state.startsWith("finder-results")) {
       // The missed states open the heaviest profile (a disclosure, two languages) rather than the first.
       await (missed ? page.locator(".clinician-row", { hasText: "Dr Anubhav Saxena" }) : page.locator(".clinician-row").first()).click();
       await page.getByRole("heading", { level: 1 }).waitFor();

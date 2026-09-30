@@ -27,6 +27,7 @@ import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
 import { facetKey, shortLabel } from "@/matching/needs";
+import { firstSteps } from "@/finder/first-steps";
 import { heardChips } from "@/finder/heard";
 import { FINDER_COPY } from "./finder-copy";
 import { resolvePlace, type SuburbPoint } from "@/geo/suburbs";
@@ -204,6 +205,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   const { reading, modelNeeds, heard: ownRead, unlisted, readAhead } = useModelRead(level, request, roster, stage === "results");
   const read = modelNeeds ?? ownRead;
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
+  /** For a parent, three first steps above the list (src/finder/first-steps.ts); the list then opens on three rows. */
+  const steps = useMemo(() => (reading ? null : firstSteps(heardFacets.map((chip) => chip.key).filter((key) => !removed.has(key)))), [reading, heardFacets, removed]);
   const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
   /** A removed facet is no reason for a row or a profile either. */
   const removedLabels = useMemo(() => {
@@ -430,10 +433,11 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
    * fold, the fold moves to the end of the band.
    */
   const visibleCount = useMemo(() => {
-    if (!tieNote) return 5;
+    const fold = steps ? 3 : 5;
+    if (!tieNote) return fold;
     const topBand = bands[0];
-    return Math.max(5, topBand ? topBand.clinicians.length : 5);
-  }, [tieNote, bands]);
+    return Math.max(fold, topBand ? topBand.clinicians.length : fold);
+  }, [tieNote, bands, steps]);
   const shown = matches.slice(0, visibleCount + more);
   /** The signals of the rows the list opens on: one every one of them shares is no reason to pick between them. */
   const foldSignals = useMemo(() => allMatches.slice(0, visibleCount).map((m) => m.signals), [allMatches, visibleCount]);
@@ -889,6 +893,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             emptyKind={emptyKind}
             heard={heardFacets}
             removedHeard={removed}
+            steps={steps}
             onToggleHeard={toggleHeard}
             reading={reading}
             place={place}

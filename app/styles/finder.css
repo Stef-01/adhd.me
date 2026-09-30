@@ -72,6 +72,12 @@
 .platform-shell .results-summary-lines { display: grid; min-width: 0; }
 .platform-shell .results-summary-place { overflow: hidden; color: var(--muted); font-size: 13px; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
 .platform-shell .results-head h1 { max-width: 32ch; margin: 24px 0 4px; font-size: clamp(24px, 3vw, 34px); font-weight: 700; line-height: 1.25; letter-spacing: -.025em; text-wrap: balance; }
+/* First steps for a parent: three numbered lines, quiet, above the list. */
+.first-steps { max-width: 880px; margin: 16px 0 0; padding: 16px 20px; border-radius: 12px; background: var(--surface-raised); }
+.first-steps h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--muted); }
+.first-steps ol { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.first-steps li { display: grid; grid-template-columns: 20px minmax(0, 1fr); font-size: 15px; line-height: 1.45; color: var(--ink); counter-increment: step; }
+.first-steps li::before { content: counter(step); color: var(--accent-deep); font-weight: 600; font-variant-numeric: tabular-nums; }
 /* What we heard: the strongest facets of the words above, as chips. A tap takes one out (struck
    through, dashed) and a second puts it back, in place, so nothing on the row moves. */
 .heard-row { margin: 12px 0 0; }

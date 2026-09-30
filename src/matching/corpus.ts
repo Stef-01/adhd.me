@@ -914,7 +914,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I interrupt people even when I try not to", never: ["care:adhd-assessment"] },
   { text: "deadlines only exist for me at midnight the night before", never: ["care:adhd-assessment"] },
   { text: "I bought five planners this year", never: ["care:adhd-assessment"] },
-  { text: "our daughter cries over homework every single night", never: ["care:adhd-assessment", "care:child-adolescent-adhd"] },
+  // Child flows (2026-10-01): a parent describing their child is asking for help with them; only the assessment stays unasked.
+  { text: "our daughter cries over homework every single night", aspires: ["care:child-adolescent-adhd", "care:study-school", "care:emotional-regulation"], never: ["care:adhd-assessment"] },
 
   // ── logistics noise ──────────────────────────────────────────────────────────────────────
   { text: "the receptionist said the doctor is running an hour behind", never: ["manner:not_rushed"] },

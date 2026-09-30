@@ -20,6 +20,7 @@ import { type HeardChip } from "@/finder/heard";
 import { type WayOut } from "@/finder/pipeline";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
+import { type FirstSteps } from "@/finder/first-steps";
 import Link from "next/link";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import dynamic from "next/dynamic";
@@ -79,6 +80,7 @@ export function ResultsStage({
   removedHeard,
   onToggleHeard,
   reading = false,
+  steps = null,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -127,6 +129,8 @@ export function ResultsStage({
   onToggleHeard: (key: string) => void;
   /** The read route is still reading the words: the list is the finder's own order for now, and the chips' place says so. */
   reading?: boolean;
+  /** For a parent: three first steps above the list, or null. */
+  steps?: FirstSteps | null;
 }) {
   /** The filters the strip cannot show — a language, a distance, a way of working — as a count on the Filters pill. The kind has its own pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length - (filters.professions.length > 0 ? 1 : 0);
@@ -232,7 +236,7 @@ export function ResultsStage({
 
         {/* THE RAW REQUEST IS NEVER A HEADLINE IT DID NOT EARN (O46): the headline renders only
             when a reading earned it; otherwise the summary card above already shows the words. */}
-        {requestHeadline !== requestSummary && (
+        {requestHeadline !== requestSummary && !steps && (
           <h1 className="results-title" tabIndex={-1}>{requestHeadline}</h1>
         )}
 
@@ -244,6 +248,14 @@ export function ResultsStage({
           </motion.div>
         ))}
       </div>
+
+      {/* For a parent: three steps above the list, chosen by what the words were read as (src/finder/first-steps.ts). */}
+      {steps && (
+        <section className="first-steps" aria-labelledby="first-steps-title">
+          <h2 id="first-steps-title">First steps</h2>
+          <ol>{steps.steps.map((step) => <li key={step}>{step}</li>)}</ol>
+        </section>
+      )}
 
       {/* O244: the questions, in the sheet. Tapping one appends the answer in the reader's own
           words and re-ranks; the sheet closes so the re-ordered list is what they see next. */}

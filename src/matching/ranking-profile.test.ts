@@ -224,3 +224,31 @@ describe("2026-08-24 M9 — tiers before summing, past the constraint tier (F9)"
     expect(rankClinicians(request, [mannerMatch, languageMatch])[0]!.id).toBe("lang-match");
   });
 });
+
+describe("child flows (2026-10-01): what the appointment is for comes before what else it touches", () => {
+  it("lists a child assessor above a coach who answers more of the story's other words", () => {
+    const keys = ["care:child-adolescent-adhd", "care:executive-function", "care:study-school", "care:adhd-assessment"];
+    const needs = keys.flatMap((key) => needForKey(key) ?? []);
+    const coach = clone("coach", { careAreas: ["child-adolescent-adhd", "executive-function", "study-school", "non-medication"], careAreasSometimes: [], manner: [] });
+    const assessor = clone("assessor", { careAreas: ["child-adolescent-adhd", "adhd-assessment", "study-school"], careAreasSometimes: [], manner: [] });
+    const order = rankClinicians("his teacher thinks it might be ADHD", [coach, assessor], new Date(), needs).map((c) => c.id);
+    expect(order).toEqual(["assessor", "coach"]);
+  });
+
+  it("still lets telehealth, an access constraint, come before the assessment", () => {
+    const needs = ["care:adhd-assessment", "pref:telehealth-first"].flatMap((key) => needForKey(key) ?? []);
+    const remote = clone("remote", { careAreas: ["executive-function"], careAreasSometimes: [], manner: [], telehealthFirstAppointment: true });
+    const inRooms = clone("in-rooms", { careAreas: ["adhd-assessment"], careAreasSometimes: [], manner: [], telehealthFirstAppointment: undefined });
+    expect(rankClinicians("", [inRooms, remote], new Date(), needs).map((c) => c.id)).toEqual(["remote", "in-rooms"]);
+  });
+});
+
+describe("child flows: an adults-only assessor is not lifted for a child", () => {
+  it("keeps the scope tier to clinicians who see children", () => {
+    const needs = ["care:child-adolescent-adhd", "care:adhd-assessment", "care:executive-function"].flatMap((key) => needForKey(key) ?? []);
+    const adultAssessor = clone("adult-assessor", { careAreas: ["adhd-assessment"], careAreasSometimes: [], manner: [] });
+    const childCoach = clone("child-coach", { careAreas: ["child-adolescent-adhd", "executive-function"], careAreasSometimes: [], manner: [] });
+    expect(rankingProfile(adultAssessor, needs).scopeScore).toBe(0);
+    expect(rankClinicians("", [adultAssessor, childCoach], new Date(), needs).map((c) => c.id)).toEqual(["child-coach", "adult-assessor"]);
+  });
+});
