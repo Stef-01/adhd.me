@@ -230,7 +230,10 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
     const contribution = roundScore(need.weight * strength);
     coverage += 1;
     weightedScore += contribution;
-    if (need.facet.kind === "language" || (need.facet.kind === "preference" && need.facet.preference !== "lived-experience")) {
+    // A child's appointment can happen only with someone who sees children (2026-10-01: an adults-only
+    // GP was first for "my son's medication wears off by lunch"), so for a child it decides like access does.
+    const seesTheChild = need.facet.kind === "care" && need.facet.area === "child-adolescent-adhd";
+    if (seesTheChild || need.facet.kind === "language" || (need.facet.kind === "preference" && need.facet.preference !== "lived-experience")) {
       constraintCoverage += 1;
       constraintScore += contribution;
     } else if (need.facet.kind === "care" || need.facet.kind === "preference") {

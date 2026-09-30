@@ -396,3 +396,22 @@ describe("a woman at midlife (docs/matching/MIDLIFE-FLOW.md)", () => {
     expect(asked).not.toContain("woman");
   });
 });
+
+describe("edges: who the call is about (2026-10-01 edge sweep)", () => {
+  const branch = (text: string) => { const said: string[] = []; const done: QuestionId[] = ["opening"]; const heard = [answer("opening", text)]; for (let i = 0; i < 12; i++) { const n = nextQuestion(heard, done); if (!n) break; said.push(n.say); done.push(n.question!); } return said; };
+  it("hears an adult, not a child, in an adult's age or the person's own ADHD", () => {
+    for (const text of ["my 45 year old husband has ADHD", "I'm 50 and my kids think I have ADHD", "I have a 7 year old and I think I have ADHD myself", "I'm in grade 11"]) {
+      expect(branch(text), text).not.toContain("detail-child");
+      expect(branch(text), text).toContain("lived");
+    }
+  });
+  it("hears a child in 'my 2 yr old' and a stepchild", () => {
+    for (const text of ["my 2 yr old", "help for my stepdaughter who is 14"]) expect(branch(text), text).not.toContain("lived");
+  });
+  it("does not ask a first look of someone whose ADHD medication stopped working", () => {
+    expect(branch("I am a man, 52, ADHD meds stopped working")).not.toContain("first-look");
+  });
+  it("asks what help of an empty, garbled or question-mark first answer", () => {
+    for (const text of ["", "   ", "?", "asdf qwerty"]) expect(branch(text)[0], JSON.stringify(text)).toBe("help");
+  });
+});

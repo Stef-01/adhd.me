@@ -304,8 +304,10 @@ const settledOn = (answers: readonly Answer[], question: QuestionId): Form["yes_
  * is asked the child's age, what is hardest for them, and whether ADHD was raised before; they are not
  * asked about a clinician with ADHD themselves.
  */
-const CHILD = /\b(my|our) (?:\S+ ){0,3}(son|sons|daughter|daughters|boy|girl|kid|kids|child|children|teen|teenager|stepson|stepdaughter)('?s)?\b|\b(his|her) (teacher|school|class|kindy|daycare)\b|\b(year|grade) (\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b|\b(kindergarten|kindy|preschool|daycare|p(a)?ediatric\w*|child psychiatrist)\b|\bfor (a |my |our )?(kids|children|child|teens?|teenagers?)\b|\b(my|our) (\S+ )?\S*years?[-\u2011\s]olds?\b/i;
-export const aboutChild = (answers: readonly Answer[]) => of(answers, "opening").some((answer) => CHILD.test(answer.text));
+const CHILD = /\b(my|our) (?:\S+ ){0,3}(son|sons|daughter|daughters|boy|girl|kid|kids|child|children|teen|teenager|stepson|stepdaughter)('?s)?\b|\b(his|her) (teacher|school|class|kindy|daycare)\b|\b(year|grade) (\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b|\b(kindergarten|kindy|preschool|daycare|p(a)?ediatric\w*|child psychiatrist)\b|\bfor (a |my |our )?(kids|children|child|teens?|teenagers?)\b|\b(my|our) ((1[0-7]|[1-9]|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen)[-\u2011\s])(years?|yrs?)[-\u2011\s]olds?\b(?!\s+(husband|wife|partner|mum|mother|dad|father|brother|sister|friend))/i;
+/** The person asking about ADHD in themselves: "I think I have ADHD", "I'm in year 12", "for me". */
+const SELF = /\b(i'?m|i am) in (year|grade)\b|\bi (think i |might |may |probably )?(have|might have|may have) adhd\b|\bmyself\b|\bfor me\b|\bmy own\b/i;
+export const aboutChild = (answers: readonly Answer[]) => of(answers, "opening").some((answer) => CHILD.test(answer.text) && !SELF.test(answer.text));
 /** An age, a school year or a stage said: nothing to ask. */
 const AGED = /\b\d{1,2}\b|\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen)\b|\b(toddler|kindy|kindergarten|preschool|daycare|primary|high school|teenager|teen)\b/i;
 /** ADHD raised by someone, or a diagnosis, already said. */
@@ -313,7 +315,7 @@ const RAISED = /\b(teacher|school|daycare|kindy|paediatrician|pediatrician|psych
 /** Midlife heard in the first answer: the change itself, or an age in the late forties or fifties. */
 export const atMidlife = (answers: readonly Answer[]) => !aboutChild(answers) && of(answers, "opening").some((answer) => MIDLIFE.test(answer.text));
 /** Care she already has, or an assessment she asks for: a first look or not, already said. */
-const KNOWN = /\b(diagnos\w*|my (medication|meds|dose|script|prescription|prescriber|psychiatrist)|vyvanse|ritalin|concerta|dexamphetamine|stimulants?|assess\w*|could (this|it) be adhd|is (this|it) adhd|might (have|be) adhd)\b/i;
+const KNOWN = /\b(diagnos\w*|(my|adhd) (medication|meds|dose|script|prescription|prescriber|psychiatrist)|vyvanse|ritalin|concerta|dexamphetamine|stimulants?|assess\w*|could (this|it) be adhd|is (this|it) adhd|might (have|be) adhd)\b/i;
 /** A woman asked for, or said not to matter. */
 const WOMAN = /\b(woman|women|female|lady|gender|man|male)\b/i;
 const opening = (answers: readonly Answer[]) => of(answers, "opening", "carry-on").map((answer) => answer.text).join(". ");
@@ -329,7 +331,7 @@ export function detailFor(opening: readonly Answer[]): SayId | null {
   // A parent is asked what is hardest for their child, unless the first answer named it; one asking
   // for help with their own parenting is asked what is hardest at home, below.
   const parenting = PARTS_OF_LIFE.find((entry) => entry.say === "detail-home")!.mentioned.test(said);
-  if (CHILD.test(said) && !parenting) return careAsked(said).some((key) => key !== "care:child-adolescent-adhd" && key !== "care:adhd-assessment") ? null : "detail-child";
+  if (CHILD.test(said) && !SELF.test(said) && !parenting) return careAsked(said).some((key) => key !== "care:child-adolescent-adhd" && key !== "care:adhd-assessment") ? null : "detail-child";
   // The part of life named first is the one asked about ("as a new mother and also going back to uni").
   const part = PARTS_OF_LIFE.map((entry) => ({ say: entry.say, at: said.search(entry.mentioned) })).filter((entry) => entry.at >= 0).sort((a, b) => a.at - b.at)[0];
   if (part) return part.say;

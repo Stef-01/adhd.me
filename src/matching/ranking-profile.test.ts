@@ -261,3 +261,12 @@ describe("midlife (2026-10-01): an assessment ask lifts the assessor who also an
     expect(rankClinicians("", [coach, gp], new Date(), needs).map((c) => c.id)).toEqual(["gp", "coach"]);
   });
 });
+
+describe("edges: for a child, an adults-only clinician does not lead", () => {
+  it("lists someone who sees children above an adults-only prescriber for a child's dose review", () => {
+    const needs = ["care:child-adolescent-adhd", "care:titration"].flatMap((key) => needForKey(key) ?? []);
+    const adultGp = clone("adult-gp", { careAreas: ["titration"], careAreasSometimes: [], manner: [] });
+    const childPsych = clone("child-psych", { careAreas: ["child-adolescent-adhd"], careAreasSometimes: [], manner: [] });
+    expect(rankClinicians("", [adultGp, childPsych], new Date(), needs).map((c) => c.id)).toEqual(["child-psych", "adult-gp"]);
+  });
+});
