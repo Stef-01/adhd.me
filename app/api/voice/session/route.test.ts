@@ -66,7 +66,7 @@ describe("POST /api/voice/session", () => {
     // The app asks the questions: the model is told so, never answers a turn on its own, and has one tool.
     expect(session.instructions).toContain("The app asks the person its questions");
     expect(session.audio.input.turn_detection.create_response).toBe(false);
-    expect(session.audio.input.transcription).toEqual({ model: "gpt-4o-mini-transcribe", language: "en" });
+    expect(session.audio.input.transcription).toEqual({ model: "gpt-4o-transcribe", language: "en" });
     expect(session.tools.map((t: { name: string }) => t.name)).toEqual(["urgent_help"]);
   });
 
