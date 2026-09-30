@@ -13,7 +13,7 @@
 import { checkSafety, type SafetyRuleId } from "@/model/safety";
 import { PROFESSION_ENTRIES, professionsMentioned } from "@/support/professions";
 import { ANSWER, DANGER, MAX_FOLLOW_UPS, SAFETY_CHECK, TRANSLATE, URGENT_HELP, safetyInput, sayExactly } from "./interviewer";
-import { MAX_REQUEST, SENTENCES, compose, hear, mostlyEnglish, nextQuestion, saysNo, type Answer, type Line, type QuestionId, type SayId } from "./plan";
+import { MAX_REQUEST, SENTENCES, compose, echoes, hear, mostlyEnglish, nextQuestion, saysNo, type Answer, type Line, type QuestionId, type SayId } from "./plan";
 
 export { mostlyEnglish, placeOf, withoutQuestions } from "./plan";
 
@@ -68,6 +68,8 @@ export interface VoiceState {
   lines: Line[];
   /** The last sentence begun, heard in full or not: what the microphone may have picked up. */
   last: SayId | null;
+  /** The sentence a sound has just cut short: a sound made of its own words was the sentence itself. */
+  cut: SayId | null;
   /** Each committed stretch of the person's audio, and the question it answers. */
   items: Record<string, QuestionId>;
   /** Stretches of audio whose words have not arrived yet. */
@@ -152,6 +154,7 @@ export function initialVoice(): VoiceState {
     saying: null,
     lines: [],
     last: null,
+    cut: null,
     items: {},
     open: 0,
     retried: {},
@@ -299,8 +302,8 @@ function spoken(state: VoiceState, share: number): VoiceState {
   if (!line) return state;
   // A recording ends when it ends; the model's voice is still playing when its response is done.
   let next: VoiceState = { ...state, saying: null, talking: line.by === "clip" && state.talking === "assistant" ? null : state.talking };
-  if (share < HEARD) return { ...next, lines: [] };
-  next = { ...next, firm: false };
+  if (share < HEARD) return { ...next, lines: [], cut: line.say };
+  next = { ...next, firm: false, cut: null };
   if (!line.question) return next;
   next = { ...next, pending: { say: line.say, question: line.question } };
   if (line.question in next.counted) return next;
@@ -336,7 +339,9 @@ function take(state: VoiceState, question: QuestionId, text: string): { state: V
   // The microphone may have heard the sentence last begun, or the question before it.
   const ours = [state.last, state.pending?.say].flatMap((id) => (id ? [SENTENCES[id].text, SENTENCES[id].spoken ?? ""] : []));
   const echo = ours.find((sentence) => sentence && hear(words, question, sentence).kind === "echo") ?? "";
-  const what = hear(words, question, echo);
+  // A word or two of the sentence this sound cut short is that sentence, not an answer to the one before.
+  const clipped = state.cut !== null && echoes(words, SENTENCES[state.cut].spoken ?? SENTENCES[state.cut].text, 1);
+  const what = clipped ? ({ kind: "echo" } as const) : hear(words, question, echo);
   const say = state.counted[question] ?? state.pending?.say ?? "opening";
   const tries = state.retried[question] ?? 0;
   /** The question once more, with these sentences; after the last try the call moves on. */
@@ -345,7 +350,7 @@ function take(state: VoiceState, question: QuestionId, text: string): { state: V
   switch (what.kind) {
     case "echo":
       // The finder's own voice: nobody's answer. What it cut short is said through next time.
-      return { state: { ...state, firm: true, turns: [...state.turns, { who: "tool", text: `echo: ${words}` }] }, send: [] };
+      return { state: { ...state, firm: true, cut: null, turns: [...state.turns, { who: "tool", text: `echo: ${words}` }] }, send: [] };
     case "unclear": {
       const kept = words ? { ...state, turns: [...state.turns, { who: "person" as const, text: words }] } : state;
       // Once: "Sorry, I didn't catch that", and the question again. After that the call moves on.
@@ -354,12 +359,12 @@ function take(state: VoiceState, question: QuestionId, text: string): { state: V
     case "repeat":
       return { state: once({ ...state, turns: [...state.turns, { who: "person", text: words }] }, MOST_RETRIES), send: [] };
     case "finish": {
-      let next = noted(state, words);
+      let next = noted({ ...state, cut: null }, words);
       if (what.text) next = { ...next, heard: [...next.heard, { question, say, text: what.text }] };
       return { state: { ...finished(next, question), finishing: true }, send: checked(next, words) };
     }
     case "answer": {
-      let next = noted(state, words);
+      let next = noted({ ...state, cut: null }, words);
       if (what.text) next = { ...next, heard: [...next.heard, { question, say, text: what.text }] };
       // The model answers a few of their questions; past that the call keeps to finding a clinician.
       next = { ...next, owed: next.owed || (what.asks && next.answered < MOST_ANSWERS) };

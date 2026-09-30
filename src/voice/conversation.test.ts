@@ -250,6 +250,21 @@ describe("what is not an answer", () => {
     expect(c.state.pending?.question).toBe("place");
   });
 
+  it("is a word or two of the sentence a sound cut short: the sentence itself, however little of it came back", () => {
+    const c = begun().answers("an ADHD assessment");
+    c.hears("Where are", { cut: 0.2 });
+    expect(c.state.heard.map((answer) => answer.text)).toEqual(["an ADHD assessment"]);
+    expect(c.state.turns.at(-2)).toEqual({ who: "tool", text: "echo: Where are" });
+    expect(c.played.at(-1)).toBe("place");
+    // Heard out, a word of the question is an answer to it.
+    c.ends().hears("Telehealth.");
+    expect(c.state.heard.at(-1)).toEqual({ question: "place", say: "place", text: "Telehealth" });
+    // And words of their own over the start of a question are theirs.
+    const theirs = begun().answers("an ADHD assessment");
+    theirs.hears("for my daughter", { cut: 0.2 });
+    expect(theirs.state.heard.at(-1)?.text).toBe("for my daughter");
+  });
+
   it("is a request to hear the question again: it is said again, and the request never holds the asking", () => {
     const c = begun().answers("an ADHD assessment").answers("Hornsby").answers("Sorry, I didn't catch what you just said.");
     expect(c.played.slice(-2)).toEqual(["lived", "lived"]);

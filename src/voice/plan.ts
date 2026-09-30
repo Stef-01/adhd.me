@@ -143,11 +143,13 @@ export function withoutQuestions(text: string): string {
 
 /**
  * The microphone hearing the finder's own voice: every word of what came back is in the sentence just
- * said, in its order. Three words or more, so "yes" to a question with a yes in it is still an answer.
+ * said, in its order. Three words or more, so "telehealth" to a question with telehealth in it is still
+ * an answer; any number of words when the sound is the one that cut the sentence short (`least` 1),
+ * since nobody answers a question with its own first words.
  */
-export function echoes(text: string, sentence: string): boolean {
+export function echoes(text: string, sentence: string, least = 3): boolean {
   const heard = wordsOf(text);
-  if (heard.length < 3) return false;
+  if (heard.length < least) return false;
   const spoken = wordsOf(sentence);
   let at = 0;
   for (const word of heard) {

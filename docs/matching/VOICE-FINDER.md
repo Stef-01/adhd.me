@@ -43,7 +43,18 @@ thing said, for danger.
 An answer belongs to the question the person last heard in full (60% of it played). Words said over
 the start of a question are the rest of the answer before, and the question is asked again. A
 request to hear the question again, the finder's own voice in the microphone, and "show me who fits"
-are none of them answers, and none reaches the request.
+are none of them answers, and none reaches the request. The finder's own voice is three words or more
+that are all in the sentence last said, in its order; or any words of a sentence that the same sound
+cut short ("Where are"), and that sentence is then said through, whatever the microphone hears.
+
+### Verified on production (2026-09-30, commit d57e26ef)
+
+Four calls from a fresh browser: the first sound 0.28 to 0.37 s after the tap, the channel open at
+2.6 to 3.7 s. The founder's call replayed with real audio (journal row d1a7695f, `revealed`, five
+questions, 80 s): "With someone that would help me at work." / "What's hardest at work?" / "With my
+needs with focusing." / where / lived experience / culture / anything else. Heard: Getting organised,
+At work. Shown: Alex Lawson, Kate Dallimore, Donna Italiano, Erin Lysle, Romney Taylor. The call cost
+$0.0005 for the model and about $0.004 for transcription.
 
 | Part | File |
 | --- | --- |
