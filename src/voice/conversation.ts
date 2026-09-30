@@ -74,8 +74,8 @@ export interface VoiceState {
   lines: Line[];
   /** The last sentence begun, heard in full or not: what the microphone may have picked up. */
   last: SayId | null;
-  /** The sentence a sound has just cut short: a sound made of its own words was the sentence itself. */
-  cut: SayId | null;
+  /** The sentence a sound has just cut short: a sound made of its own words was the sentence itself, and an answer to its question is its answer. */
+  cut: Line | null;
   /** Each stretch of the person's speech that is still being read: the question it answers, and what has come in about it. */
   items: Record<string, Hearing>;
   /** How many of them there are: nothing more is said until each is heard in full. */
@@ -368,7 +368,7 @@ function spoken(state: VoiceState, share: number): VoiceState {
   if (!line) return state;
   // A recording ends when it ends; the model's voice is still playing when its response is done.
   let next: VoiceState = { ...state, saying: null, talking: line.by === "clip" && state.talking === "assistant" ? null : state.talking };
-  if (share < HEARD) return { ...next, lines: [], cut: line.say };
+  if (share < HEARD) return { ...next, lines: [], cut: { say: line.say, question: line.question } };
   next = { ...next, firm: false, cut: null };
   if (!line.question) return next;
   next = { ...next, pending: { say: line.say, question: line.question } };
@@ -384,14 +384,36 @@ const finished = (state: VoiceState, question: QuestionId): VoiceState => (state
 /** A question said a second time: the opening one without its hello. */
 const again = (line: Line): Line => (line.say === "opening" ? { say: "again", question: line.question } : line);
 
+/**
+ * Whether a form carries what a question asks for by name: a place or telehealth, a culture or a language.
+ * A bare yes or no over the start of a yes-or-no question is left where it was: "actually no" is as
+ * often the last answer taken back as the next one given.
+ */
+function answersQuestion(question: QuestionId, form: Form): boolean {
+  switch (question) {
+    case "place":
+      return Boolean(form.place || form.telehealth);
+    case "culture":
+    case "which-culture":
+      return Boolean(form.culture || form.language || form.plain);
+    default:
+      return false;
+  }
+}
+
 /** One answer, with its words and its form in: what it was, and what the call does with it. */
 function take(state: VoiceState, item: string): VoiceState {
   const held = state.items[item];
   if (!held) return state;
   const { [item]: _taken, ...items } = state.items;
   const base: VoiceState = { ...state, items, open: Object.keys(items).length };
-  const { question } = held;
   const words = (held.text ?? "").trim();
+  // Words over the start of a question are the rest of the last answer (the founder's 07:49 call), unless
+  // they carry what the cut question asks for: "in Queensland" over "Where are you?" is its answer (his
+  // 02:34 call, where it went into the request as words of his own).
+  const cutQuestion = base.cut?.question ?? null;
+  const early = cutQuestion !== null && cutQuestion !== held.question && answersQuestion(cutQuestion, held.form ?? formFrom(words)) ? { question: cutQuestion, asked: base.cut!.say } : null;
+  const question = early?.question ?? held.question;
   const filled = formFor(question, held.form ?? formFrom(words), words);
   // Words the transcriber was not sure of are words nobody said: fluent, and wrong. Unless the model, hearing
   // the same audio, made out a plain answer in it ("Hindi", written down at 0.33): then the answer stands.
@@ -406,13 +428,16 @@ function take(state: VoiceState, item: string): VoiceState {
   // The finder's own voice in the microphone: the sentence last begun, the question before it, or a
   // word or two of the sentence this very sound cut short. Nobody's answer; it is said through next time.
   const ours = [base.last, base.pending?.say].flatMap((id) => (id ? [SENTENCES[id].text, SENTENCES[id].spoken ?? ""] : []));
-  const clipped = base.cut !== null && echoes(words, SENTENCES[base.cut].spoken ?? SENTENCES[base.cut].text, 1);
+  const clipped = base.cut !== null && echoes(words, SENTENCES[base.cut.say].spoken ?? SENTENCES[base.cut.say].text, 1);
   if (words && (clipped || ours.some((sentence) => sentence && echoes(words, sentence)))) {
     return { ...base, firm: true, cut: null, turns: [...base.turns, { who: "tool", text: `echo: ${words}` }] };
   }
   // What was heard, on the record beside the words: how sure the transcriber was, and what the model made of it.
   const hearing: Turn = { who: "tool", text: `heard ${JSON.stringify({ ...(held.sure !== undefined ? { sure: Number(held.sure.toFixed(2)) } : {}), ...heard })}` };
-  const kept: VoiceState = { ...base, cut: null, turns: [...base.turns, ...(words ? [{ who: "person" as const, text: words }] : []), hearing] };
+  // A question answered before it was heard out counts as asked, once.
+  const follows = question !== "opening" && question !== "carry-on";
+  const counted = early && !(question in base.counted) ? { counted: { ...base.counted, [question]: early.asked }, asked: base.asked + (follows ? 1 : 0) } : {};
+  const kept: VoiceState = { ...base, ...counted, cut: null, turns: [...base.turns, ...(words ? [{ who: "person" as const, text: words }] : []), hearing] };
   // Nothing anybody could make out: "Sorry, I didn't catch that", and the question once more.
   if (!heard.understood && !heard.again) return { ...once(kept, 1, [{ say: "catch", question: null }]), firm: base.firm || !words };
   if (heard.again) return once(kept, MOST_RETRIES);
@@ -424,7 +449,7 @@ function take(state: VoiceState, item: string): VoiceState {
   const answers = Boolean(said) || Boolean(heard.yes_no || heard.place || heard.telehealth || heard.culture || heard.language);
   if (answers && !(heard.show_matches && !heard.place && !heard.culture && !heard.language && said.split(/\s+/).length < 8)) {
     // An answer is in: anything queued to ask this question again is dropped.
-    next = { ...next, heard: [...next.heard, { question, say: held.asked, text: heard.show_matches ? "" : words, form: heard }], lines: next.lines.filter((line) => line.question !== question && line.say !== "catch") };
+    next = { ...next, heard: [...next.heard, { question, say: early?.asked ?? held.asked, text: heard.show_matches ? "" : words, form: heard }], lines: next.lines.filter((line) => line.question !== question && line.say !== "catch") };
   }
   if (heard.show_matches) return { ...finished(next, question), finishing: true };
   // The model answers a few of their questions; past that the call keeps to finding a clinician.

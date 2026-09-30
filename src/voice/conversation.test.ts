@@ -350,6 +350,28 @@ describe("the founder's calls of 2026-09-30, as the app now runs them", () => {
     });
     expect(c.state.reveal?.request).not.toMatch(/grejda|Hello|preference/);
   });
+
+  it("02:34: a place said over the start of 'Where are you?' answers it; a yes taken back is no ask; a plain culture asks for nothing", () => {
+    const c = begun().answers("Someone to help me with my challenges as a new mother and also someone who is going back to uni.");
+    expect(c.playing).toBe("detail-home");
+    c.answers("I can't keep on top of anything.");
+    expect(c.playing).toBe("place");
+    // He answered before the question had played out. The words carry a place, so they are its answer, not more of the last one.
+    c.hears("in Queensland.", { cut: 0.3, form: { place: "Queensland" } });
+    expect(c.state.heard.at(-1)).toMatchObject({ question: "place", say: "place", text: "in Queensland." });
+    expect(c.playing).toBe("lived");
+    // A second thought while the form for the first is still on its way: both are answers to the same question, and the last one stands.
+    c.through().hears("Yeah, that'd be great.", { form: { yes_no: "yes" } });
+    c.hears("Actually no, it doesn't matter.", { form: { yes_no: "no" } });
+    expect(c.state.heard.slice(-2).map((answer) => [answer.question, answer.form.yes_no])).toEqual([["lived", "yes"], ["lived", "no"]]);
+    expect(c.playing).toBe("culture");
+    c.answers("Yes.", { yes_no: "yes" });
+    expect(c.playing).toBe("which-culture");
+    c.answers("Caucasian culture.", { culture: "Caucasian culture" });
+    expect(c.playing).toBe("extra");
+    c.answers("No.", { yes_no: "no", show_matches: true });
+    expect(c.state.reveal).toEqual({ request: "Someone to help me with my challenges as a new mother and also someone who is going back to uni. Hardest at home: I can't keep on top of anything", place: "Queensland" });
+  });
 });
 
 describe("an answer belongs to the question the person last heard in full", () => {
