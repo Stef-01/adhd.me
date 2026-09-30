@@ -526,3 +526,21 @@ call and nothing else. Every non-empty request is read. The eval is one run and 
 sentences every run, all a policy: SIMPLE.md §6), 0 fallbacks, $0.18. The 24 requests people typed
 or said into production this week all read as meant, each tag quoting them.
 
+## R20 · a prompted yes outranked what they came for, 2026-09-30 · layer: the ranker's tiers
+
+The founder's 02:34 call: "help with my challenges as a new mother and also someone who is going back
+to uni", then yes to "Would you like someone who has ADHD themselves?" (then "actually no", R19).
+Listed: Alex Lawson, Trisha Harris, Chantelle Pin, Samantha Courtney, Lana Hiscock. Chantelle Pin
+answers neither parenting nor study; she has ADHD herself. Flynn Simonis and Lachlan Avent answer
+both care needs and were below her.
+
+**Cause.** `rankingProfile` put every preference in the constraint tier with languages, so one
+answered preference outranked any number of answered care areas. That is right for telehealth or a
+language (the appointment cannot happen otherwise) and wrong for lived experience, which the voice
+finder asks of everybody and most say yes to.
+
+**Fix.** Lived experience is weighed in the care tier (src/demo/clinicians.ts, one branch). The
+02:34 order is now Alex Lawson, Flynn Simonis, Trisha Harris, Lachlan Avent, Meera Lakhani. Pinned
+by "weighs lived experience with care, not ahead of it" in src/matching/ranking-profile.test.ts,
+which also keeps the 2026-08-22 audit: telehealth still comes first for someone who asked for it.
+

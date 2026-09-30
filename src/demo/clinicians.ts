@@ -158,11 +158,11 @@ export function rankClinicians(
 }
 
 type RankingProfile = {
-  /** Number of distinct language and access constraints this clinician answers. */
+  /** Number of distinct language and access constraints this clinician answers (lived experience is not one: R20). */
   constraintCoverage: number;
   /** Weight of explicitly requested language and access constraints this clinician answers. */
   constraintScore: number;
-  /** Weighted overlap on care-area facets alone — the STRONG tier (M9/F9). */
+  /** Weighted overlap on care-area facets and lived experience — the STRONG tier (M9/F9, R20). */
   careScore: number;
   /** Weighted overlap on manner facets alone — the CONTRIBUTORY tier (M9/F9). */
   mannerScore: number;
@@ -205,10 +205,16 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
     const contribution = roundScore(need.weight * strength);
     coverage += 1;
     weightedScore += contribution;
-    if (need.facet.kind === "preference" || need.facet.kind === "language") {
+    if (need.facet.kind === "language" || (need.facet.kind === "preference" && need.facet.preference !== "lived-experience")) {
       constraintCoverage += 1;
       constraintScore += contribution;
-    } else if (need.facet.kind === "care") {
+    } else if (need.facet.kind === "care" || need.facet.kind === "preference") {
+      // R20 (2026-09-30): lived experience is weighed with care, not ahead of it. The voice finder asks
+      // everybody "Would you like someone who has ADHD themselves?", most say yes, and as a constraint
+      // that yes put a clinician who answered nothing else third, above two who answered both care
+      // needs (the founder's call of 02:34). A language, telehealth, a woman, bulk billing, NDIS and
+      // a longer appointment decide whether an appointment can happen at all; who the clinician is
+      // decides how well it goes, beside what they declare they work with.
       careScore += contribution;
     } else {
       mannerScore += contribution;

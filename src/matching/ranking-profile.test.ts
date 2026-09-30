@@ -14,6 +14,7 @@ import {
 import { syntheticClinician } from "@/demo/synthetic-clinician";
 import type { CareArea } from "@/demo/care-archetypes";
 import type { EIQuality } from "@/demo/emotional-fit";
+import { needForKey } from "@/matching/needs";
 
 const base = clinicians[0]!;
 
@@ -103,6 +104,22 @@ describe("2026-08-22 constraint-first ranking audit", () => {
       // O252: the sentence names the list it is about, and the real roster is no longer GPs only.
       "Punjabi-speaking is not something any provider listed today declares",
     );
+  });
+
+  it("weighs lived experience with care, not ahead of it (R20, the founder's call of 02:34)", () => {
+    // "help as a new mother, going back to uni, someone who has ADHD themselves": two care needs and the prompted yes,
+    // at the weights the model's read carries (needForKey, as app/finder-read.ts builds them: no rarity discount).
+    const needs = ["care:parenting", "care:study-school", "pref:lived-experience"].map((key) => needForKey(key)!);
+    const both = clone("both", { livedExperience: undefined, telehealthFirstAppointment: undefined, careAreas: ["parenting", "study-school"] as CareArea[], careAreasSometimes: [], manner: [] });
+    const livedOnly = clone("lived-only", { livedExperience: true, telehealthFirstAppointment: undefined, careAreas: ["titration"], careAreasSometimes: [], manner: [] });
+    const all = clone("all", { livedExperience: true, telehealthFirstAppointment: undefined, careAreas: ["parenting", "study-school"] as CareArea[], careAreasSometimes: [], manner: [] });
+    expect(rankClinicians("help as a new mother", [livedOnly, both, all], new Date(), needs).map((c) => c.id)).toEqual(["all", "both", "lived-only"]);
+    expect(rankingProfile(livedOnly, needs).constraintCoverage).toBe(0);
+    expect(rankingProfile(livedOnly, needs).careScore).toBeGreaterThan(0);
+    // A language, telehealth or a woman is still asked for first.
+    const telehealth = clone("telehealth", { telehealthFirstAppointment: true, livedExperience: undefined, careAreas: ["titration"], careAreasSometimes: [], manner: [] });
+    const withTelehealth = [...needs, needForKey("pref:telehealth-first")!];
+    expect(rankClinicians("help as a new mother", [both, telehealth], new Date(), withTelehealth)[0]!.id).toBe("telehealth");
   });
 
   it("does not invent a constraint when the reader only names care preferences", () => {

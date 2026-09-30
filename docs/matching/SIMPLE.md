@@ -26,6 +26,7 @@ journal rows are in `qa/matching/rca.md`, R15 to R18, and in the voice finder's 
 | F8 | "Yes, I want someone from my culture" → the app did not ask **which** culture (10:53) | the voice plan | a regex accepted any reply of three words or more as "a culture named"; and the transcriber heard "ja ta pi grejda" for a yes. Fixed in O264 (a form per answer, asked which when a yes names none), and verified on the 02:19 call: "Which culture or language?" → "Indian". |
 | F9 | "Yeah, that'd be great. Actually no, it doesn't matter" → the request still asked for lived experience (02:34) | the voice plan | `compose` took any yes to a question; a later no to the same question did not take it back. Fixed today: the answer a question was left at is the one that counts (`settledOn`). |
 | F10 | "as a new mother and also going back to uni" → no follow-up question about either | the voice plan | "as a new mother" did not match "as a mother", and "going back to uni" did not match "at uni". Fixed today; the part of life named first is asked about. |
+| F12 | A clinician who answered nothing but "has ADHD themselves" was listed third, above two who answered both care needs (02:34) | the ranker | lived experience sat in the constraint tier with languages and telehealth, and the voice finder prompts everybody for it. Fixed today (R20): weighed with care. |
 | F10b | "in Queensland." went into the request text (02:34) | the voice conversation | said over the start of "Where are you?", it was taken as the rest of the last answer, the rule that fixed the 07:49 call. Fixed today: early words that carry what the cut question asks for by name (a place, a culture, a language) answer it. |
 | F11 | The system itself: 10,503 lines of matching code and 7,743 of tests for a reader that produced F1 to F6; a five-phase eval ladder whose baselines had to be re-pinned after every lexicon edit | the design | every failure was met with a mechanism (a cue, a suppressor, a register of refused cues, a register of known false positives, a separation metric, a declaration-state report), and each mechanism protected the last one. The corpus pins were written to what the lexicon hears, so L0's recall was 100% by construction and the ladder gated the model against the lexicon's own mistakes. |
 
@@ -153,14 +154,22 @@ in the model's meaning line.
 1. **Described states.** "Flat and hopeless most days" typed into the finder: the corpus's G7 rule
    reads nothing (no help asked); a clinician would hear depression. The model reads it one run in
    two. Default in force: the corpus rule, gated at ≤ 5% so it cannot fail the eval on this alone.
-2. **The ranker.** `rankClinicians` still orders by tiers (language and preference constraints, then
-   care, then manner, then coverage), 1,269 lines, and the manner tier now sees nothing. The research's
-   answer is one weighted sum with a breakdown per clinician. Measured before deciding: on the six
-   requests the founder made this week, the tiered order and a weighted sum (care and preference
-   weights as the lexicon has them, language first) agree on the first three names in every case, so
-   the failures were the reader's, not the ranker's. The one wrong name in a top five (a Hindi speaker
-   third for "understands Hindi culture") was a reading error, fixed in run 4. Left as is; the tier
-   that puts a preference above a care match is the thing to change if a real request shows it wrong.
+2. **The ranker (R20, done).** `rankClinicians` orders by tiers: what makes an appointment possible
+   first (a language, telehealth, a woman, bulk billing, NDIS, a longer appointment), then care, then
+   manner (which nobody reads now), then coverage, capacity and a fixed shuffle. Measured on the
+   founder's six requests this week before deciding: the tiers and a plain weighted sum differ in
+   one way that matters. His 02:34 call ("help as a new mother … going back to uni … someone who has
+   ADHD themselves") listed a clinician who answered nothing but the lived-experience yes third,
+   above two who answered both care needs, because lived experience sat in the constraint tier. The
+   voice finder asks everybody that question, most say yes, and a prompted yes was outranking what
+   people came for. Lived experience is now weighed with care (one line in `rankingProfile`, with a
+   test from the call): the 02:34 order is Alex Lawson (both needs and lived), Flynn Simonis and
+   Trisha Harris, and the lone-yes clinician drops out of the five. The full weighted sum was not
+   adopted, because it lets four care matches in a consulting room outrank the one telehealth
+   clinician for a person who cannot come in (`ranking-profile.test.ts`, the 2026-08-22 audit). The
+   model's needs carry the lexicon's coarse weights as they are; level 0's rarity discount does not
+   apply to them, since it would lift the rare lived-experience declaration back over common care
+   areas. An earlier draft of this paragraph said the two orders agreed in every case; they did not.
 3. **Culture the roster mostly shares.** "Caucasian culture" as the answer to "which culture" is
    composed as nothing (O263), so the person's stated answer disappears from the request. Honouring
    it would rank up clinicians who declare cultural-background care, which is the opposite of what
