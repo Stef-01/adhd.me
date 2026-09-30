@@ -96,6 +96,7 @@ const EXAMPLES = [
   '"he won\'t go to school most mornings, he is terrified" → [{"tag":"care:child-adolescent-adhd","quote":"he won\'t go to school"},{"tag":"care:anxiety","quote":"he is terrified"},{"tag":"care:study-school","quote":"go to school"}]',
   '"talking therapies first" → []',
   '"we are open to medicine as one part of the plan, not the whole plan" → []',
+  '"our girl\'s class teacher raised ADHD, we want a clinician who will not only prescribe but will not refuse to either" → [{"tag":"care:child-adolescent-adhd","quote":"our girl"},{"tag":"care:adhd-assessment","quote":"class teacher raised ADHD"}]',
   '"at 51 my memory has fallen apart since the hot flushes began" → [{"tag":"care:womens-health","quote":"since the hot flushes began"}]',
   '"my stimulant does nothing now that I am going through the change" → [{"tag":"care:titration","quote":"my stimulant does nothing now"},{"tag":"care:womens-health","quote":"going through the change"}]',
   '"I was told I am autistic years ago and now I wonder about ADHD too" → [{"tag":"care:autism-adhd","quote":"I am autistic"},{"tag":"care:adhd-assessment","quote":"I wonder about ADHD too"}]',
