@@ -3,7 +3,9 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ServerEvent } from "./conversation";
+import { sayExactly } from "./interviewer";
 import { claimLink, startLink } from "./link";
+import { SENTENCES } from "./plan";
 // Loaded up front, so the call's own dynamic import settles inside the fake clock.
 import "./fake-link";
 
@@ -20,6 +22,7 @@ function handlers() {
   const heard: string[] = [];
   return {
     heard,
+    onMic: () => heard.push("mic"),
     onOpen: () => heard.push("open"),
     onEvent: (event: ServerEvent) => heard.push(event.type),
     onFail: () => heard.push("fail"),
@@ -32,10 +35,10 @@ describe("a call started in the tap", () => {
     await vi.advanceTimersByTimeAsync(500);
     const screen = handlers();
     const link = await claimLink(screen);
-    expect(screen.heard).toEqual(["open"]);
-    link.emit({ type: "response.create" });
+    expect(screen.heard).toEqual(["mic", "open"]);
+    link.emit({ type: "response.create", response: { instructions: sayExactly(SENTENCES.place.text), metadata: { purpose: "say" } } });
     await vi.advanceTimersByTimeAsync(1000);
-    expect(screen.heard.slice(1, 3)).toEqual(["response.created", "output_audio_buffer.started"]);
+    expect(screen.heard.slice(2, 4)).toEqual(["response.created", "output_audio_buffer.started"]);
     link.close();
   });
 
@@ -55,7 +58,7 @@ describe("a call started in the tap", () => {
     const late = handlers();
     const link = await claimLink(late);
     await vi.advanceTimersByTimeAsync(200);
-    expect(late.heard).toEqual(["open"]);
+    expect(late.heard).toEqual(["mic", "open"]);
     link.close();
   });
 });

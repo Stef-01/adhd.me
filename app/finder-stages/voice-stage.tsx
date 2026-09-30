@@ -4,15 +4,16 @@
 // progressively asks you questions (max 8 follow ups) and then reveals the clinician matches").
 // The screen is the prototype's (founder, the same day: "remove that bar entirely, make it exactly
 // like this", Javi0108/VoiceChatGpt-Prototype): the orb, and one button that ends the call. The
-// question being asked is the heading for a screen reader; everybody else hears it. The
-// conversation is src/voice/conversation.ts, the call src/voice/link.ts, what the model is told
-// src/voice/interviewer.ts.
+// question being asked is the heading for a screen reader; everybody else hears it. The questions
+// are src/voice/plan.ts, the conversation src/voice/conversation.ts, the call src/voice/link.ts,
+// the recordings src/voice/clips.ts, what the model is told src/voice/interviewer.ts.
 
 import { ChatCircleText, Phone } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FINDER_ANNOUNCEMENTS } from "@/finder/announce";
 import { contact, type CrisisContactId } from "@/model/crisis-contacts";
-import { initialVoice, saidAsRequest, step, type Action, type ClientEvent, type Reveal, type VoiceState, type Turn } from "@/voice/conversation";
+import { clipReady } from "@/voice/clips";
+import { initialVoice, saidAsRequest, stalled, step, type Action, type ClientEvent, type Reveal, type Step, type VoiceState, type Turn } from "@/voice/conversation";
 import { claimLink, failureOf, type VoiceLink } from "@/voice/link";
 import { FINDER_COPY } from "../finder-copy";
 import { Sheet } from "../sheet";
@@ -42,6 +43,10 @@ const LAST_WORDS_MS = 6000;
 const REVEAL_MS = 560;
 /** How long a person may say nothing after the assistant has finished before a gentle check. */
 const QUIET_MS = 18_000;
+/** How long the call waits on words that have not arrived, or on a sound that was nobody's turn. */
+const UNHEARD_MS = 4_000;
+/** A sound in a recording's first moments is the recording itself in the microphone: it plays on. */
+const GRACE_MS = 300;
 /** The contacts the urgent sheet lists, in the order a person in danger needs them. */
 const URGENT: readonly CrisisContactId[] = ["emergency", "emergency-text", "lifeline", "lifeline-text"];
 
@@ -74,6 +79,10 @@ export function VoiceStage({
   const state = useRef(view);
   const link = useRef<VoiceLink | null>(null);
   const queued = useRef<ClientEvent[]>([]);
+  /** The recorded sentence being played: which playing it is, when it began, whether a sound may cut it short. */
+  const playing = useRef<{ turn: number; began: number; firm: boolean } | null>(null);
+  const wanted = useRef<NonNullable<Step["say"]> | null>(null);
+  const plays = useRef(0);
   const revealTo = useRef(onReveal);
   const heardTo = useRef(onHeard);
   const endTo = useRef(onCallEnd);
@@ -111,7 +120,8 @@ export function VoiceStage({
 
   const act = useCallback((action: Action) => {
     const before = state.current.turns.length;
-    const { state: next, send } = step(state.current, action);
+    const spoke = state.current.talking === "person";
+    const { state: next, send, say, hush } = step(state.current, action, clipReady);
     state.current = next;
     setView(next);
     // A new turn on the record: the call so far goes out as "stopped", overwritten by the end. Not on the turn that
@@ -122,7 +132,32 @@ export function VoiceStage({
       if (link.current) link.current.emit(event);
       else queued.current.push(event);
     }
+    // The person has begun to speak over a recording: it stops, unless it has only just begun or must be said through.
+    const now = playing.current;
+    const over = !spoke && next.talking === "person" && now !== null && !now.firm && performance.now() - now.began > GRACE_MS;
+    if (hush || over) {
+      wanted.current = null;
+      link.current?.hush();
+    }
+    if (say) play(say);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `play` calls `act` when a sentence ends: each reads the other through refs.
   }, []);
+
+  /** Plays a recorded sentence on the call, and tells the conversation how much of it was heard. */
+  const play = useCallback((say: NonNullable<Step["say"]>) => {
+    const call = link.current;
+    if (!call) {
+      // The call is on its way: the sentence is played the moment it is here.
+      wanted.current = say;
+      return;
+    }
+    const turn = ++plays.current;
+    playing.current = { turn, began: performance.now(), firm: say.firm };
+    void call.say(say.id).then((heard) => {
+      if (playing.current?.turn === turn) playing.current = null;
+      act({ type: "said", say: say.id, heard });
+    });
+  }, [act]);
 
   // The tap started the call (`startLink`); the screen claims it a tick after arrival, so React's
   // development double mount claims it once, and any way off this screen closes it.
@@ -130,7 +165,8 @@ export function VoiceStage({
     let live = true;
     const start = window.setTimeout(() => {
       claimLink({
-        onOpen: () => live && act({ type: "connected" }),
+        onMic: () => live && act({ type: "mic" }),
+        onOpen: (missed) => live && act({ type: "connected", missed }),
         onEvent: (event) => live && act({ type: "server", event }),
         onFail: (failure) => live && act({ type: "failed", failure }),
       }).then(
@@ -138,6 +174,9 @@ export function VoiceStage({
           if (!live) return opened.close();
           link.current = opened;
           for (const event of queued.current.splice(0)) opened.emit(event);
+          const say = wanted.current;
+          wanted.current = null;
+          if (say) play(say);
         },
         (error: unknown) => live && act({ type: "failed", failure: failureOf(error) }),
       );
@@ -150,7 +189,7 @@ export function VoiceStage({
       link.current?.close();
       link.current = null;
     };
-  }, [act]);
+  }, [act, play]);
 
   // Leaving by any other way (the browser's Back) still reports the call, once it had connected: the
   // development double mount, which unmounts while connecting, is not a call.
@@ -180,11 +219,21 @@ export function VoiceStage({
 
   // Quiet after the assistant has finished: a gentle check, then (once they have said anything) the
   // matches for what they said. Any sound from either side starts the wait again.
+  const busy = view.responding || view.saying !== null;
   useEffect(() => {
-    if (phase !== "live" || talking !== null || view.responding) return;
+    if (phase !== "live" || talking !== null || busy) return;
     const timer = window.setTimeout(() => act({ type: "quiet" }), QUIET_MS);
     return () => window.clearTimeout(timer);
-  }, [phase, talking, view.responding, view.quiet, view.answers, act]);
+  }, [phase, talking, busy, view.quiet, view.answers, act]);
+
+  // Words that have not arrived, or a sound that cut a sentence short and was nobody's turn: the call
+  // waits a few seconds, then carries on.
+  const stuck = stalled(view);
+  useEffect(() => {
+    if (!stuck) return;
+    const timer = window.setTimeout(() => act({ type: "unheard" }), UNHEARD_MS);
+    return () => window.clearTimeout(timer);
+  }, [stuck, view.open, view.turns.length, act]);
 
   const level = useCallback(() => link.current?.level() ?? { input: 0, output: 0 }, []);
 

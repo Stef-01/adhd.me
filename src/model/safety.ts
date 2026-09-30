@@ -42,7 +42,7 @@ const LIFELINE = `Lifeline is on ${said("lifeline")}, any hour, or text ${said("
 export const SAFETY_RULES: readonly SafetyRule[] = [
   {
     id: "self-harm",
-    trigger: /\b(kill myself|end my life|suicid\w*|hurt(ing)? myself|self[- ]?harm\w*|want to die|don'?t want to (be here|live|wake up)|better off dead|not be here any ?more)\b/i,
+    trigger: /\b(kill myself|end my life|take my (own )?life|end(ing)? it all|suicid\w*|hurt(ing)? myself|self[- ]?harm\w*|want to die|don'?t want to (be here|live|wake up)|better off dead|not be here any ?more)\b/i,
     severity: "emergency",
     message: "What you wrote matters, and it is more than an app should hold on its own. You deserve a person right now.",
     recommendedAction: `${EMERGENCY} Otherwise ${LIFELINE}, and the Suicide Call Back Service is on ${said("suicide-call-back")}.`,
@@ -51,7 +51,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
   },
   {
     id: "hopelessness",
-    trigger: /\b(no point (in )?(going on|anything|living)|can'?t go on|nothing matters any ?more|everyone would be better without me|no way out)\b/i,
+    trigger: /\b(no point (in )?(going on|anything|living|being alive)|(don'?t|do not) see the point (in|of) (living|being alive|going on)|can'?t go on|nothing matters any ?more|everyone would be better (off )?without me|no way out)\b/i,
     severity: "urgent-support",
     message: "It sounds like things feel very heavy right now. That is worth saying to a person, not a screen.",
     recommendedAction: `${LIFELINE}. Beyond Blue is on ${said("beyond-blue")}. If it becomes an emergency, call ${said("emergency")}.`,

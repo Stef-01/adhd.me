@@ -1,0 +1,41 @@
+{
+  "base": "http://localhost:3021",
+  "lines": [
+    "I need help at work with focus and getting things done.",
+    "Deadlines, and I can't get started.",
+    "I'm in Parramatta, but telehealth is fine.",
+    "No thanks.",
+    "No.",
+    "No, that's everything."
+  ],
+  "turns": [],
+  "request": "I need help at work with focus and getting things done. deadlines, and I can't get started. I'm in Parramatta, but telehealth is fine",
+  "reads": [
+    {
+      "text": "I need help at work with focus and getting things done. deadlines, and I can't get started. I'm in Parramatta, but telehealth is fine",
+      "answer": {
+        "keys": [
+          "care:executive-function",
+          "care:work-career",
+          "pref:telehealth-first"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Telehealth",
+    "Getting organised",
+    "At work"
+  ],
+  "results": [
+    "Alex Lawson ADHD coach · At work Sutherland",
+    "Kate Dallimore ADHD coach · At work Perth",
+    "Donna Italiano ADHD coach · At work Perth",
+    "Fiona Alexander ADHD coach Perth",
+    "Debbie Hirte ADHD coach Perth"
+  ],
+  "whyMatched": "Why matched Focus and getting things done Work and career From your words: “help at work” By phone or telehealth Compare",
+  "stage": "results"
+}

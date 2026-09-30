@@ -1,0 +1,85 @@
+{
+  "base": "http://localhost:3021",
+  "lines": [
+    "With someone that would help me at work.",
+    "[pause 1]",
+    "with my needs with focusing.",
+    "In Sydney.",
+    "Yeah, that's fine.",
+    "No.",
+    "Okay, show me who fits."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "With someone that would help me at work."
+    },
+    {
+      "who": "assistant",
+      "text": "What's hardest at work?"
+    },
+    {
+      "who": "person",
+      "text": "With my needs with focusing."
+    },
+    {
+      "who": "assistant",
+      "text": "Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "In Sydney."
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "You there, that's fine."
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone from your own culture?"
+    },
+    {
+      "who": "person",
+      "text": "No."
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    }
+  ],
+  "request": "With someone that would help me at work. With my needs with focusing. In Sydney. You there, that's fine",
+  "reads": [
+    {
+      "text": "With someone that would help me at work. With my needs with focusing. In Sydney. You there, that's fine",
+      "answer": {
+        "keys": [
+          "care:executive-function",
+          "care:work-career"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Getting organised",
+    "At work"
+  ],
+  "results": [
+    "Alex Lawson ADHD coach · At work Sutherland, by telehealth",
+    "Donna Italiano ADHD coach · At work Perth, by telehealth",
+    "Kate Dallimore ADHD coach · At work Perth, by telehealth",
+    "Debbie Hirte ADHD coach Perth, by telehealth",
+    "Erin Lysle ADHD coach Perth, by telehealth"
+  ],
+  "whyMatched": "Why matched Focus and getting things done From your words: “needs with focusing” Work and career From your words: “helps me at work” Compare",
+  "stage": "results"
+}

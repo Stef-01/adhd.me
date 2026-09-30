@@ -56,6 +56,7 @@ import { WelcomeStage } from "./finder-stages/welcome-stage";
 import { ListeningStage } from "./finder-stages/listening-stage";
 import { VoiceStage } from "./finder-stages/voice-stage";
 import { useFinderMode, useModelRead, useWhyMatched } from "./finder-read";
+import { loadClips } from "@/voice/clips";
 import { fakeVoice, startLink } from "@/voice/link";
 import { handOff, newId, track, trackSearch, trackVoiceCall } from "@/finder/track";
 import type { EventKind, SearchSource } from "@/db/finder";
@@ -99,6 +100,11 @@ const LISTLESS: ReadonlySet<Stage> = new Set(["welcome", "listening", "voice", "
 export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: number; voice?: boolean }) {
   const reducedMotion = useReducedMotion();
   const { mode, chooseMode, level, talks } = useFinderMode(readLevel, voice);
+  // The sentences the voice finder says are fetched while the welcome screen is read, so the first
+  // is played the moment the microphone opens (O263).
+  useEffect(() => {
+    if (talks) void loadClips();
+  }, [talks]);
   const [draft, setDraft] = useState("");
   const [request, setRequest] = useState(exampleRequest);
   /**

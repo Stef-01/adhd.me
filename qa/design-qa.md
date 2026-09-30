@@ -324,3 +324,22 @@ line of three. And the map's problem fit (`src/support/problem-fit.ts`) reads th
 areas beside the legacy expertise tags, so "help me start work tasks" from a person whose map says
 starting is hardest now finds the coaches, who declare focus and getting things done, not only the
 seven profiles with expertise tags.
+
+# The voice finder asks its own questions, and speaks at once (O263, 2026-09-30)
+
+The founder (2026-09-30): "there is load time for when you open the AI orb … there should be more
+standardized questions, like asking someone from your culture … Should also have asked for more
+detail about what the struggle at work is." The screen is unchanged to the eye: the orb and one stop
+button, no words on it (text budget 0, 127 of 127 app screens within their ceiling, median 32). What
+changed is what it says and when. The heading a screen reader lands on is now one of the app's own
+sentences, as written (`src/voice/plan.ts`): after "I need help at work" it reads "What's hardest at
+work?" (qa/voice/o263-voice-hardest-at-work-390.png), where the model used to choose its own words
+and asked where the person lived. Each sentence is a recording in the call's voice, played the
+moment the microphone opens: the first sound came 0.26 to 0.40 s after the tap in nine local calls,
+where production that morning took 3.5, 7.4 and 12.8 s. The orb goes live with that first sound and
+swells with the recording as it does with the model's voice. The matches the call reveals for
+"I need help at work. deadlines, and my boss. Hornsby, or telehealth" are the coaches who declare
+work and getting organised (qa/voice/o263-voice-matches-390.png): Alex Lawson, Donna Italiano, Kate
+Dallimore. Nothing about medication is heard, because nothing about medication was said (R18).
+Reduced motion: the orb holds still and the call still runs (e2e/voice-mode.spec.ts).
+

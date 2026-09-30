@@ -5,7 +5,7 @@
 // latencies and the cost, and appends the cost to qa/voice/ledger.jsonl. About $0.02 a call.
 //
 //   BASE=http://localhost:3021 node scripts/voice-call.mjs "I think I might have ADHD." "It's for me." "[pause 25]" ...
-//   CONNECT_ONLY=1 ...   stops at the first spoken word and prints each step's time from the tap
+//   CONNECT_ONLY=1 ...   stops once the first sentence has been heard and the call has connected, and prints each step's time from the tap
 //   NO_WEBGL=1 ...       the orb's still disc, so a software renderer does not skew the timings
 import { chromium } from "@playwright/test";
 import { execFileSync } from "node:child_process";
@@ -55,7 +55,8 @@ const silence = (seconds) => Buffer.alloc(Math.round(RATE * seconds) * 2);
 const dir = mkdtempSync(join(tmpdir(), "voice-call-"));
 const wav = join(dir, "person.wav");
 // A line "[pause 25]" is 25 seconds of saying nothing, to meet the quiet check.
-const pcm = [silence(4)];
+// LEAD is how long the person waits before their first word, from the moment the microphone opens (default 4 s).
+const pcm = [silence(Number(process.env.LEAD) || 4)];
 lines.forEach((line, i) => {
   const pause = /^\[pause (\d+)\]$/.exec(line);
   pcm.push(...(pause ? [silence(Number(pause[1]))] : [spoken(line, dir, i), silence(13)]));
@@ -73,13 +74,30 @@ await context.addInitScript(() => {
   try { localStorage.setItem("adhdme-privacy-ack", "1"); } catch {}
   window.__events = [];
   window.__marks = {};
+  window.__sounds = [];
+  window.__calls = [];
+  // A recorded sentence is played through an AudioBufferSourceNode: its start is the first sound a person hears.
+  const startSound = AudioBufferSourceNode.prototype.start;
+  AudioBufferSourceNode.prototype.start = function (...a) {
+    window.__marks.firstSound ??= Date.now();
+    window.__sounds.push({ t: Date.now(), seconds: this.buffer?.duration ?? 0 });
+    return startSound.apply(this, a);
+  };
   document.addEventListener("click", () => { window.__marks.tap ??= Date.now(); }, true);
   const gum = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
   navigator.mediaDevices.getUserMedia = async (...a) => { window.__marks.micAsked ??= Date.now(); const s = await gum(...a); window.__marks.micGiven ??= Date.now(); return s; };
+  // The call as the journal is sent it (a beacon), turn by turn: the last one is the whole call.
+  const beacon = navigator.sendBeacon?.bind(navigator);
+  if (beacon) navigator.sendBeacon = (url, data) => {
+    if (String(url).includes("/api/finder/track") && data instanceof Blob) void data.text().then((body) => { try { const sent = JSON.parse(body); if (sent.type === "voice") window.__calls.push(sent.record); } catch {} });
+    return beacon(url, data);
+  };
   const f = window.fetch.bind(window);
   window.fetch = async (url, init) => {
     const voice = String(url).includes("/api/voice/session");
     const read = String(url).includes("/api/finder/read");
+    // The call as the journal is sent it, turn by turn: the last one is the whole call.
+    if (String(url).includes("/api/finder/track")) try { const sent = JSON.parse(String(init?.body ?? "{}")); if (sent.type === "voice") window.__calls.push(sent.record); } catch {}
     if (voice) window.__marks.offerSent = Date.now();
     if (read) window.__marks.readStart ??= Date.now();
     const r = await f(url, init);
@@ -96,6 +114,17 @@ await context.addInitScript(() => {
       if (document.querySelector("main")?.dataset.stage === "results") window.__marks.results ??= Date.now();
     }).observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ["data-stage"] });
   });
+  // The connection's own steps: candidates gathered, a route found, the secure channel up.
+  const Peer = window.RTCPeerConnection;
+  window.RTCPeerConnection = function (...a) {
+    const pc = new Peer(...a);
+    pc.addEventListener("icegatheringstatechange", () => { window.__marks[`gathering-${pc.iceGatheringState}`] ??= Date.now(); });
+    pc.addEventListener("iceconnectionstatechange", () => { window.__marks[`ice-${pc.iceConnectionState}`] ??= Date.now(); });
+    pc.addEventListener("connectionstatechange", () => { window.__marks[`peer-${pc.connectionState}`] ??= Date.now(); });
+    pc.addEventListener("icecandidate", (e) => { if (e.candidate) window.__marks.firstCandidate ??= Date.now(); });
+    return pc;
+  };
+  window.RTCPeerConnection.prototype = Peer.prototype;
   const make = RTCPeerConnection.prototype.createDataChannel;
   RTCPeerConnection.prototype.createDataChannel = function (...a) {
     const channel = make.apply(this, a);
@@ -115,11 +144,12 @@ const timings = async () => {
   const ev = await page.evaluate(() => window.__events);
   const at = (type) => ev.find((e) => e.type === type)?.t;
   const tap = marks.tap ?? t0;
-  const steps = { ...marks, sessionCreated: at("session.created"), firstWord: at("response.output_audio_transcript.delta") };
+  const steps = { ...marks, sessionCreated: at("session.created"), firstModelWord: at("response.output_audio_transcript.delta") };
   return Object.entries(steps).filter(([k, v]) => k !== "tap" && v).map(([k, v]) => `${k} ${v - tap} ms`).join(" · ");
 };
 if (process.env.CONNECT_ONLY) {
-  await page.waitForFunction(() => window.__events.some((e) => e.type === "response.output_audio_transcript.delta"), null, { timeout: 30_000 });
+  await page.waitForFunction(() => (window.__marks.firstSound || window.__events.some((e) => e.type === "response.output_audio_transcript.delta")) && window.__marks.channelOpen, null, { timeout: 30_000 });
+  await page.waitForTimeout(1500);
   console.log("from the tap:", await timings());
   await browser.close();
   process.exit(0);
@@ -129,14 +159,13 @@ const stage = await page.locator("main").getAttribute("data-stage");
 const ev = await page.evaluate(() => window.__events);
 const request = await page.evaluate(() => { try { return JSON.parse(sessionStorage.getItem("adhdme.finder.v2") ?? "{}").request ?? "(none)"; } catch { return "(none)"; } });
 console.log("from the tap:", await timings());
-for (const e of ev) {
-  if (e.type === "response.output_audio_transcript.done") console.log(`  assistant  ${e.transcript}`);
-  if (e.type === "conversation.item.input_audio_transcription.completed") console.log(`  heard      ${e.transcript}`);
-  if (e.type === "response.done") for (const o of e.response?.output ?? []) if (o.type === "function_call") console.log(`  tool       ${o.name} ${o.arguments}`);
-  if (e.type === "error") console.log(`  error      ${e.error?.message}`);
-}
+const record = (await page.evaluate(() => window.__calls ?? [])).at(-1);
+for (const turn of record?.turns ?? []) console.log(`  ${turn.who.padEnd(10)} ${turn.text}`);
+for (const e of ev) if (e.type === "error") console.log(`  error      ${e.error?.message}`);
+// From the end of the person's speech to the next sound: a recording played, or the model's first word.
+const sounds = [...(await page.evaluate(() => window.__sounds ?? [])).map((sound) => sound.t), ...ev.filter((e) => e.type === "response.output_audio_transcript.delta").map((e) => e.t)].sort((a, b) => a - b);
 const stops = ev.filter((e) => e.type === "input_audio_buffer.speech_stopped").map((e) => e.t);
-const lat = stops.map((s) => { const d = ev.find((e) => e.t > s && e.type === "response.output_audio_transcript.delta"); return d ? d.t - s : null; }).filter((x) => x !== null);
+const lat = stops.map((s) => { const d = sounds.find((t) => t > s); return d ? d - s : null; }).filter((x) => x !== null);
 console.log(`stage ${stage} · request: ${request}`);
 // What the finder made of it: the read route's answer, the chips, the first five, and the first's reasons.
 await page.locator(".reading-line").waitFor({ state: "detached", timeout: 20_000 }).catch(() => undefined);
@@ -170,11 +199,7 @@ const seconds = Math.round((Date.now() - t0) / 1000);
 const transcribe = (seconds / 60) * 0.003;
 console.log(`call ${seconds} s · tokens ${JSON.stringify(tokens)} · $${usd.toFixed(4)} + about $${transcribe.toFixed(4)} transcription`);
 // The whole call, for going back to it: every turn both ways, the request, the read and the results.
-const turns = ev.flatMap((e) =>
-  e.type === "response.output_audio_transcript.done" ? [{ who: "assistant", text: e.transcript }]
-  : e.type === "conversation.item.input_audio_transcription.completed" ? [{ who: "person", text: e.transcript }]
-  : e.type === "response.done" ? (e.response?.output ?? []).filter((o) => o.type === "function_call").map((o) => ({ who: "tool", text: `${o.name} ${o.arguments}` }))
-  : []);
+const turns = record?.turns ?? [];
 mkdirSync("qa/voice/runs", { recursive: true });
 writeFileSync(`qa/voice/runs/${new Date().toISOString().replace(/[:.]/g, "-")}.json`, JSON.stringify({ base: BASE, lines, turns, request, reads, heard: heardChips, results: rows, whyMatched, stage }, null, 2));
 appendFileSync("qa/voice/ledger.jsonl", `${JSON.stringify({ time: new Date().toISOString(), kind: "spoken", lines: lines.length, seconds, tokens, costUsd: Number((usd + transcribe).toFixed(6)), stage })}\n`);

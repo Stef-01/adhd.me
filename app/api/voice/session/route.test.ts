@@ -49,7 +49,7 @@ describe("POST /api/voice/session", () => {
     expect(network).not.toHaveBeenCalled();
   });
 
-  it("sends the offer and the interviewer's session with the key, and answers with the SDP", async () => {
+  it("sends the offer and the model's session with the key, and answers with the SDP", async () => {
     const reply = await call();
     expect(reply.status).toBe(201);
     expect(reply.headers.get("content-type")).toBe("application/sdp");
@@ -63,8 +63,11 @@ describe("POST /api/voice/session", () => {
     expect(form.get("sdp")).toBe(OFFER);
     const session = JSON.parse(String(form.get("session")));
     expect(session).toMatchObject({ type: "realtime", model: "gpt-realtime-2.1-mini" });
-    expect(session.instructions).toContain("at most 8 more questions");
-    expect(session.tools.map((t: { name: string }) => t.name)).toEqual(["show_matches", "urgent_help"]);
+    // The app asks the questions: the model is told so, never answers a turn on its own, and has one tool.
+    expect(session.instructions).toContain("The app asks the person its questions");
+    expect(session.audio.input.turn_detection.create_response).toBe(false);
+    expect(session.audio.input.transcription).toEqual({ model: "gpt-4o-mini-transcribe", language: "en" });
+    expect(session.tools.map((t: { name: string }) => t.name)).toEqual(["urgent_help"]);
   });
 
   it("never returns the key or OpenAI's error to the browser, and pauses on a key that fails", async () => {

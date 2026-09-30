@@ -1,0 +1,115 @@
+{
+  "model": "gpt-realtime-2.1-mini",
+  "voice": "marin",
+  "clips": {
+    "opening": {
+      "text": "Hi. What kind of support are you looking for?",
+      "seconds": 2.52,
+      "bytes": 20972,
+      "sha": "85786f3558c8"
+    },
+    "again": {
+      "text": "What kind of support are you looking for?",
+      "seconds": 1.79,
+      "bytes": 15020,
+      "sha": "3eaf6f0fca9e"
+    },
+    "help": {
+      "text": "What would you like help with?",
+      "seconds": 1.66,
+      "bytes": 14060,
+      "sha": "f1530fb8f2ac"
+    },
+    "detail-work": {
+      "text": "What's hardest at work?",
+      "seconds": 1.16,
+      "bytes": 10028,
+      "sha": "53ca84cf0cb6"
+    },
+    "detail-study": {
+      "text": "What's hardest with school or study?",
+      "seconds": 2.12,
+      "bytes": 17708,
+      "sha": "2620f53a1670"
+    },
+    "detail-home": {
+      "text": "What's hardest at home?",
+      "seconds": 1.61,
+      "bytes": 13676,
+      "sha": "547afcaf39ef"
+    },
+    "detail-relationship": {
+      "text": "What's hardest in your relationship?",
+      "seconds": 1.73,
+      "bytes": 14636,
+      "sha": "14f0bee77eae"
+    },
+    "detail-social": {
+      "text": "What's hardest with other people?",
+      "seconds": 1.67,
+      "bytes": 14060,
+      "sha": "0cc8b9854ba6"
+    },
+    "place": {
+      "text": "Where are you, or would telehealth suit you?",
+      "seconds": 2.75,
+      "bytes": 22700,
+      "sha": "8f24bbacca44"
+    },
+    "lived": {
+      "text": "Would you like someone who has ADHD themselves?",
+      "seconds": 2.62,
+      "bytes": 21740,
+      "sha": "85b0e0dc3f33"
+    },
+    "culture": {
+      "text": "Would you like someone from your own culture?",
+      "seconds": 1.88,
+      "bytes": 15788,
+      "sha": "c2aac880e054"
+    },
+    "which-culture": {
+      "text": "Which culture or language?",
+      "seconds": 1.9,
+      "bytes": 15980,
+      "sha": "b33c1c7ecdef"
+    },
+    "extra": {
+      "text": "Is there anything else a clinician should know?",
+      "seconds": 2.91,
+      "bytes": 24044,
+      "sha": "9ce0dc08531c"
+    },
+    "catch": {
+      "text": "Sorry, I didn't catch that.",
+      "seconds": 1.97,
+      "bytes": 16364,
+      "sha": "e6f7e9af63bc"
+    },
+    "nudge": {
+      "text": "Still there? Take your time.",
+      "seconds": 2.51,
+      "bytes": 20780,
+      "sha": "8514759ddf07"
+    },
+    "closing": {
+      "text": "Thanks, here's who fits.",
+      "seconds": 1.89,
+      "bytes": 15788,
+      "sha": "7ca378076464"
+    },
+    "urgent": {
+      "text": "If you're in danger now, call 000. Lifeline is 13 11 14, any hour, or text 0477 13 11 14.",
+      "spoken": "If you're in danger now, call triple zero. Lifeline is 13 11 14, any hour, or text 0477 13 11 14.",
+      "seconds": 9.89,
+      "bytes": 79916,
+      "sha": "393ddc7a98c9"
+    },
+    "carry-on": {
+      "text": "Would you like to keep looking for a clinician?",
+      "seconds": 2.21,
+      "bytes": 18476,
+      "sha": "94c168ffb6ac"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-29T23:13:40.226Z",
+  "measuredAt": "2026-09-30T00:16:15.596Z",
   "base": "http://localhost:3620",
   "benchmark": {
     "headspaceHome": 38,
@@ -449,26 +449,26 @@
       "path": "/lives/lab/play",
       "name": "/lives/lab/play",
       "state": null,
-      "total": 9,
-      "fold": 9,
+      "total": 18,
+      "fold": 18,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.5,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
-        },
-        {
-          "w": 2,
-          "text": "CATCH IT!",
+          "w": 3,
+          "text": "HOLD THE LID!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
+          "w": 2,
+          "text": ". Then, at",
+          "tag": "p"
+        },
+        {
+          "w": 2,
+          "text": "it stops",
+          "tag": "p"
         }
       ]
     },
@@ -503,26 +503,26 @@
       "path": "/lives/play",
       "name": "/lives/play",
       "state": null,
-      "total": 8,
-      "fold": 8,
+      "total": 10,
+      "fold": 10,
       "chrome": 0,
-      "ratio": 0.2,
+      "ratio": 0.3,
       "verdict": "target",
       "longest": [
         {
-          "w": 6,
-          "text": "Skip this one (costs a life)",
-          "tag": "button"
+          "w": 5,
+          "text": "Mia, why are you here?",
+          "tag": "p"
+        },
+        {
+          "w": 4,
+          "text": "WHY ARE YOU HERE?",
+          "tag": "p"
         },
         {
           "w": 1,
           "text": "0",
           "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "POP!",
-          "tag": "p"
         }
       ]
     },
@@ -1934,10 +1934,10 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, repair",
       "state": "zoe-repair",
-      "total": 18,
-      "fold": 18,
+      "total": 28,
+      "fold": 28,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.7,
       "verdict": "target",
       "longest": [
         {
@@ -1946,14 +1946,14 @@
           "tag": "p"
         },
         {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
+          "w": 5,
+          "text": "Whatever. Sure. Guess work wins.",
+          "tag": "p"
         },
         {
-          "w": 4,
-          "text": "That came out sharp.",
-          "tag": "h1"
+          "w": 5,
+          "text": "Ouch. I did say sorry.",
+          "tag": "p"
         }
       ]
     },
@@ -1961,12 +1961,17 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, reply",
       "state": "zoe-reply",
-      "total": 18,
-      "fold": 18,
+      "total": 30,
+      "fold": 30,
       "chrome": 0,
-      "ratio": 0.5,
+      "ratio": 0.8,
       "verdict": "target",
       "longest": [
+        {
+          "w": 8,
+          "text": "Oh, that’s a shame. Sure. Is Friday free?",
+          "tag": "p"
+        },
         {
           "w": 7,
           "text": "Can we move dinner? Work ran late.",
@@ -1976,11 +1981,6 @@
           "w": 4,
           "text": "Zoe · Before you send",
           "tag": "span"
-        },
-        {
-          "w": 4,
-          "text": "Said what you meant.",
-          "tag": "h1"
         }
       ]
     },
@@ -2042,12 +2042,17 @@
       "path": "/lives/play/zoe-before-you-send",
       "name": "Zoe, complete",
       "state": "zoe-complete",
-      "total": 26,
-      "fold": 26,
+      "total": 35,
+      "fold": 35,
       "chrome": 0,
-      "ratio": 0.7,
+      "ratio": 0.9,
       "verdict": "target",
       "longest": [
+        {
+          "w": 6,
+          "text": "Yes! Saturday at 7. Can’t wait.",
+          "tag": "p"
+        },
         {
           "w": 5,
           "text": "Still on for our plan?",
@@ -2057,11 +2062,6 @@
           "w": 5,
           "text": "It started about the dishes",
           "tag": "a"
-        },
-        {
-          "w": 4,
-          "text": "Zoe · Before you send",
-          "tag": "span"
         }
       ]
     },
@@ -3082,17 +3082,17 @@
       "longest": [
         {
           "w": 3,
-          "text": "ONLY THE LIST!",
+          "text": "I held off",
+          "tag": "button"
+        },
+        {
+          "w": 2,
+          "text": "DON’T SCROLL!",
           "tag": "p"
         },
         {
-          "w": 1,
-          "text": "0",
-          "tag": "span"
-        },
-        {
-          "w": 1,
-          "text": "bread",
+          "w": 2,
+          "text": "ONE MORE",
           "tag": "span"
         }
       ]

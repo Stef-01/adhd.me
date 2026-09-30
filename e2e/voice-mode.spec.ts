@@ -1,13 +1,18 @@
 // The voice finder (src/voice), on the scripted call (src/voice/fake-link.ts): no microphone, no
-// network, no spend. The screen is the prototype's, the orb and one stop button; the call asks at
-// most eight questions and then reveals the matches for what the person said.
+// network, no spend. The screen is the prototype's, the orb and one stop button; the call asks the
+// plan's questions (src/voice/plan.ts), never more than eight after the first, and then reveals the
+// matches for what the person said.
 
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { MAX_FOLLOW_UPS, OPENING_QUESTION } from "../src/voice/interviewer";
+import { SENTENCES } from "../src/voice/plan";
 
-// Answers to the scripted call's questions (src/voice/fake-link.ts), none a bare yes or no, so the request is their join.
-const ANSWERS = ["an adult ADHD assessment", "Hornsby, or telehealth", "someone who has ADHD themselves would be good", "Hindi would help", "I have anxiety too", "an assessment", "mornings", "nothing that comes to mind", "that's everything", "nothing more"];
+// A person asked each of the plan's questions in turn: what is hard at work, where, lived experience, culture, anything else.
+const ANSWERS = ["I need help at work", "deadlines, and my boss", "Hornsby, or telehealth", "yes please", "yes", "Indian", "I have anxiety as well"];
+const ASKED = ["detail-work", "place", "lived", "culture", "which-culture", "extra"] as const;
+/** What those answers ask for: their words, a yes in the finder's words, and what they named as hard. */
+const REQUEST = "I need help at work. deadlines, and my boss. Hornsby, or telehealth. someone who has ADHD themselves. someone from my own culture, Indian. I have anxiety as well. help with focus and getting things done";
 
 async function openVoice(page: Page, script: boolean | string[]) {
   await page.addInitScript((value) => {
@@ -34,21 +39,35 @@ test("the voice screen is the orb and one stop button, with the question as its 
   await expect(page.getByRole("link", { name: "Urgent help" })).toBeVisible();
 });
 
-test("a whole call asks at most eight questions, then reveals the matches for what was said", async ({ page }) => {
+test("a whole call asks the plan's questions, then reveals the matches for what was said", async ({ page }) => {
   await openVoice(page, ANSWERS);
   await expect(page.locator("main")).toHaveAttribute("data-stage", "results", { timeout: 20000 });
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 20000 });
   const request = await page.evaluate(() => JSON.parse(sessionStorage.getItem("adhdme.finder.v2") ?? "{}").request);
   // Each answer is its own sentence in the request (stage 2 of docs/matching/RCA-NIGHT-2026-09-29.md).
-  expect(request).toBe(ANSWERS.slice(0, MAX_FOLLOW_UPS + 1).join(". "));
+  expect(request).toBe(REQUEST);
+  expect(ASKED.length).toBeLessThanOrEqual(MAX_FOLLOW_UPS);
+});
+
+test("a person who asks for help at work is asked what is hardest there (the founder, 2026-09-30)", async ({ page }) => {
+  await openVoice(page, ANSWERS.slice(0, 1));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES["detail-work"].text, { timeout: 10000 });
+});
+
+test("a person is asked whether they would like someone from their own culture, and which", async ({ page }) => {
+  await openVoice(page, ANSWERS.slice(0, 4));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES.culture.text, { timeout: 10000 });
+  await page.goto("about:blank");
+  await openVoice(page, ANSWERS.slice(0, 5));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES["which-culture"].text, { timeout: 10000 });
 });
 
 test("the stop button ends the call and puts what was said in the box", async ({ page }) => {
   await openVoice(page, ANSWERS.slice(0, 2));
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Would you like someone who has ADHD themselves?", { timeout: 10000 });
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES.place.text, { timeout: 10000 });
   await page.getByRole("button", { name: "End voice" }).click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "welcome");
-  await expect(page.getByRole("textbox")).toHaveValue("an adult ADHD assessment, Hornsby, or telehealth");
+  await expect(page.getByRole("textbox")).toHaveValue("I need help at work, deadlines, and my boss");
 });
 
 /** Every record the page sent to the finder's journal, in order. */
@@ -72,8 +91,13 @@ test("a call is on record turn by turn under one id, and its end fills the same 
   for (const call of sent.slice(0, -1)) expect(call.outcome).toBe("stopped");
   expect((sent[0]!.turns as unknown[]).length).toBeLessThan((sent.at(-1)!.turns as unknown[]).length);
   expect(sent.at(-1)!.searchId, "the end names its search").toBeTruthy();
-  expect(sent.at(-1)!.request).toBe(ANSWERS.slice(0, MAX_FOLLOW_UPS + 1).join(". "));
-  // O260: the card prints the first twenty words of the nine answers, and the rest live behind "Change what you said".
+  expect(sent.at(-1)!.request).toBe(REQUEST);
+  expect(sent.at(-1)!.questions).toBe(ASKED.length);
+  // The record holds what the finder said as well as what the person did, in order.
+  const turns = sent.at(-1)!.turns as { who: string; text: string }[];
+  expect(turns.filter((turn) => turn.who === "assistant").map((turn) => turn.text)).toEqual([SENTENCES.opening.text, ...ASKED.map((id) => SENTENCES[id].text), SENTENCES.closing.text]);
+  expect(turns.filter((turn) => turn.who === "person").map((turn) => turn.text)).toEqual(ANSWERS);
+  // O260: the card prints the first twenty words of the answers, and the rest live behind "Change what you said".
   const card = (await page.locator(".results-summary-text").textContent()) ?? "";
   expect(card.endsWith("…")).toBe(true);
   expect(card.split(/\s+/).length).toBeLessThanOrEqual(21);
@@ -82,7 +106,7 @@ test("a call is on record turn by turn under one id, and its end fills the same 
 test("a call stopped in the middle keeps every turn said so far (stage 5)", async ({ page }) => {
   const calls = await journal(page);
   await openVoice(page, ANSWERS.slice(0, 2));
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Would you like someone who has ADHD themselves?", { timeout: 10000 });
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES.place.text, { timeout: 10000 });
   await expect.poll(() => calls().length).toBeGreaterThan(0);
   await page.getByRole("button", { name: "End voice" }).click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "welcome");

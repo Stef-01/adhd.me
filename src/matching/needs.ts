@@ -424,6 +424,8 @@ const NON_MEDICATION_HARD: readonly string[] = [
   "do not want pills", "dont want tablets", "do not want tablets", "dont want any meds", "dont want any tablets",
   "dont want stimulants", "do not want stimulants", "stay off medication", "staying off medication",
   "against medication", "anything but medication",
+  // "coaching and skills, not medication": the alternative named, and medication refused in two words.
+  "not medication", "not meds", "not tablets", "not pills", "not medicine",
 ];
 /** Read as non-medication only in a sentence that mentions medication: on their own they decline nothing. */
 const NON_MEDICATION_SOFT: readonly string[] = [
@@ -433,7 +435,7 @@ const NON_MEDICATION_SOFT: readonly string[] = [
 ];
 const NON_MEDICATION_CUES: readonly string[] = [...NON_MEDICATION_HARD, ...NON_MEDICATION_SOFT];
 /** "don't want medication changes / reviewed / increased": the medication stays. "don't want tablets that wear off by lunch": the no is to what these tablets do. */
-const MEDICATION_LEFT_ALONE = /\b(?:don'?t|do not) want (?:any |my )?(?:medication|meds|tablets|pills|stimulants) (?:chang\w*|review\w*|increas\w*|adjust\w*|switch\w*|touched|messed|that|which)\b/i;
+const MEDICATION_LEFT_ALONE = /\b(?:(?:don'?t|do not) want|not|no) (?:any |my )?(?:medication|meds|tablets|pills|stimulants) (?:chang\w*|review\w*|increas\w*|adjust\w*|switch\w*|touched|messed|that|which)\b/i;
 const SOFT_NON_MEDICATION = new Set(NON_MEDICATION_SOFT);
 /** The cues that count only beside a word about medication, for the test that reads every cue back. */
 export const SOFT_NON_MEDICATION_CUES: ReadonlySet<string> = SOFT_NON_MEDICATION;
@@ -986,6 +988,12 @@ const RUN_DEMANDED = new Set([
 
 /** O256: the assessment cues that merely name the condition or the diagnosis; disclosure once the diagnosis is said to exist. */
 const DISCLOSURE_WORDS = new Set(["adhd", "diagnosis", "diagnosed"]);
+/** "understands ADHD", "knows about adult ADHD", "experienced with ADHD in women": the clinician's knowledge, not the person's ask. */
+const KNOWS_ADHD = /\b(?:understands?|understanding|understood|knows?|gets|familiar with|experienced? (?:with|in)|works? with|good with|trained in|knowledge of)\s+(?:about\s+)?(?:adult\s+|adults with\s+|women'?s\s+|women with\s+|childhood\s+|my\s+)?adhd\b/gi;
+function adhdOnlyAsWhatTheyKnow(text: string): boolean {
+  const named = text.match(/\badhd\b/gi)?.length ?? 0;
+  return named > 0 && (text.match(KNOWS_ADHD)?.length ?? 0) >= named;
+}
 
 export function readNeeds(text: string): NeedSignal[] {
   const sentence = tokenise(text);
@@ -1070,6 +1078,13 @@ export function readNeeds(text: string): NeedSignal[] {
         DISCLOSURE_WORDS.has(cue.phrase) &&
         diagnosisAlreadyMade(rawSentence)
       ) {
+        continue;
+      }
+      /* O263: ADHD named only as what the clinician should know is no assessment ask. "someone who
+         understands adult ADHD from personal experience" (a simulated patient, 2026-09-30) was read as an
+         ADHD assessment for a person diagnosed the year before. The bare word stands down when every
+         "ADHD" in the sentence is governed that way; an assessment asked for in its own words still reaches. */
+      if (facetKey(cue.entry.facet) === "care:adhd-assessment" && cue.phrase === "adhd" && adhdOnlyAsWhatTheyKnow(text)) {
         continue;
       }
       /* O262: a soft non-medication cue declines nothing on its own. "strategies first, tablets later" is

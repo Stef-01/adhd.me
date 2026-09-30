@@ -9,15 +9,49 @@ device) decides per person: AI talks through this finder, Standard's microphone 
 The finder's microphone opens a spoken conversation, after ChatGPT's voice mode (founder: "talking
 to ChatGPT voice, which progressively asks you questions (max 8 follow ups) and then reveals the
 clinician matches"). The screen is Javi0108/VoiceChatGpt-Prototype's (founder: "make it exactly
-like this"): the orb and one stop button. The model asks one short question at a time, at most 8
-after the first answer, then writes one request sentence; the finder ranks on it exactly as it
-ranks a typed one, and the results arrive where the orb was.
+like this"): the orb and one stop button. The app asks one short question at a time, at most 8
+after the first answer; the request is the person's own answers, each its own sentence; the finder
+ranks on it exactly as it ranks a typed one, and the results arrive where the orb was.
+
+### The app asks (O263, 2026-09-30)
+
+Until 2026-09-30 the realtime model chose each question. The calls on record show what that cost: it
+thought aloud ("let me ask one more small question"), asked two questions before one was answered,
+put a city nobody had said into a question ("someone in Perth?"), cut in on a person who had paused
+mid-sentence, and never asked what was hard at work of a person who had asked for help at work. The
+founder, that morning: "there should be more standardized questions, like asking someone from your
+culture … Should also have asked for more detail about what the struggle at work is."
+
+The questions are now the app's, in fixed words and a fixed order (`src/voice/plan.ts`):
+
+| Question | Said | Skipped when |
+| --- | --- | --- |
+| opening | "Hi. What kind of support are you looking for?" | never |
+| detail | "What's hardest at work?" (or with school or study, at home, in your relationship, with other people), or "What would you like help with?" when the first answer names no help | the first answer says what it wants (an assessment, scripts, a dose), or already names two things that are hard |
+| place | "Where are you, or would telehealth suit you?" | a place or telehealth has been said |
+| lived | "Would you like someone who has ADHD themselves?" | already asked for |
+| culture | "Would you like someone from your own culture?", then "Which culture or language?" of a yes that named none | a culture or a language has been named |
+| extra | "Is there anything else a clinician should know?" | never |
+
+Each sentence is a recording in the call's own voice (`public/voice/*.mp3`, made and heard back by
+`scripts/voice-clips.mjs`, listed in `src/voice/clips.json`), played by the browser the moment it is
+due. Where a recording has not arrived the model says the sentence, exactly, with no conversation
+behind it to colour it. The model's own jobs are two: to answer what the person asks it (at most
+three times a call, in one or two sentences, never advice), and a silent one-word check on each
+thing said, for danger.
+
+An answer belongs to the question the person last heard in full (60% of it played). Words said over
+the start of a question are the rest of the answer before, and the question is asked again. A
+request to hear the question again, the finder's own voice in the microphone, and "show me who fits"
+are none of them answers, and none reaches the request.
 
 | Part | File |
 | --- | --- |
-| What the model is told, its two tools, the cap | `src/voice/interviewer.ts` |
-| The conversation: events in, events out, the cap held by the client | `src/voice/conversation.ts` |
-| The call: WebRTC, the data channel, loudness | `src/voice/link.ts` |
+| The questions, their order, what each answer adds to the request | `src/voice/plan.ts` |
+| What the model is told, its one tool, the danger check's wording | `src/voice/interviewer.ts` |
+| The conversation: who holds the floor, which question an answer belongs to, what is said next | `src/voice/conversation.ts` |
+| The recordings and their loader | `public/voice/`, `src/voice/clips.json`, `src/voice/clips.ts`, `scripts/voice-clips.mjs` |
+| The call: WebRTC, the data channel, the recordings played, loudness | `src/voice/link.ts` |
 | The scripted call for e2e, the text budget and audits | `src/voice/fake-link.ts` |
 | The call route: the browser's offer to OpenAI, the key never leaves | `app/api/voice/session/route.ts` |
 | The screen, the orb (the prototype's sphere visualizer, MIT, in WebGL2) | `app/finder-stages/voice-stage.tsx`, `voice-orb.tsx`, `app/voice-orb/` |
@@ -25,14 +59,22 @@ ranks a typed one, and the results arrive where the orb was.
 
 ## Guards
 
-- **The cap is the client's.** After the 8th question the next answer starts no response on its
-  own, and the one after it is forced to call `show_matches`. Unit-tested to the question.
-- **The request is held to the person's words** at the reveal: a kind of clinician they did not
-  name becomes "clinician" (a named kind is a hard filter), "adult" goes from a request for a child,
-  and "specialist" never reaches the screen. The place is the suburb or postcode alone.
-- **Urgent help** opens from the model's `urgent_help` call, or from the person's own words through
-  the safety rules (self-harm, hopelessness, danger), whatever the model does. The app header, with
-  Urgent help, stays on the screen.
+- **The cap is the client's.** The plan has six questions after the first; the call never asks a
+  ninth, and a question is said again at most twice (after "Sorry, I didn't catch that", a request
+  to repeat it, or an answer to the person's own question). Unit-tested to the question.
+- **The request is the person's words**, each answer its own sentence. The finder's words stand in
+  for a bare yes ("someone who has ADHD themselves", "someone from my own culture, Indian",
+  "telehealth is fine") and for what a person names as hardest in answer to the detail question
+  ("deadlines" reads as help with focus and getting things done). Nothing is added to "anything else
+  a clinician should know". "specialist" never reaches the screen. The place is the suburb or
+  postcode alone.
+- **Urgent help** opens from the person's own words through the safety rules (self-harm,
+  hopelessness, danger), and from the model's silent check on each thing said
+  (`qa/voice/safety-check.md`: no false alarm in 84, no miss in 48). Whatever is being said stops,
+  the contacts open, the numbers are said once, and the call asks whether to keep looking. The app
+  header, with Urgent help, stays on the screen.
+- **The transcriber is told the language and nothing else.** A prompt is text it recites on
+  silence as the person's words (R18).
 - **Spend:** 8 calls in ten minutes from one caller, `ADHDME_VOICE_DAILY_SESSIONS` a UTC day (default
   40), a six-minute ceiling on a call, and a key that fails pauses voice for ten minutes.
 
@@ -54,9 +96,12 @@ its canvas under either voice, then settles back.
 
 ## Live checks
 
-- `scripts/voice-eval.mjs`: the interviewer against nine personas, headless, no browser.
+- `scripts/voice-eval.mjs`: the conversation against thirteen personas, headless, no browser.
 - `scripts/voice-call.mjs`: a real spoken call from Chromium, its microphone a WAV built by macOS
-  `say` from the lines given; `CONNECT_ONLY=1` times each step from the tap to the first word.
+  `say` from the lines given; `CONNECT_ONLY=1` times each step from the tap to the first sound and
+  the open channel; `LEAD=3` has the person begin three seconds after the microphone opens.
+- `scripts/voice-safety.mjs`: the silent danger check, put ordinary answers and dangerous ones.
+- `scripts/voice-clips.mjs`: records a sentence that was changed, and hears it back before keeping it.
 
 ### Drift on the record (`scripts/voice-drift.mjs`)
 
@@ -89,9 +134,36 @@ residual is the realtime model adding an example to the one open question; the t
   start of their answer. While it connects the orb breathes instead, so the wait reads as getting
   ready.
 
+## Cost and speed (live, 2026-09-30, the app asking)
+
+The founder, 2026-09-30: "there is load time for when you open the AI orb."
+
+| From the tap | Before (production, the model saying the question) | After (local build, the recording) |
+| --- | --- | --- |
+| The microphone open | 0.27 to 0.41 s | 0.26 to 0.39 s |
+| The first sound | 3.5, 7.4 and 12.8 s (three calls that morning; 3.8 s the night before) | 0.26 to 0.40 s (nine calls) |
+| The offer sent | 0.29 to 0.45 s, before the browser's routes were gathered | 0.40 to 0.47 s, with them |
+| The channel open | 2.5, 3.4 and 11.7 s | 2.2 to 3.4 s in six calls, 4.5 s in one |
+
+- The tap starts the microphone, the call and the recordings' loader together. The opening sentence
+  (2.5 s) plays as soon as the microphone is open, while the call connects behind it.
+- The offer waits for the browser's routes (0.1 to 0.15 s; at most 0.7 s). Sent without them, each
+  layer of the connection waited out a lost first packet (ICE, then DTLS, then SCTP, in steps of one
+  and two seconds: 4.0 to 8.5 s to open in six calls). With them the channel opened 1.3 s after
+  OpenAI's answer in six calls of seven. Eight samples on 2026-09-28 had shown no gain; the two
+  days' measurements disagree, and the cost is a tenth of a second.
+- A recorded greeting was weighed on 2026-09-28 and refused, because a person might answer before
+  the line is open. Two calls where the person began 2.9 s and 3.3 s after the microphone opened,
+  the moment the greeting ended, were heard whole. For the call that is not, the browser listens to
+  its own microphone until the connection carries it: a voice in that gap is answered with "Sorry, I
+  didn't catch that" and the question again, once the call opens.
+- The next question starts 0.0 to 1.1 s after a spoken answer stops (the words must arrive first).
+- A whole spoken call of 85 s: $0.0005 for the model, which says nothing, and about $0.004 for
+  transcription. A simulated call: $0.0014 (26 calls), where it was $0.009 to $0.0115.
+
 ## Evaluation (`scripts/voice-eval.mjs`)
 
-Nine personas played by gpt-5-mini from a hidden brief (an adult, a parent, a stable patient
+Thirteen personas played by gpt-5-mini from a hidden brief (an adult, a parent, a stable patient
 needing scripts, a rambler, a person asking for advice, a prompt injection, a person saying what they
 do not want, a Vietnamese-speaking mother, and a person in crisis), each through the app's own
 conversation code. A persona passes when the call stays within the cap, asks one question a turn,
@@ -110,6 +182,7 @@ advice. Runs are in `qa/voice/runs/`.
 | 6 | 17/20 (each persona twice, a tenth who asks questions back) | The person may ask how things work; answers do not count toward the eight; "adult" and "ADHD" only where they belong |
 | 7 | 18/20 | No leading questions; never drop a need to fit the length |
 | 8 | 10/11, then 2/2 on the two that ask back (a postpartum persona added) | R15: questions asked in their given words with no choices in them; the manner question skipped once answered; a life stage kept in the person's own word; after one double question ("… and is telehealth better?"), one question mark a turn |
+| 13 | 8/13, 10/13, then 26/26 (each persona twice; questions p50 3; $0.0014 a call) | O263, the app asking. The first run found four things. The model's danger check, asked to call `urgent_help`, called it on "Yes, that would be helpful." in two calls, and the crisis numbers were read to people who had agreed to a question: the check answers in one word now, given the question with the words. The finder's paraphrases were being added to "anything else a clinician should know" ("he gets overwhelmed easily" became "help with stress and overwhelm"): nothing is added there now. A person who only asks questions looped: a question is said again at most twice and the model answers at most three. An answer that was neither a yes nor a name was read as asking for a culture. The second run found "understands adult ADHD" read as an assessment ask (the bare word stands down where ADHD is only what the clinician should know) and the evaluation's own advice pattern matching a refusal. `asker` no longer expects bulk billing of "cost matters" |
 | 12 | 11/13, 11/13, 10/13, then the run recorded in the commit, with a `work` persona ("help at work with focus and getting things done") added | O261 and the composition rules of the small hours (RCA-NIGHT-2026-09-29.md, stage 2): questions asked of the assistant leave the request, a yes that opens its own request is that request, filler after a yes goes, a non-English answer reads through the model's English request. The misses left are the grader calling a quoted phrase invented and the realtime model's own drift |
 | 11 | 11/12, 11/12, 11/12 over three runs (first word p50 1.0 to 1.25 s, p90 1.8 to 2.0 s; questions p50 3; $0.009 a call) | The request is the person's own words, each answer a sentence (stage 2 of RCA-NIGHT-2026-09-29.md), read by the same reader as a typed one; the eval's request cap is 250 for a runaway, a rambler's ran to 165 words and read right. Each run missed one persona, each a different one: the first the old 35-word cap; the second `scripts`, whose "stable on Vyvanse … ADHD-experienced" read as an assessment until treatment under way stood the bare words down (O260); the third `advice`, where the realtime model revealed on the person's own question with "I want help finding ADHD care" (its own words, the fallback) and asked nothing: the model's drift, not the reader's, and guarded since: a show_matches before any answer is answered as not shown and the model is told to ask again (`TOO_SOON`). No invented key and no `never` key in any run after O260 |
 | 10 | 12/12 (first word p50 1.00 s, p90 1.16 s; questions p50 4; $0.0115 a call) | O257: the two manner questions gone ("How would you like a clinician to treat you?", "Does anything matter to you about the clinician?"), "Would you like someone who has ADHD themselves?" and "Is there a language or a background that matters?" in their place; a `lived` persona added |
