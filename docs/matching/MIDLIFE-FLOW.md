@@ -122,3 +122,17 @@ MBS item 695 and the MBS factsheet; TIS National's private medical practitioners
 reviews of ADHD across perimenopause and menopause (abstracts); the Australasian Menopause Society
 fact sheets; the AADPA guideline site; the NSW Government reforms release; an Aboriginal women's
 menopause study. Links in the living doc.
+
+## Built (2026-10-01)
+
+- Reader: `womens-health` hears hot flushes, night sweats, HRT/MHT, periods stopped, midlife brain
+  fog; `titration` hears a medication that stopped working. Six midlife probes.
+- First steps: `midlife-find`, `midlife-medication`, `midlife-days`, only when midlife is in her
+  words (PMDD alone shows none).
+- Voice: "A first look, or care you already have?" and "Would you prefer a woman clinician?", asked
+  at midlife and skipped when said; a yes is written as "a woman clinician" (the woman constraint).
+- AuDHD, alongside: `autism-adhd` hears being autistic as well, sensory overwhelm and masking
+  burnout; first steps `audhd-assessment` and `audhd` (a quiet appointment, answers in writing).
+
+Not built: the doors (as for the parent), the interpreter line (the card holds three lines), the
+onboarding declarations (a support person welcome, menopause) and recruitment.

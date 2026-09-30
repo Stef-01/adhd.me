@@ -146,3 +146,21 @@ AADPA guideline executive summary and parent/family training pages; NCCD "what's
 on the GP Chronic Condition Management Plan; the NSW Government release on GP diagnosis and the NSW
 ACI FAQ. Links in the living doc. To verify: each state's rules, fees and waits by region, school
 terms by state, free parent programs, exam provisions.
+
+## Built (2026-10-01)
+
+- Reader child mode: a described difficulty is an ask for a child; balanced care ("won't just push
+  tablets, won't rule them out") is not `non-medication`. Twenty-four parent, midlife and AuDHD probes.
+- Ranking: for a child, assessment, titration and shared care are a scope tier ahead of other care,
+  counted only for clinicians who see children (`rankingProfile`, `ranking-profile.test.ts`).
+- First steps (`src/finder/first-steps.ts`): nine child scenarios, steps of at most six words; the
+  headline goes and the list folds at three rows when they show (parent results 57 words).
+- Voice: `detail-child`, `age`, `raised`, each skipped when said; no lived-experience question for a child.
+- Roster: five clinicians whose own words say they see children declare it at the sometimes grade.
+
+Not built, and why:
+- The three doors: the clarifier shows only when the order is uninformed, which a parent's read
+  rarely is; the `start` scenario ("Start with a GP visit") answers "doesn't know what".
+- `paediatrician`, `speech-pathologist`, `educational-psychologist`: a named kind nobody lists empties
+  the list, so each is added with its first listed clinician (pinned in `pipeline.test.ts`).
+- No clinician declares a balanced medication approach in their own words; the card says it as a step.
