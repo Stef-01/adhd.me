@@ -238,3 +238,11 @@
 .platform-shell .booking-content h1 { font-family: inherit; font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -.025em; text-wrap: balance; }
 .platform-shell .booking-content h1 + p { margin-top: 12px; }
 .platform-shell .booking-screen .bottom-action { padding-inline: 0; }
+
+/* At the narrowest phones the words keep their room: the whole card is the edit control, so the
+   pencil goes, and Start over keeps its label with less padding around it. */
+@media (max-width: 379px) {
+  .platform-shell .results-summary-words { grid-template-columns: auto minmax(0, 1fr); gap: 8px; padding: 12px 6px 12px 12px; }
+  .platform-shell .results-summary-words > svg:last-child { display: none; }
+  .platform-shell .results-summary-reset { gap: 4px; margin-right: 4px; padding: 8px; }
+}

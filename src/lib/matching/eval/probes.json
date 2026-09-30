@@ -729,5 +729,39 @@
       "care:child-adolescent-adhd",
       "care:study-school"
     ]
+  },
+  {
+    "text": "my 19 year old son at uni can't keep up",
+    "reaches": [
+      "care:study-school"
+    ],
+    "mentions": [
+      "care:child-adolescent-adhd"
+    ]
+  },
+  {
+    "text": "I am not autistic but my son is, and I think I have ADHD",
+    "reaches": [
+      "care:adhd-assessment"
+    ],
+    "never": [
+      "care:autism-adhd"
+    ],
+    "mentions": [
+      "care:child-adolescent-adhd"
+    ]
+  },
+  {
+    "text": "my daughter says she wants to die",
+    "reaches": [
+      "care:child-adolescent-adhd"
+    ]
+  },
+  {
+    "text": "mi hijo tiene 10 años y su maestra cree que tiene TDAH",
+    "aspires": [
+      "care:child-adolescent-adhd",
+      "care:adhd-assessment"
+    ]
   }
 ]
