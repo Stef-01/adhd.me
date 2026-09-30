@@ -189,3 +189,11 @@ describe("the ranking over the narrowed roster", () => {
     expect(ids(ranked).sort()).toEqual(ids(roster).sort());
   });
 });
+
+describe("child flows: a parent who names a kind nobody lists still reaches support", () => {
+  it("keeps the whole list for a paediatrician or a speech therapist until one is listed", () => {
+    for (const request of ["a paediatrician for my son", "my son needs a speech therapist"]) {
+      expect(searchRoster(clinicians, emptyFilters(), request, null).length, request).toBe(clinicians.length);
+    }
+  });
+});
