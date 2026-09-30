@@ -21,6 +21,7 @@ import { type WayOut } from "@/finder/pipeline";
 import { type SuburbPoint } from "@/geo/suburbs";
 import { resultsAnnouncement } from "@/finder/announce";
 import { type FirstSteps } from "@/finder/first-steps";
+import { SENTENCES } from "@/voice/plan";
 import Link from "next/link";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import dynamic from "next/dynamic";
@@ -81,6 +82,7 @@ export function ResultsStage({
   onToggleHeard,
   reading = false,
   steps = null,
+  danger = false,
 }: {
   requestHeadline: string;
   requestSummary: string;
@@ -131,6 +133,8 @@ export function ResultsStage({
   reading?: boolean;
   /** For a parent: three first steps above the list, or null. */
   steps?: FirstSteps | null;
+  /** The words say someone may be in danger: urgent help comes before anything else. */
+  danger?: boolean;
 }) {
   /** The filters the strip cannot show — a language, a distance, a way of working — as a count on the Filters pill. The kind has its own pill. */
   const otherFilterCount = activeFilterCount(filters) - BOOLEAN_FILTER_KEYS.filter((key) => filters[key]).length - (filters.professions.length > 0 ? 1 : 0);
@@ -199,6 +203,12 @@ export function ResultsStage({
           <Wordmark />
         </span>
       </header>
+
+      {danger && (
+        <p className="finder-urgent" role="alert">
+          {SENTENCES.urgent.text} <Link href="/urgent">Urgent help</Link>
+        </p>
+      )}
 
       <div className="results-head">
         {/* O237 (founder-directed, "improve aesthetic and minimalism … just show the results"):

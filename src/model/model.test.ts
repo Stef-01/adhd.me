@@ -333,3 +333,12 @@ describe("the relate beat (play, founder 2026-09-08)", () => {
     expect(deriveNeeds(readModel(s)).find((n) => n.subdomain === "activation")!.functionalCost).toBe(2);
   });
 });
+
+describe("safety: a parent's words about their child (2026-10-01 edge sweep)", () => {
+  it("hears danger said of someone else, and not in ordinary words", () => {
+    for (const text of ["my son threatened to hurt himself at school today", "my daughter says she wants to die", "he keeps saying he wants to kill himself", "they have been harming themselves"]) {
+      expect(checkSafety(text)?.id, text).toBe("self-harm");
+    }
+    for (const text of ["my son is hurting at school", "she hurt her knee", "homework is killing him", "he dies laughing at cartoons"]) expect(checkSafety(text), text).toBeNull();
+  });
+});

@@ -27,6 +27,7 @@ import { topNeed, type Need } from "@/model/needs";
 import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@/finder/pipeline";
 import { clarifiers } from "@/matching/clarify";
 import { facetKey, shortLabel } from "@/matching/needs";
+import { checkSafety } from "@/model/safety";
 import { firstSteps } from "@/finder/first-steps";
 import { heardChips } from "@/finder/heard";
 import { FINDER_COPY } from "./finder-copy";
@@ -205,6 +206,8 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
   const { reading, modelNeeds, heard: ownRead, unlisted, readAhead } = useModelRead(level, request, roster, stage === "results");
   const read = modelNeeds ?? ownRead;
   const heardFacets = useMemo(() => heardChips(read, FINDER_COPY.heardChip.max), [read]);
+  /** Words that say someone may be in danger (src/model/safety.ts): the results lead with urgent help, as the voice finder does. */
+  const danger = useMemo(() => { const rule = checkSafety(request); return rule !== null && rule.severity !== "support"; }, [request]);
   /** For a parent, three first steps above the list (src/finder/first-steps.ts); the list then opens on three rows. */
   const steps = useMemo(() => (reading ? null : firstSteps(heardFacets.map((chip) => chip.key).filter((key) => !removed.has(key)), request)), [reading, heardFacets, removed, request]);
   const kept = useMemo(() => read.filter((n) => !removed.has(facetKey(n.facet))), [read, removed]);
@@ -894,6 +897,7 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
             heard={heardFacets}
             removedHeard={removed}
             steps={steps}
+            danger={danger}
             onToggleHeard={toggleHeard}
             reading={reading}
             place={place}
