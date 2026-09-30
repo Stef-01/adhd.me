@@ -259,10 +259,9 @@ export function ProfileStage({
                     {profileEvidence.slice(0, 3).map((need) => (
                       <li key={need.label}>
                         <strong>{need.label}</strong>
-                        {/* The quote only where there is one (the model's read carries the person's
-                            words only where the finder heard them too) and where it says more than
-                            the label: "longer first appointment" under "A longer first appointment"
-                            said it twice. */}
+                        {/* The quote only where there is one (the model quotes the words that asked for
+                            each tag, R19) and where it says more than the label: "longer first
+                            appointment" under "A longer first appointment" said it twice. */}
                         {need.matched !== "" && !saysAgain(need.label, need.matched) && <span>From your words: &ldquo;{need.matched}&rdquo;</span>}
                       </li>
                     ))}

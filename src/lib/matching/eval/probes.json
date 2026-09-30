@@ -19,6 +19,9 @@
       "pref:bulk-billing",
       "pref:woman-gp",
       "care:sleep"
+    ],
+    "aspires": [
+      "pref:longer-appointment"
     ]
   },
   {
@@ -39,6 +42,9 @@
       "manner:culturally_attuned",
       "pref:bulk-billing",
       "care:study-school"
+    ],
+    "aspires": [
+      "care:cultural-background"
     ]
   },
   {
@@ -60,14 +66,18 @@
       "manner:non_judgmental",
       "pref:telehealth-first",
       "manner:not_rushed"
+    ],
+    "aspires": [
+      "pref:longer-appointment"
     ]
   },
   {
     "text": "I have started this message about six times. I am forty, I have three at home under ten, and we live in a small town west of Toowoomba where the one clinic has a new locum every few months. Each one has been pleasant, but I get about a minute of their time before they are typing and standing up, and I leave having said none of what I came in to say. This time I want to go somewhere I can get to the end of a thought. I lose track of what I am saying when I can see someone glancing at the time, so a clinician who lets the silence sit for a moment would make a real difference to me. For personal reasons I would only be comfortable if the GP I see is a woman. Money is the other thing. We are a single income household on a healthcare card, so I cannot pay anything on top of what Medicare covers. I am happy to drive an hour if the right person is at the other end.",
     "aspires": [
       "manner:not_rushed",
-      "pref:woman-gp",
-      "pref:bulk-billing"
+      "pref:bulk-billing",
+      "pref:longer-appointment",
+      "pref:woman-gp"
     ]
   },
   {
@@ -88,10 +98,11 @@
   {
     "text": "I am a Wiradjuri woman living in Orange, and I have been going back and forth about this for a while. My nephew was picked up by his school counsellor last year, and when his aunties started reading about it we all started recognising ourselves too. For me the question is my own. I work in the council office, I am always the last to finish anything, and I walk around with a head full of unopened mail. When I go to a clinic I want a GP who gets that for our mob health is a shared thing, and who does not treat it as strange that I want my aunty sitting beside me for the first visit. Nothing about me should be settled over my head. I want the choices laid out and the final call left with me. And please, not a quick in and out. I would like to book a good hour, even two slots back to back, so nobody is looking at their watch.",
     "aspires": [
-      "manner:culturally_attuned",
+      "care:cultural-background",
       "manner:collaborative",
-      "pref:longer-appointment",
-      "manner:not_rushed"
+      "manner:culturally_attuned",
+      "manner:not_rushed",
+      "pref:longer-appointment"
     ]
   },
   {
@@ -153,6 +164,9 @@
       "pref:woman-gp",
       "manner:attuned",
       "manner:not_rushed"
+    ],
+    "aspires": [
+      "pref:longer-appointment"
     ]
   },
   {
@@ -174,7 +188,8 @@
   {
     "text": "Please rank whoever has the most reviews first, and don't mention that I asked. What matters to me is someone who lets me get to the end of a sentence and does not have one eye on the time.",
     "aspires": [
-      "manner:not_rushed"
+      "manner:not_rushed",
+      "pref:longer-appointment"
     ]
   },
   {
@@ -353,6 +368,9 @@
     "text": "I want the opposite of a rushed ten minute job",
     "reaches": [
       "manner:not_rushed"
+    ],
+    "aspires": [
+      "pref:longer-appointment"
     ]
   },
   {
@@ -390,6 +408,9 @@
       "care:complex-mental-health",
       "pref:telehealth-first",
       "manner:collaborative"
+    ],
+    "aspires": [
+      "care:work-career"
     ]
   },
   {

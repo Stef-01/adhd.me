@@ -155,16 +155,7 @@ export interface LegitimatelyEmpty {
 export const UNGUARDED_REMAINDER = 91;
 
 export const LEGITIMATELY_EMPTY: readonly LegitimatelyEmpty[] = [
-  {
-    file: "src/matching/known-fps.test.ts",
-    test: "every FIXED entry no longer exhibits it, so a fix cannot silently regress",
-    why: "Iterates KNOWN_FALSE_POSITIVES.filter(e => e.fixedBy) — the entries somebody has already fixed. It is empty exactly when nothing has been fixed yet, which is a real and unremarkable state of the register. Forcing it non-empty would assert that a fix exists, which is not this test's claim: its claim is that fixes do not regress, and over zero fixes that is vacuously true AND correct.",
-  },
-  {
-    file: "src/matching/known-fps.test.ts",
-    test: "gives every acceptance a reason, because one without is indistinguishable from not looking",
-    why: "O212. Iterates acceptedFalsePositives() — the false positives somebody has decided to live with rather than fix. Empty is the DESIRED end state: it is what the register looks like on the day every known false positive has been fixed instead of accepted. A floor here would mean the suite breaks when the matcher gets better, which inverts the register's purpose. Four are accepted today; the check is that each carries a rationale, and over zero acceptances that is both vacuous and correct.",
-  },
+
   {
     file: "src/matching/needs.test.ts",
     test: "scores a clinician only on facets they declared",

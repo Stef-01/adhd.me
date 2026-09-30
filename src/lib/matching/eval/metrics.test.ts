@@ -1,8 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CorpusEntry } from "@/matching/corpus";
-import { extractorReport, gradedEntries } from "@/matching/extractor-quality";
-import { facetKey, readNeeds } from "@/matching/needs";
-import { facetScore, flipRate, kendallTau, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
+import { faults, ndcgAt, reciprocalRank, scoreReader } from "./metrics";
 
 const ENTRIES: CorpusEntry[] = [
   { text: "one", reaches: ["care:anxiety", "pref:woman-gp"] },
@@ -31,18 +29,19 @@ describe("scoreReader", () => {
     expect(score.correct).toBe(1 / 4);
   });
 
-  it("gives per-facet precision, recall and F1", () => {
-    expect(facetScore(score.perFacet.get("care:anxiety")!)).toEqual({ recall: 1, precision: 1, f1: 1 });
-    expect(facetScore(score.perFacet.get("pref:woman-gp")!)).toEqual({ recall: 0, precision: null, f1: null });
-    expect(facetScore(score.perFacet.get("care:depression")!)).toEqual({ recall: null, precision: 0, f1: null });
-    const half = facetScore({ asked: 2, heard: 1, aspired: 0, aspiredHeard: 0, extracted: 4, right: 1 });
-    expect(half.f1).toBeCloseTo((2 * 0.5 * 0.25) / 0.75, 12);
+  it("tallies per tag", () => {
+    expect(score.perFacet.get("care:anxiety")).toEqual({ asked: 2, heard: 2, aspired: 0, aspiredHeard: 0, extracted: 2, right: 2 });
+    expect(score.perFacet.get("pref:woman-gp")).toEqual({ asked: 1, heard: 0, aspired: 0, aspiredHeard: 0, extracted: 0, right: 0 });
   });
 
-  it("agrees with extractor-quality on the lexicon, which it builds on", () => {
-    const report = extractorReport();
-    const lexicon = scoreReader(gradedEntries(), (text) => readNeeds(text).map((n) => facetKey(n.facet)));
-    expect(lexicon.recall).toBeCloseTo(report.recall, 3);
+  it("scores only the keys `keep` admits: manner pins are nobody's to read now", () => {
+    const care = (key: string) => key.startsWith("care:") || key.startsWith("pref:");
+    const scored = scoreReader(ENTRIES, (text) => READS[text]!, care);
+    expect(scored.precision).toBe(2 / 4);
+    expect(scored.aspires).toBeNull();
+    expect(faults(ENTRIES[1]!, READS.two!, care)).toEqual({ missed: [], broke: ["care:depression"], stray: [], extra: [] });
+    expect(faults(ENTRIES[3]!, READS.four!, care)).toEqual({ missed: [], broke: [], stray: ["pref:bulk-billing"], extra: [] });
+    expect(faults(ENTRIES[0]!, ["care:anxiety", "care:sleep"], care)).toEqual({ missed: ["pref:woman-gp"], broke: [], stray: [], extra: ["care:sleep"] });
   });
 });
 
@@ -61,21 +60,5 @@ describe("order metrics", () => {
     expect(reciprocalRank(["b", "c"], gain)).toBe(1);
     expect(reciprocalRank(["c", "d", "a"], gain)).toBe(1 / 3);
     expect(reciprocalRank(["d"], new Map([["d", 0]]))).toBe(0);
-  });
-
-  it("Kendall tau for identical, reversed and one-swap orders", () => {
-    expect(kendallTau(["a", "b", "c", "d"], ["a", "b", "c", "d"])).toBe(1);
-    expect(kendallTau(["a", "b", "c", "d"], ["d", "c", "b", "a"])).toBe(-1);
-    expect(kendallTau(["a", "b", "c", "d"], ["b", "a", "c", "d"])).toBeCloseTo(4 / 6, 12);
-  });
-
-  it("flip rate over three runs", () => {
-    const runs = [
-      [["x"], ["y", "z"], []],
-      [["x"], ["z", "y"], ["w"]],
-      [["x"], ["y", "z"], []],
-    ];
-    expect(flipRate(runs)).toBe(1 / 3);
-    expect(flipRate([[["x"]], [["x"]]])).toBe(0);
   });
 });

@@ -1,5 +1,9 @@
 # LLM matching: a working prototype, tested cheaply and in order
 
+> **2026-09-30 (R19).** The reader described from §5 on (three reads, a vote, checks, a five-phase
+> ladder) is gone. The reader is one grounded call and the eval is one run: docs/matching/SIMPLE.md.
+> The sections below are kept as the record of how it got there.
+
 Status: plan, 2026-09-27. Scope: a proof of concept that works, not a product. No consent flows,
 audit trails or production safeguards beyond what keeps the test budget safe. Minimal code,
 one way of doing each thing, easy to refactor.

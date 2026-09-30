@@ -1,253 +1,125 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { clinicians, rankClinicians } from "@/demo/clinicians";
-import { EI_QUALITY_KEYS } from "@/demo/emotional-fit";
 import { CASSETTES, cassetteFetch, completed } from "@/lib/llm/cassettes";
 import { BudgetMeter } from "@/lib/llm/meter";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, LEXICON_CUES, needForKey, readNeeds } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
-import { answerFor, CHECKS, checkInput, fromModel, INSTRUCTIONS, lexiconReading, MEANINGS, READS, readRequest, SCHEMA, VOCABULARY } from "./llm-read";
+import { answerFor, fromModel, grounded, INSTRUCTIONS, lexiconReading, MEANINGS, READ_CALL, readRequest, SCHEMA, TAGS, VOCABULARY } from "./llm-read";
 
 const ENV = { OPENAI_API_KEY: "k" };
 const TODAY = new Date("2026-09-27T00:00:00Z");
-const EMPTY = { care: [], manner: [], prefs: [], languages: [], negated: [] };
-const schemaKeys = () => Object.values(VOCABULARY).flatMap(({ prefix, ids }) => ids.map((id) => `${prefix}:${id}`));
+const NONE = { needs: [], unlisted: [] };
+/** One answer as the model gives it. */
+const answer = (...needs: [tag: string, quote: string][]) => ({ needs: needs.map(([tag, quote]) => ({ tag, quote })), unlisted: [] });
+const replying = (data: object) => async () => new Response(JSON.stringify(completed(data)));
 
 afterEach(() => {
   vi.useRealTimers();
 });
 
-describe("one vocabulary (F8, F9)", () => {
-  it("the schema's keys are the lexicon's facets and the matchable languages, both ways", () => {
-    const lexicon = new Set(LEXICON_CUES.map((cue) => cue.key));
-    const corpusKeys = [
-      ...CARE_AREA_LABELS.map((area) => `care:${area.id}`),
-      ...EI_QUALITY_KEYS.map((trait) => `manner:${trait}`),
-      "pref:woman-gp", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience", "pref:ndis",
-    ];
-    const languages = MATCHABLE_LANGUAGES.map((name) => `language:${name.toLowerCase()}`);
-    expect(new Set(schemaKeys())).toEqual(new Set([...lexicon, ...languages]));
-    expect(new Set(schemaKeys())).toEqual(new Set([...corpusKeys, ...languages]));
+describe("one vocabulary", () => {
+  it("the tags are every care area and preference the lexicon matches on, and no manner trait", () => {
+    const care = CARE_AREA_LABELS.map((area) => `care:${area.id}`);
+    const prefs = ["pref:woman-gp", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience", "pref:ndis"];
+    expect(new Set(TAGS)).toEqual(new Set([...care, ...prefs]));
+    const lexicon = new Set(LEXICON_CUES.map((cue) => cue.key).filter((key) => !key.startsWith("manner:")));
+    expect(new Set(TAGS)).toEqual(lexicon);
+    expect(VOCABULARY.languages.ids).toEqual(MATCHABLE_LANGUAGES.map((name) => name.toLowerCase()));
   });
 
-  it("every key has one meaning line, is in the rendered instructions, and maps to a signal", () => {
-    const ids = Object.values(VOCABULARY).flatMap(({ ids }) => ids);
-    const withMeaning = ids.filter((id) => !VOCABULARY.languages.ids.includes(id));
-    expect(Object.keys(MEANINGS).sort()).toEqual([...withMeaning].sort());
-    for (const id of ids) expect(INSTRUCTIONS, id).toMatch(new RegExp(`\\b${id}\\b`));
-    for (const key of schemaKeys()) expect(facetKey(needForKey(key)!.facet)).toBe(key);
+  it("every tag has one meaning line, is in the instructions, and maps to a signal", () => {
+    expect(Object.keys(MEANINGS).sort()).toEqual(TAGS.map((tag) => tag.slice(tag.indexOf(":") + 1)).sort());
+    for (const tag of TAGS) expect(INSTRUCTIONS, tag).toContain(`- ${tag}: `);
+    for (const tag of TAGS) expect(facetKey(needForKey(tag)!.facet)).toBe(tag);
   });
 
-  it("is a strict schema: flat arrays of enums, every property required, nothing additional", () => {
+  it("is a strict schema: a list of tag and quote, every property required, nothing additional", () => {
     const { schema } = SCHEMA;
     expect(schema.additionalProperties).toBe(false);
     expect(schema.required.sort()).toEqual(Object.keys(schema.properties).sort());
-    expect(schema.properties.negated.items.enum).toHaveLength(schemaKeys().length);
+    expect(schema.properties.needs.items.properties.tag.enum).toEqual([...TAGS]);
+    expect(schema.properties.needs.items.required).toEqual(["tag", "quote"]);
+    expect(READ_CALL).not.toHaveProperty("model"); // `modelOf` decides, in one place
+  });
+});
+
+describe("grounded", () => {
+  const text = "I’d like a woman GP who bulk bills, by video if I can";
+
+  it("keeps a tag only when its quote is in the text, whatever the case, quotes or spacing", () => {
+    const kept = grounded(
+      [
+        { key: "pref:woman-gp", quote: "Woman GP" },
+        { key: "pref:bulk-billing", quote: "bulk bills" },
+        { key: "pref:telehealth-first", quote: "by  video" },
+        { key: "pref:lived-experience", quote: "has ADHD herself" },
+        { key: "care:anxiety", quote: "I'd like" },
+      ],
+      text,
+    );
+    expect(kept.map((need) => need.key)).toEqual(["pref:woman-gp", "pref:bulk-billing", "pref:telehealth-first", "care:anxiety"]);
+  });
+
+  it("drops an unknown tag, an empty quote, and a repeat", () => {
+    expect(grounded([{ key: "manner:attuned", quote: "GP" }, { key: "pref:woman-gp", quote: "" }, { key: "pref:woman-gp", quote: "woman" }, { key: "pref:woman-gp", quote: "GP" }], text)).toEqual([{ key: "pref:woman-gp", quote: "woman" }]);
   });
 });
 
 describe("fromModel", () => {
-  it("returns the signals readNeeds would, so the ranker takes them as they are", () => {
+  it("returns the signals readNeeds would, quoting the person's words, so the ranker takes them as they are", () => {
     const [lexical] = readNeeds("my dose needs titration");
-    const [model] = fromModel({ ...EMPTY, care: ["titration"] }).needs;
-    expect({ ...model, matched: "" }).toEqual({ ...lexical, matched: "" });
+    const [model] = fromModel(answer(["care:titration", "needs titration"]), "my dose needs titration").needs;
+    expect(model).toEqual({ ...lexical, matched: "needs titration" });
   });
 
   it("ranks through rankClinicians' needs argument, and the default reading is unchanged", () => {
-    const woman = fromModel({ ...EMPTY, prefs: ["woman-gp"] }).needs;
+    const woman = fromModel(answer(["pref:woman-gp", "a woman"]), "a woman I feel safe with").needs;
     expect(rankClinicians("someone I feel safe with", clinicians, TODAY, woman)[0]!.gender).toBe("woman");
     const query = "a woman GP who bulk bills";
-    expect(rankClinicians(query, clinicians, TODAY).map((c) => c.id)).toEqual(
-      rankClinicians(query, clinicians, TODAY, undefined).map((c) => c.id),
-    );
+    expect(rankClinicians(query, clinicians, TODAY).map((c) => c.id)).toEqual(rankClinicians(query, clinicians, TODAY, undefined).map((c) => c.id));
   });
 
-  it("drops and counts unknown values, merges duplicates, and removes negated keys", () => {
-    const reading = fromModel({
-      care: ["titration", "titration", "astrology"],
-      manner: ["attuned"],
-      prefs: ["telehealth-first", "woman-gp"],
-      languages: ["klingon", "urdu"],
-      negated: ["telehealth-first"],
-    });
-    expect(reading.keys).toEqual(["care:titration", "manner:attuned", "pref:woman-gp", "language:urdu"]);
+  it("drops and counts what it cannot quote or does not know, and reads a language by name", () => {
+    const text = "a psychologist who speaks Urdu, for my anxiety";
+    const reading = fromModel({ needs: [{ tag: "care:anxiety", quote: "my anxiety" }, { tag: "care:depression", quote: "feeling low" }, { tag: "care:astrology", quote: "anxiety" }], unlisted: ["evening appointments", " ", "evening appointments"] }, text);
+    expect(reading.keys).toEqual(["care:anxiety", "language:urdu"]);
     expect(reading.dropped).toBe(2);
     expect(reading.needs.map((need) => need.label)).toContain("Urdu-speaking");
+    expect(reading.unlisted).toEqual(["evening appointments", "evening appointments"]);
   });
 
-  it("reads answerFor(keys) back as exactly those keys, four at a time", () => {
-    const keys = schemaKeys();
-    for (let at = 0; at < keys.length; at += 4) expect(fromModel(answerFor(keys.slice(at, at + 4))).keys).toEqual(keys.slice(at, at + 4));
-    expect(fromModel(answerFor([])).keys).toEqual([]);
-  });
-
-  it("treats a recited list as a malformed answer, and allows every preference at once (six)", () => {
-    const care = VOCABULARY.care.ids;
-    expect(() => fromModel({ ...answerFor([]), care: care.slice(0, 7) })).toThrow(/care recites 7 keys/);
-    expect(() => fromModel({ ...answerFor([]), languages: VOCABULARY.languages.ids })).toThrow(/languages recites/);
-    expect(fromModel({ ...answerFor([]), care: care.slice(0, 3) }).keys).toHaveLength(3);
-    expect(fromModel({ ...answerFor([]), prefs: VOCABULARY.prefs.ids }).keys).toHaveLength(6); // O261: + ndis
-  });
-
-  it("keeps every key the lexicon hears in the request, unless the model marked it refused", () => {
+  it("adds nothing from the lexicon: a tag the model did not quote is not there", () => {
     const text = "a woman GP who bulk bills";
     expect(lexiconReading(text).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
-    expect(fromModel(answerFor([]), text).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
-    expect(fromModel(answerFor(["manner:not_rushed", "pref:woman-gp"]), text).keys).toEqual(["manner:not_rushed", "pref:woman-gp", "pref:bulk-billing"]);
-    expect(fromModel({ ...answerFor([]), negated: ["bulk-billing"] }, text).keys).toEqual(["pref:woman-gp"]);
+    expect(fromModel(NONE, text).keys).toEqual([]);
+    expect(fromModel(answer(["pref:woman-gp", "woman GP"]), text).keys).toEqual(["pref:woman-gp"]);
+  });
+
+  it("reads answerFor(keys, text) back as exactly those keys, four at a time", () => {
+    for (let at = 0; at < TAGS.length; at += 4) expect(fromModel(answerFor(TAGS.slice(at, at + 4), "help"), "help").keys).toEqual(TAGS.slice(at, at + 4));
+    expect(fromModel(answerFor([], "help"), "help").keys).toEqual([]);
+    expect(answerFor(["manner:attuned", "language:urdu"], "help").needs).toEqual([]);
   });
 });
 
 describe("readRequest", () => {
-  it("sends the static instructions and the request as input, at low effort with room to reason", async () => {
-    const bodies: { instructions: string; input: string; reasoning: object; max_output_tokens: number; prompt_cache_key?: string; prompt_cache_retention?: string }[] = [];
+  it("makes one call: the static instructions and the request as input, at low effort with room to reason", async () => {
+    const bodies: { instructions: string; input: string; reasoning: object; max_output_tokens: number; prompt_cache_key?: string; prompt_cache_retention?: string; model: string }[] = [];
     const fetch = async (_url: string, init: { body: string }) => {
       bodies.push(JSON.parse(init.body));
-      return new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] })));
+      return new Response(JSON.stringify(completed(answer(["pref:woman-gp", "a woman GP"]))));
     };
     const reading = await readRequest("a woman GP", { fetch, env: ENV });
-    expect(reading).toMatchObject({ keys: ["pref:woman-gp"], source: "llm" });
-    expect(bodies[0]).toMatchObject({ instructions: INSTRUCTIONS, input: "a woman GP", reasoning: { effort: "low" }, max_output_tokens: 1600, prompt_cache_key: "adhdme-l1-read", prompt_cache_retention: "24h" });
-    expect(bodies[0]!.max_output_tokens).toBeGreaterThanOrEqual(400);
+    expect(reading).toMatchObject({ keys: ["pref:woman-gp"], source: "llm", dropped: 0 });
+    expect(reading.needs[0]!.matched).toBe("a woman GP");
+    expect(bodies).toHaveLength(1);
+    expect(bodies[0]).toMatchObject({ model: "gpt-5-mini", instructions: INSTRUCTIONS, input: "a woman GP", reasoning: { effort: "low" }, max_output_tokens: 1600, prompt_cache_key: "adhdme-l1-read", prompt_cache_retention: "24h" });
   });
 
-  it(`reads ${READS} times at once, and keeps a key only when every read gives it`, async () => {
-    const answers = [
-      { ...EMPTY, prefs: ["woman-gp"], manner: ["attuned", "not_rushed"] },
-      { ...EMPTY, prefs: ["woman-gp"], manner: ["not_rushed"] },
-      { ...EMPTY, prefs: ["woman-gp"], manner: ["not_rushed", "steadying"] },
-    ];
-    let [reads, checks] = [0, 0];
-    const fetch = async (_url: string, init: { body: string }) => {
-      if (JSON.parse(init.body).input === "someone patient") return new Response(JSON.stringify(completed(answers[reads++ % answers.length]!)));
-      checks += 1;
-      return new Response(JSON.stringify(completed({ verdicts: [] })));
-    };
-    const reading = await readRequest("someone patient", { fetch, env: ENV });
-    expect([reads, checks]).toEqual([READS, CHECKS]);
-    expect(reading).toMatchObject({ keys: ["manner:not_rushed", "pref:woman-gp"], source: "llm" });
-  });
-
-  it("drops a key the reads add as soon as one check says it is not asked (R18): a sentence on the line is not an ask", async () => {
-    const text = "flat for months, everything is heavy";
-    expect(lexiconReading(text).keys).toEqual([]);
-    let check = 0;
-    const fetch = async (_url: string, init: { body: string }) => {
-      const { input } = JSON.parse(init.body) as { input: string };
-      if (input === text) return new Response(JSON.stringify(completed({ ...EMPTY, care: ["depression"] })));
-      const asks = check++ !== 1; // two checks say asked, one says not
-      return new Response(JSON.stringify(completed({ verdicts: [{ key: "care:depression", asks }] })));
-    };
-    expect((await readRequest(text, { fetch, env: ENV, waitForAll: true })).keys).toEqual([]);
-    // Every check agreeing keeps it.
-    const agreed = async (_url: string, init: { body: string }) => {
-      const { input } = JSON.parse(init.body) as { input: string };
-      if (input === text) return new Response(JSON.stringify(completed({ ...EMPTY, care: ["depression"] })));
-      return new Response(JSON.stringify(completed({ verdicts: [{ key: "care:depression", asks: true }] })));
-    };
-    expect((await readRequest(text, { fetch: agreed, env: ENV, waitForAll: true })).keys).toEqual(["care:depression"]);
-  });
-
-  it("checks only the keys the reads add beyond the lexicon, and drops one the checks say is not asked", async () => {
-    const text = "it has to be bulk billed";
-    expect(lexiconReading(text).keys).toEqual(["pref:bulk-billing"]);
-    const inputs: string[] = [];
-    let check = 0;
-    const fetch = async (_url: string, init: { body: string }) => {
-      const { input } = JSON.parse(init.body) as { input: string };
-      inputs.push(input);
-      if (input === text) return new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp", "bulk-billing"] })));
-      const asks = check++ === 0; // one check says asked, two say not
-      return new Response(JSON.stringify(completed({ verdicts: [{ key: "pref:woman-gp", asks }] })));
-    };
-    const reading = await readRequest(text, { fetch, env: ENV });
-    expect(inputs.filter((input) => input !== text)).toEqual(Array(CHECKS).fill(checkInput(text, ["pref:woman-gp"])));
-    expect(reading.keys).toEqual(["pref:bulk-billing"]);
-  });
-
-  it("keeps the reads' unlisted asks for the report, once each, never as keys", async () => {
-    const answers = [
-      { ...EMPTY, unlisted: ["after hours"] },
-      { ...EMPTY, unlisted: ["After hours", "a small practice"] },
-      { ...EMPTY, unlisted: [] },
-    ];
-    let n = 0;
-    const fetch = async () => new Response(JSON.stringify(completed(answers[n++ % 3]!)));
-    const reading = await readRequest("after-hours only, I am rarely free before seven", { fetch, env: ENV }); // O261: "night shifts" reads work now
-    expect(reading).toMatchObject({ keys: [], source: "llm", unlisted: ["after hours", "a small practice"] });
-  });
-
-  it("settles on two reads that add nothing beyond the lexicon, without waiting for the third", async () => {
-    let n = 0;
-    const fetch = () => (n++ < 2 ? Promise.resolve(new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] })))) : new Promise<Response>(() => {}));
-    const reading = await Promise.race([readRequest("a woman GP", { fetch, env: ENV }), new Promise((resolve) => setTimeout(() => resolve("waited"), 1000))]);
-    expect(reading).toMatchObject({ keys: ["pref:woman-gp"], source: "llm" });
-  });
-
-  it("waits for the third read when the first two add a key, which the third can take away", async () => {
-    let n = 0;
-    const added = { ...EMPTY, manner: ["not_rushed"] };
-    const fetch = async () => {
-      const at = n++;
-      if (at === 2) await new Promise((resolve) => setTimeout(resolve, 30));
-      return new Response(JSON.stringify(completed(at === 2 ? EMPTY : added)));
-    };
-    expect((await readRequest("someone patient", { fetch, env: ENV })).keys).toEqual([]);
-  });
-
-  it("settles the checks once two agree a key is not asked, without waiting for the third", async () => {
-    let check = 0;
-    const fetch = (_url: string, init: { body: string }) => {
-      if (JSON.parse(init.body).input === "it has to be bulk billed") return Promise.resolve(new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp", "bulk-billing"] }))));
-      return check++ < 2 ? Promise.resolve(new Response(JSON.stringify(completed({ verdicts: [{ key: "pref:woman-gp", asks: false }] })))) : new Promise<Response>(() => {});
-    };
-    const reading = await Promise.race([readRequest("it has to be bulk billed", { fetch, env: ENV }), new Promise((resolve) => setTimeout(() => resolve("waited"), 1000))]);
-    expect(reading).toMatchObject({ keys: ["pref:bulk-billing"] });
-  });
-
-  it("starts the check once two reads agree, before the third returns, and the third can still take a key away", async () => {
-    const events: string[] = [];
-    let read = 0;
-    const fetch = async (_url: string, init: { body: string }) => {
-      const { input } = JSON.parse(init.body) as { input: string };
-      if (input !== "someone patient") {
-        events.push("check");
-        return new Response(JSON.stringify(completed({ verdicts: [] })));
-      }
-      const at = read++;
-      if (at < 2) return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["not_rushed", "attuned"] })));
-      await new Promise((resolve) => setTimeout(resolve, 50));
-      events.push("third read");
-      return new Response(JSON.stringify(completed({ ...EMPTY, manner: ["not_rushed"] })));
-    };
-    const reading = await readRequest("someone patient", { fetch, env: ENV });
-    expect(events.indexOf("check")).toBeLessThan(events.indexOf("third read"));
-    expect(reading.keys).toEqual(["manner:not_rushed"]);
-  });
-
-  it("makes no check when the reads add nothing beyond the lexicon", async () => {
-    let calls = 0;
-    const fetch = async () => (calls += 1, new Response(JSON.stringify(completed({ ...EMPTY, prefs: ["woman-gp"] }))));
-    expect((await readRequest("a woman GP", { fetch, env: ENV })).keys).toEqual(["pref:woman-gp"]);
-    expect(calls).toBe(READS);
-  });
-
-  it("drops a key the lexicon hears when most reads refuse it, and keeps it when one does", async () => {
-    const text = "a woman GP who bulk bills";
-    const reads = (refusals: string[][]) => {
-      let n = 0;
-      return async () => new Response(JSON.stringify(completed({ ...EMPTY, negated: refusals[n++ % 3]! })));
-    };
-    expect((await readRequest(text, { fetch: reads([["bulk-billing"], ["bulk-billing"], []]), env: ENV })).keys).toEqual(["pref:woman-gp"]);
-    expect((await readRequest(text, { fetch: reads([["bulk-billing"], [], []]), env: ENV })).keys).toEqual(["pref:bulk-billing", "pref:woman-gp"]);
-  });
-
-  it("lets the reads that answered decide when one fails, and keeps its error", async () => {
-    let n = 0;
-    const fetch = async () =>
-      new Response(JSON.stringify(n++ === 0 ? completed({ ...EMPTY, care: VOCABULARY.care.ids }) : completed({ ...EMPTY, care: ["titration"] })));
-    const reading = await readRequest("my dose wears off", { fetch, env: ENV });
-    expect(reading).toMatchObject({ keys: expect.arrayContaining(["care:titration"]), source: "llm", error: expect.stringMatching(/^SchemaError: care recites/) });
+  it("keeps the unlisted asks for the report, never as keys", async () => {
+    const reading = await readRequest("after-hours only, I am rarely free before seven", { fetch: replying({ needs: [], unlisted: ["after hours"] }), env: ENV });
+    expect(reading).toMatchObject({ keys: [], source: "llm", unlisted: ["after hours"] });
   });
 
   it("makes no call for empty or whitespace text", async () => {
@@ -256,13 +128,11 @@ describe("readRequest", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it.each(CASSETTES.map((cassette) => [cassette.class, cassette.input.slice(0, 40), cassette] as const))(
-    "replays the %s cassette: %s",
-    async (_class, _input, cassette) => {
-      const reading = await readRequest(cassette.input, { fetch: cassetteFetch(CASSETTES), env: ENV });
-      expect({ keys: reading.keys, source: reading.source }).toEqual(cassette.expect);
-    },
-  );
+  it.each(CASSETTES.map((cassette) => [cassette.class, cassette.input.slice(0, 40), cassette] as const))("replays the %s cassette: %s", async (_class, _input, cassette) => {
+    const reading = await readRequest(cassette.input, { fetch: cassetteFetch(CASSETTES), env: ENV });
+    expect({ keys: reading.keys, source: reading.source }).toEqual(cassette.expect);
+    for (const need of reading.needs) if (reading.source === "llm" && need.facet.kind !== "language") expect(cassette.input).toContain(need.matched);
+  });
 
   it("covers every class once, plus an incomplete and a refusal", () => {
     expect(CASSETTES.filter((c) => c.expect.source === "llm").map((c) => c.class)).toEqual(["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"]);
@@ -270,17 +140,16 @@ describe("readRequest", () => {
     expect(JSON.stringify(CASSETTES)).toContain('"type":"refusal"');
   });
 
-  it("falls back to the lexicon on a timeout, a budget refusal or a malformed answer", async () => {
+  it("falls back to the lexicon on a timeout, a budget refusal or a malformed answer, and says so", async () => {
     const text = "I would prefer a woman GP";
     const lexicon = lexiconReading(text);
-    const malformed = async () => new Response(JSON.stringify(completed({ care: "titration" })));
+    const malformed = replying({ needs: "woman-gp" });
     const budget = await readRequest(text, { fetch: malformed, env: ENV, meter: new BudgetMeter(0) });
     expect(budget).toMatchObject({ keys: lexicon.keys, source: "lexicon", error: expect.stringMatching(/^BudgetError/) });
     expect(await readRequest(text, { fetch: malformed, env: ENV })).toMatchObject({ source: "lexicon", error: expect.stringMatching(/^SchemaError/) });
 
     vi.useFakeTimers();
-    const hung = (_url: string, init: { signal: AbortSignal }) =>
-      new Promise<Response>((_resolve, reject) => init.signal.addEventListener("abort", () => reject(new Error("aborted"))));
+    const hung = (_url: string, init: { signal: AbortSignal }) => new Promise<Response>((_resolve, reject) => init.signal.addEventListener("abort", () => reject(new Error("aborted"))));
     const pending = readRequest(text, { fetch: hung, env: ENV });
     await vi.advanceTimersByTimeAsync(20_000);
     expect(await pending).toMatchObject({ keys: lexicon.keys, source: "lexicon", error: expect.stringMatching(/^TimeoutError/) });

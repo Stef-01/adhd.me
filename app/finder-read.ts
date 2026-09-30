@@ -6,8 +6,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { needsFor, type Clinician } from "@/demo/clinicians";
-import { worthReading } from "@/finder/read-policy";
-import { facetKey, needForKey } from "@/matching/needs";
+import { needForKey } from "@/matching/needs";
 import { MODE_KEY, type FinderMode } from "./finder-stages/welcome-stage";
 
 /** At level 1, how long the results wait for the read before ranking on the finder's own. */
@@ -44,30 +43,33 @@ export function useFinderMode(readLevel: number, voice: boolean) {
   };
 }
 
+/** One need as the route answers it: its key, and the person's words that asked for it. */
+type Quoted = { key: string; quote: string };
+const quoted = (value: unknown): value is Quoted => typeof (value as Quoted)?.key === "string" && typeof (value as Quoted)?.quote === "string";
+
 /**
- * Level 1: the results ask `/api/finder/read` once for each new set of words and wait for it, only
- * where it helps (src/finder/read-policy.ts: a short request the lexicon already heard lists at
- * once). Its keys are the read everything runs on; with no answer, or the lexicon's, it is the
- * finder's own read, exactly the level 0 list.
+ * Level 1: the results ask `/api/finder/read` once for each new set of words and wait for it. Its
+ * needs are the read everything runs on; with no answer, or the lexicon's, it is the finder's own
+ * read, exactly the level 0 list.
  *
  * @param active The results are on screen, so a read is wanted now.
  */
 export function useModelRead(level: number, request: string, roster: readonly Clinician[], active: boolean) {
-  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; keys?: string[]; unlisted: string[] }>({ request: "", done: true, unlisted: [] });
-  /** The finder's own reading of these words: the fallback, and the words each key was heard in. */
+  const [routeRead, setRouteRead] = useState<{ request: string; done: boolean; needs?: Quoted[]; unlisted: string[] }>({ request: "", done: true, unlisted: [] });
+  /** The finder's own reading of these words: the fallback. */
   const heard = useMemo(() => needsFor(request, roster), [request, roster]);
-  const modelReads = useMemo(() => level >= 1 && worthReading(request, heard.length), [level, request, heard]);
+  const modelReads = level >= 1 && request.trim().length > 0;
   /** Asks the route to read these words; the answer lands only while they are still the ones read. */
   const readWords = useCallback((words: string) => {
     setRouteRead({ request: words, done: false, unlisted: [] });
     const body = JSON.stringify({ text: words });
     fetch("/api/finder/read", { method: "POST", headers: { "content-type": "application/json" }, body, signal: AbortSignal.timeout(READ_TIMEOUT_MS) })
-      .then((reply) => (reply.ok ? (reply.json() as Promise<{ keys: string[]; source: string; unlisted?: string[] }>) : null))
+      .then((reply) => (reply.ok ? (reply.json() as Promise<{ needs?: unknown; source: string; unlisted?: unknown }>) : null))
       .catch(() => null)
       .then((answer) => setRouteRead((held) => held.request !== words ? held : {
         request: words,
         done: true,
-        keys: answer?.source === "llm" ? answer.keys : undefined,
+        needs: answer?.source === "llm" && Array.isArray(answer.needs) ? answer.needs.filter(quoted) : undefined,
         unlisted: answer?.source === "llm" && Array.isArray(answer.unlisted) ? answer.unlisted.filter((p): p is string => typeof p === "string") : [],
       }));
   }, []);
@@ -82,19 +84,15 @@ export function useModelRead(level: number, request: string, roster: readonly Cl
    */
   const readAhead = useCallback((words: string) => {
     const trimmed = words.trim();
-    if (level >= 1 && trimmed && worthReading(trimmed, needsFor(trimmed, roster).length)) readWords(trimmed);
-  }, [level, readWords, roster]);
+    if (level >= 1 && trimmed) readWords(trimmed);
+  }, [level, readWords]);
   const landed = level >= 1 && routeRead.request === request;
   /**
-   * The model's needs for these words, or undefined where the finder's own read stands. A need's
-   * quote is the words the lexicon heard the same key in, and nothing where it heard none: the model
-   * returns keys, not the person's words, and a key is never shown as one (qa/matching/rca.md, R15).
+   * The model's needs for these words, or undefined where the finder's own read stands. Each need
+   * carries the person's own words that asked for it, which is what "From your words" shows; a key
+   * is never shown as one (qa/matching/rca.md, R15).
    */
-  const modelNeeds = useMemo(() => {
-    if (!landed || !routeRead.keys) return undefined;
-    const spoken = new Map(heard.map((need) => [facetKey(need.facet), need.matched]));
-    return routeRead.keys.flatMap((key) => needForKey(key, spoken.get(key) ?? "") ?? []);
-  }, [landed, routeRead.keys, heard]);
+  const modelNeeds = useMemo(() => (!landed || !routeRead.needs ? undefined : routeRead.needs.flatMap(({ key, quote }) => needForKey(key, quote) ?? [])), [landed, routeRead.needs]);
   return {
     /** A read is wanted for these words and has not landed. */
     reading: modelReads && (routeRead.request !== request || !routeRead.done),

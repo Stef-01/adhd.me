@@ -295,12 +295,6 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
     notCopy: "A test helper comparing experiment arms. No strings but identifiers and failure messages.",
   },
   {
-    module: "src/matching/match.ts",
-    operatorCopy: [],
-    notCopy:
-      "W214's matcher decides; W213's `MATCH_REASON_COPY` is where every sentence a practice reads about a decision lives, and this module composes nothing of its own. `REASONS_THIS_MATCHER_PRODUCES` holds reason identifiers, not prose.",
-  },
-  {
     module: "src/ops/silence.ts",
     operatorCopy: ["SILENCE_COPY"],
     notCopy:
@@ -484,22 +478,10 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
       "Exports three enumerators over a clinician's own declarations and a `ToldLine` type. It holds NO copy of its own and is declared with an empty `operatorCopy` deliberately, because the whole point of the module is that it AUTHORS NOTHING: every sentence it returns is composed by the function the finder itself calls — the reason line by `getPersonalizedMatch`, the closed-books line by `closedBooksNote`, the distance line by `distanceTo`, the listing-gap line by `unservedCopy` — and the two fixed frames it does carry are the profile's missed-asks sentence and a source label naming the field a line came from, neither of which a patient ever reads. A test asserts the panel and the finder cannot disagree. That property is the module's reason to exist: a \"what patients are told\" view that wrote its own copy would drift from the product the first time a sentence changed, and the clinician reading it would be reading a reassuring fiction about their own listing.",
   },
   {
-    module: "src/matching/known-fps.ts",
-    operatorCopy: [],
-    notCopy:
-      "Exports the false-positive register, its two selectors and its type. It holds no operator copy: every string in it is a build-time note — a corpus sentence quoted verbatim, the facet it wrongly reaches, the construction family it belongs to, and where an entry is accepted, the reason. None of it is rendered to anybody. Declared with an empty `operatorCopy` for the reason src/matching/read.ts states: a module absent from this census is indistinguishable from a module nobody has checked. What it is FOR is the O84 bar — one case does not earn a matcher mechanism, two do — which the tree had been applying from memory since August because the evidence for it lived in sixteen prose comments spread across corpus.ts. The register makes the count automatic, and its own first run taught it a distinction it lacked: a reading examined and judged harmless is ACCEPTED, not queued, and collapsing the two would have made the bar demand a mechanism for a family O119 had already looked at and cleared.",
-  },
-  {
     module: "src/matching/scale-fixture.ts",
     operatorCopy: [],
     notCopy:
       "Exports a synthetic roster generator and a report over the clarifier selector. It is declared with an empty `operatorCopy` and that declaration deserves more scrutiny than its siblings', because unlike them this module DOES hold strings shaped like clinician copy — a name, a title, a practice, an `about` — and they are the one kind of string this tree must never publish: a fabricated doctor. They are here because `clarifiers()` takes a roster of `Clinician`, so measuring it at twenty means constructing twenty of them. Three things keep that safe and none of them is this comment. The strings are deliberately unusable as a person (\"Synthetic fixture entry 7\", \"Fixture entry — not a clinician\", a practice that says it does not exist, no image, no booking route, `realPerson` absent), so a surface that rendered one would look obviously broken rather than plausibly real. The module is imported from nowhere under `app/`, and `scale-fixture.test.ts` FAILS if that ever changes — verified by seeding a violation, not by assertion. And no entry carries an appointment, a suburb that resolves, or a competence claim of any kind. What the module is FOR is Q3 item 10, which rested on a guess about roster size that nobody had checked: the fixture is how that guess got measured without growing the real roster, which is a founder decision behind G6 and not a thing a build loop may simulate its way around.",
-  },
-  {
-    module: "src/matching/refused-cues.ts",
-    operatorCopy: [],
-    notCopy:
-      "Exports the refusal register and its type. It holds no operator copy: every string in it is a BUILD-TIME note to the next cue author — the phrase that was refused, the sentence that refused it, and why — and none of it is rendered to a patient, a clinician or an operator. It is declared with an empty `operatorCopy` rather than left out, for the reason src/matching/read.ts states: a module absent from this census is indistinguishable from a module nobody has checked. Worth saying what the register is FOR, because it looks like a ban list and is not: a refusal is a measurement somebody paid for, and recording it as data makes it findable by the person about to repeat it. Three times in one day a unit re-added a cue an earlier unit had measured and refused, and every one was caught by a pin — being caught three times is a signal about the process, not about the three cues. An entry can be overturned deliberately by deleting it and saying why; what it prevents is meeting the refusal by accident.",
   },
   {
     module: "src/matching/read.ts",
@@ -524,12 +506,6 @@ export const OPERATOR_COPY_SURFACES: readonly CopySurface[] = [
     operatorCopy: ["MATCHABLE_LANGUAGES"],
     notCopy:
       "The one export is a closed list of consultation-language names shared by clinician onboarding and patient matching. Each string may render as a checkbox label or inside a literal language match/gap label. It contains no clinical claim, advice, symptom inference or patient classification; its job is to make a known roster gap explicit instead of treating the reader's language request as unreadable.",
-  },
-  {
-    module: "src/matching/explain.ts",
-    operatorCopy: ["MATCH_REASON_COPY", "MATCH_FLOOR_BREACH_COPY"],
-    notCopy:
-      "The remaining exports are the reason union, the candidate projection and the floor check. `MATCH_REASON_COPY` is the sentence a practice manager reads about one appointment offer and `MATCH_FLOOR_BREACH_COPY` tells a reviewer why a plan was refused. Both are about capacity, recorded availability and practice-set limits; a test asserts neither can name a condition, a symptom or an urgency, because a reason is the one place a matcher gets to say WHY in words somebody reads.",
   },
   {
     module: "src/console/capacity.ts",

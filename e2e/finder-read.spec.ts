@@ -16,6 +16,9 @@ import { searchRoster } from "../src/finder/pipeline";
 import { CASSETTES } from "../src/lib/llm/cassettes";
 import { lexiconReading } from "../src/lib/matching/llm-read";
 import { facetKey, needForKey, type NeedSignal } from "../src/matching/needs";
+
+/** The lexicon's answer for these words, as the route gives it. */
+const lexicon = (text: string) => ({ needs: lexiconReading(text).needs.map((need) => ({ key: facetKey(need.facet), quote: need.matched })), source: "lexicon", unlisted: [] });
 import { POST } from "../app/api/finder/read/route";
 
 /** Why matched, in their words: what the model would write, answered by the route for this spec. */
@@ -66,7 +69,7 @@ test("level 0: the finder reads the words itself and asks nothing", async ({ pag
 
   // The route on this server answers from the lexicon.
   const reply = await page.request.post("/api/finder/read", { data: { text: REQUEST } });
-  expect(await reply.json()).toEqual({ keys: lexiconReading(REQUEST).keys, source: "lexicon", unlisted: [] });
+  expect(await reply.json()).toEqual(lexicon(REQUEST));
 });
 
 test("level 1: one read per search, a line and three blank rows while it runs, then the model's order", async ({ page }) => {
@@ -159,7 +162,7 @@ test("level 1: AI is the default, and Standard, kept on the device, asks the mod
   expect(posts).toEqual([]);
 });
 
-test("level 1: a short request the lexicon already heard lists at once, with no read (read-policy.ts)", async ({ page }) => {
+test("level 1: every request is read, a short one too, and a failed read lists the finder's own order", async ({ page }) => {
   await page.route((url) => url.pathname === "/", async (route) => {
     const response = await route.fetch();
     const html = await response.text();
@@ -167,14 +170,16 @@ test("level 1: a short request the lexicon already heard lists at once, with no 
   });
   const posts: string[] = [];
   await page.route("**/api/finder/read", async (route) => {
-    posts.push(route.request().postData() ?? "");
-    await route.fulfill({ status: 500, body: "the model should not be asked" });
+    posts.push(JSON.parse(route.request().postData() ?? "{}").text);
+    await route.fulfill({ status: 500, body: "the model is down" });
   });
   await page.goto("/");
-  await page.getByRole("textbox").fill("an ADHD assessment by telehealth");
+  const short = "an ADHD assessment by telehealth";
+  await page.getByRole("textbox").fill(short);
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-row").first()).toBeVisible();
   await expect(page.locator(".reading-line")).toHaveCount(0);
-  await page.waitForTimeout(500);
-  expect(posts, "no read for words the lexicon already heard").toEqual([]);
+  const own = rankClinicians(short, searchRoster(clinicians, emptyFilters(), short, null), new Date()).slice(0, 5).map((c) => c.id);
+  await expect.poll(() => rowIds(page)).toEqual(own);
+  expect(posts, "one read, for the words as typed").toEqual([short]);
 });

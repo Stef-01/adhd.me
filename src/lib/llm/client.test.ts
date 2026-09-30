@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { callJson, costOf, HttpError, IncompleteError, keyProblem, RefusalError, SchemaError, TimeoutError, type CallJson } from "./client";
 import { BudgetError, BudgetMeter } from "./meter";
 
-const ENV = { OPENAI_API_KEY: "k" };
+const ENV = { OPENAI_API_KEY: "k", ADHDME_LLM_MODEL: "gpt-5-nano" };
 const CALL: CallJson = {
   effort: "minimal",
   instructions: "Read the request.",
@@ -59,10 +59,12 @@ describe("callJson", () => {
     expect(calls[0]!.body.indexOf('"instructions"')).toBeLessThan(calls[0]!.body.indexOf('"input"'));
   });
 
-  it("reads the model from the environment", async () => {
-    const { fetch, calls } = recording(() => reply(completed("{}")));
+  it("reads the model from the environment, gpt-5-mini without one", async () => {
+    const { fetch, calls } = recording(() => reply(completed("{}")), () => reply(completed("{}")));
     await callJson(CALL, { fetch, env: { ...ENV, ADHDME_LLM_MODEL: "gpt-5-mini" } });
     expect(JSON.parse(calls[0]!.body).model).toBe("gpt-5-mini");
+    await callJson(CALL, { fetch, env: { OPENAI_API_KEY: "k" } });
+    expect(JSON.parse(calls[1]!.body).model).toBe("gpt-5-mini");
   });
 
   it("parses the message text, or output_text when the body carries it", async () => {

@@ -260,8 +260,8 @@ const ORDER: readonly QuestionId[] = ["opening", "detail", "place", "lived", "cu
  */
 const PARTS_OF_LIFE: readonly { say: SayId; mentioned: RegExp }[] = [
   { say: "detail-work", mentioned: /\b(at work|my work|my job|workplace|my career|my boss|my manager|the office|in my role|a job|at my job)\b/i },
-  { say: "detail-study", mentioned: /\b(at school|at uni|at university|at tafe|with uni|my studies|my study|studying|my exams?|my assignments?|my degree|my course)\b/i },
-  { say: "detail-home", mentioned: /\b(parenting|as a (parent|mum|mom|dad|mother|father)|with my kids|with the kids|with my children|at home)\b/i },
+  { say: "detail-study", mentioned: /\b(at school|at uni|at university|at tafe|with uni|to uni|to university|back to study|my studies|my study|studying|my exams?|my assignments?|my degree|my course)\b/i },
+  { say: "detail-home", mentioned: /\b(parenting|as a (new |single |working )?(parent|mum|mom|dad|mother|father)|with my kids|with the kids|with my children|at home)\b/i },
   { say: "detail-relationship", mentioned: /\b(my relationship|my marriage|with my (partner|husband|wife|boyfriend|girlfriend))\b/i },
   { say: "detail-social", mentioned: /\b(my friendships?|with friends|making friends|socially|social situations|fitting in)\b/i },
 ];
@@ -279,6 +279,11 @@ const careAsked = (text: string) => readNeeds(text).map((need) => facetKey(need.
 const LIVED = /\b(has|have|with|got) adhd (them|her|him)sel(f|ves)\b|\blived experience\b|\badhd from the inside\b/i;
 const asksLived = (text: string) => LIVED.test(text) || readNeeds(text).some((need) => facetKey(need.facet) === "pref:lived-experience");
 const of = (answers: readonly Answer[], ...questions: QuestionId[]) => answers.filter((answer) => questions.includes(answer.question));
+/**
+ * The yes or no a question was left with: the last understood answer to it that said either. "Yeah,
+ * that'd be great" and then "Actually no, it doesn't matter" is a no (the founder's call, 2026-09-30 02:34).
+ */
+const settledOn = (answers: readonly Answer[], question: QuestionId): Form["yes_no"] => of(answers, question).filter((answer) => answer.form.understood && answer.form.yes_no).at(-1)?.form.yes_no;
 
 /**
  * The follow-up to the first answer, or null when it needs none (the founder, 2026-09-30: "should
@@ -288,7 +293,8 @@ const of = (answers: readonly Answer[], ...questions: QuestionId[]) => answers.f
  */
 export function detailFor(opening: readonly Answer[]): SayId | null {
   const said = opening.map((answer) => answer.text).join(". ");
-  const part = PARTS_OF_LIFE.find((entry) => entry.mentioned.test(said));
+  // The part of life named first is the one asked about ("as a new mother and also going back to uni").
+  const part = PARTS_OF_LIFE.map((entry) => ({ say: entry.say, at: said.search(entry.mentioned) })).filter((entry) => entry.at >= 0).sort((a, b) => a.at - b.at)[0];
   if (part) return part.say;
   return careAsked(said).length === 0 ? "help" : null;
 }
@@ -308,7 +314,7 @@ function sayFor(question: QuestionId, answers: readonly Answer[]): SayId | null 
       return answers.some((answer) => answer.form.culture || answer.form.language) ? null : "culture";
     case "which-culture":
       // A yes that named none is asked which (the founder, 2026-09-30: "the ai didn't prompt to ask what the culture was").
-      return of(answers, "culture").some((answer) => answer.form.yes_no === "yes") && !answers.some((answer) => answer.form.culture || answer.form.language || answer.form.plain) ? "which-culture" : null;
+      return settledOn(answers, "culture") === "yes" && !answers.some((answer) => answer.form.culture || answer.form.language || answer.form.plain) ? "which-culture" : null;
     case "extra":
       return "extra";
     case "carry-on":
@@ -361,12 +367,13 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         if (more && !form.place && !form.telehealth) parts.push(more);
         break;
       case "lived":
-        if (form.yes_no === "yes") parts.push(...(more && asksLived(more) ? [more] : [LIVED_ASK, ...(more ? [more] : [])]));
-        else if (more) parts.push(more);
+        // A yes counts only where the question was left at yes: a later "actually no" takes it back.
+        if (form.yes_no === "yes" && settledOn(answers, "lived") === "yes") parts.push(...(more && asksLived(more) ? [more] : [LIVED_ASK, ...(more ? [more] : [])]));
+        else if (more && form.yes_no !== "yes") parts.push(more);
         break;
       case "culture":
       case "which-culture":
-        if (form.yes_no === "yes" && !names) parts.push(CULTURE_ASK);
+        if (form.yes_no === "yes" && !names && settledOn(answers, "culture") === "yes") parts.push(CULTURE_ASK);
         else if (more && !names && form.yes_no !== "yes") parts.push(more);
         break;
       case "extra":

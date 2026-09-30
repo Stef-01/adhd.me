@@ -45,7 +45,8 @@ const FLEX_RATE = 0.5;
 const TIMEOUT_MS = 20_000;
 /** Flex answers more slowly and is for evals, where nobody is waiting. */
 const FLEX_TIMEOUT_MS = 60_000;
-export const modelOf = (env: Record<string, string | undefined>) => env.ADHDME_LLM_MODEL ?? "gpt-5-nano";
+/** gpt-5-mini: on the same corpus, nano read a `never` key in one request of nine, mini in none (R19, 2026-09-30). */
+export const modelOf = (env: Record<string, string | undefined>) => env.ADHDME_LLM_MODEL ?? "gpt-5-mini";
 /** `ADHDME_LLM_LEVEL` in effect: 1 where there is a key (or the e2e cassettes stand in for one) unless it says otherwise, 0 without. */
 export const levelOf = (env: Record<string, string | undefined>) =>
   env.OPENAI_API_KEY || env.ADHDME_LLM_CASSETTES === "1" ? Number(env.ADHDME_LLM_LEVEL || 1) || 0 : 0;

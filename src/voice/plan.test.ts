@@ -115,6 +115,11 @@ describe("the follow-up to the first answer", () => {
     expect(detailFor([answer("opening", "I think I might have ADHD and I'd like to get assessed.")])).toBeNull();
   });
 
+  it("hears study in going back to uni (the founder's call of 02:34)", () => {
+    expect(detailFor([answer("opening", "Someone to help me with my challenges as a new mother and also someone who is going back to uni.")])).toBe("detail-home");
+    expect(detailFor([answer("opening", "I am going back to uni next year and I am worried")])).toBe("detail-study");
+  });
+
   it("asks what is hardest in the part of life they named (the founder, 2026-09-30: 'should have asked for more detail about what the struggle at work is')", () => {
     expect(detailFor([answer("opening", "With someone that would help me at work.")])).toBe("detail-work");
     expect(detailFor([answer("opening", "I'm looking for help with staying more focused at my job at work.")])).toBe("detail-work");
@@ -241,6 +246,16 @@ describe("the request the answers make", () => {
     expect(compose([answer("lived", "No, but a woman would be good if there is one")]).request).toBe("No, but a woman would be good if there is one");
     // Said in their own words, the ask is not said twice.
     expect(compose([answer("lived", "Yes, I'd prefer someone who has ADHD themselves.")]).request).toBe("Yes, I'd prefer someone who has ADHD themselves");
+  });
+
+  it("takes a yes back when the next answer to the same question is a no (the founder's call of 02:34: 'Yeah, that'd be great. Actually no, it doesn't matter')", () => {
+    const changed = [answer("opening", "help as a new mother"), answer("lived", "Yeah, that'd be great.", { yes_no: "yes" }), answer("lived", "Actually no, it doesn't matter.", { yes_no: "no" })];
+    expect(compose(changed).request).toBe("help as a new mother");
+    expect(compose(changed.slice(0, 2)).request).toBe(`help as a new mother. ${LIVED_ASK}`);
+    // The same for culture: a yes taken back is not asked which.
+    const heard = [answer("opening", "an ADHD assessment"), answer("culture", "Yes.", { yes_no: "yes" }), answer("culture", "No, actually.", { yes_no: "no" })];
+    expect(nextQuestion(heard, ["opening", "place", "lived", "culture"])?.say).toBe("extra");
+    expect(compose(heard).request).toBe("an ADHD assessment");
   });
 
   it("asks for a culture or a language in the finder's words", () => {

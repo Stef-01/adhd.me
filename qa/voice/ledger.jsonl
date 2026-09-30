@@ -508,3 +508,4 @@
 {"time":"2026-09-30T01:51:56.073Z","kind":"eval","persona":"crisis","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0019,"pass":true}
 {"time":"2026-09-30T01:58:21.093Z","kind":"spoken","lines":7,"seconds":144,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":912,"audio_out":0},"costUsd":0.009389,"stage":"results"}
 {"time":"2026-09-30T02:04:26.401Z","kind":"spoken","lines":7,"seconds":104,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":801,"audio_out":0},"costUsd":0.007122,"stage":"results"}
+{"time":"2026-09-30T02:19:15.641Z","kind":"spoken","lines":7,"seconds":106,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":981,"audio_out":0},"costUsd":0.007654,"stage":"results"}

@@ -13,7 +13,7 @@
     "status": "completed",
     "error": null,
     "incomplete_details": null,
-    "model": "gpt-5-nano-2025-08-07",
+    "model": "gpt-5-mini-2025-08-07",
     "output": [
       {
         "id": "rs_cassette_c04",
@@ -30,7 +30,7 @@
             "type": "output_text",
             "annotations": [],
             "logprobs": [],
-            "text": "{\"care\":[],\"manner\":[],\"prefs\":[],\"languages\":[],\"negated\":[\"bulk-billing\"]}"
+            "text": "{\"needs\":[],\"unlisted\":[]}"
           }
         ]
       }

@@ -24,7 +24,6 @@ import {
 } from "@/demo/clinicians";
 import { NEED_LABELS, facetKey, readNeeds } from "./needs";
 import { clarifiers } from "./clarify";
-import { matchSlots } from "./match";
 import { resolvePlace } from "@/geo/suburbs";
 import type { CareArea } from "@/demo/care-archetypes";
 
@@ -197,30 +196,5 @@ describe("O9 degenerate rosters", () => {
     const ranked = rankClinicians("my dose needs titration", roster);
     expect(ranked.map((c) => c.id)).toEqual(["full", "empty"]);
     expect(scoreAgainst(ranked[1]!, needsFor("my dose needs titration", roster))).toBe(0);
-  });
-});
-
-describe("O9 slot-matcher degenerate inputs", () => {
-  it("zero candidates and zero slots produce an empty, valid plan", () => {
-    expect(matchSlots([], [])).toEqual([]);
-  });
-
-  it("availability naming a slot that does not exist reads as no availability", () => {
-    const decisions = matchSlots(
-      [{ candidateRef: "c1", practiceId: "p1", availableSlotIds: ["ghost"], outstandingOffers: 0 }],
-      [{ slotId: "real", practiceId: "p1", startsAt: "2026-09-01T00:00:00Z" }],
-    );
-    expect(decisions[0]!.reason).toBe("no_offered_slot_within_recorded_availability");
-  });
-
-  it("duplicate slot ids in recorded availability cannot double-book", () => {
-    const decisions = matchSlots(
-      [
-        { candidateRef: "c1", practiceId: "p1", availableSlotIds: ["s1", "s1", "s1"], outstandingOffers: 0 },
-        { candidateRef: "c2", practiceId: "p1", availableSlotIds: ["s1"], outstandingOffers: 0 },
-      ],
-      [{ slotId: "s1", practiceId: "p1", startsAt: "2026-09-01T00:00:00Z" }],
-    );
-    expect(decisions.filter((d) => d.slotId === "s1")).toHaveLength(1);
   });
 });

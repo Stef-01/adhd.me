@@ -1,8 +1,7 @@
-// The numbers every level is graded by: the reader's recall and precision against the corpus pins,
-// per facet and in total, and an order's NDCG@3, hit@1, MRR, Kendall tau and flip rate.
+// The numbers the reader is graded by: recall and precision against the corpus pins, per tag and in
+// total, and an order's NDCG@3, hit@1 and MRR.
 
 import type { CorpusEntry } from "@/matching/corpus";
-import { gradeExtraction } from "@/matching/extractor-quality";
 
 export type Tally = { asked: number; heard: number; aspired: number; aspiredHeard: number; extracted: number; right: number };
 
@@ -14,16 +13,23 @@ export type Tally = { asked: number; heard: number; aspired: number; aspiredHear
 export type ReaderScore = { recall: number | null; aspires: number | null; precision: number | null; never: number | null; correct: number | null; perFacet: Map<string, Tally> };
 
 const rate = (part: number, whole: number) => (whole === 0 ? null : part / whole);
+/** Language keys are not scored: the corpus cannot pin them. */
+const notLanguage = (key: string) => !key.startsWith("language:");
 
-/** What one reading got wrong: gold keys missed, `never` keys read, keys read where nothing was asked. */
-export function faults(entry: CorpusEntry, keys: readonly string[]): { missed: string[]; broke: string[]; stray: string[] } {
-  const got = new Set(keys.filter((key) => !key.startsWith("language:")));
-  const gold = [...(entry.reaches ?? []), ...(entry.aspires ?? [])];
-  return { missed: gold.filter((key) => !got.has(key)), broke: (entry.never ?? []).filter((key) => got.has(key)), stray: gold.length ? [] : [...got] };
+/**
+ * What one reading got wrong among the keys `keep` scores: gold keys missed, `never` keys read, keys
+ * read where nothing was asked (stray), and keys read beside the gold that no pin speaks to (extra:
+ * wrong, or a pin the corpus lacks; precision counts them, a person judges them).
+ */
+export function faults(entry: CorpusEntry, keys: readonly string[], keep: (key: string) => boolean = notLanguage): { missed: string[]; broke: string[]; stray: string[]; extra: string[] } {
+  const got = new Set(keys.filter(keep));
+  const gold = [...(entry.reaches ?? []), ...(entry.aspires ?? [])].filter(keep);
+  const never = new Set(entry.never ?? []);
+  const beside = [...got].filter((key) => !gold.includes(key) && !never.has(key));
+  return { missed: gold.filter((key) => !got.has(key)), broke: (entry.never ?? []).filter((key) => keep(key) && got.has(key)), stray: gold.length ? [] : beside, extra: gold.length ? beside : [] };
 }
 
-/** Language keys are not scored: the corpus cannot pin them. */
-export function scoreReader(entries: readonly CorpusEntry[], read: (text: string) => readonly string[]): ReaderScore {
+export function scoreReader(entries: readonly CorpusEntry[], read: (text: string) => readonly string[], keep: (key: string) => boolean = notLanguage): ReaderScore {
   const perFacet = new Map<string, Tally>();
   const total: Tally = { asked: 0, heard: 0, aspired: 0, aspiredHeard: 0, extracted: 0, right: 0 };
   const count = (facets: readonly string[], field: keyof Tally) => {
@@ -36,17 +42,18 @@ export function scoreReader(entries: readonly CorpusEntry[], read: (text: string
   };
   let [pinned, broken, correct] = [0, 0, 0];
   for (const entry of entries) {
-    const graded = gradeExtraction(entry, (text) => read(text).filter((key) => !key.startsWith("language:")));
-    const aspires = entry.aspires ?? [];
-    const gold = [...graded.gold, ...aspires];
-    count(graded.gold, "asked");
-    count(graded.hits, "heard");
+    const reaches = (entry.reaches ?? []).filter(keep);
+    const aspires = (entry.aspires ?? []).filter(keep);
+    const extracted = [...new Set(read(entry.text).filter(keep))];
+    const gold = [...reaches, ...aspires];
+    count(reaches, "asked");
+    count(reaches.filter((f) => extracted.includes(f)), "heard");
     count(aspires, "aspired");
-    count(aspires.filter((f) => graded.extracted.includes(f)), "aspiredHeard");
-    count(graded.extracted, "extracted");
-    count(graded.extracted.filter((f) => gold.includes(f)), "right");
-    const wrong = faults(entry, graded.extracted);
-    if (entry.never?.length) pinned += 1;
+    count(aspires.filter((f) => extracted.includes(f)), "aspiredHeard");
+    count(extracted, "extracted");
+    count(extracted.filter((f) => gold.includes(f)), "right");
+    const wrong = faults(entry, extracted, keep);
+    if (entry.never?.some(keep)) pinned += 1;
     if (wrong.broke.length) broken += 1;
     if (!wrong.missed.length && !wrong.broke.length && !wrong.stray.length) correct += 1;
   }
@@ -58,13 +65,6 @@ export function scoreReader(entries: readonly CorpusEntry[], read: (text: string
     correct: rate(correct, entries.length),
     perFacet,
   };
-}
-
-/** One facet's recall over its gold (`reaches` and `aspires`), precision, and F1. */
-export function facetScore(t: Tally): { recall: number | null; precision: number | null; f1: number | null } {
-  const recall = rate(t.heard + t.aspiredHeard, t.asked + t.aspired);
-  const precision = rate(t.right, t.extracted);
-  return { recall, precision, f1: recall === null || precision === null || recall + precision === 0 ? null : (2 * recall * precision) / (recall + precision) };
 }
 
 /** Null when no id has any gain: there is no order to get right. */
@@ -79,28 +79,4 @@ export function reciprocalRank(order: readonly string[], gain: ReadonlyMap<strin
   const best = Math.max(0, ...gain.values());
   const at = order.findIndex((id) => best > 0 && gain.get(id) === best);
   return at < 0 ? 0 : 1 / (at + 1);
-}
-
-/** Kendall's tau-a between two orders of the same ids: 1 identical, -1 reversed. */
-export function kendallTau(a: readonly string[], b: readonly string[]): number {
-  const at = new Map(b.map((id, i) => [id, i]));
-  let [score, pairs] = [0, 0];
-  for (let i = 0; i < a.length; i += 1) {
-    for (let j = i + 1; j < a.length; j += 1, pairs += 1) score += at.get(a[i]!)! < at.get(a[j]!)! ? 1 : -1;
-  }
-  return pairs === 0 ? 1 : score / pairs;
-}
-
-/** Share of items whose key set differs between any two runs. `runs[r][i]` is run r's keys for item i. */
-export function flipRate(runs: ReadonlyArray<ReadonlyArray<readonly string[]>>): number {
-  const items = runs[0]?.length ?? 0;
-  let flips = 0;
-  for (let i = 0; i < items; i += 1) if (new Set(runs.map((run) => [...run[i]!].sort().join())).size > 1) flips += 1;
-  return items === 0 ? 0 : flips / items;
-}
-
-/** The share of `mentions` keys a reading leaves out: 0 for the lexicon by construction. Null with none pinned. */
-export function mentionsDropped(entries: readonly { text: string; mentions?: readonly string[] }[], read: (text: string) => readonly string[]): number | null {
-  const pinned = entries.flatMap((entry) => (entry.mentions ?? []).map((key) => [entry.text, key] as const));
-  return pinned.length ? pinned.filter(([text, key]) => !read(text).includes(key)).length / pinned.length : null;
 }

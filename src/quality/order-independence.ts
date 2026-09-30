@@ -173,27 +173,11 @@ export const FOLD_SITES: readonly FoldSite[] = [
     },
   },
   {
-    module: "src/matching/extractor-quality.ts",
-    folds: 4,
-    disposition: {
-      kind: "rationale",
-      why: "FOUR folds (M6), all the same shape as `emotional-fit.ts`'s and `separation-effect.ts`'s: `extractorReport` sums `gold.length`, `hits.length`, `extracted.length` and `extras.length` across `results = entries.map(gradeExtraction)` to four scalar totals (goldFacetCount, hitCount, extractedCount, extraCount). Addition is commutative and every term is read from its own entry's own extraction result, never from its position in the array — permuting `entries` permutes which term contributes which addend, not the sum. None of the four selects a winner or reads a specific index; all four are counts.",
-    },
-  },
-  {
     module: "src/matching/read.ts",
     folds: 1,
     disposition: {
       kind: "rationale",
       why: "`trimDouble` reads the LAST CHARACTER OF A STRING, not the last record of a collection. The detector is right to see it — it cannot tell a string from an array, and one that guessed would miss the family it exists for — but there is no order to depend on, because a word's letters do not arrive in a different sequence depending on how a store returned them. Declared rather than rewritten to dodge the pattern, since dodging a detector is how a register stops describing the tree. NOTE FOR THE NEXT EDITOR: this rationale deliberately does not spell the index expression out. Only comments are stripped before scanning, so writing the literal here makes this file match its own detector — which is exactly what happened on the first draft.",
-    },
-  },
-  {
-    module: "src/matching/separation-effect.ts",
-    folds: 2,
-    disposition: {
-      kind: "rationale",
-      why: "TWO folds (M5), both order-independent for the same reason `emotional-fit.ts`'s is: `separationEffect` sums a FIXED-length array of K null-shuffle separation rates to a mean, then sums squared deviations from that mean to a variance. Both are addition over a total (a mean and a variance are scalars nobody is ranked by), not a selection of a winner — `nullRates[i]` is one shuffle's own measured rate, not a position-dependent read, so permuting which index holds which shuffle's result changes nothing either sum accumulates. The array itself is built by `Array.from({length: k}, (_, i) => ...)`, a fixed 0..k-1 walk with a seeded, index-keyed shuffle per `i` — the SAME index order every run, which is what makes the whole report a pin rather than a flake, but is a determinism property of the seed, not of this fold.",
     },
   },
   {

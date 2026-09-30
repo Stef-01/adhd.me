@@ -63,7 +63,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
 
   // ── care:child-adolescent-adhd ───────────────────────────────────────────────────────────
   { text: "this is for my teenager", reaches: ["care:child-adolescent-adhd"] },
-  { text: "my daughter is twelve and school keeps calling", reaches: ["care:child-adolescent-adhd"] },
+  { text: "my daughter is twelve and school keeps calling", reaches: ["care:child-adolescent-adhd"], aspires: ["care:study-school"] },  // R19: the model reads it, the lexicon never will
   { text: "looking for someone who sees kids", reaches: ["care:child-adolescent-adhd"] },
   { text: "my son cannot sit through a class", reaches: ["care:child-adolescent-adhd"] },
 
@@ -120,7 +120,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:non-medication ──────────────────────────────────────────────────────────────────
   { text: "not just medication", reaches: ["care:non-medication"] },
   { text: "I want options that are not a script", reaches: ["care:non-medication"] },
-  { text: "coaching and habits first, tablets later if ever", reaches: ["care:non-medication"] }, // O262: read on "tablets later"; the soft run claims the coaching
+  { text: "coaching and habits first, tablets later if ever", reaches: ["care:non-medication"], aspires: ["care:executive-function"] }, // O262: read on "tablets later"; the soft run claims the coaching  // R19: the model reads it, the lexicon never will
 
   // ── manner:attuned ───────────────────────────────────────────────────────────────────────
   { text: "I want someone who won't make me feel like I'm making it up", reaches: ["manner:non_judgmental"] },
@@ -136,7 +136,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── manner:sense_making ──────────────────────────────────────────────────────────────────
   { text: "I want to actually understand what's happening to me", reaches: ["manner:sense_making"] },
   { text: "someone who explains things in plain english", reaches: ["manner:sense_making", "manner:collaborative"] },
-  { text: "help me join the dots on thirty years of this", reaches: ["manner:sense_making"] },
+  { text: "help me join the dots on thirty years of this", reaches: ["manner:sense_making"], aspires: ["care:late-diagnosis"] },  // R19: the model reads it, the lexicon never will
 
   // ── manner:motivating ────────────────────────────────────────────────────────────────────
   { text: "a plan I can actually act on, built around what already works", reaches: ["manner:motivating"] },
@@ -144,7 +144,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a doctor who is neurodiversity affirming", reaches: ["manner:motivating"] },
 
   // ── manner:not_rushed ─────────────────────────────────────────────────────────────────────
-  { text: "I can never get a word in before the appointment is over", reaches: ["manner:not_rushed"] },
+  { text: "I can never get a word in before the appointment is over", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   { text: "she rushed me out the door in ten minutes", reaches: ["manner:not_rushed"] },
   /* O119 KNOWN FALSE POSITIVE, pinned as today's truth (the O68 pattern).
      WHO IS DOING THE EXPLAINING. `collaborative` means the CLINICIAN explains and decides with
@@ -217,7 +217,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "no interest in titration at all", never: ["care:titration"] },
   { text: "my GP won't do titration and I need someone who will", reaches: ["care:titration"] },
   { text: "I've never had an assessment and I want one", reaches: ["care:adhd-assessment"] },
-  { text: "I don't want to feel rushed", reaches: ["manner:not_rushed"] },
+  { text: "I don't want to feel rushed", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
 
   // ── collapse discipline (O45) ────────────────────────────────────────────────────────────
   { text: "the practice name is on the sign", never: ["manner:sense_making"] },
@@ -295,7 +295,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a trauma informed GP please", reaches: ["care:trauma-informed"] },
   { text: "I need to not be pushed on the details of the history", reaches: ["care:trauma-informed"] },
   { text: "childhood was rough and it comes up in appointments", awaitingFounder: "experience", aspires: ["care:trauma-informed"] },
-  { text: "cptsd and probably ADHD underneath it", reaches: ["care:trauma-informed", "care:adhd-assessment"] },
+  { text: "cptsd and probably ADHD underneath it", reaches: ["care:trauma-informed", "care:adhd-assessment"], aspires: ["care:complex-mental-health"] },  // R19: the model reads it, the lexicon never will
   { text: "schizoaffective and ADHD together, it is a lot", reaches: ["care:complex-mental-health", "care:adhd-assessment"] },
   { text: "a psychosis history, so stimulants are complicated", reaches: ["care:complex-mental-health"] },
   { text: "a complicated psych history most GPs won't touch", reaches: ["care:complex-mental-health"] },
@@ -313,7 +313,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── care:emotional-regulation / care:non-medication ─────────────────────────────────────
   { text: "RSD is the worst part of all of it", reaches: ["care:emotional-regulation"] },
   { text: "rage over tiny things and then the shame after", reaches: ["care:emotional-regulation"] },
-  { text: "want to try coaching before tablets", reaches: ["care:non-medication"] },
+  { text: "want to try coaching before tablets", reaches: ["care:non-medication"], aspires: ["care:executive-function"] },  // R19: the model reads it, the lexicon never will
   { text: "not ready for medication yet, what else is there", reaches: ["care:non-medication"] },
   { text: "alternatives to stimulants please", reaches: ["care:non-medication"] },
   { text: "no interest in coaching, the medication is working", never: ["care:non-medication"] },
@@ -326,7 +326,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "sick of being brushed off", reaches: ["manner:attuned"] },
   { text: "I shake in waiting rooms, I need calm", reaches: ["manner:steadying"] },
   { text: "someone reassuring, I arrive overwhelmed", reaches: ["manner:steadying"] },
-  { text: "a calm voice and no rushing", reaches: ["manner:steadying", "manner:not_rushed"] },
+  { text: "a calm voice and no rushing", reaches: ["manner:steadying", "manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   { text: "explain what ADHD actually is, properly", reaches: ["care:adhd-assessment", "manner:collaborative"], aspires: ["manner:sense_making"] },
   { text: "help me understand my own brain", reaches: ["manner:sense_making"] },
   { text: "the whole picture in plain english", reaches: ["manner:sense_making"] },
@@ -336,8 +336,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "strengths first, please", reaches: ["manner:motivating"] },
   // Promoted by O65: heard since the cue set grew past its single three-token phrase.
   { text: "a double appointment from the start", reaches: ["pref:longer-appointment"] },
-  { text: "time to actually talk", reaches: ["manner:not_rushed"] },
-  { text: "not shoved out the door in twelve minutes", reaches: ["manner:not_rushed"] },
+  { text: "time to actually talk", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
+  { text: "not shoved out the door in twelve minutes", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   { text: "no shame about how I have coped", reaches: ["manner:non_judgmental"] },
   { text: "somewhere safe to say the ugly bits out loud", reaches: ["manner:non_judgmental"] },
   { text: "explain my options and let me choose", reaches: ["manner:collaborative"] },
@@ -479,7 +479,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "panic attacks in supermarkets, it is getting worse", reaches: ["care:anxiety"] },
   { text: "I am autistic as well, the two tangle together", reaches: ["care:autism-adhd"] },
   { text: "AuDHD, both sides need understanding", reaches: ["care:autism-adhd"] },
-  { text: "my teenager is falling apart at school", reaches: ["care:child-adolescent-adhd"] },
+  { text: "my teenager is falling apart at school", reaches: ["care:child-adolescent-adhd"], aspires: ["care:study-school"] },  // R19: the model reads it, the lexicon never will
   { text: "our ten year old needs an assessment", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd"] }, // O261: a child named by age is heard
 
   // ── manner breadth: culturally_attuned, attuned, non_judgmental, not_rushed, structured ──
@@ -488,8 +488,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I want to be believed the first time I say it", reaches: ["manner:attuned"] },
   { text: "somewhere I will not be judged for how long I left this", reaches: ["manner:non_judgmental"] },
   { text: "no lectures, I know the history looks bad", reaches: ["manner:non_judgmental"] },
-  { text: "I do not want to be rushed out the door again", reaches: ["manner:not_rushed"] },
-  { text: "a methodical workup done properly", reaches: ["manner:structured"] },
+  { text: "I do not want to be rushed out the door again", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
+  { text: "a methodical workup done properly", reaches: ["manner:structured"], aspires: ["care:adhd-assessment"] },  // R19: the model reads it, the lexicon never will
 
   // ── anchors: titration and assessment phrasings not yet in the set ──────────────────────
   { text: "the dose needs adjusting, it stopped holding in the afternoons", reaches: ["care:titration"] },
@@ -506,14 +506,14 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // measurement as always: reaches = heard, aspires = the to-do list, never = the boundary.
 
   // ── compounds: two and three asks in one breath ─────────────────────────────────────────
-  { text: "a woman GP who bulk bills and won't rush me", reaches: ["pref:woman-gp", "pref:bulk-billing", "manner:not_rushed"] },
+  { text: "a woman GP who bulk bills and won't rush me", reaches: ["pref:woman-gp", "pref:bulk-billing", "manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   { text: "a female doctor for an ADHD assessment, by video if possible", reaches: ["care:adhd-assessment", "pref:woman-gp", "pref:telehealth-first"] },
   { text: "bulk billed titration review with someone patient", reaches: ["care:titration", "pref:bulk-billing"], aspires: ["manner:not_rushed"] },
   { text: "a calm woman doctor who understands anxiety", reaches: ["care:anxiety", "manner:steadying", "pref:woman-gp"] },
   { text: "telehealth assessment and I speak Hindi at home", reaches: ["care:adhd-assessment", "pref:telehealth-first"] },
   { text: "a gentle GP who takes trauma seriously and bulk bills", reaches: ["manner:attuned", "manner:steadying", "pref:bulk-billing", "care:trauma-informed"] },
-  { text: "shared care with my psychiatrist, and don't rush the appointments", reaches: ["care:shared-care", "manner:not_rushed"] },
-  { text: "a structured assessment, not rushed, with the heart checks done first", reaches: ["care:adhd-assessment", "manner:structured", "manner:not_rushed"] },
+  { text: "shared care with my psychiatrist, and don't rush the appointments", reaches: ["care:shared-care", "manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
+  { text: "a structured assessment, not rushed, with the heart checks done first", reaches: ["care:adhd-assessment", "manner:structured", "manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   { text: "my teenager needs an assessment and we want a woman doctor", reaches: ["care:adhd-assessment", "care:child-adolescent-adhd", "pref:woman-gp"] },
   { text: "a non-judgmental GP for my drinking history and my ADHD", reaches: ["care:substance-history", "manner:non_judgmental"] }, // O261: "my ADHD" is a diagnosis they have, not an assessment ask
   { text: "someone strengths focused who also handles the depression side", reaches: ["care:depression", "manner:motivating"] },
@@ -536,7 +536,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // ── mid facets: substance, non-medication, shared-care, complex ─────────────────────────
   { text: "my drinking is part of this story", reaches: ["care:substance-history"] },
   { text: "sober two years and proud of it, keep that in mind", reaches: ["care:substance-history"] },
-  { text: "skills and strategies before any script", reaches: ["care:non-medication"] },
+  { text: "skills and strategies before any script", reaches: ["care:non-medication"], aspires: ["care:executive-function"] },  // R19: the model reads it, the lexicon never will
   { text: "I would rather not take medication if there is another way", reaches: ["care:non-medication"] }, // O262: promoted; the cue demands its run of words, so the gap that refused it (O103, O177) is gone
   { text: "my psychiatrist suggested GP shared care", reaches: ["care:shared-care"] },
   { text: "a GP willing to do the shared care paperwork", reaches: ["care:shared-care"] },
@@ -621,7 +621,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      because it is a parent describing distress, not asking for care. A bare family reference
      cannot tell the two apart: the difference is the ASK, and the cue only sees the
      relationship. */
-  { text: "year seven has been a disaster, we need answers for our boy", aspires: ["care:child-adolescent-adhd"] },
+  { text: "year seven has been a disaster, we need answers for our boy", aspires: ["care:child-adolescent-adhd", "care:study-school"] },  // R19: the model reads it, the lexicon never will
 
   // ── life-stage and situation: the context the ask rides in on ───────────────────────────
   { text: "I am at uni and my study is falling apart, I want this assessed", reaches: ["care:adhd-assessment", "care:study-school"] }, // O261: uni is heard
@@ -649,7 +649,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a GP good with anxious teenagers", reaches: ["care:child-adolescent-adhd", "care:anxiety"] },
 
   // ── paraphrase depth and honest gaps, facet by facet ─────────────────────────────────────
-  { text: "a formal diagnosis so work will make adjustments", reaches: ["care:adhd-assessment"] },
+  { text: "a formal diagnosis so work will make adjustments", reaches: ["care:adhd-assessment"], aspires: ["care:work-career"] },  // R19: the model reads it, the lexicon never will
   { text: "get the paperwork that proves it is ADHD", reaches: ["care:adhd-assessment"] },
   { text: "put a name to what has been going on since childhood", reaches: ["manner:sense_making"], aspires: ["care:adhd-assessment"] },
   { text: "the black dog is back and I want it dealt with alongside the ADHD", reaches: ["care:adhd-assessment", "care:depression"] },
@@ -668,7 +668,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "what works besides medication", reaches: ["care:non-medication"] },
   { text: "help with the anger that comes out of nowhere", reaches: ["care:emotional-regulation"] },
   { text: "my moods flip fast and I say things I regret", awaitingFounder: "self-state", aspires: ["care:emotional-regulation"] },
-  { text: "I want the emotional side taken as seriously as the focus side", reaches: ["manner:attuned", "care:emotional-regulation"] },
+  { text: "I want the emotional side taken as seriously as the focus side", reaches: ["manner:attuned", "care:emotional-regulation"], aspires: ["care:executive-function"] },  // R19: the model reads it, the lexicon never will
   { text: "please go slowly with the history questions", reaches: ["care:trauma-informed"] },
   { text: "a doctor trained in trauma, not just aware of it", reaches: ["care:trauma-informed"] },
   { text: "what happened to me before makes doctors hard to trust", awaitingFounder: "experience", aspires: ["care:trauma-informed"] },
@@ -684,7 +684,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
      `attuned` reads not-being-believed BY THE DOCTOR. Here the family is the disbeliever, and
      the ask is help navigating them. */
   { text: "my family does not believe in ADHD and I need help navigating that", reaches: ["manner:culturally_attuned", "manner:attuned", "care:adhd-assessment"] },
-  { text: "English is my second language and appointments move too fast", reaches: ["manner:not_rushed", "care:cultural-background"] },
+  { text: "English is my second language and appointments move too fast", reaches: ["manner:not_rushed", "care:cultural-background"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   { text: "I rehearse what to say and still leave unheard", awaitingFounder: "self-state", aspires: ["manner:attuned"] },
   { text: "believe women when they describe this", reaches: ["manner:non_judgmental"] },
   { text: "I need the appointment to not feel like an interrogation", reaches: ["manner:steadying"] },
@@ -694,7 +694,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "run the options past me first", reaches: ["manner:collaborative"] },
   { text: "someone who sees what is right with me too", reaches: ["manner:motivating"] },
   { text: "less what is wrong with you, more what we can build", aspires: ["manner:motivating"] },
-  { text: "the good doctors never make you watch the clock", reaches: ["manner:not_rushed"] },
+  { text: "the good doctors never make you watch the clock", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   // O210: three plain phrasings a probe found reaching NOTHING, each now cued and pinned here so the
   // cue cannot be removed without a corpus entry going red. The fourth and most natural phrasing —
   // "a GP who takes their time" — is deliberately absent: "their" is a stopword, so the cue would
@@ -703,7 +703,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I just want a doctor with patience", reaches: ["manner:not_rushed"] },
   { text: "a GP who hears me out", reaches: ["manner:attuned"] },
   { text: "someone who will hear me out about all of it", reaches: ["manner:attuned"] },
-  { text: "give me the full appointment, not the doorway version", reaches: ["manner:not_rushed"] },
+  { text: "give me the full appointment, not the doorway version", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
   { text: "a female GP for personal reasons", reaches: ["pref:woman-gp"] },
   { text: "medicare only, I cannot pay extra", reaches: ["pref:bulk-billing"] },
   { text: "does it cost anything out of pocket", reaches: ["pref:bulk-billing"] },
@@ -740,7 +740,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // so a trailing hedge never silences the genuine ask in front of it — and a real ask
   // elsewhere in a hedged sentence still reaches.
   { text: "I want a woman doctor, if that makes sense", reaches: ["pref:woman-gp"], never: ["manner:sense_making"] },
-  { text: "help me make sense of thirty years, if that makes sense", reaches: ["manner:sense_making"] },
+  { text: "help me make sense of thirty years, if that makes sense", reaches: ["manner:sense_making"], aspires: ["care:late-diagnosis"] },  // R19: the model reads it, the lexicon never will
 
   // ═══ O78 (founder-directed matching audit): what the close read found, as data. ═════════
   // FIXED in the same commit — suppression is now per-OCCURRENCE (findCue retries past a
@@ -803,7 +803,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "um yeah so basically my dose stopped working around lunch", reaches: ["care:titration"] },
   { text: "look I just need someone to listen properly for once", reaches: ["manner:attuned"] },
   { text: "sorry this is rambling but I need an assessment and maybe the anxiety looked at too", reaches: ["care:adhd-assessment", "care:anxiety"] },
-  { text: "you know how it is, doctors rush you, I want the opposite", reaches: ["manner:not_rushed"] },
+  { text: "you know how it is, doctors rush you, I want the opposite", reaches: ["manner:not_rushed"], aspires: ["pref:longer-appointment"] },  // R19: the model reads it, the lexicon never will
 
   // ── history and self-recognition ─────────────────────────────────────────────────────────
   // The son sentence straddles: the family history is genuine context and the child reach is
@@ -826,12 +826,12 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
    * the raw determiner between a cue's own negator and its noun ("my"/"the" = lacking,
    * "a"/"any"/bare = declining) — and retagged it, the O68 pattern's sixth full run.
    */
-  { text: "the medication shortage keeps leaving me without my script", never: ["care:non-medication"] },
+  { text: "the medication shortage keeps leaving me without my script", never: ["care:non-medication"], aspires: ["care:shared-care"] },  // R19: the model reads it, the lexicon never will
   // O92's boundary as data: definite-article deprivation suppresses too; every declining
   // shape keeps reaching, including the indefinite article inside the cue's own span.
   { text: "three weeks without the medication and nobody warned me", never: ["care:non-medication"] },
   { text: "no medication please, I want strategies", reaches: ["care:non-medication", "care:executive-function"] }, // O261: strategies are the coaches' word
-  { text: "coaching first, without a script if we can", reaches: ["care:non-medication"] },
+  { text: "coaching first, without a script if we can", reaches: ["care:non-medication"], aspires: ["care:executive-function"] },  // R19: the model reads it, the lexicon never will
   { text: "my script keeps bouncing between pharmacies, I need someone who can manage that", reaches: ["care:shared-care"] },
   // O256: "continue my … prescriptions" is continuation, and the person is diagnosed (assessment reached here until 2026-09-29).
   { text: "just moved to Sydney and I need a new GP to continue my ADHD prescriptions", reaches: ["care:shared-care"], never: ["care:adhd-assessment"] },
@@ -850,8 +850,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "the shame spiral after every mistake is the worst part", reaches: ["care:emotional-regulation"] },
   { text: "crying at work over nothing and I want it taken seriously", awaitingFounder: "self-state", reaches: ["manner:attuned"], aspires: ["care:emotional-regulation"] },
   { text: "I want a plan that is more than a prescription", reaches: ["care:non-medication"] }, // O262: promoted; the cue demands its run of words, so the gap that refused it (O103, O177) is gone
-  { text: "what about diet and exercise before we go straight to stimulants", reaches: ["care:non-medication"] },
-  { text: "structure and skills first, medication as a last resort", reaches: ["care:non-medication"] },
+  { text: "what about diet and exercise before we go straight to stimulants", reaches: ["care:non-medication"], aspires: ["care:movement-exercise", "care:eating-body"] },  // R19: the model reads it, the lexicon never will
+  { text: "structure and skills first, medication as a last resort", reaches: ["care:non-medication"], aspires: ["care:executive-function"] },  // R19: the model reads it, the lexicon never will
   { text: "I am on suboxone and need a GP who can work with that", reaches: ["care:substance-history"] },
   { text: "weekend cocaine use is part of my history and I will not lie about it", reaches: ["care:substance-history"] },
 
@@ -969,7 +969,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my psychologist suggested I ask about the non-drug options", reaches: ["care:non-medication"] }, // O262: promoted; the cue demands its run of words, so the gap that refused it (O103, O177) is gone
   { text: "the diet advice was useless, I want the actual assessment", reaches: ["care:adhd-assessment"] },
   { text: "I already do exercise and sleep hygiene, that is not the question", never: ["care:non-medication"] },
-  { text: "skills first, then we can discuss whether a script helps", reaches: ["care:non-medication"] },
+  { text: "skills first, then we can discuss whether a script helps", reaches: ["care:non-medication"], aspires: ["care:executive-function"] },  // R19: the model reads it, the lexicon never will
   /* O177: the new cue's adversary, pinned rather than measured once. "skills first" is the cue;
      this sentence contains `skill` and `first` in that order and means the OPPOSITE — medication
      first, skills as the fallback. It stays silent because `skill`@0 to `first`@4 is a gap of
@@ -979,7 +979,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "skills are fine but I want medication first", never: ["care:non-medication"] },
   { text: "last resort is fine, I just want to know the order", reaches: [], never: ["care:non-medication"] }, // O262: no word about medication
   { text: "walk me through what the assessment actually involves", reaches: ["care:adhd-assessment"] },
-  { text: "tell me straight if I do not have it", reaches: ["manner:sense_making"] },
+  { text: "tell me straight if I do not have it", reaches: ["manner:sense_making"], aspires: ["care:adhd-assessment"] },  // R19: the model reads it, the lexicon never will
   { text: "I want to be talked through the options, not at", reaches: ["manner:collaborative"] },
   { text: "the step by step of getting diagnosed, please", reaches: ["manner:sense_making", "care:adhd-assessment"] },
   { text: "a lady doctor would make this easier", reaches: ["pref:woman-gp"] },
@@ -987,7 +987,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "my wife is a doctor and she says get assessed", reaches: ["care:adhd-assessment"] },
   { text: "the lady at the desk said to ask", never: ["pref:woman-gp"] },
   { text: "can I get a longer appointment than the standard ten minutes", reaches: ["pref:longer-appointment", "manner:not_rushed"] },
-  { text: "my daughter's school wants a report", reaches: ["care:child-adolescent-adhd"] },
+  { text: "my daughter's school wants a report", reaches: ["care:child-adolescent-adhd"], aspires: ["care:study-school"] },  // R19: the model reads it, the lexicon never will
   { text: "my sons are both like this and so am I", reaches: ["care:child-adolescent-adhd"] },
   { text: "the longest wait I have had was eight months", never: ["pref:longer-appointment"] },
   { text: "bipolar two and the ADHD question has never been asked", reaches: ["care:complex-mental-health", "care:adhd-assessment"] },
@@ -1002,8 +1002,8 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "phone appointments work better with my shift roster", reaches: ["pref:telehealth-first"] },
   { text: "I live three hours away so video is the only realistic option", reaches: ["pref:telehealth-first"] },
   { text: "the practice is a risk for me, I have a transplant", aspires: ["pref:telehealth-first"] },
-  { text: "go gently with the history, the last one was rough", reaches: ["manner:steadying"] },
-  { text: "I do not want to feel interrogated about my childhood", reaches: ["manner:steadying"] },
+  { text: "go gently with the history, the last one was rough", reaches: ["manner:steadying"], aspires: ["care:trauma-informed"] },  // R19: the model reads it, the lexicon never will
+  { text: "I do not want to feel interrogated about my childhood", reaches: ["manner:steadying"], aspires: ["care:trauma-informed"] },  // R19: the model reads it, the lexicon never will
   { text: "believe me when I say I have tried", reaches: ["manner:non_judgmental"] },
   { text: "I am not looking for medication management, just the diagnosis", reaches: ["care:adhd-assessment"] },
   { text: "my partner said no to telehealth but I want it", reaches: ["pref:telehealth-first"] },
@@ -1034,7 +1034,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "I feel like a fraud at work every single day", never: ["care:adhd-assessment", "care:emotional-regulation"] },
   { text: "adult ADHD assessment with someone who bulk bills", reaches: ["pref:bulk-billing", "care:adhd-assessment"] },
   { text: "I need my prescription continued after moving from Perth", aspires: ["care:shared-care"] },
-  { text: "a GP who can do the assessment and keep the scripts going", reaches: ["care:adhd-assessment"] },
+  { text: "a GP who can do the assessment and keep the scripts going", reaches: ["care:adhd-assessment"], aspires: ["care:shared-care"] },  // R19: the model reads it, the lexicon never will
   { text: "somewhere near Beecroft that takes new patients", never: ["care:adhd-assessment"] },
 
   // ── R15: the postpartum call. The founder's own scenario, in the phrasings a new parent uses. ──
@@ -1047,7 +1047,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "expecting a baby in March and I want help lined up before then", reaches: ["care:perinatal"] },
   { text: "pregnant and unsure what this means for my medication", reaches: ["care:perinatal"] },
   { text: "still breastfeeding so I need someone careful about what I can take", reaches: ["care:perinatal"] },
-  { text: "a new dad who cannot keep up and wants it looked at properly", reaches: ["care:perinatal"] },
+  { text: "a new dad who cannot keep up and wants it looked at properly", reaches: ["care:perinatal"], aspires: ["care:adhd-assessment"] },  // R19: the model reads it, the lexicon never will
   { text: "perinatal mental health experience, please", reaches: ["care:perinatal"] },
   // The words that must not reach it: a relative, a figure of speech, a childhood.
   { text: "my baby brother was diagnosed last year and I recognised myself", reaches: ["care:adhd-assessment"], never: ["care:perinatal"] },
@@ -1070,13 +1070,13 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // care:study-school
   { text: "I am at uni and I cannot get through the readings before exams", reaches: ["care:study-school"] },
   { text: "his teacher thinks he has ADHD and school is a battle", reaches: ["care:study-school", "care:adhd-assessment"] },
-  { text: "year 12 next year and she cannot start an assignment", reaches: ["care:study-school"] },
+  { text: "year 12 next year and she cannot start an assignment", reaches: ["care:study-school"], aspires: ["care:child-adolescent-adhd"] },  // R19: the model reads it, the lexicon never will
   { text: "dyslexia as well, someone who understands learning differences", reaches: ["care:study-school"] },
   // care:parenting
   { text: "I am a parent with ADHD and I am drowning", reaches: ["care:parenting"] },
-  { text: "parenting strategies for a seven year old who melts down every afternoon", reaches: ["care:parenting"] },
+  { text: "parenting strategies for a seven year old who melts down every afternoon", reaches: ["care:parenting"], aspires: ["care:child-adolescent-adhd"] },  // R19: the model reads it, the lexicon never will
   { text: "we need family sessions, the whole family is struggling", reaches: ["care:parenting"] },
-  { text: "help as a dad, I lose my temper at bedtime", reaches: ["care:parenting"] },
+  { text: "help as a dad, I lose my temper at bedtime", reaches: ["care:parenting"], aspires: ["care:emotional-regulation"] },  // R19: the model reads it, the lexicon never will
   // care:relationships
   { text: "my marriage is falling apart because of my ADHD", reaches: ["care:relationships"] },
   { text: "couples counselling with someone who understands it", reaches: ["care:relationships"] },
@@ -1089,7 +1089,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   // care:late-diagnosis
   { text: "diagnosed at forty and now I am rethinking everything", reaches: ["care:late-diagnosis"] },
   { text: "just been diagnosed and I want to make sense of my ADHD", reaches: ["care:late-diagnosis"], never: ["care:adhd-assessment"] },
-  { text: "someone who works with women adjusting to a late diagnosis", reaches: ["care:late-diagnosis"] },
+  { text: "someone who works with women adjusting to a late diagnosis", reaches: ["care:late-diagnosis"], aspires: ["care:womens-health"] },  // R19: the model reads it, the lexicon never will
   // care:sleep
   { text: "my sleep is a mess, I am up until three every night", reaches: ["care:sleep"] },
   { text: "insomnia on top of my ADHD", reaches: ["care:sleep"] },

@@ -501,3 +501,28 @@ two sentences that never named medication demoted. The ladder, prompt c717a332d9
 recall 99.5%, precision 92.7%, never violations 0.0%, non-medication 19 of 19 heard and 19 of 19
 read correctly (qa/matching/reports/L1-P4-2026-09-29T22-56-16-094Z.md). Two earlier runs the same
 morning failed P4 at 1.4% and 2.6% and are kept beside it.
+
+## R19 · one grounded call in place of the lexicon, the votes and the checks, 2026-09-30 · layer: the reader's design
+
+The founder: "this should be very simple, not overengineered. Why are these basic failures happening?"
+The failures F1 to F11, their root causes, the research and the measurements are in
+docs/matching/SIMPLE.md. In one line each:
+
+- The lexicon read words, not asks: "coaching" was a refusal of medication, "stress" was emotional
+  regulation, "ADHD" was an assessment. Each misread was patched with a special case, and the patches
+  protected each other (10,503 lines).
+- The model was asked for bare tags, so nothing could check it and nothing could show it; three small
+  reads voted is still a coin (a `never` key one request in seventy, a different one each run).
+- Short requests were not read by the model at all, so the lexicon's misreads went out unchecked on
+  the requests people type most.
+
+**Fix.** One gpt-5-mini call returns `[{tag, quote}]`; a tag whose quote is not in the request is
+dropped (google/langextract, instructor's exact citations). The lexicon is the fallback for a failed
+call and nothing else. Every non-empty request is read. The eval is one run and one report
+(`pnpm match:eval [--live]`); the ladder, its baselines and five measurement modules are deleted.
+
+**Proof.** qa/matching/reports/reader-live-2026-09-30T03-29-25-415Z.md (prompt 63ae126f02a4):
+709 requests, recall 91.8%, aspires 94.0%, precision 90.8% (lower bound), never 4.5% (the same five
+sentences every run, all a policy: SIMPLE.md §6), 0 fallbacks, $0.18. The 24 requests people typed
+or said into production this week all read as meant, each tag quoting them.
+

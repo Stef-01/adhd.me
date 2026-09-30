@@ -1,7 +1,6 @@
 // The finder's readings, remembered per request on this server instance, under a hash of its words
-// (the words themselves are never held): the same words read the same way every time (the reader's own runs differ on about one request in ten, mostly on a
-// manner key; qa/matching/reports/L1-P5-2026-09-28T02-21-08-216Z.md), and a repeated search, such as
-// an example chip, costs nothing and waits for nothing. Only the model's own readings are kept, never
+// (the words themselves are never held): the same words read the same way every time, and a repeated
+// search, such as an example chip, costs nothing and waits for nothing. Only the model's own readings are kept, never
 // a fallback; at most MAX, the oldest going first, each for a day.
 
 import { createHash } from "node:crypto";
@@ -9,9 +8,9 @@ import { createHash } from "node:crypto";
 const MAX = 500;
 const TTL_MS = 24 * 60 * 60 * 1000;
 
-/** A model reading as the route answers it: the keys, and the asks no key covers. */
+/** A model reading as the route answers it: each need with the person's words for it, and the asks no key covers. */
 export interface HeldReading {
-  keys: string[];
+  needs: { key: string; quote: string }[];
   unlisted: string[];
 }
 interface Held extends HeldReading {
@@ -38,14 +37,14 @@ export function cachedReading(text: string, now = Date.now()): HeldReading | nul
     cache().delete(key);
     return null;
   }
-  return { keys: held.keys, unlisted: held.unlisted };
+  return { needs: held.needs, unlisted: held.unlisted };
 }
 
-export function rememberReading(text: string, reading: { keys: readonly string[]; unlisted?: readonly string[] }, now = Date.now()): void {
+export function rememberReading(text: string, reading: HeldReading, now = Date.now()): void {
   const key = readKey(text);
   const map = cache();
   map.delete(key);
-  map.set(key, { keys: [...reading.keys], unlisted: [...(reading.unlisted ?? [])], at: now });
+  map.set(key, { needs: reading.needs.map((need) => ({ ...need })), unlisted: [...reading.unlisted], at: now });
   if (map.size > MAX) map.delete(map.keys().next().value!);
 }
 
