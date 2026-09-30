@@ -365,8 +365,11 @@ export function ResultsStage({
 
       {!empty && (
       <>
+      {/* When the chips take the reading line's place and stand two rows tall on a phone, the heading
+          glides down with the rows (O52's re-sort) rather than jumping; instant under reduced motion. */}
       <motion.div
         className="results-list-head"
+        layout="position"
         initial={reducedMotion ? false : { opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...STAGE_SPRING, delay: 0.06, opacity: { duration: 0.2, delay: 0.06 } }}
