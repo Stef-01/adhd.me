@@ -509,3 +509,16 @@
 {"time":"2026-09-30T01:58:21.093Z","kind":"spoken","lines":7,"seconds":144,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":912,"audio_out":0},"costUsd":0.009389,"stage":"results"}
 {"time":"2026-09-30T02:04:26.401Z","kind":"spoken","lines":7,"seconds":104,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":801,"audio_out":0},"costUsd":0.007122,"stage":"results"}
 {"time":"2026-09-30T02:19:15.641Z","kind":"spoken","lines":7,"seconds":106,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":981,"audio_out":0},"costUsd":0.007654,"stage":"results"}
+{"time":"2026-09-30T04:15:45.259Z","kind":"eval","persona":"adult","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0021,"pass":true}
+{"time":"2026-09-30T04:15:45.260Z","kind":"eval","persona":"parent","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0014,"pass":true}
+{"time":"2026-09-30T04:15:45.260Z","kind":"eval","persona":"scripts","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.002,"pass":true}
+{"time":"2026-09-30T04:15:45.261Z","kind":"eval","persona":"lived","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0022,"pass":true}
+{"time":"2026-09-30T04:15:45.261Z","kind":"eval","persona":"rambler","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0031,"pass":true}
+{"time":"2026-09-30T04:15:45.261Z","kind":"eval","persona":"advice","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0024,"pass":true}
+{"time":"2026-09-30T04:15:45.261Z","kind":"eval","persona":"injection","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0017,"pass":true}
+{"time":"2026-09-30T04:15:45.262Z","kind":"eval","persona":"negation","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0016,"pass":true}
+{"time":"2026-09-30T04:15:45.263Z","kind":"eval","persona":"vietnamese","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0023,"pass":true}
+{"time":"2026-09-30T04:15:45.263Z","kind":"eval","persona":"asker","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0178,"pass":true}
+{"time":"2026-09-30T04:15:45.264Z","kind":"eval","persona":"postpartum","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0022,"pass":true}
+{"time":"2026-09-30T04:15:45.264Z","kind":"eval","persona":"work","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0025,"pass":true}
+{"time":"2026-09-30T04:15:45.264Z","kind":"eval","persona":"crisis","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0019,"pass":true}

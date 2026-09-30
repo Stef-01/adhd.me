@@ -64,6 +64,12 @@ describe("the form the model fills", () => {
     for (const unnamed of ["my culture", "their own culture", "own", "my own background", "your own culture"]) expect(formOf({ understood: true, yes_no: "yes", culture: unnamed })).toEqual({ understood: true, yes_no: "yes" });
   });
 
+  it("takes an Anglicised background as the culture most of the roster shares (the rambler persona, 2026-09-30)", () => {
+    expect(formOf({ understood: true, culture: "Aussie, Anglicised background" })).toEqual({ understood: true, plain: true });
+    expect(formOf({ understood: true, culture: "Anglo-Celtic" })).toEqual({ understood: true, plain: true });
+    expect(formOf({ understood: true, culture: "Lebanese background" })).toEqual({ understood: true, culture: "Lebanese background" });
+  });
+
   it("takes the culture most of the roster shares as nothing to ask for, and the first peoples' by name", () => {
     for (const plain of ["Australian", "Aussie", "Anglo", "English", "Australian culture"]) expect(formOf({ understood: true, culture: plain }), plain).toEqual({ understood: true, plain: true });
     expect(formOf({ understood: true, language: "English" })).toEqual({ understood: true, plain: true });

@@ -123,7 +123,7 @@ const NO_NAME = /\b(my|your|their|our|own|same|culture|cultural|background|herit
  * and "works with cultural background" on a listing means other cultures than this one. Aboriginal and
  * Torres Strait Islander cultures are asked for by their own names.
  */
-const PLAIN_CULTURE = /\b(australian|aussie|anglo|english|western|white|caucasian)\b/gi;
+const PLAIN_CULTURE = /\b(australian|aussie|anglo-?(celtic|saxon|australian)|anglicised|anglicized|anglo|british|english|western|white|caucasian)\b/gi;
 const FIRST_PEOPLES = /\b(aboriginal|indigenous|torres strait|first nations|koori|murri|noongar|wiradjuri)\b/i;
 
 /** True when the words name the culture most of the roster shares and no other. */
