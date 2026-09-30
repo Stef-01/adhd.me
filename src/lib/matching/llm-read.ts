@@ -166,7 +166,7 @@ export function lexiconReading(text: string): Reading {
 const plain = (text: string) => text.toLowerCase().replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim();
 
 /** The labels src/voice/plan.ts writes before an answer ("Hardest for my child: ", "My child's age: "). */
-const OUR_LABEL = /^(hardest (at work|at home|with school or study|in my relationship|with other people|for my child)|my child's age|whether adhd was raised before|a first look at adhd, or care i already have|i would like help with)\s*:\s*/i;
+const OUR_LABEL = /^\s*(hardest (at work|at home|with school or study|in my relationship|with other people|for my child)|my child's age|whether adhd was raised before|a first look at adhd, or care i already have|i would like help with)\s*:?\s*/i;
 
 /** The needs whose quote is in the text: a tag the model cannot quote is a tag it did not read. */
 export function grounded(needs: readonly Need[], text: string): Need[] {
@@ -175,8 +175,11 @@ export function grounded(needs: readonly Need[], text: string): Need[] {
   for (const need of needs) {
     const quote = plain(need.quote);
     if (quote.length < 2 || !words.includes(quote) || !TAGS.includes(need.key) || kept.some((held) => held.key === need.key)) continue;
-    // A quote is shown as the person's words: the labels the voice finder writes before an answer are not theirs.
-    kept.push({ key: need.key, quote: need.quote.trim().replace(OUR_LABEL, "").trim() || need.quote.trim() });
+    // A quote is shown as the person's words: the labels the voice finder writes before an answer are
+    // not theirs, and a tag quoting only a label ("Hardest at work:") quotes nothing they said.
+    const theirs = need.quote.trim().replace(OUR_LABEL, "").trim();
+    if (theirs.replace(/[^\p{L}\p{N}]/gu, "").length < 2) continue;
+    kept.push({ key: need.key, quote: theirs });
   }
   return kept;
 }

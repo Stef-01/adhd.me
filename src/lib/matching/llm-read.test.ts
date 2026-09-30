@@ -166,3 +166,9 @@ describe("a quote shown as the person's words", () => {
     expect(grounded([{ key: "care:child-adolescent-adhd", quote: "My child's age: She's nine." }, { key: "care:study-school", quote: "Hardest for my child: She cries over homework" }], text).map((n) => n.quote)).toEqual(["She's nine.", "She cries over homework"]);
   });
 });
+
+describe("a tag quoting only the finder's label", () => {
+  it("is dropped: it quotes nothing the person said", () => {
+    expect(grounded([{ key: "care:work-career", quote: "Hardest at work:" }], "Hardest at work: deadlines")).toEqual([]);
+  });
+});

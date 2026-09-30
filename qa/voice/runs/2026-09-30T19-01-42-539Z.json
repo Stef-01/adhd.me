@@ -1,0 +1,159 @@
+{
+  "base": "http://localhost:3021",
+  "lines": [
+    "Since menopause I can't keep track of anything at work.",
+    "[pause 3]",
+    "Deadlines, and I forget what people told me an hour ago.",
+    "[pause 3]",
+    "A first look, I've never been assessed.",
+    "[pause 3]",
+    "Yes please.",
+    "[pause 3]",
+    "Telehealth is fine.",
+    "[pause 3]",
+    "No.",
+    "[pause 3]",
+    "No.",
+    "[pause 3]",
+    "No, that's all."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "Since menopause I can't keep track of anything at work."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":1,\"understood\":true}"
+    },
+    {
+      "who": "assistant",
+      "text": "What's hardest at work?"
+    },
+    {
+      "who": "person",
+      "text": "Deadlines, and I forget what people told me an hour ago."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":1,\"understood\":true}"
+    },
+    {
+      "who": "assistant",
+      "text": "A first look, or care you already have?"
+    },
+    {
+      "who": "person",
+      "text": "At first lur, I've never been assessed."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.65,\"understood\":true}"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you prefer a woman clinician?"
+    },
+    {
+      "who": "person",
+      "text": "Yes please."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.98,\"understood\":true,\"yes_no\":\"yes\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "Telehealth is fun."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.73,\"understood\":true,\"telehealth\":true}"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "No"
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":1,\"understood\":true,\"yes_no\":\"no\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone from your own culture?"
+    },
+    {
+      "who": "person",
+      "text": "No."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.91,\"understood\":true,\"yes_no\":\"no\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    }
+  ],
+  "request": "Since menopause I can't keep track of anything at work. Hardest at work: Deadlines, and I forget what people told me an hour ago. A first look at ADHD, or care I already have: At first lur, I've never been assessed. a woman clinician. telehealth is fine",
+  "reads": [
+    {
+      "text": "Since menopause I can't keep track of anything at work. Hardest at work: Deadlines, and I forget what people told me an hour ago. A first look at ADHD, or care I already have: At first lur, I've never been assessed. a woman clinician. telehealth is fine",
+      "answer": {
+        "needs": [
+          {
+            "key": "care:womens-health",
+            "quote": "Since menopause"
+          },
+          {
+            "key": "care:work-career",
+            "quote": "Deadlines, and I forget what people told me an hour ago."
+          },
+          {
+            "key": "care:executive-function",
+            "quote": "can't keep track of anything at work."
+          },
+          {
+            "key": "care:adhd-assessment",
+            "quote": "A first look at ADHD"
+          },
+          {
+            "key": "pref:woman-gp",
+            "quote": "a woman clinician."
+          },
+          {
+            "key": "pref:telehealth-first",
+            "quote": "telehealth is fine"
+          }
+        ],
+        "unlisted": [],
+        "source": "llm"
+      }
+    }
+  ],
+  "heard": [
+    "Woman clinician",
+    "Telehealth",
+    "Getting organised",
+    "Women's health"
+  ],
+  "results": [
+    "Donna Italiano ADHD coach · At work Perth",
+    "Paula Garrido Psychologist · Getting organised Sydney",
+    "Samantha Courtney Psychologist · Women's health Fortitude Valley"
+  ],
+  "whyMatched": "Why matched Work and career From your words: “Deadlines, and I forget what people told me an hour ago.” Focus and getting things done From your words: “can't keep track of anything at work.” A woman clinician Not in their listing: women's health and hormones, ADHD assessment. Compare",
+  "stage": "results"
+}

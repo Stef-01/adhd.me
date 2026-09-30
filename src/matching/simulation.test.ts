@@ -48,7 +48,7 @@ const PERSONAS: Persona[] = [
   { said: "an exercise physiologist", first: "sarah-savage", why: "the kind" },
   { said: "help getting organised, the bills and paperwork are out of control", all: (id) => declares(id, "executive-function"), why: "ten declare executive function" },
   { said: "Spanish speaking psychologist", first: "valeria-urrutia", why: "the one who speaks Spanish" },
-  { said: "I have anxiety and think I might have ADHD, telehealth, someone who has ADHD themselves", first: "chantelle-pin", within: { ids: ["chantelle-pin", "alex-lawson", "trisha-harris"], atLeast: 3, of: 3 }, why: "R17: the three with ADHD themselves, whom a mention of anxiety used to remove" },
+  { said: "I have anxiety and think I might have ADHD, telehealth, someone who has ADHD themselves", first: "chantelle-pin", within: { ids: ["chantelle-pin", "alex-lawson", "trisha-harris"], atLeast: 3, of: 5 }, why: "R17: the three with ADHD themselves, whom a mention of anxiety used to remove; since 2026-10-01 in the first five, after the assessors who also declare anxiety (scope tier)" },
   { said: "a physio for chronic pain who gets ADHD", within: { ids: ["lester-rafanan", "tom-hissey", "yuri-lima"], atLeast: 3, of: 3 }, why: "the physios" },
   { said: "my daughter needs an OT, she cannot cope at school", first: "flynn-simonis", why: "the occupational therapist, who declares school" },
   { said: "postpartum, I think I have ADHD, a woman", within: { ids: ["samantha-courtney", "lana-hiscock"], atLeast: 2, of: 3 }, why: "the two women who declare perinatal care" },

@@ -205,9 +205,9 @@ type RankingProfile = {
  * contributory — instead of letting a contributory tier buy its way past a strong one.
  */
 /**
- * What the appointment is for, when only some clinicians can do it. Held apart for a child only: a
- * child's care starts with an assessment or the prescriber (AADPA), while an adult's assessment ask
- * sits beside their other care, as the simulated patients pin (postpartum, trauma, lived experience).
+ * What the appointment is for, when only some clinicians can do it: held apart for a clinician who also
+ * answers the rest of the care ask (2026-10-01; a coach who assesses nobody listed above the assessor
+ * who declares women's health, for a woman at menopause asking for an assessment).
  */
 const SCOPE: ReadonlySet<string> = new Set(["adhd-assessment", "titration", "shared-care"]);
 
@@ -215,9 +215,11 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
   let constraintCoverage = 0;
   let constraintScore = 0;
   let scopeScore = 0;
-  // An assessment of a child is done by someone who sees children: an adults-only assessor answers it no better than a coach.
-  const child = needs.some((need) => need.facet.kind === "care" && need.facet.area === "child-adolescent-adhd");
-  const seesChildren = child && facetStrength(clinician, { kind: "care", area: "child-adolescent-adhd" }) > 0;
+  // What the appointment is for is lifted only for a clinician who also answers the rest of the ask:
+  // a child's assessment by someone who sees children, a midlife one by someone who declares women's
+  // health. An assessor who answers nothing else the person said is no better placed than a coach.
+  const careTier = (need: NeedSignal) => (need.facet.kind === "care" && !SCOPE.has(need.facet.area)) || (need.facet.kind === "preference" && need.facet.preference === "lived-experience");
+  const answersMore = needs.some((need) => careTier(need) && facetStrength(clinician, need.facet) > 0);
   let careScore = 0;
   let mannerScore = 0;
   let weightedScore = 0;
@@ -238,7 +240,7 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
       // needs (the founder's call of 02:34). A language, telehealth, a woman, bulk billing, NDIS and
       // a longer appointment decide whether an appointment can happen at all; who the clinician is
       // decides how well it goes, beside what they declare they work with.
-      if (seesChildren && need.facet.kind === "care" && SCOPE.has(need.facet.area)) scopeScore += contribution;
+      if (answersMore && need.facet.kind === "care" && SCOPE.has(need.facet.area)) scopeScore += contribution;
       else careScore += contribution;
     } else {
       mannerScore += contribution;

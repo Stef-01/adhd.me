@@ -560,3 +560,5 @@
 {"time":"2026-09-30T16:30:28.265Z","kind":"clips","model":"gpt-realtime-2.1-mini","voice":"marin","recorded":2,"costUsd":0.0026}
 {"time":"2026-09-30T16:30:51.400Z","kind":"clips","model":"gpt-realtime-2.1-mini","voice":"marin","recorded":1,"costUsd":0.0013}
 {"time":"2026-09-30T18:52:34.020Z","kind":"spoken","lines":13,"seconds":121,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":736,"audio_out":0},"costUsd":0.007816,"stage":"results"}
+{"time":"2026-09-30T18:56:07.620Z","kind":"spoken","lines":13,"seconds":119,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":800,"audio_out":0},"costUsd":0.00787,"stage":"results"}
+{"time":"2026-09-30T19:01:42.541Z","kind":"spoken","lines":15,"seconds":143,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":1009,"audio_out":0},"costUsd":0.009572,"stage":"results"}

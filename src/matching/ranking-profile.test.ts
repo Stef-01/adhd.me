@@ -252,3 +252,12 @@ describe("child flows: an adults-only assessor is not lifted for a child", () =>
     expect(rankClinicians("", [adultAssessor, childCoach], new Date(), needs).map((c) => c.id)).toEqual(["child-coach", "adult-assessor"]);
   });
 });
+
+describe("midlife (2026-10-01): an assessment ask lifts the assessor who also answers the rest", () => {
+  it("lists the assessor who declares women's health above a coach who answers focus and work", () => {
+    const needs = ["care:adhd-assessment", "care:womens-health", "care:executive-function", "care:work-career"].flatMap((key) => needForKey(key) ?? []);
+    const coach = clone("coach", { careAreas: ["executive-function", "work-career"], careAreasSometimes: [], manner: [] });
+    const gp = clone("gp", { careAreas: ["adhd-assessment", "womens-health"], careAreasSometimes: [], manner: [] });
+    expect(rankClinicians("", [coach, gp], new Date(), needs).map((c) => c.id)).toEqual(["gp", "coach"]);
+  });
+});
