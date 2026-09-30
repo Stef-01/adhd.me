@@ -264,6 +264,23 @@ describe("the request the answers make", () => {
     expect(compose(heard).request).toBe("an ADHD assessment");
   });
 
+  it("does not say a culture or a language again that the person's own words already name (the 00:51 call replayed, 2026-09-30)", () => {
+    const opening = answer("opening", "I need the assessment near Sydney for my child, and preferably someone who understands Hindi culture.", { place: "Sydney", culture: "Hindi culture" });
+    expect(compose([opening]).request).toBe("I need the assessment near Sydney for my child, and preferably someone who understands Hindi culture");
+    const spoken = answer("extra", "My mother will come along and she only speaks Punjabi.", { language: "Punjabi" });
+    expect(compose([spoken]).request).toBe("My mother will come along and she only speaks Punjabi");
+    // Named in an answer that is not written down as said, it is asked for in the finder's words.
+    expect(compose([answer("which-culture", "Indian, and I speak Hindi.", { culture: "Indian", language: "Hindi" })]).request).toBe(`${CULTURE_ASK}, Indian. someone who speaks Hindi`);
+  });
+
+  it("takes a short place given to 'What's hardest at home?' as the place, not as what is hardest (the 22:00 call replayed, 2026-09-30)", () => {
+    const heard = [answer("opening", "Someone who will understand my needs as a mother."), answer("detail", "Queensland, telehealth is fine.", { place: "Queensland", telehealth: true }, "detail-home")];
+    expect(compose(heard)).toEqual({ request: `Someone who will understand my needs as a mother. ${TELEHEALTH_ASK}`, place: "Queensland" });
+    // Said at length, what is hardest at home stands, place and all.
+    const long = [heard[0]!, answer("detail", "Mornings in Brisbane, getting three kids out the door before school.", { place: "Brisbane" }, "detail-home")];
+    expect(compose(long).request).toBe("Someone who will understand my needs as a mother. Hardest at home: Mornings in Brisbane, getting three kids out the door before school");
+  });
+
   it("asks for a culture or a language in the finder's words", () => {
     expect(compose([answer("culture", "Yes, Indian.", { yes_no: "yes", culture: "Indian" })]).request).toBe(`${CULTURE_ASK}, Indian`);
     expect(compose([answer("culture", "Yes please.", { yes_no: "yes" }), answer("which-culture", "Indian, and Hindi", { culture: "Indian", language: "Hindi" })]).request).toBe(`${CULTURE_ASK}, Indian. someone who speaks Hindi`);

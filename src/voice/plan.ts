@@ -356,12 +356,16 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
     const text = tidy(answer.text);
     const more = readable(text) && text.split(/\s+/).length >= SAYS_MORE ? text : "";
     const names = Boolean(form.culture || form.language);
+    /** The words as said go into the request: a name in them is not said again in the finder's words. */
+    const said = (part: string) => parts.push(part);
+    let theirs = false;
     switch (question) {
       case "opening":
-        if (readable(text)) parts.push(text);
+        if (readable(text)) (theirs = true), said(text);
         break;
       case "detail":
-        if (readable(text) && !(form.yes_no === "no" && !more)) parts.push(`${HARDEST[answer.say] ?? HARDEST.help}: ${text}`);
+        // A short answer that names a place or telehealth answered the next question, not this one.
+        if (readable(text) && !(form.yes_no === "no" && !more) && !((form.place || form.telehealth) && !more)) (theirs = true), said(`${HARDEST[answer.say] ?? HARDEST.help}: ${text}`);
         break;
       case "place":
         if (more && !form.place && !form.telehealth) parts.push(more);
@@ -378,13 +382,15 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         break;
       case "extra":
       case "carry-on":
-        if (readable(text) && !(form.yes_no && !more)) parts.push(text);
+        if (readable(text) && !(form.yes_no && !more)) (theirs = true), said(text);
         break;
     }
-    // Named in any answer, a culture, a language and telehealth are asked for in the finder's words.
-    if (form.culture) parts.push(`${CULTURE_ASK}, ${form.culture}`);
-    if (form.language) parts.push(`someone who speaks ${form.language}`);
-    if (form.telehealth && question === "place") parts.push(TELEHEALTH_ASK);
+    // Named in an answer, a culture, a language and telehealth are asked for in the finder's words,
+    // unless the words already in the request name them ("someone who understands Hindi culture").
+    const inTheirs = (name: string) => theirs && text.toLowerCase().includes(name.toLowerCase());
+    if (form.culture && !inTheirs(form.culture)) said(`${CULTURE_ASK}, ${form.culture}`);
+    if (form.language && !inTheirs(form.language)) said(`someone who speaks ${form.language}`);
+    if (form.telehealth && (question === "place" || (question === "detail" && !theirs))) said(TELEHEALTH_ASK);
   }
   // The bare ask goes when the same ask carries a name, or when their own culture is the one most of the roster shares.
   const theirs = parts.some((part) => part.startsWith(`${CULTURE_ASK}, `)) || answers.some((answer) => answer.form.plain);

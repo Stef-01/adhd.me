@@ -1,0 +1,143 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "Someone who will understand my needs as a mother who has just been wondering if they have ADHD, and can help me decide what the best options are. I don't like medication treatment options.",
+    "Queensland, telehealth is fine.",
+    "Yes.",
+    "Yes.",
+    "Indian, and I speak Hindi.",
+    "I also have bipolar, and I struggle with sleep a lot."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "Someone who will understand my needs as a mother who has just been wondering if they have ADHD and can help me decide what the best options are. I don't like medication treatment options."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.97,\"understood\":true}"
+    },
+    {
+      "who": "assistant",
+      "text": "What's hardest at home?"
+    },
+    {
+      "who": "person",
+      "text": "Queensland, telehealth is fine."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.89,\"understood\":true,\"telehealth\":true,\"place\":\"Queensland\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "Yes."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.88,\"understood\":true,\"yes_no\":\"yes\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone from your own culture?"
+    },
+    {
+      "who": "person",
+      "text": "Yes."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":0.94,\"understood\":true,\"yes_no\":\"yes\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Which culture or language?"
+    },
+    {
+      "who": "person",
+      "text": "Indian, and I speak Hindi."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":1,\"understood\":true,\"language\":\"Hindi\",\"culture\":\"Indian\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    }
+  ],
+  "request": "Someone who will understand my needs as a mother who has just been wondering if they have ADHD and can help me decide what the best options are. I don't like medication treatment options. Hardest at home: Queensland, telehealth is fine. someone who has ADHD themselves. someone from my own culture, Indian. someone who speaks Hindi. I also have bipolar, and I struggle with sleep a lot",
+  "reads": [
+    {
+      "text": "Someone who will understand my needs as a mother who has just been wondering if they have ADHD and can help me decide what the best options are. I don't like medication treatment options. Hardest at home: Queensland, telehealth is fine. someone who has ADHD themselves. someone from my own culture, Indian. someone who speaks Hindi. I also have bipolar, and I struggle with sleep a lot",
+      "answer": {
+        "needs": [
+          {
+            "key": "care:adhd-assessment",
+            "quote": "wondering if they have ADHD"
+          },
+          {
+            "key": "care:parenting",
+            "quote": "understand my needs as a mother"
+          },
+          {
+            "key": "care:non-medication",
+            "quote": "I don't like medication treatment options"
+          },
+          {
+            "key": "pref:telehealth-first",
+            "quote": "telehealth is fine"
+          },
+          {
+            "key": "pref:lived-experience",
+            "quote": "someone who has ADHD themselves"
+          },
+          {
+            "key": "care:cultural-background",
+            "quote": "someone from my own culture, Indian"
+          },
+          {
+            "key": "language:hindi",
+            "quote": "someone who speaks Hindi"
+          },
+          {
+            "key": "care:complex-mental-health",
+            "quote": "I also have bipolar"
+          },
+          {
+            "key": "care:sleep",
+            "quote": "I struggle with sleep a lot"
+          }
+        ],
+        "unlisted": [
+          "Queensland",
+          "help to decide what the best options are"
+        ],
+        "source": "llm"
+      }
+    }
+  ],
+  "heard": [
+    "Lived experience",
+    "Hindi-speaking",
+    "Telehealth",
+    "Non-medication supports"
+  ],
+  "results": [
+    "Dr Anubhav Saxena ADHD assessment Beecroft & Double Bay",
+    "Dr Anu Saxena ADHD assessment Double Bay & Hornsby",
+    "Dr Yogesh Kalra Hindi-speaking Bateau Bay",
+    "Alex Lawson ADHD coach · Parenting Sutherland",
+    "Lachlan Avent Psychologist · ADHD assessment Fortitude Valley"
+  ],
+  "whyMatched": "Why matched ADHD assessment From your words: “wondering if they have ADHD” By phone or telehealth From your words: “telehealth is fine” Hindi-speaking From your words: “someone who speaks Hindi” Not in their listing: parenting, non-medication supports. Compare",
+  "stage": "results"
+}

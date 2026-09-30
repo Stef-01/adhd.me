@@ -1,0 +1,81 @@
+{
+  "base": "https://adhdme.vercel.app",
+  "lines": [
+    "I need the assessment near Sydney for my child who is struggling, and also for myself, and preferably someone who understands Hindi culture.",
+    "Yeah, that would be great.",
+    "No, nothing else."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "person",
+      "text": "I need the assessment near Sydney for my child who is struggling, and also for myself, and preferably someone who understands Hindi culture."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":1,\"understood\":true,\"place\":\"Sydney\",\"culture\":\"Hindi culture\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "Yeah, that would be great."
+    },
+    {
+      "who": "tool",
+      "text": "heard {\"sure\":1,\"understood\":true,\"yes_no\":\"yes\"}"
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    }
+  ],
+  "request": "I need the assessment near Sydney for my child who is struggling, and also for myself, and preferably someone who understands Hindi culture. someone from my own culture, Hindi culture. someone who has ADHD themselves",
+  "reads": [
+    {
+      "text": "I need the assessment near Sydney for my child who is struggling, and also for myself, and preferably someone who understands Hindi culture. someone from my own culture, Hindi culture. someone who has ADHD themselves",
+      "answer": {
+        "needs": [
+          {
+            "key": "care:adhd-assessment",
+            "quote": "I need the assessment"
+          },
+          {
+            "key": "care:child-adolescent-adhd",
+            "quote": "for my child who is struggling"
+          },
+          {
+            "key": "care:cultural-background",
+            "quote": "someone who understands Hindi culture"
+          },
+          {
+            "key": "pref:lived-experience",
+            "quote": "someone who has ADHD themselves"
+          }
+        ],
+        "unlisted": [],
+        "source": "llm"
+      }
+    }
+  ],
+  "heard": [
+    "Lived experience",
+    "Children, teens",
+    "Cultural background",
+    "ADHD assessment"
+  ],
+  "results": [
+    "Chantelle Pin Psychologist · ADHD assessment Benowa, by telehealth",
+    "Dr Anu Saxena ADHD assessment Double Bay & Hornsby, about 3 km away",
+    "Trisha Harris Counsellor · Lived experience Glenbrook, by telehealth",
+    "Gisele Fortkamp Psychologist · Cultural background Benowa, by telehealth",
+    "Meera Lakhani Psychologist · ADHD assessment Fortitude Valley, by telehealth"
+  ],
+  "whyMatched": "Why matched ADHD assessment From your words: “I need the assessment” Children and adolescents From your words: “for my child who is struggling” Has ADHD themselves From your words: “someone who has ADHD themselves” Not in their listing: understands your cultural background. Compare",
+  "stage": "results"
+}
