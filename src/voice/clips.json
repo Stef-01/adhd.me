@@ -50,6 +50,24 @@
       "bytes": 14060,
       "sha": "0cc8b9854ba6"
     },
+    "detail-child": {
+      "text": "What's hardest for them right now?",
+      "seconds": 2.18,
+      "bytes": 18092,
+      "sha": "a6abd71c9c6b"
+    },
+    "age": {
+      "text": "How old are they?",
+      "seconds": 1.2,
+      "bytes": 10220,
+      "sha": "db914f940705"
+    },
+    "raised": {
+      "text": "Has anyone raised ADHD with you before?",
+      "seconds": 2.43,
+      "bytes": 20204,
+      "sha": "3617f5fe42eb"
+    },
     "place": {
       "text": "Where are you, or would telehealth suit you?",
       "seconds": 2.75,

@@ -271,9 +271,9 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     experience: ["Consultant coach, REACH ADHD Coaching and Consultancy, Perth", "Secondary education: ATAR Economics and Business Management, Special Needs Support, Commerce and Sport", "Middle-management leadership, and roles in professional services, governance and community sport", "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York", "Bachelor of Arts", "Bachelor of Education"],
     languages: ["English"],
     careAreas: ["emotional-regulation", "non-medication", "executive-function", "study-school"],
-    careAreasSometimes: ["work-career"],
+    careAreasSometimes: ["work-career", "child-adolescent-adhd"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "executive-function": "Donna focuses on ADHD, executive functioning, emotional regulation, and neurodivergent-affirming practice", "study-school": "creating safe, inclusive spaces where students and families feel seen", "work-career": "how learning, wellbeing, and performance intersect" },
+    careEvidence: { "child-adolescent-adhd": "Donna works alongside young people to help them understand their unique brain wiring", "executive-function": "Donna focuses on ADHD, executive functioning, emotional regulation, and neurodivergent-affirming practice", "study-school": "creating safe, inclusive spaces where students and families feel seen", "work-career": "how learning, wellbeing, and performance intersect" },
     // attuned, in their words: "With over two decades of experience across Australian and international school communities, Donna Italiano is an ADHD co"
     // sense_making, in their words: "Throughout her career, Donna has taught and mentored thousands of students, led middle-management teams, supported both "
     // motivating, in their words: "As a consultant coach with REACH ADHD, Donna focuses on ADHD, executive functioning, emotional regulation, and neurodive"
@@ -873,9 +873,9 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     experience: ["ADHD coach and mentor, Lawson ADHD Solutions, Sutherland", "Almost a decade of high school teaching and school leadership, as Head Teacher and Year Advisor", "Master of Teaching (Secondary) with Distinction, University of Wollongong", "Bachelor of Laws (LLB), and a previous career in law", "PESI ADHD Coaching Course", "Mentored by ADHD coach Mark Brandtman", "More than 50 families, adults and students supported through one-to-one coaching in six months", "Proficient High School Teacher Accreditation", "Listed in the ADHD Support Australia directory"],
     languages: ["English"],
     careAreas: ["non-medication", "executive-function", "work-career", "study-school", "parenting"],
-    careAreasSometimes: ["relationships", "late-diagnosis"],
+    careAreasSometimes: ["relationships", "late-diagnosis", "child-adolescent-adhd"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "executive-function": "I\u2019ve learned what it feels like to want to start something and just not be able to", "work-career": "I know what it\u2019s like to work in high-pressure environments; students, parents, educators, and professionals", "study-school": "Students who felt like they were failing but weren\u2019t", "parenting": "Parents who were exhausted and trying everything they could", "relationships": "Partners who didn\u2019t know how to support someone they loved", "late-diagnosis": "trying to make sense of ADHD in everyday life" },
+    careEvidence: { "child-adolescent-adhd": "today I support adults, students, parents and families", "executive-function": "I\u2019ve learned what it feels like to want to start something and just not be able to", "work-career": "I know what it\u2019s like to work in high-pressure environments; students, parents, educators, and professionals", "study-school": "Students who felt like they were failing but weren\u2019t", "parenting": "Parents who were exhausted and trying everything they could", "relationships": "Partners who didn\u2019t know how to support someone they loved", "late-diagnosis": "trying to make sense of ADHD in everyday life" },
     // sense_making, in their words: "I’ve been living with ADHD for over 30 years, and today I support adults, students, parents and families who are trying "
     // non_judgmental, in their words: "I’ve been living with ADHD for over 30 years, and today I support adults, students, parents and families who are trying "
     // motivating, in their words: "For the past decade, I’ve also had the privilege of supporting people with ADHD professionally. As a high school teacher"

@@ -622,9 +622,9 @@ const founding: Clinician[] = [
     ],
     languages: ["English"],
     careAreas: ["non-medication", "social-connection"],
-    careAreasSometimes: ["study-school", "work-career", "parenting"],
+    careAreasSometimes: ["study-school", "work-career", "parenting", "child-adolescent-adhd"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "social-connection": "communication, and social skills building for growing client's toolkits of practical coping strategies", "study-school": "Career counselling and post-schooling decision making", "work-career": "Career counselling and post-schooling decision making", "parenting": "supporting individuals and families through their NDIS journey to thrive" },
+    careEvidence: { "child-adolescent-adhd": "works with toddlers, children, teenagers, and adults", "social-connection": "communication, and social skills building for growing client's toolkits of practical coping strategies", "study-school": "Career counselling and post-schooling decision making", "work-career": "Career counselling and post-schooling decision making", "parenting": "supporting individuals and families through their NDIS journey to thrive" },
     ndis: true, // in their words: "supporting individuals and families through their NDIS journey"
     // Her page names goals, wellbeing and a toolkit a person can use — motivating and
     // collaborative in the manner vocabulary, and nothing beyond what she wrote.
@@ -671,9 +671,9 @@ const founding: Clinician[] = [
     ],
     languages: ["English"],
     careAreas: ["trauma-informed", "non-medication"],
-    careAreasSometimes: ["parenting"],
+    careAreasSometimes: ["parenting", "child-adolescent-adhd"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "parenting": "works collaboratively with families on psychoeducation towards their goals" },
+    careEvidence: { "child-adolescent-adhd": "works with children, teenagers and adults", "parenting": "works collaboratively with families on psychoeducation towards their goals" },
     manner: ["collaborative", "steadying"],
     wheelchairAccessible: true,
     appointmentLength: "50-minute sessions; times set with the clinic",
@@ -866,9 +866,9 @@ const founding: Clinician[] = [
     ],
     languages: ["English"],
     careAreas: ["trauma-informed", "non-medication", "cultural-background"],
-    careAreasSometimes: ["autism-adhd", "emotional-regulation", "anxiety", "depression", "grief-life-change"],
+    careAreasSometimes: ["autism-adhd", "emotional-regulation", "anxiety", "depression", "grief-life-change", "child-adolescent-adhd"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "cultural-background": "supporting clients from culturally and linguistically diverse (CALD) backgrounds who have experienced displacement, cultural transition and complex trauma with cultural sensitivity", "grief-life-change": "adjustment difficulties; displacement, cultural transition" },
+    careEvidence: { "child-adolescent-adhd": "works with children, teens and adults", "cultural-background": "supporting clients from culturally and linguistically diverse (CALD) backgrounds who have experienced displacement, cultural transition and complex trauma with cultural sensitivity", "grief-life-change": "adjustment difficulties; displacement, cultural transition" },
     // "cultural sensitivity to tailor interventions to their unique lived experiences" and
     // "a safe collaborative space" — her own page, and nothing read into it.
     manner: ["culturally_attuned", "collaborative", "non_judgmental"],

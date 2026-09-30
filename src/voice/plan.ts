@@ -20,7 +20,7 @@ import { said as number } from "@/model/crisis-contacts";
 import { OPENING_QUESTION } from "./interviewer";
 
 /** What a person can be asked. "detail" is one question said one of six ways. */
-export type QuestionId = "opening" | "detail" | "place" | "lived" | "culture" | "which-culture" | "extra" | "carry-on";
+export type QuestionId = "opening" | "detail" | "age" | "raised" | "place" | "lived" | "culture" | "which-culture" | "extra" | "carry-on";
 
 /** Every sentence the finder says itself. Each is recorded once (public/voice, scripts/voice-clips.mjs). */
 export const SAY_IDS = [
@@ -32,6 +32,9 @@ export const SAY_IDS = [
   "detail-home",
   "detail-relationship",
   "detail-social",
+  "detail-child",
+  "age",
+  "raised",
   "place",
   "lived",
   "culture",
@@ -62,6 +65,10 @@ export const SENTENCES: Record<SayId, Sentence> = {
   "detail-home": { text: "What's hardest at home?" },
   "detail-relationship": { text: "What's hardest in your relationship?" },
   "detail-social": { text: "What's hardest with other people?" },
+  // For a parent (docs/matching/CHILD-FLOWS.md): the three facts every child pathway turns on.
+  "detail-child": { text: "What's hardest for them right now?" },
+  age: { text: "How old are they?" },
+  raised: { text: "Has anyone raised ADHD with you before?" },
   place: { text: "Where are you, or would telehealth suit you?" },
   lived: { text: "Would you like someone who has ADHD themselves?" },
   culture: { text: "Would you like someone from your own culture?" },
@@ -113,7 +120,7 @@ export interface Answer {
 
 const readable = (text: string) => /[a-z]{2,}/i.test(text);
 const wordsOf = (text: string) => text.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9 ]+/g, " ").split(/\s+/).filter(Boolean);
-const named = (value: unknown) => (typeof value === "string" && !/^(none|null|n\/?a|unknown|nothing|not said)?$/i.test(value.trim()) ? value.trim().replace(/[.!?]+$/, "") : "");
+const named = (value: unknown) => (typeof value === "string" && !/^(none|null|n\/?a|unknown|nothing|not said|not specified|unspecified|no preference|not stated|not given|any)?$/i.test(value.trim()) ? value.trim().replace(/[.!?]+$/, "") : "");
 const lettersOf = (text: string) => text.replace(/[^\p{L}]+/gu, "");
 
 /** "my culture", "their own": a culture asked for and not named. */
@@ -189,10 +196,10 @@ export function formFrom(text: string): Form {
  * next question need not wait on the model ("Yes.", "No thanks.", "Yeah, that'd be great.").
  */
 const PLAIN = /^\s*(yes|yeah|yep|yup|sure|no|nope|nah)[,.!]?(\s+(please|thanks|thank you|not really|that would be (great|good|nice|lovely)|that'?d be (great|good|nice|lovely)|that'?s fine))?[.!]?\s*$/i;
-const YES_OR_NO: readonly QuestionId[] = ["lived", "culture", "carry-on"];
+const YES_OR_NO: readonly QuestionId[] = ["lived", "culture", "raised", "carry-on"];
 export const plainAnswer = (question: QuestionId, text: string): Form | null => (YES_OR_NO.includes(question) && PLAIN.test(text) ? formFrom(text) : null);
 
-const ASKS_YES_OR_NO: readonly QuestionId[] = ["place", "lived", "culture", "carry-on"];
+const ASKS_YES_OR_NO: readonly QuestionId[] = ["place", "lived", "culture", "raised", "carry-on"];
 
 /**
  * A form as it stands for the question it answers: a yes to "…or would telehealth suit you?" is
@@ -250,7 +257,7 @@ export function withoutQuestions(text: string): string {
 // ── The plan ─────────────────────────────────────────────────────────────────────────────────────
 
 /** The questions, in the order they are asked. "carry-on" is asked only after urgent help. */
-const ORDER: readonly QuestionId[] = ["opening", "detail", "place", "lived", "culture", "which-culture", "extra"];
+const ORDER: readonly QuestionId[] = ["opening", "detail", "age", "raised", "place", "lived", "culture", "which-culture", "extra"];
 
 /**
  * The part of life a first answer names, by the plain mention of it, and the sentence that asks what is
@@ -272,6 +279,7 @@ export const HARDEST: Partial<Record<SayId, string>> = {
   "detail-home": "Hardest at home",
   "detail-relationship": "Hardest in my relationship",
   "detail-social": "Hardest with other people",
+  "detail-child": "Hardest for my child",
   help: "I would like help with",
 };
 
@@ -286,6 +294,19 @@ const of = (answers: readonly Answer[], ...questions: QuestionId[]) => answers.f
 const settledOn = (answers: readonly Answer[], question: QuestionId): Form["yes_no"] => of(answers, question).filter((answer) => answer.form.understood && answer.form.yes_no).at(-1)?.form.yes_no;
 
 /**
+ * The first answer is about their child: "my son", "our daughter", "his teacher", "year 5". A parent
+ * is asked the child's age, what is hardest for them, and whether ADHD was raised before; they are not
+ * asked about a clinician with ADHD themselves.
+ */
+const CHILD = /\b(my|our) (?:\S+ ){0,3}(son|sons|daughter|daughters|boy|girl|kid|kids|child|children|teen|teenager|stepson|stepdaughter)('?s)?\b|\b(his|her) (teacher|school|class|kindy|daycare)\b|\b(year|grade) (\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b|\b(kindergarten|kindy|preschool|daycare|p(a)?ediatric\w*|child psychiatrist)\b|\bfor (a |my |our )?(kids|children|child|teens?|teenagers?)\b|\b(my|our) (\S+ )?\S*years?[-\u2011\s]olds?\b/i;
+export const aboutChild = (answers: readonly Answer[]) => of(answers, "opening").some((answer) => CHILD.test(answer.text));
+/** An age, a school year or a stage said: nothing to ask. */
+const AGED = /\b\d{1,2}\b|\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen)\b|\b(toddler|kindy|kindergarten|preschool|daycare|primary|high school|teenager|teen)\b/i;
+/** ADHD raised by someone, or a diagnosis, already said. */
+const RAISED = /\b(teacher|school|daycare|kindy|paediatrician|pediatrician|psychologist|doctor|gp)\b.{0,40}\b(said|says|thinks|think|raised|mentioned|suggested|told|wants|reckons)\b|\b(diagnos\w*|assessed|medication|meds|tablets|dose|ritalin|vyvanse|concerta|dexamphetamine|dex)\b|\b(with|has|have) adhd\b/i;
+const opening = (answers: readonly Answer[]) => of(answers, "opening", "carry-on").map((answer) => answer.text).join(". ");
+
+/**
  * The follow-up to the first answer, or null when it needs none (the founder, 2026-09-30: "should
  * have asked for more detail about what the struggle at work is"). A part of life named is asked
  * about; an answer that names no help is asked what help; an assessment, scripts or a dose says
@@ -293,6 +314,10 @@ const settledOn = (answers: readonly Answer[], question: QuestionId): Form["yes_
  */
 export function detailFor(opening: readonly Answer[]): SayId | null {
   const said = opening.map((answer) => answer.text).join(". ");
+  // A parent is asked what is hardest for their child, unless the first answer named it; one asking
+  // for help with their own parenting is asked what is hardest at home, below.
+  const parenting = PARTS_OF_LIFE.find((entry) => entry.say === "detail-home")!.mentioned.test(said);
+  if (CHILD.test(said) && !parenting) return careAsked(said).some((key) => key !== "care:child-adolescent-adhd" && key !== "care:adhd-assessment") ? null : "detail-child";
   // The part of life named first is the one asked about ("as a new mother and also going back to uni").
   const part = PARTS_OF_LIFE.map((entry) => ({ say: entry.say, at: said.search(entry.mentioned) })).filter((entry) => entry.at >= 0).sort((a, b) => a.at - b.at)[0];
   if (part) return part.say;
@@ -306,10 +331,14 @@ function sayFor(question: QuestionId, answers: readonly Answer[]): SayId | null 
       return "opening";
     case "detail":
       return detailFor(of(answers, "opening", "carry-on"));
+    case "age":
+      return aboutChild(answers) && !AGED.test(opening(answers)) ? "age" : null;
+    case "raised":
+      return aboutChild(answers) && !RAISED.test(opening(answers)) ? "raised" : null;
     case "place":
       return answers.some((answer) => answer.form.place || answer.form.telehealth) ? null : "place";
     case "lived":
-      return answers.some((answer) => asksLived(answer.text)) ? null : "lived";
+      return aboutChild(answers) || answers.some((answer) => asksLived(answer.text)) ? null : "lived";
     case "culture":
       return answers.some((answer) => answer.form.culture || answer.form.language) ? null : "culture";
     case "which-culture":
@@ -366,6 +395,12 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
       case "detail":
         // A short answer that names a place or telehealth answered the next question, not this one.
         if (readable(text) && !(form.yes_no === "no" && !more) && !((form.place || form.telehealth) && !more)) (theirs = true), said(`${HARDEST[answer.say] ?? HARDEST.help}: ${text}`);
+        break;
+      case "age":
+        if (readable(text) || /\d/.test(text)) (theirs = true), said(`My child's age: ${text}`);
+        break;
+      case "raised":
+        if (readable(text) && !(form.yes_no === "no" && !more)) (theirs = true), said(form.yes_no === "yes" && !more ? "Someone has raised ADHD about my child before" : `Whether ADHD was raised before: ${text}`);
         break;
       case "place":
         if (more && !form.place && !form.telehealth) parts.push(more);

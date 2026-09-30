@@ -34,9 +34,9 @@ async function historyState(page: Page): Promise<string> {
 
 test("Back and Forward walk the stages, and a reload resumes them with the words", async ({ page }) => {
   await speakToResults(page);
-  // The headline is derived from the words ("my son … school"), so it is the words' witness on the
-  // results screen; the example request the finder falls back to reads differently.
-  const headline = page.locator(".results-head h1");
+  // The search card holds the words ("my son … school"), so it is their witness on the results screen
+  // (a parent's search shows first steps where a headline was); the example request reads differently.
+  const headline = page.locator(".results-summary-text");
   await expect(headline).toContainText(/school/i);
 
   // A real GP's row: an example profile has no booking control by design (O217).

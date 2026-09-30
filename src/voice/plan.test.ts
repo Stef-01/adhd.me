@@ -313,3 +313,62 @@ describe("the request the answers make", () => {
     expect(compose([answer("opening", "an assessment"), answer("extra", "You didn't ask what my culture was. How were you meant to know?")]).request).toBe("an assessment. You didn't ask what my culture was");
   });
 });
+
+describe("a parent's call (docs/matching/CHILD-FLOWS.md)", () => {
+  it("asks a parent who only names their child what is hardest, their age and whether ADHD was raised, and never about a clinician with ADHD", () => {
+    const { asked, request } = call({
+      opening: ["I'm worried about my daughter"],
+      detail: ["She cries over homework every night and can't finish anything"],
+      age: ["She's nine"],
+      raised: ["Yes, her teacher mentioned it last term"],
+      place: ["Parramatta", { place: "Parramatta" }],
+      culture: ["No", { yes_no: "no" }],
+      extra: ["No", { yes_no: "no" }],
+    });
+    expect(asked).toEqual(["opening", "detail-child", "age", "raised", "place", "culture", "extra"]);
+    expect(request).toContain("Hardest for my child: She cries over homework every night and can't finish anything");
+    expect(request).toContain("My child's age: She's nine");
+    expect(request).toContain("Whether ADHD was raised before: Yes, her teacher mentioned it last term");
+  });
+
+  it("skips what the first answer already said", () => {
+    const { asked } = call({
+      opening: ["My 8 year old son's teacher thinks he has ADHD and he's struggling at school"],
+      place: ["Telehealth is fine", { telehealth: true }],
+      culture: ["No", { yes_no: "no" }],
+      extra: ["No", { yes_no: "no" }],
+    });
+    expect(asked).toEqual(["opening", "place", "culture", "extra"]);
+  });
+
+  it("keeps a bare no to the raised question out of the request, and a bare yes in the finder's words", () => {
+    expect(call({ opening: ["help for my son"], detail: ["meltdowns"], age: ["six"], raised: ["No", { yes_no: "no" }] }).request).not.toMatch(/raised/i);
+    expect(call({ opening: ["help for my son"], detail: ["meltdowns"], age: ["six"], raised: ["Yes", { yes_no: "yes" }] }).request).toContain("Someone has raised ADHD about my child before");
+  });
+
+  it("leaves an adult's call as it was", () => {
+    expect(call({ opening: ["I need help at work"], detail: ["deadlines"] }).asked.slice(0, 3)).toEqual(["opening", "detail-work", "place"]);
+    expect(detailFor([answer("opening", "I think I might have ADHD")])).toBe(null);
+  });
+});
+
+describe("a parent is heard however the first answer puts it", () => {
+  it("hears a child through any hyphen, 'for kids' and a paediatrician", () => {
+    for (const text of ["help for my seven‑year‑old daughter", "a paediatrician near Penrith", "ADHD assessments for kids", "our 10-year-old boy", "to assess my seven\u2011year\u2011old", "my 9 year old"]) {
+      expect(nextQuestion([answer("opening", text)], ["opening", "detail", "age", "raised", "place"])?.say, text).not.toBe("lived");
+    }
+    expect(nextQuestion([answer("opening", "I was a quiet child and now I want an assessment")], ["opening", "detail", "age", "raised", "place"])?.say).toBe("lived");
+  });
+});
+
+describe("what a parent has already said about ADHD", () => {
+  it("does not ask whether ADHD was raised of a child on medication or who has ADHD", () => {
+    for (const text of ["review my son's Ritalin dose", "a coach for my daughter with ADHD"]) {
+      expect(nextQuestion([answer("opening", text)], ["opening", "detail", "age"])?.say, text).not.toBe("raised");
+    }
+  });
+
+  it("writes no language that was not named", () => {
+    expect(formOf({ understood: true, language: "not specified" })).toEqual({ understood: true });
+  });
+});

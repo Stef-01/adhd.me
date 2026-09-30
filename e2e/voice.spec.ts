@@ -63,7 +63,9 @@ test("finishing mid-sentence from the microphone keeps what was already said", a
   await page.evaluate(() => (window as any).__speech.say("my son is struggling at school", true));
   await page.getByRole("button", { name: "Microphone" }).click();
   await expect(page.locator(".clinician-list")).toBeVisible({ timeout: 5000 });
-  await expect(page.locator(".results-head h1")).toContainText(/school|assessment/i);
+  // A parent's search shows first steps in the headline's place (child flows), so the words are checked where they are kept.
+  await expect(page.locator(".results-summary-text")).toContainText(/struggling at school/i);
+  await expect(page.getByRole("region", { name: "First steps" })).toBeVisible();
 });
 
 test("silence goes to typing with no error, because a quiet room is not a failure", async ({ page }) => {

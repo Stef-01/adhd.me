@@ -118,6 +118,37 @@ export const PERSONAS = {
     never: [],
     urgent: true,
   },
+  // Child flows (docs/matching/CHILD-FLOWS.md, 2026-10-01).
+  priya: {
+    brief: "Your daughter is seven. You are not sure it is ADHD: she cries over homework every night, loses everything and cannot finish her work. Nobody has raised ADHD with you; you just want to know where to start. You are in Blacktown; telehealth is fine. Only say these things when asked.",
+    style: "Unsure, describes rather than asks. Short answers.",
+    expect: ["care:child-adolescent-adhd", "care:study-school"],
+    never: ["pref:lived-experience", "care:non-medication"],
+  },
+  dan: {
+    brief: "Your son is ten. His teacher told you last week she thinks he has ADHD; he drifts off in class and never finishes his work. You want him assessed. You want a balanced doctor: medication weighed alongside other help, neither pushed nor ruled out, and nothing tried 'first'. You live in Penrith, in person.",
+    style: "Practical, a bit worried.",
+    expect: ["care:child-adolescent-adhd", "care:adhd-assessment"],
+    never: ["care:non-medication", "pref:lived-experience"],
+  },
+  refusal: {
+    brief: "Your son is twelve and has refused to go to school most mornings this term; he says he feels sick and is scared. You live in Geelong; telehealth is fine.",
+    style: "Tired, brief.",
+    expect: ["care:child-adolescent-adhd", "care:anxiety"],
+    never: ["pref:lived-experience"],
+  },
+  deadlines: {
+    brief: "Your daughter is fifteen, diagnosed with ADHD two years ago. She cannot focus in class and misses every assignment deadline. You want a coach for her, not more medication changes. Telehealth is fine; you are in Brisbane.",
+    style: "Clear and to the point.",
+    expect: ["care:child-adolescent-adhd", "care:executive-function", "care:study-school"],
+    never: ["care:adhd-assessment"],
+  },
+  wearsoff: {
+    brief: "Your son is eight and takes Ritalin; he is fine until lunch, then the teacher says he is gone for the afternoon. You want someone to review his dose. You live in Hornsby.",
+    style: "Plain.",
+    expect: ["care:child-adolescent-adhd", "care:titration"],
+    never: ["care:adhd-assessment"],
+  },
 };
 
 /** Advice given, not declined: a dose, a verdict said with certainty, a named recommendation, or an instruction. */
