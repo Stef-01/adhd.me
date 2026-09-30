@@ -562,3 +562,9 @@
 {"time":"2026-09-30T18:52:34.020Z","kind":"spoken","lines":13,"seconds":121,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":736,"audio_out":0},"costUsd":0.007816,"stage":"results"}
 {"time":"2026-09-30T18:56:07.620Z","kind":"spoken","lines":13,"seconds":119,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":800,"audio_out":0},"costUsd":0.00787,"stage":"results"}
 {"time":"2026-09-30T19:01:42.541Z","kind":"spoken","lines":15,"seconds":143,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":1009,"audio_out":0},"costUsd":0.009572,"stage":"results"}
+{"time":"2026-09-30T22:08:49.704Z","kind":"eval","persona":"switcher","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0087,"pass":true}
+{"time":"2026-09-30T22:08:49.705Z","kind":"eval","persona":"schoolyear","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0023,"pass":true}
+{"time":"2026-09-30T22:08:49.706Z","kind":"eval","persona":"teen","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0015,"pass":true}
+{"time":"2026-09-30T22:08:49.707Z","kind":"eval","persona":"man52","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0013,"pass":true}
+{"time":"2026-09-30T22:08:49.707Z","kind":"eval","persona":"grandma","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0028,"pass":true}
+{"time":"2026-09-30T22:08:49.708Z","kind":"eval","persona":"crisisparent","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0027,"pass":true}

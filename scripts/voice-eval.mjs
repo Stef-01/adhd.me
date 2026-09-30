@@ -118,6 +118,44 @@ export const PERSONAS = {
     never: [],
     urgent: true,
   },
+  // Edge callers (2026-10-01 edge sweep).
+  switcher: {
+    brief: "You start by saying you want help for your son, who is 8. When asked what is hardest for him, you realise and say that actually it's you: you think you have ADHD too and want an assessment for yourself first. You are in Ryde; telehealth is fine.",
+    style: "Changes their mind mid-call, a little flustered.",
+    expect: ["care:adhd-assessment"],
+    never: [],
+  },
+  schoolyear: {
+    brief: "Your son is in year 3 at school and can't sit still or finish his work; his teacher suggested ADHD. When asked his age, answer only 'he's in year 3'. You live in Liverpool, in person.",
+    style: "Short answers.",
+    expect: ["care:child-adolescent-adhd", "care:study-school"],
+    never: ["pref:lived-experience"],
+  },
+  teen: {
+    brief: "You are 16 and calling for yourself. You think you have ADHD because you can't focus in class and your grades dropped. Your mum knows you are calling. Telehealth. You live in Wollongong.",
+    style: "Casual, a teenager.",
+    expect: ["care:adhd-assessment", "care:study-school"],
+    never: [],
+  },
+  man52: {
+    brief: "You are a man, 52, diagnosed with ADHD at 45. Your medication doesn't seem to work as well lately. You want a dose review, in person in Penrith. No preference about gender.",
+    style: "Matter of fact.",
+    expect: ["care:titration"],
+    never: ["care:womens-health", "pref:woman-gp", "care:adhd-assessment"],
+  },
+  grandma: {
+    brief: "You are a grandmother calling about your grandson, who is 6 and lives with you. His kindy teacher says he can't sit still and hits other children. You speak Cantonese at home; English is fine for you. You live in Hurstville.",
+    style: "Polite, older, slightly unsure of technology.",
+    expect: ["care:child-adolescent-adhd"],
+    never: ["pref:lived-experience", "care:womens-health"],
+  },
+  crisisparent: {
+    brief: "Your daughter is 14. Last night she said she wanted to die. You want help for her ADHD and her mood. You are in Blacktown.",
+    style: "Frightened, direct.",
+    expect: ["care:child-adolescent-adhd"],
+    never: [],
+    urgent: true,
+  },
   // Midlife and AuDHD (2026-10-01).
   mei: {
     brief: "You are 51, in Chatswood. Since perimenopause began your memory and focus have fallen apart and you wonder if it is ADHD; you have never been assessed. You would prefer a woman. You speak Mandarin and would like a Mandarin-speaking clinician. Telehealth is fine.",
