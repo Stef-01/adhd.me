@@ -8,8 +8,8 @@
 // as an assessment ask, "minimal reassessment" as a wish to be reassessed) and its votes' (a
 // nine-year-old lost when the reads disagreed). The pattern that holds up is the one grounded
 // extraction libraries use (google/langextract; 567-labs/instructor's exact citations): the model
-// names what it found and quotes it, and anything it cannot quote is not there. Measured on the same
-// corpus (417 requests): no `never` key read in 417, where the votes had read one in seventy.
+// names what it found and quotes it, and anything it cannot quote is not there. Measured on the whole
+// corpus (709 requests): docs/matching/SIMPLE.md §4.
 
 import { callJson, SchemaError, type Deps } from "@/lib/llm/client";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
@@ -18,14 +18,14 @@ import { CARE_AREA_LABELS } from "@/onboarding/types";
 
 const PREFERENCES: Record<Preference, 1> = { "woman-gp": 1, "telehealth-first": 1, "longer-appointment": 1, "bulk-billing": 1, "lived-experience": 1, ndis: 1 };
 
-/** The tags the model reads: what the person wants care for, and the arrangement they ask for. Languages are read by name, deterministically. */
+/** The tags the model reads: what the person wants care for, the arrangement they ask for, and the language they ask for. */
 export const VOCABULARY = {
   care: { prefix: "care", ids: CARE_AREA_LABELS.map((area): string => area.id) },
   prefs: { prefix: "pref", ids: Object.keys(PREFERENCES) },
   languages: { prefix: "language", ids: MATCHABLE_LANGUAGES.map((name) => name.toLowerCase()) },
 };
 /** Every tag the model may return. */
-export const TAGS: readonly string[] = [...VOCABULARY.care.ids.map((id) => `care:${id}`), ...VOCABULARY.prefs.ids.map((id) => `pref:${id}`)];
+export const TAGS: readonly string[] = Object.values(VOCABULARY).flatMap(({ prefix, ids }) => ids.map((id) => `${prefix}:${id}`));
 
 /**
  * One line per tag, in Australian terms, each saying what the person asks for or names. A missed
@@ -65,6 +65,8 @@ export const MEANINGS: Record<string, string> = {
   "telehealth-first": "asks for telehealth: phone or video; or says a clinic visit is a risk to their health",
   "longer-appointment": "asks for a longer or double appointment, more time than a standard one, or not to be rushed",
   "bulk-billing": "asks for bulk billing: Medicare covers it, with no gap or extra fee; or asks whether there is anything to pay",
+  // A language is asked for as a language. "Hindi culture" or "an Indian background" is cultural-background (the founder's call of 00:51 ranked a Hindi speaker third for it).
+  ...Object.fromEntries(MATCHABLE_LANGUAGES.map((name) => [name.toLowerCase(), `asks for a clinician who speaks ${name}, or says the appointment would be in ${name} (${name} named as a culture, a background or a community is cultural-background, not this)`])),
 };
 
 /** In words the corpus does not use (checked by grep), so the eval stays honest. */
@@ -84,6 +86,8 @@ const EXAMPLES = [
   '"a psychologist who has ADHD herself" → [{"tag":"pref:lived-experience","quote":"who has ADHD herself"}]',
   '"my marriage is falling apart because of my ADHD" → [{"tag":"care:relationships","quote":"my marriage is falling apart"}]',
   '"someone who understands Indian families" → [{"tag":"care:cultural-background","quote":"understands Indian families"}]',
+  '"my father would come along and he only has Punjabi" → [{"tag":"language:punjabi","quote":"he only has Punjabi"}]',
+  '"someone who gets Tamil culture, in English is fine" → [{"tag":"care:cultural-background","quote":"gets Tamil culture"}]',
   '"a practice that runs on schedule" → [] and unlisted ["appointments that run on time"]',
   '"be kind about it, I shut down when someone is sharp with me" → []',
   '"my roster changes weekly, evenings would help" → [] and unlisted ["evening appointments"]',
@@ -165,8 +169,7 @@ export function fromModel(data: unknown, text: string): Reading {
   const given = answer.needs;
   const needs = grounded(given.map((need) => ({ key: String((need as { tag?: unknown })?.tag ?? ""), quote: String((need as { quote?: unknown })?.quote ?? "") })), text);
   const dropped = given.length - needs.length;
-  const languages = languageNeeds(text, MATCHABLE_LANGUAGES);
-  const signals = [...needs.flatMap((need) => needForKey(need.key, need.quote) ?? []), ...languages];
+  const signals = needs.flatMap((need) => needForKey(need.key, need.quote) ?? []);
   const unlisted = answer.unlisted.map((phrase) => String(phrase).trim()).filter(Boolean).slice(0, 3);
   return { keys: signals.map((need) => facetKey(need.facet)), needs: signals, source: "llm", dropped, ...(unlisted.length ? { unlisted } : {}) };
 }

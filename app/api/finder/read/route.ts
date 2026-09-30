@@ -26,7 +26,7 @@ const MAX_CHARS = 2000;
 const NO_STORE = { "Cache-Control": "no-store" };
 /** The lexicon's reading as the model would give it: each key with the words it was heard in. */
 const asLexicon = (input: string) => ({
-  needs: lexiconReading(input).needs.filter((need) => need.facet.kind !== "language").map((need) => ({ tag: facetKey(need.facet), quote: input.toLowerCase().includes(need.matched.toLowerCase()) ? need.matched : input })),
+  needs: lexiconReading(input).needs.map((need) => ({ tag: facetKey(need.facet), quote: input.toLowerCase().includes(need.matched.toLowerCase()) ? need.matched : input })),
   unlisted: [],
 });
 const replay = { fetch: cassetteFetch(CASSETTES, (input) => completed(asLexicon(input))), env: { OPENAI_API_KEY: "cassette" } };

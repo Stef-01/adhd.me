@@ -43,8 +43,8 @@ export type EvalOptions = {
 export type Outcome = { code: 0 | 1 | 2; message: string; report?: string };
 type Done = { entry: EvalEntry; reading: Reading };
 
-/** The pins the reader is scored on: what people ask for. Manner traits are read by nobody now, and languages are read by name. */
-export const scored = (key: string) => TAGS.includes(key);
+/** The pins the reader is scored on: care and preferences. Manner traits are read by nobody now, and the corpus cannot pin a language. */
+export const scored = (key: string) => TAGS.includes(key) && !key.startsWith("language:");
 const gold = (e: EvalEntry) => [...(e.reaches ?? []), ...(e.aspires ?? [])].filter(scored);
 const mean = (values: number[]) => (values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null);
 const cell = (value: number | null) => (value === null ? "–" : value.toFixed(3));

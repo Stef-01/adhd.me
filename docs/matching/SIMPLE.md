@@ -73,8 +73,9 @@ request text ──► gpt-5-mini, one call, strict JSON ──► [{tag, quote}
 - `src/lib/matching/llm-read.ts` (189 lines): the 27 tags with one meaning line each, 20 examples
   in words the corpus does not use, a strict schema `{needs: [{tag, quote}], unlisted}`, `grounded()`
   (a tag whose quote is not in the text is dropped and counted), and the lexicon as the fallback for a
-  failed call, marked `source: "lexicon"`. Languages are read by name, deterministically. No votes, no
-  checks, no manner traits.
+  failed call, marked `source: "lexicon"`. The ten matchable languages are tags too, each with a
+  meaning line that keeps "Hindi culture" apart from "speaks Hindi". No votes, no checks, no manner
+  traits.
 - `app/api/finder/read/route.ts`: `POST {text}` → `{needs: [{key, quote}], source, unlisted}`. Every
   non-empty request is read; `read-policy.ts` is gone. Caching, rate limit, daily cap and key pause
   are as before.
@@ -96,7 +97,11 @@ call each, $0.18 a run, $0.00025 a call.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | ef271311e9b2 | 89.5% | 94.1% | 82.3% | 3.6% | 37 | first read; 37 strays were mostly "don't rush me" → longer appointment and manner asks → trauma-informed |
 | 2 | a2d2c96f8107 | 89.3% | 89.3% | 90.7% | 2.7% | 12 | "how they want to be treated is no tag"; meanings tightened |
-| 3 | 63ae126f02a4 (final) | **91.8%** | **94.0%** | **90.8%** | 4.5% (5 of 110) | 18 | assessment named without "ADHD" counts; a question asking for a thing asks for it |
+| 3 | 63ae126f02a4 | 91.8% | 94.0% | 90.8% | 4.5% (5 of 110) | 18 | assessment named without "ADHD" counts; a question asking for a thing asks for it |
+| 4 | 94e9585c2904 (final) | **90.9%** | **88.1%** | **91.5%** | 3.6% (4 of 110) | 17 | languages are the model's tags too: "Hindi culture" is cultural background, "speaks Hindi" is Hindi (the 00:51 call had ranked a Hindi speaker third for "understands Hindi culture") |
+
+Runs 3 and 4 differ by sampling as much as by the prompt: one to two points either way is one run's
+noise on 709 requests.
 
 For comparison, the voted reader's last pass (prompt c717a332d90e, 2026-09-29) was recall 99.5% and
 precision 92.7% **against pins written to the lexicon**, with the lexicon carrying every key and the
@@ -105,8 +110,8 @@ entries re-pinned as `aspires` where the model's read was plainly right and the 
 heard it ("get to the end of a thought" → longer appointment; "for our mob health is a shared thing"
 → cultural background; "coaching before tablets" → executive function).
 
-The five `never` violations that remain, every run, are the same five sentences and are a policy,
-not a bug (§6, decision 1): "flat for months, everything is heavy", "flat and hopeless most days",
+The four or five `never` violations that remain, every run, are the same sentences and are a
+policy, not a bug (§6, decision 1): "flat for months, everything is heavy", "flat and hopeless most days",
 "everything has felt flat for months" (a state described, no help asked; the corpus's G7 rule says
 read nothing), "psychological approaches before anything else" (the founder's rule: non-medication
 needs a word about medication), and "do any GPs do the whole thing without a psychiatrist referral"
@@ -147,9 +152,14 @@ in the model's meaning line.
 1. **Described states.** "Flat and hopeless most days" typed into the finder: the corpus's G7 rule
    reads nothing (no help asked); a clinician would hear depression. The model reads it one run in
    two. Default in force: the corpus rule, gated at ≤ 5% so it cannot fail the eval on this alone.
-2. **The ranker.** `rankClinicians` still orders by tiers (constraints, then care, then manner, then
-   coverage), 1,269 lines, and the manner tier now sees nothing. The research's answer is one weighted
-   sum with a breakdown per clinician. Not done in this change; the reader change stands on its own.
+2. **The ranker.** `rankClinicians` still orders by tiers (language and preference constraints, then
+   care, then manner, then coverage), 1,269 lines, and the manner tier now sees nothing. The research's
+   answer is one weighted sum with a breakdown per clinician. Measured before deciding: on the six
+   requests the founder made this week, the tiered order and a weighted sum (care and preference
+   weights as the lexicon has them, language first) agree on the first three names in every case, so
+   the failures were the reader's, not the ranker's. The one wrong name in a top five (a Hindi speaker
+   third for "understands Hindi culture") was a reading error, fixed in run 4. Left as is; the tier
+   that puts a preference above a care match is the thing to change if a real request shows it wrong.
 3. **Culture the roster mostly shares.** "Caucasian culture" as the answer to "which culture" is
    composed as nothing (O263), so the person's stated answer disappears from the request. Honouring
    it would rank up clinicians who declare cultural-background care, which is the opposite of what

@@ -19,12 +19,13 @@ afterEach(() => {
 });
 
 describe("one vocabulary", () => {
-  it("the tags are every care area and preference the lexicon matches on, and no manner trait", () => {
+  it("the tags are every care area, preference and language the roster is matched on, and no manner trait", () => {
     const care = CARE_AREA_LABELS.map((area) => `care:${area.id}`);
     const prefs = ["pref:woman-gp", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience", "pref:ndis"];
-    expect(new Set(TAGS)).toEqual(new Set([...care, ...prefs]));
+    const languages = MATCHABLE_LANGUAGES.map((name) => `language:${name.toLowerCase()}`);
+    expect(new Set(TAGS)).toEqual(new Set([...care, ...prefs, ...languages]));
     const lexicon = new Set(LEXICON_CUES.map((cue) => cue.key).filter((key) => !key.startsWith("manner:")));
-    expect(new Set(TAGS)).toEqual(lexicon);
+    expect(new Set(TAGS.filter((tag) => !tag.startsWith("language:")))).toEqual(lexicon);
     expect(VOCABULARY.languages.ids).toEqual(MATCHABLE_LANGUAGES.map((name) => name.toLowerCase()));
   });
 
@@ -80,13 +81,16 @@ describe("fromModel", () => {
     expect(rankClinicians(query, clinicians, TODAY).map((c) => c.id)).toEqual(rankClinicians(query, clinicians, TODAY, undefined).map((c) => c.id));
   });
 
-  it("drops and counts what it cannot quote or does not know, and reads a language by name", () => {
+  it("drops and counts what it cannot quote or does not know, and takes a language the model quotes", () => {
     const text = "a psychologist who speaks Urdu, for my anxiety";
-    const reading = fromModel({ needs: [{ tag: "care:anxiety", quote: "my anxiety" }, { tag: "care:depression", quote: "feeling low" }, { tag: "care:astrology", quote: "anxiety" }], unlisted: ["evening appointments", " ", "evening appointments"] }, text);
+    const reading = fromModel({ needs: [{ tag: "care:anxiety", quote: "my anxiety" }, { tag: "language:urdu", quote: "speaks Urdu" }, { tag: "care:depression", quote: "feeling low" }, { tag: "care:astrology", quote: "anxiety" }], unlisted: ["evening appointments", " ", "evening appointments"] }, text);
     expect(reading.keys).toEqual(["care:anxiety", "language:urdu"]);
     expect(reading.dropped).toBe(2);
     expect(reading.needs.map((need) => need.label)).toContain("Urdu-speaking");
+    expect(reading.needs[1]!.matched).toBe("speaks Urdu");
     expect(reading.unlisted).toEqual(["evening appointments", "evening appointments"]);
+    // A language named as a culture is the model's to leave out; nothing here adds it by name.
+    expect(fromModel(answer(["care:cultural-background", "understands Hindi culture"]), "someone who understands Hindi culture").keys).toEqual(["care:cultural-background"]);
   });
 
   it("adds nothing from the lexicon: a tag the model did not quote is not there", () => {
@@ -99,7 +103,7 @@ describe("fromModel", () => {
   it("reads answerFor(keys, text) back as exactly those keys, four at a time", () => {
     for (let at = 0; at < TAGS.length; at += 4) expect(fromModel(answerFor(TAGS.slice(at, at + 4), "help"), "help").keys).toEqual(TAGS.slice(at, at + 4));
     expect(fromModel(answerFor([], "help"), "help").keys).toEqual([]);
-    expect(answerFor(["manner:attuned", "language:urdu"], "help").needs).toEqual([]);
+    expect(answerFor(["manner:attuned", "language:klingon"], "help").needs).toEqual([]);
   });
 });
 

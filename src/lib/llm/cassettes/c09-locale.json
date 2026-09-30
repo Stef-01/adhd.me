@@ -32,7 +32,7 @@
             "type": "output_text",
             "annotations": [],
             "logprobs": [],
-            "text": "{\"needs\":[],\"unlisted\":[]}"
+            "text": "{\"needs\": [{\"tag\": \"language:hindi\", \"quote\": \"speaks Hindi\"}], \"unlisted\": []}"
           }
         ]
       }
