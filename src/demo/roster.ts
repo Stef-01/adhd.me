@@ -94,6 +94,11 @@ export type Clinician = {
   /** The practice these rooms belong to, as the practice writes it. */
   practice: string;
   /**
+   * Instagram reels the clinician makes, by their public link (instagram.com/reel/<id>), so a person
+   * can see the content before booking. Their own links only, supplied by them; none is inferred.
+   */
+  reels?: readonly string[];
+  /**
    * How a reader actually gets an appointment — PHASE 1, AND DELIBERATELY NOT A SLOT PICKER.
    *
    * `nextAvailable: string` used to live here, holding "Thursday, 8:30 am", and the booking screen

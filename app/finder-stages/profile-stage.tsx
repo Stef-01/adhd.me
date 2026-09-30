@@ -1,5 +1,7 @@
 "use client";
 
+import { reelsOf } from "@/finder/reels";
+import { ProfileReels } from "./profile-reels";
 import { CARE_NEEDS, IDENTITY_LABELS, publicCareProfile, publicIdentity } from "@/support/care-preferences";
 import {
   ArrowLeft,
@@ -107,6 +109,7 @@ export function ProfileStage({
   strengthFit?: string | null;
 }) {
   const facts = profileFacts(clinician);
+  const reels = useMemo(() => reelsOf(clinician.reels), [clinician.reels]);
   /** The declared care areas as pills: asked-for ones first, then the rest as declared, three at most. */
   const worksWith = useMemo(() => {
     const asked = new Set(profileEvidence.map((need) => facetKey(need.facet)));
@@ -323,6 +326,18 @@ export function ProfileStage({
               <p>Languages: {clinician.languages.join(", ")}</p>
             </div>
           </details>
+
+          {reels.length > 0 && (
+            <details className="profile-disclosure" name="profile-section" onToggle={unfoldAbout}>
+              <summary>
+                <span>Reels</span>
+                <CaretRight size={19} weight="regular" aria-hidden="true" />
+              </summary>
+              <div className="profile-disclosure-body">
+                <ProfileReels reels={reels} name={clinician.shortName} />
+              </div>
+            </details>
+          )}
         </div>
       </div>
 

@@ -246,3 +246,18 @@
   .platform-shell .results-summary-words > svg:last-child { display: none; }
   .platform-shell .results-summary-reset { gap: 4px; margin-right: 4px; padding: 8px; }
 }
+
+/* A clinician's reels: 9:16 tiles, three across at every width. A tile is a plain
+   button until tapped; the reel then plays in Instagram's embed in the same place. */
+.profile-reels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.profile-reels > li { display: grid; gap: 8px; align-content: start; }
+.profile-reels > li:has(.profile-reel-frame) { grid-column: 1 / -1; justify-items: center; }
+.profile-reel-tile { position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 9 / 16; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(160deg, var(--accent-soft), var(--surface-raised)); color: var(--ink); font: inherit; cursor: pointer; transition: transform var(--dur-tap) var(--ease-ui), border-color var(--dur-tap) var(--ease-ui); }
+.profile-reel-tile:active { transform: scale(0.98); }
+.profile-reel-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.profile-reel-play { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 999px; background: var(--ink); color: var(--paper); }
+.profile-reel-label { position: absolute; left: 10px; bottom: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.profile-reel-frame { width: 100%; max-width: 400px; aspect-ratio: 9 / 16; min-height: 560px; border: 0; border-radius: 14px; background: var(--surface-raised); }
+.profile-reel-open { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; color: var(--accent-deep); font-size: 14px; font-weight: 600; }
+@media (hover: hover) { .profile-reel-tile:hover { border-color: var(--accent-mid); } }
+@media (prefers-reduced-motion: reduce) { .profile-reel-tile { transition: none; } }

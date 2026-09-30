@@ -54,6 +54,8 @@ const GA_HOSTS = {
  * by the headers test.
  */
 const TILE_HOSTS = { img: ["https://tile.openstreetmap.org"] } as const;
+/** Instagram's reel embed, the one third-party frame the app shows. */
+const EMBED_HOSTS = { frame: ["https://www.instagram.com"] } as const;
 
 /** `@vercel/analytics` in development only; in production it is same-origin `/_vercel/insights/`. */
 const VERCEL_DEBUG_SCRIPT = "https://va.vercel-scripts.com";
@@ -69,6 +71,8 @@ function contentSecurityPolicy({ gaId, dev }: PolicyInputs = {}): string {
     "style-src": ["'self'", "'unsafe-inline'"],
     "img-src": ["'self'", ...TILE_HOSTS.img, ...ga.img],
     "connect-src": ["'self'", ...ga.connect],
+    // A clinician's reels play in Instagram's own embed, loaded only when a person taps one (profile-reels.tsx).
+    "frame-src": ["'self'", ...EMBED_HOSTS.frame],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],
     "form-action": ["'self'"],
