@@ -6,12 +6,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { initialVoice, step, type Action, type VoiceState } from "./conversation";
 import { FAKE_ANSWER, fakeLink } from "./fake-link";
 import { MAX_FOLLOW_UPS, OPENING_QUESTION } from "./interviewer";
-import { CULTURE_ASK, LIVED_ASK, SENTENCES } from "./plan";
+import type { Scripted } from "./link";
+import { CULTURE_ASK, LIVED_ASK, SENTENCES, TELEHEALTH_ASK } from "./plan";
 
 beforeEach(() => vi.useFakeTimers());
 afterEach(() => vi.useRealTimers());
 
-function call(answers: string[], recorded: boolean) {
+function call(answers: Scripted[], recorded: boolean) {
   let state: VoiceState = initialVoice();
   const clips = () => recorded;
   const link = fakeLink(
@@ -39,9 +40,17 @@ function call(answers: string[], recorded: boolean) {
   };
 }
 
-const ANSWERS = ["I need help at work", "deadlines, and my boss", "Parramatta, but telehealth is fine", "yes please", "yes", "Indian", "I have anxiety as well"];
+const ANSWERS: Scripted[] = [
+  "I need help at work",
+  "deadlines, and my boss",
+  { say: "Parramatta, but telehealth is fine", form: { place: "Parramatta", telehealth: true } },
+  "yes please",
+  "yes",
+  { say: "Indian", form: { culture: "Indian" } },
+  "I have anxiety as well",
+];
 const ASKED = ["opening", "detail-work", "place", "lived", "culture", "which-culture", "extra", "closing"] as const;
-const REQUEST = `I need help at work. deadlines, and my boss. Parramatta, but telehealth is fine. ${LIVED_ASK}. ${CULTURE_ASK}, Indian. I have anxiety as well. help with focus and getting things done`;
+const REQUEST = `I need help at work. Hardest at work: deadlines, and my boss. ${TELEHEALTH_ASK}. ${LIVED_ASK}. ${CULTURE_ASK}, Indian. I have anxiety as well`;
 
 describe.each([
   ["played as recordings", true],
@@ -67,14 +76,14 @@ describe.each([
   });
 
   it("answers what the person asks it, then asks its own question again", async () => {
-    const c = call(["an ADHD assessment", "What does bulk billing mean?", "Hornsby"], recorded);
+    const c = call(["an ADHD assessment", "What does bulk billing mean?", { say: "Hornsby", form: { place: "Hornsby" } }], recorded);
     await vi.advanceTimersByTimeAsync(60_000);
     expect(c.said.slice(0, 5)).toEqual([SENTENCES.opening.text, SENTENCES.place.text, FAKE_ANSWER, SENTENCES.place.text, SENTENCES.lived.text]);
     expect(c.state.heard.map((answer) => answer.text)).toEqual(["an ADHD assessment", "Hornsby"]);
   });
 
   it("stops everything it scheduled when the call is closed", async () => {
-    const c = call(["an assessment", "Hornsby"], recorded);
+    const c = call(["an assessment", { say: "Hornsby", form: { place: "Hornsby" } }], recorded);
     await vi.advanceTimersByTimeAsync(200);
     c.link.close();
     const before = c.state;

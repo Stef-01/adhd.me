@@ -36,16 +36,49 @@ The questions are now the app's, in fixed words and a fixed order (`src/voice/pl
 Each sentence is a recording in the call's own voice (`public/voice/*.mp3`, made and heard back by
 `scripts/voice-clips.mjs`, listed in `src/voice/clips.json`), played by the browser the moment it is
 due. Where a recording has not arrived the model says the sentence, exactly, with no conversation
-behind it to colour it. The model's own jobs are two: to answer what the person asks it (at most
-three times a call, in one or two sentences, never advice), and a silent one-word check on each
-thing said, for danger.
+behind it to colour it.
+
+### Each answer is heard three ways (O264, 2026-09-30)
+
+For some hours each answer was read by rules: twenty patterns for yes, no, "say that again", "show
+me who fits", a culture's name, a place. The founder's next call broke them at once. The transcriber
+wrote his yes to the culture question as "ja ta pi grejda"; the rules took it for an answer; nobody
+asked him which culture; and his complaint about that, at "anything else a clinician should know",
+was written into the request. Rules for speech are the same whack-a-mole as a phrase lexicon.
+
+Now, from the moment the person stops:
+
+1. The transcriber (`gpt-4o-transcribe`; the smaller model wrote "Oh, Sydney" as "Hello, Sydney")
+   writes the words and says how sure it is of them. Under `SURE` (0.5) the words are words nobody
+   said: clear speech scores 0.89 to 1.00, and the same speech under noise comes back as fluent
+   sentences ("The sky is blue", "He is a good guy") at 0.01 to 0.31. The call says it did not catch
+   that, and asks again.
+2. The model, hearing the same audio, fills a form of eight fields (`FORM`): understood, a yes or a
+   no, a request to hear the question again, a request for the matches, a place, telehealth, a
+   culture, a language. Only what was said. A plain yes or no to a question that asks for one waits
+   for no form. Measured on the founder's own utterances and the ways people say yes and no
+   (`scripts/voice-form.mjs`): 211 of 213 fields right, heard as audio.
+3. The words go to the model with one question, answered in a word: do they say danger? Nothing
+   waits on the answer; "danger" stops whatever is being said, and the numbers come first. Asked
+   as a field of the form it raised the alarm on "my son hits his sister" and missed "I don't see
+   the point in being alive" two times in three; asked this alone, of the words, it missed none.
+
+The code reads the three and decides what is said next (`src/voice/plan.ts`): a yes to the culture
+question with no culture named is asked "Which culture or language?"; a place named in the first
+answer skips "Where are you?"; the part of life is read from the words ("at my job", "at uni").
+Each answer's hearing is on the record beside the words (`heard {"sure":0.97,"place":"Sydney"}`).
 
 An answer belongs to the question the person last heard in full (60% of it played). Words said over
-the start of a question are the rest of the answer before, and the question is asked again. A
-request to hear the question again, the finder's own voice in the microphone, and "show me who fits"
-are none of them answers, and none reaches the request. The finder's own voice is three words or more
-that are all in the sentence last said, in its order; or any words of a sentence that the same sound
-cut short ("Where are"), and that sentence is then said through, whatever the microphone hears.
+the start of a question are the rest of the answer before, and the question is asked again. The
+finder's own voice in the microphone is three words or more that are all in the sentence last said,
+in its order; or any words of a sentence that the same sound cut short ("Where are"), and that
+sentence is then said through, whatever the microphone hears.
+
+The request is the person's free answers in their words (the first, "hardest at work", "anything
+else"), and their answers to the finder's yes-or-no questions in the finder's words ("someone who has
+ADHD themselves", "someone from my own culture, Indian", "telehealth is fine"). A yes, a no, a place
+and a garble never reach it as text: "Hello, Sydney" and "ja ta pi grejda" are on the record and not
+in the request.
 
 ### Verified on production (2026-09-30, commit d57e26ef)
 
@@ -193,6 +226,7 @@ advice. Runs are in `qa/voice/runs/`.
 | 6 | 17/20 (each persona twice, a tenth who asks questions back) | The person may ask how things work; answers do not count toward the eight; "adult" and "ADHD" only where they belong |
 | 7 | 18/20 | No leading questions; never drop a need to fit the length |
 | 8 | 10/11, then 2/2 on the two that ask back (a postpartum persona added) | R15: questions asked in their given words with no choices in them; the manner question skipped once answered; a life stage kept in the person's own word; after one double question ("… and is telehealth better?"), one question mark a turn |
+| 14 | 10/13 (the three misses the old reader's: "no re-assessment" read as an assessment ask, "sensory/attention stuff" too, a child lost to the model's vote) | O264, the form. The founder's call of 10:53 replayed with real audio: "Yes, I want someone from my culture" is asked "Which culture or language?", "Indian" is heard, and the request reads work, focus and cultural background. What the eval still misses is the matching reader, which the next unit replaces |
 | 13 | 8/13, 10/13, then 26/26 (each persona twice; questions p50 3; $0.0014 a call) | O263, the app asking. The first run found four things. The model's danger check, asked to call `urgent_help`, called it on "Yes, that would be helpful." in two calls, and the crisis numbers were read to people who had agreed to a question: the check answers in one word now, given the question with the words. The finder's paraphrases were being added to "anything else a clinician should know" ("he gets overwhelmed easily" became "help with stress and overwhelm"): nothing is added there now. A person who only asks questions looped: a question is said again at most twice and the model answers at most three. An answer that was neither a yes nor a name was read as asking for a culture. The second run found "understands adult ADHD" read as an assessment ask (the bare word stands down where ADHD is only what the clinician should know) and the evaluation's own advice pattern matching a refusal. `asker` no longer expects bulk billing of "cost matters" |
 | 12 | 11/13, 11/13, 10/13, then the run recorded in the commit, with a `work` persona ("help at work with focus and getting things done") added | O261 and the composition rules of the small hours (RCA-NIGHT-2026-09-29.md, stage 2): questions asked of the assistant leave the request, a yes that opens its own request is that request, filler after a yes goes, a non-English answer reads through the model's English request. The misses left are the grader calling a quoted phrase invented and the realtime model's own drift |
 | 11 | 11/12, 11/12, 11/12 over three runs (first word p50 1.0 to 1.25 s, p90 1.8 to 2.0 s; questions p50 3; $0.009 a call) | The request is the person's own words, each answer a sentence (stage 2 of RCA-NIGHT-2026-09-29.md), read by the same reader as a typed one; the eval's request cap is 250 for a runaway, a rambler's ran to 165 words and read right. Each run missed one persona, each a different one: the first the old 35-word cap; the second `scripts`, whose "stable on Vyvanse … ADHD-experienced" read as an assessment until treatment under way stood the bare words down (O260); the third `advice`, where the realtime model revealed on the person's own question with "I want help finding ADHD care" (its own words, the fallback) and asked nothing: the model's drift, not the reader's, and guarded since: a show_matches before any answer is answered as not shown and the model is told to ask again (`TOO_SOON`). No invented key and no `never` key in any run after O260 |

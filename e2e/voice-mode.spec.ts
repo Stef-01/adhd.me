@@ -6,21 +6,43 @@
 import { expect, type Page } from "@playwright/test";
 import { test } from "./support/test";
 import { MAX_FOLLOW_UPS, OPENING_QUESTION } from "../src/voice/interviewer";
+import type { Scripted } from "../src/voice/link";
 import { SENTENCES } from "../src/voice/plan";
 
-// A person asked each of the plan's questions in turn: what is hard at work, where, lived experience, culture, anything else.
-const ANSWERS = ["I need help at work", "deadlines, and my boss", "Hornsby, or telehealth", "yes please", "yes", "Indian", "I have anxiety as well"];
+// A person asked each of the plan's questions in turn: what is hard at work, where, lived experience, culture, anything
+// else. Each answer is its words, with the form the model fills for it where that holds more than a yes or a no.
+const ANSWERS: Scripted[] = [
+  "I need help at work",
+  "deadlines, and my boss",
+  { say: "Hornsby, or telehealth", form: { place: "Hornsby", telehealth: true } },
+  "yes please",
+  // The founder's own words, 2026-09-30: a yes that names no culture is asked which.
+  { say: "Yes, I want someone from my culture", form: { yes_no: "yes" } },
+  { say: "Indian", form: { culture: "Indian" } },
+  "I have anxiety as well",
+];
+const SAID = ANSWERS.map((answer) => (typeof answer === "string" ? answer : answer.say));
 const ASKED = ["detail-work", "place", "lived", "culture", "which-culture", "extra"] as const;
-/** What those answers ask for: their words, a yes in the finder's words, and what they named as hard. */
-const REQUEST = "I need help at work. deadlines, and my boss. Hornsby, or telehealth. someone who has ADHD themselves. someone from my own culture, Indian. I have anxiety as well. help with focus and getting things done";
+/** What those answers ask for: their own words, and their answers to the finder's questions in the finder's words. */
+const REQUEST = "I need help at work. Hardest at work: deadlines, and my boss. telehealth is fine. someone who has ADHD themselves. someone from my own culture, Indian. I have anxiety as well";
 
-async function openVoice(page: Page, script: boolean | string[]) {
+async function openVoice(page: Page, script: boolean | Scripted[]) {
   await page.addInitScript((value) => {
-    (window as { __adhdmeVoiceFake?: boolean | string[] }).__adhdmeVoiceFake = value;
+    (window as { __adhdmeVoiceFake?: unknown }).__adhdmeVoiceFake = value;
   }, script);
   await page.goto("/");
   await page.getByRole("button", { name: "Talk instead of typing" }).click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "voice");
+}
+
+/** Every record the page sent to the finder's journal, in order. */
+async function journal(page: Page) {
+  const posts: { type: string; record: Record<string, unknown> }[] = [];
+  await page.route("**/api/finder/track", async (route) => {
+    posts.push(JSON.parse(route.request().postData() ?? "{}"));
+    await route.fulfill({ status: 204, body: "" });
+  });
+  return () => posts.filter((post) => post.type === "voice").map((post) => post.record);
 }
 
 test("the voice screen is the orb and one stop button, with the question as its heading", async ({ page }) => {
@@ -54,12 +76,21 @@ test("a person who asks for help at work is asked what is hardest there (the fou
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES["detail-work"].text, { timeout: 10000 });
 });
 
-test("a person is asked whether they would like someone from their own culture, and which", async ({ page }) => {
+test("a person is asked whether they would like someone from their own culture, and a yes is asked which", async ({ page }) => {
   await openVoice(page, ANSWERS.slice(0, 4));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES.culture.text, { timeout: 10000 });
   await page.goto("about:blank");
   await openVoice(page, ANSWERS.slice(0, 5));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES["which-culture"].text, { timeout: 10000 });
+});
+
+test("an answer nobody could make out is asked again (the founder's yes, written down as 'ja ta pi grejda')", async ({ page }) => {
+  const calls = await journal(page);
+  await openVoice(page, [...ANSWERS.slice(0, 4), { say: "ja ta pi grejda.", sure: 0.04 }]);
+  // "Sorry, I didn't catch that", then the question once more; the sound is no answer to it.
+  const said = () => ((calls().at(-1)?.turns ?? []) as { who: string; text: string }[]).filter((turn) => turn.who === "assistant").map((turn) => turn.text);
+  await expect.poll(() => said().slice(-3), { timeout: 10000 }).toEqual([SENTENCES.culture.text, SENTENCES.catch.text, SENTENCES.culture.text]);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(SENTENCES.culture.text);
 });
 
 test("the stop button ends the call and puts what was said in the box", async ({ page }) => {
@@ -69,16 +100,6 @@ test("the stop button ends the call and puts what was said in the box", async ({
   await expect(page.locator("main")).toHaveAttribute("data-stage", "welcome");
   await expect(page.getByRole("textbox")).toHaveValue("I need help at work, deadlines, and my boss");
 });
-
-/** Every record the page sent to the finder's journal, in order. */
-async function journal(page: Page) {
-  const posts: { type: string; record: Record<string, unknown> }[] = [];
-  await page.route("**/api/finder/track", async (route) => {
-    posts.push(JSON.parse(route.request().postData() ?? "{}"));
-    await route.fulfill({ status: 204, body: "" });
-  });
-  return () => posts.filter((post) => post.type === "voice").map((post) => post.record);
-}
 
 test("a call is on record turn by turn under one id, and its end fills the same row (stage 5)", async ({ page }) => {
   const calls = await journal(page);
@@ -96,7 +117,7 @@ test("a call is on record turn by turn under one id, and its end fills the same 
   // The record holds what the finder said as well as what the person did, in order.
   const turns = sent.at(-1)!.turns as { who: string; text: string }[];
   expect(turns.filter((turn) => turn.who === "assistant").map((turn) => turn.text)).toEqual([SENTENCES.opening.text, ...ASKED.map((id) => SENTENCES[id].text), SENTENCES.closing.text]);
-  expect(turns.filter((turn) => turn.who === "person").map((turn) => turn.text)).toEqual(ANSWERS);
+  expect(turns.filter((turn) => turn.who === "person").map((turn) => turn.text)).toEqual(SAID);
   // O260: the card prints the first twenty words of the answers, and the rest live behind "Change what you said".
   const card = (await page.locator(".results-summary-text").textContent()) ?? "";
   expect(card.endsWith("…")).toBe(true);
@@ -114,7 +135,7 @@ test("a call stopped in the middle keeps every turn said so far (stage 5)", asyn
   const sent = calls();
   expect(new Set(sent.map((call) => call.id)).size).toBe(1);
   const turns = sent.at(-1)!.turns as { who: string; text: string }[];
-  expect(turns.filter((turn) => turn.who === "person").map((turn) => turn.text)).toEqual(ANSWERS.slice(0, 2));
+  expect(turns.filter((turn) => turn.who === "person").map((turn) => turn.text)).toEqual(SAID.slice(0, 2));
 });
 
 test("under reduced motion the orb holds still, and the call still runs", async ({ page }) => {

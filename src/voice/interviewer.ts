@@ -1,7 +1,7 @@
-// The voice finder's model: what the realtime model is told, the one tool it may call, and the
-// session a call starts with. The app asks the questions (src/voice/plan.ts) and writes the request;
-// the model answers what the person asks it, watches for danger, and says a sentence it is given
-// when the recording of that sentence cannot be played.
+// The voice finder's model: what the realtime model is told, the form it fills for each answer, and
+// the session a call starts with. The app asks the questions (src/voice/plan.ts) and writes the
+// request; the model says what each answer holds (`FORM`), answers what the person asks it, and says
+// a sentence it is given when the recording of that sentence cannot be played.
 
 import { said } from "@/model/crisis-contacts";
 
@@ -13,7 +13,20 @@ export const OPENING_QUESTION = "What kind of support are you looking for?";
 
 export const DEFAULT_VOICE_MODEL = "gpt-realtime-2.1-mini";
 export const DEFAULT_VOICE = "marin";
-const TRANSCRIBE_MODEL = "gpt-4o-mini-transcribe";
+/**
+ * The larger transcriber (2026-09-30): the smaller one wrote the founder's "I really want to meet
+ * deadlines" as "You really want …", "Oh, Sydney" as "Hello, Sydney" (reproduced the same day) and
+ * his yes to a question as "ja ta pi grejda". The words are the record and the request, so they are
+ * worth $0.006 a minute.
+ */
+const TRANSCRIBE_MODEL = "gpt-4o-transcribe";
+/**
+ * How sure the transcriber must be of what it wrote, as the mean probability of its tokens, for the
+ * words to count as heard. Measured 2026-09-30: clear speech scores 0.89 to 1.00; the same speech
+ * under noise comes back as fluent sentences nobody said ("The sky is blue", "He is a good guy") at
+ * 0.01 to 0.31. Below this the call says it did not catch that, and asks again.
+ */
+export const SURE = 0.5;
 /**
  * The person is speaking English, and the transcriber is told so (2026-09-29: with no language pinned,
  * "what?", "no" and "nah" came back as "什么?", "Nein." and "Gar"). It is told NOTHING ELSE. For a day it
@@ -66,16 +79,49 @@ export const ANSWER =
   "The person has just asked you something. Answer it in one or two plain sentences, and ask nothing. If it is something only a clinician can answer, say so in one sentence. Say nothing else.";
 
 /**
- * One silent response after each thing the person says: the net under the app's own safety rules. It
+ * The form the model fills for each answer, silently and apart from the conversation: what the answer
+ * holds, in fields with fixed names, and only what it said. The model hears the person's own audio,
+ * so a word the transcriber got wrong is not a word the form gets wrong. Eight fields: with danger,
+ * the part of life and "asks you something" beside them it got one field in twenty-five wrong, the
+ * wrong ones the ones that matter (scripts/voice-form.mjs); those three are read another way.
+ */
+export const FORM = {
+  type: "function",
+  name: "heard",
+  description: "Record what the person's answer says. Leave out every field the answer says nothing about.",
+  parameters: {
+    type: "object",
+    additionalProperties: false,
+    required: ["understood"],
+    properties: {
+      understood: { type: "boolean", description: "False when the answer makes no sense as an answer to the question: garbled sounds, words in no language, silence, or the question itself come back." },
+      yes_no: { type: "string", enum: ["yes", "no"], description: "Their answer to a yes-or-no question; no preference is no." },
+      again: { type: "boolean", description: "True when they ask to hear the question again, or did not catch it." },
+      show_matches: { type: "boolean", description: "True when they ask to see the matches or the list now, or say they are finished." },
+      place: { type: "string", description: "The suburb, town, city or postcode they are in or near." },
+      telehealth: { type: "boolean", description: "True when telehealth, online, video or phone suits them." },
+      culture: { type: "string", description: "The culture, background, faith or community they name (Indian, Lebanese, Aboriginal, Sikh). Only a name: never 'my culture' or 'their own'." },
+      language: { type: "string", description: "The language other than English they want spoken." },
+    },
+  },
+} as const;
+
+export const FORM_INSTRUCTIONS =
+  "You hear one answer a person gave to a service that finds clinicians for ADHD in Australia. Call heard with what the answer says, and nothing it does not say.";
+
+/** What the form's reader is told before the answer: the question it answers. */
+export const asked = (question: string) => `The question asked: "${question}". The answer follows.`;
+
+/**
+ * One silent response to each thing the person says: the net under the app's own safety rules. It
  * answers in a word. Asked to call `urgent_help` instead, it called it on "Yes, that would be helpful"
- * twice in thirteen simulated calls (2026-09-30), and the crisis numbers were read to a person who had
- * agreed to a question; in this wording it raised no alarm in 84 ordinary answers and missed none of 48
- * that said danger (qa/voice/safety-check.md).
+ * twice in thirteen simulated calls, and the crisis numbers were read to a person who had agreed to a
+ * question; as one field of the form it raised the alarm on "my son hits his sister" and missed "I
+ * don't see the point in being alive" two times in three. Asked this one thing, in this wording, it
+ * raised no alarm in 84 ordinary answers and missed none of 48 that said danger (scripts/voice-form.mjs).
  */
 export const SAFETY_CHECK =
-  'You read one thing a person said to a service that finds clinicians for ADHD, and decide one thing: do their words say they may hurt themselves or someone else, want to die or not be alive, have tried to end their life, or are not safe from someone? Nearly everything said here is ordinary: the help they want, where they live, a yes or a no, how hard things are. Hard, stressed, overwhelmed, exhausted or drowning in work is ordinary, and so is a child who hits. Answer with one word: "danger" if their words say so, otherwise "fine".';
-/** What the check is given: the question, and the words. */
-export const safetyInput = (asked: string, said: string) => `Asked: "${asked}"\nThey said: "${said}"`;
+  'You hear one thing a person said to a service that finds clinicians for ADHD, and decide one thing: do their words say they may hurt themselves or someone else, want to die or not be alive, have tried to end their life, or are not safe from someone? Nearly everything said here is ordinary: the help they want, where they live, a yes or a no, how hard things are. Hard, stressed, overwhelmed, exhausted or drowning in work is ordinary, and so is a child who hits. Answer with one word: "danger" if their words say so, otherwise "fine".';
 /** The word that opens the crisis contacts. */
 export const DANGER = /\bdanger\b/i;
 
@@ -112,6 +158,8 @@ export function sessionFor(env: Record<string, string | undefined>) {
     instructions: interviewerInstructions(),
     output_modalities: ["audio"],
     max_output_tokens: 800,
+    // How sure the transcriber is of each word it writes (`SURE`).
+    include: ["item.input_audio_transcription.logprobs"],
     audio: {
       input: {
         noise_reduction: { type: "near_field" },

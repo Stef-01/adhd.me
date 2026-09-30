@@ -1,11 +1,11 @@
 // The voice finder's conversation, driven by scripted events: the app asks the plan's questions, an
 // answer belongs to the question the person last heard in full, a sentence is a recording or the
-// model saying it, and the model is left answering what it is asked and watching for danger.
+// model saying it, and the model fills a form for each answer and answers what it is asked.
 
 import { describe, expect, it } from "vitest";
 import { HEARD, MOST_ANSWERS, initialVoice, inTheirWords, resting, saidAsRequest, settled, stalled, step, type Action, type ClientEvent, type ServerEvent, type Step, type VoiceState } from "./conversation";
-import { ANSWER, MAX_FOLLOW_UPS, SAFETY_CHECK, TRANSLATE, URGENT_HELP, safetyInput, sayExactly } from "./interviewer";
-import { CULTURE_ASK, LIVED_ASK, NEED_PHRASE, SENTENCES, TELEHEALTH_ASK, type SayId } from "./plan";
+import { ANSWER, FORM, FORM_INSTRUCTIONS, MAX_FOLLOW_UPS, SAFETY_CHECK, SURE, TRANSLATE, URGENT_HELP, asked, sayExactly } from "./interviewer";
+import { CULTURE_ASK, LIVED_ASK, SENTENCES, TELEHEALTH_ASK, formFrom, type Form, type SayId } from "./plan";
 
 const RECORDED = () => true;
 const server = (event: ServerEvent): Action => ({ type: "server", event });
@@ -52,20 +52,30 @@ function call(start: VoiceState = initialVoice(), clips: (id: SayId) => boolean 
       while (playing) self.ends();
       return self;
     },
-    /** The person speaks: the server commits the audio, then its words arrive. */
-    hears(text: string, { cut }: { cut?: number } = {}) {
+    /** The person speaks: the server commits the audio; then its words arrive, the model's form, and its word on danger. */
+    hears(text: string, { cut, form = {}, first = "words", sure = 1, danger = false }: { cut?: number; form?: Partial<Form>; first?: "words" | "form"; sure?: number; danger?: boolean } = {}) {
       const item_id = `item_${++ids}`;
       act(server({ type: "input_audio_buffer.speech_started", item_id }));
       // Speaking over a recording stops it, as the screen does.
       if (playing && cut !== undefined) self.ends(cut);
       act(server({ type: "input_audio_buffer.speech_stopped", item_id }));
       act(server({ type: "input_audio_buffer.committed", item_id }));
-      act(server({ type: "conversation.item.input_audio_transcription.completed", item_id, transcript: text }));
+      const words = () => act(server({ type: "conversation.item.input_audio_transcription.completed", item_id, transcript: text, logprobs: [{ token: text, logprob: Math.log(sure) }] }));
+      const filled = () => { for (const action of [...formed(item_id, { ...formFrom(text), ...form }), ...checked(item_id, danger)]) act(action); };
+      if (first === "words") words(), filled();
+      else filled(), words();
       return self;
     },
     /** A whole exchange: what is being said is heard out, then the person answers. */
-    answers(text: string) {
-      return self.through().hears(text);
+    answers(text: string, form: Partial<Form> = {}, more: { sure?: number; danger?: boolean } = {}) {
+      return self.through().hears(text, { form, ...more });
+    },
+    /** The person types, and the model fills the form for the words and says whether they say danger. */
+    types(text: string, form: Partial<Form> = {}, danger = false) {
+      const item = `typed_${state.answers}`;
+      act({ type: "typed", text });
+      for (const action of [...formed(item, { ...formFrom(text), ...form }), ...checked(item, danger)]) act(action);
+      return self;
     },
   };
   return self;
@@ -82,6 +92,26 @@ const begun = () => {
 const purposes = (sent: ClientEvent[]) => sent.filter((event) => event.type === "response.create").map((event) => (event.response as { metadata?: { purpose?: string } }).metadata?.purpose);
 const assistant = (state: VoiceState) => state.turns.filter((turn) => turn.who === "assistant").map((turn) => turn.text);
 const person = (state: VoiceState) => state.turns.filter((turn) => turn.who === "person").map((turn) => turn.text);
+/** The form for one answer, as the model returns it. */
+function formed(item: string, form: Form): Action[] {
+  const id = `resp_${++ids}`;
+  const metadata = { purpose: "form", item };
+  return [
+    server({ type: "response.created", response: { id, metadata } }),
+    server({ type: "response.done", response: { id, status: "completed", metadata, output: [{ type: "function_call", name: FORM.name, call_id: `call_${id}`, arguments: JSON.stringify(form) }] } }),
+  ];
+}
+
+/** The model's word on danger for one answer. */
+function checked(item: string, danger: boolean): Action[] {
+  const id = `resp_${++ids}`;
+  const metadata = { purpose: "safety", item };
+  return [
+    server({ type: "response.created", response: { id, metadata } }),
+    server({ type: "response.done", response: { id, status: "completed", metadata, output: [{ type: "message", role: "assistant", content: [{ type: "output_text", text: danger ? "Danger." : "fine" }] }] } }),
+  ];
+}
+
 /** One response of the model's, done. */
 function done(purpose: string, output: unknown[] = [], status = "completed"): Action[] {
   const id = `resp_${++ids}`;
@@ -117,6 +147,15 @@ describe("the opening", () => {
     c.ends();
     expect(c.state.pending?.question).toBe("opening");
     expect(c.state.asked).toBe(0);
+    // Their answer arriving in the middle of that (the call carried some of it after all) drops the asking again.
+    const arrived = call();
+    arrived.act({ type: "mic" });
+    arrived.ends();
+    arrived.act({ type: "connected", missed: true });
+    arrived.hears("focused at my job at work.");
+    expect(arrived.state.heard.map((answer) => answer.text)).toEqual(["focused at my job at work."]);
+    arrived.ends();
+    expect(arrived.playing).toBe("detail-work");
     // Still being said when the call opens: the sentence is finished first.
     const during = call();
     during.act({ type: "mic" });
@@ -147,15 +186,119 @@ describe("the opening", () => {
     const c = call(initialVoice(), () => false);
     c.act({ type: "connected" });
     for (const action of done("say")) c.act(action);
-    c.act({ type: "typed", text: "I want to die" });
+    c.types("I want to die", {}, true);
     const said = c.sent.filter((event) => event.type === "response.create").map((event) => (event.response as { instructions?: string }).instructions);
     expect(said).toContain(sayExactly(SENTENCES.urgent.spoken!));
     expect(c.state.caption).toBe(SENTENCES.urgent.text);
   });
 });
 
-describe("the founder's call of 2026-09-30, 07:49, as the app now runs it", () => {
-  it("hears 'with my needs with focusing' as the rest of his first answer, asks what is hardest at work, and reads work and focus", () => {
+describe("the form the model fills for each answer", () => {
+  it("is asked for the moment they stop speaking, of their own audio, beside the transcriber", () => {
+    const c = begun();
+    c.act(server({ type: "input_audio_buffer.speech_started", item_id: "a" }));
+    c.act(server({ type: "input_audio_buffer.speech_stopped", item_id: "a" }));
+    const stopped = c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
+    const question = { type: "message", role: "system", content: [{ type: "input_text", text: asked(SENTENCES.opening.text) }] };
+    expect(stopped.send).toEqual([
+      {
+        type: "response.create",
+        response: { conversation: "none", input: [question, { type: "item_reference", id: "a" }], instructions: FORM_INSTRUCTIONS, output_modalities: ["text"], tools: [FORM], tool_choice: { type: "function", name: "heard" }, max_output_tokens: 300, metadata: { purpose: "form", item: "a" } },
+      },
+    ]);
+    expect(c.state.open).toBe(1);
+    expect(settled(c.state)).toBe(false);
+    // Their words, once written, go to the model with one question, answered in a word: do they say danger?
+    const written = c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "a", transcript: "help with my anxiety" }));
+    expect(written.send).toEqual([
+      { type: "response.create", response: { conversation: "none", input: [question, { type: "message", role: "user", content: [{ type: "input_text", text: "help with my anxiety" }] }], instructions: SAFETY_CHECK, output_modalities: ["text"], tool_choice: "none", max_output_tokens: 200, metadata: { purpose: "safety", item: "a" } } },
+    ]);
+  });
+
+  it("is waited for with the words, whichever comes first, before anything more is said; the word on danger is waited on by nothing", () => {
+    const words = server({ type: "conversation.item.input_audio_transcription.completed", item_id: "a", transcript: "help with my anxiety" });
+    for (const [at, order] of [[words, ...formed("a", { understood: true })], [...formed("a", { understood: true }), words]].entries()) {
+      const c = begun();
+      c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
+      for (const action of order.slice(0, -1)) {
+        c.act(action);
+        expect(c.playing, String(at)).toBeNull();
+        expect(c.state.open, String(at)).toBe(1);
+      }
+      c.act(order.at(-1)!);
+      expect(c.playing, String(at)).toBe("place");
+      expect(c.state.open, String(at)).toBe(0);
+      expect(c.state.heard, String(at)).toEqual([{ question: "opening", say: "opening", text: "help with my anxiety", form: { understood: true } }]);
+      // "fine" changes nothing; "danger" stops the question being asked, and the numbers are said.
+      for (const action of checked("a", false)) c.act(action);
+      expect(c.playing, String(at)).toBe("place");
+      for (const action of checked("a", true)) c.act(action);
+      expect(c.hushes, String(at)).toBe(1);
+      expect(c.playing, String(at)).toBe("urgent");
+    }
+  });
+
+  it("is not waited for when the answer is a plain yes or no to a question that asks for one", () => {
+    const c = begun().answers("an ADHD assessment").answers("Hornsby", { place: "Hornsby" }).through();
+    expect(c.state.pending?.question).toBe("lived");
+    c.act(server({ type: "input_audio_buffer.committed", item_id: "y" }));
+    c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "y", transcript: "Yeah, that'd be great.", logprobs: [{ token: "Yeah", logprob: -0.01 }] }));
+    expect(c.playing).toBe("culture");
+    expect(c.state.heard.at(-1)).toEqual({ question: "lived", say: "lived", text: "Yeah, that'd be great.", form: { understood: true, yes_no: "yes" } });
+    // The form, when it comes, has nothing to add.
+    for (const action of formed("y", { understood: true, yes_no: "yes" })) c.act(action);
+    expect(c.state.heard).toHaveLength(3);
+    // A yes with a name in it, and any answer to a question that asks for more than yes or no, waits for the form.
+    c.through();
+    c.act(server({ type: "input_audio_buffer.committed", item_id: "c" }));
+    c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "c", transcript: "Yes, Indian." }));
+    expect(c.playing).toBeNull();
+    for (const action of formed("c", { understood: true, yes_no: "yes", culture: "Indian" })) c.act(action);
+    expect(c.playing).toBe("extra");
+    // And words the transcriber was not sure of are never plain.
+    const unsure = begun().answers("an ADHD assessment").answers("Hornsby", { place: "Hornsby" }).through();
+    unsure.act(server({ type: "input_audio_buffer.committed", item_id: "n" }));
+    unsure.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "n", transcript: "No.", logprobs: [{ token: "No", logprob: Math.log(0.2) }] }));
+    expect(unsure.playing).toBeNull();
+  });
+
+  it(`takes words the transcriber was not sure of as words nobody said: under ${SURE}, the call did not catch that`, () => {
+    // Measured 2026-09-30: speech under noise came back as "The sky is blue" at 0.31, and clear speech at 0.89 to 1.00.
+    const c = begun().answers("an ADHD assessment").answers("The sky is blue", { understood: true }, { sure: 0.31 }).through();
+    expect(c.played.slice(-2)).toEqual(["catch", "place"]);
+    expect(c.state.heard.map((answer) => answer.text)).toEqual(["an ADHD assessment"]);
+    expect(c.state.said).toEqual(["an ADHD assessment"]);
+    const sure = begun().answers("an ADHD assessment").answers("Oh, Sydney.", { place: "Sydney" }, { sure: 0.89 });
+    expect(sure.state.heard.at(-1)?.form.place).toBe("Sydney");
+    // Unless the model, hearing the audio, made out a plain answer in it: "Hindi", written down at 0.33.
+    const heardAnyway = begun().answers("an ADHD assessment").answers("Hornsby", { place: "Hornsby" }).answers("no").answers("yes").answers("Hindi.", { language: "Hindi" }, { sure: 0.33 });
+    expect(heardAnyway.state.heard.at(-1)?.form.language).toBe("Hindi");
+    expect(heardAnyway.playing).toBe("extra");
+  });
+
+  it("is read from the words alone when it comes back broken", () => {
+    const c = begun();
+    c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
+    c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "a", transcript: "Yes, an assessment please" }));
+    for (const action of checked("a", false)) c.act(action);
+    c.act(server({ type: "response.done", response: { id: "r", status: "completed", metadata: { purpose: "form", item: "a" }, output: [{ type: "function_call", name: "heard", arguments: "{not json" }] } }));
+    expect(c.state.heard[0]?.form).toEqual({ understood: true, yes_no: "yes" });
+    expect(c.playing).toBe("place");
+  });
+
+  it("is given the words themselves when the person typed them", () => {
+    const c = begun();
+    const typed = c.act({ type: "typed", text: "an ADHD assessment" });
+    const [form, check] = typed.send.filter((event) => event.type === "response.create").map((event) => event.response as { input: unknown[]; metadata: unknown });
+    expect(form!.input[1]).toEqual({ type: "message", role: "user", content: [{ type: "input_text", text: "an ADHD assessment" }] });
+    expect(form!.metadata).toEqual({ purpose: "form", item: "typed_0" });
+    expect(check!.input[1]).toEqual(form!.input[1]);
+    expect(check!.metadata).toEqual({ purpose: "safety", item: "typed_0" });
+  });
+});
+
+describe("the founder's calls of 2026-09-30, as the app now runs them", () => {
+  it("07:49: hears 'with my needs with focusing' as the rest of his first answer, asks what is hardest at work, and reads work and focus", () => {
     const c = begun();
     c.hears("With someone that would help me at work.");
     // The follow-up begins, and he is still speaking: it stops, and his words go where they belong.
@@ -166,23 +309,46 @@ describe("the founder's call of 2026-09-30, 07:49, as the app now runs it", () =
     expect(c.playing).toBe("detail-work");
     c.answers("Deadlines, and I can't get started on anything.");
     expect(c.playing).toBe("place");
-    c.answers("In Sydney.");
+    c.answers("In Sydney.", { place: "Sydney" });
     expect(c.playing).toBe("lived");
-    c.answers("Yeah, that's fine.");
+    c.answers("Yeah, that's fine.", { yes_no: "yes" });
     expect(c.playing).toBe("culture");
     c.answers("No.");
     expect(c.playing).toBe("extra");
-    c.answers("Okay, show me who fits.");
+    c.answers("Okay, show me who fits.", { show_matches: true });
     expect(c.playing).toBe("closing");
     expect(c.state.phase).toBe("revealing");
     expect(c.state.reveal).toEqual({
-      request: `With someone that would help me at work. with my needs with focusing. Deadlines, and I can't get started on anything. In Sydney. ${LIVED_ASK}`,
+      request: `With someone that would help me at work. with my needs with focusing. Hardest at work: Deadlines, and I can't get started on anything. ${LIVED_ASK}`,
       place: "Sydney",
     });
     expect(c.state.asked).toBe(5);
     expect(assistant(c.state)).toEqual(["opening", "detail-work", "detail-work", "place", "lived", "culture", "extra", "closing"].map((id) => SENTENCES[id as SayId].text));
-    // Nothing the model said is in the call: it was asked only to watch for danger.
-    expect(new Set(purposes(c.sent))).toEqual(new Set(["safety"]));
+    // Nothing the model said is in the call: it filled the forms, and said whether the words said danger.
+    expect(new Set(purposes(c.sent))).toEqual(new Set(["form", "safety"]));
+  });
+
+  it("10:53: a yes nobody could make out is asked again, and a yes that names no culture is asked which", () => {
+    const c = begun()
+      .answers("I'm looking for help with staying more focused at my job at work.")
+      .answers("You really want to meet deadlines and then also be consistent and productive.")
+      .answers("Hello, Sydney.", { place: "Sydney" })
+      .answers("No preferences. No preference.", { yes_no: "no" });
+    expect(c.playing).toBe("culture");
+    // The transcriber wrote his yes as "ja ta pi grejda", and was not sure of a word of it.
+    c.answers("ja ta pi grejda.", { understood: true }, { sure: 0.04 }).through();
+    expect(c.played.slice(-2)).toEqual(["catch", "culture"]);
+    expect(c.state.heard.map((answer) => answer.question)).not.toContain("culture");
+    c.answers("Yes, I want someone from my culture.", { yes_no: "yes" });
+    expect(c.playing).toBe("which-culture");
+    c.answers("Indian.", { culture: "Indian" });
+    expect(c.playing).toBe("extra");
+    c.answers("No, that's everything.", { yes_no: "no", show_matches: true });
+    expect(c.state.reveal).toEqual({
+      request: `I'm looking for help with staying more focused at my job at work. Hardest at work: You really want to meet deadlines and then also be consistent and productive. ${CULTURE_ASK}, Indian`,
+      place: "Sydney",
+    });
+    expect(c.state.reveal?.request).not.toMatch(/grejda|Hello|preference/);
   });
 });
 
@@ -190,13 +356,13 @@ describe("an answer belongs to the question the person last heard in full", () =
   it(`takes a question as heard once ${HEARD * 100}% of it has played`, () => {
     const late = begun().answers("an ADHD assessment");
     expect(late.playing).toBe("place");
-    late.hears("Parramatta", { cut: 0.8 });
-    expect(late.state.heard.at(-1)).toEqual({ question: "place", say: "place", text: "Parramatta" });
+    late.hears("Parramatta", { cut: 0.8, form: { place: "Parramatta" } });
+    expect(late.state.heard.at(-1)).toMatchObject({ question: "place", say: "place", text: "Parramatta" });
     expect(late.playing).toBe("lived");
 
     const early = begun().answers("an ADHD assessment");
     early.hears("for myself, I mean", { cut: 0.3 });
-    expect(early.state.heard.at(-1)).toEqual({ question: "opening", say: "opening", text: "for myself, I mean" });
+    expect(early.state.heard.at(-1)).toMatchObject({ question: "opening", say: "opening", text: "for myself, I mean" });
     expect(early.playing).toBe("place");
     expect(early.state.asked).toBe(0);
   });
@@ -209,28 +375,17 @@ describe("an answer belongs to the question the person last heard in full", () =
     expect(c.played.filter((id) => id === "place")).toHaveLength(2);
   });
 
-  it("waits for the words of what was said before it says anything more", () => {
-    const c = begun();
-    c.act(server({ type: "input_audio_buffer.speech_started", item_id: "a" }));
-    c.act(server({ type: "input_audio_buffer.speech_stopped", item_id: "a" }));
-    c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
-    expect(c.playing).toBeNull();
-    expect(c.state.open).toBe(1);
-    expect(c.state.answers).toBe(1);
-    expect(settled(c.state)).toBe(false);
-    c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "a", transcript: "help with my anxiety" }));
-    expect(c.playing).toBe("place");
-  });
-
   it("holds the next question while the person is still speaking", () => {
     const c = begun();
     c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
     c.act(server({ type: "input_audio_buffer.speech_started", item_id: "b" }));
     c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "a", transcript: "help with my anxiety" }));
+    for (const action of [...formed("a", { understood: true }), ...checked("a", false)]) c.act(action);
     expect(c.playing).toBeNull();
     c.act(server({ type: "input_audio_buffer.speech_stopped", item_id: "b" }));
     c.act(server({ type: "input_audio_buffer.committed", item_id: "b" }));
     c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "b", transcript: "and my sleep" }));
+    for (const action of [...formed("b", { understood: true }), ...checked("b", false)]) c.act(action);
     expect(c.playing).toBe("place");
     expect(c.state.heard.map((answer) => answer.text)).toEqual(["help with my anxiety", "and my sleep"]);
   });
@@ -243,6 +398,7 @@ describe("what is not an answer", () => {
     expect(c.state.said).toEqual(["an ADHD assessment"]);
     expect(person(c.state)).toEqual(["an ADHD assessment"]);
     expect(c.state.turns.at(-2)).toEqual({ who: "tool", text: "echo: Where are you, or would telehealth" });
+    expect(c.state.turns.filter((turn) => turn.who === "tool").map((turn) => turn.text)).toContain('heard {"sure":1,"understood":true}');
     expect(c.played.at(-1)).toBe("place");
     expect(c.state.firm).toBe(true);
     c.ends();
@@ -257,8 +413,8 @@ describe("what is not an answer", () => {
     expect(c.state.turns.at(-2)).toEqual({ who: "tool", text: "echo: Where are" });
     expect(c.played.at(-1)).toBe("place");
     // Heard out, a word of the question is an answer to it.
-    c.ends().hears("Telehealth.");
-    expect(c.state.heard.at(-1)).toEqual({ question: "place", say: "place", text: "Telehealth" });
+    c.ends().hears("Telehealth.", { form: { telehealth: true } });
+    expect(c.state.heard.at(-1)).toMatchObject({ question: "place", text: "Telehealth." });
     // And words of their own over the start of a question are theirs.
     const theirs = begun().answers("an ADHD assessment");
     theirs.hears("for my daughter", { cut: 0.2 });
@@ -266,35 +422,34 @@ describe("what is not an answer", () => {
   });
 
   it("is a request to hear the question again: it is said again, and the request never holds the asking", () => {
-    const c = begun().answers("an ADHD assessment").answers("Hornsby").answers("Sorry, I didn't catch what you just said.");
+    const c = begun().answers("an ADHD assessment").answers("Hornsby", { place: "Hornsby" }).answers("Sorry, I didn't catch what you just said.", { understood: false, again: true });
     expect(c.played.slice(-2)).toEqual(["lived", "lived"]);
     c.answers("Yeah, that would be great.");
-    expect(c.state.heard.map((answer) => answer.text)).toEqual(["an ADHD assessment", "Hornsby", "Yeah, that would be great"]);
+    expect(c.state.heard.map((answer) => answer.text)).toEqual(["an ADHD assessment", "Hornsby", "Yeah, that would be great."]);
     expect(c.state.asked).toBe(2);
     expect(person(c.state)).toContain("Sorry, I didn't catch what you just said.");
+    expect(c.answers("no").answers("no").state.reveal?.request).toBe(`an ADHD assessment. ${LIVED_ASK}`);
   });
 
-  it("is a sound nobody can read: 'Sorry, I didn't catch that', the question once more, then the call moves on", () => {
+  it("is a sound nobody can make out: 'Sorry, I didn't catch that', the question once more, then the call moves on", () => {
     const c = begun().answers("an ADHD assessment").answers("什么?").through();
     expect(c.played.slice(-2)).toEqual(["catch", "place"]);
     expect(person(c.state)).toContain("什么?");
     expect(c.state.said).toEqual(["an ADHD assessment"]);
-    c.answers("Gar");
-    expect(c.state.heard.at(-1)?.text).toBe("Gar");
     const twice = begun().answers("an ADHD assessment").answers("…").answers("…");
     expect(twice.played.slice(-3)).toEqual(["catch", "place", "lived"]);
     expect(twice.state.done).toContain("place");
   });
 
   it("is a request for the matches: the call closes on what was said, without the asking", () => {
-    const c = begun().answers("an ADHD assessment").answers("I'm in Hornsby, just show me the matches");
+    const c = begun().answers("an ADHD assessment").answers("I'm in Hornsby, just show me the matches", { place: "Hornsby", show_matches: true });
     expect(c.played.at(-1)).toBe("closing");
-    expect(c.state.reveal).toEqual({ request: "an ADHD assessment. I'm in Hornsby", place: "Hornsby" });
+    expect(c.state.reveal).toEqual({ request: "an ADHD assessment", place: "Hornsby" });
     expect(c.state.turns.at(-1)).toEqual({ who: "tool", text: `reveal ${JSON.stringify(c.state.reveal)}` });
   });
 });
 
-describe("what the model is left to do", () => {
+describe("what the model is left to say", () => {
   it("answers what the person asks it, before the question they did not answer is asked again", () => {
     const c = begun().answers("an ADHD assessment").answers("What does bulk billing mean?");
     expect(c.playing).toBeNull();
@@ -314,21 +469,21 @@ describe("what the model is left to do", () => {
     expect(c.playing).toBe("place");
     expect(c.state.asked).toBe(1);
     expect(assistant(c.state).slice(-2)).toEqual(["It means Medicare pays.", SENTENCES.place.text]);
-    expect(c.answers("Penrith").state.heard.map((answer) => answer.text)).toEqual(["an ADHD assessment", "Penrith"]);
+    expect(c.answers("Penrith", { place: "Penrith" }).state.heard.map((answer) => answer.text)).toEqual(["an ADHD assessment", "Penrith"]);
   });
 
   it("answers, and takes the answer given in the same breath", () => {
-    const c = begun().answers("an ADHD assessment").answers("What does bulk billing mean? I'm in Penrith.");
+    const c = begun().answers("an ADHD assessment").answers("What does bulk billing mean? I'm in Penrith.", { place: "Penrith" });
     expect(c.state.answering).toBe(true);
     for (const action of done("answer")) c.act(action);
     expect(c.playing).toBe("lived");
-    expect(c.state.heard.at(-1)?.text).toBe("I'm in Penrith");
+    expect(c.state.heard.at(-1)?.form.place).toBe("Penrith");
   });
 
   it("answers three of their questions in a call, and keeps to finding a clinician after that", () => {
     const c = begun();
-    for (let asked = 0; asked < MOST_ANSWERS; asked++) {
-      c.answers(`an assessment, number ${asked}`).answers("What does bulk billing mean?");
+    for (let turn = 0; turn < MOST_ANSWERS; turn++) {
+      c.answers(`an assessment, number ${turn}`).answers("What does bulk billing mean?");
       expect(c.state.answering).toBe(true);
       for (const action of done("answer")) c.act(action);
     }
@@ -355,48 +510,26 @@ describe("what the model is left to do", () => {
     expect(c.state.urgent).toBe(true);
     expect(c.played.at(-1)).toBe("urgent");
   });
+});
 
-  it("is asked, silently and apart from the conversation, whether what was said is danger, in one word", () => {
-    const c = begun().answers("an ADHD assessment");
-    const check = c.sent.filter((event) => event.type === "response.create").at(-1)!.response as Record<string, unknown>;
-    expect(check).toEqual({
-      conversation: "none",
-      input: [{ type: "message", role: "user", content: [{ type: "input_text", text: safetyInput(SENTENCES.opening.text, "an ADHD assessment") }] }],
-      instructions: SAFETY_CHECK,
-      output_modalities: ["text"],
-      tool_choice: "none",
-      max_output_tokens: 200,
-      metadata: { purpose: "safety" },
-    });
-    for (const action of done("safety", [{ type: "message", content: [{ type: "output_text", text: "fine" }] }])) c.act(action);
-    expect(c.state.urgent).toBe(false);
-    expect(c.playing).toBe("place");
-  });
-
-  it("stops what is being said when the check says danger, and the numbers come first", () => {
-    const c = begun().answers("everything would be easier if I just wasn't around");
-    expect(c.state.urgent).toBe(false);
-    expect(c.playing).toBe("help");
-    for (const action of done("safety", [{ type: "message", content: [{ type: "output_text", text: "Danger" }] }])) c.act(action);
-    expect(c.hushes).toBe(1);
+describe("urgent help", () => {
+  it("opens when the model's word is danger, stops what was being said, and the numbers come first", () => {
+    const c = begun();
+    c.hears("everything would be easier if I just wasn't around", { danger: true });
     expect(c.state.urgent).toBe(true);
     expect(c.played.at(-1)).toBe("urgent");
     expect(c.state.turns).toContainEqual({ who: "tool", text: URGENT_HELP });
     c.ends();
     expect(c.playing).toBe("carry-on");
   });
-});
 
-describe("urgent help", () => {
-  it("opens from the person's own words, whatever the model does, and asks whether to keep looking", () => {
+  it("opens from the person's own words by the app's rules, whatever the model hears, and asks whether to keep looking", () => {
     const c = begun().answers("Honestly I don't want to be here any more.");
     expect(c.state.urgent).toBe(true);
     expect(c.played.slice(-1)).toEqual(["urgent"]);
-    // The app has seen it: the model is not asked.
-    expect(purposes(c.sent)).toEqual([]);
     c.ends();
     expect(c.playing).toBe("carry-on");
-    c.answers("I'd still like to find a GP near Newtown for ADHD");
+    c.answers("I'd still like to find a GP near Newtown for ADHD", { place: "Newtown" });
     expect(c.state.paused).toBe(false);
     expect(c.playing).toBe("lived");
     c.act({ type: "urgent-seen" });
@@ -415,7 +548,7 @@ describe("urgent help", () => {
   });
 
   it("says the numbers once in a call", () => {
-    const c = begun().answers("I want to die").through().answers("yes, I want to die but I need a GP");
+    const c = begun().answers("I want to die").through().answers("yes, I want to die but I need a GP", { yes_no: "yes" }, { danger: true });
     expect(c.played.filter((id) => id === "urgent")).toHaveLength(1);
   });
 });
@@ -444,7 +577,7 @@ describe("a person who goes quiet", () => {
   it("starts the checks again once they speak", () => {
     const c = begun().answers("an ADHD assessment").through();
     c.act({ type: "quiet" });
-    c.answers("Hornsby");
+    c.answers("Hornsby", { place: "Hornsby" });
     expect(c.state.quiet).toBe(0);
     expect(c.through().act({ type: "quiet" }).say?.id).toBe("nudge");
   });
@@ -456,7 +589,7 @@ describe("a person who goes quiet", () => {
   });
 });
 
-describe("words that never arrive", () => {
+describe("words or a form that never arrive", () => {
   it("are an answer nobody caught: the question is asked once more", () => {
     const c = begun();
     c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
@@ -468,11 +601,22 @@ describe("words that never arrive", () => {
     expect(stalled(c.state)).toBe(false);
   });
 
-  it("are told apart from a transcript that failed", () => {
+  it("the call goes on with the words alone when only the form is missing", () => {
     const c = begun();
     c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
+    c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "a", transcript: "an ADHD assessment" }));
+    expect(c.playing).toBeNull();
+    expect(c.act({ type: "unheard" }).say?.id).toBe("place");
+    expect(c.state.heard[0]).toEqual({ question: "opening", say: "opening", text: "an ADHD assessment", form: { understood: true } });
+  });
+
+  it("and with the form alone when the transcriber failed", () => {
+    const c = begun().answers("an ADHD assessment").through();
+    c.act(server({ type: "input_audio_buffer.committed", item_id: "a" }));
+    for (const action of [...formed("a", { understood: true, place: "Parramatta", telehealth: true }), ...checked("a", false)]) c.act(action);
     c.act(server({ type: "conversation.item.input_audio_transcription.failed", item_id: "a" }));
-    expect(c.played.slice(-1)).toEqual(["catch"]);
+    expect(c.state.heard.at(-1)).toEqual({ question: "place", say: "place", text: "", form: { understood: true, place: "Parramatta", telehealth: true } });
+    expect(c.playing).toBe("lived");
   });
 
   it("a sound that cut a question short and was never a turn leaves the call to say it again, through", () => {
@@ -491,17 +635,17 @@ describe("the end of the call", () => {
     const c = begun()
       .answers("I need help at work")
       .answers("Stress, mostly. And my boss.")
-      .answers("Parramatta, but telehealth is fine.")
+      .answers("Parramatta, but telehealth is fine.", { place: "Parramatta", telehealth: true })
       .answers("Yes, please.")
       .answers("Yes")
-      .answers("Indian, and Hindi")
+      .answers("Indian, and Hindi", { culture: "Indian", language: "Hindi" })
       .answers("I also struggle with sleep a lot");
     expect(c.played).toEqual(["opening", "detail-work", "place", "lived", "culture", "which-culture", "extra", "closing"]);
     expect(c.state.asked).toBe(6);
     expect(c.state.asked).toBeLessThanOrEqual(MAX_FOLLOW_UPS);
     expect(c.state.phase).toBe("revealing");
     expect(c.state.reveal).toEqual({
-      request: `I need help at work. Stress, mostly. And my boss. Parramatta, but telehealth is fine. ${LIVED_ASK}. ${CULTURE_ASK}, Indian. someone who speaks Hindi. I also struggle with sleep a lot. ${NEED_PHRASE["care:emotional-regulation"]}`,
+      request: `I need help at work. Hardest at work: Stress, mostly. And my boss. ${TELEHEALTH_ASK}. ${LIVED_ASK}. ${CULTURE_ASK}, Indian. someone who speaks Hindi. I also struggle with sleep a lot`,
       place: "Parramatta",
     });
     // The matches wait for the last sentence to be said.
@@ -512,7 +656,7 @@ describe("the end of the call", () => {
   });
 
   it("reads a yes to telehealth, and says nothing about what they declined", () => {
-    const c = begun().answers("an ADHD assessment").answers("Yeah, that's fine.").answers("No thanks.").answers("No, English is fine.").answers("No.");
+    const c = begun().answers("an ADHD assessment").answers("Yeah, that's fine.", { telehealth: true }).answers("No thanks.").answers("No, English is fine.", { plain: true }).answers("No.");
     expect(c.state.reveal).toEqual({ request: `an ADHD assessment. ${TELEHEALTH_ASK}`, place: "" });
   });
 
@@ -528,7 +672,7 @@ describe("the end of the call", () => {
     expect(c.state.reveal?.request).toBe("an ADHD assessment");
   });
 
-  it("is the typing screen when nothing anybody could read was said", () => {
+  it("is the typing screen when nothing anybody could make out was said", () => {
     const c = begun();
     for (let turn = 0; turn < 20 && c.state.phase === "live"; turn++) c.answers("…");
     expect(c.state.phase).toBe("failed");
@@ -540,15 +684,14 @@ describe("the end of the call", () => {
     const c = call(initialVoice(), () => false);
     c.act({ type: "connected" });
     for (const action of done("say")) c.act(action);
-    const say = (text: string) => {
-      c.act({ type: "typed", text });
+    const says = (text: string, form: Partial<Form> = {}) => {
+      c.types(text, { understood: true, ...form });
       for (const action of done("say")) c.act(action);
     };
-    say("Con gái tôi 15 tuổi, có thể bị ADHD. Tôi muốn bác sĩ nói tiếng Việt.");
-    say("Cabramatta");
-    say("không");
-    say("không");
-    c.act({ type: "typed", text: "không" });
+    says("Con gái tôi 15 tuổi, có thể bị ADHD. Tôi muốn bác sĩ nói tiếng Việt.", { language: "Vietnamese" });
+    says("Cabramatta", { place: "Cabramatta" });
+    says("không", { yes_no: "no" });
+    c.types("không", { understood: true, yes_no: "no" });
     expect(c.state.translating).toBe(true);
     expect(c.state.phase).toBe("live");
     const asked = c.sent.filter((event) => event.type === "response.create").map((event) => event.response as Record<string, unknown>).find((response) => (response.metadata as { purpose: string }).purpose === "translate")!;
@@ -564,7 +707,7 @@ describe("the end of the call", () => {
     const c = call(initialVoice(), () => false);
     c.act({ type: "connected" });
     for (const action of done("say")) c.act(action);
-    c.act({ type: "typed", text: "Tôi muốn bác sĩ nói tiếng Việt ở Cabramatta" });
+    c.types("Tôi muốn bác sĩ nói tiếng Việt ở Cabramatta", { understood: true });
     for (const action of done("say")) c.act(action);
     c.act({ type: "finish" });
     for (const action of done("translate", [])) c.act(action);
@@ -582,7 +725,7 @@ describe("a sentence the model is given", () => {
 
   it("goes on the record as the model said it", () => {
     const c = spoken();
-    c.act({ type: "typed", text: "an ADHD assessment" });
+    c.types("an ADHD assessment");
     const id = "resp_place";
     c.act(server({ type: "response.created", response: { id, metadata: { purpose: "say" } } }));
     expect(c.state.responding).toBe(true);
@@ -598,7 +741,7 @@ describe("a sentence the model is given", () => {
 
   it("is cut short when the person speaks, and asked again after what they said", () => {
     const c = spoken();
-    c.act({ type: "typed", text: "an ADHD assessment" });
+    c.types("an ADHD assessment");
     const id = "resp_place";
     c.act(server({ type: "response.created", response: { id, metadata: { purpose: "say" } } }));
     const over = c.act(server({ type: "input_audio_buffer.speech_started", item_id: "x" }));
@@ -606,9 +749,11 @@ describe("a sentence the model is given", () => {
     c.act(server({ type: "response.done", response: { id, status: "cancelled", metadata: { purpose: "say" }, output: [] } }));
     c.act(server({ type: "input_audio_buffer.speech_stopped", item_id: "x" }));
     c.act(server({ type: "input_audio_buffer.committed", item_id: "x" }));
-    const next = c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "x", transcript: "it's for me" }));
-    expect(c.state.heard.at(-1)).toEqual({ question: "opening", say: "opening", text: "it's for me" });
-    expect(purposes(next.send)).toEqual(["safety", "say"]);
+    c.act(server({ type: "conversation.item.input_audio_transcription.completed", item_id: "x", transcript: "it's for me" }));
+    let last: Step | null = null;
+    for (const action of [...checked("x", false), ...formed("x", { understood: true })]) last = c.act(action);
+    expect(c.state.heard.at(-1)).toMatchObject({ question: "opening", say: "opening", text: "it's for me" });
+    expect(purposes(last!.send)).toEqual(["say"]);
   });
 
   it("ends the call in the typing screen when the model will not say it", () => {
@@ -645,7 +790,7 @@ describe("the call's own state", () => {
   });
 
   it("takes nothing but the end of its last sentence while the matches are on their way", () => {
-    const c = begun().answers("an ADHD assessment").answers("show me the matches");
+    const c = begun().answers("an ADHD assessment").answers("show me the matches", { show_matches: true });
     expect(c.state.phase).toBe("revealing");
     const before = c.state;
     c.act({ type: "typed", text: "wait" });
@@ -654,25 +799,29 @@ describe("the call's own state", () => {
     expect(c.state).toBe(before);
     c.hears("one more thing");
     expect(c.state.heard).toEqual(before.heard);
+    expect(c.state.reveal).toEqual(before.reveal);
   });
 
-  it("keeps every turn for the record: the person's, the finder's and the tools', in order", () => {
-    const c = begun().answers("an ADHD assessment").answers("Hornsby").answers("just show me who fits").through();
+  it("keeps every turn for the record: the person's, the finder's and what was heard in each answer, in order", () => {
+    const c = begun().answers("an ADHD assessment").answers("Hornsby", { place: "Hornsby" }).answers("just show me who fits", { show_matches: true }).through();
     expect(c.state.turns).toEqual([
       { who: "assistant", text: SENTENCES.opening.text },
       { who: "person", text: "an ADHD assessment" },
+      { who: "tool", text: 'heard {"sure":1,"understood":true}' },
       { who: "assistant", text: SENTENCES.place.text },
       { who: "person", text: "Hornsby" },
+      { who: "tool", text: 'heard {"sure":1,"understood":true,"place":"Hornsby"}' },
       { who: "assistant", text: SENTENCES.lived.text },
       { who: "person", text: "just show me who fits" },
+      { who: "tool", text: 'heard {"sure":1,"understood":true,"show_matches":true}' },
       { who: "assistant", text: SENTENCES.closing.text },
-      { who: "tool", text: `reveal ${JSON.stringify({ request: "an ADHD assessment. Hornsby", place: "Hornsby" })}` },
+      { who: "tool", text: `reveal ${JSON.stringify({ request: "an ADHD assessment", place: "Hornsby" })}` },
     ]);
   });
 
   it("gives the stop button what was said, as it was said", () => {
     expect(saidAsRequest(["an adult ADHD assessment", "Hornsby, or telehealth"])).toBe("an adult ADHD assessment, Hornsby, or telehealth");
-    expect(begun().answers("an ADHD assessment").answers("Hornsby").state.said).toEqual(["an ADHD assessment", "Hornsby"]);
+    expect(begun().answers("an ADHD assessment").answers("Hornsby", { place: "Hornsby" }).state.said).toEqual(["an ADHD assessment", "Hornsby"]);
   });
 });
 
@@ -695,7 +844,7 @@ describe("a sentence the model wrote, held to the person's words", () => {
   it("never writes 'specialist', whoever wrote it", () => {
     expect(inTheirWords("A psychologist specialising in ADHD coaching", ["a psychologist for coaching"])).toBe("A psychologist for ADHD coaching");
     expect(inTheirWords("An ADHD specialist by telehealth", ["telehealth"])).toBe("An ADHD clinician by telehealth");
-    const c = begun().answers("an assessment for my daughter, she's 15, with a specialist in teens").answers("show me the matches");
+    const c = begun().answers("an assessment for my daughter, she's 15, with a specialist in teens").answers("show me the matches", { show_matches: true });
     expect(c.state.reveal?.request).toBe("an assessment for my daughter, she's 15, with a clinician in teens");
   });
 });

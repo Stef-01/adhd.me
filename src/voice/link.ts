@@ -10,12 +10,19 @@
 //
 // `window.__adhdmeVoiceFake` swaps in the scripted call in src/voice/fake-link.ts, which the e2e
 // suite, the text budget and screenshot audits use: the whole screen, with no microphone and no
-// spend. `true` holds at the first question; an array of answers runs a whole call.
+// spend. `true` holds at the first question; an array of answers runs a whole call, each answer its
+// words, or its words with the form the model would fill for them.
 // `window.__adhdmeVoiceLevel` plays a voice to the orb on that call: levels, or a function of time.
 
 import { clip, loadClips } from "./clips";
 import type { ClientEvent, Failure, ServerEvent } from "./conversation";
-import type { SayId } from "./plan";
+import type { Form, SayId } from "./plan";
+
+/**
+ * One scripted answer: what the person says; what the model hears in it, when that is more than a yes
+ * or a no; how sure the transcriber was of the words, when it was not; and whether the words say danger.
+ */
+export type Scripted = string | { say: string; form?: Partial<Form>; sure?: number; danger?: boolean };
 
 export interface VoiceLink {
   /** The realtime model the call runs on, as the route named it. */
@@ -45,7 +52,7 @@ type Levels = ReturnType<VoiceLink["level"]>;
 
 declare global {
   interface Window {
-    __adhdmeVoiceFake?: boolean | string[];
+    __adhdmeVoiceFake?: boolean | Scripted[];
     __adhdmeVoiceLevel?: Levels | (() => Levels);
   }
 }

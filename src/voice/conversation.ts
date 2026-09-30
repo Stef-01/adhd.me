@@ -7,13 +7,19 @@
 // THE APP ASKS (O263, 2026-09-30). The questions, their order and the request they make are
 // src/voice/plan.ts; this file is the floor: who is speaking, which question an answer belongs to,
 // and what is said next. The server never answers a turn on its own. A sentence is a recording the
-// screen plays (`say`), or, where there is none, the model saying exactly that sentence. The model's
-// own jobs are two: to answer what the person asks it, and to call urgent_help.
+// screen plays (`say`), or, where there is none, the model saying exactly that sentence.
+//
+// EACH ANSWER IS HEARD THREE WAYS (O264). From the moment the person stops, the transcriber writes
+// the words and says how sure it is of them, and the model, hearing the same audio, fills a form (a
+// yes or a no, a place, a culture, a wish to hear the question again or to see the matches). The
+// next thing is said when both are in; a plain yes or no does not wait for the form. The words then
+// go to the model with one question, answered in a word: do they say danger? That answer is waited
+// on by nothing, and stops whatever is being said when it is yes.
 
 import { checkSafety, type SafetyRuleId } from "@/model/safety";
 import { PROFESSION_ENTRIES, professionsMentioned } from "@/support/professions";
-import { ANSWER, DANGER, MAX_FOLLOW_UPS, SAFETY_CHECK, TRANSLATE, URGENT_HELP, safetyInput, sayExactly } from "./interviewer";
-import { MAX_REQUEST, SENTENCES, compose, echoes, hear, mostlyEnglish, nextQuestion, saysNo, type Answer, type Line, type QuestionId, type SayId } from "./plan";
+import { ANSWER, DANGER, FORM, FORM_INSTRUCTIONS, MAX_FOLLOW_UPS, SAFETY_CHECK, SURE, TRANSLATE, URGENT_HELP, asked, sayExactly } from "./interviewer";
+import { MAX_REQUEST, SENTENCES, asksSomething, compose, echoes, formFor, formFrom, formOf, mostlyEnglish, nextQuestion, plainAnswer, withoutQuestions, type Answer, type Form, type Line, type QuestionId, type SayId } from "./plan";
 
 export { mostlyEnglish, placeOf, withoutQuestions } from "./plan";
 
@@ -70,9 +76,9 @@ export interface VoiceState {
   last: SayId | null;
   /** The sentence a sound has just cut short: a sound made of its own words was the sentence itself. */
   cut: SayId | null;
-  /** Each committed stretch of the person's audio, and the question it answers. */
-  items: Record<string, QuestionId>;
-  /** Stretches of audio whose words have not arrived yet. */
+  /** Each stretch of the person's speech that is still being read: the question it answers, and what has come in about it. */
+  items: Record<string, Hearing>;
+  /** How many of them there are: nothing more is said until each is heard in full. */
   open: number;
   /** How often each question has been said again. */
   retried: Partial<Record<QuestionId, number>>;
@@ -97,6 +103,18 @@ export interface VoiceState {
   firm: boolean;
   /** Sentences the model was given and did not say. */
   misfires: number;
+}
+
+/** One stretch of the person's speech, as it is being heard. */
+export interface Hearing {
+  question: QuestionId;
+  /** The sentence the question was asked in. */
+  asked: SayId;
+  /** The transcriber's words, and how sure it was of them (the mean probability of its tokens). */
+  text?: string;
+  sure?: number;
+  /** The model's form. */
+  form?: Form;
 }
 
 export type ServerEvent = { type: string } & Record<string, unknown>;
@@ -245,17 +263,65 @@ export function inTheirWords(request: string, said: readonly string[]): string {
 const message = (role: "assistant" | "user", text: string) => ({ type: "message", role, content: [{ type: role === "assistant" ? "output_text" : "input_text", text }] });
 const item = (role: "assistant" | "user", text: string): ClientEvent => ({ type: "conversation.item.create", item: message(role, text) });
 /** A response of the model's, marked with what it is for. */
-const respond = (purpose: string, response: Record<string, unknown>): ClientEvent => ({ type: "response.create", response: { ...response, metadata: { purpose } } });
+const respond = (purpose: string, response: Record<string, unknown>): ClientEvent => ({ type: "response.create", response: { ...response, metadata: { purpose, ...((response.metadata as Record<string, unknown> | undefined) ?? {}) } } });
 /** Apart from the conversation: what it says or writes is not added to it, and it reads only what it is given. */
 const apart = (purpose: string, given: string, instructions: string, more: Record<string, unknown> = {}): ClientEvent =>
   respond(purpose, { conversation: "none", input: given ? [message("user", given)] : [], instructions, ...more });
 
 const SAY = "say";
 const ANSWERING = "answer";
+const FORMING = "form";
 const SAFETY = "safety";
 const TRANSLATING = "translate";
 
+/** The question, then the person's own audio, or their words when they typed them. */
+const answerTo = (item: string, question: SayId, words?: string) => [
+  { type: "message", role: "system", content: [{ type: "input_text", text: asked(SENTENCES[question].text) }] },
+  words === undefined ? { type: "item_reference", id: item } : message("user", words),
+];
+
+/** The form for one answer, asked for silently and apart from the conversation. */
+const form = (item: string, question: SayId, words?: string): ClientEvent =>
+  respond(FORMING, {
+    conversation: "none",
+    input: answerTo(item, question, words),
+    instructions: FORM_INSTRUCTIONS,
+    output_modalities: ["text"],
+    tools: [FORM],
+    tool_choice: { type: "function", name: FORM.name },
+    max_output_tokens: 300,
+    metadata: { purpose: FORMING, item },
+  });
+
+/** The word on danger, asked of the words themselves: read, the model missed none; heard, it missed one in twenty-one. */
+const check = (item: string, question: SayId, words: string): ClientEvent =>
+  respond(SAFETY, {
+    conversation: "none",
+    input: answerTo(item, question, words),
+    instructions: SAFETY_CHECK,
+    output_modalities: ["text"],
+    tool_choice: "none",
+    max_output_tokens: 200,
+    metadata: { purpose: SAFETY, item },
+  });
+
+/** How sure the transcriber was: the mean probability of the tokens it wrote. */
+function sureOf(logprobs: unknown): number | undefined {
+  if (!Array.isArray(logprobs) || logprobs.length === 0) return undefined;
+  const values = logprobs.map((token) => (token as { logprob?: unknown }).logprob).filter((value): value is number => typeof value === "number");
+  return values.length ? Math.exp(values.reduce((sum, value) => sum + value, 0) / values.length) : undefined;
+}
+
 const idle = (state: VoiceState): Step => ({ state, send: [], say: null, hush: false });
+
+function parse(args: unknown): unknown {
+  if (typeof args !== "string") return null;
+  try {
+    return JSON.parse(args);
+  } catch {
+    return null;
+  }
+}
 
 /** Cuts the model short, whichever of its responses is speaking. */
 function cancel(state: VoiceState): ClientEvent[] {
@@ -315,66 +381,92 @@ function spoken(state: VoiceState, share: number): VoiceState {
 
 const finished = (state: VoiceState, question: QuestionId): VoiceState => (state.done.includes(question) ? state : { ...state, done: [...state.done, question] });
 
-/** The person's words on the record, read for danger by the app's own rules. */
-function noted(state: VoiceState, words: string): VoiceState {
-  const rule = checkSafety(words);
-  return {
-    ...state,
-    said: [...state.said, words],
-    turns: [...state.turns, { who: "person", text: words }],
-    urgent: state.urgent || (rule !== null && URGENT_RULES.has(rule.id)),
-  };
-}
-
 /** A question said a second time: the opening one without its hello. */
 const again = (line: Line): Line => (line.say === "opening" ? { say: "again", question: line.question } : line);
 
-/** The silent check on what was said, unless the app's own rules have already seen danger in it. */
-const checked = (state: VoiceState, words: string): ClientEvent[] =>
-  state.urgent ? [] : [apart(SAFETY, safetyInput(SENTENCES[state.pending?.say ?? "opening"].text, words), SAFETY_CHECK, { output_modalities: ["text"], tool_choice: "none", max_output_tokens: 200 })];
-
-/** One turn of the person's, under the question it answers. */
-function take(state: VoiceState, question: QuestionId, text: string): { state: VoiceState; send: ClientEvent[] } {
-  const words = text.trim();
-  // The microphone may have heard the sentence last begun, or the question before it.
-  const ours = [state.last, state.pending?.say].flatMap((id) => (id ? [SENTENCES[id].text, SENTENCES[id].spoken ?? ""] : []));
-  const echo = ours.find((sentence) => sentence && hear(words, question, sentence).kind === "echo") ?? "";
-  // A word or two of the sentence this sound cut short is that sentence, not an answer to the one before.
-  const clipped = state.cut !== null && echoes(words, SENTENCES[state.cut].spoken ?? SENTENCES[state.cut].text, 1);
-  const what = clipped ? ({ kind: "echo" } as const) : hear(words, question, echo);
-  const say = state.counted[question] ?? state.pending?.say ?? "opening";
-  const tries = state.retried[question] ?? 0;
-  /** The question once more, with these sentences; after the last try the call moves on. */
+/** One answer, with its words and its form in: what it was, and what the call does with it. */
+function take(state: VoiceState, item: string): VoiceState {
+  const held = state.items[item];
+  if (!held) return state;
+  const { [item]: _taken, ...items } = state.items;
+  const base: VoiceState = { ...state, items, open: Object.keys(items).length };
+  const { question } = held;
+  const words = (held.text ?? "").trim();
+  const filled = formFor(question, held.form ?? formFrom(words), words);
+  // Words the transcriber was not sure of are words nobody said: fluent, and wrong. Unless the model, hearing
+  // the same audio, made out a plain answer in it ("Hindi", written down at 0.33): then the answer stands.
+  const named = Boolean(filled.yes_no || filled.place || filled.telehealth || filled.culture || filled.language);
+  const unsure = held.sure !== undefined && held.sure < SURE && !named;
+  const heard: Form = unsure ? { understood: false, ...(filled.again ? { again: true } : {}) } : filled;
+  const tries = base.retried[question] ?? 0;
+  /** The question once more, with these sentences before it; after the last try the call moves on. */
   const once = (from: VoiceState, most: number, before: Line[] = []): VoiceState =>
-    tries >= most || !state.pending ? finished(from, question) : { ...from, retried: { ...from.retried, [question]: tries + 1 }, lines: [...before, again(state.pending)] };
-  switch (what.kind) {
-    case "echo":
-      // The finder's own voice: nobody's answer. What it cut short is said through next time.
-      return { state: { ...state, firm: true, cut: null, turns: [...state.turns, { who: "tool", text: `echo: ${words}` }] }, send: [] };
-    case "unclear": {
-      const kept = words ? { ...state, turns: [...state.turns, { who: "person" as const, text: words }] } : state;
-      // Once: "Sorry, I didn't catch that", and the question again. After that the call moves on.
-      return { state: { ...once(kept, 1, [{ say: "catch", question: null }]), firm: state.firm || !words }, send: [] };
-    }
-    case "repeat":
-      return { state: once({ ...state, turns: [...state.turns, { who: "person", text: words }] }, MOST_RETRIES), send: [] };
-    case "finish": {
-      let next = noted({ ...state, cut: null }, words);
-      if (what.text) next = { ...next, heard: [...next.heard, { question, say, text: what.text }] };
-      return { state: { ...finished(next, question), finishing: true }, send: checked(next, words) };
-    }
-    case "answer": {
-      let next = noted({ ...state, cut: null }, words);
-      if (what.text) next = { ...next, heard: [...next.heard, { question, say, text: what.text }] };
-      // The model answers a few of their questions; past that the call keeps to finding a clinician.
-      next = { ...next, owed: next.owed || (what.asks && next.answered < MOST_ANSWERS) };
-      // A question of theirs with no answer beside it leaves ours waiting, to be asked again once theirs is answered.
-      if (what.text || !what.asks) next = finished(next, question);
-      else next = once(next, MOST_RETRIES);
-      if (question === "carry-on" && saysNo(what.text)) next = { ...next, paused: true };
-      return { state: next, send: checked(next, words) };
-    }
+    tries >= most || !base.pending ? finished(from, question) : { ...from, retried: { ...from.retried, [question]: tries + 1 }, lines: [...before, again(base.pending)] };
+
+  // The finder's own voice in the microphone: the sentence last begun, the question before it, or a
+  // word or two of the sentence this very sound cut short. Nobody's answer; it is said through next time.
+  const ours = [base.last, base.pending?.say].flatMap((id) => (id ? [SENTENCES[id].text, SENTENCES[id].spoken ?? ""] : []));
+  const clipped = base.cut !== null && echoes(words, SENTENCES[base.cut].spoken ?? SENTENCES[base.cut].text, 1);
+  if (words && (clipped || ours.some((sentence) => sentence && echoes(words, sentence)))) {
+    return { ...base, firm: true, cut: null, turns: [...base.turns, { who: "tool", text: `echo: ${words}` }] };
   }
+  // What was heard, on the record beside the words: how sure the transcriber was, and what the model made of it.
+  const hearing: Turn = { who: "tool", text: `heard ${JSON.stringify({ ...(held.sure !== undefined ? { sure: Number(held.sure.toFixed(2)) } : {}), ...heard })}` };
+  const kept: VoiceState = { ...base, cut: null, turns: [...base.turns, ...(words ? [{ who: "person" as const, text: words }] : []), hearing] };
+  // Nothing anybody could make out: "Sorry, I didn't catch that", and the question once more.
+  if (!heard.understood && !heard.again) return { ...once(kept, 1, [{ say: "catch", question: null }]), firm: base.firm || !words };
+  if (heard.again) return once(kept, MOST_RETRIES);
+
+  const rule = checkSafety(words);
+  const urgent = kept.urgent || (rule !== null && URGENT_RULES.has(rule.id));
+  let next: VoiceState = { ...kept, urgent, said: words ? [...kept.said, words] : kept.said };
+  const said = withoutQuestions(words);
+  const answers = Boolean(said) || Boolean(heard.yes_no || heard.place || heard.telehealth || heard.culture || heard.language);
+  if (answers && !(heard.show_matches && !heard.place && !heard.culture && !heard.language && said.split(/\s+/).length < 8)) {
+    // An answer is in: anything queued to ask this question again is dropped.
+    next = { ...next, heard: [...next.heard, { question, say: held.asked, text: heard.show_matches ? "" : words, form: heard }], lines: next.lines.filter((line) => line.question !== question && line.say !== "catch") };
+  }
+  if (heard.show_matches) return { ...finished(next, question), finishing: true };
+  // The model answers a few of their questions; past that the call keeps to finding a clinician.
+  const asks = asksSomething(words) && next.answered < MOST_ANSWERS;
+  next = { ...next, owed: next.owed || asks };
+  // A question of theirs with no answer beside it leaves ours waiting, to be asked again once theirs is answered.
+  next = answers ? finished(next, question) : once(next, MOST_RETRIES);
+  if (question === "carry-on" && heard.yes_no === "no") next = { ...next, paused: true };
+  return next;
+}
+
+/** Takes every answer whose words and form are both in, oldest first. */
+function settle(state: VoiceState): VoiceState {
+  let next = state;
+  for (const [item, held] of Object.entries(state.items)) {
+    if (held.text === undefined || held.form === undefined) break;
+    next = take(next, item);
+  }
+  return next;
+}
+
+/** One more thing heard about an answer; then whatever is heard in full is taken, and danger comes before anything else. */
+function heardMore(state: VoiceState, item: string, more: Partial<Hearing>, clips: Clips, send: ClientEvent[] = []): Step {
+  const held = state.items[item];
+  if (!held) return { ...idle(state), send };
+  const before = state.urgent;
+  const taken = settle({ ...state, items: { ...state.items, [item]: { ...held, ...more } } });
+  if (state.phase !== "live") return { ...idle(taken), send };
+  if (taken.urgent && !before && !taken.urgentSaid) {
+    const stopped = stop(taken);
+    return then({ ...stopped, send: [...send, ...stopped.send] }, clips);
+  }
+  return then({ state: taken, send }, clips);
+}
+
+/** Their words are in: the word on danger is asked for, and a plain yes or no waits for nothing more. */
+function wordsIn(state: VoiceState, item: string, text: string, sure: number | undefined, clips: Clips): Step {
+  const held = state.items[item];
+  if (!held) return idle(state);
+  const plain = sure === undefined || sure >= SURE ? plainAnswer(held.question, text) : null;
+  const asks = text.trim() && state.phase === "live" ? [check(item, held.asked, text)] : [];
+  return heardMore(state, item, { text, sure, ...(plain && !held.form ? { form: plain } : {}) }, clips, asks);
 }
 
 // ── What happens next ────────────────────────────────────────────────────────────────────────────
@@ -442,13 +534,20 @@ function onResponseDone(state: VoiceState, event: ServerEvent, clips: Clips): St
 
   const written = output.flatMap((entry) => entry.content ?? []).map((part) => part.text ?? "").join("").trim();
   const called = output.some((entry) => entry.type === "function_call" && entry.name === URGENT_HELP);
+  const item = (response.metadata as { item?: string } | null)?.item ?? "";
+  if (purpose === FORMING) {
+    if (!next.items[item] || next.items[item]!.form) return idle(next);
+    const filled = output.find((entry) => entry.type === "function_call" && entry.name === FORM.name);
+    // A form that did not come, or came broken, is read from the words alone.
+    const given = (filled ? formOf(parse(filled.arguments)) : null) ?? formFrom(next.items[item]!.text ?? "");
+    return heardMore(next, item, { form: given }, clips);
+  }
   if (purpose === SAFETY) {
-    if (!called && !DANGER.test(written)) return idle(next);
+    if (!(called || DANGER.test(written)) || next.phase !== "live") return idle(next);
     next = { ...next, turns: [...next.turns, { who: "tool", text: URGENT_HELP }] };
     if (next.urgent || next.urgentSaid) return then({ state: { ...next, urgent: true }, send: [] }, clips);
     // The numbers come before anything else that was about to be said.
-    const stopped = stop({ ...next, urgent: true });
-    return then(stopped, clips);
+    return then(stop({ ...next, urgent: true }), clips);
   }
   if (purpose === TRANSLATING) {
     if (!next.translating) return idle(next);
@@ -507,17 +606,19 @@ function onServer(state: VoiceState, event: ServerEvent, clips: Clips): Step {
       // Their words are on the way (committed, then transcribed): nothing is said until they are in.
       return idle({ ...state, talking: state.talking === "person" ? null : state.talking });
     case "input_audio_buffer.committed": {
+      // They have stopped: the transcriber writes their words, and the model hears what they hold, side by side.
+      if (state.phase !== "live") return idle(state);
       const id = typeof event.item_id === "string" ? event.item_id : `item_${state.answers}`;
-      return idle({ ...state, answers: state.answers + 1, quiet: 0, open: state.open + 1, items: { ...state.items, [id]: state.pending?.question ?? "opening" } });
+      const said = state.pending ?? { say: "opening" as SayId, question: "opening" as QuestionId };
+      const items = { ...state.items, [id]: { question: said.question ?? "opening", asked: said.say } };
+      const next: VoiceState = { ...state, answers: state.answers + 1, quiet: 0, items, open: Object.keys(items).length };
+      return { state: next, send: [form(id, said.say)], say: null, hush: false };
     }
     case "conversation.item.input_audio_transcription.completed":
     case "conversation.item.input_audio_transcription.failed": {
       const id = typeof event.item_id === "string" ? event.item_id : "";
-      const { [id]: question = state.pending?.question ?? "opening", ...items } = state.items;
       const text = event.type.endsWith("completed") && typeof event.transcript === "string" ? event.transcript : "";
-      const open = Math.max(0, state.open - 1);
-      if (state.phase !== "live") return idle({ ...state, items, open });
-      return then(take({ ...state, items, open }, question, text), clips);
+      return wordsIn(state, id, text, sureOf(event.logprobs), clips);
     }
     case "output_audio_buffer.started":
       return idle({ ...state, talking: "assistant" });
@@ -557,11 +658,16 @@ export function step(state: VoiceState, action: Action, clips: Clips = NO_CLIPS)
     case "typed": {
       const words = action.text.trim();
       if (!words || state.phase !== "live") return idle(state);
-      // Typing over a sentence cuts it short, as speaking does.
+      // Typing over a sentence cuts it short, as speaking does. The words are in; their form is asked for.
       const stopped = stop(state);
-      const base: VoiceState = { ...stopped.state, answers: state.answers + 1, quiet: 0 };
-      const taken = take(base, base.pending?.question ?? "opening", words);
-      return then({ state: taken.state, send: [...stopped.send, item("user", words), ...taken.send], hush: stopped.hush }, clips);
+      const id = `typed_${state.answers}`;
+      const said = state.pending ?? { say: "opening" as SayId, question: "opening" as QuestionId };
+      const items = { ...stopped.state.items, [id]: { question: said.question ?? "opening", asked: said.say, text: words } };
+      const next: VoiceState = { ...stopped.state, answers: state.answers + 1, quiet: 0, items, open: Object.keys(items).length };
+      const plain = plainAnswer(said.question ?? "opening", words);
+      const asks = [item("user", words), ...(plain ? [] : [form(id, said.say, words)]), check(id, said.say, words)];
+      const heard = plain ? heardMore(next, id, { form: plain }, clips, asks) : { state: next, send: asks, say: null, hush: false };
+      return { ...heard, send: [...stopped.send, ...heard.send], hush: stopped.hush || heard.hush };
     }
     case "muted":
       return idle({ ...state, muted: action.muted });
@@ -581,9 +687,14 @@ export function step(state: VoiceState, action: Action, clips: Clips = NO_CLIPS)
       return advance({ ...state, quiet: state.quiet + 1, finishing: true }, clips);
     case "unheard": {
       if (!stalled(state)) return idle(state);
-      // Words that never arrived are an answer nobody caught; a sound that was no turn is nothing at all.
+      // A sound that cut a sentence short and was never a turn: the sentence is said again, through.
       if (state.open === 0) return advance({ ...state, firm: true }, clips);
-      return then(take({ ...state, open: 0, items: {} }, state.pending?.question ?? "opening", ""), clips);
+      // Words or a form that never arrived: the call goes on with what it has, and asks again when that is nothing.
+      const items = Object.fromEntries(Object.entries(state.items).map(([id, held]) => [id, { ...held, text: held.text ?? "", form: held.form ?? formFrom(held.text ?? "") }]));
+      const before = state.urgent;
+      const taken = settle({ ...state, items });
+      if (taken.urgent && !before && !taken.urgentSaid) return then(stop(taken), clips);
+      return then({ state: taken, send: [] }, clips);
     }
     case "urgent-seen":
       return idle({ ...state, urgent: false });

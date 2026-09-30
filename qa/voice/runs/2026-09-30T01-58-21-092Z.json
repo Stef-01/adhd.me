@@ -1,0 +1,119 @@
+{
+  "base": "http://localhost:3021",
+  "lines": [
+    "I'm looking for help with staying more focused at my job at work.",
+    "I really want to meet deadlines and then also be consistent and productive.",
+    "Oh, Sydney.",
+    "No preference.",
+    "Yes, I want someone from my culture.",
+    "Indian.",
+    "No, that's everything."
+  ],
+  "turns": [
+    {
+      "who": "assistant",
+      "text": "Hi. What kind of support are you looking for?"
+    },
+    {
+      "who": "assistant",
+      "text": "Sorry, I didn't catch that."
+    },
+    {
+      "who": "person",
+      "text": "Help with staying more focused at my job at work."
+    },
+    {
+      "who": "assistant",
+      "text": "What kind of support are you looking for?"
+    },
+    {
+      "who": "assistant",
+      "text": "What's hardest at work?"
+    },
+    {
+      "who": "person",
+      "text": "I really want to meet deadlines and then also be consistent and productive."
+    },
+    {
+      "who": "assistant",
+      "text": "Where are you, or would telehealth suit you?"
+    },
+    {
+      "who": "person",
+      "text": "Oh, Sydney."
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone who has ADHD themselves?"
+    },
+    {
+      "who": "person",
+      "text": "No preference."
+    },
+    {
+      "who": "assistant",
+      "text": "Would you like someone from your own culture?"
+    },
+    {
+      "who": "person",
+      "text": "Yes, I want someone from my culture."
+    },
+    {
+      "who": "assistant",
+      "text": "Which culture or language?"
+    },
+    {
+      "who": "person",
+      "text": "Indian."
+    },
+    {
+      "who": "assistant",
+      "text": "Sorry, I didn't catch that."
+    },
+    {
+      "who": "assistant",
+      "text": "Which culture or language?"
+    },
+    {
+      "who": "person",
+      "text": "No, that's everything."
+    },
+    {
+      "who": "assistant",
+      "text": "Is there anything else a clinician should know?"
+    },
+    {
+      "who": "assistant",
+      "text": "Still there? Take your time."
+    }
+  ],
+  "request": "Help with staying more focused at my job at work. Hardest at work: I really want to meet deadlines and then also be consistent and productive. someone from my own culture",
+  "reads": [
+    {
+      "text": "Help with staying more focused at my job at work. Hardest at work: I really want to meet deadlines and then also be consistent and productive. someone from my own culture",
+      "answer": {
+        "keys": [
+          "care:executive-function",
+          "care:work-career",
+          "care:cultural-background"
+        ],
+        "source": "llm",
+        "unlisted": []
+      }
+    }
+  ],
+  "heard": [
+    "Getting organised",
+    "Cultural background",
+    "At work"
+  ],
+  "results": [
+    "Alex Lawson ADHD coach · Getting organised Sutherland, by telehealth",
+    "Donna Italiano ADHD coach · Getting organised Perth, by telehealth",
+    "Kate Dallimore ADHD coach · Getting organised Perth, by telehealth",
+    "Dr Anu Saxena Cultural background Double Bay & Hornsby, about 3 km away",
+    "Lana Hiscock Psychologist · Cultural background Benowa, by telehealth"
+  ],
+  "whyMatched": "Why matched Focus and getting things done From your words: “meeting deadlines” Work and career From your words: “my job” Not in their listing: understands your cultural background. Compare",
+  "stage": "results"
+}

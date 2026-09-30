@@ -343,3 +343,20 @@ work and getting organised (qa/voice/o263-voice-matches-390.png): Alex Lawson, D
 Dallimore. Nothing about medication is heard, because nothing about medication was said (R18).
 Reduced motion: the orb holds still and the call still runs (e2e/voice-mode.spec.ts).
 
+# A yes that names no culture is asked which; a garble is asked again (O264, 2026-09-30)
+
+The founder's 10:53 call: "me saying yes I want someone from my culture but the ai didn't prompt to
+ask what the culture was, this is a very clear failure and omission." Two failures under it, on the
+record: the transcriber wrote his yes as "ja ta pi grejda", and the rules that read answers took it
+for an answer; and his "Yes, I want someone from my culture" would have been read as a yes with words
+after it, which the rule for asking "which" did not cover. Each answer is now heard three ways
+(docs/matching/VOICE-FINDER.md): the transcriber's words and its confidence, the model's eight-field
+form heard from the audio, and a one-word check for danger. Nothing on the screen changed (text
+budget: the voice screen 0 words; 127 of 127 within their ceiling, median 32); what the screen reader
+hears did: after "Yes, I want someone from my culture" the heading is "Which culture or language?"
+(e2e/voice-mode.spec.ts), and after a garble it is "Sorry, I didn't catch that." then the question
+again. His call replayed with real audio through a local production build: opening, "What's hardest
+at work?", where (Sydney), lived experience (no), culture (yes), "Which culture or language?"
+(Indian), anything else; heard as Getting organised, At work, Cultural background; Alex Lawson, Kate
+Dallimore, Donna Italiano, Dr Anu Saxena, Fiona Alexander.
+

@@ -3,7 +3,7 @@
 
 import { afterEach, describe, expect, it } from "vitest";
 import { said } from "@/model/crisis-contacts";
-import { ANSWER, DANGER, DEFAULT_VOICE_MODEL, interviewerInstructions, MAX_FOLLOW_UPS, OPENING_QUESTION, SAFETY_CHECK, safetyInput, sayExactly, sessionFor, TRANSLATE, URGENT_HELP, VOICE_TOOLS, voiceOn } from "./interviewer";
+import { ANSWER, asked, DANGER, DEFAULT_VOICE_MODEL, FORM, FORM_INSTRUCTIONS, interviewerInstructions, MAX_FOLLOW_UPS, OPENING_QUESTION, SAFETY_CHECK, sayExactly, sessionFor, SURE, TRANSLATE, URGENT_HELP, VOICE_TOOLS, voiceOn } from "./interviewer";
 import { SENTENCES } from "./plan";
 import { DEFAULT_DAILY_SESSIONS, dailyCap, resetVoiceSessions, takeVoiceSession } from "./sessions";
 
@@ -28,15 +28,30 @@ describe("the model", () => {
     expect(text).toContain(URGENT_HELP);
   });
 
-  it("is asked about danger in a way that answers in one word, with the question beside the words", () => {
+  it("fills one form for each answer, with eight fixed fields, and only understood is always there", () => {
+    expect(FORM.name).toBe("heard");
+    expect(FORM.parameters.required).toEqual(["understood"]);
+    expect(Object.keys(FORM.parameters.properties)).toEqual(["understood", "yes_no", "again", "show_matches", "place", "telehealth", "culture", "language"]);
+    expect(FORM.parameters.additionalProperties).toBe(false);
+    // A culture asked for and not named is no name: the app asks which.
+    expect(FORM.parameters.properties.culture.description).toContain("never 'my culture'");
+    expect(FORM_INSTRUCTIONS).toContain("nothing it does not say");
+    expect(asked("Would you like someone from your own culture?")).toBe('The question asked: "Would you like someone from your own culture?". The answer follows.');
+  });
+
+  it("is asked about danger on its own, in a way that answers in one word", () => {
     expect(SAFETY_CHECK).toContain('"danger"');
     expect(SAFETY_CHECK).toContain('"fine"');
     // Asked to call a tool named for help, it called it on a person who said "that would be helpful".
     expect(SAFETY_CHECK).not.toContain(URGENT_HELP);
-    expect(safetyInput("Would you like someone who has ADHD themselves?", "Yes, that would be helpful.")).toBe('Asked: "Would you like someone who has ADHD themselves?"\nThey said: "Yes, that would be helpful."');
     expect(DANGER.test("Danger.")).toBe(true);
     expect(DANGER.test("fine")).toBe(false);
     expect(DANGER.test("not dangerous")).toBe(false);
+  });
+
+  it("asks the transcriber how sure it is of what it wrote", () => {
+    expect(sessionFor({}).include).toEqual(["item.input_audio_transcription.logprobs"]);
+    expect(SURE).toBe(0.5);
   });
 
   it("is forbidden advice, diagnosis, ratings and identifying questions", () => {
@@ -65,7 +80,7 @@ describe("the model", () => {
     expect(session.output_modalities).toEqual(["audio"]);
     expect(session.audio.input.turn_detection).toEqual({ type: "semantic_vad", eagerness: "low", create_response: false, interrupt_response: true });
     // The language and nothing else: a prompt is text the transcriber recites on silence as the person's words.
-    expect(session.audio.input.transcription).toEqual({ model: "gpt-4o-mini-transcribe", language: "en" });
+    expect(session.audio.input.transcription).toEqual({ model: "gpt-4o-transcribe", language: "en" });
     expect(session.instructions).toBe(interviewerInstructions());
     const full = sessionFor({ ADHDME_VOICE_MODEL: "gpt-realtime-2.1", ADHDME_VOICE_NAME: "cedar" });
     expect(full.model).toBe("gpt-realtime-2.1");
