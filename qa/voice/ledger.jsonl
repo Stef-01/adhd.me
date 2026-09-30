@@ -522,3 +522,4 @@
 {"time":"2026-09-30T04:15:45.264Z","kind":"eval","persona":"postpartum","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0022,"pass":true}
 {"time":"2026-09-30T04:15:45.264Z","kind":"eval","persona":"work","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0025,"pass":true}
 {"time":"2026-09-30T04:15:45.264Z","kind":"eval","persona":"crisis","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0019,"pass":true}
+{"time":"2026-09-30T04:55:11.329Z","kind":"spoken","lines":6,"seconds":97,"tokens":{"text_in":0,"audio_in":0,"cached":0,"text_out":760,"audio_out":0},"costUsd":0.006674,"stage":"results"}
