@@ -128,7 +128,13 @@ export const SCHEMA = {
   },
 };
 
-/** Everything in a read but the request and the model (`modelOf`). The eval's prompt hash is taken over this. */
+/**
+ * Everything in a read but the request and the model (`modelOf`). The eval's prompt hash is taken over this.
+ * Effort "low" is 4 to 5 s a read on the standard tier and reads right; "minimal" is 2 s and ignores
+ * negation ("I don't want telehealth" read as telehealth: never 18%, precision 71% on the corpus,
+ * qa/matching/reports/reader-live-2026-09-30T04-29-29-798Z.md). The priority tier saves nothing: the
+ * time is the reasoning.
+ */
 export const READ_CALL = {
   effort: "low",
   instructions: INSTRUCTIONS,

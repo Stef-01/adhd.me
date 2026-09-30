@@ -166,6 +166,11 @@ in the model's meaning line.
    was asked. Default in force: nothing.
 4. **A state as a place.** "In Queensland" resolves to no suburb, so the list is unfiltered by
    distance. Telehealth-first would be the useful fallback for a state or a region.
-5. **Latency.** One gpt-5-mini call at low effort is 1 to 3 s on the standard tier; the old policy
-   hid this on short requests by not reading them. Every request is now read, behind "Reading what
-   you asked".
+5. **Latency.** One gpt-5-mini call at low effort is 4 to 5 s on the standard tier (p50 4.7 s over
+   six requests; production measured 5 to 7 s end to end), and the time is the reasoning, so the
+   priority tier saves nothing (p50 4.2 s). Effort "minimal" is 2 s but ignores negation ("I don't
+   want telehealth" read as telehealth): never 18%, precision 71% on the corpus, so it is not an
+   option. The old policy hid the wait on short requests by not reading them, and let the lexicon's
+   misreads out on exactly those. Every request is now read, behind "Reading what you asked". The
+   choices left: live with 5 s; list the lexicon's order at once and re-sort when the read lands
+   (against the no-jumping rule); or a smaller, faster model when one reads negation at minimal.
