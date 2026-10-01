@@ -318,6 +318,20 @@ export const atMidlife = (answers: readonly Answer[]) => !aboutChild(answers) &&
 const KNOWN = /\b(diagnos\w*|(my|adhd) (medication|meds|dose|script|prescription|prescriber|psychiatrist)|vyvanse|ritalin|concerta|dexamphetamine|stimulants?|assess\w*|could (this|it) be adhd|is (this|it) adhd|might (have|be) adhd)\b/i;
 /** A woman asked for, or said not to matter. */
 const WOMAN = /\b(woman|women|female|lady|gender|man|male)\b/i;
+/**
+ * Whether the words answer this question by what they name (an age to "How old are they?", "a first look" or
+ * "diagnosed" to the first-look question), so an answer filed under the question before can be given to it.
+ */
+export function namesAnswerTo(question: QuestionId, words: string): boolean {
+  switch (question) {
+    case "age":
+      return AGED.test(words) || /\b(year|grade|kindy|prep|reception)\b/i.test(words);
+    case "first-look":
+      return /\b(first|never|new|already|existing|diagnos\w*|assess\w*|medication|meds|scripts?)\b/i.test(words);
+    default:
+      return false;
+  }
+}
 const opening = (answers: readonly Answer[]) => of(answers, "opening", "carry-on").map((answer) => answer.text).join(". ");
 
 /**

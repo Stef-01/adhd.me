@@ -17,6 +17,7 @@
 // on by nothing, and stops whatever is being said when it is yes.
 
 import { checkSafety, type SafetyRuleId } from "@/model/safety";
+import { namesAnswerTo } from "./plan";
 import { PROFESSION_ENTRIES, professionsMentioned } from "@/support/professions";
 import { ANSWER, DANGER, FORM, FORM_INSTRUCTIONS, MAX_FOLLOW_UPS, SAFETY_CHECK, SURE, TRANSLATE, URGENT_HELP, asked, sayExactly } from "./interviewer";
 import { MAX_REQUEST, SENTENCES, asksSomething, compose, echoes, formFor, formFrom, formOf, mostlyEnglish, nextQuestion, plainAnswer, withoutQuestions, type Answer, type Form, type Line, type QuestionId, type SayId } from "./plan";
@@ -415,14 +416,14 @@ function take(state: VoiceState, item: string): VoiceState {
   // they carry what the cut question asks for: "in Queensland" over "Where are you?" is its answer (his
   // 02:34 call, where it went into the request as words of his own).
   const cutQuestion = base.cut?.question ?? null;
-  const early = cutQuestion !== null && cutQuestion !== held.question && answersQuestion(cutQuestion, held.form ?? formFrom(words)) ? { question: cutQuestion, asked: base.cut!.say } : null;
+  const early = cutQuestion !== null && cutQuestion !== held.question && (answersQuestion(cutQuestion, held.form ?? formFrom(words)) || namesAnswerTo(cutQuestion, words)) ? { question: cutQuestion, asked: base.cut!.say } : null;
   // A recording plays to its end over the person's voice, so an answer to it can be committed while the
   // question before it is still the one waiting, and that one is finished (the call of 2026-09-30 19:02:
   // "Yes." to "someone who has ADHD themselves?" went nowhere, the question was asked again and "Yes" reached
   // the request). A yes or a no, or what the playing question names, answers the question being said when
   // the one it was taken under is done and asked for neither.
   const playing = base.saying?.question ?? null;
-  const late = !early && playing !== null && playing !== held.question && base.done.includes(held.question) && !YES_OR_NO_QUESTIONS.includes(held.question) && (answersQuestion(playing, held.form ?? formFrom(words)) || (YES_OR_NO_QUESTIONS.includes(playing) && Boolean((held.form ?? formFrom(words)).yes_no))) ? { question: playing, asked: base.saying!.say } : null;
+  const late = !early && playing !== null && playing !== held.question && base.done.includes(held.question) && !YES_OR_NO_QUESTIONS.includes(held.question) && (answersQuestion(playing, held.form ?? formFrom(words)) || namesAnswerTo(playing, words) || (YES_OR_NO_QUESTIONS.includes(playing) && Boolean((held.form ?? formFrom(words)).yes_no))) ? { question: playing, asked: base.saying!.say } : null;
   const question = early?.question ?? late?.question ?? held.question;
   const filled = formFor(question, held.form ?? formFrom(words), words);
   // Words the transcriber was not sure of are words nobody said: fluent, and wrong. Unless the model, hearing

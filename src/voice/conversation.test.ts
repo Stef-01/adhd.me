@@ -889,3 +889,30 @@ describe("an answer committed while its question is still playing (the call of 2
     expect(c.state.reveal?.request).toBe(`An ADHD doctor who speaks Hindi. ${LIVED_ASK}`);
   });
 });
+
+describe("an age or a first look given over the end of its question (sibling of the 19:02 call)", () => {
+  const upTo = (c: ReturnType<typeof call>, id: SayId) => { while (c.playing && c.playing !== id) c.ends(); };
+  it("files 'He's nine.' as the age, and every answer after it stays in its place", () => {
+    const c = call();
+    c.act({ type: "mic" });
+    c.act({ type: "connected" });
+    c.answers("my son");
+    c.answers("he cannot sit still");
+    upTo(c, "age");
+    c.hears("He's nine.");
+    c.through();
+    c.answers("No", { yes_no: "no" }).answers("Parramatta", { place: "Parramatta" }).answers("No", { yes_no: "no" }).answers("No", { yes_no: "no" }).through();
+    expect(c.state.reveal).toEqual({ request: "my son. Hardest for my child: he cannot sit still. My child's age: He's nine", place: "Parramatta" });
+  });
+  it("files 'A first look, never assessed.' under the first-look question", () => {
+    const c = call();
+    c.act({ type: "mic" });
+    c.act({ type: "connected" });
+    c.answers("since menopause I can't focus");
+    upTo(c, "first-look");
+    c.hears("A first look, never assessed.");
+    c.through();
+    expect(c.played.filter((id) => id === "first-look")).toHaveLength(1);
+    expect(c.played.at(-1)).toBe("woman");
+  });
+});
