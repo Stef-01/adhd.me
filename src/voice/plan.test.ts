@@ -387,7 +387,7 @@ describe("a woman at midlife (docs/matching/MIDLIFE-FLOW.md)", () => {
       extra: ["No", { yes_no: "no" }],
     });
     expect(asked.slice(0, 3)).toEqual(["opening", "first-look", "woman"]);
-    expect(request).toContain("A first look at ADHD, or care I already have: A first look, I've never been assessed");
+    expect(request).toContain("Care so far: A first look, I've never been assessed");
     expect(request).toContain("a woman clinician");
     expect(keys(request)).toContain("pref:woman-gp");
   });
@@ -490,5 +490,15 @@ describe("answers that ask for nothing (2026-10-01 RCA: text that is not the ask
     }
     expect(compose([base, answer("extra", "Nothing works for me at work")]).request).toBe("help at work. Nothing works for me at work");
     expect(compose([base, answer("place", "Say again? Oh, I'm in Newtown", { again: true, place: "Newtown" })]).place).toBe("Newtown");
+  });
+});
+
+describe("a language or culture the words do not name (2026-10-01)", () => {
+  it("is dropped as inferred: 'I'm Lebanese' asks for no Arabic", () => {
+    expect(formFor("extra", { understood: true, language: "Arabic", culture: "Lebanese" }, "I'm Lebanese, born here").language).toBeUndefined();
+    expect(formFor("extra", { understood: true, language: "Arabic", culture: "Lebanese" }, "I'm Lebanese, born here").culture).toBe("Lebanese");
+    expect(formFor("which-culture", { understood: true, culture: "Zimbabwean" }, "Zimbabwe.").culture).toBe("Zimbabwean");
+    expect(formFor("which-culture", { understood: true, culture: "Indian", language: "Hindi" }, "Indian, and Hindi if possible.")).toMatchObject({ culture: "Indian", language: "Hindi" });
+    expect(formFor("extra", { understood: true, language: "Hindi" }, "Indi is my first language.").language).toBe("Hindi");
   });
 });

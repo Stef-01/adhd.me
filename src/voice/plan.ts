@@ -216,9 +216,23 @@ const ASKS_YES_OR_NO: readonly QuestionId[] = ["place", "lived", "culture", "rai
  * that said neither, is nothing ("deadlines" came back with a no beside it).
  */
 export function formFor(question: QuestionId, form: Form, words = ""): Form {
+  form = grounded(form, words);
   const { yes_no: _asked, ...rest } = form;
   const said: Form = ASKS_YES_OR_NO.includes(question) || /^\s*(yes|yeah|yep|yup|no|nope|nah)\b/i.test(words) ? form : rest;
   return question === "place" && said.yes_no === "yes" && !said.place ? { ...said, telehealth: true } : said;
+}
+
+/**
+ * A language or a culture the words do not name is one the model inferred, not one they asked for: "I'm
+ * Lebanese" is no ask for Arabic (a persona of 2026-10-01 got "someone who speaks Arabic", another
+ * "Maltese"). Held only for words in English letters; an answer in another script is the model's to read.
+ */
+function grounded(form: Form, words: string): Form {
+  if (!words.trim() || !mostlyEnglish(words)) return form;
+  const said = words.toLowerCase();
+  const named = (name?: string) => !name || name.toLowerCase().split(/[\s-]+/).some((part) => part.length >= 4 && (said.includes(part.slice(0, Math.max(4, part.length - 3))) || (part.length >= 5 && said.includes(part.slice(-4)))));
+  const { language, culture, ...rest } = form;
+  return { ...rest, ...(named(language) ? (language ? { language } : {}) : {}), ...(named(culture) ? (culture ? { culture } : {}) : {}) };
 }
 
 // ── What is not an answer ────────────────────────────────────────────────────────────────────────
@@ -455,7 +469,7 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         break;
       case "first-look":
         // Either-or: a bare "yes" answers neither half, and is left out.
-        if (readable(text) && (namesAnswerTo("first-look", text) || more) && !(form.yes_no && !more)) (theirs = true), said(`A first look at ADHD, or care I already have: ${text}`);
+        if (readable(text) && (namesAnswerTo("first-look", text) || more) && !(form.yes_no && !more)) (theirs = true), said(`Care so far: ${text}`);
         break;
       case "woman":
         if (form.yes_no === "yes" && settledOn(answers, "woman") === "yes") parts.push(...(more && WOMAN.test(more) ? [more] : [WOMAN_ASK, ...(more ? [more] : [])]));
