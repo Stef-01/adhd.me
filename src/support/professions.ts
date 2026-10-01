@@ -225,8 +225,11 @@ function escape(cue: string): string {
  */
 export function professionsMentioned(text: string): Profession[] {
   const lower = text.toLowerCase();
+  // A kind refused is not asked for: "not a GP, I want a psychologist" is a psychologist search (2026-10-01:
+  // it listed GPs first). A cue counts where no refusal stands in the few words before it.
+  const refused = /\b(not|no|never|don'?t want|do not want|rather not|instead of|other than|rather than|without)\b(\W+\w+){0,2}\W*$/;
   return PROFESSION_ENTRIES.filter((entry) =>
-    entry.cues.some((cue) => new RegExp(`(^|[^a-z])${escape(cue)}(?=$|[^a-z])`, "i").test(lower)),
+    entry.cues.some((cue) => [...lower.matchAll(new RegExp(`(^|[^a-z])${escape(cue)}(?=$|[^a-z])`, "gi"))].some((match) => !refused.test(lower.slice(0, match.index! + match[1]!.length)))),
   ).map((entry) => entry.id);
 }
 

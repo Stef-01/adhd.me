@@ -33,3 +33,13 @@ describe("professions", () => {
     expect(professionsMentioned("a psych for my sleep")).toEqual(["psychologist"]);
   });
 });
+
+describe("a kind refused is not a kind asked for (2026-10-01)", () => {
+  it("reads 'not a GP, I want a psychologist' as a psychologist", () => {
+    expect(professionsMentioned("not a GP, I want a psychologist")).toEqual(["psychologist"]);
+    expect(professionsMentioned("I'd rather not see a psychiatrist")).toEqual([]);
+    expect(professionsMentioned("a coach instead of a psychologist")).toEqual(["adhd-coach"]);
+    expect(professionsMentioned("a GP who is not rushed")).toEqual(["gp"]);
+    expect(professionsMentioned("A GP near Hornsby")).toEqual(["gp"]);
+  });
+});
