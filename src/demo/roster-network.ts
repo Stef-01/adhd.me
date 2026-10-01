@@ -992,7 +992,7 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     profession: "psychiatrist",
     gender: "woman",
     pronouns: "she/her",
-    title: "Consultant Psychiatrist, FRANZCP | Board Certification in Psychiatry | MD (Psychiatry)",
+    title: "Consultant Psychiatrist, FRANZCP, Board Certification in Psychiatry, MD (Psychiatry)",
     suburb: "Graceville",
     practice: "Nurtured Thoughts Psychology",
     reach: "Clinic appointments in Graceville, Brisbane, and telehealth",

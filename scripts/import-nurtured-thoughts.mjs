@@ -128,7 +128,7 @@ for (const card of build) {
     shortName: card.short,
     ...(profession ? { profession } : {}),
     ...(gender ? { gender, pronouns: card.pronouns } : {}),
-    title: [page.role ?? card.role, page.qualifications].filter(Boolean).join(", "),
+    title: [page.role ?? card.role, page.qualifications?.replace(/\s*\|\s*/g, ", ")].filter(Boolean).join(", "),
     suburb: "Graceville",
     practice: "Nurtured Thoughts Psychology",
     reach,
