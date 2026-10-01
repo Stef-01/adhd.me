@@ -60,6 +60,7 @@ export function professionsFor(need: Need): Profession[] {
 }
 
 const ESCALATION = { minCost: 7, minFailedStrategies: 2 } as const;
+const unhelpfulCount = (need: Need) => need.strategies.filter((s) => s.outcome === "no" || s.outcome === "a-little").length;
 
 /** PRD §67's boundary: cost ≥ 7, priority yes, confidence high, and enough self-guided attempts without help. */
 export function escalationEligible(need: Need, record: ModelRecord): boolean {
@@ -143,8 +144,12 @@ export function recommend(record: ModelRecord, now: Date = new Date()): Recommen
       action: "EXPLORE_PROVIDER",
       need,
       heading: `${first.aName.charAt(0).toUpperCase()}${first.aName.slice(1)} may be particularly useful for this.`,
-      body: `${need.label} has stayed hard after what you have tried. ${first.typicallyFor}`,
-      why: `You put the cost of this at ${need.functionalCost} out of 10, said you want it easier, and ${need.strategies.filter((s) => s.outcome === "no" || s.outcome === "a-little").length} strategies did not help enough. That is the point at which the app suggests a person.`,
+      body: unhelpfulCount(need) >= ESCALATION.minFailedStrategies ? `${need.label} has stayed hard after what you have tried. ${first.typicallyFor}` : `${need.label} costs you a lot, and you asked for a person. ${first.typicallyFor}`,
+      // The reason that fired, not the other one (2026-10-01 fuzz: "0 strategies did not help enough" when the
+      // person had asked at the start for professional support and tried nothing yet).
+      why: unhelpfulCount(need) >= ESCALATION.minFailedStrategies
+        ? `You put the cost of this at ${need.functionalCost} out of 10, said you want it easier, and ${unhelpfulCount(need)} strategies did not help enough. That is the point at which the app suggests a person.`
+        : `You put the cost of this at ${need.functionalCost} out of 10, said you want it easier, and said at the start that professional support is what you are looking for.`,
       professions,
       explain: explain("escalation.eligible", "EXPLORE_PROVIDER", [...inputs, `unhelpful:${need.strategies.filter((s) => s.outcome !== "pending" && s.outcome !== "a-lot").length}`], now),
     };
