@@ -36,8 +36,6 @@ export const BARE_HEADINGS: Readonly<Record<string, string>> = {
   // A person. Never punctuated, on any screen.
   "Dr Anubhav Saxena": "A person's name.",
 
-  // A count. The number is the heading.
-  "One GP": "A count of results, which is a label and not a sentence (the real roster has one GP for some asks).",
 };
 
 /**
@@ -50,6 +48,8 @@ export function undeclaredBareHeadings(headings: readonly string[]): string[] {
   return [...new Set(headings)]
     .filter((h) => h.length > 0 && !/[.?!:]$/.test(h))
     .filter((h) => !(h in BARE_HEADINGS))
+    // A count of results ("3 GPs", "12 psychologists"), for the reason "One GP" is declared: the number is the heading.
+    .filter((h) => !/^(\d+|One) [A-Za-z ]+$/.test(h))
     .sort();
 }
 
