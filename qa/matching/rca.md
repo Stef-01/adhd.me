@@ -544,3 +544,25 @@ finder asks of everybody and most say yes to.
 by "weighs lived experience with care, not ahead of it" in src/matching/ranking-profile.test.ts,
 which also keeps the 2026-08-22 audit: telehealth still comes first for someone who asked for it.
 
+
+## 2026-10-01: root-cause families from the production record, and their siblings
+
+Each failure found in the record (48 searches, 34 calls) was traced to a cause, and the cause was
+then searched for elsewhere. A family is one cause; its siblings are the other places it bites.
+
+| Family (cause) | Found as | Siblings found and fixed | Left, and why |
+| --- | --- | --- | --- |
+| A way of being helped outweighed by the purposes it serves | "Exercise based" listed an OT and a coach; "gym routine to help my focus" listed focus coaches | sleep ("help with sleep so I can focus at work"), nutrition ("nutrition based help with focus"): `withoutPurposes`; exercise ranks with access | sleep stays a care area: "help at work, and I sleep badly" must still lead with work |
+| An answer filed under the question last heard in full while the next one still plays | the 19:02 call: "Yes." lost, the question asked twice, "Yes" in the request | an age ("He's nine.") and a first look said over the end of their questions shifted every later answer by one: `namesAnswerTo` | a free answer in a question's first instant stays the rest of the last answer (the 07:49 rule) |
+| A path that does one thing the other path does not | the typed finder never ran the safety check | the typed finder never read a place ("A GP near Hornsby…", the finder's own example): `placeIn` | the typed finder asks no questions, by design |
+| A rule written in the first person | "my daughter says she wants to die" reached no rule | cutting, an overdose, "doesn't want to wake up", "better off without him", threats, not eating, a racing heart on a stimulant, days without sleep | figures of speech stay quiet; "rejection hits me like a truck" was a pre-existing false alarm, now excluded |
+| The finder's words shown as the person's | "From your words: Hardest at work:" | "From your words: someone who has ADHD themselves" for a spoken yes: `FINDER_WORDS` | none |
+| A bare yes or no to a question that asks for neither | "A first look, or care I already have: Yes" | "My child's age: No" | none |
+| A small gazetteer, silently | Parramatta, Penrith, Blacktown, Marrickville resolved to nothing | 38 localities, "the Gold Coast" | misspellings stay unresolved (W189) |
+| Someone else's condition read as the person's ask | "I am not autistic but my son is" read autism | a 19-year-old son read as a child; "a dietitian who gets ADHD" read lived experience | none |
+
+Open questions for the founder: Valeria Urrutia's `adhd-assessment` rests on "neurodiversity … and
+psychological assessments" (moving it to the sometimes grade unseparates 11 corpus requests, so it
+was left); Eliza Keefe's `child-adolescent-adhd` rests on "child and adolescent mental health"; no
+exercise clinician offers telehealth; no clinician prescribes for children; a transcribed "a JPEG"
+for "a GP" is not corrected (no rules for speech).
