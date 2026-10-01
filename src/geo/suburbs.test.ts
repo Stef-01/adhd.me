@@ -35,8 +35,15 @@ describe("the gazetteer covers what the roster claims", () => {
       Perth: [-32.1, -31.8, 115.75, 116],
     };
     const inside = (s: SuburbPoint, [south, north, west, east]: [number, number, number, number]) => s.lat > south && s.lat < north && s.lon > west && s.lon < east;
+    // 2026-10-01: the places people name beyond the focus areas (capitals, regional centres) are held
+    // to their state instead, by the postcode's first digit, so a coordinate typed into the wrong state fails.
+    const STATES: Record<string, [number, number, number, number]> = {
+      "0": [-26, -10.9, 129, 138.1], "2": [-37.6, -28.1, 140.9, 153.7], "3": [-39.2, -33.9, 140.9, 150.1],
+      "4": [-29.2, -10, 137.9, 153.6], "5": [-38.1, -25.9, 129, 141.1], "6": [-35.2, -13.7, 112.9, 129.1], "7": [-43.7, -39.5, 143.8, 148.5],
+    };
     for (const s of SUBURBS) {
-      expect(Object.values(AREAS).some((box) => inside(s, box)), `${s.suburb} is outside every focus area`).toBe(true);
+      const state = STATES[s.postcode[0]!];
+      expect(Object.values(AREAS).some((box) => inside(s, box)) || (state !== undefined && inside(s, state)), `${s.suburb} is outside every focus area and its state`).toBe(true);
       expect(s.postcode).toMatch(/^\d{4}$/);
     }
   });
@@ -150,5 +157,16 @@ describe("how a distance is said", () => {
     expect(describeDistance(0.44)).toBe("about 0.4 km away");
     expect(describeDistance(4.4)).toBe("about 4 km away");
     expect(describeDistance(4.6)).toBe("about 5 km away");
+  });
+});
+
+describe("the places people name to the finder (2026-10-01)", () => {
+  it("resolves the places in the production record and the voice personas, and 'the' is noise", () => {
+    for (const place of ["Parramatta", "Penrith", "Blacktown", "Marrickville", "Newtown", "Chatswood", "Wollongong", "Melbourne", "Canberra", "Hobart", "Darwin", "Geelong"]) expect(resolvePlace(place)?.suburb, place).toBe(place);
+    expect(resolvePlace("the Gold Coast")?.suburb).toBe("Gold Coast");
+  });
+  it("still guesses nothing: a misspelling stays unresolved", () => {
+    expect(resolvePlace("Paramatta")).toBeNull();
+    expect(resolvePlace("Woolongong")).toBeNull();
   });
 });

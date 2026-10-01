@@ -73,6 +73,48 @@ export const SUBURBS: readonly SuburbPoint[] = [
   { suburb: "Sutherland", postcode: "2232", lat: -34.0310, lon: 151.0580 },
   { suburb: "Jindabyne", postcode: "2627", lat: -36.4150, lon: 148.6230 },
   { suburb: "Perth", postcode: "6000", lat: -31.9523, lon: 115.8613 },
+  // 2026-10-01 (edge sweep of the production record): the places people named to the finder and
+  // to the voice personas resolved to nothing, so the list ranked as if from nowhere. Each is the
+  // locality's centre, to about a kilometre, as the regions above are; distances are said as "about".
+  // Greater Sydney.
+  { suburb: "Parramatta", postcode: "2150", lat: -33.8150, lon: 151.0011 },
+  { suburb: "Penrith", postcode: "2750", lat: -33.7511, lon: 150.6942 },
+  { suburb: "Blacktown", postcode: "2148", lat: -33.7710, lon: 150.9063 },
+  { suburb: "Liverpool", postcode: "2170", lat: -33.9200, lon: 150.9230 },
+  { suburb: "Campbelltown", postcode: "2560", lat: -34.0650, lon: 150.8140 },
+  { suburb: "Bankstown", postcode: "2200", lat: -33.9170, lon: 151.0350 },
+  { suburb: "Cabramatta", postcode: "2166", lat: -33.8950, lon: 150.9360 },
+  { suburb: "Auburn", postcode: "2144", lat: -33.8490, lon: 151.0330 },
+  { suburb: "Hurstville", postcode: "2220", lat: -33.9670, lon: 151.1020 },
+  { suburb: "Ryde", postcode: "2112", lat: -33.8150, lon: 151.1040 },
+  { suburb: "Chatswood", postcode: "2067", lat: -33.7970, lon: 151.1830 },
+  { suburb: "Marrickville", postcode: "2204", lat: -33.9110, lon: 151.1550 },
+  { suburb: "Newtown", postcode: "2042", lat: -33.8970, lon: 151.1790 },
+  { suburb: "Manly", postcode: "2095", lat: -33.7970, lon: 151.2880 },
+  { suburb: "Cronulla", postcode: "2230", lat: -34.0550, lon: 151.1530 },
+  // NSW and the ACT beyond Sydney.
+  { suburb: "Wollongong", postcode: "2500", lat: -34.4250, lon: 150.8930 },
+  { suburb: "Newcastle", postcode: "2300", lat: -32.9270, lon: 151.7760 },
+  { suburb: "Gosford", postcode: "2250", lat: -33.4250, lon: 151.3420 },
+  { suburb: "Katoomba", postcode: "2780", lat: -33.7120, lon: 150.3110 },
+  { suburb: "Dubbo", postcode: "2830", lat: -32.2490, lon: 148.6010 },
+  { suburb: "Wagga Wagga", postcode: "2650", lat: -35.1080, lon: 147.3600 },
+  { suburb: "Canberra", postcode: "2601", lat: -35.2810, lon: 149.1300 },
+  // Queensland.
+  { suburb: "Toowoomba", postcode: "4350", lat: -27.5600, lon: 151.9510 },
+  { suburb: "Ipswich", postcode: "4305", lat: -27.6140, lon: 152.7590 },
+  { suburb: "Logan", postcode: "4114", lat: -27.6390, lon: 153.1090 },
+  { suburb: "Sunshine Coast", postcode: "4558", lat: -26.6500, lon: 153.0660 },
+  { suburb: "Townsville", postcode: "4810", lat: -19.2590, lon: 146.8170 },
+  { suburb: "Cairns", postcode: "4870", lat: -16.9200, lon: 145.7710 },
+  // The other capitals and Victoria's regional centres.
+  { suburb: "Melbourne", postcode: "3000", lat: -37.8140, lon: 144.9630 },
+  { suburb: "Geelong", postcode: "3220", lat: -38.1490, lon: 144.3610 },
+  { suburb: "Ballarat", postcode: "3350", lat: -37.5620, lon: 143.8500 },
+  { suburb: "Adelaide", postcode: "5000", lat: -34.9290, lon: 138.6010 },
+  { suburb: "Hobart", postcode: "7000", lat: -42.8820, lon: 147.3270 },
+  { suburb: "Darwin", postcode: "0800", lat: -12.4630, lon: 130.8450 },
+  { suburb: "Alice Springs", postcode: "0870", lat: -23.6980, lon: 133.8810 },
 ];
 
 const byName = new Map(SUBURBS.map((s) => [s.suburb.toLowerCase(), s]));
@@ -80,7 +122,7 @@ const byName = new Map(SUBURBS.map((s) => [s.suburb.toLowerCase(), s]));
 /** Trailing state names and country, commas and doubled spaces — the noise around a place name. */
 const STATE_WORDS = /\b(nsw|qld|vic|wa|sa|tas|nt|act|new south wales|queensland|australia)\b/g;
 const normalise = (input: string): string =>
-  input.toLowerCase().replace(/,/g, " ").replace(STATE_WORDS, " ").replace(/\s+/g, " ").trim();
+  input.toLowerCase().replace(/,/g, " ").replace(STATE_WORDS, " ").replace(/\s+/g, " ").trim().replace(/^the /, "");
 
 /**
  * Resolve what somebody typed to a point, or null.
