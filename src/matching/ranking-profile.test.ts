@@ -306,3 +306,16 @@ describe("reachable before unreachable (2026-10-01 sweep)", () => {
     expect(rankCliniciansNear("", origin, [farInPerson, telehealth], new Date(), needs).map((c) => c.id)).toEqual(["tele", "far"]);
   });
 });
+
+describe("asked to be seen in person (2026-10-01)", () => {
+  it("places a telehealth clinician by their rooms, so the near rooms come first", async () => {
+    const { rankCliniciansNear } = await import("@/demo/clinicians");
+    const { resolvePlace } = await import("@/geo/suburbs");
+    const origin = resolvePlace("Penrith")!;
+    const needs = ["care:adhd-assessment"].flatMap((key) => needForKey(key) ?? []);
+    const brisbaneTele = clone("brisbane-tele", { suburb: "Graceville", careAreas: ["adhd-assessment"], careAreasSometimes: [], manner: [], telehealthFirstAppointment: true, alsoConsultsAt: [] });
+    const nearRooms = clone("near-rooms", { suburb: "Glenbrook", careAreas: ["adhd-assessment"], careAreasSometimes: [], manner: [], telehealthFirstAppointment: undefined, alsoConsultsAt: [] });
+    expect(rankCliniciansNear("an assessment in person", origin, [brisbaneTele, nearRooms], new Date(), needs).map((c) => c.id)).toEqual(["near-rooms", "brisbane-tele"]);
+    expect(rankCliniciansNear("an assessment, telehealth or in person", origin, [brisbaneTele, nearRooms], new Date(), needs)[0]!.id).toBeDefined();
+  });
+});

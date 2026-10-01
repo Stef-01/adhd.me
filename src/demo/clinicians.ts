@@ -1124,6 +1124,7 @@ export function requestFitCopy(summary: RequestFitSummary, rosterSize: number): 
  */
 /** How far in-person-only rooms can be before a clinician lists after everyone reachable from the person. */
 export const REACHABLE_KM = 150;
+const IN_PERSON = /\b(in[- ]person|face[- ]to[- ]face|in the room|not (by )?telehealth|no telehealth)\b/i;
 
 export function rankCliniciansNear(
   query: string,
@@ -1137,6 +1138,9 @@ export function rankCliniciansNear(
   if (!origin) return byFit;
 
   const read = needs ?? needsFor(query, roster);
+  // Asked to be seen in person ("in person in Penrith", "face to face"): a clinician who also offers
+  // telehealth is placed by their rooms like anyone else (2026-10-01).
+  const inPerson = IN_PERSON.test(query) && !/\b(or|and) telehealth\b|\btelehealth (or|and)\b/i.test(query);
   // O85: the distance a clinician sorts on is the nearest of their consulting locations —
   // somebody with Hornsby rooms IS near a Hornsby reader, whatever their primary suburb says.
   const km = (c: Clinician) => nearestLocation(c, origin)?.km ?? null;
@@ -1170,7 +1174,7 @@ export function rankCliniciansNear(
     const movable: number[] = [];
     for (let i = start; i <= end; i += 1) {
       const c = out[i]!;
-      if (!c.telehealthFirstAppointment && km(c) !== null) movable.push(i);
+      if ((inPerson || !c.telehealthFirstAppointment) && km(c) !== null) movable.push(i);
     }
     const nearestFirst = movable
       .map((i) => out[i]!)
@@ -1185,7 +1189,7 @@ export function rankCliniciansNear(
   // patients" listed two Sydney GPs, in person only and about 700 km away, above the Brisbane GPs who
   // see people by telehealth. Somebody seen only in rooms that far away cannot be booked in any useful
   // sense, which is the access tier's own reason; the order within each part is the order above.
-  const reachable = (c: Clinician) => c.telehealthFirstAppointment === true || (km(c) ?? 0) <= REACHABLE_KM;
+  const reachable = (c: Clinician) => (!inPerson && c.telehealthFirstAppointment === true) || (km(c) ?? 0) <= REACHABLE_KM;
   return [...out.filter(reachable), ...out.filter((c) => !reachable(c))];
 }
 
