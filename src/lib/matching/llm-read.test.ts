@@ -5,7 +5,7 @@ import { BudgetMeter } from "@/lib/llm/meter";
 import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, LEXICON_CUES, needForKey, readNeeds } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
-import { answerFor, fromModel, grounded, INSTRUCTIONS, lexiconReading, MEANINGS, READ_CALL, readRequest, SCHEMA, TAGS, VOCABULARY } from "./llm-read";
+import { withoutPurposes, answerFor, fromModel, grounded, INSTRUCTIONS, lexiconReading, MEANINGS, READ_CALL, readRequest, SCHEMA, TAGS, VOCABULARY } from "./llm-read";
 
 const ENV = { OPENAI_API_KEY: "k" };
 const TODAY = new Date("2026-09-27T00:00:00Z");
@@ -170,5 +170,25 @@ describe("a quote shown as the person's words", () => {
 describe("a tag quoting only the finder's label", () => {
   it("is dropped: it quotes nothing the person said", () => {
     expect(grounded([{ key: "care:work-career", quote: "Hardest at work:" }], "Hardest at work: deadlines")).toEqual([]);
+  });
+});
+
+describe("a purpose clause (2026-10-01)", () => {
+  it("drops focus, work or study quoted only from what the help asked for is meant to do", () => {
+    const text = "help with sleep so I can focus at work";
+    const needs = [{ key: "care:sleep", quote: "help with sleep" }, { key: "care:executive-function", quote: "focus" }, { key: "care:work-career", quote: "at work" }];
+    expect(withoutPurposes(needs, text).map((n) => n.key)).toEqual(["care:sleep"]);
+  });
+  it("keeps them when nothing is asked before the clause, or when they are asked before it", () => {
+    expect(withoutPurposes([{ key: "care:executive-function", quote: "focus" }], "so I can focus at work").map((n) => n.key)).toEqual(["care:executive-function"]);
+    const text = "help at work with focus, and sleep so I can rest";
+    expect(withoutPurposes([{ key: "care:work-career", quote: "help at work" }, { key: "care:sleep", quote: "sleep" }], text).map((n) => n.key)).toEqual(["care:work-career", "care:sleep"]);
+  });
+});
+
+describe("'X-based help with Y'", () => {
+  it("asks for X; Y is what it is for", () => {
+    const text = "nutrition based help with focus";
+    expect(withoutPurposes([{ key: "care:eating-body", quote: "nutrition" }, { key: "care:executive-function", quote: "help with focus" }], text).map((n) => n.key)).toEqual(["care:eating-body"]);
   });
 });

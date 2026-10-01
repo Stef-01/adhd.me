@@ -46,10 +46,10 @@ export const MEANINGS: Record<string, string> = {
   "non-medication": "says they do not want medication, or want something else tried in its place or before it, in words that mention medication (asking for help, coaching, strategies, skills or therapy with no word against medication is not this: that help may include medication; wanting medication kept open, weighed with other help, or not the only thing offered, is balanced care and not this, even when said as not wanting pills alone)",
   perinatal: "names pregnancy, birth or the months after having a baby (postpartum, postnatal, a new mum or dad) as part of what they need care for or understood",
   "woman-gp": "asks for a woman clinician",
-  "lived-experience": "asks for a clinician who has ADHD themselves, or was diagnosed with it themselves (the person having ADHD is not this; a clinician who has \"lived a bit\" or is their age is not this)",
+  "lived-experience": "asks for a clinician who has ADHD themselves, or was diagnosed with it themselves (the person having ADHD is not this; a clinician who \"gets\" or understands ADHD is not this; a clinician who has \"lived a bit\" or is their age is not this)",
   // O261: the life domains.
-  "executive-function": "asks for help with focus, organisation, starting or finishing things, time, routines or life admin, or for coaching and strategies (the person listing their symptoms, for an assessment or for nothing, is not this; focus or getting things done named only as what exercise, movement or sport is for is movement-exercise and not this)",
-  "work-career": "asks for help with their own work, job, career or workplace, or workplace adjustments (shift work, night shifts or a workplace named only as where or when something happens is not this)",
+  "executive-function": "asks for help with focus, organisation, starting or finishing things, time, routines or life admin, or for coaching and strategies (the person listing their symptoms, for an assessment or for nothing, is not this; focus or getting things done named only as what exercise, movement, sport, sleep or eating is meant to help is that help and not this)",
+  "work-career": "asks for help with their own work, job, career or workplace, or workplace adjustments (shift work, night shifts or a workplace named only as where or when something happens is not this; work named only as what better sleep, exercise or eating would help is not this)",
   "study-school": "school, university, TAFE, exams, study, homework, learning difficulties or giftedness, for the person or their child",
   "parenting": "help as a parent: parenting strategies, a child's behaviour at home, family sessions, being a parent with ADHD",
   "relationships": "the person's relationship, marriage or partner, couples work, dating, conflict, people-pleasing or attachment",
@@ -57,7 +57,7 @@ export const MEANINGS: Record<string, string> = {
   "late-diagnosis": "adjusting to, or making sense of, a recent or late ADHD diagnosis, or decades of undiagnosed ADHD, and what it means for who they are (a child's recent diagnosis is not this)",
   "grief-life-change": "grief, bereavement, or a big life change or transition (a move, retirement, a loss)",
   "sleep": "asks for help with sleep: insomnia, falling or staying asleep, a night owl, a sleep routine (a bad night described while asking for nothing is not this)",
-  "eating-body": "eating, an eating disorder, binge or disordered eating, appetite, forgetting to eat, weight, body image",
+  "eating-body": "eating, nutrition, diet, a dietitian, an eating disorder, binge or disordered eating, appetite, forgetting to eat, weight, body image",
   "womens-health": "women's health: hormones, periods, perimenopause or menopause (hot flushes, night sweats, HRT or MHT, since the periods stopped or changed, brain fog or forgetting that began in her forties or fifties), PMDD, fertility, ADHD in women and girls",
   "movement-exercise": "exercise, movement, physio, an exercise physiologist, sport, gym, running, yoga, injury or pain, staying active, or exercise-based help, including exercise to help with focus, mood or sleep",
   "cultural-background": "asks for a clinician who understands their culture, background, faith, migration or community, or names their own background (a language they speak is a language key, not this; a relative coming to the appointment is not this)",
@@ -101,6 +101,8 @@ const EXAMPLES = [
   '"my stimulant does nothing now that I am going through the change" → [{"tag":"care:titration","quote":"my stimulant does nothing now"},{"tag":"care:womens-health","quote":"going through the change"}]',
   '"I was told I am autistic years ago and now I wonder about ADHD too" → [{"tag":"care:autism-adhd","quote":"I am autistic"},{"tag":"care:adhd-assessment","quote":"I wonder about ADHD too"}]',
   '"a personal trainer who gets ADHD, lifting helps me concentrate" → [{"tag":"care:movement-exercise","quote":"a personal trainer"}]',
+  '"something for my insomnia so I stop flagging at my desk" → [{"tag":"care:sleep","quote":"something for my insomnia"}]',
+  '"food-focused support so my concentration improves" → [{"tag":"care:eating-body","quote":"food-focused support"}]',
   '"since our daughter got her diagnosis I see it in myself, can I be checked" → [{"tag":"care:adhd-assessment","quote":"can I be checked"}]',
   '"do you take on kids under ten" → [{"tag":"care:child-adolescent-adhd","quote":"kids under ten"}]',
 ];
@@ -185,12 +187,31 @@ export function grounded(needs: readonly Need[], text: string): Need[] {
   return kept;
 }
 
+/** A purpose clause: what the help asked for before it is meant to do ("so I can focus at work", "to help my concentration"). */
+const PURPOSE = /\b(so (that )?(i|he|she|they|we|my \w+) (can|could|will|would|might|stop|start|get)|so my|to help (me|my|him|her|them|with my)|for my (focus|concentration|work|study)|based (help|support|care) (with|for))\b/i;
+/** The tags a purpose names, which the help before it serves rather than adds to. */
+const SERVED = new Set(["care:executive-function", "care:work-career", "care:study-school"]);
+
+/**
+ * The needs, less those quoted only from a purpose clause when another care ask comes before it: "help with
+ * sleep so I can focus at work" asks for sleep, and focus and work are what it is for (2026-10-01: such a
+ * read listed focus coaches above everyone who declares sleep).
+ */
+export function withoutPurposes(needs: readonly Need[], text: string): Need[] {
+  const at = text.search(PURPOSE);
+  if (at < 0) return [...needs];
+  const lower = plain(text);
+  const before = (need: Need) => { const i = lower.indexOf(plain(need.quote)); return i >= 0 && i < at; };
+  const askedBefore = needs.some((need) => need.key.startsWith("care:") && !SERVED.has(need.key) && before(need));
+  return askedBefore ? needs.filter((need) => !SERVED.has(need.key) || before(need)) : [...needs];
+}
+
 /** One answer as the schema has it, held to the tags and the text; a tag that is not quoted is dropped and counted. */
 export function fromModel(data: unknown, text: string): Reading {
   const answer = (data ?? {}) as { needs?: unknown; unlisted?: unknown };
   if (!Array.isArray(answer.needs) || !Array.isArray(answer.unlisted)) throw new SchemaError("the answer is not a list of needs and a list of unlisted asks");
   const given = answer.needs;
-  const needs = grounded(given.map((need) => ({ key: String((need as { tag?: unknown })?.tag ?? ""), quote: String((need as { quote?: unknown })?.quote ?? "") })), text);
+  const needs = withoutPurposes(grounded(given.map((need) => ({ key: String((need as { tag?: unknown })?.tag ?? ""), quote: String((need as { quote?: unknown })?.quote ?? "") })), text), text);
   const dropped = given.length - needs.length;
   const signals = needs.flatMap((need) => needForKey(need.key, need.quote) ?? []);
   const unlisted = answer.unlisted.map((phrase) => String(phrase).trim()).filter(Boolean).slice(0, 3);

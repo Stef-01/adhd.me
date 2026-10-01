@@ -807,8 +807,10 @@
     ],
     "aspires": [
       "care:movement-exercise",
-      "care:work-career",
       "pref:woman-gp"
+    ],
+    "mentions": [
+      "care:executive-function"
     ]
   }
 ]

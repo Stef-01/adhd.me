@@ -35,7 +35,7 @@ const STEPS: Record<Scenario, FirstSteps["steps"]> = {
 };
 
 /** Midlife said in the words: the change itself, or an age in the late forties or fifties. */
-export const MIDLIFE = /\b(peri-?menopaus\w*|menopaus\w*|post-?menopaus\w*|the change|hot flush\w*|night sweats|hrt|mht|periods? (have |has )?(stopped|changed)|in my (late )?(forties|fifties)|(4[5-9]|5\d)(?! ?(km|min\w*|hours?|\$|dollars))\b)/i;
+export const MIDLIFE = /\b(peri-?menopaus\w*|menopaus\w*|post-?menopaus\w*|the change|hot (flush|flash)\w*|night sweats|hrt|mht|periods? (have |has )?(stopped|changed)|in my (late )?(forties|fifties)|(4[5-9]|5\d)(?! ?(km|min\w*|hours?|\$|dollars))\b)/i;
 
 /** The scenario a request's keys (and, for midlife, its words) fit, most specific first; null when none does. */
 export function scenarioFor(keys: readonly string[], words = ""): Scenario | null {
