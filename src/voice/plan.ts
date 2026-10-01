@@ -399,6 +399,10 @@ export const LIVED_ASK = "someone who has ADHD themselves";
 export const CULTURE_ASK = "someone from my own culture";
 export const WOMAN_ASK = "a woman clinician";
 export const TELEHEALTH_ASK = "telehealth is fine";
+const RAISED_YES = "Someone has raised ADHD about my child before";
+/** The finder's own words for an answer of yes: a quote that is one of these is not the person's. */
+export const FINDER_WORDS: readonly string[] = [LIVED_ASK, CULTURE_ASK, TELEHEALTH_ASK, WOMAN_ASK, RAISED_YES];
+export const finderWords = (quote: string) => FINDER_WORDS.some((words) => words.toLowerCase().includes(quote.trim().toLowerCase().replace(/[.,]+$/, "")) && quote.trim().length > 3);
 export const MAX_REQUEST = 2000;
 /** An answer to a yes-or-no question this long says more than yes or no, and is kept as it was said. */
 const SAYS_MORE = 6;
@@ -434,7 +438,7 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         if (namesAnswerTo("age", text) || (more && !form.yes_no)) (theirs = true), said(`My child's age: ${text}`);
         break;
       case "raised":
-        if (readable(text) && !(form.yes_no === "no" && !more)) (theirs = true), said(form.yes_no === "yes" && !more ? "Someone has raised ADHD about my child before" : `Whether ADHD was raised before: ${text}`);
+        if (readable(text) && !(form.yes_no === "no" && !more)) (theirs = true), said(form.yes_no === "yes" && !more ? RAISED_YES : `Whether ADHD was raised before: ${text}`);
         break;
       case "first-look":
         // Either-or: a bare "yes" answers neither half, and is left out.

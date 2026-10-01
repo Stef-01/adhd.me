@@ -2,6 +2,7 @@
 
 import { reelsOf } from "@/finder/reels";
 import { ProfileReels } from "./profile-reels";
+import { finderWords } from "@/voice/plan";
 import { CARE_NEEDS, IDENTITY_LABELS, publicCareProfile, publicIdentity } from "@/support/care-preferences";
 import {
   ArrowLeft,
@@ -265,7 +266,7 @@ export function ProfileStage({
                         {/* The quote only where there is one (the model quotes the words that asked for
                             each tag, R19) and where it says more than the label: "longer first
                             appointment" under "A longer first appointment" said it twice. */}
-                        {need.matched !== "" && !saysAgain(need.label, need.matched) && <span>From your words: &ldquo;{need.matched}&rdquo;</span>}
+                        {need.matched !== "" && !saysAgain(need.label, need.matched) && !finderWords(need.matched) && <span>From your words: &ldquo;{need.matched}&rdquo;</span>}
                       </li>
                     ))}
                   </ul>

@@ -424,3 +424,14 @@ describe("edges: a bare yes or no to a question that asks for neither", () => {
     expect(compose([answer("opening", "menopause"), answer("first-look", "never been assessed")]).request).toContain("never been assessed");
   });
 });
+
+describe("the finder's own words for a yes", () => {
+  it("are known, so a quote of them is never shown as the person's", async () => {
+    const { finderWords } = await import("./plan");
+    expect(finderWords("someone who has ADHD themselves")).toBe(true);
+    expect(finderWords("telehealth is fine")).toBe(true);
+    expect(finderWords("a woman clinician")).toBe(true);
+    expect(finderWords("I want someone who gets ADHD from the inside")).toBe(false);
+    expect(finderWords("my daughter")).toBe(false);
+  });
+});
