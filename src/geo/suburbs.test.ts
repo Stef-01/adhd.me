@@ -193,3 +193,11 @@ describe("placeIn: the place said last", () => {
     expect(placeIn("moving from Sydney to Perth, I am in Perth from March")).toBe("Perth");
   });
 });
+
+describe("placeIn: a place they are not in", () => {
+  it("is not their place", () => {
+    expect(placeIn("I don't live in Sydney")).toBe("");
+    expect(placeIn("not in Sydney, I'm in Penrith")).toBe("Penrith");
+    expect(placeIn("I used to live in Parramatta")).toBe("");
+  });
+});

@@ -220,6 +220,8 @@ export function placeIn(text: string): string {
     const pattern = new RegExp(` ${lead}${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} `, "g");
     for (const match of lower.matchAll(pattern)) {
       const at = match.index ?? 0;
+      // "I don't live in Sydney" names where they are not.
+      if (/\b(not|no longer|don'?t|do not|never|used to)\b(\W+\w+){0,2}\W*$/.test(lower.slice(0, at + 1))) continue;
       if (!best || at > best.at || (at === best.at && name.length > best.length)) best = { at, length: name.length, suburb: byName.get(name)!.suburb };
     }
   }
