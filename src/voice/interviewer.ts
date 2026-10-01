@@ -88,7 +88,7 @@ The person has just asked you something. If it is about finding ADHD care, answe
 /**
  * The form the model fills for each answer, silently and apart from the conversation: what the answer
  * holds, in fields with fixed names, and only what it said. The model hears the person's own audio,
- * so a word the transcriber got wrong is not a word the form gets wrong. Eight fields: with danger,
+ * so a word the transcriber got wrong is not a word the form gets wrong. Nine fields (off_topic since 2026-10-01, measured 251 of 255 with it): with danger,
  * the part of life and "asks you something" beside them it got one field in twenty-five wrong, the
  * wrong ones the ones that matter (scripts/voice-form.mjs); those three are read another way.
  */
@@ -109,12 +109,13 @@ export const FORM = {
       telehealth: { type: "boolean", description: "True when telehealth, online, video or phone suits them." },
       culture: { type: "string", description: "The culture, background, faith or community they name (Indian, Lebanese, Aboriginal, Sikh). Only a name: never 'my culture' or 'their own'." },
       language: { type: "string", description: "The language other than English they want spoken." },
+      off_topic: { type: "boolean", description: "True only for chatter with someone else in the room, a question about you or the app itself, or a request unrelated to care (a recipe, a joke). Anything about their life, struggles, ADHD, health, help they want, cost, telehealth or clinicians is about care: leave it out." },
     },
   },
 } as const;
 
 export const FORM_INSTRUCTIONS =
-  "You hear one answer a person gave to a service that finds clinicians for ADHD in Australia. Call heard with what the answer says, and nothing it does not say.";
+  "You hear one answer a person gave to a service that finds clinicians for ADHD in Australia. Call heard with what the answer says, and nothing it does not say. Set off_topic true only for chatter with someone else, a question about you or the app itself, or a request unrelated to care (a recipe, a joke); anything about their life, struggles, ADHD, help, cost or clinicians is about care.";
 
 /** What the form's reader is told before the answer: the question it answers. */
 export const asked = (question: string) => `The question asked: "${question}". The answer follows.`;

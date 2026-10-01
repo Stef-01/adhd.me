@@ -28,10 +28,10 @@ describe("the model", () => {
     expect(text).toContain(URGENT_HELP);
   });
 
-  it("fills one form for each answer, with eight fixed fields, and only understood is always there", () => {
+  it("fills one form for each answer, with nine fixed fields, and only understood is always there", () => {
     expect(FORM.name).toBe("heard");
     expect(FORM.parameters.required).toEqual(["understood"]);
-    expect(Object.keys(FORM.parameters.properties)).toEqual(["understood", "yes_no", "again", "show_matches", "place", "telehealth", "culture", "language"]);
+    expect(Object.keys(FORM.parameters.properties)).toEqual(["understood", "yes_no", "again", "show_matches", "place", "telehealth", "culture", "language", "off_topic"]);
     expect(FORM.parameters.additionalProperties).toBe(false);
     // A culture asked for and not named is no name: the app asks which.
     expect(FORM.parameters.properties.culture.description).toContain("never 'my culture'");

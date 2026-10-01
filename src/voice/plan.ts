@@ -113,6 +113,8 @@ export interface Form {
   language?: string;
   /** They named the culture most of the roster shares ("Australian", "just English"): nothing to ask for. */
   plain?: boolean;
+  /** The answer is not about the care they want at all: talk to someone else, questions about the app, a recipe. */
+  offTopic?: boolean;
 }
 
 /** What the person said, under the question it answers, with what the model heard in it. */
@@ -177,6 +179,7 @@ export function formOf(value: unknown): Form | null {
   if (given.yes_no === "yes" || given.yes_no === "no") form.yes_no = given.yes_no;
   for (const flag of ["again", "show_matches"] as const) if (given[flag] === true) form[flag] = true;
   if (given.telehealth === true) form.telehealth = true;
+  if (given.off_topic === true) form.offTopic = true;
   const place = placeOf(given.place);
   if (place) form.place = place;
   const language = languageOf(given.language);
@@ -419,6 +422,9 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
   for (const answer of answers) {
     const { form, question } = answer;
     if (!form.understood) continue;
+    // Chatter that is not about their care (the call of 2026-10-01 06:28: "It's a wrap-up… POV. Pretend
+    // you're in need") is not their request; a yes, a place or a name in it still counts below.
+    if (form.offTopic && !form.yes_no && !form.place && !form.telehealth && !form.culture && !form.language) continue;
     const text = tidy(answer.text);
     const more = readable(text) && text.split(/\s+/).length >= SAYS_MORE ? text : "";
     const names = Boolean(form.culture || form.language);

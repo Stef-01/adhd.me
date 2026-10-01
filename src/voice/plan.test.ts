@@ -464,3 +464,20 @@ describe("'Sure.' to 'What would you like help with?' (the call of 2026-10-01 07
     expect(compose([answer("opening", "Find a GP near Chatswood.", { place: "Chatswood" }), answer("detail", "Sure.", {}, "help")]).request).toBe("Find a GP near Chatswood");
   });
 });
+
+describe("chatter that is not about care (the call of 2026-10-01 06:28)", () => {
+  it("is left out of the request, while a yes, a place or a name in it still counts", () => {
+    const heard = [
+      answer("opening", "Hi"),
+      answer("detail", "It's a wrap-up, but it's true. Legit, it's a good wrap-up.", { offTopic: true }, "help"),
+      answer("detail", "Can you help me design a good chicken nugget recipe?", { offTopic: true }, "help"),
+      answer("lived", "Yeah, that'd be great.", { yes_no: "yes" }),
+      answer("which-culture", "Zimbabwe.", { culture: "Zimbabwean" }),
+    ];
+    expect(compose(heard).request).toBe(`Hi. ${LIVED_ASK}. ${CULTURE_ASK}, Zimbabwean`);
+  });
+  it("reads off_topic from the model's form only when it says true", () => {
+    expect(formOf({ understood: true, off_topic: true })).toEqual({ understood: true, offTopic: true });
+    expect(formOf({ understood: true, off_topic: false })).toEqual({ understood: true });
+  });
+});

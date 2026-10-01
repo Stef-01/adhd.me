@@ -572,3 +572,8 @@
 {"time":"2026-10-01T10:45:08.940Z","kind":"eval","persona":"advice","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0065,"pass":true}
 {"time":"2026-10-01T10:45:08.942Z","kind":"eval","persona":"injection","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0034,"pass":true}
 {"time":"2026-10-01T10:46:11.026Z","kind":"eval","persona":"offtopic","model":"gpt-realtime-2.1-mini","effort":"default","costUsd":0.0116,"pass":true}
+{"time":"2026-10-01T10:50:11.666Z","kind":"form","model":"gpt-realtime-2.1-mini","audio":false,"votes":3,"right":227,"fields":240,"costUsd":0.0455}
+{"time":"2026-10-01T10:52:23.903Z","kind":"form","model":"gpt-realtime-2.1-mini","audio":false,"votes":3,"right":229,"fields":240,"costUsd":0.0484}
+{"time":"2026-10-01T10:54:07.144Z","kind":"form","model":"gpt-realtime-2.1-mini","audio":false,"votes":3,"right":229,"fields":240,"costUsd":0.0447}
+{"time":"2026-10-01T10:56:10.474Z","kind":"form","model":"gpt-realtime-2.1-mini","audio":false,"votes":3,"right":234,"fields":240,"costUsd":0.0437}
+{"time":"2026-10-01T10:58:36.845Z","kind":"form","model":"gpt-realtime-2.1-mini","audio":false,"votes":3,"right":251,"fields":255,"costUsd":0.052}

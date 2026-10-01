@@ -50,6 +50,17 @@ const CASES = [
   ["extra", "I also have bipolar.", { understood: true, show_matches: undefined, danger: false }],
   ["extra", "I've been brushed off before, so I need someone patient.", { understood: true, danger: false }],
   ["opening", "With someone that would help me at work.", { understood: true, danger: false }],
+  // The call of 2026-10-01 06:28: chatter that is not about care, which the request must leave out (off_topic true).
+  ["help", "Is this just a wrap-up? It's a wrap-up, but it's true. I'm surprised that you got the animations to even work. Legit, it's a good wrap-up.", { understood: true, offTopic: true }],
+  ["help", "Can you help me design a good chicken nugget recipe?", { offTopic: true }],
+  ["help", "Wait, are you ChatGPT? What's it called?", { offTopic: true }],
+  // And answers about care, said loosely, which must keep it.
+  ["help", "Honestly just someone to help me get my life together, I keep dropping everything.", { understood: true, offTopic: undefined }],
+  ["opening", "Um, hi, yeah, so I think I need an ADHD assessment, my mate reckons I have it.", { understood: true, offTopic: undefined }],
+  ["extra", "Do you know if bulk billing is common?", { offTopic: undefined }],
+  ["help", "Everything, my whole life is a mess, I can't keep a job.", { understood: true, offTopic: undefined }],
+  ["extra", "Can I bring my mum to the appointment?", { offTopic: undefined }],
+  ["opening", "Hang on, my kid's yelling. Sorry. Yeah, I need help for my son, he's struggling at school.", { understood: true, offTopic: undefined }],
   ["opening", "I'm looking for help with staying more focused at my job at work.", { understood: true, danger: false }],
   ["opening", "I think I might have ADHD and I'd like to get assessed.", { understood: true, danger: false }],
   ["opening", "I need the assessment near Sydney for my child who is struggling and also for myself, and preferably someone who understands Hindi culture.", { understood: true, place: "Sydney" }],
