@@ -75,8 +75,23 @@ export function waysOut(
   effective: (filters: Filters) => Filters = (f) => f,
 ): WayOut[] {
   if (searchRoster(roster, effective(held), request, origin).length > 0) return [];
-  return relaxations(held)
-    .map((r) => ({ ...r, count: searchRoster(roster, effective(r.filters), request, origin).length }))
+  const count = (filters: Filters) => searchRoster(roster, effective(filters), request, origin).length;
+  const single = relaxations(held)
+    .map((r) => ({ ...r, count: count(r.filters) }))
     .filter((r) => r.count > 0)
     .sort((a, b) => b.count - a.count);
+  if (single.length > 0) return single;
+  // No one filter dropped brings anybody back (2026-10-01 sweep: 878 of 1,536 combinations, among them
+  // "psychologist, bulk billing, longer appointments"): the two that do, still one tap, before Clear.
+  const pairs: WayOut[] = [];
+  for (const first of relaxations(held)) {
+    for (const second of relaxations(first.filters)) {
+      if (second.label === first.label) continue;
+      const label = [first.label, second.label].sort().join(" and ");
+      if (pairs.some((p) => p.label === label)) continue;
+      const n = count(second.filters);
+      if (n > 0) pairs.push({ label, filters: second.filters, count: n });
+    }
+  }
+  return pairs.sort((a, b) => b.count - a.count);
 }

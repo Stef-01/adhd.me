@@ -151,11 +151,17 @@ describe("the ways out of an empty list", () => {
     for (let i = 1; i < ways.length; i += 1) expect(ways[i - 1]!.count).toBeGreaterThanOrEqual(ways[i]!.count);
   });
 
-  it("offers nothing when no single filter is the cause, and nothing at all for a list that is not empty", () => {
-    // Three languages nobody shares two of: dropping any one still leaves a pair nobody declares.
+  it("offers two filters dropped together when no single one is the cause, and nothing for a list that is not empty", () => {
+    // Three languages nobody shares two of: dropping any one still leaves a pair nobody declares, so
+    // since 2026-10-01 the way out drops two, still one tap.
     const three: Filters = { ...emptyFilters(), languages: ["Tamil", "Igbo", "Mandarin"] };
     expect(searchRoster(clinicians, three, "", null)).toEqual([]);
-    expect(waysOut(clinicians, three, "", null)).toEqual([]);
+    const ways = waysOut(clinicians, three, "", null);
+    expect(ways.length).toBeGreaterThan(0);
+    for (const way of ways) {
+      expect(way.label).toMatch(/ and /);
+      expect(way.count).toBe(searchRoster(clinicians, way.filters, "", null).length);
+    }
     expect(waysOut(clinicians, { ...emptyFilters(), telehealth: true }, "", hornsby)).toEqual([]);
   });
 
