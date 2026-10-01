@@ -135,3 +135,10 @@ describe("O5 preference clarifiers (F7)", () => {
     expect(keys).not.toContain("pref:telehealth-first");
   });
 });
+
+describe("the child question, for a request about the person themselves (2026-10-01)", () => {
+  it("is not asked", () => {
+    const query = "after my son was diagnosed I recognised myself and now I want my own assessment";
+    expect(clarifiers(query, clinicians).map((c) => c.facetKey)).not.toContain("care:child-adolescent-adhd");
+  });
+});

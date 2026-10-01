@@ -262,6 +262,8 @@ export function declaredKeys(clinician: Clinician): Set<string> {
  * reader never hinted at. The figures are pinned in scale-fixture.test.ts, so the day the roster
  * or the corpus grows, the pin fails and says so.
  */
+const ABOUT_THEMSELVES = /\b(my own|myself|for me|i (think i )?(have|might have|may have) adhd|recogni[sz]ed myself)\b/i;
+
 export function clarifiers(query: string, roster: readonly Clinician[], limit = 3): Clarifier[] {
   // THE ROSTER ARGUMENT MUST BE THE LIST THE READER IS LOOKING AT (O7/F10). `heldBy` and the
   // evenness ordering are computed over exactly what is passed: hand this the full roster while
@@ -294,6 +296,9 @@ export function clarifiers(query: string, roster: readonly Clinician[], limit = 
   const ranked = [...keys]
     .filter((key) => !alreadyAsked.has(key))
     .filter((key) => reachedKeys.length === 0 || requestSuggests(reachedKeys, key))
+    // A request about the person's own care is not asked whether it is for a child (2026-10-01: "after my son
+    // was diagnosed I recognised myself and now I want my own assessment" was asked "Is this for a child?").
+    .filter((key) => key !== "care:child-adolescent-adhd" || !ABOUT_THEMSELVES.test(query))
     .map((key) => ({ key, heldBy: declared.filter((set) => set.has(key)).length }))
     // Splits the roster: somebody has it, somebody does not. Anything else cannot reorder.
     .filter((entry) => entry.heldBy > 0 && entry.heldBy < roster.length)
