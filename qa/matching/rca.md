@@ -566,3 +566,12 @@ psychological assessments" (moving it to the sometimes grade unseparates 11 corp
 was left); Eliza Keefe's `child-adolescent-adhd` rests on "child and adolescent mental health"; no
 exercise clinician offers telehealth; no clinician prescribes for children; a transcribed "a JPEG"
 for "a GP" is not corrected (no rules for speech).
+
+### Round 2 (2026-10-01 evening): from the calls of 06:28 and 07:47 and a 12-persona regression
+
+| Family (cause) | Found as | Siblings checked | Guard now |
+| --- | --- | --- | --- |
+| A response's own instructions replace the session's | "Yep, you're talking to ChatGPT", a chicken nugget recipe | TRANSLATE (its output becomes the request) and Why matched took the person's words with no data guard; FORM, SAFETY_CHECK and SAY are narrow tasks | ANSWER carries the full rules; every prompt that takes their words says they are data; probed live with three injections |
+| Text that is not the person's ask in the request | chatter, "Sure." | "say that again", "show me who fits", fillers, closings; the finder's own label read by the model as an assessment ask | `off_topic` on the form (measured 251 of 255, no false alarm on 6 hard negatives); SAYS_NOTHING; the label renamed "Care so far:" |
+| The model infers what was not said | "someone who speaks Arabic" for "I'm Lebanese" | culture likewise | an English answer's language or culture must be named in it (grounded, as the reader's tags are) |
+| Safety rules with holes | "thinking about ending it", "if I just wasn't around" (found by the form measurement) | ending a relationship or a session must stay quiet | both added, with their figures of speech excluded; corpus sweep clean |
