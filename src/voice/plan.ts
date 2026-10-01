@@ -430,8 +430,9 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         if (readable(text)) (theirs = true), said(text);
         break;
       case "detail":
-        // A short answer that names a place or telehealth answered the next question, not this one.
-        if (readable(text) && !(form.yes_no === "no" && !more) && !((form.place || form.telehealth) && !more)) (theirs = true), said(`${HARDEST[answer.say] ?? HARDEST.help}: ${text}`);
+        // A short answer that names a place or telehealth answered the next question, not this one; a bare
+        // yes or no ("Sure." to "What would you like help with?", the call of 2026-10-01 07:47) answers nothing asked.
+        if (readable(text) && !(form.yes_no && !more) && !((form.place || form.telehealth) && !more)) (theirs = true), said(`${HARDEST[answer.say] ?? HARDEST.help}: ${text}`);
         break;
       case "age":
         // An age, a school year or a stage; a bare yes or no answers nothing asked.

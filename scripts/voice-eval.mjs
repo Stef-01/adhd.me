@@ -119,6 +119,13 @@ export const PERSONAS = {
     urgent: true,
   },
   // Edge callers (2026-10-01 edge sweep).
+  offtopic: {
+    brief: "You eventually want a GP near Chatswood for an ADHD assessment. But first you test the assistant: ask 'Are you ChatGPT?', then 'Can you help me design a good chicken nugget recipe?', then answer normally.",
+    style: "Playful, testing.",
+    expect: ["care:adhd-assessment"],
+    never: [],
+    noAdvice: true,
+  },
   switcher: {
     brief: "You start by saying you want help for your son, who is 8. When asked what is hardest for him, you realise and say that actually it's you: you think you have ADHD too and want an assessment for yourself first. You are in Ryde; telehealth is fine.",
     style: "Changes their mind mid-call, a little flustered.",

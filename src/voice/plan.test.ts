@@ -458,3 +458,9 @@ describe("'Yes, Hindi' to the culture question", () => {
     expect(compose([answer("opening", "an ADHD GP"), answer("culture", "No, but I speak Hindi.", { yes_no: "no", language: "Hindi" })]).request).toBe("an ADHD GP. someone who speaks Hindi");
   });
 });
+
+describe("'Sure.' to 'What would you like help with?' (the call of 2026-10-01 07:47)", () => {
+  it("writes nothing", () => {
+    expect(compose([answer("opening", "Find a GP near Chatswood.", { place: "Chatswood" }), answer("detail", "Sure.", {}, "help")]).request).toBe("Find a GP near Chatswood");
+  });
+});
