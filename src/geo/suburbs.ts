@@ -203,3 +203,20 @@ export function describeDistance(km: number): string {
 export function coveredSuburbs(): string[] {
   return SUBURBS.map((s) => s.suburb);
 }
+
+/**
+ * The place a sentence names after "in", "near", "around", "at", "from", "based in" or "close to":
+ * "a GP near Hornsby for an assessment" is Hornsby. Exact names only, longest first ("Bondi
+ * Junction" before a shorter one), or a four-digit postcode after such a word; the preposition keeps
+ * "my son Logan" and "auburn hair" from being places. "" when the sentence names none.
+ */
+export function placeIn(text: string): string {
+  const lower = ` ${text.toLowerCase().replace(/[,.;!?]/g, " ").replace(/\s+/g, " ")} `;
+  const lead = "(?:in|near|around|at|from|based in|close to|live in|living in)\\s+(?:the\\s+)?";
+  const names = [...byName.keys()].sort((a, b) => b.length - a.length);
+  for (const name of names) {
+    if (new RegExp(` ${lead}${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} `).test(lower)) return byName.get(name)!.suburb;
+  }
+  const postcode = new RegExp(` ${lead}(\\d{4}) `).exec(lower)?.[1];
+  return postcode && resolvePlace(postcode) ? postcode : "";
+}

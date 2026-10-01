@@ -30,3 +30,8 @@ test("an adult's request shows no first steps", async ({ page }) => {
   await expect(page.getByRole("region", { name: "First steps" })).toHaveCount(0);
   await expect(page.locator(".clinician-row")).toHaveCount(5);
 });
+
+test("a place in the typed words is the search's place (2026-10-01)", async ({ page }) => {
+  await search(page, "A GP near Hornsby for an adult ADHD assessment");
+  await expect(page.locator(".results-summary-place")).toContainText("Hornsby");
+});

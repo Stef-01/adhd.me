@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { clinicians } from "@/demo/clinicians";
-import { SUBURBS, coveredSuburbs, describeDistance, distanceKm, resolvePlace, type SuburbPoint, suggestPlaces } from "./suburbs";
+import { SUBURBS, coveredSuburbs, describeDistance, distanceKm, resolvePlace, type SuburbPoint, suggestPlaces, placeIn } from "./suburbs";
 
 const at = (name: string) => resolvePlace(name)!;
 
@@ -168,5 +168,21 @@ describe("the places people name to the finder (2026-10-01)", () => {
   it("still guesses nothing: a misspelling stays unresolved", () => {
     expect(resolvePlace("Paramatta")).toBeNull();
     expect(resolvePlace("Woolongong")).toBeNull();
+  });
+});
+
+describe("placeIn: the place a typed sentence names (2026-10-01)", () => {
+  it("reads a place after a word that says where", () => {
+    expect(placeIn("A GP near Hornsby for an adult ADHD assessment, by telehealth")).toBe("Hornsby");
+    expect(placeIn("I live in Parramatta and want an assessment")).toBe("Parramatta");
+    expect(placeIn("a psychologist in the Gold Coast")).toBe("Gold Coast");
+    expect(placeIn("someone close to Bondi Junction please")).toBe("Bondi Junction");
+    expect(placeIn("an OT around 4220")).toBe("4220");
+  });
+  it("takes no name without such a word, and no name it does not know", () => {
+    expect(placeIn("my son Logan can't sit still")).toBe("");
+    expect(placeIn("she has auburn hair and ADHD")).toBe("");
+    expect(placeIn("I live in Paramatta")).toBe("");
+    expect(placeIn("an adult ADHD assessment")).toBe("");
   });
 });

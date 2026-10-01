@@ -28,6 +28,7 @@ import { careKindsFor, searchRoster, waysOut as waysOutOf, type WayOut } from "@
 import { clarifiers } from "@/matching/clarify";
 import { facetKey, shortLabel } from "@/matching/needs";
 import { checkSafety } from "@/model/safety";
+import { placeIn } from "@/geo/suburbs";
 import { firstSteps } from "@/finder/first-steps";
 import { heardChips } from "@/finder/heard";
 import { FINDER_COPY } from "./finder-copy";
@@ -624,6 +625,13 @@ export function CareFinder({ readLevel = 0, voice = false }: { readLevel?: numbe
     requestSource.current = source;
     const nextRequest = value.trim() || archetype.request;
     setRequest(nextRequest);
+    // A place the typed words name ("a GP near Hornsby") is the search's place, as a spoken one is
+    // (2026-10-01: the finder's own example ranked as if from nowhere).
+    const named = source === "voice" ? "" : placeIn(nextRequest);
+    if (named) {
+      setPlace(named);
+      rememberPlace(named);
+    }
     // A new search is a new list: whatever the ratings taught applies to it, the same words or not.
     setTaught((held) => (held.heldFor === null ? held : { ...held, heldFor: null }));
     setMatchIndex(0);
