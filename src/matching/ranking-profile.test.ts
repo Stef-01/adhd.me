@@ -270,3 +270,12 @@ describe("edges: for a child, an adults-only clinician does not lead", () => {
     expect(rankClinicians("", [adultGp, childPsych], new Date(), needs).map((c) => c.id)).toEqual(["child-psych", "adult-gp"]);
   });
 });
+
+describe("exercise-based help (2026-10-01, the founder's gap)", () => {
+  it("lists an exercise clinician above a focus coach when exercise is how the help is asked for", () => {
+    const needs = ["care:movement-exercise", "care:executive-function", "care:work-career"].flatMap((key) => needForKey(key) ?? []);
+    const coach = clone("coach", { careAreas: ["executive-function", "work-career"], careAreasSometimes: [], manner: [] });
+    const ep = clone("ep", { careAreas: ["movement-exercise"], careAreasSometimes: [], manner: [] });
+    expect(rankClinicians("", [coach, ep], new Date(), needs).map((c) => c.id)).toEqual(["ep", "coach"]);
+  });
+});

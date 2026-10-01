@@ -763,5 +763,52 @@
       "care:child-adolescent-adhd",
       "care:adhd-assessment"
     ]
+  },
+  {
+    "text": "Exercise based",
+    "aspires": [
+      "care:movement-exercise"
+    ],
+    "never": [
+      "care:non-medication"
+    ]
+  },
+  {
+    "text": "A exercise based pyschology",
+    "aspires": [
+      "care:movement-exercise"
+    ]
+  },
+  {
+    "text": "gym routine to help my focus",
+    "aspires": [
+      "care:movement-exercise"
+    ]
+  },
+  {
+    "text": "running helps my ADHD, want someone to build on that",
+    "aspires": [
+      "care:movement-exercise"
+    ]
+  },
+  {
+    "text": "a physio who understands ADHD",
+    "reaches": [
+      "care:movement-exercise"
+    ],
+    "never": [
+      "care:autism-adhd"
+    ]
+  },
+  {
+    "text": "Exercise based help with getting things done at work, a woman, telehealth is fine",
+    "reaches": [
+      "pref:telehealth-first"
+    ],
+    "aspires": [
+      "care:movement-exercise",
+      "care:work-career",
+      "pref:woman-gp"
+    ]
   }
 ]

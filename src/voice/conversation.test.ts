@@ -870,3 +870,22 @@ describe("a sentence the model wrote, held to the person's words", () => {
     expect(c.state.reveal?.request).toBe("an assessment for my daughter, she's 15, with a clinician in teens");
   });
 });
+
+describe("an answer committed while its question is still playing (the call of 2026-09-30 19:02)", () => {
+  it("answers the question being said, not the finished one before it, and the call moves on", () => {
+    const c = call();
+    c.act({ type: "mic" });
+    c.act({ type: "connected" });
+    c.answers("An ADHD doctor who speaks Hindi.", { language: "Hindi" });
+    c.answers("Brisbane", { place: "Brisbane" });
+    while (c.playing && c.playing !== "lived") c.ends();
+    expect(c.playing).toBe("lived");
+    c.hears("Yes.", { form: { yes_no: "yes" }, sure: 0.94 });
+    c.through();
+    expect(c.played.filter((id) => id === "lived")).toHaveLength(1);
+    expect(c.played.at(-1)).toBe("extra");
+    c.answers("No.", { yes_no: "no" });
+    c.through();
+    expect(c.state.reveal?.request).toBe(`An ADHD doctor who speaks Hindi. ${LIVED_ASK}`);
+  });
+});

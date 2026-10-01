@@ -48,7 +48,7 @@ export const MEANINGS: Record<string, string> = {
   "woman-gp": "asks for a woman clinician",
   "lived-experience": "asks for a clinician who has ADHD themselves, or was diagnosed with it themselves (the person having ADHD is not this; a clinician who has \"lived a bit\" or is their age is not this)",
   // O261: the life domains.
-  "executive-function": "asks for help with focus, organisation, starting or finishing things, time, routines or life admin, or for coaching and strategies (the person listing their symptoms, for an assessment or for nothing, is not this)",
+  "executive-function": "asks for help with focus, organisation, starting or finishing things, time, routines or life admin, or for coaching and strategies (the person listing their symptoms, for an assessment or for nothing, is not this; focus or getting things done named only as what exercise, movement or sport is for is movement-exercise and not this)",
   "work-career": "asks for help with their own work, job, career or workplace, or workplace adjustments (shift work, night shifts or a workplace named only as where or when something happens is not this)",
   "study-school": "school, university, TAFE, exams, study, homework, learning difficulties or giftedness, for the person or their child",
   "parenting": "help as a parent: parenting strategies, a child's behaviour at home, family sessions, being a parent with ADHD",
@@ -59,7 +59,7 @@ export const MEANINGS: Record<string, string> = {
   "sleep": "asks for help with sleep: insomnia, falling or staying asleep, a night owl, a sleep routine (a bad night described while asking for nothing is not this)",
   "eating-body": "eating, an eating disorder, binge or disordered eating, appetite, forgetting to eat, weight, body image",
   "womens-health": "women's health: hormones, periods, perimenopause or menopause (hot flushes, night sweats, HRT or MHT, since the periods stopped or changed, brain fog or forgetting that began in her forties or fifties), PMDD, fertility, ADHD in women and girls",
-  "movement-exercise": "exercise, movement, physio, sport, injury or pain, staying active",
+  "movement-exercise": "exercise, movement, physio, an exercise physiologist, sport, gym, running, yoga, injury or pain, staying active, or exercise-based help, including exercise to help with focus, mood or sleep",
   "cultural-background": "asks for a clinician who understands their culture, background, faith, migration or community, or names their own background (a language they speak is a language key, not this; a relative coming to the appointment is not this)",
   "ndis": "the person is an NDIS participant, has NDIS funding or a plan, or has a support coordinator",
   "telehealth-first": "asks for telehealth: phone or video; or says a clinic visit is a risk to their health",
@@ -100,6 +100,7 @@ const EXAMPLES = [
   '"at 51 my memory has fallen apart since the hot flushes began" → [{"tag":"care:womens-health","quote":"since the hot flushes began"}]',
   '"my stimulant does nothing now that I am going through the change" → [{"tag":"care:titration","quote":"my stimulant does nothing now"},{"tag":"care:womens-health","quote":"going through the change"}]',
   '"I was told I am autistic years ago and now I wonder about ADHD too" → [{"tag":"care:autism-adhd","quote":"I am autistic"},{"tag":"care:adhd-assessment","quote":"I wonder about ADHD too"}]',
+  '"a personal trainer who gets ADHD, lifting helps me concentrate" → [{"tag":"care:movement-exercise","quote":"a personal trainer"}]',
   '"since our daughter got her diagnosis I see it in myself, can I be checked" → [{"tag":"care:adhd-assessment","quote":"can I be checked"}]',
   '"do you take on kids under ten" → [{"tag":"care:child-adolescent-adhd","quote":"kids under ten"}]',
 ];
