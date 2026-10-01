@@ -68,6 +68,8 @@ export const SUBURBS: readonly SuburbPoint[] = [
   // R15 (2026-09-29): the rooms of the clinicians brought over from revamped-adhd.me. Centroids are
   // OpenStreetMap's, read once through Nominatim and committed here, as gold-coast.ts's are.
   { suburb: "Ashgrove", postcode: "4060", lat: -27.4449, lon: 152.9853 },
+  // 2026-10-01: Nurtured Thoughts Psychology, 4 Rakeevan Road (sixteen clinicians from revamped-adhd.me).
+  { suburb: "Graceville", postcode: "4075", lat: -27.5226, lon: 152.9822 },
   { suburb: "Bateau Bay", postcode: "2261", lat: -33.3852, lon: 151.4780 },
   { suburb: "Glenbrook", postcode: "2773", lat: -33.7669, lon: 150.6204 },
   { suburb: "Sutherland", postcode: "2232", lat: -34.0310, lon: 151.0580 },

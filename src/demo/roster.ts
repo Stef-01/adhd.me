@@ -99,6 +99,17 @@ export type Clinician = {
    */
   reels?: readonly string[];
   /**
+   * The backend layer (2026-10-01): everything the clinician's own page says, section by section and
+   * verbatim, read on `readOn` from `sourceUrl`. Never shown as it stands; the visible profile is the
+   * short line, signals, summary and About above. Care areas are derived from it with the sentence
+   * behind each (`careEvidence`), and "Why matched" reads it, so an ask is answered from their words.
+   */
+  profileDetail?: {
+    sourceUrl: string;
+    readOn: string;
+    sections: Readonly<Record<string, string | readonly string[]>>;
+  };
+  /**
    * How a reader actually gets an appointment — PHASE 1, AND DELIBERATELY NOT A SLOT PICKER.
    *
    * `nextAvailable: string` used to live here, holding "Thursday, 8:30 am", and the booking screen

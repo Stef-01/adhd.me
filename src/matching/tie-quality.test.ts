@@ -181,7 +181,7 @@ import { corpusRun, tieOutcome, tieQualityReport } from "./tie-quality";
 // because the four profiles that declare the area are not the same four on anything else.
 // 2026-09-29: 37 real profiles, separated 134 -> 160 and unseparated 29 -> 11: the network answers
 // more of what the corpus asks, and answers it differently from the founding eleven.
-const PINNED = { total: 531, separated: 161, partialTie: 359, unseparated: 11 }; // Children as an access constraint for a child (2026-10-01): one partial tie separates again (160 -> 161). Child flows (2026-10-01): five clinicians whose own words say they see children declare it at the sometimes grade, and one separated child read became a partial tie (161 -> 160). O262 (2026-09-30): non-medication reads an explicit no to medication; four aspirations promoted, two sentences demoted and nine written from the founder's calls (520 -> 531), one of them separated. O261 (2026-09-30): +49 life-domain sentences (471 -> 520), two more separated, one corpus sentence rewritten. O260 (2026-09-29): the shared-care sentence lost its assessment key, one separated read became a partial tie (159 -> 158). O257 (2026-09-29): +4 lived-experience sentences, one separated. O256 (2026-09-29): +3 continuation sentences, and three lost care:adhd-assessment, so three separated reads became partial ties (161 -> 158). Before that, 2026-09-29: +1 sentence ("new mums"), separated
+const PINNED = { total: 531, separated: 110, partialTie: 421, unseparated: 0 }; // 2026-10-01, the 53-person roster (sixteen from Nurtured Thoughts Psychology): 161 -> 110 separated, because more clinicians now declare the same common areas, so more first bands hold several equal fits; the 11 requests nobody answered are all answered (bipolar among them). Children as an access constraint for a child (2026-10-01): one partial tie separates again (160 -> 161). Child flows (2026-10-01): five clinicians whose own words say they see children declare it at the sometimes grade, and one separated child read became a partial tie (161 -> 160). O262 (2026-09-30): non-medication reads an explicit no to medication; four aspirations promoted, two sentences demoted and nine written from the founder's calls (520 -> 531), one of them separated. O261 (2026-09-30): +49 life-domain sentences (471 -> 520), two more separated, one corpus sentence rewritten. O260 (2026-09-29): the shared-care sentence lost its assessment key, one separated read became a partial tie (159 -> 158). O257 (2026-09-29): +4 lived-experience sentences, one separated. O256 (2026-09-29): +3 continuation sentences, and three lost care:adhd-assessment, so three separated reads became partial ties (161 -> 158). Before that, 2026-09-29: +1 sentence ("new mums"), separated
 
 describe("W234 the tie-quality KPI over the corpus run", () => {
   const report = tieQualityReport();
@@ -208,7 +208,7 @@ describe("W234 the tie-quality KPI over the corpus run", () => {
     expect(tieOutcome("my dose wears off and needs titration reviewed")).toBe("separated");
     expect(tieOutcome("zzz qqq")).toBe("unseparated");
     // O252: eleven, and the middle outcome exists again because of it; 2026-09-29: thirty-seven.
-    expect(clinicians.length).toBe(37);
+    expect(clinicians.length).toBe(53);
   });
 
   it("survives roster growth without redefinition: outcomes are relative to roster size", () => {

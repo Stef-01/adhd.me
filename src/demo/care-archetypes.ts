@@ -211,7 +211,8 @@ export const careArchetypes: CareArchetype[] = [
     request:
       "I would prefer a woman doctor for this. I was treated for anxiety before and it never quite fitted, and I want an ADHD assessment looked at properly this time.",
     headline: "A woman GP with mental health behind her.",
-    expectedFirstMatch: "anusha-saxena",
+    // 2026-10-01: Dr Kay Walls (Nurtured Thoughts) declares assessment and anxiety as main areas, ahead of Dr Anu Saxena's sometimes.
+    expectedFirstMatch: "kay-walls",
     requirements: {
       careAreas: ["adhd-assessment"],
       // The request says "a woman doctor" in its first sentence; the requirement has to say it

@@ -49,13 +49,12 @@ describe("ADHD assessment demo archetypes", () => {
    * route to an occupational therapist would be asking this file to invent a journey that
    * ends somewhere the journey was never about.
    */
-  it("routes to every GP on the roster", () => {
+  it("routes every journey to a GP who declares assessment", () => {
     const reached = new Set(careArchetypes.map((archetype) => archetype.expectedFirstMatch));
-    // 2026-09-29: the GPs who declare assessment; a GP listed for shared care alone is reached from the finder.
-    const gps = clinicians.filter((clinician) => professionOf(clinician) === "gp" && clinician.careAreas.includes("adhd-assessment"));
-
-    expect(gps.length).toBeGreaterThan(0);
-    expect([...reached].sort()).toEqual(gps.map((clinician) => clinician.id).sort());
+    // 2026-10-01: with ten assessing GPs no fixed set of journeys reaches each of them; each journey's first is one.
+    const gps = new Set(clinicians.filter((clinician) => professionOf(clinician) === "gp" && clinician.careAreas.includes("adhd-assessment")).map((clinician) => clinician.id));
+    expect(gps.size).toBeGreaterThan(0);
+    for (const id of reached) expect(gps.has(id), id).toBe(true);
   });
 
   it("anchors every journey on assessment rather than on a subtype", () => {

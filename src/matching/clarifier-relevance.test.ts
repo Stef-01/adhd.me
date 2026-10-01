@@ -105,10 +105,12 @@ describe("M10 the gate's measured effect on the tied queue (the unit's verify li
     // top-3 cut matters here: an external filter over the old top three would have zeroed two of
     // these readers, where the integrated gate promotes a suggested candidate from further down
     // the ranking instead.
-    expect(full).toBe(60); // O261: 58 -> 60. O259 (manner never asked): 58 full, 1 partial, 2 none. O256: 57 -> 58. R15: 54 -> 57
-    expect(partial).toBe(1);
-    expect(zero).toBe(1); // O261: the second-language sentence reads care:cultural-background now and gets a question
-    expect(zeroed).toEqual(["a calm doctor for my anxious mum, she speaks Hindi"]);
+    expect(full).toBe(46); // 2026-10-01, the 53-person roster: 60 -> 46, fewer queries tie at all (the roster separates them), so fewer are offered questions. O261: 58 -> 60. O259 (manner never asked): 58 full, 1 partial, 2 none. O256: 57 -> 58. R15: 54 -> 57
+    expect(partial).toBe(0); // 2026-10-01: 1 -> 0 on the 53-person roster
+    // 2026-10-01: 1 -> 0; "a calm doctor for my anxious mum, she speaks Hindi" no longer ties on the 53-person
+    // roster, so it is not in this queue (its own test below still pins that it is offered nothing).
+    expect(zero).toBe(0); // O261: the second-language sentence reads care:cultural-background now and gets a question
+    expect(zeroed).toEqual([]);
   });
 
   it("zero questions is the designed outcome when everything the request suggests is already heard", () => {

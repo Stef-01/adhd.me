@@ -5,7 +5,7 @@ import { EXPERTISE_LABELS, EXPERTISE_TAGS, PROFESSION_ENTRIES, PROFESSIONS, prof
 
 describe("professions", () => {
   it("cover the PRD's six P0 and five P1 kinds and the three the network brought, each with copy that passes the patient rules", () => {
-    expect(PROFESSIONS.length).toBe(14);
+    expect(PROFESSIONS.length).toBe(15);
     for (const p of eachOf(PROFESSION_ENTRIES, "the professions")) {
       // `inAWord` is swept with the rest: it is the line a person who has told the app nothing
       // reads on /support, which makes it the most patient-facing copy in this file.

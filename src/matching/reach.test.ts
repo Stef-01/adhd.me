@@ -160,8 +160,11 @@ describe("W221 how much of a real sentence the lexicon can hear", () => {
     // O252: trauma-informed care is declared by four of the eleven now, so the live gap moved.
     // `complex-mental-health` is the area nobody on the roster declares today, and it is the
     // honest one to pin: a bipolar or psychosis ask is read perfectly and answered by no one.
-    const asks = unservedAsks("I have bipolar as well");
+    // 2026-10-01: with Nurtured Thoughts' psychiatrists every care area is declared by someone, and
+    // bipolar is answered; the gap a person can still hit is a language nobody speaks.
+    const asks = unservedAsks("a clinician who speaks Arabic");
     expect(asks.length).toBeGreaterThan(0);
+    expect(unservedAsks("I have bipolar as well")).toEqual([]);
     expect(unservedAsks("titration and telehealth")).toEqual([]);
     expect(unservedAsks("I need trauma-informed care, I have a difficult childhood")).toEqual([]);
   });
@@ -1279,7 +1282,8 @@ describe("§O111 the finder does not say it could not read what it read perfectl
   it("separates a request nobody answers from a request nobody could read", () => {
     // 2026-09-29: bulk billing is answered on the network roster; Arabic and bipolar are the live gaps.
     expect(matchQuality("a clinician who speaks Arabic")).toBe("unserved");
-    expect(matchQuality("I have bipolar as well")).toBe("unserved");
+    // 2026-10-01: Dr Jae Cho, Dr Rajitha De Silva and Canice Curtis declare bipolar; Arabic is the gap left.
+    expect(matchQuality("I have bipolar as well")).toBe("informed");
     // The genuine no-read case keeps the value and the sentence that were always true of it.
     expect(matchQuality("zzz qqq")).toBe("unmatched");
   });
@@ -1300,7 +1304,7 @@ describe("§O111 the finder does not say it could not read what it read perfectl
   it("nothing that branches on an earned order changes: unserved is not informed either", () => {
     // Every honesty branch in the UI asks `quality !== "informed"`, so the new value must sit
     // on the same side of that line as the one it split from.
-    for (const said of ["a clinician who speaks Arabic", "zzz qqq", "I have bipolar as well"]) {
+    for (const said of ["a clinician who speaks Arabic", "zzz qqq"]) {
       expect(matchQuality(said)).not.toBe("informed");
     }
     // And a request the roster genuinely answers is still informed.

@@ -196,7 +196,9 @@ describe("O1 languages go through the one pipeline (F2)", () => {
     // O252: Hindi used to be the shared language, because the roster was the two GPs who speak
     // it. On eleven it separates, so the property is pinned where it is still true — on the two
     // GPs for Hindi, and on the whole roster for the language every entry declares.
-    const gps = clinicians.filter((c) => professionOf(c) === "gp");
+    // 2026-10-01: the roster's GPs now include nine who speak English only; the three who speak Hindi still tie on it.
+    const gps = clinicians.filter((c) => professionOf(c) === "gp" && c.languages.includes("Hindi"));
+    expect(gps.length).toBe(3);
     expect(matchQuality("a GP who speaks Hindi", gps)).toBe("tied");
     expect(clinicians.every((c) => c.languages.includes("English"))).toBe(true);
     expect(matchQuality("a GP who speaks Hindi")).toBe("informed");

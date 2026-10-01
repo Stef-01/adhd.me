@@ -15,5 +15,5 @@ export const EXAMPLE_SEARCHES: readonly ExampleSearch[] = [
   { label: "Adult ADHD assessment", request: "An adult ADHD assessment, telehealth, not rushed" },
   { label: "Medication review", request: "An ADHD medication review" },
   { label: "A woman doctor", request: "A woman GP for ADHD, not rushed" },
-  { label: "Telehealth appointment", request: "A telehealth appointment for ADHD" },
+  { label: "Telehealth appointment", request: "A telehealth appointment for ADHD, not rushed" },
 ];

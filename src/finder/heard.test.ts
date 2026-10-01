@@ -17,7 +17,8 @@ describe("heardChips", () => {
   it("shows the four strongest of five, in the ranker's order, and nothing else", () => {
     const text = "I want a woman GP who bulk bills and speaks Hindi, my anxiety is bad and I need a longer appointment";
     expect(new Set(needsFor(text, roster).map((n) => facetKey(n.facet))).size).toBe(5);
-    expect(chipsFor(text).map((c) => c.label)).toEqual(["Hindi-speaking", "Bulk billing", "Woman clinician", "Longer appointment"]);
+    // 2026-10-01: with eight more women on the roster a woman clinician is rarer to lack, so it weighs below a longer appointment.
+    expect(chipsFor(text).map((c) => c.label)).toEqual(["Hindi-speaking", "Bulk billing", "Longer appointment", "Woman clinician"]);
   });
 
   it("gives a long label its short one", () => {

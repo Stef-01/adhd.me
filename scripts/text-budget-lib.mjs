@@ -406,7 +406,11 @@ export async function reach(page, route, base) {
     if (child) await page.locator(".first-steps").waitFor({ timeout: 8000 });
     if (!route.state.startsWith("finder-results")) {
       // The missed states open the heaviest profile (a disclosure, two languages) rather than the first.
-      await (missed ? page.locator(".clinician-row", { hasText: "Dr Anubhav Saxena" }) : page.locator(".clinician-row").first()).click();
+      // On the 53-person roster the heaviest profile may sit past the fold: "N more" until its row is there.
+      const heavy = page.locator(".clinician-row", { hasText: "Dr Anubhav Saxena" });
+      const more = page.getByRole("button", { name: /^\d+ more$/ });
+      for (let guard = 0; missed && guard < 20 && !(await heavy.isVisible()) && (await more.isVisible()); guard++) await more.click();
+      await (missed ? heavy : page.locator(".clinician-row").first()).click();
       await page.getByRole("heading", { level: 1 }).waitFor();
     }
     if (route.state?.startsWith("finder-profile-why") || missed) {

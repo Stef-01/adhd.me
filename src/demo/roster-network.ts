@@ -887,4 +887,1306 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     booking: { via: "practice", url: "https://lawsonadhdsolutions.com.au/book-here", note: "Lawson ADHD Solutions takes bookings on its own website." },
     realPerson: true,
   },
+  // Nurtured Thoughts Psychology (2026-10-01): sixteen clinicians, from revamped-adhd.me's cards (the visible layer) and their own pages
+  // (profileDetail, the backend layer), by scripts/import-nurtured-thoughts.mjs.
+  {
+    id: "jae-cho",
+    name: "Dr Jae Cho",
+    shortName: "Dr Cho",
+    profession: "psychiatrist",
+    gender: "man",
+    pronouns: "he/him",
+    title: "Specialist Psychiatrist, MD, FRANZCP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/jae-cho.jpg",
+    acceptingNewPatients: true,
+    focus: "Thorough, compassionate general psychiatry, with calm explanations that make difficult topics feel manageable and clear.",
+    matchLine: "Thorough, compassionate general psychiatry, with calm explanations that make difficult topics feel manageable and clear.",
+    fitSignals: [
+      "General psychiatry",
+      "ADHD",
+      "Trauma-informed"
+    ],
+    practicalSignals: [
+      "$900 initial, $395–$445 review, Medicare rebate applies; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Jae Cho is a specialist psychiatrist who provides thorough, compassionate care across all areas of general psychiatry, with a strong interest in anxiety, depression, insomnia, trauma, ADHD, personality disorder, bipolar disorder, OCD, addiction and other complex mental health conditions. Patients appreciate his calm manner, thoughtful explanations, and ability to make difficult topics feel manageable and clear.",
+    about: "Dr Jae Cho is a specialist psychiatrist who provides thorough, compassionate care across all areas of general psychiatry, with a strong interest in anxiety, depression, insomnia, trauma, ADHD, personality disorder, bipolar disorder, OCD, addiction and other complex mental health conditions. Patients appreciate his calm manner, thoughtful explanations, and ability to make difficult topics feel manageable and clear. Jae’s approach is evidence-based, trauma-informed, and grounded in the biopsychosocial model. He takes the time to understand each patient’s background, strengths, and goals, and works collaboratively to create a tailored treatment plan. He values close partnership with GPs, psychologists, families, and other clinicians to ensure holistic, coordinated care. He is a Fellow of the Royal Australian and New Zealand College of Psychiatrists and completed his medical degree at Western Sydney University before undertaking specialist psychiatric training across major hospitals in Sydney. His experience spans acute inpatient care, community mental health, consultation-liaison psychiatry, and outpatient management of complex cases. He also supervises psychiatry trainees and medical students.",
+    experience: [
+      "Specialist psychiatrist, Nurtured Thoughts Psychology, Graceville",
+      "Fellow of the Royal Australian and New Zealand College of Psychiatrists",
+      "Medical degree, Western Sydney University",
+      "Specialist psychiatric training across major Sydney hospitals",
+      "Acute inpatient, community mental health, consultation-liaison and outpatient psychiatry",
+      "Supervises psychiatry trainees and medical students"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "trauma-informed",
+      "anxiety",
+      "depression",
+      "complex-mental-health",
+      "sleep",
+      "substance-history"
+    ],
+    careAreasSometimes: [
+      "adhd-assessment"
+    ],
+    careEvidence: {
+      "trauma-informed": "Trauma-informed",
+      anxiety: "Anxiety",
+      depression: "Depression",
+      "complex-mental-health": "Bipolar disorder",
+      "adhd-assessment": "ADHD",
+      sleep: "Insomnia",
+      "substance-history": "Addiction"
+    },
+    manner: [
+      "steadying",
+      "non_judgmental",
+      "structured"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/jae-cho",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Jae at a Glance": [
+          "Dr Jae Cho is a specialist psychiatrist who provides thorough, compassionate care across all areas of general psychiatry. He has a strong interest in supporting patients experiencing:",
+          "• Anxiety",
+          "• Depression",
+          "• Insomnia",
+          "• Trauma",
+          "• ADHD",
+          "• Personality disorder",
+          "• Bipolar disorder",
+          "• OCD",
+          "• Addiction",
+          "• Other complex mental health conditions.",
+          "Patients appreciate his calm manner, thoughtful explanations, and ability to make difficult topics feel manageable and clear.",
+          "Jae’s approach is evidence-based, trauma-informed, and grounded in the biopsychosocial model. He takes the time to understand each patient’s background, strengths, and goals, and works collaboratively to create a tailored treatment plan. He values close partnership with GPs, psychologists, families, and other clinicians to ensure holistic, coordinated care.",
+          "He is a Fellow of the Royal Australian and New Zealand College of Psychiatrists and completed his medical degree at Western Sydney University before undertaking specialist psychiatric training across major hospitals in Sydney. His experience spans acute inpatient care, community mental health, consultation-liaison psychiatry, and outpatient management of complex cases.",
+          "In addition to his clinical work, Jae is actively involved in medical education. He supervises psychiatry trainees and medical students, contributing to the development of the next generation of psychiatrists. His commitment to teaching reflects his passion for clear communication, clinical excellence, and high-quality patient care.",
+          "Jae welcomes patients seeking a thoughtful, thorough, and supportive psychiatric assessment and values working with individuals who want to understand their condition and move towards meaningful change."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "rajitha-de-silva",
+    name: "Dr Rajitha De Silva",
+    shortName: "Dr De Silva",
+    profession: "psychiatrist",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Consultant Psychiatrist, FRANZCP | Board Certification in Psychiatry | MD (Psychiatry)",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/rajitha-de-silva.jpg",
+    acceptingNewPatients: true,
+    focus: "Over 16 years caring for adults, with a culturally sensitive approach that begins with feeling heard.",
+    matchLine: "Over 16 years caring for adults, with a culturally sensitive approach that begins with feeling heard.",
+    fitSignals: [
+      "Adults",
+      "Anxiety & mood",
+      "Culturally sensitive"
+    ],
+    practicalSignals: [
+      "$900 initial, $395–$445 review, Medicare rebate applies; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Rajitha Marcellin De Silva is a compassionate consultant psychiatrist with over 16 years of experience caring for adults experiencing a wide range of mental health concerns. Having practised in both Sri Lanka and Australia, she brings a thoughtful, culturally sensitive approach to helping people navigate life’s challenges.",
+    about: "Dr Rajitha Marcellin De Silva is a compassionate consultant psychiatrist with over 16 years of experience caring for adults experiencing a wide range of mental health concerns. Having practised in both Sri Lanka and Australia, she brings a thoughtful, culturally sensitive approach to helping people navigate life’s challenges. She believes that the best care begins with feeling heard. Rajitha takes the time to understand each person’s unique experiences, concerns, and goals, creating a safe, supportive, and non-judgemental environment where patients feel comfortable discussing even the most difficult issues. Her approach combines empathy with evidence-based medicine, working collaboratively with patients to develop personalised treatment plans that reflect the latest research while respecting individual preferences and circumstances.",
+    experience: [
+      "Consultant psychiatrist, Nurtured Thoughts Psychology, Graceville",
+      "Over 16 years caring for adults, in Sri Lanka and Australia",
+      "Fellow of the Royal Australian and New Zealand College of Psychiatrists",
+      "MD (Psychiatry) and Board Certification in Psychiatry",
+      "Particular interests in anxiety, depression, bipolar, OCD, trauma and psychosis"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "anxiety",
+      "depression",
+      "complex-mental-health",
+      "trauma-informed",
+      "cultural-background"
+    ],
+    careAreasSometimes: [],
+    careEvidence: {
+      anxiety: "Anxiety & mood",
+      depression: "depression",
+      "complex-mental-health": "bipolar",
+      "trauma-informed": "trauma",
+      "cultural-background": "Culturally sensitive."
+    },
+    manner: [
+      "attuned",
+      "non_judgmental"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/rajitha-dinushini",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Rajitha at a Glance": [
+          "Dr Rajitha Marcellin De Silva is a compassionate consultant psychiatrist with over 16 years of experience caring for adults experiencing a wide range of mental health concerns. Having practised in both Sri Lanka and Australia, she brings a thoughtful, culturally sensitive approach to helping people navigate life’s challenges.",
+          "She believes that the best care begins with feeling heard. Rajitha takes the time to understand each person’s unique experiences, concerns, and goals, creating a safe, supportive, and non-judgemental environment where patients feel comfortable discussing even the most difficult issues.",
+          "Her approach combines empathy with evidence-based medicine, working collaboratively with patients to develop personalised treatment plans that reflect the latest research while respecting individual preferences and circumstances. She is committed to helping people achieve meaningful improvements in their mental health, wellbeing, and quality of life.",
+          "Rajitha has particular interests in anxiety, depression, bipolar, OCD, trauma and psychosis"
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "beth-hansen",
+    name: "Dr Beth Hansen",
+    shortName: "Dr Hansen",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Specialist GP, MBBS, FRACGP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/beth-hansen.jpg",
+    acceptingNewPatients: true,
+    focus: "A gentle, practical and thorough ADHD assessment for adults who have spent years masking, overcompensating or pushing through.",
+    matchLine: "A gentle, practical and thorough ADHD assessment for adults who have spent years masking, overcompensating or pushing through.",
+    fitSignals: [
+      "ADHD in women",
+      "Late-identified ADHD",
+      "ADHD in parents"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Beth Hansen is a GP with a special interest in mental health, adult ADHD and women’s health. A UQ graduate and a Fellow of the Royal Australian College of General Practitioners, she brings a gentle, practical and thorough approach to ADHD assessment and care.",
+    about: "Dr Beth Hansen is a GP with a special interest in mental health, adult ADHD and women’s health. A UQ graduate and a Fellow of the Royal Australian College of General Practitioners, she brings a gentle, practical and thorough approach to ADHD assessment and care. Beth is particularly interested in supporting adults who have managed for many years by masking, overcompensating or pushing through, often at the cost of exhaustion, anxiety, self-criticism or burnout. She has a strong interest in how ADHD can present in women, especially when symptoms have been missed, minimised or attributed to other causes. In her consultations, Beth aims to create a space where patients feel heard, understood and taken seriously. She takes time to explore symptoms in the context of a person’s life, including work, study, relationships, parenting, sleep, emotional regulation and mental health. She has worked across urban, rural and remote settings, which has shaped her interest in accessible and compassionate mental health care.",
+    experience: [
+      "General practice with a special interest in mental health, adult ADHD and women’s health",
+      "Fellow of the Royal Australian College of General Practitioners",
+      "Medical degree, University of Queensland",
+      "Urban, rural and remote practice"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment",
+      "emotional-regulation",
+      "womens-health",
+      "late-diagnosis",
+      "parenting"
+    ],
+    careAreasSometimes: [
+      "anxiety"
+    ],
+    careEvidence: {
+      "adhd-assessment": "A gentle, practical and thorough ADHD assessment for adults who have spent years masking, overcompensating or pushing through.",
+      "emotional-regulation": "Emotional regulation, self-esteem and relationship impacts of ADHD",
+      anxiety: "Beth is particularly interested in supporting adults who have managed for many years by masking, overcompensating or pushing through, often at the cost of exhaustion, anxiety, self-criticism or burnou",
+      "womens-health": "ADHD in women.",
+      "late-diagnosis": "Late-identified ADHD.",
+      parenting: "ADHD in parents."
+    },
+    manner: [
+      "steadying",
+      "structured",
+      "culturally_attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/beth-hansen",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Beth at a Glance": [
+          "Dr Beth Hansen is a GP with a special interest in mental health, adult ADHD and women’s health. As a UQ graduate, she is a Fellow of the Royal Australian College of General Practitioners and brings a gentle, practical and thorough approach to ADHD assessment and care.",
+          "Beth is particularly interested in supporting adults who have managed for many years by masking, overcompensating or pushing through, often at the cost of exhaustion, anxiety, self-criticism or burnout. She has a strong interest in how ADHD can present in women, especially when symptoms have been missed, minimised or attributed to other causes.",
+          "In her consultations, Beth aims to create a space where patients feel heard, understood and taken seriously. She takes time to explore symptoms in the context of a person’s life, including work, study, relationships, parenting, sleep, emotional regulation and mental health.",
+          "Beth has worked across urban, rural and remote settings, which has shaped her interest in accessible and compassionate mental health care.",
+          "Her areas of interest include:",
+          "• Adult ADHD in young adult and middle aged women",
+          "• Late-identified and high-functioning ADHD presentations",
+          "• Emotional regulation, self-esteem and relationship impacts of ADHD",
+          "• ADHD in parents"
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "bill-liley",
+    name: "Dr Bill Liley",
+    shortName: "Dr Liley",
+    gender: "man",
+    pronouns: "he/him",
+    title: "Specialist GP, FRACGP, FACRRM",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Telehealth from regional Queensland",
+    image: "/clinicians/bill-liley.jpg",
+    acceptingNewPatients: true,
+    focus: "More than 40 years of practice and a whole-person approach to how ADHD shapes your day-to-day life.",
+    matchLine: "More than 40 years of practice and a whole-person approach to how ADHD shapes your day-to-day life.",
+    fitSignals: [
+      "40+ years in practice",
+      "Rural & regional",
+      "Whole-person care"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Bill Liley is an experienced Rural Generalist GP with more than 40 years of clinical experience and a particular interest in supporting people with ADHD.",
+    about: "Dr Bill Liley is an experienced Rural Generalist GP with more than 40 years of clinical experience and a particular interest in supporting people with ADHD. Throughout his career, Bill has worked across metropolitan, regional, rural and remote communities in Queensland, New South Wales and Victoria, including in private practice, community and public hospital settings, Aboriginal Community Controlled Health Organisations, and rural generalist practice. This breadth has given him extensive experience working with people from diverse backgrounds, including many who experience the effects of ADHD in their everyday lives. Bill brings a practical, whole-person approach to ADHD care, taking into consideration each patient’s individual circumstances and how ADHD impacts their day-to-day life. Based in regional Queensland, he also appreciates the accessibility that telehealth provides, particularly for people who may otherwise have difficulty accessing ADHD care.",
+    experience: [
+      "Rural generalist GP, more than 40 years of clinical experience",
+      "Metropolitan, regional, rural and remote practice in Queensland, New South Wales and Victoria",
+      "Private practice, community and public hospital settings",
+      "Aboriginal Community Controlled Health Organisations"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [],
+    careAreasSometimes: [],
+    careEvidence: {},
+    manner: [
+      "attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/bill-liley",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Bill at a Glance": [
+          "Dr Bill Lilley is an experienced Rural Generalist GP with more than 40 years of clinical experience and a particular interest in supporting people with ADHD.",
+          "Throughout his career, Bill has worked across metropolitan, regional, rural and remote communities in Queensland, New South Wales and Victoria, including in private practice, community and public hospital settings, Aboriginal Community Controlled Health Organisations, and rural generalist practice.",
+          "This breadth of experience has given Bill extensive experience working with people from diverse backgrounds and communities, including many people who experience the effects of ADHD in their everyday lives.",
+          "Bill brings a practical, whole-person approach to ADHD care, taking into consideration each patient’s individual circumstances and how ADHD impacts their day-to-day life.",
+          "Based in regional Queensland, Bill also appreciates the accessibility and convenience that telehealth provides, particularly for people who may otherwise have difficulty accessing appropriate ADHD care."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "hannah-gray",
+    name: "Dr Hannah Gray",
+    shortName: "Dr Gray",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Specialist GP, MBBS, FRACGP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/hannah-gray.jpg",
+    acceptingNewPatients: true,
+    focus: "Calm, structured and collaborative, explaining each step so you understand the plan and why.",
+    matchLine: "Calm, structured and collaborative, explaining each step so you understand the plan and why.",
+    fitSignals: [
+      "Students & early career",
+      "Organisation & follow-through",
+      "New to assessment"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Hannah Gray is a warm and approachable GP with a strong interest in mental health and adult ADHD. She works primarily with adults who are managing study, early career roles or professional responsibilities and are concerned that attention, organisation or follow-through difficulties may be affecting their performance and wellbeing.",
+    about: "Dr Hannah Gray is a warm and approachable GP with a strong interest in mental health and adult ADHD. She works primarily with adults who are managing study, early career roles or professional responsibilities and are concerned that attention, organisation or follow-through difficulties may be affecting their performance and wellbeing. In consultations, Hannah is calm, structured and collaborative. She takes pride in explaining her thinking and plans clearly so patients understand each step of the process. Her recommendations emphasise practical strategies and realistic next steps that fit a person’s day-to-day life, and she particularly welcomes patients who are new to mental health or ADHD assessment.",
+    experience: [
+      "General practice with a strong interest in mental health and adult ADHD",
+      "Fellow of the Royal Australian College of General Practitioners",
+      "Adult ADHD in university students and early-career professionals",
+      "Organisation, procrastination and follow-through in study and work"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment",
+      "study-school",
+      "executive-function",
+      "work-career"
+    ],
+    careAreasSometimes: [],
+    careEvidence: {
+      "adhd-assessment": "New to assessment",
+      "study-school": "Students & early career",
+      "executive-function": "Organisation & follow-through",
+      "work-career": "early-career professionals"
+    },
+    manner: [
+      "steadying",
+      "sense_making",
+      "collaborative"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/hannah-gray",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Hannah at a Glance": [
+          "Dr Hannah Gray is a warm and approachable GP with a strong interest in mental health and adult ADHD.",
+          "She works primarily with adults who are managing study, early career roles or professional responsibilities and are concerned that attention, organisation or follow-through difficulties may be affecting their performance and wellbeing.",
+          "In consultations, Hannah is calm, structured and collaborative. She takes pride in explaining her thinking and plans clearly so patients understand each step of the process. Her recommendations emphasise practical strategies and realistic next steps that fit a person’s day-to-day life.",
+          "Her areas of clinical interest include:",
+          "• Adult ADHD in university students and early-career professionals",
+          "• Difficulties with organisation, procrastination and follow‑through in study and work settings",
+          "• Supporting patients who are new to mental health or ADHD assessment"
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "john-ruberry",
+    name: "Dr John Ruberry",
+    shortName: "Dr Ruberry",
+    gender: "man",
+    pronouns: "he/him",
+    title: "Specialist GP, MBBS",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/john-ruberry.jpg",
+    acceptingNewPatients: true,
+    focus: "Thirteen years in community general practice, and passionate about improving access to ADHD care.",
+    matchLine: "Thirteen years in community general practice, and passionate about improving access to ADHD care.",
+    fitSignals: [
+      "13 years in practice",
+      "Access to ADHD care",
+      "Mental health"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr John is a General Practitioner with 13 years of experience in community general practice, including five years as the owner and principal of his own busy clinic. Throughout his career, he has developed a strong interest in mental health and has seen firsthand the positive difference effective ADHD treatment can make to a person’s quality of life. He is passionate about improving access to ADHD care and supporting patients through their assessment and treatment journey.",
+    about: "Dr John is a General Practitioner with 13 years of experience in community general practice, including five years as the owner and principal of his own busy clinic. Throughout his career, he has developed a strong interest in mental health and has seen firsthand the positive difference effective ADHD treatment can make to a person’s quality of life. He is passionate about improving access to ADHD care and supporting patients through their assessment and treatment journey.",
+    experience: [
+      "13 years in community general practice",
+      "Five years as owner and principal of his own clinic",
+      "Strong interest in mental health and ADHD treatment"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment"
+    ],
+    careAreasSometimes: [],
+    careEvidence: {
+      "adhd-assessment": "Dr John is a General Practitioner with 13 years of experience in community general practice, including five years as the owner and principal of his own busy clinic. Throughout his career, he has devel"
+    },
+    manner: [
+      "non_judgmental"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/john-ruberry",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr John at a Glance": [
+          "Dr John is a General Practitioner with 13 years of experience in community general practice, including five years as the owner and principal of his own busy clinic. Throughout his career, he has developed a strong interest in mental health and has seen firsthand the positive difference effective ADHD treatment can make to a person’s quality of life. He is passionate about improving access to ADHD care and supporting patients through their assessment and treatment journey."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "kay-walls",
+    name: "Dr Kay Walls",
+    shortName: "Dr Walls",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Specialist GP, MBBS, BHealthSci, FRACGP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/kay-walls.jpg",
+    acceptingNewPatients: true,
+    focus: "An ADHD assessment that is never just a checklist: room to tell your whole story, and a plan that fits your life.",
+    matchLine: "An ADHD assessment that is never just a checklist: room to tell your whole story, and a plan that fits your life.",
+    fitSignals: [
+      "ADHD in adult women",
+      "Mothers & postnatal",
+      "Focused Psychological Strategies"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Kay Walls is a specialist general practitioner who brings warmth, curiosity, and a deeply holistic lens to everything she does. With a background spanning mental health and women’s health, she has developed a particular focus on ADHD in adult women, a group she feels has historically been under-recognised and underserved.",
+    about: "Dr Kay Walls is a specialist general practitioner who brings warmth, curiosity, and a deeply holistic lens to everything she does. With a background spanning mental health and women’s health, she has developed a particular focus on ADHD in adult women, a group she feels has historically been under-recognised and underserved. For Kay, an ADHD assessment is never just a checklist. She is interested in the whole person, including their history, relationships, long-standing patterns, and the strengths that often sit alongside the challenges. She creates space for patients to tell their story fully, and many describe her consultations as the first time they have felt genuinely listened to. Her interests include supporting mothers and high-functioning women navigating a new ADHD diagnosis, culturally sensitive and person-centred care, and emotional regulation, anxiety and depression, particularly in the postnatal period. She works closely with psychologists, psychiatrists, and allied health providers to ensure coordinated, comprehensive support.",
+    experience: [
+      "Specialist general practice, with a background in mental health and women’s health",
+      "Medical degree, University of Sydney",
+      "General practice training, James Cook University; Fellow of the Royal Australian College of General Practitioners",
+      "Additional training in Focused Psychological Strategies"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment",
+      "depression",
+      "anxiety",
+      "emotional-regulation",
+      "womens-health",
+      "perinatal",
+      "cultural-background"
+    ],
+    careAreasSometimes: [],
+    careEvidence: {
+      "adhd-assessment": "An ADHD assessment that is never just a checklist: room to tell your whole story, and a plan that fits your life.",
+      depression: "Emotional regulation, anxiety and depression particularly in the postnatal period",
+      anxiety: "Emotional regulation, anxiety and depression particularly in the postnatal period",
+      "emotional-regulation": "Emotional regulation, anxiety and depression particularly in the postnatal period",
+      "womens-health": "ADHD in adult women.",
+      perinatal: "Mothers & postnatal.",
+      "cultural-background": "Culturally sensitive and person-centred care."
+    },
+    manner: [
+      "culturally_attuned",
+      "attuned",
+      "motivating"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/kay-walls",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Kay at a Glance": [
+          "Dr Kay Walls is a specialist general practitioner who brings warmth, curiosity, and a deeply holistic lens to everything she does. With a background spanning mental health and women’s health, she has developed a particular focus on ADHD in adult women, a group she feels has historically been under-recognised and underserved.",
+          "She completed her medical degree at the University of Sydney, followed by general practice training through James Cook University, where she attained Fellowship with the Royal Australian College of General Practitioners. She has also undertaken additional training in Focused Psychological Strategies (FPS), allowing her to integrate psychological support into her care.",
+          "For Kay, an ADHD assessment is never just a checklist. She is interested in the whole person, including their history, relationships, long-standing patterns, and the strengths that often sit alongside the challenges. She creates space for patients to tell their story fully, and many describe her consultations as the first time they have felt genuinely listened to.",
+          "Her areas of interest include:",
+          "• Supporting mothers and high-functioning women navigating a new ADHD diagnosis",
+          "• Culturally sensitive and person-centred care",
+          "• Emotional regulation, anxiety and depression particularly in the postnatal period",
+          "• Holistic, personalised care planning.",
+          "Kay’s approach is warm, thorough, and deeply patient-centred. She takes time to understand the full picture, including a patient’s history, day-to-day challenges, strengths, and goals, before developing a care plan that is practical and tailored to their life. She works closely with psychologists, psychiatrists, and allied health providers to ensure coordinated, comprehensive support.",
+          "She welcomes patients who are looking for a practitioner who will take their concerns seriously, ask thoughtful questions, and walk alongside them towards greater clarity, confidence, and wellbeing."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "natalie-cook",
+    name: "Dr Natalie Cook",
+    shortName: "Dr Cook",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Specialist GP, MBBS, FRACGP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/natalie-cook.jpg",
+    acceptingNewPatients: true,
+    focus: "Direct, honest and safety-focused advice, tailored to your work, sleep, family and day-to-day demands.",
+    matchLine: "Direct, honest and safety-focused advice, tailored to your work, sleep, family and day-to-day demands.",
+    fitSignals: [
+      "Complex adult ADHD",
+      "Evidence-based",
+      "Central Queensland"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Natalie Cook is a Russian-born and trained GP who has practised in Central Queensland for over 11 years. She holds FRACGP and AMC qualifications in Australia.",
+    about: "Dr Natalie Cook is a Russian-born and trained GP who has practised in Central Queensland for over 11 years. She holds FRACGP and AMC qualifications in Australia. Her approach is direct, honest and safety-focused, providing clear, evidence-based advice while tailoring treatment to each patient’s individual circumstances, preferences and goals, including their work, sleep, family and day-to-day demands. She has extensive experience assessing and managing adults with ADHD, including complex cases requiring collaboration with psychiatrists and other specialists.",
+    experience: [
+      "General practice in Central Queensland for over 11 years",
+      "Russian-born and trained; FRACGP and AMC qualifications in Australia",
+      "Assessing and managing adults with ADHD, including complex cases with psychiatrists and other specialists"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [],
+    careAreasSometimes: [],
+    careEvidence: {
+    },
+    manner: [
+      "non_judgmental",
+      "culturally_attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/natalie-cook",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Natalie at a Glance": [
+          "Dr Natalie Cook is a Russian-born and trained GP who has practised in Central Queensland for over 11 years. She holds FRACGP and AMC qualifications in Australia.",
+          "Her approach is direct, honest and safety-focused, providing clear, evidence-based advice while tailoring treatment to each patient’s individual circumstances, preferences and goals, including their work, sleep, family and day-to-day demands.",
+          "She has extensive experience assessing and managing adults with ADHD, including complex cases requiring collaboration with psychiatrists and other specialists."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "richard-hostiadi",
+    name: "Dr Richard Hostiadi",
+    shortName: "Dr Hostiadi",
+    gender: "man",
+    pronouns: "he/him",
+    title: "Specialist GP, MBBS, FRACGP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/richard-hostiadi.jpg",
+    acceptingNewPatients: true,
+    focus: "Adult ADHD, men’s mental health and lifestyle medicine, with real insight into demanding, high-pressure work.",
+    matchLine: "Adult ADHD, men’s mental health and lifestyle medicine, with real insight into demanding, high-pressure work.",
+    fitSignals: [
+      "Men’s mental health",
+      "ADHD at work",
+      "Lifestyle medicine"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Richard Hostiadi is a Fellow of the Royal Australian College of General Practitioners with a focus on adult ADHD, men’s mental health and lifestyle medicine. Before studying medicine, he worked as a Registered Nurse at St Vincent’s Hospital in Sydney across a range of clinical areas for several years.",
+    about: "Dr Richard Hostiadi is a Fellow of the Royal Australian College of General Practitioners with a focus on adult ADHD, men’s mental health and lifestyle medicine. Before studying medicine, he worked as a Registered Nurse at St Vincent’s Hospital in Sydney across a range of clinical areas for several years. He also worked in workers’ compensation, life insurance and disability claims. Together with his experience as a General Practitioner and Medical Officer in the Royal Australian Navy Reserve, this has given him insight into occupational medicine, workplace health and the challenges faced by professionals, tradespeople and shift workers in physically demanding and high-pressure occupations. Outside medicine, Richard keeps active and has completed half and full marathons, HYROX events, obstacle course races and the Everest Base Camp trek. He lives with his wife and two young boys, and their dog.",
+    experience: [
+      "Fellow of the Royal Australian College of General Practitioners",
+      "Adult ADHD assessments and ongoing management",
+      "Medical Officer, Royal Australian Navy Reserve",
+      "Registered Nurse, St Vincent’s Hospital, Sydney",
+      "Workers’ compensation, life insurance and disability claims"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment",
+      "work-career"
+    ],
+    careAreasSometimes: [
+      "movement-exercise",
+      "titration"
+    ],
+    careEvidence: {
+      titration: "Adult ADHD assessments and ongoing management",
+      "adhd-assessment": "Adult ADHD assessments and ongoing management",
+      "work-career": "ADHD at work",
+      "movement-exercise": "Lifestyle medicine"
+    },
+    manner: [
+      "culturally_attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/richard-hostiadi",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Richard at a Glance": [
+          "Dr Richard Hostiadi is a Fellow of the Royal Australian College of General Practitioners (FRACGP) with a focus on adult ADHD, men’s mental health and lifestyle medicine.",
+          "Before studying medicine, Richard worked as a Registered Nurse at St Vincent’s Hospital in Sydney across a range of clinical areas for several years.",
+          "Prior to becoming a doctor, Richard also worked in workers’ compensation, life insurance and disability claims. Together with his experience as a General Practitioner and Medical Officer in the Royal Australian Navy Reserve, this has given him valuable insight into occupational medicine, workplace health and the challenges faced by people in physically demanding and high-pressure occupations.",
+          "Areas of interest:",
+          "• Adult ADHD assessments and ongoing management",
+          "• Men’s mental health",
+          "• Occupational health and ADHD in working adults, including professionals, tradespeople and shift workers",
+          "• Lifestyle medicine to support long-term ADHD management",
+          "Outside medicine, Richard enjoys maintaining an active lifestyle and has completed multiple half marathons, full marathons, HYROX events, obstacle course races and the Everest Base Camp trek. He lives with his wife and two young boys and enjoys spending time with his family and their dog."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "sally-mcleod",
+    name: "Dr Sally McLeod",
+    shortName: "Dr McLeod",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Specialist GP, MBBS., FRACGP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/sally-mcleod.jpg",
+    acceptingNewPatients: true,
+    focus: "Helping adolescents and adults understand how their brain works, with thorough, evidence-based assessment.",
+    matchLine: "Helping adolescents and adults understand how their brain works, with thorough, evidence-based assessment.",
+    fitSignals: [
+      "Women & girls",
+      "Late diagnosis",
+      "Perimenopause"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Sally McLeod completed her medical degree at the University of Queensland in 2009 before her junior doctor training at the Mater Hospital in South Brisbane, and her Fellowship of the Royal Australian College of General Practitioners in 2016.",
+    about: "Dr Sally McLeod completed her medical degree at the University of Queensland in 2009 before her junior doctor training at the Mater Hospital in South Brisbane, and her Fellowship of the Royal Australian College of General Practitioners in 2016. Sally has a special interest in ADHD and is passionate about helping adolescents and adults better understand how their brain works. She provides thorough, evidence-based assessments and works collaboratively with patients to develop practical, individualised treatment plans. Her interests include ADHD in women and girls, high-functioning and late-identified ADHD in professionals, perimenopause, and autism, anxiety and depression in the context of neurodivergence. Outside of medicine, Sally enjoys spending time with her three sons. She loves reading, music, and the outdoors, particularly bushwalking, camping and travelling to remote parts of Australia.",
+    experience: [
+      "Medical degree, University of Queensland, 2009",
+      "Junior doctor training, Mater Hospital, South Brisbane",
+      "Fellow of the Royal Australian College of General Practitioners, 2016",
+      "ADHD in women and girls, including late diagnosis in adulthood",
+      "Perimenopause and its interaction with ADHD and mental health"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment",
+      "depression",
+      "anxiety",
+      "autism-adhd",
+      "womens-health",
+      "late-diagnosis",
+      "work-career"
+    ],
+    careAreasSometimes: [
+      "child-adolescent-adhd"
+    ],
+    careEvidence: {
+      "adhd-assessment": "Helping adolescents and adults understand how their brain works, with thorough, evidence-based assessment.",
+      "child-adolescent-adhd": "Helping adolescents and adults understand how their brain works, with thorough, evidence-based assessment.",
+      depression: "Autism, anxiety and depression in the context of neurodivergence",
+      anxiety: "Autism, anxiety and depression in the context of neurodivergence",
+      "autism-adhd": "Autism, anxiety and depression in the context of neurodivergence",
+      "womens-health": "Perimenopause.",
+      "late-diagnosis": "Late diagnosis.",
+      "work-career": "High-functioning and late-identified ADHD in professionals."
+    },
+    manner: [
+      "sense_making",
+      "structured",
+      "attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/sally-mcleod",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Sally at a Glance": [
+          "Dr Sally McLeod completed her medical degree at the University of Queensland in 2009 before undertaking her junior doctor training at the Mater Hospital in South Brisbane. She completed her Fellowship of the Royal Australian College of General Practitioners (FRACGP) in 2016.",
+          "Sally has a special interest in ADHD and is passionate about helping adolescents and adults better understand how their brain works. She provides thorough, evidence-based assessments and works collaboratively with patients to develop practical, individualised treatment plans.",
+          "Areas of interest:",
+          "• ADHD in women and girls - including late diagnosis in adulthood",
+          "• High-functioning and late-identified ADHD in professionals",
+          "• Perimenopause and its interaction with ADHD and mental health",
+          "• Autism, anxiety and depression in the context of neurodivergence",
+          "Patients appreciate Sally’s warm, approachable nature and the time she takes to listen. She strives to create a supportive, non-judgemental environment where patients feel genuinely heard and cared for.",
+          "Outside of medicine, Sally enjoys spending time with her three sons. She loves reading, music, and the outdoors, particularly bushwalking, camping and travelling to remote parts of Australia."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "shwetha-murthy",
+    name: "Dr Shwetha Murthy",
+    shortName: "Dr Murthy",
+    gender: "woman",
+    pronouns: "she/her",
+    title: "Specialist GP, MBBS, FRACGP, SCHP",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/shwetha-murthy.jpg",
+    acceptingNewPatients: true,
+    focus: "A structured assessment that maps how ADHD has shown up over time, and what it means for family life at home and at work.",
+    matchLine: "A structured assessment that maps how ADHD has shown up over time, and what it means for family life at home and at work.",
+    fitSignals: [
+      "Parents & carers",
+      "ADHD in families",
+      "Sydney Child Health Program"
+    ],
+    practicalSignals: [
+      "$1,950 all-inclusive adult ADHD pathway, about $200 Medicare rebate; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Dr Shwetha Murthy is a Specialist General Practitioner with a particular interest in adult ADHD and mental health. Many of the people she sees are managing busy households, caring for children or relatives, and noticing patterns of attention, organisation or emotional regulation that seem to run through the family. She is especially interested in supporting women who are starting to wonder how their own history, their children’s experiences and ADHD might be connected, and in adult ADHD in men across blue-collar and white-collar work.",
+    about: "Dr Shwetha Murthy is a Specialist General Practitioner with a particular interest in adult ADHD and mental health. Many of the people she sees are managing busy households, caring for children or relatives, and noticing patterns of attention, organisation or emotional regulation that seem to run through the family. She is especially interested in supporting women who are starting to wonder how their own history, their children’s experiences and ADHD might be connected, and in adult ADHD in men across blue-collar and white-collar work. In consultations, Shwetha brings a calm, organised style and a strong focus on context: childhood experiences, school reports, family roles, cultural background and current life demands. She maps how symptoms have shown up over time, how they interact with mood, sleep and physical health, and what this means day to day, aiming for a structured, clinically sound assessment explained in clear, practical language.",
+    experience: [
+      "Specialist General Practitioner with a particular interest in adult ADHD and mental health",
+      "Medical degree in India; clinical experience in the United Kingdom; in Australia since 2007",
+      "Tertiary and regional hospitals in NSW, WA and Queensland: General Medicine, Nephrology, Nuclear Medicine and Radiology",
+      "Sydney Child Health Program, University of Sydney"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment",
+      "parenting",
+      "executive-function",
+      "relationships",
+      "womens-health",
+      "work-career"
+    ],
+    careAreasSometimes: [
+      "child-adolescent-adhd",
+      "emotional-regulation",
+      "titration"
+    ],
+    careEvidence: {
+      titration: "This breadth of experience underpins her careful, whole‑person approach to ADHD assessment and ongoing management.",
+      "adhd-assessment": "A structured assessment that maps how ADHD has shown up over time, and what it means for family life at home and at work.",
+      "child-adolescent-adhd": "Dr Shwetha Murthy is a Specialist General Practitioner with a particular interest in adult ADHD and mental health. Many of the people she sees are managing busy households, caring for children or rela",
+      "emotional-regulation": "Dr Shwetha Murthy is a Specialist General Practitioner with a particular interest in adult ADHD and mental health. Many of the people she sees are managing busy households, caring for children or rela",
+      parenting: "Parents & carers.",
+      "executive-function": "executive functioning challenges",
+      relationships: "family routines and relationships",
+      "womens-health": "Adult ADHD in women who are also parents or carers.",
+      "work-career": "Adult ADHD in men across a wide range of roles, from blue‑collar to white‑collar work"
+    },
+    manner: [
+      "culturally_attuned",
+      "structured",
+      "steadying"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/shwetha-murthy",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Dr Shwetha at a Glance": [
+          "Dr Shwetha Murthy is a Specialist General Practitioner with extensive experience across multiple fields of medicine and a particular interest in adult ADHD and mental health. Many of the people she sees are managing busy households, caring for children or relatives, and noticing patterns of attention, organisation or emotional regulation that seem to run through the family. She is especially interested in supporting women who are starting to wonder how their own history, their children’s experiences and ADHD might be connected.",
+          "In consultations, Shwetha brings a calm, organised style and a strong focus on context: childhood experiences, school reports, family roles, cultural background and current life demands. She takes time to map out how symptoms have shown up over time, how they interact with mood, sleep and physical health, and what this means for day‑to‑day life at home and at work. Her goal is to provide a structured, clinically sound assessment and to help patients understand their options in clear, practical language.",
+          "Her areas of interest include:",
+          "• Adult ADHD in women who are also parents or carers",
+          "• How ADHD traits and executive functioning challenges can affect family routines and relationships",
+          "• Adult ADHD in men across a wide range of roles, from blue‑collar to white‑collar work",
+          "Shwetha obtained her medical degree in India and gained clinical experience in the United Kingdom before relocating to Australia in 2007. She has worked in tertiary and regional hospitals across New South Wales, Western Australia and Queensland, including roles in General Medicine, Nephrology, Nuclear Medicine and Radiology, and has completed the Sydney Child Health Program through the University of Sydney. This breadth of experience underpins her careful, whole‑person approach to ADHD assessment and ongoing management.",
+          "Shwetha welcomes adults who are curious about how ADHD might be affecting not just themselves but their family life, and who are looking for a thoughtful assessment and a coordinated plan that takes their wider responsibilities into account."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "heather-mcauliffe",
+    name: "Heather McAuliffe",
+    shortName: "Heather McAuliffe",
+    gender: "undeclared",
+    pronouns: "",
+    profession: "psychologist",
+    title: "Clinical Psychologist",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/heather-mcauliffe.jpg",
+    acceptingNewPatients: true,
+    focus: "A neurodivergent clinical psychologist who makes assessment warm and safe, and treats you as the expert on your own experience.",
+    matchLine: "A neurodivergent clinical psychologist who makes assessment warm and safe, and treats you as the expert on your own experience.",
+    fitSignals: [
+      "Neurodevelopmental assessment",
+      "Neurodivergent clinician",
+      "Collaborative care"
+    ],
+    practicalSignals: [
+      "Set and charged by the practice; quoted when you book",
+      "Telehealth"
+    ],
+    summary: "Heather is a neurodivergent Clinical Psychologist with a particular interest in neurodevelopment. Her background includes private and community practice, where she has engaged in detailed assessment and diagnosis, therapeutic intervention, and collaborative care coordination.",
+    about: "Heather is a neurodivergent Clinical Psychologist with a particular interest in neurodevelopment. Her background includes private and community practice, where she has engaged in detailed assessment and diagnosis, therapeutic intervention, and collaborative care coordination. She strives to ensure that the assessment process provides warmth, safety, and supportive recommendations, valuing the individual as the expert of their own experiences. Her approach is collaborative, and she often consults with paediatricians, psychiatrists, clinical psychologists, and other allied health professionals for a holistic understanding of each person’s needs.",
+    experience: [
+      "Clinical psychologist with a particular interest in neurodevelopment",
+      "Private and community practice",
+      "Detailed assessment and diagnosis, therapeutic intervention and care coordination",
+      "Consults with paediatricians, psychiatrists and allied health professionals"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "adhd-assessment"
+    ],
+    careAreasSometimes: [
+      "autism-adhd"
+    ],
+    careEvidence: {
+      "adhd-assessment": "A neurodivergent clinical psychologist who makes assessment warm and safe, and treats you as the expert on your own experience.",
+      "autism-adhd": "neurodivergent"
+    },
+    manner: [
+      "non_judgmental",
+      "collaborative"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/heather-mcauliffe",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Heather at a Glance": [
+          "Hello there! I am Heather, a neurodivergent Clinical Psychologist with particular interest in neurodevelopment. My background includes private and community practice, where she has engaged in detailed assessment and diagnosis, therapeutic intervention, and collaborative care coordination.",
+          "I strive to ensure that the assessment process provides warmth, safety, and supportive recommendations, valuing the individual as the expert of their own experiences. My approach is collaborative, and I often consult with paediatricians, psychiatrists, clinical psychologists, and other allied health professionals to ensure a holistic approach to understanding the individual's needs and informing support recommendations."
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "matthew-persello",
+    name: "Matthew Persello",
+    shortName: "Matthew Persello",
+    gender: "undeclared",
+    pronouns: "",
+    profession: "psychologist",
+    title: "Registered Psychologist",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/matthew-persello.jpg",
+    acceptingNewPatients: true,
+    focus: "Strengths-based, solution-focused therapy for adolescents and adults, with a focus on men’s mental health, neurodiversity and the LGBTQIA+ community.",
+    matchLine: "Strengths-based, solution-focused therapy for adolescents and adults, with a focus on men’s mental health, neurodiversity and the LGBTQIA+ community.",
+    fitSignals: [
+      "Teens 13+ & adults",
+      "Men’s mental health",
+      "LGBTQIA+"
+    ],
+    practicalSignals: [
+      "$240 a session, $98.95 Medicare rebate with a plan; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Matthew is a Registered Psychologist specialising in therapy for adolescents (13+ years) and adults, with a strong focus on men’s mental health, neurodiversity and the LGBTQIA+ community. He completed his psychology honours degree through studies in both Australia and the United States, including a year-long research project exploring romantic self-sabotage within gender and sexually diverse populations.",
+    about: "Matthew is a Registered Psychologist specialising in therapy for adolescents (13+ years) and adults, with a strong focus on men’s mental health, neurodiversity and the LGBTQIA+ community. He completed his psychology honours degree through studies in both Australia and the United States, including a year-long research project exploring romantic self-sabotage within gender and sexually diverse populations. His areas of interest include anxiety, depression and stress, sleep difficulties, neurodiversity including autism and ADHD, gender and sexual identity, self-esteem, emotional regulation and relationship challenges. His approach is strengths-based and solution-focused, drawing on CBT, ACT, Solution Focused Therapy and Motivational Interviewing tailored to each client’s needs.",
+    experience: [
+      "Therapy for adolescents (13+) and adults",
+      "Psychology honours, studied in Australia and the United States",
+      "Year-long research project on romantic self-sabotage in gender and sexually diverse populations",
+      "CBT, ACT, Solution Focused Therapy and Motivational Interviewing"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "depression",
+      "anxiety",
+      "emotional-regulation",
+      "autism-adhd",
+      "sleep",
+      "relationships"
+    ],
+    careAreasSometimes: [
+      "non-medication",
+      "child-adolescent-adhd"
+    ],
+    careEvidence: {
+      "child-adolescent-adhd": "Strengths-based, solution-focused therapy for adolescents and adults, with a focus on men’s mental health, neurodiversity and the LGBTQIA+ community.",
+      depression: "Anxiety, Depression, and Stress",
+      anxiety: "Anxiety, Depression, and Stress",
+      "emotional-regulation": "Emotional regulation difficulties",
+      "autism-adhd": "His areas of interest include anxiety, depression and stress, sleep difficulties, neurodiversity including autism and ADHD, gender and sexual identity, self-esteem, emotional regulation and relationsh",
+      "non-medication": "• Cognitive Behavioural Therapy (CBT)",
+      sleep: "Sleep difficulties.",
+      relationships: "Relationship Challenges (Individual Counselling)"
+    },
+    manner: [
+      "motivating"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/matthew-persello",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Matthew at a Glance": [
+          "Hello, I'm Matthew! I am a Registered Psychologist specialising in therapy for adolescents (13+ years) and adults, with a strong focus on Men’s Mental Health, Neurodiversity and the LGBTQIA+ community. I completed my psychology honours degree through studies in both Australia and the United States, where I conducted a yearlong research project exploring romantic self-sabotage within gender and sexually diverse populations.",
+          "Area of Interest:",
+          "• Men's Mental Health",
+          "• LGBTQIA+ Community",
+          "• Anxiety, Depression, and Stress",
+          "• Sleep difficulties",
+          "• Neurodiversity (i.e. ASD, ADHD)",
+          "• Gender and Sexual Identity",
+          "• Self-esteem issues",
+          "• Emotional regulation difficulties",
+          "• Relationship Challenges (Individual Counselling)",
+          "My therapeutic approach is strengths based and solution focused, drawing on evidence based techniques tailored to each client’s unique needs. These include:",
+          "• Cognitive Behavioural Therapy (CBT)",
+          "• Acceptance and Commitment Therapy (ACT)",
+          "• Solution Focused Therapy (SFT)",
+          "• Motivational Interviewing"
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "nzubechi-oguoma",
+    name: "Nzubechi Oguoma",
+    shortName: "Nzubechi Oguoma",
+    gender: "undeclared",
+    pronouns: "",
+    profession: "psychologist",
+    title: "Registered Psychologist",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/nzubechi-oguoma.jpg",
+    acceptingNewPatients: true,
+    focus: "Working with individuals and families from age 5 and across the lifespan, including neurodevelopmental conditions.",
+    matchLine: "Working with individuals and families from age 5 and across the lifespan, including neurodevelopmental conditions.",
+    fitSignals: [
+      "Ages 5+",
+      "Family therapy",
+      "Trauma & PTSD"
+    ],
+    practicalSignals: [
+      "$240 a session, $98.95 Medicare rebate with a plan; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Nzubechi is a Registered Psychologist with experience working with individuals and families from age 5 and across the lifespan, presenting with a range of mental health conditions as well as neurodevelopmental disorders.",
+    about: "Nzubechi is a Registered Psychologist with experience working with individuals and families from age 5 and across the lifespan, presenting with a range of mental health conditions as well as neurodevelopmental disorders. Areas of interest include anxiety, depression, trauma and post-traumatic stress disorder, family therapy, relationships, self-esteem and self-development, and work-related issues. The primary evidence-based modalities used are Cognitive Behaviour Therapy, Acceptance and Commitment Therapy and Trauma-Informed Practice.",
+    experience: [
+      "Individuals and families from age 5 and across the lifespan",
+      "Mental health conditions and neurodevelopmental disorders",
+      "CBT, ACT and Trauma-Informed Practice"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "trauma-informed",
+      "anxiety",
+      "depression",
+      "child-adolescent-adhd",
+      "parenting",
+      "relationships",
+      "work-career"
+    ],
+    careAreasSometimes: [],
+    careEvidence: {
+      "trauma-informed": "Trauma & PTSD",
+      anxiety: "Anxiety",
+      depression: "Depression",
+      "child-adolescent-adhd": "Ages 5+",
+      parenting: "Family therapy",
+      relationships: "Relationships",
+      "work-career": "Work Related Issues"
+    },
+    manner: [
+      "culturally_attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/nzubechi-oguoma",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Nzubechi at a Glance": [
+          "Hello! I am Nzubechi, a Registered Psychologist with experience working with individuals and families from age 5+ and across the lifespan presenting with a range of mental health conditions, as well as neurodevelopmental disorders.",
+          "Area of Interest:",
+          "• Anxiety",
+          "• Depression",
+          "• Trauma & Post-Traumatic Stress Disorder (PTSD)",
+          "• Family Therapy",
+          "• Relationships",
+          "• Self-Esteem and Self-Development",
+          "• Work Related Issues",
+          "The primary evidenced-based modalities I utilise are:",
+          "• Cognitive Behaviour Therapy (CBT)",
+          "• Acceptance and Commitment Therapy (ACT)",
+          "• Trauma-Informed Practice (TIP)"
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "canice-curtis",
+    name: "Canice Curtis",
+    shortName: "Canice Curtis",
+    profession: "social-worker",
+    gender: "man",
+    pronouns: "he/him",
+    title: "Mental Health Social Worker, MSW, MPaDS, BA, AASW",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/canice-curtis.jpg",
+    acceptingNewPatients: true,
+    focus: "A grounded, integrated and evidence-informed approach for people 15 and over, including complex trauma and ADHD.",
+    matchLine: "A grounded, integrated and evidence-informed approach for people 15 and over, including complex trauma and ADHD.",
+    fitSignals: [
+      "Ages 15+",
+      "Trauma & EMDR",
+      "Men’s mental health"
+    ],
+    practicalSignals: [
+      "$230 a session, $87.25 Medicare rebate with a plan; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Canice Curtis is a deeply attuned and compassionate Mental Health Social Worker who considers it a privilege to walk alongside clients as they navigate challenges and work towards meaningful change. His commitment to client care led colleagues to nominate him for the AASW Social Worker of the Year Award.",
+    about: "Canice Curtis is a deeply attuned and compassionate Mental Health Social Worker who considers it a privilege to walk alongside clients as they navigate challenges and work towards meaningful change. His commitment to client care led colleagues to nominate him for the AASW Social Worker of the Year Award. He supports people aged 15+ experiencing complex trauma, dissociative conditions, addictions, personality disorders, bipolar disorder, ADHD, chronic pain, parenting and relationship difficulties, men’s mental health concerns, grief and loss, anxiety, depression, and the mental health impacts of climate change and natural disasters. With a background spanning international development, child protection and academia, he brings a grounded, integrated, evidence-informed approach tailored to each person. Outside the therapy room, Canice enjoys time with his young family, playing the drums, bushwalking, yoga, reading, and exploring Buddhist philosophy and mindfulness practices.",
+    experience: [
+      "Mental health social worker, people aged 15 and over",
+      "Nominated by colleagues for the AASW Social Worker of the Year Award",
+      "Background in international development, child protection and academia",
+      "Trauma and EMDR, men’s mental health, and mental health after major life changes or disasters"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "trauma-informed",
+      "depression",
+      "anxiety",
+      "complex-mental-health",
+      "grief-life-change"
+    ],
+    careAreasSometimes: [
+      "child-adolescent-adhd"
+    ],
+    careEvidence: {
+      "trauma-informed": "A grounded, integrated and evidence-informed approach for people 15 and over, including complex trauma and ADHD.",
+      depression: "He supports people aged 15+ experiencing complex trauma, dissociative conditions, addictions, personality disorders, bipolar disorder, ADHD, chronic pain, parenting and relationship difficulties, men’",
+      anxiety: "He supports people aged 15+ experiencing complex trauma, dissociative conditions, addictions, personality disorders, bipolar disorder, ADHD, chronic pain, parenting and relationship difficulties, men’",
+      "complex-mental-health": "He supports people aged 15+ experiencing complex trauma, dissociative conditions, addictions, personality disorders, bipolar disorder, ADHD, chronic pain, parenting and relationship difficulties, men’",
+      "child-adolescent-adhd": "aged 15+",
+      "grief-life-change": "Mental Health related to significant life changes or disasters"
+    },
+    manner: [
+      "culturally_attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/canice-curtis",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Canice at a Glance": [
+          "Canice Curtis is a deeply attuned and compassionate Mental Health Social Worker who considers it a privilege to walk alongside clients as they navigate challenges and work towards meaningful change. His commitment to client care has led colleagues to nominate him for the AASW Social Worker of the Year Award.",
+          "He supports people aged 15+ experiencing complex trauma, dissociative conditions, addictions, personality disorders, bipolar disorder, ADHD, chronic pain, parenting and relationship difficulties, men’s mental health concerns, grief and loss, anxiety, depression, and the mental health impacts of climate change and natural disasters.",
+          "With a background spanning international development, child protection, and academia, Canice has found his home in therapeutic practice. He brings a grounded, integrated, and evidence-informed approach, tailoring treatment to each person’s needs.",
+          "Outside the therapy room, Canice enjoys spending time with his young family, playing the drums, bushwalking, yoga, reading, and exploring Buddhist philosophy and mindfulness practices.",
+          "Area of Interest:",
+          "• Trauma and EMDR",
+          "• Men’s Mental Health",
+          "• Mental Health related to significant life changes or disasters"
+        ]
+      }
+    },
+    realPerson: true
+  },
+  {
+    id: "tracey-dale",
+    name: "Tracey Dale",
+    shortName: "Tracey Dale",
+    gender: "undeclared",
+    pronouns: "",
+    profession: "social-worker",
+    title: "Accredited Mental Health Social Worker",
+    suburb: "Graceville",
+    practice: "Nurtured Thoughts Psychology",
+    reach: "Clinic appointments in Graceville, Brisbane, and telehealth",
+    image: "/clinicians/tracey-dale.jpg",
+    acceptingNewPatients: true,
+    focus: "Warm, empowering and highly personalised therapy, kept straightforward and free from unnecessary jargon.",
+    matchLine: "Warm, empowering and highly personalised therapy, kept straightforward and free from unnecessary jargon.",
+    fitSignals: [
+      "All ages",
+      "Burnout & life transitions",
+      "EMDR"
+    ],
+    practicalSignals: [
+      "$230 a session, $87.25 Medicare rebate with a plan; set and charged by the practice",
+      "Telehealth"
+    ],
+    summary: "Tracey is an Accredited Mental Health Social Worker with over 10 years of experience in counselling, therapy and psychotherapy. She works with clients of all ages through major life transitions such as pregnancy and motherhood, and challenges like anxiety, depression, burnout, trauma (including complex PTSD using EMDR), grief, sleep difficulties, disordered eating, and recovery from violence or substance use.",
+    about: "Tracey is an Accredited Mental Health Social Worker with over 10 years of experience in counselling, therapy and psychotherapy. She works with clients of all ages through major life transitions such as pregnancy and motherhood, and challenges like anxiety, depression, burnout, trauma (including complex PTSD using EMDR), grief, sleep difficulties, disordered eating, and recovery from violence or substance use. She has provided counselling at QUT, worked in private practice and led clinical operations in busy mental health settings, including crisis support services. Clients often describe her approach as warm, empowering and highly personalised; she draws on CBT, ACT, DBT, EMDR and Narrative Therapy, tailoring each session and keeping things straightforward. The first session is about getting to know you, your story and what you would like to achieve, and she aims for you to leave each session with practical skills to take into everyday life. Outside therapy she reads, gardens, hikes, and tries her hand at pottery on a throwing wheel.",
+    experience: [
+      "Over 10 years in counselling, therapy and psychotherapy",
+      "Counsellor, Queensland University of Technology",
+      "Private practice, and clinical operations lead in mental health and crisis support services",
+      "CBT, ACT, DBT, EMDR, Narrative Therapy and individual psychotherapy"
+    ],
+    languages: [
+      "English"
+    ],
+    careAreas: [
+      "depression",
+      "anxiety",
+      "trauma-informed",
+      "substance-history",
+      "non-medication",
+      "grief-life-change"
+    ],
+    careAreasSometimes: [
+      "child-adolescent-adhd",
+      "perinatal",
+      "complex-mental-health",
+      "sleep",
+      "eating-body"
+    ],
+    careEvidence: {
+      depression: "Tracey is an Accredited Mental Health Social Worker with over 10 years of experience in counselling, therapy and psychotherapy. She works with clients of all ages through major life transitions such a",
+      anxiety: "Tracey is an Accredited Mental Health Social Worker with over 10 years of experience in counselling, therapy and psychotherapy. She works with clients of all ages through major life transitions such a",
+      "trauma-informed": "Tracey is an Accredited Mental Health Social Worker with over 10 years of experience in counselling, therapy and psychotherapy. She works with clients of all ages through major life transitions such a",
+      "substance-history": "Tracey is an Accredited Mental Health Social Worker with over 10 years of experience in counselling, therapy and psychotherapy. She works with clients of all ages through major life transitions such a",
+      "non-medication": "Clients often describe my approach as warm, empowering, and highly personalised. I use practical, evidence based methods including Individual Psychotherapy, Cognitive Behavioural Therapy (CBT), Accept",
+      "child-adolescent-adhd": "clients of all ages",
+      "grief-life-change": "Burnout & life transitions.",
+      perinatal: "pregnancy and motherhood",
+      "complex-mental-health": "complex PTSD",
+      sleep: "sleep difficulties",
+      "eating-body": "disordered eating"
+    },
+    manner: [
+      "attuned",
+      "non_judgmental",
+      "culturally_attuned"
+    ],
+    wheelchairAccessible: false,
+    appointmentLength: "Clinicians see people Monday to Saturday, with evenings Monday to Wednesday; times set with the practice",
+    telehealthFirstAppointment: true,
+    booking: {
+      via: "practice",
+      url: "https://www.nurturedthoughtspsychology.com.au/contact",
+      note: "Nurtured Thoughts Psychology books by phone, (07) 3056 0921, or its online enquiry form."
+    },
+    profileDetail: {
+      sourceUrl: "https://www.nurturedthoughtspsychology.com.au/practitioners/tracey-dale",
+      readOn: "2026-10-01",
+      sections: {
+        "Meet Tracey at a Glance": [
+          "Hello! I’m Tracey, an Accredited Mental Health Social Worker with over 10 years of experience in counselling, therapy, and psychotherapy. I work with clients of all ages, supporting them through major life transitions such as pregnancy and motherhood, as well as challenges like anxiety, depression, burnout, trauma (including complex PTSD using EMDR therapy), grief, sleep difficulties, disordered eating, and recovery from violence or substance use.",
+          "In the past, I’ve provided counselling at QUT, where I supported students of all ages using focused psychological strategies to improve their mental health. I’ve also worked in private practice and led clinical operations in busy mental health settings, including crisis support services. These experiences have given me a deep understanding of the pressures and complexities people face in today’s fast paced world.",
+          "Clients often describe my approach as warm, empowering, and highly personalised. I use practical, evidence based methods including Individual Psychotherapy, Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Dialectical Behaviour Therapy (DBT), EMDR, and Narrative Therapy. I tailor each session to your unique needs. Keeping things straightforward and free from unnecessary jargon.",
+          "Outside of therapy, I strongly believe in the value of connection, balance, and self-care principles, I actively encourage in the lives of the people I work with."
+        ],
+        "Getting to Know Tracey a Bit Better: What’s something small that always brings you comfort or joy?": "Playing with my grandsons and preparing food for my family.",
+        "Getting to Know Tracey a Bit Better: Where did you grow up, and how has that shaped who you are today?": "I moved around a lot as a child and now call Brisbane home. It helped me to build resilience, and contributed to me being adaptable, and to making friends easily.",
+        "Getting to Know Tracey a Bit Better: What music or artist always lifts your mood?": "I love all types of music! Listening to music is a real passion of mine. I love electronica, house, rap, soul, blues, country and classical to name a few.",
+        "Getting to Know Tracey a Bit Better: What hobbies or activities help you feel most grounded?": "Reading, listening to music, gardening and hiking.",
+        "Getting to Know Tracey a Bit Better: If you could visit anywhere in the world tomorrow, where would you go and why?": "Paris, for the flea markets, art, history, culture and the romance of the city.",
+        "Getting to Know Tracey a Bit Better: What’s a hidden skill or interest you have that people might be surprised to learn about?": "I do pottery, I try to make pots on a throwing wheel. I mostly fail, but I love it anyway.",
+        "Getting to Know Tracey a Bit Better: What’s your favourite way to unwind after a long day?": "I am a TV  addict! I love a good series, documentary or podcast.",
+        "Getting to Know Tracey a Bit Better: What do you enjoy most about being a therapist?": "The opportunity to help people, often at vulnerable times in their lives is a privilege. It is a humbling experience to be able to share people’s stories and challenges, and to work alongside them to improve their lives.",
+        "Getting to Know Tracey a Bit Better: What are three words your clients often use to describe working with you?": "Warm, person-centred, effective.",
+        "Getting to Know Tracey a Bit Better: How do you stay current with new research, while balancing it with real world client needs?": "I am committed to my professional development and ongoing learning as a therapist. I obtain external clinical supervision, and I am responsible for my ongoing learning to meet my professional registration as an Accredited Mental Health Social Worker. I love new ideas and am always open to new training opportunities!",
+        "Getting to Know Tracey a Bit Better: How do you tailor your approach to support each client’s unique goals and challenges?": "I use a range of counselling techniques; these are often referred to as Focussed Psychological Strategies. This allows us to be able to shape our sessions to your particular needs and goals. I also bring a wealth of personal and work experience that can assist me to connect to people, develop rapport and be able to build a strong therapeutic relationship.",
+        "Getting to Know Tracey a Bit Better: What can someone expect during their first session with you, and how do you help make it feel welcoming?": "The first session is about getting to know you, your unique story and what you would like to achieve in therapy. I always try to ensure that at the end of each session you have some practical skills and learnings to take with you in your everyday life.",
+        "Getting to Know Tracey a Bit Better: What’s one piece of advice you often find yourself sharing with clients?": "The quality of our lives is often determined by the quality of our thoughts and relationships. Our connections with each other, and importantly with ourselves, can have a transformative impact for people.",
+        "Getting to Know Tracey a Bit Better: How would you describe your therapy style in a few words?": "I bring a strengths based approach, and I hope that a sense of kindness and warmth underpins my practice. I am engaged, personal, tailored and goal oriented with a focus on research based treatment, leading to positive outcomes for clients."
+      }
+    },
+    realPerson: true
+  },
 ];

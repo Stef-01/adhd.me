@@ -29,6 +29,8 @@ export const PROFESSIONS = [
   "physiotherapist",
   "therapy-assistant",
   "neurotherapy-practitioner",
+  // 2026-10-01: two of Nurtured Thoughts Psychology's clinicians are accredited mental health social workers.
+  "social-worker",
 ] as const;
 export type Profession = (typeof PROFESSIONS)[number];
 
@@ -196,6 +198,16 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
     typicallyFor: "Neurofeedback and brain-training programs, offered alongside, never instead of, assessment and care by a registered clinician.",
     whenToExplore: "You want a training-based approach to attention beside the care you already have.",
     cues: ["neurotherapy", "neurofeedback"],
+  },
+  {
+    id: "social-worker",
+    label: "Social worker",
+    inAWord: "Talking, and life around it",
+    plural: "social workers",
+    aName: "a social worker",
+    typicallyFor: "Talking things through, with an eye on the practical side of life around it: family, work, money and the services that can help.",
+    whenToExplore: "You want someone to talk to who also looks at what is going on around you, at home, at work or with services.",
+    cues: ["social worker", "social workers", "mental health social worker"],
   },
 ];
 

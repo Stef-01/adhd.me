@@ -15,6 +15,8 @@ const QUERIES = [
   "i want someone steadying who bulk bills",
   "telehealth, i work nights",
   "I have bipolar as well",
+  // 2026-10-01: nobody on the 53-person roster speaks Arabic; the sample keeps an unserved verdict.
+  "I speak Arabic",
 ];
 
 describe("orderNote", () => {

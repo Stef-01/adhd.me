@@ -179,7 +179,8 @@ test("level 1: every request is read, a short one too, and a failed read lists t
   await page.keyboard.press("Enter");
   await expect(page.locator(".clinician-row").first()).toBeVisible();
   await expect(page.locator(".reading-line")).toHaveCount(0);
-  const own = rankClinicians(short, searchRoster(clinicians, emptyFilters(), short, null), new Date()).slice(0, 5).map((c) => c.id);
-  await expect.poll(() => rowIds(page)).toEqual(own);
+  // The fold never cuts a tied band, so the list shows as many rows as the first band holds (thirteen on the 53-person roster).
+  const own = rankClinicians(short, searchRoster(clinicians, emptyFilters(), short, null), new Date()).map((c) => c.id);
+  await expect.poll(async () => { const rows = await rowIds(page); return rows.length >= 5 && rows.every((id, i) => id === own[i]); }).toBe(true);
   expect(posts, "one read, for the words as typed").toEqual([short]);
 });

@@ -59,6 +59,8 @@ export function clinicianInWords(clinician: Clinician): string {
     `Focus: ${clinician.focus}`,
     `About: ${clinician.summary} ${clinician.about}`.trim(),
     clinician.experience.length ? `Experience: ${clinician.experience.join("; ")}.` : "",
+    // The backend layer: their whole page, section by section, so a clause can quote any of it.
+    ...Object.entries(clinician.profileDetail?.sections ?? {}).map(([heading, text]) => `${heading}: ${Array.isArray(text) ? text.join("; ") : text}`),
     clinician.fitSignals.length ? `They say: ${clinician.fitSignals.join("; ")}.` : "",
     clinician.careAreas.length ? `They list care for: ${clinician.careAreas.map(careLabel).join("; ")}.` : "",
     clinician.careAreasSometimes?.length ? `Sometimes: ${clinician.careAreasSometimes.map(careLabel).join("; ")}.` : "",
