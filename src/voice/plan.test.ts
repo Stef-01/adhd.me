@@ -283,7 +283,9 @@ describe("the request the answers make", () => {
 
   it("writes a short last answer that only names a language in the finder's words, not the transcriber's (a caller of 05:34, 'Indi is my first language')", () => {
     const heard = [answer("opening", "I am looking for a ADHD GP who speaks Hindi.", { language: "Hindi" }), answer("lived", "Yes.", { yes_no: "yes" }), answer("extra", "Indi is my first language.", { language: "Hindi" })];
-    expect(compose(heard).request).toBe(`I am looking for a ADHD GP who speaks Hindi. ${LIVED_ASK}. someone who speaks Hindi`);
+    // 2026-10-01: the opening already asks for Hindi, so it is not asked again; "Indi" never reaches the request.
+    expect(compose(heard).request).toBe(`I am looking for a ADHD GP who speaks Hindi. ${LIVED_ASK}`);
+    expect(compose([answer("opening", "an ADHD GP"), answer("extra", "Indi is my first language.", { language: "Hindi" })]).request).toBe("an ADHD GP. someone who speaks Hindi");
     // Said at length, their words stand, and the language is not said again when they are in it.
     const long = [heard[0]!, answer("extra", "My parents will come along and they are more comfortable in Hindi than English.", { language: "Hindi" })];
     expect(compose(long).request).toBe("I am looking for a ADHD GP who speaks Hindi. My parents will come along and they are more comfortable in Hindi than English");
@@ -433,5 +435,12 @@ describe("the finder's own words for a yes", () => {
     expect(finderWords("a woman clinician")).toBe(true);
     expect(finderWords("I want someone who gets ADHD from the inside")).toBe(false);
     expect(finderWords("my daughter")).toBe(false);
+  });
+});
+
+describe("a language or culture the request already says", () => {
+  it("is not said again in the finder's words (the call of 2026-09-30 16:15)", () => {
+    const request = compose([answer("opening", "I am looking for an ADHD GP who speaks Hindi", { language: "Hindi" }), answer("extra", "Hindi is my first language", { language: "Hindi" })]).request;
+    expect(request.match(/Hindi/g)?.length).toBe(1);
   });
 });

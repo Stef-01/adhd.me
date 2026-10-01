@@ -470,7 +470,9 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
     }
     // Named in an answer, a culture, a language and telehealth are asked for in the finder's words,
     // unless the words already in the request name them ("someone who understands Hindi culture").
-    const inTheirs = (name: string) => theirs && text.toLowerCase().includes(name.toLowerCase());
+    // Or the request already says it, in any answer before (the call of 2026-09-30 16:15: "an ADHD GP who
+    // speaks Hindi … someone who speaks Hindi").
+    const inTheirs = (name: string) => (theirs && text.toLowerCase().includes(name.toLowerCase())) || parts.some((part) => part.toLowerCase().includes(name.toLowerCase()));
     if (form.culture && !inTheirs(form.culture)) said(`${CULTURE_ASK}, ${form.culture}`);
     if (form.language && !inTheirs(form.language)) said(`someone who speaks ${form.language}`);
     if (form.telehealth && (question === "place" || (question === "detail" && !theirs))) said(TELEHEALTH_ASK);
