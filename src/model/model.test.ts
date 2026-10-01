@@ -362,3 +362,14 @@ describe("safety: the edge sweep's siblings (2026-10-01)", () => {
     for (const text of ["rejection hits me like a truck", "it hit me hard when I was diagnosed", "homework is killing me", "I could kill for a coffee", "dying to get an appointment", "this wait is killing me"]) expect(checkSafety(text), text).toBeNull();
   });
 });
+
+describe("safety: the measured holes of 2026-10-01", () => {
+  it("hears 'thinking about ending it' and 'if I just wasn't around'", () => {
+    expect(checkSafety("I've been thinking about ending it.")?.id).toBe("self-harm");
+    expect(checkSafety("Everything would be easier if I just wasn't around.")?.id).toBe("self-harm");
+    expect(checkSafety("she says it'd be better if she wasn't here")?.id).toBe("self-harm");
+  });
+  it("and not ending a relationship, a call or a session", () => {
+    for (const text of ["I'm thinking about ending it with my boyfriend", "want to end it early today", "I wasn't around when he was diagnosed"]) expect(checkSafety(text), text).toBeNull();
+  });
+});

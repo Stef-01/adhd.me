@@ -42,7 +42,7 @@ const LIFELINE = `Lifeline is on ${said("lifeline")}, any hour, or text ${said("
 export const SAFETY_RULES: readonly SafetyRule[] = [
   {
     id: "self-harm",
-    trigger: /\b(kill myself|end my life|take my (own )?life|end(ing)? it all|suicid\w*|hurt(ing)? myself|self[- ]?harm\w*|wants? to die|(kill|hurt|harm)(s|ing)? (him|her|them)sel(f|ves)|threat\w* to (kill|hurt) (him|her|them)sel(f|ves)|(don'?t|doesn'?t|do not|does not) want to (be here|live|wake up)|cut(s|ting)? (myself|him|her|them)sel(f|ves)?|cutting (myself|himself|herself|themselves)|took too many (of )?(my|his|her|their)? ?(tablets|pills)|disappear forever|better off dead|not be here any ?more)\b/i,
+    trigger: /\b(kill myself|end my life|take my (own )?life|end(ing)? it all|suicid\w*|hurt(ing)? myself|self[- ]?harm\w*|wants? to die|(kill|hurt|harm)(s|ing)? (him|her|them)sel(f|ves)|threat\w* to (kill|hurt) (him|her|them)sel(f|ves)|(don'?t|doesn'?t|do not|does not) want to (be here|live|wake up)|cut(s|ting)? (myself|him|her|them)sel(f|ves)?|cutting (myself|himself|herself|themselves)|took too many (of )?(my|his|her|their)? ?(tablets|pills)|disappear forever|(thinking about|think about|want to|wanted to|going to|planning to|plan to|might) end(ing)? it\b(?! (with|for|early|there|here|on|at))|(if|when) (i|he|she|they) (just )?(wasn'?t|weren'?t|was not|were not) (around|here)|better off dead|not be here any ?more)\b/i,
     severity: "emergency",
     message: "What you wrote matters, and it is more than an app should hold on its own. You deserve a person right now.",
     recommendedAction: `${EMERGENCY} Otherwise ${LIFELINE}, and the Suicide Call Back Service is on ${said("suicide-call-back")}.`,

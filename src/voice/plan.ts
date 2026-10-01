@@ -410,6 +410,8 @@ export const MAX_REQUEST = 2000;
 /** An answer to a yes-or-no question this long says more than yes or no, and is kept as it was said. */
 const SAYS_MORE = 6;
 
+/** A closing or a filler with nothing asked in it. */
+const SAYS_NOTHING = /^(?:(?:um+|uh+|hmm+|er+|so|well|yeah|ok(?:ay)?|no)[,.\s]+)*(?:nothing(?: else)?|that'?s (?:it|all|everything)|i'?m good|all good|let me think|not really|that'?s about it)?(?:[,.\s]+(?:thanks?|thank you|cheers|mate|for now|hmm+|um+))*[.!\s]*$/i;
 const tidy = (text: string) => withoutQuestions(text.trim()).replace(/[\s.,;:!?]+$/, "");
 
 /**
@@ -424,7 +426,11 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
     if (!form.understood) continue;
     // Chatter that is not about their care (the call of 2026-10-01 06:28: "It's a wrap-up… POV. Pretend
     // you're in need") is not their request; a yes, a place or a name in it still counts below.
-    if (form.offTopic && !form.yes_no && !form.place && !form.telehealth && !form.culture && !form.language) continue;
+    // Asking to hear the question again, or for the list now, asks for nothing in the request; nor does
+    // a closing or a filler with nothing in it ("Nothing else, thanks", "That's it", "Um, let me think").
+    const carries = Boolean(form.yes_no || form.place || form.telehealth || form.culture || form.language);
+    if (((form.again || form.show_matches) && !carries) || SAYS_NOTHING.test(answer.text.trim())) continue;
+    if (form.offTopic && !carries) continue;
     const text = tidy(answer.text);
     const more = readable(text) && text.split(/\s+/).length >= SAYS_MORE ? text : "";
     const names = Boolean(form.culture || form.language);

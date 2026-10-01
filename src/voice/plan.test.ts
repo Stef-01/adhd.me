@@ -481,3 +481,14 @@ describe("chatter that is not about care (the call of 2026-10-01 06:28)", () => 
     expect(formOf({ understood: true, off_topic: false })).toEqual({ understood: true });
   });
 });
+
+describe("answers that ask for nothing (2026-10-01 RCA: text that is not the ask)", () => {
+  it("leaves out 'say that again', 'show me who fits', fillers and closings, and keeps what an answer names", () => {
+    const base = answer("opening", "help at work");
+    for (const [question, text, form, say] of [["detail", "Say that again please", { again: true }, "detail-work"], ["detail", "Um, let me think, hmm", {}, "detail-work"], ["extra", "Nothing else, thanks", {}, "extra"], ["extra", "That's it", {}, "extra"], ["extra", "Just show me who fits", { show_matches: true }, "extra"]] as const) {
+      expect(compose([base, answer(question, text, form, say)]).request, text).toBe("help at work");
+    }
+    expect(compose([base, answer("extra", "Nothing works for me at work")]).request).toBe("help at work. Nothing works for me at work");
+    expect(compose([base, answer("place", "Say again? Oh, I'm in Newtown", { again: true, place: "Newtown" })]).place).toBe("Newtown");
+  });
+});
