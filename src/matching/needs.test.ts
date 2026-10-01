@@ -126,7 +126,7 @@ describe("W221 the ranking and the explanation are one computation", () => {
     const needs = readNeeds("titration and a longer first appointment");
     for (const clinician of eachOf(clinicians, "the roster")) {
       for (const need of matchEvidence(clinician, "titration and a longer first appointment")) {
-        if (need.facet.kind === "care") expect(clinician.careAreas).toContain(need.facet.area);
+        if (need.facet.kind === "care") expect([...clinician.careAreas, ...(clinician.careAreasSometimes ?? [])]).toContain(need.facet.area);
         if (need.facet.kind === "manner") expect(clinician.manner).toContain(need.facet.trait);
       }
       expect(scoreAgainst(clinician, needs)).toBeGreaterThanOrEqual(0);

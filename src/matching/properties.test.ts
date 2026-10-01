@@ -141,8 +141,8 @@ describe("W232 the invariants, for all inputs", () => {
     // fix). The tier vector `rankClinicians` actually sorts on — constraintCoverage,
     // constraintScore, careScore, mannerScore, coverage — is what must be strictly descending
     // across band boundaries; `score` (the sum) is asserted equal WITHIN a band only.
-    const tierVector = (band: { constraintCoverage: number; constraintScore: number; scopeScore: number; careScore: number; mannerScore: number; coverage: number }) =>
-      [band.constraintCoverage, band.constraintScore, band.scopeScore, band.careScore, band.mannerScore, band.coverage] as const;
+    const tierVector = (band: { childScore: number; constraintCoverage: number; constraintScore: number; scopeScore: number; careScore: number; mannerScore: number; coverage: number }) =>
+      [band.childScore, band.constraintCoverage, band.constraintScore, band.scopeScore, band.careScore, band.mannerScore, band.coverage] as const;
     fc.assert(
       fc.property(sentence, (text) => {
         const bands = rankBands(text, clinicians);

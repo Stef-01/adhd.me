@@ -279,3 +279,18 @@ describe("exercise-based help (2026-10-01, the founder's gap)", () => {
     expect(rankClinicians("", [coach, ep], new Date(), needs).map((c) => c.id)).toEqual(["ep", "coach"]);
   });
 });
+
+describe("the 2026-10-01 personalisation sweep (1,045 combinations)", () => {
+  it("lists those who see children before a language match for a child", () => {
+    const needs = ["care:child-adolescent-adhd", "language:hindi"].flatMap((key) => needForKey(key) ?? []);
+    const hindiAdults = clone("hindi-adults", { careAreas: ["adhd-assessment"], careAreasSometimes: [], manner: [], languages: ["English", "Hindi"] });
+    const childEnglish = clone("child-english", { careAreas: ["child-adolescent-adhd"], careAreasSometimes: [], manner: [], languages: ["English"] });
+    expect(rankClinicians("", [hindiAdults, childEnglish], new Date(), needs).map((c) => c.id)).toEqual(["child-english", "hindi-adults"]);
+  });
+  it("lists a prescriber before someone with ADHD themselves for a dose review asked alone", () => {
+    const needs = ["care:titration", "pref:lived-experience"].flatMap((key) => needForKey(key) ?? []);
+    const lived = clone("lived", { careAreas: [], careAreasSometimes: [], manner: [], livedExperience: true });
+    const prescriber = clone("prescriber", { careAreas: ["titration"], careAreasSometimes: [], manner: [], livedExperience: undefined });
+    expect(rankClinicians("", [lived, prescriber], new Date(), needs).map((c) => c.id)).toEqual(["prescriber", "lived"]);
+  });
+});

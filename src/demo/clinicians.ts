@@ -92,6 +92,9 @@ export function rankClinicians(
      * still the reader's stated preference, not an inferred clinical rule, and every point remains
      * explainable through the same evidence shown on the profile.
      */
+    const byChild = bProfile.childScore - aProfile.childScore;
+    if (byChild !== 0) return byChild;
+
     const byConstraintCoverage = bProfile.constraintCoverage - aProfile.constraintCoverage;
     if (byConstraintCoverage !== 0) return byConstraintCoverage;
 
@@ -168,6 +171,8 @@ export function rankClinicians(
 }
 
 type RankingProfile = {
+  /** For a child: whether, and how fully, the clinician sees children. Compared before everything else. */
+  childScore: number;
   /** Number of distinct language and access constraints this clinician answers (lived experience is not one: R20). */
   constraintCoverage: number;
   /** Weight of explicitly requested language and access constraints this clinician answers. */
@@ -210,16 +215,21 @@ type RankingProfile = {
  * who declares women's health, for a woman at menopause asking for an assessment).
  */
 const SCOPE: ReadonlySet<string> = new Set(["adhd-assessment", "titration", "shared-care"]);
+const PRESCRIBING: ReadonlySet<string> = new Set(["titration", "shared-care"]);
 
 export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[]): RankingProfile {
   let constraintCoverage = 0;
   let constraintScore = 0;
   let scopeScore = 0;
+  let childScore = 0;
   // What the appointment is for is lifted only for a clinician who also answers the rest of the ask:
   // a child's assessment by someone who sees children, a midlife one by someone who declares women's
   // health. An assessor who answers nothing else the person said is no better placed than a coach.
   const careTier = (need: NeedSignal) => (need.facet.kind === "care" && !SCOPE.has(need.facet.area)) || (need.facet.kind === "preference" && need.facet.preference === "lived-experience");
   const answersMore = needs.some((need) => careTier(need) && facetStrength(clinician, need.facet) > 0);
+  // Whether anything else in care was asked: a dose review asked alone (beside a preference) is the
+  // purpose; asked beside binge eating, the wear-off is the story and the eating the ask.
+  const otherCare = needs.some((need) => need.facet.kind === "care" && !SCOPE.has(need.facet.area) && need.facet.area !== "child-adolescent-adhd");
   let careScore = 0;
   let mannerScore = 0;
   let weightedScore = 0;
@@ -236,7 +246,11 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
     // Exercise-based help names how the care is given, as telehealth does (2026-10-01: "gym routine to
     // help my focus" and "exercise based help at work" listed focus coaches above every exercise clinician).
     const exerciseBased = need.facet.kind === "care" && need.facet.area === "movement-exercise";
-    if (seesTheChild || exerciseBased || need.facet.kind === "language" || (need.facet.kind === "preference" && need.facet.preference !== "lived-experience")) {
+    if (seesTheChild) {
+      // Seeing the child is its own first tier (2026-10-01 sweep: "a child, Hindi" put two adults-only
+      // Hindi-speaking GPs in the first five; the language is often the parent's, the child is the patient).
+      childScore += contribution;
+    } else if (exerciseBased || need.facet.kind === "language" || (need.facet.kind === "preference" && need.facet.preference !== "lived-experience")) {
       constraintCoverage += 1;
       constraintScore += contribution;
     } else if (need.facet.kind === "care" || need.facet.kind === "preference") {
@@ -246,13 +260,17 @@ export function rankingProfile(clinician: Clinician, needs: readonly NeedSignal[
       // needs (the founder's call of 02:34). A language, telehealth, a woman, bulk billing, NDIS and
       // a longer appointment decide whether an appointment can happen at all; who the clinician is
       // decides how well it goes, beside what they declare they work with.
-      if (answersMore && need.facet.kind === "care" && SCOPE.has(need.facet.area)) scopeScore += contribution;
+      // A dose review or shared prescribing only a prescriber can do: the purpose when nothing else in care is asked (2026-10-01 sweep:
+      // "a dose review, someone with ADHD themselves" put a psychologist first). An assessment, which
+      // psychologists do too, is lifted for those who also answer the rest of the ask.
+      if ((answersMore || (need.facet.kind === "care" && PRESCRIBING.has(need.facet.area) && !otherCare)) && need.facet.kind === "care" && SCOPE.has(need.facet.area)) scopeScore += contribution;
       else careScore += contribution;
     } else {
       mannerScore += contribution;
     }
   }
   return {
+    childScore: roundScore(childScore),
     constraintCoverage,
     constraintScore: roundScore(constraintScore),
     scopeScore: roundScore(scopeScore),
@@ -690,6 +708,7 @@ export const MATCH_QUALITY_COPY: Record<MatchQuality, string> = {
  */
 type RankBand = {
   score: number;
+  childScore: number;
   constraintCoverage: number;
   constraintScore: number;
   scopeScore: number;
@@ -713,6 +732,7 @@ export function rankBands(query: string, roster: readonly Clinician[] = clinicia
     if (
       last &&
       last.score === profile.weightedScore &&
+      last.childScore === profile.childScore &&
       last.constraintCoverage === profile.constraintCoverage &&
       last.constraintScore === profile.constraintScore &&
       last.scopeScore === profile.scopeScore &&
@@ -724,6 +744,7 @@ export function rankBands(query: string, roster: readonly Clinician[] = clinicia
     } else {
       bands.push({
         score: profile.weightedScore,
+        childScore: profile.childScore,
         constraintCoverage: profile.constraintCoverage,
         constraintScore: profile.constraintScore,
         scopeScore: profile.scopeScore,
@@ -1136,7 +1157,7 @@ export function rankCliniciansNear(
   const tieKey = (c: Clinician) => {
     const profile = rankingProfile(c, read);
     const q = standing(demonstrated, c);
-    return `${profile.constraintCoverage}|${profile.constraintScore}|${profile.scopeScore}|${profile.careScore * q}|${profile.mannerScore * q}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}|${q}`;
+    return `${profile.childScore}|${profile.constraintCoverage}|${profile.constraintScore}|${profile.scopeScore}|${profile.careScore * q}|${profile.mannerScore * q}|${profile.coverage}|${CAPACITY_ORDER[capacityGrade(c, today)]}|${q}`;
   };
   let start = 0;
   while (start < out.length) {
