@@ -1122,6 +1122,9 @@ export function requestFitCopy(summary: RequestFitSummary, rosterSize: number): 
  * sinking. An unknown location is a gap in our data, and penalising a practice for it would be
  * making them pay for our missing row.
  */
+/** How far in-person-only rooms can be before a clinician lists after everyone reachable from the person. */
+export const REACHABLE_KM = 150;
+
 export function rankCliniciansNear(
   query: string,
   origin: SuburbPoint | null,
@@ -1178,7 +1181,12 @@ export function rankCliniciansNear(
 
     start = end + 1;
   }
-  return out;
+  // Reachable before unreachable (2026-10-01 sweep): for a person on the Gold Coast, "a GP who takes new
+  // patients" listed two Sydney GPs, in person only and about 700 km away, above the Brisbane GPs who
+  // see people by telehealth. Somebody seen only in rooms that far away cannot be booked in any useful
+  // sense, which is the access tier's own reason; the order within each part is the order above.
+  const reachable = (c: Clinician) => c.telehealthFirstAppointment === true || (km(c) ?? 0) <= REACHABLE_KM;
+  return [...out.filter(reachable), ...out.filter((c) => !reachable(c))];
 }
 
 /**

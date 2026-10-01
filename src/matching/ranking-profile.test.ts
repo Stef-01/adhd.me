@@ -294,3 +294,15 @@ describe("the 2026-10-01 personalisation sweep (1,045 combinations)", () => {
     expect(rankClinicians("", [lived, prescriber], new Date(), needs).map((c) => c.id)).toEqual(["prescriber", "lived"]);
   });
 });
+
+describe("reachable before unreachable (2026-10-01 sweep)", () => {
+  it("lists a telehealth clinician before an in-person-only one hundreds of kilometres away, whatever the fit", async () => {
+    const { rankCliniciansNear } = await import("@/demo/clinicians");
+    const { resolvePlace } = await import("@/geo/suburbs");
+    const origin = resolvePlace("Surfers Paradise")!;
+    const needs = ["care:adhd-assessment", "care:anxiety"].flatMap((key) => needForKey(key) ?? []);
+    const farInPerson = clone("far", { suburb: "Beecroft", careAreas: ["adhd-assessment", "anxiety"], careAreasSometimes: [], manner: [], telehealthFirstAppointment: undefined, alsoConsultsAt: [] });
+    const telehealth = clone("tele", { suburb: "Graceville", careAreas: ["adhd-assessment"], careAreasSometimes: [], manner: [], telehealthFirstAppointment: true, alsoConsultsAt: [] });
+    expect(rankCliniciansNear("", origin, [farInPerson, telehealth], new Date(), needs).map((c) => c.id)).toEqual(["tele", "far"]);
+  });
+});
