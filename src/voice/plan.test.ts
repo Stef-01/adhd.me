@@ -451,3 +451,10 @@ describe("'Which culture or language?' answered with a language (the call of 202
     expect(request).toBe(`I'm looking for an ADHD GP. someone who speaks Hindi. ${CULTURE_ASK}, Hindi`);
   });
 });
+
+describe("'Yes, Hindi' to the culture question", () => {
+  it("asks for that culture and that language", () => {
+    expect(compose([answer("opening", "an ADHD GP"), answer("culture", "Yes, Hindi.", { yes_no: "yes", language: "Hindi" })]).request).toBe(`an ADHD GP. someone who speaks Hindi. ${CULTURE_ASK}, Hindi`);
+    expect(compose([answer("opening", "an ADHD GP"), answer("culture", "No, but I speak Hindi.", { yes_no: "no", language: "Hindi" })]).request).toBe("an ADHD GP. someone who speaks Hindi");
+  });
+});
