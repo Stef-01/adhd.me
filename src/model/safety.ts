@@ -42,7 +42,7 @@ const LIFELINE = `Lifeline is on ${said("lifeline")}, any hour, or text ${said("
 export const SAFETY_RULES: readonly SafetyRule[] = [
   {
     id: "self-harm",
-    trigger: /\b(kill myself|end my life|take my (own )?life|end(ing)? it all|suicid\w*|hurt(ing)? myself|self[- ]?harm\w*|wants? to die|(kill|hurt|harm)(s|ing)? (him|her|them)sel(f|ves)|threat\w* to (kill|hurt) (him|her|them)sel(f|ves)|don'?t want to (be here|live|wake up)|better off dead|not be here any ?more)\b/i,
+    trigger: /\b(kill myself|end my life|take my (own )?life|end(ing)? it all|suicid\w*|hurt(ing)? myself|self[- ]?harm\w*|wants? to die|(kill|hurt|harm)(s|ing)? (him|her|them)sel(f|ves)|threat\w* to (kill|hurt) (him|her|them)sel(f|ves)|(don'?t|doesn'?t|do not|does not) want to (be here|live|wake up)|cut(s|ting)? (myself|him|her|them)sel(f|ves)?|cutting (myself|himself|herself|themselves)|took too many (of )?(my|his|her|their)? ?(tablets|pills)|disappear forever|better off dead|not be here any ?more)\b/i,
     severity: "emergency",
     message: "What you wrote matters, and it is more than an app should hold on its own. You deserve a person right now.",
     recommendedAction: `${EMERGENCY} Otherwise ${LIFELINE}, and the Suicide Call Back Service is on ${said("suicide-call-back")}.`,
@@ -51,7 +51,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
   },
   {
     id: "hopelessness",
-    trigger: /\b(no point (in )?(going on|anything|living|being alive)|(don'?t|do not) see the point (in|of) (living|being alive|going on)|can'?t go on|nothing matters any ?more|everyone would be better (off )?without me|no way out)\b/i,
+    trigger: /\b(no point (in )?(going on|anything|living|being alive)|(don'?t|do not) see the point (in|of) (living|being alive|going on)|can'?t go on|nothing matters any ?more|everyone would be better (off )?without (me|him|her|them)|no way out)\b/i,
     severity: "urgent-support",
     message: "It sounds like things feel very heavy right now. That is worth saying to a person, not a screen.",
     recommendedAction: `${LIFELINE}. Beyond Blue is on ${said("beyond-blue")}. If it becomes an emergency, call ${said("emergency")}.`,
@@ -69,7 +69,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
   },
   {
     id: "mania",
-    trigger: /\b(haven'?t slept (in|for) (days|a week)|don'?t need (to )?sleep|can'?t stop talking|racing (thoughts|mind)|spent (all|thousands))\b/i,
+    trigger: /\b((haven'?t|hasn'?t) slept (in|for) (\d+ |a few |two |three |four )?(days|nights|a week)|feel(s|ing)? invincible|don'?t need (to )?sleep|can'?t stop talking|racing (thoughts|mind)|spent (all|thousands))\b/i,
     severity: "urgent-support",
     message: "Several days without sleep, or a mind that will not slow down, is something to raise with a clinician promptly.",
     recommendedAction: `Contact your GP or prescriber today. If it becomes an emergency, call ${said("emergency")}.`,
@@ -78,7 +78,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
   },
   {
     id: "eating",
-    trigger: /\b(stopped eating|not eating (at all|for days)|purg\w*|making myself (sick|throw up)|starv\w*)\b/i,
+    trigger: /\b(stopped eating|not eating (at all|for days)|(hasn'?t|haven'?t|not) eaten (in|for) days|purg\w*|making myself (sick|throw up)|starv\w*)\b/i,
     severity: "urgent-support",
     message: "Eating that has stopped, or a pattern you cannot stop, deserves a person's help, not a strategy.",
     recommendedAction: `${contact("butterfly").service} is on ${said("butterfly")}. Your GP can also help. If you feel faint or unwell, call ${said("emergency")}.`,
@@ -96,7 +96,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
   },
   {
     id: "violence",
-    trigger: /\b(hits? me|hit me|scared of (my|him|her|them)|threaten\w* me|not safe at home|abus\w*|violen\w*)\b/i,
+    trigger: /\b((?<!(rejection|it|that|this|reality|grief) )hits? me(?! (like|hard|harder))|hit me(?! (like|hard|harder))|scared of (my|him|her|them)|threaten\w* (to (kill|hurt) )?me|not safe at home|abus\w*|violen\w*)\b/i,
     severity: "urgent-support",
     message: "If you are not safe at home, that comes before anything this app can offer.",
     recommendedAction: `${EMERGENCY} ${contact("respect").service} is on ${said("respect")}, any hour, for support and a plan.`,
@@ -105,7 +105,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
   },
   {
     id: "cardiac",
-    trigger: /\b(chest (pain|tight\w*)|heart (is )?(racing|pounding)|palpitat\w*|can'?t breathe|fainted)\b/i,
+    trigger: /\b(chest (pain|tight\w*)|heart (is )?(racing|pounding)|heart (races|pounds)|palpitat\w*|can'?t breathe|fainted)\b/i,
     severity: "emergency",
     message: "Chest pain, a racing heart or trouble breathing, particularly on stimulant medication, needs a clinician now, not later.",
     recommendedAction: `Call ${said("emergency")} if it is happening now. Otherwise contact your prescriber or GP today and tell them what you noticed.`,
@@ -114,7 +114,7 @@ export const SAFETY_RULES: readonly SafetyRule[] = [
   },
   {
     id: "danger",
-    trigger: /\b(in danger|going to hurt (someone|somebody|them|him|her)|kill (him|her|them|someone))\b/i,
+    trigger: /\b(in danger|(going to|he'?ll|she'?ll|they'?ll|might|will) hurt (someone|somebody|them|him|her)|kill (him|her|them|someone))\b/i,
     severity: "emergency",
     message: "If anybody is in danger right now, the only useful thing this screen can say is who to call.",
     recommendedAction: EMERGENCY,

@@ -342,3 +342,23 @@ describe("safety: a parent's words about their child (2026-10-01 edge sweep)", (
     for (const text of ["my son is hurting at school", "she hurt her knee", "homework is killing him", "he dies laughing at cartoons"]) expect(checkSafety(text), text).toBeNull();
   });
 });
+
+describe("safety: the edge sweep's siblings (2026-10-01)", () => {
+  it("hears self-harm, overdose, hopelessness, threats, eating, cardiac and mania said of someone else", () => {
+    const cases: Record<string, string> = {
+      "my daughter has been cutting herself": "self-harm",
+      "she took too many of her tablets on purpose": "self-harm",
+      "my teen said she doesn't want to wake up": "self-harm",
+      "my son keeps saying everyone would be better off without him": "hopelessness",
+      "he threatened to kill me": "violence",
+      "I'm scared he'll hurt someone": "danger",
+      "she hasn't eaten in days": "eating",
+      "my heart races on vyvanse": "cardiac",
+      "I haven't slept in 3 days and feel invincible": "mania",
+    };
+    for (const [text, id] of Object.entries(cases)) expect(checkSafety(text)?.id, text).toBe(id);
+  });
+  it("stays quiet for figures of speech", () => {
+    for (const text of ["rejection hits me like a truck", "it hit me hard when I was diagnosed", "homework is killing me", "I could kill for a coffee", "dying to get an appointment", "this wait is killing me"]) expect(checkSafety(text), text).toBeNull();
+  });
+});
