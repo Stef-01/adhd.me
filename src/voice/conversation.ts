@@ -414,9 +414,10 @@ function take(state: VoiceState, item: string): VoiceState {
   const words = (held.text ?? "").trim();
   // Words over the start of a question are the rest of the last answer (the founder's 07:49 call), unless
   // they carry what the cut question asks for: "in Queensland" over "Where are you?" is its answer (his
-  // 02:34 call, where it went into the request as words of his own).
+  // 02:34 call, where it went into the request as words of his own). And "say that again" over a question
+  // just begun asks for that question (the 2026-10-01 fuzz: it replayed the question before, twice).
   const cutQuestion = base.cut?.question ?? null;
-  const early = cutQuestion !== null && cutQuestion !== held.question && (answersQuestion(cutQuestion, held.form ?? formFrom(words)) || namesAnswerTo(cutQuestion, words)) ? { question: cutQuestion, asked: base.cut!.say } : null;
+  const early = cutQuestion !== null && cutQuestion !== held.question && (answersQuestion(cutQuestion, held.form ?? formFrom(words)) || namesAnswerTo(cutQuestion, words) || Boolean((held.form ?? formFrom(words)).again)) ? { question: cutQuestion, asked: base.cut!.say } : null;
   // A recording plays to its end over the person's voice, so an answer to it can be committed while the
   // question before it is still the one waiting, and that one is finished (the call of 2026-09-30 19:02:
   // "Yes." to "someone who has ADHD themselves?" went nowhere, the question was asked again and "Yes" reached
@@ -434,7 +435,7 @@ function take(state: VoiceState, item: string): VoiceState {
   const tries = base.retried[question] ?? 0;
   /** The question once more, with these sentences before it; after the last try the call moves on. */
   const once = (from: VoiceState, most: number, before: Line[] = []): VoiceState =>
-    tries >= most || !base.pending ? finished(from, question) : { ...from, retried: { ...from.retried, [question]: tries + 1 }, lines: [...before, again(base.pending)] };
+    tries >= most || !base.pending ? finished(from, question) : { ...from, retried: { ...from.retried, [question]: tries + 1 }, lines: [...before, again(early ? { say: early.asked, question: early.question } : base.pending)] };
 
   // The finder's own voice in the microphone: the sentence last begun, the question before it, or a
   // word or two of the sentence this very sound cut short. Nobody's answer; it is said through next time.

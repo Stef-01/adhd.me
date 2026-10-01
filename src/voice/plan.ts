@@ -453,7 +453,8 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
     let theirs = false;
     switch (question) {
       case "opening":
-        if (readable(text)) (theirs = true), said(text);
+        // A bare yes or no over the next question's start is filed here and asks for nothing (2026-10-01 fuzz: "Hi. Yes.").
+        if (readable(text) && !(form.yes_no && !more)) (theirs = true), said(text);
         break;
       case "detail":
         // A short answer that names a place or telehealth answered the next question, not this one; a bare
