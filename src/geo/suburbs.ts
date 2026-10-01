@@ -213,10 +213,17 @@ export function coveredSuburbs(): string[] {
 export function placeIn(text: string): string {
   const lower = ` ${text.toLowerCase().replace(/[,.;!?]/g, " ").replace(/\s+/g, " ")} `;
   const lead = "(?:in|near|around|at|from|based in|close to|live in|living in)\\s+(?:the\\s+)?";
-  const names = [...byName.keys()].sort((a, b) => b.length - a.length);
-  for (const name of names) {
-    if (new RegExp(` ${lead}${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} `).test(lower)) return byName.get(name)!.suburb;
+  // The place said last is where they are now ("I used to live in Parramatta, now in Penrith"); at one
+  // position, the longest name ("Bondi Junction" over a shorter one).
+  let best: { at: number; length: number; suburb: string } | null = null;
+  for (const name of byName.keys()) {
+    const pattern = new RegExp(` ${lead}${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} `, "g");
+    for (const match of lower.matchAll(pattern)) {
+      const at = match.index ?? 0;
+      if (!best || at > best.at || (at === best.at && name.length > best.length)) best = { at, length: name.length, suburb: byName.get(name)!.suburb };
+    }
   }
+  if (best) return best.suburb;
   const postcode = new RegExp(` ${lead}(\\d{4}) `).exec(lower)?.[1];
   return postcode && resolvePlace(postcode) ? postcode : "";
 }

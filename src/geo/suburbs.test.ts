@@ -186,3 +186,10 @@ describe("placeIn: the place a typed sentence names (2026-10-01)", () => {
     expect(placeIn("an adult ADHD assessment")).toBe("");
   });
 });
+
+describe("placeIn: the place said last", () => {
+  it("is where they are now", () => {
+    expect(placeIn("I used to live in Parramatta, now in Penrith")).toBe("Penrith");
+    expect(placeIn("moving from Sydney to Perth, I am in Perth from March")).toBe("Perth");
+  });
+});
