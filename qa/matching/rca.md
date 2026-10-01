@@ -575,3 +575,19 @@ for "a GP" is not corrected (no rules for speech).
 | Text that is not the person's ask in the request | chatter, "Sure." | "say that again", "show me who fits", fillers, closings; the finder's own label read by the model as an assessment ask | `off_topic` on the form (measured 251 of 255, no false alarm on 6 hard negatives); SAYS_NOTHING; the label renamed "Care so far:" |
 | The model infers what was not said | "someone who speaks Arabic" for "I'm Lebanese" | culture likewise | an English answer's language or culture must be named in it (grounded, as the reader's tags are) |
 | Safety rules with holes | "thinking about ending it", "if I just wasn't around" (found by the form measurement) | ending a relationship or a session must stay quiet | both added, with their figures of speech excluded; corpus sweep clean |
+
+### Round 3 (2026-10-01/02, overnight): sweeps and fuzzers, now standing tests
+
+| Instrument | Found | Fixed |
+| --- | --- | --- |
+| personalisation-sweep (1,045 combinations) | adults-only Hindi GPs in a child's first five; a psychologist first for a dose review asked alone | childScore first; a prescribing ask alone is the purpose |
+| plan-fuzz (5,000 calls), conversation-fuzz (1,500 with timing) | "say that again" over a question's start replayed the one before, twice; "Hi. Yes." | an again request goes to the question cut short; a bare yes adds nothing to an opening |
+| filters-sweep (1,536 combinations) | 878 empty lists with no way out but Clear | the best pair of filters, one tap |
+| recommend-fuzz (3,000 records) | "0 strategies did not help enough" to someone who asked for a person and tried nothing | the reason that fired |
+| clarifier measure (534 tied requests) | the child question asked of a request about the person themselves | gated on "my own", "myself", "for me" |
+| evidence-grounded (53 profiles) | three quotes not verbatim | exact quotes |
+| full e2e (582 of 585) | Sydney GPs in person only first for a Gold Coast person | reachable (telehealth or rooms within 150 km) before unreachable; "in person" places everyone by their rooms |
+
+Refused after measuring: a wider child-question gate (313 of 317 tie-breaks, down from 316).
+Policy left for the founder: access before an assessment ('a bulk-billed assessment' leads with a
+GP who does not assess).
