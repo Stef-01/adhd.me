@@ -415,3 +415,12 @@ describe("edges: who the call is about (2026-10-01 edge sweep)", () => {
     for (const text of ["", "   ", "?", "asdf qwerty"]) expect(branch(text)[0], JSON.stringify(text)).toBe("help");
   });
 });
+
+describe("edges: a bare yes or no to a question that asks for neither", () => {
+  it("writes nothing for 'Yes' to the either-or first look, or 'No' to a child's age", () => {
+    expect(compose([answer("opening", "since menopause I can't focus"), answer("first-look", "Yes", { yes_no: "yes" })]).request).toBe("since menopause I can't focus");
+    expect(compose([answer("opening", "my son"), answer("age", "No", { yes_no: "no" })]).request).toBe("my son");
+    expect(compose([answer("opening", "my son"), answer("age", "nine")]).request).toBe("my son. My child's age: nine");
+    expect(compose([answer("opening", "menopause"), answer("first-look", "never been assessed")]).request).toContain("never been assessed");
+  });
+});

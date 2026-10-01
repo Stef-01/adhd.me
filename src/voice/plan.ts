@@ -430,13 +430,15 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
         if (readable(text) && !(form.yes_no === "no" && !more) && !((form.place || form.telehealth) && !more)) (theirs = true), said(`${HARDEST[answer.say] ?? HARDEST.help}: ${text}`);
         break;
       case "age":
-        if (readable(text) || /\d/.test(text)) (theirs = true), said(`My child's age: ${text}`);
+        // An age, a school year or a stage; a bare yes or no answers nothing asked.
+        if (namesAnswerTo("age", text) || (more && !form.yes_no)) (theirs = true), said(`My child's age: ${text}`);
         break;
       case "raised":
         if (readable(text) && !(form.yes_no === "no" && !more)) (theirs = true), said(form.yes_no === "yes" && !more ? "Someone has raised ADHD about my child before" : `Whether ADHD was raised before: ${text}`);
         break;
       case "first-look":
-        if (readable(text)) (theirs = true), said(`A first look at ADHD, or care I already have: ${text}`);
+        // Either-or: a bare "yes" answers neither half, and is left out.
+        if (readable(text) && (namesAnswerTo("first-look", text) || more) && !(form.yes_no && !more)) (theirs = true), said(`A first look at ADHD, or care I already have: ${text}`);
         break;
       case "woman":
         if (form.yes_no === "yes" && settledOn(answers, "woman") === "yes") parts.push(...(more && WOMAN.test(more) ? [more] : [WOMAN_ASK, ...(more ? [more] : [])]));
