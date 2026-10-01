@@ -135,7 +135,7 @@ export const NETWORK_CLINICIANS: Clinician[] = [
     careAreas: ["non-medication", "child-adolescent-adhd", "executive-function", "study-school"],
     careAreasSometimes: ["parenting"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "executive-function": "Executive functioning", "study-school": "supporting neurodivergent students and their families", "parenting": "helping students and families discover that" },
+    careEvidence: { "executive-function": "Executive functioning", "study-school": "supporting neurodivergent students and their families", "parenting": "help students and families discover that" },
     // sense_making, in their words: "An ADHD coach with 25 years of teaching, helping students and families understand how their brain works."
     // motivating, in their words: "Throughout my 25 years in education, I’ve had the privilege of teaching children from all walks of life, each with their"
     // non_judgmental, in their words: "I’m passionate about helping clients thrive in their own way. Together, we can make learning an empowering experience th"

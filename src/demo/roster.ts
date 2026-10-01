@@ -734,7 +734,7 @@ const founding: Clinician[] = [
     careAreas: ["adhd-assessment", "autism-adhd", "child-adolescent-adhd", "non-medication", "parenting"],
     careAreasSometimes: ["anxiety", "depression", "study-school", "social-connection", "work-career"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "parenting": "provides parenting support; certified Triple P Stepping Stones Parenting Program Practitioner", "study-school": "specific learning disorders, bullying", "social-connection": "bullying, interpersonal difficulties", "work-career": "stress / burn out" },
+    careEvidence: { "parenting": "provides parenting support; certified Triple P Stepping Stones Parenting Program Practitioner", "study-school": "specific learning disorders; bullying", "social-connection": "bullying, interpersonal difficulties", "work-career": "stress / burn out" },
     manner: ["non_judgmental", "motivating"],
     // O253: his page names anger among the presentations he works with, which is what this tag
     // is for. Nothing else in the expertise taxonomy matches what he published.
@@ -982,7 +982,7 @@ const founding: Clinician[] = [
     careAreas: ["non-medication", "parenting", "study-school", "social-connection"],
     careAreasSometimes: ["child-adolescent-adhd", "autism-adhd", "emotional-regulation", "movement-exercise", "executive-function"],
     // O261: each life-domain declaration with the clinician's own sentence behind it.
-    careEvidence: { "parenting": "paediatric occupational therapy including play therapy and parent training", "study-school": "school refusal / school can't; kindergarten and school visit appointments", "social-connection": "social and movement programs, supporting goals including social skills, teamwork", "movement-exercise": "motor development, building independence, resilience, and confidence", "executive-function": "strategies are practical, achievable and able to be easily implemented into daily routines" },
+    careEvidence: { "parenting": "paediatric occupational therapy including play therapy and parent training", "study-school": "school refusal / school can't; kindergarten and school visit appointments", "social-connection": "social and movement programs; supporting goals including social skills, teamwork", "movement-exercise": "motor development, building independence, resilience, and confidence", "executive-function": "strategies are practical, achievable and able to be easily implemented into daily routines" },
     // "a safe, supportive, creative and fun therapy environment", "family-centred practice in
     // working with caregivers", "guided by his client's interests" — his page, in the closed
     // manner vocabulary.
