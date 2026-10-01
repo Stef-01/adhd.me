@@ -475,6 +475,9 @@ export function compose(answers: readonly Answer[]): { request: string; place: s
     const inTheirs = (name: string) => (theirs && text.toLowerCase().includes(name.toLowerCase())) || parts.some((part) => part.toLowerCase().includes(name.toLowerCase()));
     if (form.culture && !inTheirs(form.culture)) said(`${CULTURE_ASK}, ${form.culture}`);
     if (form.language && !inTheirs(form.language)) said(`someone who speaks ${form.language}`);
+    // "Which culture or language?" answered with a language alone ("Hindi.") names the culture they asked
+    // for too (the call of 2026-10-01 04:34 left the bare "someone from my own culture" beside it).
+    if (question === "which-culture" && form.language && !form.culture) said(`${CULTURE_ASK}, ${form.language}`);
     if (form.telehealth && (question === "place" || (question === "detail" && !theirs))) said(TELEHEALTH_ASK);
   }
   // The bare ask goes when the same ask carries a name, or when their own culture is the one most of the roster shares.

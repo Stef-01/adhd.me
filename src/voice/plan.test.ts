@@ -444,3 +444,10 @@ describe("a language or culture the request already says", () => {
     expect(request.match(/Hindi/g)?.length).toBe(1);
   });
 });
+
+describe("'Which culture or language?' answered with a language (the call of 2026-10-01 04:34)", () => {
+  it("asks for that culture and that language, and the bare ask goes", () => {
+    const request = compose([answer("opening", "I'm looking for an ADHD GP."), answer("culture", "Yes.", { yes_no: "yes" }), answer("which-culture", "Hindi.", { language: "Hindi" })]).request;
+    expect(request).toBe(`I'm looking for an ADHD GP. someone who speaks Hindi. ${CULTURE_ASK}, Hindi`);
+  });
+});
