@@ -5,7 +5,7 @@
 import { describe, expect, it } from "vitest";
 import { HEARD, MOST_ANSWERS, initialVoice, inTheirWords, resting, saidAsRequest, settled, stalled, step, type Action, type ClientEvent, type ServerEvent, type Step, type VoiceState } from "./conversation";
 import { ANSWER, FORM, FORM_INSTRUCTIONS, MAX_FOLLOW_UPS, SAFETY_CHECK, SURE, TRANSLATE, URGENT_HELP, asked, sayExactly } from "./interviewer";
-import { CULTURE_ASK, LIVED_ASK, SENTENCES, TELEHEALTH_ASK, formFrom, type Form, type SayId } from "./plan";
+import { CULTURE_ASK, LIVED_ASK, SENTENCES, TELEHEALTH_ASK, WOMAN_ASK, formFrom, type Form, type SayId } from "./plan";
 
 const RECORDED = () => true;
 const server = (event: ServerEvent): Action => ({ type: "server", event });
@@ -262,7 +262,7 @@ it("over 1,200 calls in every flow, with echoes and overlaps, each answer is fil
       default: return yesNo();
     }
   };
-  const OPEN = ["help with deadlines at work", "my son is 9 and his teacher thinks it might be ADHD", "since perimenopause I can't focus", "an ADHD GP in Brisbane"];
+  const OPEN = ["help with deadlines at work", "my son is 9 and his teacher thinks it might be ADHD", "my daughter can't sit still at school", "since perimenopause I can't focus", "an ADHD GP in Brisbane"];
   const wrong: string[] = [];
   for (let n = 0; n < 1200; n++) {
     const c = begun();
@@ -304,6 +304,16 @@ it("over 1,200 calls in every flow, with echoes and overlaps, each answer is fil
     for (const [question, text] of Object.entries(gave)) {
       const last = [...c.state.heard].reverse().find((h) => h.question === question);
       if (last?.text !== text && wrong.length < 400) wrong.push(`${opening} | ${question}: gave "${text}", filed "${last?.text ?? "nothing"}" | heard ${JSON.stringify(c.state.heard.map((h) => [h.question, h.text]))}`);
+    }
+    // What is filed is what is searched: a yes asks in the finder's words, a no asks nothing, the age and the culture are there.
+    const request = c.state.reveal?.request ?? null;
+    if (request !== null && wrong.length < 400) {
+      const expects: Array<[string, string, boolean]> = [
+        ["lived", LIVED_ASK, gave.lived === "Yes."], ["woman", WOMAN_ASK, gave.woman === "Yes."], ["culture", CULTURE_ASK, gave.culture === "Yes."],
+        ["which-culture", "Indian", gave["which-culture"] === "Indian"], ["age", "nine", gave.age === "She's nine"], ["detail", "Deadlines", gave.detail !== undefined],
+      ];
+      for (const [question, phrase, wanted] of expects) if (question in gave && request.includes(phrase) !== wanted) wrong.push(`${opening} | request ${wanted ? "lacks" : "has"} "${phrase}" (${question}: "${gave[question]}") | ${request}`);
+      if (/\b(yes|no)\.?(\.|$)/i.test(request)) wrong.push(`${opening} | a bare yes or no in the request | ${request}`);
     }
   }
   expect(wrong.length, wrong.slice(0, 6).join("\n")).toBe(0);
