@@ -218,9 +218,12 @@ export function coveredSuburbs(): string[] {
  * Junction" before a shorter one), or a four-digit postcode after such a word; the preposition keeps
  * "my son Logan" and "auburn hair" from being places. "" when the sentence names none.
  */
+/** Names that are also people or other things, read as a place only after "in", "near" and the like. */
+const BARE_AMBIGUOUS = new Set(["logan", "auburn", "darwin", "liverpool", "newcastle", "cheltenham", "goldie", "syd", "bris"]);
+
 export function placeIn(text: string): string {
   const lower = ` ${text.toLowerCase().replace(/[,.;!?]/g, " ").replace(/\s+/g, " ")} `;
-  const lead = "(?:in|near|around|at|from|based in|close to|live in|living in)\\s+(?:the\\s+)?";
+  const lead = "(?:in|on|near|around|at|from|based in|close to|live in|living in)\\s+(?:the\\s+)?";
   // The place said last is where they are now ("I used to live in Parramatta, now in Penrith"); at one
   // position, the longest name ("Bondi Junction" over a shorter one).
   let best: { at: number; length: number; suburb: string } | null = null;
@@ -230,6 +233,18 @@ export function placeIn(text: string): string {
       const at = match.index ?? 0;
       // "I don't live in Sydney" names where they are not.
       if (/\b(not|no longer|don'?t|do not|never|used to)\b(\W+\w+){0,2}\W*$/.test(lower.slice(0, at + 1))) continue;
+      if (!best || at > best.at || (at === best.at && name.length > best.length)) best = { at, length: name.length, suburb: byName.get(name)!.suburb };
+    }
+  }
+  if (best) return best.suburb;
+  // A place said bare ("gp brisbane", "sydney cbd", 2026-10-02 sweep: read nowhere), unless the name is
+  // also a person's or another thing's ("my son Logan", "Liverpool fan").
+  for (const name of byName.keys()) {
+    if (BARE_AMBIGUOUS.has(name)) continue;
+    for (const match of lower.matchAll(new RegExp(` ${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?='?s?\\b)`, "g"))) {
+      const at = match.index ?? 0;
+      const before = lower.slice(0, at + 1);
+      if (/\b(not|no longer|don'?t|do not|never|used to|my|named|called|son|daughter|child|kid|partner)\W*$/.test(before) || /\b(not|no longer|don'?t|never|used to)\b(\W+\w+){0,2}\W*$/.test(before)) continue;
       if (!best || at > best.at || (at === best.at && name.length > best.length)) best = { at, length: name.length, suburb: byName.get(name)!.suburb };
     }
   }

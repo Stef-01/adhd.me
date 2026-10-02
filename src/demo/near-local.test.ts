@@ -39,3 +39,12 @@ describe("none local (2026-10-02)", () => {
     expect(noneLocal(sydneyGp, resolvePlace("Brisbane"))).toBe(true);
   });
 });
+
+describe("closed books stay behind (2026-10-02)", () => {
+  it("a local clinician not taking patients does not move above an open one by telehealth", () => {
+    const origin = resolvePlace("Brisbane")!;
+    const roster = clinicians.map((c) => (c.id === "beth-hansen" ? { ...c, acceptingNewPatients: false } : c));
+    const list = rankCliniciansNear("A gp in Brisbane", origin, searchRoster(roster, emptyFilters(), "A gp in Brisbane", origin));
+    expect(list.findIndex((c) => c.id === "beth-hansen")).toBeGreaterThan(list.findIndex((c) => c.id === "anubhav-saxena"));
+  });
+});

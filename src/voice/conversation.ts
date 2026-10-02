@@ -416,9 +416,11 @@ function take(state: VoiceState, item: string): VoiceState {
   // they carry what the cut question asks for: "in Queensland" over "Where are you?" is its answer (his
   // 02:34 call, where it went into the request as words of his own). And "say that again" over a question
   // just begun asks for that question (the 2026-10-01 fuzz: it replayed the question before, twice). A
-  // bare yes or no over a cut yes-or-no question answers it, when the one before asked for neither.
+  // bare yes or no over a cut yes-or-no question answers it, when the one before asked for neither or is
+  // answered already (a "No" to the culture question took back a "Yes" to lived experience).
   const cutQuestion = base.cut?.question ?? null;
-  const early = cutQuestion !== null && cutQuestion !== held.question && (answersQuestion(cutQuestion, held.form ?? formFrom(words)) || namesAnswerTo(cutQuestion, words) || Boolean((held.form ?? formFrom(words)).again) || (YES_OR_NO_QUESTIONS.includes(cutQuestion) && !YES_OR_NO_QUESTIONS.includes(held.question) && Boolean((held.form ?? formFrom(words)).yes_no))) ? { question: cutQuestion, asked: base.cut!.say } : null;
+  const bareToCut = cutQuestion !== null && Boolean((held.form ?? formFrom(words)).yes_no) && ((YES_OR_NO_QUESTIONS.includes(cutQuestion) || cutQuestion === "extra") && (!YES_OR_NO_QUESTIONS.includes(held.question) || base.heard.some((answer) => answer.question === held.question)));
+  const early = cutQuestion !== null && cutQuestion !== held.question && (answersQuestion(cutQuestion, held.form ?? formFrom(words)) || namesAnswerTo(cutQuestion, words) || Boolean((held.form ?? formFrom(words)).again) || bareToCut) ? { question: cutQuestion, asked: base.cut!.say } : null;
   // A recording plays to its end over the person's voice, so an answer to it can be committed while the
   // question before it is still the one waiting, and that one is finished (the call of 2026-09-30 19:02:
   // "Yes." to "someone who has ADHD themselves?" went nowhere, the question was asked again and "Yes" reached
@@ -456,6 +458,9 @@ function take(state: VoiceState, item: string): VoiceState {
   // Nothing anybody could make out: "Sorry, I didn't catch that", and the question once more.
   if (!heard.understood && !heard.again) return { ...once(kept, 1, [{ say: "catch", question: null }]), firm: base.firm || !words };
   if (heard.again) return once(kept, MOST_RETRIES);
+  // "Which culture or language?" answered with no culture or language in it ("Indeed.", the call of
+  // 2026-10-02 04:44, most likely "Indian"): not caught, and asked once more.
+  if (question === "which-culture" && !heard.culture && !heard.language && !heard.plain && heard.yes_no !== "no" && !heard.show_matches) return once(kept, 1, [{ say: "catch", question: null }]);
 
   const rule = checkSafety(words);
   const urgent = kept.urgent || (rule !== null && URGENT_RULES.has(rule.id));

@@ -87,7 +87,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
     aName: "a counsellor",
     typicallyFor: "Talking things through: relationships, conflict, a change in life stage, the load of a late recognition.",
     whenToExplore: "The problem lives between you and somebody else, or you need a place to think it through with a person.",
-    cues: ["counsellor", "counselor", "counselling", "counseling"],
+    cues: ["counsellor", "counselor", "counselling", "counseling", "councellor", "counseller", "councelor", "councelling"],
   },
   {
     id: "occupational-therapist",

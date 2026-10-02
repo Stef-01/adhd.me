@@ -1190,11 +1190,12 @@ export function rankCliniciansNear(
   // Local rooms before a screen far away (2026-10-02): "a GP in Brisbane" led with a Sydney GP seen by
   // telehealth, on capacity alone, above four Brisbane GPs who also see people by telehealth. Among
   // those level on what was asked (child, constraints, scope, care, manner), clinicians with rooms near
-  // the place named come first, in their fit order; capacity orders within each part.
+  // the place named come first, in their fit order; capacity orders within each part, and closed books
+  // stay behind open ones.
   const fitKey = (c: Clinician) => {
     const profile = rankingProfile(c, read);
     const q = standing(demonstrated, c);
-    return `${profile.childScore}|${profile.constraintCoverage}|${profile.constraintScore}|${profile.scopeScore}|${profile.careScore * q}|${profile.mannerScore * q}`;
+    return `${profile.childScore}|${profile.constraintCoverage}|${profile.constraintScore}|${profile.scopeScore}|${profile.careScore * q}|${profile.mannerScore * q}|${capacityGrade(c, today) === "closed"}`;
   };
   const isLocal = (c: Clinician) => (km(c) ?? Infinity) <= LOCAL_KM;
   for (let s = 0; s < out.length; ) {

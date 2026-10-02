@@ -187,3 +187,61 @@ it("an echo cuts a yes-or-no question, and the yes after it answers that questio
   expect(c.state.heard.at(-1)!.question).toBe("lived");
   expect(assistant(c.state).at(-1)).toBe("Would you like someone from your own culture?");
 });
+
+it("a culture answer that names none is asked once more (the call of 2026-10-02 04:44: 'Indeed.')", () => {
+  const c = begun();
+  c.answers("an ADHD GP in Brisbane", { place: "Brisbane" });
+  c.answers("No.", { yes_no: "no" });
+  c.answers("Yes.", { yes_no: "yes" });
+  c.answers("Indeed.", { understood: true });
+  c.through();
+  expect(assistant(c.state).slice(-2)).toEqual(["Sorry, I didn't catch that.", "Which culture or language?"]);
+  c.answers("Indian.", { culture: "Indian" });
+  expect(c.state.heard.at(-1)!.form.culture).toBe("Indian");
+});
+
+it("over 800 calls with the finder's own voice echoed before answers, a yes to lived experience reaches the request", () => {
+  const random = rng(11);
+  let lost = 0;
+  const lostCalls: string[] = [];
+  for (let n = 0; n < 800; n++) {
+    const c = begun();
+    c.hears("an ADHD GP in Brisbane", { form: { place: "Brisbane" } });
+    let saidLived = false;
+    for (let turn = 0; turn < 25 && !c.state.reveal; turn++) {
+      // The finder's own question heard back, cutting it short, with the answer begun before the echo is written down.
+      if (random() < 0.3 && c.playing) {
+        const asked = c.playing;
+        const echo = `echo_${n}_${turn}`, reply = `reply_${n}_${turn}`;
+        const ev = (e: object) => c.act(server(e as never));
+        ev({ type: "input_audio_buffer.speech_started", item_id: echo });
+        c.ends(0.2);
+        ev({ type: "input_audio_buffer.speech_stopped", item_id: echo });
+        ev({ type: "input_audio_buffer.committed", item_id: echo });
+        ev({ type: "input_audio_buffer.speech_started", item_id: reply });
+        if (c.playing) c.ends(0.1);
+        ev({ type: "input_audio_buffer.speech_stopped", item_id: reply });
+        ev({ type: "input_audio_buffer.committed", item_id: reply });
+        ev({ type: "conversation.item.input_audio_transcription.completed", item_id: echo, transcript: SENTENCES[asked].text.split(" ").slice(0, 3).join(" "), logprobs: [] });
+        for (const a of formed(echo, { understood: true } as Form)) c.act(a);
+        const yes = asked === "lived";
+        if (yes) saidLived = true;
+        ev({ type: "conversation.item.input_audio_transcription.completed", item_id: reply, transcript: yes ? "Yes." : "No.", logprobs: [] });
+        for (const a of formed(reply, { understood: true, yes_no: yes ? "yes" : "no" } as Form)) c.act(a);
+        continue;
+      }
+      // The finder's own question, heard back by the microphone, sometimes cutting it short.
+      if (random() < 0.4 && c.playing) c.hears(SENTENCES[c.playing].text.split(" ").slice(0, 3).join(" "), { cut: random() < 0.5 ? 0.2 : undefined, form: { understood: true } });
+      // They answer the question being asked: over its end, or once it is heard out.
+      const over = c.playing && random() < 0.3;
+      if (!over) c.through();
+      const asked = over ? c.playing : [...c.played].reverse().find((id) => !["catch", "again", "nudge"].includes(id));
+      if (!asked) break;
+      if (asked === "lived") (saidLived = true), c.hears("Yes.", { form: { yes_no: "yes" }, cut: over ? 0.9 : undefined });
+      else c.hears("No.", { form: { yes_no: "no" }, cut: over ? 0.9 : undefined });
+    }
+    c.through();
+    if (saidLived && c.state.reveal && !c.state.reveal.request.includes(LIVED_ASK)) (lost += 1), lostCalls.length < 3 && lostCalls.push(JSON.stringify(c.state.heard.map((h) => [h.question, h.text])) + "\n" + c.state.turns.map((t) => `${t.who}: ${t.text}`).join("\n"));
+  }
+  expect(lost, lostCalls.join("\n\n")).toBe(0);
+});

@@ -591,3 +591,14 @@ for "a GP" is not corrected (no rules for speech).
 Refused after measuring: a wider child-question gate (313 of 317 tie-breaks, down from 316).
 Policy left for the founder: access before an assessment ('a bulk-billed assessment' leads with a
 GP who does not assess).
+
+### Round 4 (2026-10-02): from production's searches of 03:48–06:27 and the call of 04:44
+
+| Family (cause) | Found as | Siblings checked | Guard now |
+| --- | --- | --- | --- |
+| Distance only reordered clinicians in person; telehealth kept fit order even with rooms next door | "A GP in Brisbane" led with a Sydney GP by telehealth, on capacity alone, over four Brisbane GPs | 10 places × 15 kinds × 8 asks: the remaining non-local leaders all declare the asked care or access | among those level on what was asked, rooms within 40 km first; closed books stay behind; "None in X" when nobody listed is local |
+| A kind or place written as people write it | "physchologist" (no kind: a GP first), "psychologists", "councellor"; "bris", "gp brisbane", "on the Gold Coast", "sydney cbd" | names that are people or other things ("my son Logan", "my daughter Sydney", "Liverpool supporter"), negation | plurals and common misspellings; short city names; a bare place name, except ambiguous ones and after "my", "son", "daughter" |
+| An echo cleared which question was cut | the app's "Would you like" heard, then "Yes" went to the opening; lived experience asked again, answered "No" | an echo fuzz (800 calls, echo transcribed after the answer began): 246 lost yeses before, then a "No" to culture or "anything else" taking back a "Yes" to lived experience | the cut stays across an echo; a bare yes or no over a cut question answers it when the one before is answered or asked for neither; 0 of 800 |
+| An unrecognised answer to "Which culture or language?" was taken as an answer | "Indeed." (likely "Indian"): no culture in the request | — | asked once more after "Sorry, I didn't catch that." |
+
+Not acted on: "bring my AI notetaker" (the roster records clinicians' scribes, not whether a patient may record).
