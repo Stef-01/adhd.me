@@ -6,9 +6,9 @@ test("games and modules are two panes, remembered, and a game returns to Games",
   await page.goto("/approach");
   await expect(page.getByTestId("learn-tab-games")).toHaveAttribute("aria-selected", "true");
   await expect(page.getByTestId("learn-play")).toBeVisible();
-  // Three to try first (PLAN.md W7), and they are the glass scope; the modules are not.
+  // Both library panes stay flat; glass is reserved for the game after it opens.
   await expect(page.locator("[data-testid=learn-try][data-ready] .learn-try-tile")).toHaveCount(3);
-  await expect(page.locator("[data-liquid] [data-testid='learn-try']")).toHaveCount(1);
+  await expect(page.locator("[data-liquid]")).toHaveCount(0);
   // "All games" sits beside "Play mix", takes the three's place below it and opens on the eight
   // lives; the button itself does not move. Groups open one at a time.
   const toggle = page.getByTestId("learn-show-all");

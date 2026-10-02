@@ -13,7 +13,7 @@
 //   * the whole tab is the target, not the glyph: `flex: 1` with a 56px minimum block size, well
 //     over the 44–48px floor and far over WCAG 2.2's 24px legal minimum, which is a floor and not
 //     a design target;
-//   * the active tab is stated three ways — colour, a filled icon weight, and the band above it —
+//   * the active tab is stated three ways — colour, a filled icon weight, and a quiet active surface —
 //     never colour alone (the same rule the charts follow);
 //   * `aria-current="page"` is what a screen reader gets, and the bar is a real `<nav>` with real
 //     links, so Back, long-press-to-open-in-new-tab and the browser's own history all still work;
@@ -63,10 +63,10 @@ export function AppTabs({ hidden = false }: { hidden?: boolean }) {
                 <motion.span
                   className="app-tab-glyph"
                   // Under reduced motion the glyph rests untransformed — the sweep holds every element to that.
-                  animate={reducedMotion ? { scale: 1, y: 0 } : { scale: isCurrent ? 1.08 : 1, y: isCurrent ? -1 : 0 }}
+                  animate={{ scale: 1, y: 0 }}
                   transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 46 }}
                 >
-                  <Glyph size={22} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
+                  <Glyph size={20} weight={isCurrent ? "fill" : "regular"} aria-hidden="true" />
                 </motion.span>
                 <span className="app-tab-label">{tab.label}</span>
 

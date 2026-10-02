@@ -31,7 +31,7 @@
 .platform-shell .patient-v2 .voice-screen :is(.voice-core,.voice-actions) { padding-inline: 0; }
 /* The welcome's question, in one rule: a question, so the serif (`t-question`), at the size every
    page heading takes, on the column's left edge with the box under it (app-shell.spec). */
-.platform-shell .patient-v2 .voice-screen .voice-prompt h1 { max-width: 18ch; margin: 0; color: var(--ink); font-size: clamp(30px, 3.3vw, 44px); line-height: 1.1; text-align: left; text-wrap: balance; }
+.platform-shell .patient-v2 .voice-screen .voice-prompt h1 { max-width: 18ch; margin: 0; color: var(--ink); font-size: clamp(32px, 3.6vw, 48px); line-height: 1.12; text-align: left; text-wrap: balance; }
 .platform-shell .patient-v2 .clinician-row .row-availability { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; white-space: normal; color: var(--accent-deep); font-size: 13px; }
 .platform-shell .patient-v2 .clinician-row .row-focus { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; white-space: normal; color: var(--muted); font-size: 14px; }
 .platform-shell .clinician-card :is(.match-reason,.match-caution,.clinician-availability) { -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; }
@@ -39,7 +39,7 @@
    measure. The two-column grid this replaced kept a right column for a panel that no longer
    renders, so the question sat in the left half of an empty room. */
 @media (min-width: 1050px) {
-  .platform-shell .patient-v2 .screen.voice-screen { display: grid; grid-template-columns: minmax(0, 760px); justify-content: center; align-content: center; max-width: 1280px; min-height: calc(100svh - 80px); padding-block: 48px 96px; }
+  .platform-shell .patient-v2 .screen.voice-screen { display: grid; grid-template-columns: minmax(0, 680px); justify-content: center; align-content: center; max-width: 1280px; min-height: calc(100svh - 80px); padding-block: 48px 96px; }
   .platform-shell .voice-screen .voice-core { grid-column: 1; grid-row: 1; margin: 0 0 32px; }
   /* Left-aligned inside the centred column, as the reference sets its hero copy: the question,
      the box and the example link keep one left edge (app-shell.spec holds them to it). */

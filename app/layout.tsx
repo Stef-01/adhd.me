@@ -34,19 +34,9 @@ import { SHARED_OPEN_GRAPH } from "@/seo/pages";
  * unfurl with the generated card in app/opengraph-image.tsx; metadataBase makes every relative
  * URL absolute from the one place the site's address is decided.
  */
-/**
- * O167: the browser chrome matches the paper.
- *
- * Without this the address bar and the pull-to-refresh gutter render in the browser's own default
- * — white on iOS, grey on Android — against a page whose background is a warm off-white. On a phone
- * that is a visible seam at the top of every screen, and it is invisible in every desktop capture,
- * which is why a checklist found it and looking did not.
- *
- * The value is `--brand` from `globals.css` now: every page opens on the yellow header, so the
- * address bar continues that field rather than the paper below it (revamped-adhd.me's own choice).
- */
+/** Browser chrome continues the neutral platform header. */
 export const viewport: Viewport = {
-  themeColor: "#f1bc31",
+  themeColor: "#fbfbf9",
   // O225 (STANDALONE-APP-PLAN.md Phase 1b): without `cover`, the installed app letterboxes below
   // the notch and the status-bar strip renders as a paper seam above the brand band. With it, the
   // band paints to the device edge and the chrome pads itself back out with safe-area insets —
@@ -103,9 +93,9 @@ const ORGANIZATION_JSONLD = {
  */
 const DESIGN_DIRECTION = {
   thesis:
-    "A bright, responsive platform for finding care and understanding ADHD, with clear labelled navigation and approachable illustrated learning.",
+    "A calm, focused platform for finding care and understanding ADHD, with clear labelled navigation and approachable illustrated learning.",
   world:
-    "Cream paper and stone, a saturated yellow header with ink type, deep-gold accents, Newsreader questions and Inter UI, with original illustrated learning.",
+    "Warm white and stone, charcoal controls, quiet sage accents, Newsreader questions and Plus Jakarta Sans UI, with original illustrated learning.",
   story:
     "A visitor understands the GP finder, sees how their words affect the order, and can move from search to a booking handoff without losing context.",
   firstViewport:

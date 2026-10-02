@@ -188,8 +188,8 @@
 .lives-run.is-large .lives-choice { font-size: 1.125rem; min-height: 68px; }
 .lives-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 /* One pill for a choice: the chips, and the tabs on Learn and Adjustments, which are a choice of two. */
-.lives-chip, .platform-shell .learn-pane-tab, .adjust-tab { min-height: 44px; padding: 8px 14px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9rem; font-weight: 650; cursor: pointer; }
-.lives-chip[aria-pressed="true"], .platform-shell .learn-pane-tab.is-active, .adjust-tab.is-active { border-color: var(--accent); background: var(--accent-soft); }
+.lives-chip, .adjust-tab { min-height: 44px; padding: 8px 14px; border: 2px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 999px; background: var(--surface-raised); color: var(--ink); font: inherit; font-size: 0.9rem; font-weight: 650; cursor: pointer; }
+.lives-chip[aria-pressed="true"], .adjust-tab.is-active { border-color: var(--accent); background: var(--accent-soft); }
 .lives-shelf { margin-top: 22px; }
 .lives-toolkit-section { margin-top: 18px; }
 .lives-tool-head { display: flex; gap: 12px; align-items: flex-start; }

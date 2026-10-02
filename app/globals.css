@@ -87,36 +87,19 @@
    not pass it.
    =========================================================================== */
 
-/* THE PALETTE. Light paper, one amber accent, one place to change either.
-   There is no second theme — see "THERE IS NO DARK MODE" further down this file.
-   The accent is `--accent` #a14f19. It replaced Crushed Rose, which replaced sage before it,
-   and the token is finally NAMED for its job rather than for a colour it used to be; it
-   measures 5.42:1 as text on --paper and 5.76:1 on white, so it works as a colour and as a
-   ground. Change it here and every surface follows.
-
-   This header was two headers until now, appended one accent change apart, and the second
-   still quoted #8A5A16 with contrast figures for a colour the tree stopped using. Two
-   descriptions of one palette is worse than none: the reader believes whichever they hit
-   first. One block, current values, measured rather than remembered. */
+/* Shared neutral palette; immersive scenes define their own colors. */
 :root {
   color-scheme: light;
 
-  /* THE YELLOW SCHEME (2026-09-17, founder-directed): the colour scheme of Stef-01/revamped-adhd.me,
-     the static marketing site. Cream paper, warm near-neutral greys, charcoal ink, a saturated
-     yellow field for the header and the mark, deep gold where the brand has to be TEXT, and ink
-     for every primary control. The blue scheme of 2026-09-10 is the version this replaced.
-     Every text token was measured against --paper before it landed: ink 16.4:1, muted 7.3:1
-     (6.9 on stone), faint 6.2:1 (5.9 on stone; it sets 11px labels), accent 6.2:1 as text and
-     6.4:1 under white. The greys keep their channel spread under 24 on purpose: src/quality/tint.ts
-     reads a wider warm grey as a badge, and that rule guards two console specs. */
-  --ink: #1a1c1c;
-  /** Secondary text. paper 7.3, stone 6.9, white 7.6. */
-  --muted: #55534d;
-  /** Smallest labels. Has to clear AA at 11px: paper 6.2, stone 5.9, white 6.6. */
-  --faint: #5f5e59;
-  --paper: #fafaf7;
-  --stone: #f6f4ee;
-  --line: #e8e6df;
+  /* Warm neutrals and restrained sage for the shared platform. */
+  --ink: #272925;
+  /* Supporting text remains readable on both paper and stone. */
+  --muted: #62655f;
+  /* Small labels use the same neutral family. */
+  --faint: #666a63;
+  --paper: #fbfbf9;
+  --stone: #f4f4f0;
+  --line: #e6e7e0;
 
   /* AR27: the dashboard chart's palette, tokenised with values preserved — the pair was
      validated by the dataviz method when the chart was built (CVD ΔE 24.7, ≥3:1 on white;
@@ -130,24 +113,20 @@
   --chart-end-label: var(--muted);
   --chart-point-ring: #ffffff;
 
-  --accent: #785a00;
+  --accent: #53604e;
   --on-accent: #ffffff;
-  --accent-deep: #5b4300;
-  --accent-soft: #fff8e6;
-  --accent-mid: #e5b026;
-  --accent-tint: #fde7a5;
+  --accent-deep: #3f4c3b;
+  --accent-soft: #f0f2ec;
+  --accent-mid: #a7b19e;
+  --accent-tint: #dce2d5;
 
-  /* THE BRAND FIELD (2026-09-17, founder-directed: the colour scheme of Stef-01/revamped-adhd.me).
-     Saturated yellow is the ground the wordmark and the header sit on, with ink type; it is a
-     SURFACE, never text — 1.6:1 on paper. Text in the brand's colour uses --accent, the deep gold.
-     --brand-edge is the header's hairline, --brand-pill the translucent nav container. --signal is
-     the one warm-red dot beside the wordmark in that repo's mark. */
+  /* Legacy brand yellow is retained for scoped story and game artwork. */
   --brand: #f1bc31;
   --brand-deep: #e5b026;
   --brand-edge: #e5b029;
   --brand-pill: #f7cf63;
   --on-brand: var(--ink);
-  --signal: #ff4d2e;
+  --signal: #b77762;
 
   /* THE MAP (founder, 2026-09-19, the Calm Clarity design system).
      Four roles nothing existing could fill. The coral is the polygon's and nothing else's: it is

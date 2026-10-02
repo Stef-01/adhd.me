@@ -1,11 +1,6 @@
 /* Colour is an intentional exception inside learning and meditation, requested by the user. */
 .site-motion-root { display: contents; }
 .platform-brand { font-size: 24px; letter-spacing: -.06em; min-height: 44px; }
-.platform-shell .app-tab { isolation: isolate; }
-.platform-shell .app-tab.is-current { background: transparent; }
-.platform-shell .app-tab-marker { display: block; position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 999px; background: var(--ink); z-index: -1; }
-@media (max-width: 767px) { .platform-shell .app-tab-marker { border-radius: 14px; background: var(--brand); } }
-.platform-shell .app-tab-label { position: relative; }
 .platform-shell .learn-module { --lesson-colour: #f4d94f; --lesson-soft: #fff6c8; --lesson-ink: #34362f; --lesson-ink-quiet: #3f4038; --on-band: #e99443; --hero-blue: #647bbf; }
 /* THE READER TAKES THE COLOUR OF THE CARD IT WAS OPENED FROM.
    A per-topic set lived here — six pastels, named by module id — beside the eight covers the

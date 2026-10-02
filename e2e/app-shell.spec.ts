@@ -456,7 +456,7 @@ test("O244: a Learn quiz can be played through, is never about the reader, and r
   await expect(page.getByRole("button", { name: /Myth or fact\?/ })).toContainText("Done");
 });
 
-test("library and playable games retain live glass with a tap-bubble fallback", async ({ page }) => {
+test("the library stays flat while playable games retain live glass with a tap-bubble fallback", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   const errors: string[] = [];
   page.on("console", (m) => { if (m.type() === "error" || m.type() === "warning") errors.push(m.text()); });
@@ -465,7 +465,14 @@ test("library and playable games retain live glass with a tap-bubble fallback", 
   await page.waitForTimeout(600);
   expect(await page.evaluate(() => ({ scope: document.querySelector("[data-liquid]") !== null, liquid: document.documentElement.classList.contains("has-liquid") }))).toEqual({ scope: false, liquid: false });
   await page.goto("/approach");
-  await expect(page.locator("[data-liquid] .learn-try-tile").first()).toBeVisible();
+  const tile = page.locator(".learn-try-tile").first();
+  await expect(tile).toBeVisible();
+  await expect(page.locator("[data-liquid]")).toHaveCount(0);
+  expect(await tile.evaluate(el => ({ shadow: getComputedStyle(el).boxShadow, sheen: getComputedStyle(el, "::before").content }))).toEqual({ shadow: "none", sheen: "none" });
+  expect(await page.evaluate(() => document.documentElement.classList.contains("has-liquid"))).toBe(false);
+
+  await page.goto("/approach?module=starting");
+  await expect(page.locator("[data-liquid]")).toBeVisible();
   await page.waitForTimeout(600);
   const state = await page.evaluate(() => {
     const c = document.createElement("canvas");
@@ -482,18 +489,15 @@ test("library and playable games retain live glass with a tap-bubble fallback", 
   // The layer is decoration: hidden from assistive tech, and present exactly when the engine can draw it.
   expect(state.canvas).toBe("true");
   expect(state.liquid).toBe(state.able);
-  const card = page.locator("[data-liquid] .learn-try-tile").first();
+  const card = page.locator("[data-liquid] .play-hut").first();
   const box = (await card.boundingBox())!;
   await card.dispatchEvent("pointerdown", { pointerId: 1, clientX: box.x + 24, clientY: box.y + 24, button: 0 });
   await expect(card).toHaveAttribute("data-tap", "");
   expect(await card.evaluate(el => ({ clipped: getComputedStyle(el).overflow, bubble: getComputedStyle(el, "::after").animationName }))).toEqual({ clipped: "hidden", bubble: "lg-bubble" });
 
-  await page.goto("/lives/play/leo-mosquito");
-  await page.waitForTimeout(600);
-  expect(await page.evaluate(() => document.documentElement.classList.contains("has-liquid"))).toBe(state.able);
   expect(errors.filter((e) => /liquid-glass/.test(e))).toEqual([]);
-  // Nothing the layer does may cover the page: the first heading is still hit-testable.
-  const hit = await page.evaluate(() => { const h = document.querySelector("h1")!; const r = h.getBoundingClientRect(); return document.elementFromPoint(r.left + 4, r.top + 4)?.closest("h1") === h; });
+  // The quick game's visible title remains hit-testable under its decorative layer.
+  const hit = await page.locator(".play-title").evaluate(h => { const r = h.getBoundingClientRect(); return document.elementFromPoint(r.left + 4, r.top + 4)?.closest(".play-title") === h; });
   expect(hit).toBe(true);
 });
 

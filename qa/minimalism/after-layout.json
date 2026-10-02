@@ -1,0 +1,52 @@
+[
+  {
+    "name": "support",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "name": "learn",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "name": "modules",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "name": "my-adhd",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "name": "today",
+    "width": 390,
+    "overflow": false
+  },
+  {
+    "name": "support",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "name": "learn",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "name": "modules",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "name": "my-adhd",
+    "width": 1440,
+    "overflow": false
+  },
+  {
+    "name": "today",
+    "width": 1440,
+    "overflow": false
+  }
+]

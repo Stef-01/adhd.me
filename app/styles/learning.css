@@ -1,26 +1,19 @@
 /* Library covers and lesson pages deliberately have different layout classes. */
-/* The palette itself is globals.css §RADIANT unit 3 and is NOT restated here. This file used to
-   carry a second, paler set — a tint of each cover mixed towards the platform's cool paper — and
-   with it one blanket ink (#182230) for all seven. Two things followed. The measured per-card
-   inks went unused, and every card had to be pale enough for that one ink to survive on, which
-   is how a stack the founder drew in eight colours came to read as grey with three accents. */
-.platform-shell .learn-thesis { margin: 0 0 12px; color: var(--ink); font-size: 38px; font-weight: 750; letter-spacing: -.045em; }
+/* Library covers use quiet tints of the topic colors; lessons retain their full palettes. */
+.platform-shell .learn-thesis { margin: 0 0 12px; color: var(--ink); font-size: 38px; font-weight: 600; letter-spacing: -.04em; }
 .learn-reset { margin: -8px 0 24px; min-height: 44px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; font-size: 13px; }
 .platform-shell .learn-screen:has(.learn-module) :is(.learn-thesis, .learning-intro, .learn-care-map) { display: none; }
-.platform-shell .me-screen.learn-screen { padding-top: 40px; }
-/* The hero is a LITE glass surface (app/styles/glass.css) and takes its fill from there. A
-   palette wash was tried here and is deliberately not kept: glass.css loads after this file and
-   owns the fill, so the wash was dead CSS, and the honest fix is to leave the material alone
-   rather than out-specify it. On a warm ground the neutral hero reads as the platform's own
-   material with the covers as the colour, which is the division this tab wants. */
+.platform-shell .me-screen.learn-screen { max-width: 1080px; padding-top: clamp(32px, 5vw, 64px); }
+/* A flat surface groups a featured lesson without competing with its illustration. */
 .learning-feature { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; min-height: 280px; margin-bottom: 32px; padding: 32px 40px; border-radius: 24px; background: var(--stone); overflow: hidden; }
 .learning-feature h2 { max-width: 17ch; font-size: clamp(26px, 3vw, 36px); line-height: 1.2; letter-spacing: -.04em; margin: 10px 0 16px; }
 .learning-feature p:not(.learning-overline) { max-width: 42ch; color: var(--muted); margin-bottom: 24px; }
 .learning-scene { width: 100%; max-height: 300px; }
 .platform-shell .learn-chip { min-height: 44px; font-size: 14px; border-color: var(--line-strong); background: var(--paper); }
 .platform-shell .learn-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
-.platform-shell .learn-pane-tabs { display: flex; gap: 8px; margin: 4px 0 18px; max-width: 420px; }
-.platform-shell .learn-pane-tab { flex: 1; }
+.platform-shell .learn-pane-tabs { display: flex; gap: 28px; margin: 28px 0; max-width: none; border-bottom: 1px solid var(--line); }
+.platform-shell .learn-pane-tab { flex: none; min-height: 48px; padding: 10px 2px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: var(--muted); font-size: 14px; font-weight: 550; }
+.platform-shell .learn-pane-tab.is-active { border-bottom-color: var(--ink); background: transparent; color: var(--ink); }
 .platform-shell .learn-pane-tab:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .platform-shell .learn-pane { touch-action: pan-y; display: flow-root; min-width: 0; }
 .platform-shell .learn-play-card { display: grid; justify-items: center; gap: 12px; margin: 0 0 20px; padding: 24px 20px 20px; border-radius: 24px; background: var(--stone); }
@@ -45,16 +38,14 @@
 .platform-shell :is(.learn-card, .learn-try-tile).is-night   { --cover: var(--learn-night);   --cover-ink: var(--learn-night-ink);   --cover-sub: var(--learn-night-sub); }
 .platform-shell .learn-stack .learn-card {
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(64px, 34%); align-items: center; gap: 12px;
-  width: 100%; min-height: 184px; height: 100%; padding: 28px; border: 0; border-radius: 32px;
-  background: var(--cover); color: var(--cover-ink); font: inherit; text-align: left; cursor: pointer; overflow: hidden;
-  box-shadow: 0 3px 12px -7px rgb(23 32 51 / 0.12);
+  width: 100%; min-height: 156px; height: 100%; padding: 24px; border: 1px solid var(--line); border-radius: 12px;
+  background: color-mix(in srgb, var(--cover) 20%, var(--paper)); color: var(--ink); font: inherit; text-align: left; cursor: pointer; overflow: hidden;
+  box-shadow: none;
   transition: transform 200ms var(--ease-ui), box-shadow 200ms var(--ease-ui);
 }
-/* The sheen is a pseudo-element, so the text's computed background stays the flat fill the inks
-   above were measured against; it sits over the art side, which the 69% text column never reaches. */
+/* Covers stay flat even when the surrounding page uses illustrated content. */
 .platform-shell .learn-stack .learn-card::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(115% 85% at 86% 6%, rgb(255 255 255 / 0.26), transparent 62%);
+  content: none;
 }
 .platform-shell .learn-stack .learn-card > * { position: relative; }
 @media (hover: hover) {
@@ -69,7 +60,7 @@
 .platform-shell .learn-stack .learn-card :is(.learn-card-text small, .learn-card-meta) { color: var(--cover-sub); }
 .platform-shell .learn-stack > li { min-width: 0; display: grid; }
 .platform-shell .learn-card-text { max-width: none; min-width: 0; gap: 10px; overflow-wrap: anywhere; }
-.platform-shell .learn-card-text strong { font-size: 23px; line-height: 1.2; letter-spacing: -.03em; }
+.platform-shell .learn-card-text strong { font-size: 19px; font-weight: 600; line-height: 1.2; letter-spacing: -.03em; }
 .platform-shell .learn-card-text small { font-size: 13px; line-height: 1.5; }
 .platform-shell .learn-card-art { width: 100%; height: 132px; filter: none; margin: 0; }
 .platform-shell .learn-card-art svg { width: 100%; height: 100%; }
@@ -98,8 +89,8 @@
 .platform-shell .learn-card-foot { max-width: 66ch; margin-top: 24px; color: var(--muted); font-size: 14px; line-height: 1.6; }
 .learning-lesson-art { float: right; width: 30%; margin: 0 0 24px 28px; border-radius: 20px; background: var(--stone); }
 .platform-shell .learn-controls { display: flex; justify-content: space-between; gap: 16px; margin: 24px 0 48px; padding: 0; position: static; background: transparent; }
-/* Pills, as every big control is (O232's radius law: controls are pills, cards are 12 to 16px). */
-.platform-shell :is(.learn-primary, .learn-secondary, .learn-back) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border-radius: 999px; padding: 12px 22px; font: inherit; font-size: 14px; font-weight: 700; }
+/* Compact corners distinguish controls from the softer illustrated surfaces. */
+.platform-shell :is(.learn-primary, .learn-secondary, .learn-back) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border-radius: 8px; padding: 12px 20px; font: inherit; font-size: 14px; font-weight: 600; }
 .platform-shell .learn-primary { background: var(--accent); color: var(--paper); border: 1px solid var(--accent); }
 .platform-shell :is(.learn-secondary, .learn-back) { background: var(--paper); color: var(--ink); border: 1px solid var(--line-strong); }
 .platform-shell :is(.learn-primary, .learn-secondary):disabled { opacity: .5; cursor: not-allowed; }
@@ -151,7 +142,7 @@
   .ring-2 { inset: 80px; padding: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .platform-shell *, .platform-shell *::before, .platform-shell *::after { animation-duration: 0s; transition-duration: 0s; scroll-behavior: auto; } }
-/* The games scope is a marker for the glass, not a box: its children keep the pane's own layout. */
+/* Library children share the pane layout without an additional wrapper box. */
 .platform-shell .learn-games-scope { display: contents; }
 
 /* Every character game is a direct destination, not hidden inside the cast screen. */
@@ -160,7 +151,7 @@
 
 /* ── The games pane, rebuilt (docs/design/ux-evaluation-2026-09/PLAN.md W7) ─────────────────── */
 /* The care map's one door: a full-width row above both panes, 56px and more. */
-.platform-shell .learn-care-map { display: flex; align-items: center; gap: 14px; max-width: 560px; min-height: 56px; margin: 0 0 20px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--paper); color: var(--ink); text-decoration: none; }
+.platform-shell .learn-care-map { display: flex; align-items: center; gap: 14px; max-width: 360px; min-height: 56px; margin: 0 0 28px; padding: 12px 0; border: 0; border-radius: 8px; background: transparent; color: var(--ink); text-decoration: none; }
 .platform-shell .learn-care-map > span { display: grid; gap: 2px; flex: 1; min-width: 0; }
 .platform-shell .learn-care-map strong { font-size: 1rem; font-weight: 700; }
 .platform-shell .learn-care-map small { color: var(--muted); font-size: 0.875rem; }
@@ -168,24 +159,24 @@
 .platform-shell .learn-care-map:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 @media (hover: hover) { .platform-shell .learn-care-map:hover { border-color: var(--accent); } }
 .platform-shell .learn-pane-line { margin: 0 0 16px; color: var(--muted); font-size: 1rem; }
-.platform-shell .learn-try-title { margin: 24px 0 12px; font-size: 1.25rem; font-weight: 700; }
+.platform-shell .learn-try-title { margin: 36px 0 16px; font-size: 1rem; font-weight: 600; }
 /* The three appear once the device has been read, into space already held for them: three tiles
    stacked on a phone, one row of three from 768px. Nothing below moves when they arrive. */
-.platform-shell .learn-try { --try-tile: 76px; display: grid; align-content: start; gap: 10px; min-height: calc(3 * var(--try-tile) + 2 * 10px); margin: 0 0 16px; padding: 0; list-style: none; }
+.platform-shell .learn-try { --try-tile: 96px; display: grid; align-content: start; gap: 10px; min-height: calc(3 * var(--try-tile) + 2 * 10px); margin: 0 0 16px; padding: 0; list-style: none; }
 @media (min-width: 768px) { .platform-shell .learn-try { grid-template-columns: repeat(3, minmax(0, 1fr)); min-height: var(--try-tile); } }
 .platform-shell .learn-try:not([data-ready]) { visibility: hidden; }
-.platform-shell .learn-try-tile { display: flex; align-items: center; gap: 12px; width: 100%; min-height: var(--try-tile, 76px); padding: 12px 16px; border: 0; border-radius: 20px; background: var(--game-colour, var(--cover, var(--stone))); color: var(--cover-ink, var(--ink)); font: inherit; text-align: left; text-decoration: none; cursor: pointer; touch-action: manipulation; }
+.platform-shell .learn-try-tile { display: flex; align-items: center; gap: 12px; width: 100%; min-height: var(--try-tile, 76px); padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--game-colour, var(--cover, var(--stone))) 14%, var(--paper)); color: var(--ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; touch-action: manipulation; }
 .platform-shell .learn-try-tile > span { display: grid; gap: 3px; flex: 1; min-width: 0; }
-.platform-shell .learn-try-tile strong { font-size: 1.0625rem; font-weight: 700; }
-.platform-shell .learn-try-tile small { color: inherit; font-size: 0.875rem; }
+.platform-shell .learn-try-tile strong { font-size: 1rem; font-weight: 600; }
+.platform-shell .learn-try-tile small { color: var(--muted); font-size: 0.875rem; }
 .platform-shell .learn-try-tile > svg:last-child { flex: none; }
 .platform-shell .learn-try-tile:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 /* "All games" sits in the toolbar beside "Play mix", so opening it swaps what is below and the
-   button stays where the finger left it. A pill, like its neighbour. */
-.platform-shell .learn-all-games { gap: 8px; margin: 0; border-radius: 99px; }
+   button stays where the finger left it. */
+.platform-shell .learn-all-games { gap: 8px; margin: 0; border-radius: 8px; }
 .platform-shell .learn-all-games[aria-expanded="true"] svg:last-child { transform: rotate(180deg); }
 .platform-shell .learn-game-groups { display: grid; gap: 8px; margin: 12px 0 0; }
-.platform-shell .learn-group-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; padding: 0 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); font: inherit; font-weight: 650; cursor: pointer; touch-action: manipulation; }
+.platform-shell .learn-group-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; padding: 0 4px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--ink); font: inherit; font-weight: 650; cursor: pointer; touch-action: manipulation; }
 .platform-shell .learn-group-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
 .platform-shell .learn-group-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .platform-shell .learn-game-names { display: grid; gap: 2px; margin: 6px 0 4px; padding: 0; list-style: none; }

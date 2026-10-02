@@ -4,51 +4,38 @@ The 2026 redesign follows the six user-supplied references and the requirements 
 
 ## Shared visual language
 
-The founder's direction on 2026-09-17 moved the app to the colour scheme of
-[Stef-01/revamped-adhd.me](https://github.com/Stef-01/revamped-adhd.me), the static marketing site:
-cream paper and stone, warm near-neutral greys, charcoal ink for content, primary controls and the
-footer, a saturated yellow field carrying the header and the mark with ink type on it, deep gold
-where the brand has to be text, and the reference's own link blue and sky tints for route and
-state. Learning keeps its topic palettes on neutral covers; each game keeps the palette of its own
-world (`docs/design/games-to-leo-standard.md`). Reading uses a constrained text measure even when
-the workspace uses the whole desktop. The blue scheme of 2026-09-10 and the warm brand before it
-remain in `docs/design/2026-platform/` and `docs/design/warm-brand/` as the record.
+The October 2026 refinement makes the platform quieter. Warm white replaces the saturated
+header, flat charcoal controls carry the main action, and sage is reserved for selected content.
+The brand mark, serif questions and original learning characters retain the app's identity.
+
+References: [Things](https://culturedcode.com/things/features/) for focused tasks and secondary
+details that step back; [Linear](https://linear.app/features) for compact navigation and restrained
+hierarchy. These inform the shared shell rather than introduce new workflows.
 
 | Token | Value | Use |
-|---|---|---|
-| Paper | `#FAFAF7` | Page ground |
-| Stone | `#F6F4EE` | Inset and raised surfaces |
-| Ink | `#1A1C1C` | Content, primary controls, the footer; 16.4:1 on paper |
-| Muted / faint | `#55534D` / `#5F5E59` | Supporting copy and small labels; 7.3:1 and 6.2:1 on paper |
-| Brand | `#F1BC31` | The header field, the mark, selection, the active tab on a phone; a surface, never text |
-| Brand edge / pill / deep | `#E5B029` / `#F7CF63` / `#E5B026` | The header hairline, the nav container, the hover step |
-| Accent (gold) | `#785A00` | The brand as text: links in the accent, eyebrows, focus, the italic word; 6.2:1 on paper |
-| Accent deep / mid / tint / soft | `#5B4300` / `#E5B026` / `#FDE7A5` / `#FFF8E6` | The accent ramp; the console's amber utilities read it |
-| Route | `#1D64C2` | Text links and state; 5.5:1 on paper. Soft `#DCEDFA`, line `#B9D6EE`, strong `#24487A` |
-| Line / strong line | `#E8E6DF` / `#D9D5C9` | Dividers and visible boundaries |
-| Signal | `#FF4D2E` | The one warm-red dot in the mark |
+| --- | --- | --- |
+| Paper | #FBFBF9 | Canvas, header and browser chrome |
+| Stone | #F4F4F0 | Quiet inset surfaces and active navigation |
+| Ink | #272925 | Content and primary controls |
+| Muted / faint | #62655F / #666A63 | Supporting copy and labels |
+| Accent | #53604E | Selected content, links and field focus |
+| Accent deep / soft / mid / tint | #3F4C3B / #F0F2EC / #A7B19E / #DCE2D5 | Sage selection ramp |
+| Line | #E6E7E0 | Structural dividers |
+| Signal | #B77762 | Small mark detail |
 
-Yellow is the ground of the header and nothing else on a screen, so the field reads as identity
-rather than decoration; the one exception is the landing's throughline band, a marketing beat on a
-marketing page. The mark is the reference's: ADHD small and letter-spaced over "me", the warm-red
-point after it, one component (`app/brand-wordmark.tsx`) inside every wordmark link whose
-accessible name stays ADHD.ME. Type is the reference's too: Plus Jakarta Sans for the interface and
-Newsreader for display and editorial serif. The landing has no navy: its dark beats are the ink of
-the footer, its chapters the paper, the stone and the yellow wash. The Learn library's covers are
-pastel tints under ink, the reference's card family; the colour lives inside a module. The one
-primary on a screen is an ink pill with a yellow glyph and a soft shadow that lifts under a pointer;
-the microphone is that pill. Nothing is filled with the deep gold; as a fill it reads olive. Focus is
-an ink ring on light surfaces and a yellow one on ink. Two selected states, by role: navigation and
-pressed filters are the ink pill; a chosen segment inside content (a module step, an adjustments
-tab, a map chip, the library's Games and Modules) is the yellow wash under a gold hairline. A callout
-is one hairline and a wash, never a coloured side tab. The finder's filters are one row of pills
-under the search, the kind of support first; the row wraps on a desk and scrolls sideways on a
-phone. A monogram is the callout wash with deep-gold initials, never a second hue. An empty list
-names what emptied it and offers each filter that would bring it back, with the count.
-Captures from the production build are in `docs/design/yellow-scheme/`. The colourful educational stages, the meditation player and the games are
-the exceptions: each uses its own readable palette while the surrounding library and navigation
-stay quiet. The two categorical chart colours are unchanged. Chart greys use the neutral ramp.
-Text on dark uses paper; the band's text uses ink.
+Plus Jakarta Sans sets the interface; Newsreader sets patient questions and quoted voices.
+Page headings use a quieter 600 weight. Navigation retains icons, labels, a filled active icon
+and aria-current. Desktop tabs sit directly on the header; mobile tabs retain their fixed bottom
+position, consent offset and safe-area padding.
+
+Main controls have an 8px radius, library cards 12px, and the search composer has a single border.
+Learn uses a bounded 1080px workspace, underline tabs, an unboxed care-map link and pale covers.
+Its browsing surface no longer opts into liquid glass. Game scenes, lesson palettes, chart
+semantics, route behavior and stored personal data keep their existing contracts.
+
+The public header and footer share the neutral surfaces. The marketing story and immersive games
+retain their scoped artwork and brand colors. Hover feedback is subtle; focus stays explicit;
+reduced-motion preferences are respected. No product copy is added for this visual pass.
 
 ## Component ownership
 
@@ -58,7 +45,7 @@ Text on dark uses paper; the band's text uses ink.
 - `app/styles/finder.css`: desktop search composition and provider/profile refinements.
 - `app/styles/learning.css`: learning library, lesson pages, examples and responsive focus treatment.
 - `app/styles/platform-surfaces.css`: public navigation and operational console primitives.
-- `app/styles/brand.css`: the supplied brand's cross-surface colour/type treatment; `:root` in globals.css owns palette values.
+- `app/styles/brand.css`: the shared neutral cross-surface colour/type treatment; `:root` in globals.css owns palette values.
 - `app/styles/learning-play.css`, `app/learning-activities.tsx`: colourful educational compositions, discovery, sequence, collection and timeline activities.
 - `app/site-motion.tsx`: shared route reveals and public/console pointer feedback; reduced-motion users get immediate states.
 - `app/meditation-studio.tsx`, `src/learn/meditation.ts`: personal monotonic timers and server-synchronised shared sessions. No fabricated attendance or human host.

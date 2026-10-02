@@ -1,62 +1,66 @@
-/* The yellow scheme of Stef-01/revamped-adhd.me: a saturated yellow field carries the header on
-   every page with ink type, primaries are ink pills, the accent in text is the deep gold, and the
-   footer is ink under a yellow rule. :root in globals.css owns the values; this file places them. */
+/* Shared platform identity. Game worlds keep their own scoped palettes. */
 :root {
   --font-ui: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Newsreader Variable", Newsreader, Georgia, serif;
 }
 body { font-family: var(--font-ui); }
 .platform-header, .platform-public-nav.site-nav {
-  position: relative;
-  background: var(--brand);
-  color: var(--on-brand);
-  border-top: 0;
-  border-bottom: 1px solid var(--brand-edge);
+  position: relative; background: var(--paper); color: var(--ink);
+  border-top: 0; border-bottom: 1px solid var(--line);
 }
-.platform-console .console-header { position: relative; border-top: 4px solid var(--brand); }
-.platform-brand { position: relative; gap: 0; align-items: center; letter-spacing: 0; color: var(--on-brand); }
+.platform-console .console-header { border-top: 0; }
+.platform-brand { position: relative; gap: 0; align-items: center; letter-spacing: 0; color: var(--ink); }
 .platform-public-nav .site-nav-wordmark { gap: 5px; align-items: baseline; }
 .platform-brand svg { color: var(--ink); }
-.platform-help { color: var(--on-brand); }
-/* On the yellow field the urgent pill is paper with ink: found at a glance, never an alarm. */
-.platform-urgent {
-  border-color: color-mix(in srgb, var(--ink) 16%, transparent);
-  background: var(--paper);
-  color: var(--ink);
+.platform-help { color: var(--muted); }
+.platform-shell .settings-trigger { background: transparent; border-color: transparent; color: var(--muted); }
+@media (hover: hover) {
+  .platform-urgent:hover, .platform-shell .settings-trigger:hover { background: var(--stone); border-color: var(--line); color: var(--ink); }
 }
-@media (hover: hover) { .platform-urgent:hover { border-color: var(--ink); } }
-.platform-shell .settings-trigger { border-color: color-mix(in srgb, var(--ink) 16%, transparent); color: var(--ink); }
-/* Desktop tabs sit in the header as the reference's nav: a translucent lighter-yellow container,
-   ink links, and the current one an ink pill. On a phone the bar is paper and the current tab
-   is a yellow pill (learning-play.css draws the travelling marker). */
-@media (min-width: 768px) {
-  .platform-shell .app-tabs-list { padding: 5px; border: 1px solid color-mix(in srgb, var(--ink) 5%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--brand-pill) 70%, transparent); box-shadow: 0 1px 4px color-mix(in srgb, var(--ink) 4%, transparent); }
-  .platform-shell .app-tab { min-height: 44px; padding-block: 10px; color: var(--ink); }
-  .platform-shell .app-tab.is-current { color: var(--paper); }
-}
-.platform-shell .app-tab { border-radius: 999px; }
 .platform-shell main h1 { font-family: var(--font-ui); }
-/* D1 (docs/design/ux-evaluation-2026-09/PLAN.md): Newsreader for a question asked of the person
-   and for a quoted voice; Plus Jakarta Sans for every statement. One class carries it, so a
-   heading is serif because of what it says, not because of which page it is on. */
-.platform-shell main .t-question, .t-question, .t-voice { font-family: var(--font-display); font-weight: 460; letter-spacing: -0.025em; }
-@media (max-width: 767px) { .platform-shell .app-tab.is-current { color: var(--ink); } }
-/* The story page's header pill joins the ink idiom: it was the one primary still on the navy
-   `--route-strong` after the landing moved to the yellow scheme. */
-.platform-shell :is(.learn-primary,.me-sticky a), .platform-console :is(.console-button,.console-primary-button), .platform-public-nav .site-nav-link, .story-demo-link, body:has(.platform-shell) .consent-agree {
-  background: var(--ink); color: var(--paper); border-color: var(--ink);
+.platform-shell main .t-question, .t-question, .t-voice { font-family: var(--font-display); font-weight: 460; letter-spacing: -.025em; }
+.platform-shell :is(h1, h2, h3) { text-wrap: balance; }
+.platform-shell main p { text-wrap: pretty; }
+.platform-shell :is(p, li, blockquote) { hanging-punctuation: first; }
+.platform-shell :is(input, textarea) { caret-color: var(--ink); }
+.platform-shell :is(input, textarea)::placeholder { color: var(--muted); opacity: 1; }
+::selection { background: var(--accent-tint); color: var(--ink); }
+
+/* A single solid action, with quiet outlined and text alternatives. */
+.platform-shell :is(.learn-primary, .me-sticky a, .lives-play),
+.platform-console :is(.console-button, .console-primary-button),
+.platform-public-nav .site-nav-link, .story-demo-link,
+.patient-v2 .profile-footer .primary-button, .patient-v2 .bottom-action .primary-button,
+.cv2-action > button, .cv2-action > .cv2-start-cta, .notfound-primary, .me-show, .consent-agree {
+  background: var(--ink); border-color: var(--ink); color: var(--paper);
+  border-radius: 8px; box-shadow: none;
+  transition: background-color 160ms ease-out, transform 160ms ease-out;
 }
-/* A chosen chip takes the one pill for a choice (the care plan's, the Learn tabs'): the ink pill is
-   each screen's one primary, and a row of answers with one in ink read as a second. */
+.platform-shell :is(.learn-primary, .me-sticky a, .lives-play) svg,
+.platform-public-nav .site-nav-link svg,
+.patient-v2 .profile-footer .primary-button svg, .patient-v2 .bottom-action .primary-button svg,
+.cv2-action > button svg, .cv2-action > .cv2-start-cta svg, .notfound-primary svg, .me-show svg { color: currentColor; }
+.platform-shell .patient-v2 .voice-actions .dual-input-action,
+.platform-shell .patient-v2 .voice-screen .mic-button { background: var(--ink); color: var(--paper); box-shadow: none; }
+.platform-shell .patient-v2 .voice-actions .dual-input-action { border-radius: 10px; }
+.platform-shell .patient-v2 .voice-screen .mic-button svg { color: currentColor; }
+.platform-shell .patient-v2 .voice-actions .dual-input {
+  border: 1px solid var(--line-strong); border-radius: 12px; background: var(--surface-raised); box-shadow: none;
+}
+.platform-shell .patient-v2 .voice-actions .dual-input:focus-within { border-color: var(--accent); }
+.platform-shell .patient-v2 .voice-actions .dual-input-field { background: transparent; border: 0; border-radius: inherit; box-shadow: none; font-size: 16px; }
+.platform-shell .patient-v2 .finder-example { border-radius: 6px; border-color: var(--line); font-size: 12px; font-weight: 500; background: transparent; }
+.platform-shell .patient-v2 .finder-example[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.platform-shell :is(.filter-chip, .finder-profession select, .learn-chip, .map-share) { border-radius: 8px; }
 .platform-shell .learn-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
-/* THE LEARN COVERS ARE THE ONE SURFACE THE WARM RAMP DOES NOT OWN.
-   This file flattened the stack to alternating --stone and --paper with a hairline, which is a
-   correct instinct everywhere else on the platform and wrong here: the founder drew the library
-   as eight colours, and a shelf of covers is the one place on this product where colour is the
-   content rather than the decoration. The covers, their inks and their tone live in
-   globals.css §RADIANT and app/styles/learning.css; nothing about them is restated here.
-   Everything else on this page — the chip, the primary action, the band, the footer — still
-   takes the ramp below. */
+.platform-shell .my-daily-action .life-card { border-radius: 12px; padding: clamp(24px, 4vw, 40px); }
+.platform-shell .my-daily-action .life-card.is-lead { background: var(--stone); border-color: var(--line); }
+.platform-shell .my-daily-action .life-card.is-lead h2 { font-weight: 550; line-height: 1.35; }
+.platform-shell .map-share { border-color: var(--line); }
+.platform-shell .learn-panes .lives-chip { border-radius: 8px; box-shadow: none; }
+.platform-shell .learn-panes .lives-row { border-radius: 8px; box-shadow: none; }
+.platform-shell .learn-game-toolbar .learn-mix-link { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.platform-shell .learn-game-toolbar .learn-all-games { background: transparent; border-color: transparent; color: var(--muted); box-shadow: none; }
 .learning-example-choices button { background: var(--paper); }
 .learning-example-choices button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
 .learning-care-ring.ring-0 { background: var(--line); }
@@ -65,97 +69,39 @@ body { font-family: var(--font-ui); }
 .learning-care-ring[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--accent); }
 .platform-shell .learn-reveal { color: var(--ink); }
 body .aoc-band, body:has(.platform-shell) .aoc-band, .site-footer {
-  background: var(--ink); background-image: none; color: var(--line);
-  border-top: 4px solid var(--brand);
+  background: var(--stone); background-image: none; color: var(--muted); border-top: 1px solid var(--line);
 }
-body .aoc-band p, body:has(.platform-shell) .aoc-band p, .site-footer-brand p { color: var(--line); }
-.site-footer :is(a,.site-footer-wordmark) { color: var(--paper); }
-.story-portrait .coverage-names { color: var(--paper); }
+body .aoc-band p, body:has(.platform-shell) .aoc-band p, .site-footer-brand p { color: var(--muted); }
+.site-footer :is(a, .site-footer-wordmark) { color: var(--ink); }
 body .aoc-band::before, .site-footer::before { display: none; }
-/* Fixed navigation must keep its contrast as colourful content scrolls underneath it. */
-@media (max-width: 767px) { .platform-shell .app-tabs { background: var(--paper); } }
-
-.platform-shell :is(.life-head h1, .learn-thesis) { letter-spacing: -.035em; line-height: 1.18; text-wrap: balance; }
-.platform-shell :is(input, textarea) { caret-color: var(--accent); }
-.platform-shell :is(input, textarea)::placeholder { color: var(--muted); opacity: 1; }
-::selection { background: var(--brand); color: var(--ink); }
-/* Focus on the ink footer and band reads in the brand's yellow, as the reference does on dark. */
-:is(.site-footer, .aoc-band) :is(a, button):focus-visible { outline-color: var(--brand); }
-
-/* ── Micro-refinements, ported from revamped-adhd.me's research passes ──────────────────────────
-   The one primary on a screen is an ink pill with the brand's yellow glyph and a soft shadow, and
-   it lifts under a pointer; the microphone is that pill. Focus is an ink ring on light surfaces and
-   the yellow one on ink. Headings balance, paragraphs avoid orphans, quotation marks hang. */
-.platform-shell :is(.learn-primary, .me-sticky a), .platform-public-nav .site-nav-link, .story-demo-link, body:has(.platform-shell) .consent-agree {
-  box-shadow: 0 4px 16px -2px color-mix(in srgb, var(--ink) 18%, transparent);
-  transition: background-color var(--dur-tap) var(--ease-ui), transform var(--dur-move) var(--ease-ui), box-shadow var(--dur-move) var(--ease-ui);
-}
-.platform-shell :is(.learn-primary, .me-sticky a) svg, .platform-public-nav .site-nav-link svg { color: var(--brand); }
-.platform-shell .patient-v2 .voice-actions .dual-input-action { background: var(--ink); color: var(--brand); box-shadow: 0 4px 16px -2px color-mix(in srgb, var(--ink) 22%, transparent); }
-.platform-shell .patient-v2 .voice-screen .mic-button { background: var(--ink); color: var(--paper); box-shadow: 0 10px 24px color-mix(in srgb, var(--ink) 18%, transparent); }
-.platform-shell .patient-v2 .voice-screen .mic-button svg { color: var(--brand); }
-.platform-shell .app-tab-marker { box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 8%, transparent); }
+.story-portrait .coverage-names { color: var(--paper); }
+.story-primary-link { background: var(--brand); color: var(--ink); }
+.story-primary-link svg { color: currentColor; }
 @media (hover: hover) {
-  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover, .story-demo-link:hover, body:has(.platform-shell) .consent-agree:hover,
-  .platform-shell .patient-v2 .voice-actions .dual-input-action:hover, .platform-shell .patient-v2 .voice-screen .mic-button:hover {
-    background: color-mix(in srgb, var(--ink) 86%, var(--paper)); border-color: transparent;
+  .platform-shell :is(.learn-primary, .me-sticky a, .lives-play):not(:disabled):hover,
+  .platform-public-nav .site-nav-link:hover, .story-demo-link:hover, .consent-agree:hover,
+  .patient-v2 .profile-footer .primary-button:hover, .patient-v2 .bottom-action .primary-button:hover,
+  .cv2-action > button:hover, .cv2-action > .cv2-start-cta:hover, .notfound-primary:hover, .me-show:hover,
+  .platform-shell .patient-v2 .voice-actions .dual-input-action:hover {
+    background: color-mix(in srgb, var(--ink) 86%, var(--paper)); color: var(--paper); box-shadow: none;
   }
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .platform-shell :is(.learn-primary, .me-sticky a):not(:disabled):hover, .platform-public-nav .site-nav-link:hover, .story-demo-link:hover {
-    transform: translateY(-1px); box-shadow: 0 6px 18px -2px color-mix(in srgb, var(--ink) 24%, transparent);
-  }
+  .platform-shell :is(.learn-try-tile, .learn-stack .learn-card):hover { border-color: var(--line-strong); box-shadow: none; }
+  .platform-shell .learn-game-toolbar .learn-all-games:hover { background: var(--stone); color: var(--ink); }
 }
 .platform-shell :is(button, a, input, textarea, select, summary):focus-visible,
 body:has(.platform-shell) :is(.consent-read, .consent-agree):focus-visible,
 .platform-public-nav :is(a, button):focus-visible,
-.platform-console :is(a, button, input, select):focus-visible { outline-color: var(--ink); }
-.platform-shell :is(h1, h2, h3) { text-wrap: balance; }
-.platform-shell main p { text-wrap: pretty; }
-.platform-shell :is(p, li, blockquote) { hanging-punctuation: first; }
-
-/* ── Third pass: the appraisal ────────────────────────────────────────────────────────────────
-   Nothing is FILLED with the deep gold. As text it is the brand; as a fill it reads olive, and
-   the reference never does it — its primaries are ink (or the yellow itself on a dark ground).
-   The finder's booking button, the GP walkthrough's pathway button, the games' Play, the 404 and
-   worked-examples door, the profile's "show" pill and the base consent
-   button all take the ink pill; the story hero, on its navy, takes the yellow with ink type. */
-.patient-v2 .profile-footer .primary-button, .patient-v2 .bottom-action .primary-button, .cv2-action > button, .cv2-action > .cv2-start-cta, .notfound-primary, .me-show, .consent-agree, .platform-shell .lives-play {
-  background: var(--ink); border-color: var(--ink); color: var(--paper);
-  box-shadow: 0 4px 16px -2px color-mix(in srgb, var(--ink) 18%, transparent);
-}
-.patient-v2 .profile-footer .primary-button svg, .patient-v2 .bottom-action .primary-button svg, .cv2-action > button svg, .cv2-action > .cv2-start-cta svg, .notfound-primary svg, .me-show svg, .platform-shell .lives-play svg { color: var(--brand); }
-.story-primary-link { background: var(--brand); color: var(--ink); }
-.story-primary-link svg { color: var(--ink); }
-@media (hover: hover) {
-  .patient-v2 .profile-footer .primary-button:hover, .patient-v2 .bottom-action .primary-button:hover, .cv2-action > button:hover, .cv2-action > .cv2-start-cta:hover, .notfound-primary:hover, .me-show:hover, .consent-agree:hover, .platform-shell .lives-play:hover {
-    background: color-mix(in srgb, var(--ink) 86%, var(--paper)); border-color: transparent; color: var(--paper);
-  }
-  .story-primary-link:hover { background: var(--brand-deep); color: var(--ink); }
-}
-/* A heading that takes focus on arrival wears the same ink ring as a control. */
-.screen h1:focus-visible, .sheet-header h2:focus-visible, .platform-shell :is(h1, h2, h3):focus-visible { outline-color: var(--ink); }
-/* The console's fields sit on the warm hairline, not the route blue. */
+.platform-console :is(a, button, input, select):focus-visible,
+:is(.site-footer, .aoc-band) :is(a, button):focus-visible,
+.screen h1:focus-visible, .sheet-header h2:focus-visible { outline-color: var(--ink); }
 .console-input, .console-main input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), .console-main select, .console-main textarea { border-color: var(--line-strong); }
-/* On a phone the console's tabs scroll sideways instead of shrinking into each other. */
-@media (max-width: 767px) { .console-nav-link { flex: none; } }
 .console-navigation { border-top-color: var(--line); }
-/* The matching console family set its section headings in the serif while its page title is the
-   sans; one page, one display face. The quoted request keeps its serif: it is a quotation. */
-.platform-console .mc-section h2 { font-family: var(--font-ui); font-weight: 700; letter-spacing: -.02em; }
-
-/* ── The mark ──────────────────────────────────────────────────────────────────────────────────
-   As the reference draws it: ADHD small and letter-spaced over "me", the warm-red point after it.
-   One component (app/brand-mark.tsx) inside every wordmark link, so the header, the finder, the
-   public nav, the landing and both footers carry the same mark; it inherits the link's colour, so
-   it is ink on the yellow band and paper on the ink footer. */
+.platform-console .mc-section h2 { font-family: var(--font-ui); font-weight: 600; letter-spacing: -.02em; }
+@media (max-width: 767px) { .console-nav-link { flex: none; } }
 .brand-mark { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; color: inherit; font-family: var(--font-ui); }
-.brand-mark-top { display: block; padding-left: 0.62em; font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.62em; text-transform: uppercase; }
-.brand-mark-me { display: inline-flex; align-items: baseline; margin-top: -0.08em; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.03em; }
-.brand-mark-dot { display: inline-block; width: 0.36em; height: 0.36em; margin-left: 0.09em; border-radius: 50%; background: var(--signal); box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 18%, transparent); }
+.brand-mark-top { display: block; padding-left: .62em; font-size: .625rem; font-weight: 750; letter-spacing: .62em; text-transform: uppercase; }
+.brand-mark-me { display: inline-flex; align-items: baseline; margin-top: -.08em; font-size: 1.625rem; font-weight: 750; letter-spacing: -.03em; }
+.brand-mark-dot { display: inline-block; width: .3em; height: .3em; margin-left: .09em; border-radius: 50%; background: var(--signal); }
 .site-footer-wordmark .brand-mark-me, .story-footer-wordmark .brand-mark-me { font-size: 1.5rem; }
-.site-footer-wordmark .brand-mark-top, .story-footer-wordmark .brand-mark-top { font-size: 0.625rem; }
-@media (max-width: 767px) {
-  .brand-mark-me { font-size: 1.5rem; }
-  .brand-mark-top { font-size: 0.625rem; }
-}
+@media (max-width: 767px) { .brand-mark-me { font-size: 1.5rem; } }
+@media (prefers-reduced-motion: reduce) { .platform-shell :is(a, button), .platform-public-nav .site-nav-link { transition: none; } }

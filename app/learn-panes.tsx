@@ -305,7 +305,7 @@ function GamesPane({ progress, completed, hydrated, start, reducedMotion: _reduc
   const anyPlayed = hydrated && [...LIFE_GAMES, ...RUN_GAMES].some(isPlayed);
   const completedRun = completed && MODULES.find((m) => m.id === completed)?.kind === "run" ? completed : null;
   return (
-    <div className="learn-games-scope" data-liquid>
+    <div className="learn-games-scope">
       <Completion completed={completedRun} start={start} />
       <p className="learn-pane-line">Short scenes from everyday life.</p>
       <div className="learn-game-toolbar">
