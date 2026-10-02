@@ -120,6 +120,12 @@ export const SUBURBS: readonly SuburbPoint[] = [
 ];
 
 const byName = new Map(SUBURBS.map((s) => [s.suburb.toLowerCase(), s]));
+// What people call a city in a hurry ("a GP in bris", 2026-10-02, read no place at all).
+const SHORT_NAMES: Record<string, string> = { bris: "Brisbane", brissie: "Brisbane", brisvegas: "Brisbane", syd: "Sydney", "gold coast": "Gold Coast", "the goldie": "Gold Coast", goldie: "Gold Coast" };
+for (const [short, suburb] of Object.entries(SHORT_NAMES)) {
+  const point = byName.get(suburb.toLowerCase());
+  if (point && !byName.has(short)) byName.set(short, point);
+}
 
 /** Trailing state names and country, commas and doubled spaces — the noise around a place name. */
 const STATE_WORDS = /\b(nsw|qld|vic|wa|sa|tas|nt|act|new south wales|queensland|australia)\b/g;

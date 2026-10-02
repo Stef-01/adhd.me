@@ -1124,6 +1124,8 @@ export function requestFitCopy(summary: RequestFitSummary, rosterSize: number): 
  */
 /** How far in-person-only rooms can be before a clinician lists after everyone reachable from the person. */
 export const REACHABLE_KM = 150;
+/** Rooms near enough to call local: the same city. */
+export const LOCAL_KM = 40;
 const IN_PERSON = /\b(in[- ]person|face[- ]to[- ]face|in the room|not (by )?telehealth|no telehealth)\b/i;
 
 export function rankCliniciansNear(
@@ -1185,12 +1187,34 @@ export function rankCliniciansNear(
 
     start = end + 1;
   }
+  // Local rooms before a screen far away (2026-10-02): "a GP in Brisbane" led with a Sydney GP seen by
+  // telehealth, on capacity alone, above four Brisbane GPs who also see people by telehealth. Among
+  // those level on what was asked (child, constraints, scope, care, manner), clinicians with rooms near
+  // the place named come first, in their fit order; capacity orders within each part.
+  const fitKey = (c: Clinician) => {
+    const profile = rankingProfile(c, read);
+    const q = standing(demonstrated, c);
+    return `${profile.childScore}|${profile.constraintCoverage}|${profile.constraintScore}|${profile.scopeScore}|${profile.careScore * q}|${profile.mannerScore * q}`;
+  };
+  const isLocal = (c: Clinician) => (km(c) ?? Infinity) <= LOCAL_KM;
+  for (let s = 0; s < out.length; ) {
+    let e = s;
+    while (e + 1 < out.length && fitKey(out[e + 1]!) === fitKey(out[s]!)) e += 1;
+    const block = out.slice(s, e + 1);
+    out.splice(s, block.length, ...block.filter(isLocal), ...block.filter((c) => !isLocal(c)));
+    s = e + 1;
+  }
   // Reachable before unreachable (2026-10-01 sweep): for a person on the Gold Coast, "a GP who takes new
   // patients" listed two Sydney GPs, in person only and about 700 km away, above the Brisbane GPs who
   // see people by telehealth. Somebody seen only in rooms that far away cannot be booked in any useful
   // sense, which is the access tier's own reason; the order within each part is the order above.
   const reachable = (c: Clinician) => (!inPerson && c.telehealthFirstAppointment === true) || (km(c) ?? 0) <= REACHABLE_KM;
   return [...out.filter(reachable), ...out.filter((c) => !reachable(c))];
+}
+
+/** "None in Brisbane": a place was named, and nobody listed has rooms near it (2026-10-02). */
+export function noneLocal(list: readonly Clinician[], origin: SuburbPoint | null): boolean {
+  return origin !== null && list.length > 0 && list.every((c) => (nearestLocation(c, origin)?.km ?? Infinity) > LOCAL_KM);
 }
 
 /**

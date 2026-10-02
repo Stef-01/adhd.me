@@ -415,9 +415,10 @@ function take(state: VoiceState, item: string): VoiceState {
   // Words over the start of a question are the rest of the last answer (the founder's 07:49 call), unless
   // they carry what the cut question asks for: "in Queensland" over "Where are you?" is its answer (his
   // 02:34 call, where it went into the request as words of his own). And "say that again" over a question
-  // just begun asks for that question (the 2026-10-01 fuzz: it replayed the question before, twice).
+  // just begun asks for that question (the 2026-10-01 fuzz: it replayed the question before, twice). A
+  // bare yes or no over a cut yes-or-no question answers it, when the one before asked for neither.
   const cutQuestion = base.cut?.question ?? null;
-  const early = cutQuestion !== null && cutQuestion !== held.question && (answersQuestion(cutQuestion, held.form ?? formFrom(words)) || namesAnswerTo(cutQuestion, words) || Boolean((held.form ?? formFrom(words)).again)) ? { question: cutQuestion, asked: base.cut!.say } : null;
+  const early = cutQuestion !== null && cutQuestion !== held.question && (answersQuestion(cutQuestion, held.form ?? formFrom(words)) || namesAnswerTo(cutQuestion, words) || Boolean((held.form ?? formFrom(words)).again) || (YES_OR_NO_QUESTIONS.includes(cutQuestion) && !YES_OR_NO_QUESTIONS.includes(held.question) && Boolean((held.form ?? formFrom(words)).yes_no))) ? { question: cutQuestion, asked: base.cut!.say } : null;
   // A recording plays to its end over the person's voice, so an answer to it can be committed while the
   // question before it is still the one waiting, and that one is finished (the call of 2026-09-30 19:02:
   // "Yes." to "someone who has ADHD themselves?" went nowhere, the question was asked again and "Yes" reached
@@ -442,7 +443,9 @@ function take(state: VoiceState, item: string): VoiceState {
   const ours = [base.last, base.pending?.say].flatMap((id) => (id ? [SENTENCES[id].text, SENTENCES[id].spoken ?? ""] : []));
   const clipped = base.cut !== null && echoes(words, SENTENCES[base.cut.say].spoken ?? SENTENCES[base.cut.say].text, 1);
   if (words && (clipped || ours.some((sentence) => sentence && echoes(words, sentence)))) {
-    return { ...base, firm: true, cut: null, turns: [...base.turns, { who: "tool", text: `echo: ${words}` }] };
+    // The cut question stays cut: the echo is often what cut it, and the answer after it is to that
+    // question (the call of 2026-10-02 04:44: "Yes" went to the opening and the question was asked again).
+    return { ...base, firm: true, turns: [...base.turns, { who: "tool", text: `echo: ${words}` }] };
   }
   // What was heard, on the record beside the words: how sure the transcriber was, and what the model made of it.
   const hearing: Turn = { who: "tool", text: `heard ${JSON.stringify({ ...(held.sure !== undefined ? { sure: Number(held.sure.toFixed(2)) } : {}), ...heard })}` };

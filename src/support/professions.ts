@@ -77,7 +77,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
     aName: "a psychologist",
     typicallyFor: "Emotional regulation, anxiety and low mood alongside ADHD, perfectionism, and structured psychological work on patterns that keep repeating.",
     whenToExplore: "The hardest part is emotional, overwhelm, the sting of criticism, patterns you can see but cannot shift alone.",
-    cues: ["psychologist", "psychology", "psych"],
+    cues: ["psychologist", "psychology", "psych", "physchologist", "phsychologist", "pyschologist", "psycologist", "physcologist", "sychologist", "psychologyst"],
   },
   {
     id: "counsellor",
@@ -127,7 +127,7 @@ export const PROFESSION_ENTRIES: readonly ProfessionEntry[] = [
     aName: "a psychiatrist",
     typicallyFor: "The complicated picture: other conditions sitting beside ADHD, medication that has not settled after a fair trial, or a history a GP wants a second opinion on.",
     whenToExplore: "Your GP suggests it, or the medication questions have outgrown what a general practice can hold.",
-    cues: ["psychiatrist", "psychiatry"],
+    cues: ["psychiatrist", "psychiatry", "physchiatrist", "pyschiatrist", "psychiatris", "phychiatrist", "sychiatrist"],
   },
   {
     id: "dietitian",
@@ -240,8 +240,10 @@ export function professionsMentioned(text: string): Profession[] {
   // A kind refused is not asked for: "not a GP, I want a psychologist" is a psychologist search (2026-10-01:
   // it listed GPs first). A cue counts where no refusal stands in the few words before it.
   const refused = /\b(not|no|never|don'?t want|do not want|rather not|instead of|other than|rather than|without)\b(\W+\w+){0,2}\W*$/;
+  // A plural ("psychologists", "counsellors") and the common misspellings ("physchologist", 2026-10-02:
+  // it listed a GP first for a psychologist search) are the same kind asked for.
   return PROFESSION_ENTRIES.filter((entry) =>
-    entry.cues.some((cue) => [...lower.matchAll(new RegExp(`(^|[^a-z])${escape(cue)}(?=$|[^a-z])`, "gi"))].some((match) => !refused.test(lower.slice(0, match.index! + match[1]!.length)))),
+    entry.cues.some((cue) => [...lower.matchAll(new RegExp(`(^|[^a-z])${escape(cue)}s?(?=$|[^a-z])`, "gi"))].some((match) => !refused.test(lower.slice(0, match.index! + match[1]!.length)))),
   ).map((entry) => entry.id);
 }
 

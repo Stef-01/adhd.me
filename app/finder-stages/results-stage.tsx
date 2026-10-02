@@ -26,7 +26,7 @@ import Link from "next/link";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import dynamic from "next/dynamic";
 import { Sheet } from "../sheet";
-import { professionOf } from "@/demo/clinicians";
+import { noneLocal, professionOf } from "@/demo/clinicians";
 import { professionLabel, type Profession } from "@/support/professions";
 
 /** O235: Leaflet reads `window` on import, so the map is a client-only chunk fetched the first time a place resolves. */
@@ -448,6 +448,10 @@ export function ResultsStage({
           )}
         </span>
       </motion.div>
+      {/* Nobody near the place named: said, so a telehealth clinician far away is not read as local (2026-10-02). */}
+      {noneLocal(matches, origin) && (
+        <p className="results-none-local">None in {origin!.suburb}. {matches.some((c) => c.telehealthFirstAppointment) ? "By telehealth:" : "Nearest:"}</p>
+      )}
       {/* WHY THIS ORDER, SAID OUT LOUD (Roadmap Q4; Product Principle #1 — "start with the
           person's words, then show how those words affected the order"). O237 was right to delete
           the four verdict paragraphs that used to sit at the top of this screen, but it left the

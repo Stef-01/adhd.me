@@ -167,5 +167,23 @@ describe("the conversation, fuzzed with timing (2026-10-01)", () => {
   });
 });
 
-
-
+it("an echo cuts a yes-or-no question, and the yes after it answers that question (the call of 2026-10-02 04:44)", () => {
+  const c = begun();
+  c.hears("an ADHD GP in Brisbane", { form: { place: "Brisbane" } });
+  const ev = (e: object) => c.act(server(e as never));
+  ev({ type: "input_audio_buffer.speech_started", item_id: "e1" });
+  c.ends(0.2);
+  ev({ type: "input_audio_buffer.speech_stopped", item_id: "e1" });
+  ev({ type: "input_audio_buffer.committed", item_id: "e1" });
+  ev({ type: "input_audio_buffer.speech_started", item_id: "y1" });
+  if (c.playing) c.ends(0.1);
+  ev({ type: "input_audio_buffer.speech_stopped", item_id: "y1" });
+  ev({ type: "input_audio_buffer.committed", item_id: "y1" });
+  ev({ type: "conversation.item.input_audio_transcription.completed", item_id: "e1", transcript: "Would you like", logprobs: [] });
+  for (const a of formed("e1", { understood: true } as never)) c.act(a);
+  ev({ type: "conversation.item.input_audio_transcription.completed", item_id: "y1", transcript: "Yes", logprobs: [] });
+  for (const a of formed("y1", { understood: true, yes_no: "yes" } as never)) c.act(a);
+  c.through();
+  expect(c.state.heard.at(-1)!.question).toBe("lived");
+  expect(assistant(c.state).at(-1)).toBe("Would you like someone from your own culture?");
+});
