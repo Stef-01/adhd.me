@@ -240,12 +240,29 @@ export function professionsMentioned(text: string): Profession[] {
   // A kind refused is not asked for: "not a GP, I want a psychologist" is a psychologist search (2026-10-01:
   // it listed GPs first). A cue counts where no refusal stands in the few words before it.
   // "not a male GP" refuses the man, not the GP: a refusal does not reach past a gender word.
-  const refused = /\b(not|no|never|don'?t want|do not want|rather not|instead of|other than|rather than|without)\b(\W+(?!male\b|female\b|man\b|woman\b|lady\b|bloke\b)\w+){0,2}\W*$/;
+  const refused = /\b(not|no|never|don'?t want|do not want|rather not|instead of|other than|rather than|without|anyone but|anything but|except|apart from|but not)\b(\W+(?!male\b|female\b|man\b|woman\b|lady\b|bloke\b)\w+){0,2}\W*$/;
+  // "My GP referred me to a psychologist": the clinician they have, not the one they ask for.
+  const theirs = /\b(my|our|his|her|their)\W+$/;
   // A plural ("psychologists", "counsellors") and the common misspellings ("physchologist", 2026-10-02:
   // it listed a GP first for a psychologist search) are the same kind asked for.
-  return PROFESSION_ENTRIES.filter((entry) =>
-    entry.cues.some((cue) => [...lower.matchAll(new RegExp(`(^|[^a-z])${escape(cue)}s?(?=$|[^a-z])`, "gi"))].some((match) => !refused.test(lower.slice(0, match.index! + match[1]!.length)))),
-  ).map((entry) => entry.id);
+  const spans = PROFESSION_ENTRIES.flatMap((entry) =>
+    entry.cues.flatMap((cue) =>
+      [...lower.matchAll(new RegExp(`(^|[^a-z])${escape(cue)}s?(?=$|[^a-z])`, "gi"))].map((match) => {
+        const start = match.index! + match[1]!.length;
+        return { id: entry.id, start, end: match.index! + match[0].length, before: lower.slice(0, start) };
+      }),
+    ),
+  );
+  // A cue inside another kind's longer cue is that kind's word: "a sleep doctor" is not a GP.
+  const inside = (a: (typeof spans)[number]) => spans.some((b) => b.start <= a.start && b.end >= a.end && b.end - b.start > a.end - a.start);
+  const asked = spans.filter((span) => !inside(span) && !refused.test(span.before) && !theirs.test(span.before));
+  // Everyone asks for their own kind when nothing else is asked: "my GP said to see someone" is not a GP search,
+  // but "my GP" alone, with no other kind, still is the kind they named.
+  const kept = asked.length ? asked : spans.filter((span) => !inside(span) && !refused.test(span.before) && !spans.some((other) => other.id !== span.id && !inside(other)));
+  const ids = new Set(kept.map((span) => span.id));
+  // Nobody here is a relationship counsellor by kind; counsellors are who would answer it.
+  if (ids.has("relationship-counsellor")) ids.add("counsellor");
+  return PROFESSION_ENTRIES.filter((entry) => ids.has(entry.id)).map((entry) => entry.id);
 }
 
 /** "GP" for a GP; "Psychologist" otherwise — the word beside a name on a card. */

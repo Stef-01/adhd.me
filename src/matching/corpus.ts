@@ -593,6 +593,7 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "a man GP in Sydney", aspires: ["pref:man-clinician"] },
   { text: "my son would talk more easily to a bloke", reaches: ["care:child-adolescent-adhd"], aspires: ["pref:man-clinician"] },
   { text: "I am a man looking for a GP", never: ["pref:man-clinician"] },
+  { text: "a GP who is a woman", aspires: ["pref:woman-gp"] },
   { text: "I don't want a male doctor", never: ["pref:man-clinician"] },
   { text: "does anyone there see children", reaches: ["care:child-adolescent-adhd"] },
   { text: "who handles shared care agreements", reaches: ["care:shared-care"] },

@@ -605,3 +605,21 @@ Not acted on: "bring my AI notetaker" (the roster records clinicians' scribes, n
 | A request for a man had no facet | "a male psychologist", "a man GP in Sydney" read nothing, beside a woman preference with 25 sentences | "I am a man looking for a GP" and "I don't want a male doctor" must not ask for one (live: both clean); "man gp" as a cue read the first | `pref:man-clinician`, model and lexicon ("male …" only) |
 | A refusal reached past a gender word | "not a male GP" refused GPs: psychologists listed | "no male GP please", "I don't want a male doctor" | a refusal stops at male, female, man, woman, lady, bloke |
 | A bare place read inside a story (this round's own change, caught by e2e finder-read) | "I live two hours out of Dubbo" set Dubbo as the place | — | bare names only in requests of eight words or fewer |
+
+### Round 5 (2026-10-02): the edge sweep, a standing test (src/matching/edge-sweep.test.ts)
+
+Invariants, not pinned lists: 18 places × 18 phrasings and 4 negations; every kind's every cue × 7 ways
+of asking and 5 of refusing; every place × kind listed near a place; six preferences said 3–7 ways
+and refused 2–3; every roster language × 5 phrasings.
+
+| Family | Found | Fixed |
+| --- | --- | --- |
+| Place punctuation and clauses | "a GP (Brisbane)" nothing; "not Brisbane, Gold Coast" nothing (negation crossed the comma); "moved from Sydney to Brisbane" Sydney | brackets are noise; a comma ends a negation; "to" leads a place |
+| A place name that is something else | "Melbourne Cup", "Brisbane Broncos" | team and event words after a bare name |
+| Refusals of a kind | "anyone but a GP" and the like, 70 phrasings across every kind | anyone but, anything but, except, apart from, but not |
+| A cue inside another kind's cue | "a sleep doctor" also a GP; "not a mental health social worker" refused nothing | a cue inside a longer cue is that cue's |
+| The clinician they have, not the one they ask for | "my GP referred me to a psychologist" listed GPs | "my/our/his/her" before a kind, when another kind is asked |
+| A woman describing herself | live: "I am a woman looking for a GP" read as asking for a woman | MEANINGS and an example; live 7 of 7 after |
+
+Roster gaps, not faults: no psychologist speaks Hindi or Urdu; no GP speaks Mandarin, Spanish or Portuguese.
+The lexicon's six remaining misses are listed in the sweep; the model reads all six.

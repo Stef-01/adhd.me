@@ -45,7 +45,7 @@ export const MEANINGS: Record<string, string> = {
   "emotional-regulation": "names big emotions, anger, meltdowns, shame or rejection sensitivity as something to get help with (asking not to be shamed or judged is not this)",
   "non-medication": "says they do not want medication, or want something else tried in its place or before it, in words that mention medication (asking for help, coaching, strategies, skills or therapy with no word against medication is not this: that help may include medication; wanting medication kept open, weighed with other help, or not the only thing offered, is balanced care and not this, even when said as not wanting pills alone)",
   perinatal: "names pregnancy, birth or the months after having a baby (postpartum, postnatal, a new mum or dad) as part of what they need care for or understood",
-  "woman-gp": "asks for a woman clinician",
+  "woman-gp": "asks for a woman clinician (the person saying they are a woman, or a mother, is not this)",
   "man-clinician": "asks for a male clinician (a man, a male GP, psychologist or doctor; not wanting a woman, with no man asked for, is not this)",
   "lived-experience": "asks for a clinician who has ADHD themselves, or was diagnosed with it themselves (the person having ADHD is not this; a clinician who \"gets\" or understands ADHD is not this; a clinician who has \"lived a bit\" or is their age is not this)",
   // O261: the life domains.
@@ -107,6 +107,7 @@ const EXAMPLES = [
   '"juggling school pickups and my job, my own dose stops working by mid afternoon" → [{"tag":"care:titration","quote":"my own dose stops working by mid afternoon"}]',
   '"since our daughter got her diagnosis I see it in myself, can I be checked" → [{"tag":"care:adhd-assessment","quote":"can I be checked"}]',
   '"do you take on kids under ten" → [{"tag":"care:child-adolescent-adhd","quote":"kids under ten"}]',
+  '"I\'m a woman in my thirties looking for a GP" → []',
 ];
 
 export const INSTRUCTIONS = [
