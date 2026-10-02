@@ -64,7 +64,7 @@ export type Facet = { kind: "care"; area: CareArea } | { kind: "manner"; trait: 
  * A preference that is a hard filter or a strong lift rather than a facet — the things somebody
  * says that are about access rather than about the care itself.
  */
-export type Preference = "woman-gp" | "telehealth-first" | "bulk-billing" | "longer-appointment" | "lived-experience" | "ndis";
+export type Preference = "woman-gp" | "man-clinician" | "telehealth-first" | "bulk-billing" | "longer-appointment" | "lived-experience" | "ndis";
 
 /**
  * One thing the reader asked for, with the words to say it back to them.
@@ -807,6 +807,13 @@ const LEXICON: readonly Entry[] = [
     "lived experience", "been through it themselves", "knows it from the inside", "gets it from the inside", "adhd from the inside", "diagnosed themselves", "diagnosed herself", "diagnosed himself",
     ...LIVED_DIAGNOSED,
   ]),
+  /* 2026-10-02 sweep: "a male psychologist" and "a man GP in Sydney" read nothing, while the woman
+     preference stood beside it. The cues name the clinician, never the person ("I'm a man"). */
+  pref("man-clinician", "A male clinician", 30, [
+    "male gp", "male doctor", "male psychologist", "male clinician", "male practitioner", "male counsellor", "male therapist", "male psychiatrist", "male coach",
+    "prefer a male",
+    // Refused: "a bloke" (one token after stopwords), "man gp" and "man doctor" read "I'm a man looking for a GP" as asking for one.
+  ]),
   /* O261: an NDIS plan is a hard fact about who a person can see; six of 37 say they see participants. */
   pref("ndis", "For NDIS participants", 28, NDIS_CUES),
   pref("telehealth-first", "By phone or telehealth", 28, [
@@ -1228,6 +1235,8 @@ export function holdsPreference(
   switch (preference) {
     case "woman-gp":
       return clinician.gender === "woman";
+    case "man-clinician":
+      return clinician.gender === "man";
     case "lived-experience":
       return clinician.livedExperience === true;
     case "ndis":
@@ -1323,6 +1332,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   "care:substance-history": "Substances, safely",
   "care:perinatal": "Postpartum",
   "pref:woman-gp": "Woman clinician",
+  "pref:man-clinician": "Male clinician",
   "pref:lived-experience": "Lived experience",
   "pref:telehealth-first": "Telehealth",
   "pref:longer-appointment": "Longer appointment",

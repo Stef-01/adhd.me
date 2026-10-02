@@ -239,7 +239,8 @@ export function professionsMentioned(text: string): Profession[] {
   const lower = text.toLowerCase();
   // A kind refused is not asked for: "not a GP, I want a psychologist" is a psychologist search (2026-10-01:
   // it listed GPs first). A cue counts where no refusal stands in the few words before it.
-  const refused = /\b(not|no|never|don'?t want|do not want|rather not|instead of|other than|rather than|without)\b(\W+\w+){0,2}\W*$/;
+  // "not a male GP" refuses the man, not the GP: a refusal does not reach past a gender word.
+  const refused = /\b(not|no|never|don'?t want|do not want|rather not|instead of|other than|rather than|without)\b(\W+(?!male\b|female\b|man\b|woman\b|lady\b|bloke\b)\w+){0,2}\W*$/;
   // A plural ("psychologists", "counsellors") and the common misspellings ("physchologist", 2026-10-02:
   // it listed a GP first for a psychologist search) are the same kind asked for.
   return PROFESSION_ENTRIES.filter((entry) =>

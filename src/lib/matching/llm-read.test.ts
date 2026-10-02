@@ -21,7 +21,7 @@ afterEach(() => {
 describe("one vocabulary", () => {
   it("the tags are every care area, preference and language the roster is matched on, and no manner trait", () => {
     const care = CARE_AREA_LABELS.map((area) => `care:${area.id}`);
-    const prefs = ["pref:woman-gp", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience", "pref:ndis"];
+    const prefs = ["pref:woman-gp", "pref:man-clinician", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience", "pref:ndis"];
     const languages = MATCHABLE_LANGUAGES.map((name) => `language:${name.toLowerCase()}`);
     expect(new Set(TAGS)).toEqual(new Set([...care, ...prefs, ...languages]));
     const lexicon = new Set(LEXICON_CUES.map((cue) => cue.key).filter((key) => !key.startsWith("manner:")));

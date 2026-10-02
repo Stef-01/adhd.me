@@ -239,7 +239,8 @@ export function placeIn(text: string): string {
   if (best) return best.suburb;
   // A place said bare ("gp brisbane", "sydney cbd", 2026-10-02 sweep: read nowhere), unless the name is
   // also a person's or another thing's ("my son Logan", "Liverpool fan").
-  for (const name of byName.keys()) {
+  // Short requests only: in a story a name is as often somewhere else ("two hours out of Dubbo").
+  for (const name of lower.trim().split(" ").length <= 8 ? byName.keys() : []) {
     if (BARE_AMBIGUOUS.has(name)) continue;
     for (const match of lower.matchAll(new RegExp(` ${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?='?s?\\b)`, "g"))) {
       const at = match.index ?? 0;

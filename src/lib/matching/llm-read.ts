@@ -16,7 +16,7 @@ import { MATCHABLE_LANGUAGES } from "@/matching/languages";
 import { facetKey, languageNeeds, needForKey, readNeeds, type NeedSignal, type Preference } from "@/matching/needs";
 import { CARE_AREA_LABELS } from "@/onboarding/types";
 
-const PREFERENCES: Record<Preference, 1> = { "woman-gp": 1, "telehealth-first": 1, "longer-appointment": 1, "bulk-billing": 1, "lived-experience": 1, ndis: 1 };
+const PREFERENCES: Record<Preference, 1> = { "woman-gp": 1, "man-clinician": 1, "telehealth-first": 1, "longer-appointment": 1, "bulk-billing": 1, "lived-experience": 1, ndis: 1 };
 
 /** The tags the model reads: what the person wants care for, the arrangement they ask for, and the language they ask for. */
 export const VOCABULARY = {
@@ -46,6 +46,7 @@ export const MEANINGS: Record<string, string> = {
   "non-medication": "says they do not want medication, or want something else tried in its place or before it, in words that mention medication (asking for help, coaching, strategies, skills or therapy with no word against medication is not this: that help may include medication; wanting medication kept open, weighed with other help, or not the only thing offered, is balanced care and not this, even when said as not wanting pills alone)",
   perinatal: "names pregnancy, birth or the months after having a baby (postpartum, postnatal, a new mum or dad) as part of what they need care for or understood",
   "woman-gp": "asks for a woman clinician",
+  "man-clinician": "asks for a male clinician (a man, a male GP, psychologist or doctor; not wanting a woman, with no man asked for, is not this)",
   "lived-experience": "asks for a clinician who has ADHD themselves, or was diagnosed with it themselves (the person having ADHD is not this; a clinician who \"gets\" or understands ADHD is not this; a clinician who has \"lived a bit\" or is their age is not this)",
   // O261: the life domains.
   "executive-function": "asks for help with focus, organisation, starting or finishing things, time, routines or life admin, or for coaching and strategies (the person listing their symptoms, for an assessment or for nothing, is not this; focus or getting things done named only as what exercise, movement, sport, sleep or eating is meant to help is that help and not this)",

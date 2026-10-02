@@ -602,3 +602,6 @@ GP who does not assess).
 | An unrecognised answer to "Which culture or language?" was taken as an answer | "Indeed." (likely "Indian"): no culture in the request | — | asked once more after "Sorry, I didn't catch that." |
 
 Not acted on: "bring my AI notetaker" (the roster records clinicians' scribes, not whether a patient may record).
+| A request for a man had no facet | "a male psychologist", "a man GP in Sydney" read nothing, beside a woman preference with 25 sentences | "I am a man looking for a GP" and "I don't want a male doctor" must not ask for one (live: both clean); "man gp" as a cue read the first | `pref:man-clinician`, model and lexicon ("male …" only) |
+| A refusal reached past a gender word | "not a male GP" refused GPs: psychologists listed | "no male GP please", "I don't want a male doctor" | a refusal stops at male, female, man, woman, lady, bloke |
+| A bare place read inside a story (this round's own change, caught by e2e finder-read) | "I live two hours out of Dubbo" set Dubbo as the place | — | bare names only in requests of eight words or fewer |

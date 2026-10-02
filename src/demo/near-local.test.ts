@@ -48,3 +48,12 @@ describe("closed books stay behind (2026-10-02)", () => {
     expect(list.findIndex((c) => c.id === "beth-hansen")).toBeGreaterThan(list.findIndex((c) => c.id === "anubhav-saxena"));
   });
 });
+
+describe("a bare place (2026-10-02)", () => {
+  it("is read in a short request, and not in a story", () => {
+    expect(placeIn("gp brisbane")).toBe("Brisbane");
+    expect(placeIn("sydney cbd psychologist")).toBe("Sydney");
+    expect(placeIn("my son Logan has ADHD")).toBe("");
+    expect(placeIn("I am thirty eight and I live two hours out of Dubbo, and the nearest clinic is a day trip each way")).toBe("");
+  });
+});

@@ -439,6 +439,7 @@ export function labelInSentence(need: NeedSignal): string {
 /** A preference as a person asks for it: "telehealth", not the chip's "by phone or telehealth". */
 const PREFERENCE_ASKED: Record<Preference, string> = {
   "woman-gp": "a woman clinician",
+  "man-clinician": "a male clinician",
   "lived-experience": "someone who has ADHD themselves",
   "telehealth-first": "telehealth",
   "bulk-billing": "bulk billing",

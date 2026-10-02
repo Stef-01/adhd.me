@@ -588,6 +588,12 @@ export const REACH_CORPUS: readonly CorpusEntry[] = [
   { text: "do any of your GPs do dose adjustments", reaches: ["care:titration"] },
   { text: "can the assessment be done over video", reaches: ["care:adhd-assessment", "pref:telehealth-first"] },
   { text: "is a woman doctor available", reaches: ["pref:woman-gp"] },
+  // pref:man-clinician (2026-10-02): the model reads these; the lexicon reads only "male …".
+  { text: "a male psychologist", reaches: ["pref:man-clinician"] },
+  { text: "a man GP in Sydney", aspires: ["pref:man-clinician"] },
+  { text: "my son would talk more easily to a bloke", reaches: ["care:child-adolescent-adhd"], aspires: ["pref:man-clinician"] },
+  { text: "I am a man looking for a GP", never: ["pref:man-clinician"] },
+  { text: "I don't want a male doctor", never: ["pref:man-clinician"] },
   { text: "does anyone there see children", reaches: ["care:child-adolescent-adhd"] },
   { text: "who handles shared care agreements", reaches: ["care:shared-care"] },
   { text: "can I ask for a longer appointment when I book", reaches: ["pref:longer-appointment"] },
@@ -1269,6 +1275,7 @@ export const REACH_FLOORS: Readonly<Record<string, number>> = {
   // women doctors. The two left were refused on measurement ("not a man" fires on the idiom
   // "not a man of many words"; "a she not a he" collapses to the bare token [not]).
   "pref:woman-gp": 25,
+  "pref:man-clinician": 1, // 2026-10-02: "a male psychologist"; the model reads the rest
   "pref:lived-experience": 3, // O257, 2026-09-29
   // O261, 2026-09-29: the life domains, each floor the sentences written for it (cultural-background also holds ten moved from manner:culturally_attuned).
   "care:executive-function": 5,

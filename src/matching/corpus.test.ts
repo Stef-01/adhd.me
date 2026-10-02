@@ -13,7 +13,7 @@ describe("the corpus is well-formed", () => {
   const VALID_KEYS = new Set<string>([
     ...CARE_AREA_LABELS.map((a) => `care:${a.id}`),
     ...EI_QUALITY_KEYS.map((t) => `manner:${t}`),
-    "pref:woman-gp", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience", "pref:ndis",
+    "pref:woman-gp", "pref:man-clinician", "pref:telehealth-first", "pref:longer-appointment", "pref:bulk-billing", "pref:lived-experience", "pref:ndis",
   ]);
 
   it("every entry expects something, and every key names a real facet", () => {
