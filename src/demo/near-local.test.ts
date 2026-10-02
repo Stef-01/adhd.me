@@ -57,3 +57,12 @@ describe("a bare place (2026-10-02)", () => {
     expect(placeIn("I am thirty eight and I live two hours out of Dubbo, and the nearest clinic is a day trip each way")).toBe("");
   });
 });
+
+describe("a bare postcode (2026-10-02)", () => {
+  it("is the place in a short request, and a price or a distance is not", () => {
+    expect(placeIn("gp 4000")).toBe("4000");
+    expect(placeIn("psychologist 4217 telehealth ok")).toBe("4217");
+    expect(placeIn("a GP under $4000")).toBe("");
+    expect(placeIn("I can drive 4000 km")).toBe("");
+  });
+});

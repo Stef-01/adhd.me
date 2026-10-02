@@ -250,6 +250,8 @@ export function placeIn(text: string): string {
     }
   }
   if (best) return best.suburb;
-  const postcode = new RegExp(` ${lead}(\\d{4}) `).exec(lower)?.[1];
+  // A postcode said bare in a short request ("gp 4000"), never a price or a distance ("$4000", "4000 km").
+  const short = lower.trim().split(" ").length <= 8;
+  const postcode = new RegExp(` ${lead}(\\d{4}) `).exec(lower)?.[1] ?? (short ? / (?<![$])(\d{4}) (?!(km|kms|dollars|bucks|minutes|mins|hours)\b)/.exec(lower)?.[1] : undefined);
   return postcode && resolvePlace(postcode) ? postcode : "";
 }
