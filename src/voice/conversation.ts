@@ -79,6 +79,9 @@ export interface VoiceState {
   cut: Line | null;
   /** Each stretch of the person's speech that is still being read: the question it answers, and what has come in about it. */
   items: Record<string, Hearing>;
+  /** The person began speaking while a sentence was being said (2026-10-02: "A first look" said back to
+   *  "A first look, or care you already have?" after it ended was taken for the finder's own voice). */
+  over: boolean;
   /** How many of them there are: nothing more is said until each is heard in full. */
   open: number;
   /** How often each question has been said again. */
@@ -116,6 +119,8 @@ export interface Hearing {
   sure?: number;
   /** The model's form. */
   form?: Form;
+  /** Begun while the finder was saying something: only then can the words be its own voice. */
+  over?: boolean;
 }
 
 export type ServerEvent = { type: string } & Record<string, unknown>;
@@ -174,6 +179,7 @@ export function initialVoice(): VoiceState {
     lines: [],
     last: null,
     cut: null,
+    over: false,
     items: {},
     open: 0,
     retried: {},
@@ -444,7 +450,7 @@ function take(state: VoiceState, item: string): VoiceState {
   // word or two of the sentence this very sound cut short. Nobody's answer; it is said through next time.
   const ours = [base.last, base.pending?.say].flatMap((id) => (id ? [SENTENCES[id].text, SENTENCES[id].spoken ?? ""] : []));
   const clipped = base.cut !== null && echoes(words, SENTENCES[base.cut.say].spoken ?? SENTENCES[base.cut.say].text, 1);
-  if (words && (clipped || ours.some((sentence) => sentence && echoes(words, sentence)))) {
+  if (words && held.over !== false && (clipped || ours.some((sentence) => sentence && echoes(words, sentence)))) {
     // The cut question stays cut: the echo is often what cut it, and the answer after it is to that
     // question (the call of 2026-10-02 04:44: "Yes" went to the opening and the question was asked again).
     return { ...base, firm: true, turns: [...base.turns, { who: "tool", text: `echo: ${words}` }] };
@@ -643,7 +649,7 @@ function onServer(state: VoiceState, event: ServerEvent, clips: Clips): Step {
       return idle({ ...state, ...(answer ? { caption: text, captionOf: id } : {}), turns: [...state.turns, { who: "assistant", text }] });
     }
     case "input_audio_buffer.speech_started": {
-      const next: VoiceState = { ...state, talking: "person" };
+      const next: VoiceState = { ...state, talking: "person", over: state.saying !== null };
       // The model is cut short by the person, as the recording is by the screen.
       return { state: next, send: state.saying?.by === "model" && !state.firm ? cancel(state) : [], say: null, hush: false };
     }
@@ -655,7 +661,7 @@ function onServer(state: VoiceState, event: ServerEvent, clips: Clips): Step {
       if (state.phase !== "live") return idle(state);
       const id = typeof event.item_id === "string" ? event.item_id : `item_${state.answers}`;
       const said = state.pending ?? { say: "opening" as SayId, question: "opening" as QuestionId };
-      const items = { ...state.items, [id]: { question: said.question ?? "opening", asked: said.say } };
+      const items = { ...state.items, [id]: { question: said.question ?? "opening", asked: said.say, over: state.over } };
       const next: VoiceState = { ...state, answers: state.answers + 1, quiet: 0, items, open: Object.keys(items).length };
       return { state: next, send: [form(id, said.say)], say: null, hush: false };
     }
@@ -707,7 +713,7 @@ export function step(state: VoiceState, action: Action, clips: Clips = NO_CLIPS)
       const stopped = stop(state);
       const id = `typed_${state.answers}`;
       const said = state.pending ?? { say: "opening" as SayId, question: "opening" as QuestionId };
-      const items = { ...stopped.state.items, [id]: { question: said.question ?? "opening", asked: said.say, text: words } };
+      const items = { ...stopped.state.items, [id]: { question: said.question ?? "opening", asked: said.say, text: words, over: false } };
       const next: VoiceState = { ...stopped.state, answers: state.answers + 1, quiet: 0, items, open: Object.keys(items).length };
       const plain = plainAnswer(said.question ?? "opening", words);
       const asks = [item("user", words), ...(plain ? [] : [form(id, said.say, words)]), check(id, said.say, words)];

@@ -245,3 +245,75 @@ it("over 800 calls with the finder's own voice echoed before answers, a yes to l
   }
   expect(lost, lostCalls.join("\n\n")).toBe(0);
 });
+
+it("over 1,200 calls in every flow, with echoes and overlaps, each answer is filed under the question it answered", () => {
+  const random = rng(23);
+  const pick = <T,>(xs: readonly T[]) => xs[Math.floor(random() * xs.length)]!;
+  const questionOf = (say: SayId): string => (say.startsWith("detail") ? "detail" : say);
+  const reply = (say: SayId): [string, Partial<Form>] => {
+    const yesNo = (): [string, Partial<Form>] => (random() < 0.5 ? ["Yes.", { yes_no: "yes" }] : ["No.", { yes_no: "no" }]);
+    switch (questionOf(say)) {
+      case "detail": return ["Deadlines and losing track of time", {}];
+      case "age": return ["She's nine", {}];
+      case "first-look": return ["A first look", {}];
+      case "place": return ["Brisbane", { place: "Brisbane" }];
+      case "which-culture": return ["Indian", { culture: "Indian" }];
+      case "extra": return ["No, that's all.", { yes_no: "no" }];
+      default: return yesNo();
+    }
+  };
+  const OPEN = ["help with deadlines at work", "my son is 9 and his teacher thinks it might be ADHD", "since perimenopause I can't focus", "an ADHD GP in Brisbane"];
+  const wrong: string[] = [];
+  for (let n = 0; n < 1200; n++) {
+    const c = begun();
+    const opening = pick(OPEN);
+    c.hears(opening, { form: formFrom(opening) });
+    const gave: Record<string, string> = {};
+    for (let turn = 0; turn < 30 && !c.state.reveal; turn++) {
+      const mode = random();
+      if (mode < 0.25 && c.playing && !["catch", "again", "nudge", "closing"].includes(c.playing)) {
+        // The question heard back, cutting it short, with the answer begun before the echo is written down.
+        const asked = c.playing;
+        const [text, form] = reply(asked);
+        const echo = `e${n}_${turn}`, said = `r${n}_${turn}`;
+        const ev = (e: object) => c.act(server(e as never));
+        ev({ type: "input_audio_buffer.speech_started", item_id: echo });
+        c.ends(0.2);
+        ev({ type: "input_audio_buffer.speech_stopped", item_id: echo });
+        ev({ type: "input_audio_buffer.committed", item_id: echo });
+        ev({ type: "input_audio_buffer.speech_started", item_id: said });
+        if (c.playing) c.ends(0.1);
+        ev({ type: "input_audio_buffer.speech_stopped", item_id: said });
+        ev({ type: "input_audio_buffer.committed", item_id: said });
+        ev({ type: "conversation.item.input_audio_transcription.completed", item_id: echo, transcript: SENTENCES[asked].text.split(" ").slice(0, 3).join(" "), logprobs: [] });
+        for (const a of formed(echo, { understood: true } as Form)) c.act(a);
+        ev({ type: "conversation.item.input_audio_transcription.completed", item_id: said, transcript: text, logprobs: [] });
+        for (const a of formed(said, { understood: true, ...form } as Form)) c.act(a);
+        gave[questionOf(asked)] = text;
+        continue;
+      }
+      const over = mode < 0.45 && c.playing && !["catch", "again", "nudge", "closing"].includes(c.playing);
+      if (!over) c.through();
+      const asked = over ? c.playing : [...c.played].reverse().find((id) => !["catch", "again", "nudge", "closing"].includes(id));
+      if (!asked || asked === "closing") break;
+      const [text, form] = reply(asked);
+      c.hears(text, { form, cut: over ? 0.9 : undefined });
+      gave[questionOf(asked)] = text;
+    }
+    c.through();
+    for (const [question, text] of Object.entries(gave)) {
+      const last = [...c.state.heard].reverse().find((h) => h.question === question);
+      if (last?.text !== text && wrong.length < 400) wrong.push(`${opening} | ${question}: gave "${text}", filed "${last?.text ?? "nothing"}" | heard ${JSON.stringify(c.state.heard.map((h) => [h.question, h.text]))}`);
+    }
+  }
+  expect(wrong.length, wrong.slice(0, 6).join("\n")).toBe(0);
+});
+
+it("an answer in the question's own words, said after it ended, is theirs (the midlife fuzz, 2026-10-02)", () => {
+  const c = begun();
+  c.hears("since perimenopause I can't focus", { form: formFrom("since perimenopause I can't focus") });
+  c.through();
+  c.hears("A first look", {});
+  expect(c.state.heard.at(-1)).toMatchObject({ question: "first-look", text: "A first look" });
+  c.types("Care I already have");
+});

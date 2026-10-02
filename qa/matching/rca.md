@@ -623,3 +623,7 @@ and refused 2–3; every roster language × 5 phrasings.
 
 Roster gaps, not faults: no psychologist speaks Hindi or Urdu; no GP speaks Mandarin, Spanish or Portuguese.
 The lexicon's six remaining misses are listed in the sweep; the model reads all six.
+| An answer in the question's own words taken for an echo (voice fuzz, 1,200 calls across the adult, child and midlife flows) | "A first look" to "A first look, or care you already have?" was dropped as the finder's voice, in 286 of 1,200 calls | every question's natural answer, with echoes and overlaps throughout | only words begun while the finder was speaking can be its echo; typed words never; 0 of 1,200 |
+
+Live reader eval after the round's prompt change: never-violations 1.6% (from 2.4%), precision 90.1% (88.8%), recall 94.7% (94.3%).
+Full e2e: 581 of 585; the four failures (three finder-read from this round's bare-place change, one leo-room focus) pass on re-run after the fix.
