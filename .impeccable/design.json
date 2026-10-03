@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-03T13:27:29Z",
+  "title": "Design System: ADHD.ME",
+  "extensions": {
+    "colorMeta": {
+      "patient-night": { "role": "neutral", "displayName": "Patient Night", "canonical": "#07151D", "tonalRamp": ["#020609", "#041016", "#07151D", "#102B38", "#28505F", "#557B86", "#9CB8BF", "#E7F2F4"] },
+      "aurora-mint": { "role": "primary", "displayName": "Aurora Mint", "canonical": "#A8E6CF", "tonalRamp": ["#102D25", "#1D4A3D", "#32745F", "#52A485", "#7ACBA9", "#A8E6CF", "#D4F5E8", "#F1FCF8"] },
+      "aurora-cyan": { "role": "secondary", "displayName": "Aurora Cyan", "canonical": "#88D4D6", "tonalRamp": ["#0C292B", "#16474A", "#246E72", "#3C979B", "#60BEC1", "#88D4D6", "#C5ECEE", "#EFFAFA"] },
+      "aurora-peach": { "role": "tertiary", "displayName": "Aurora Peach", "canonical": "#FFD6BA", "tonalRamp": ["#40271B", "#69422E", "#996345", "#C98A65", "#EAB18C", "#FFD6BA", "#FFE9D9", "#FFF8F2"] },
+      "brand-yellow": { "role": "primary", "displayName": "Brand Yellow", "canonical": "#F1BC31", "tonalRamp": ["#332500", "#574100", "#806200", "#A98400", "#D3A619", "#F1BC31", "#F9D979", "#FFF4D0"] },
+      "public-paper": { "role": "neutral", "displayName": "Warm Paper", "canonical": "#FAFAF7", "tonalRamp": ["#242421", "#454540", "#696962", "#909088", "#B9B9B1", "#DCDCD5", "#EEEEEA", "#FAFAF7"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Patient Question", "purpose": "One human, serif question at the start of a patient task." },
+      "body": { "displayName": "Interface Body", "purpose": "Plain-language instructions, content and operational data." },
+      "label": { "displayName": "Control Label", "purpose": "Navigation, buttons, compact status and field labels." }
+    },
+    "shadows": [
+      { "name": "ambient-patient", "value": "0 24px 70px -28px rgb(0 0 0 / 0.82)", "purpose": "Separates dark glass from the night ground." },
+      { "name": "luminous-wisp", "value": "0 0 34px rgb(56 189 248 / 0.64), 0 0 76px rgb(45 212 191 / 0.38)", "purpose": "Signature voice-action light only." },
+      { "name": "floating-dock", "value": "0 16px 38px -12px rgb(0 0 0 / 0.78)", "purpose": "Lifts mobile navigation above the patient sky." }
+    ],
+    "motion": [
+      { "name": "aurora-curtain", "value": "21–32s cubic-bezier(0.37, 0, 0.63, 1), alternate", "purpose": "Independent ambient light cycles; pausable and disabled for reduced motion." },
+      { "name": "wisp-float", "value": "6s cubic-bezier(0.45, 0, 0.55, 1)", "purpose": "Keeps the voice guide subtly alive." },
+      { "name": "wisp-refraction", "value": "6.5–17s, transform/opacity/filter only", "purpose": "Creates internal spectral movement without layout work." },
+      { "name": "control-state", "value": "180–220ms cubic-bezier(0.32, 0.72, 0, 1)", "purpose": "Fast hover, focus and press feedback." }
+    ],
+    "breakpoints": [
+      { "name": "small-phone", "value": "390px" },
+      { "name": "mobile", "value": "768px" },
+      { "name": "wide", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Patient Primary Button",
+      "kind": "button",
+      "refersTo": "patient-primary-button",
+      "description": "The decisive action on a patient step.",
+      "html": "<button class=\"ds-patient-primary\">Show my matches</button>",
+      "css": ".ds-patient-primary { min-height:44px; padding:12px 18px; border:1px solid #A8E6CF; border-radius:12px; background:#A8E6CF; color:#07151D; font:650 13px/1.2 'Plus Jakarta Sans',system-ui,sans-serif; transition:filter 180ms cubic-bezier(.32,.72,0,1),transform 180ms cubic-bezier(.32,.72,0,1); } .ds-patient-primary:hover { filter:brightness(1.06); } .ds-patient-primary:active { transform:scale(.97); } .ds-patient-primary:focus-visible { outline:2px solid #F5FBFC; outline-offset:3px; }"
+    },
+    {
+      "name": "AI Composer",
+      "kind": "input",
+      "refersTo": "patient-glass-input",
+      "description": "A compact typed fallback that remains visible beneath the voice guide.",
+      "html": "<label class=\"ds-composer\"><span class=\"ds-sr\">Describe the support you need</span><input placeholder=\"Or type what you need\"><button aria-label=\"Search\">→</button></label>",
+      "css": ".ds-composer { display:flex; align-items:center; min-height:58px; padding:0 6px 0 18px; border:1px solid rgb(255 255 255 / .2); border-radius:999px; background:rgb(4 14 23 / .72); box-shadow:inset 0 1px 0 rgb(255 255 255 / .06),0 22px 60px -30px #000; } .ds-composer input { flex:1; border:0; outline:0; background:transparent; color:#F5FBFC; font:400 16px/1.4 'Plus Jakarta Sans',system-ui,sans-serif; } .ds-composer button { width:46px; height:46px; border:0; border-radius:50%; background:#A8E6CF; color:#07151D; } .ds-composer:focus-within { border-color:rgb(168 230 207 / .62); box-shadow:0 0 0 1px rgb(168 230 207 / .18); } .ds-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }"
+    },
+    {
+      "name": "Matching Mode",
+      "kind": "chip",
+      "refersTo": "patient-mode-pill",
+      "description": "A two-choice control that keeps AI and Standard paths explicit.",
+      "html": "<div class=\"ds-mode\" role=\"group\" aria-label=\"Matching\"><button aria-pressed=\"true\">AI</button><button aria-pressed=\"false\">Standard</button></div>",
+      "css": ".ds-mode { display:inline-flex; padding:4px; border:1px solid rgb(255 255 255 / .18); border-radius:999px; background:rgb(3 12 20 / .72); } .ds-mode button { min-height:44px; padding:0 20px; border:1px solid transparent; border-radius:999px; background:transparent; color:#C0D1D6; font:650 13px/1.2 'Plus Jakarta Sans',system-ui,sans-serif; } .ds-mode button[aria-pressed='true'] { border-color:rgb(168 230 207 / .42); background:rgb(168 230 207 / .18); color:#D9FFF1; } .ds-mode button:focus-visible { outline:2px solid #F5FBFC; outline-offset:2px; }"
+    },
+    {
+      "name": "Floating Patient Navigation",
+      "kind": "nav",
+      "description": "The mobile app dock with persistent icon-and-label destinations.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Sections\"><a class=\"is-current\" href=\"#\">●<span>Support</span></a><a href=\"#\">□<span>Learn</span></a><a href=\"#\">◇<span>My ADHD</span></a></nav>",
+      "css": ".ds-nav { display:flex; padding:6px 8px; border:1px solid rgb(255 255 255 / .18); border-radius:999px; background:rgb(3 13 21 / .78); box-shadow:0 16px 38px -12px rgb(0 0 0 / .78); } .ds-nav a { display:grid; place-items:center; gap:4px; min-width:92px; min-height:58px; border-radius:999px; color:rgb(235 249 252 / .62); text-decoration:none; font:500 11px/1.2 'Plus Jakarta Sans',system-ui,sans-serif; } .ds-nav a span { display:block; } .ds-nav .is-current { border:1px solid rgb(168 230 207 / .3); background:rgb(168 230 207 / .14); color:#BCF7E1; } .ds-nav a:focus-visible { outline:2px solid #F5FBFC; outline-offset:2px; }"
+    },
+    {
+      "name": "Patient Glass Card",
+      "kind": "card",
+      "description": "A restrained raised surface for patient results and supporting information.",
+      "html": "<article class=\"ds-card\"><h3>Why this match</h3><p>Adult ADHD assessment · Telehealth available</p></article>",
+      "css": ".ds-card { padding:20px; border:1px solid rgb(255 255 255 / .15); border-radius:12px; background:rgb(9 25 35 / .72); color:#F5FBFC; box-shadow:0 20px 54px -34px rgb(0 0 0 / .9),inset 0 1px 0 rgb(255 255 255 / .04); font-family:'Plus Jakarta Sans',system-ui,sans-serif; } .ds-card h3 { margin:0 0 8px; font-size:18px; } .ds-card p { margin:0; color:#C0D1D6; line-height:1.55; } .ds-card:focus-within { outline:2px solid #A8E6CF; outline-offset:3px; }"
+    },
+    {
+      "name": "Warm Public Primary",
+      "kind": "button",
+      "refersTo": "public-primary-button",
+      "description": "The primary action outside the patient Aurora world.",
+      "html": "<button class=\"ds-public-primary\">Find care</button>",
+      "css": ".ds-public-primary { min-height:44px; padding:12px 18px; border:1px solid #1A1C1C; border-radius:8px; background:#1A1C1C; color:#FAFAF7; font:650 13px/1.2 'Plus Jakarta Sans',system-ui,sans-serif; transition:background 180ms cubic-bezier(.32,.72,0,1),transform 180ms cubic-bezier(.32,.72,0,1); } .ds-public-primary:hover { background:#333633; } .ds-public-primary:active { transform:scale(.97); } .ds-public-primary:focus-visible { outline:2px solid #785A00; outline-offset:3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Living Night Guide",
+    "overview": "ADHD.ME has two related visual environments. Patient routes are a quiet, living night sky: blue-black ground, photographic stars, independently moving cyan, mint, peach and purple light, pale serif questions, and dark translucent controls. The environment should feel present and responsive without asking for attention; the voice wisp is the one expressive focal point. Public and practice-console routes retain the warm platform identity: paper and stone workspaces, a saturated yellow header, charcoal actions and restrained density. Immersive learning games are deliberately isolated visual worlds. Shared typography, direct Australian English, explicit focus and the small ADHD.ME mark keep the environments recognisably related.",
+    "keyCharacteristics": [
+      "Voice-first patient entry with a typed path always visible.",
+      "Living atmospheric depth behind a sparse, high-contrast task layer.",
+      "Warm yellow identity preserved outside the patient app.",
+      "Minimal controls, plain language and one consequential decision at a time.",
+      "Motion, transparency and touch behavior designed for access under cognitive load."
+    ],
+    "rules": [
+      { "name": "The Two Grounds Rule", "body": "Aurora night belongs to patient routes; warm paper and yellow belong to public and operational routes.", "section": "colors" },
+      { "name": "The Rare Warmth Rule", "body": "Peach and yellow are controlled identity or atmospheric signals, not extra competing actions inside the night world.", "section": "colors" },
+      { "name": "The One Question Rule", "body": "A patient first viewport leads with one serif question; interface labels remain sans serif.", "section": "typography" },
+      { "name": "The Still Task Rule", "body": "The atmosphere can live; reading surfaces and controls do not drift, pulse or compete with the task.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do let the patient sky move slowly behind a still, readable task layer.",
+      "Do keep voice dominant while leaving typed input immediately available.",
+      "Do preserve 44px minimum targets, visible focus, reduced-motion and reduced-transparency paths.",
+      "Do keep the yellow header and warm paper identity on public and console routes.",
+      "Do attach provenance to every shipping photographic or generated raster.",
+      "Do use one decisive action and short plain-language copy per patient step."
+    ],
+    "donts": [
+      "Don't apply Aurora glass to public pages, practice console screens or [data-liquid] games.",
+      "Don't hide typed matching behind a mode, menu or secondary screen.",
+      "Don't animate reading surfaces, navigation labels or high-frequency task controls continuously.",
+      "Don't replace the sky with an unstable remote hot-link or an unlicensed image.",
+      "Don't reintroduce a dense directory grid, ratings, unsupported clinical claims or manufactured confidence.",
+      "Don't flatten the original yellow brand into teal everywhere; the separation of worlds is intentional."
+    ]
+  }
+}

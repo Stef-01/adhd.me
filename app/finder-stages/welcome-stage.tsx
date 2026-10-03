@@ -18,6 +18,29 @@ export type FinderMode = "ai" | "standard";
 export const MODE_KEY = "adhdme.finder.mode";
 const MODES: readonly [FinderMode, string][] = [["ai", "AI"], ["standard", "Standard"]];
 
+/**
+ * The visual and the action are the same thing: one large, unmistakable voice target. The nested
+ * spans are light, not illustration, and stay silent to assistive technology; the button's name is
+ * the instruction. This keeps AI mode to one decision instead of showing voice, typing and four
+ * examples at once.
+ */
+function AuroraWisp({ onTalk }: { onTalk: () => void }) {
+  return (
+    <Pressable className="aurora-wisp" type="button" onClick={onTalk} aria-label="Talk instead of typing">
+      <span className="aurora-wisp-aura" aria-hidden="true" />
+      <span className="aurora-wisp-particle particle-one" aria-hidden="true" />
+      <span className="aurora-wisp-particle particle-two" aria-hidden="true" />
+      <span className="aurora-wisp-particle particle-three" aria-hidden="true" />
+      <span className="aurora-wisp-flame" aria-hidden="true">
+        <span className="aurora-wisp-mid">
+          <span className="aurora-wisp-core"><Microphone size={30} weight="fill" /></span>
+        </span>
+      </span>
+      <span className="aurora-wisp-instruction">Tap to speak</span>
+    </Pressable>
+  );
+}
+
 export function WelcomeStage({
   draft,
   setDraft,
@@ -69,25 +92,22 @@ export function WelcomeStage({
         animate={reducedMotion ? undefined : { opacity: 1, y: 0 }}
         transition={{ delay: 0.24, duration: 0.5, ease: EASE_OUT }}
       >
+        {mode === "ai" && <AuroraWisp onTalk={onTalk} />}
+
         {/* ONE field, ONE dual-functional control. Empty → a microphone that talks; the
             moment there is text → a send arrow that searches. Both routes converge on the
             same voice/findMatches() path, so speaking and writing rank clinicians identically. */}
-        <div className="dual-input">
+        <div className={mode === "ai" ? "dual-input is-ai" : "dual-input"}>
           <label className="sr-only" htmlFor="welcome-request">
             Describe the support you are looking for, or use the microphone to talk
           </label>
-          {/* O233: a textarea, not a one-line input. The thing a person is asked for is a
-              SENTENCE, "a woman GP near Chatswood who speaks Mandarin and can do the whole
-              assessment", and a 66px single line showed them a fifth of it while they typed.
-              Enter still searches, so the keyboard contract is unchanged; Shift+Enter makes a line
-              for anybody who wants one. `rows` sets the resting height and the field grows no
-              further, because a box that reflows the screen under a typing hand is worse than one
-              that scrolls. */}
+          {/* AI mode keeps the typed path immediately available, but at one line so voice stays
+              the visual lead. Standard restores the full sentence-sized composer. */}
           <textarea
             ref={box}
             id="welcome-request"
             className="dual-input-field"
-            rows={3}
+            rows={mode === "ai" ? 1 : 3}
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             onKeyDown={(event) => {
@@ -96,7 +116,7 @@ export function WelcomeStage({
                 if (draft.trim()) onSearch(draft);
               }
             }}
-            placeholder="A GP near Hornsby for an adult ADHD assessment, by telehealth"
+            placeholder={mode === "ai" ? "Or type what you need" : "A GP near Hornsby for an adult ADHD assessment, by telehealth"}
           />
           <Pressable
             className={draft.trim() ? "dual-input-action is-send" : "dual-input-action is-talk"}
@@ -123,39 +143,52 @@ export function WelcomeStage({
           </Pressable>
         </div>
 
+        {mode !== "ai" && (
+          /* W6b: four requests a person can see and tap. Each fills the box and puts the cursor at
+             its end, so the mic becomes the search arrow and the words can still be changed. */
+          <ul className="finder-examples" aria-label="Examples">
+            {EXAMPLE_SEARCHES.map((example) => (
+              <li key={example.label}>
+                <button
+                  type="button"
+                  className="finder-example"
+                  onClick={() => {
+                    setDraft(example.request);
+                    box.current?.focus();
+                    requestAnimationFrame(() => {
+                      box.current?.setSelectionRange(example.request.length, example.request.length);
+                    });
+                  }}
+                >
+                  {example.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
         {mode && (
           <div className="finder-mode" role="group" aria-label="Matching">
             {MODES.map(([value, name]) => (
-              <button key={value} type="button" className="finder-example" aria-pressed={mode === value} onClick={() => onMode(value)}>
+              <button
+                key={value}
+                type="button"
+                className="finder-example"
+                aria-pressed={mode === value}
+                onClick={() => {
+                  onMode(value);
+                  // Swapping the tall voice light for the composer must not let the browser keep
+                  // the focused switch in place by scrolling the question under the sticky header.
+                  requestAnimationFrame(() => {
+                    requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0 }));
+                  });
+                }}
+              >
                 {name}
               </button>
             ))}
           </div>
         )}
-
-        {/* W6b: four requests a person can see and tap. Each fills the box and puts the cursor at
-            its end, so the mic becomes the search arrow and the words can still be changed. */}
-        <ul className="finder-examples" aria-label="Examples">
-          {EXAMPLE_SEARCHES.map((example) => (
-            <li key={example.label}>
-              <button
-                type="button"
-                className="finder-example"
-                onClick={() => {
-                  setDraft(example.request);
-                  // Focus now, so a key pressed straight after the tap lands in the box. The
-                  // cursor waits a frame, until the box holds the new words.
-                  box.current?.focus();
-                  requestAnimationFrame(() => {
-                    box.current?.setSelectionRange(example.request.length, example.request.length);
-                  });
-                }}
-              >
-                {example.label}
-              </button>
-            </li>
-          ))}
-        </ul>
 
         {/* A day after a tap on "Book": how was the visit? One line, five stars (rate-visit.tsx). */}
         <RateVisit />

@@ -26,6 +26,8 @@ import { deviceLearningStorage } from "@/learn/cursor";
 import { copyFileName, deleteDeviceData, hasDeviceData, makeCopy, parseCopy, restoreCopy, type DeviceCopy } from "@/privacy/device-data";
 import { Sheet } from "./sheet";
 
+const AURORA_MOTION_KEY = "adhdme.aurora.motion";
+
 /** One row of the sheet: a name. A real link, so long-press and open-in-new-tab still work. */
 function SettingsLink({ href, title }: { href: string; title: string }) {
   return (
@@ -43,7 +45,17 @@ export function AppSettings({ children, fallback = false }: { children?: React.R
   const [open, setOpen] = useState(false);
   const [overridden, setOverridden] = useState(false);
   const [mount, setMount] = useState<HTMLElement | null>(null);
+  const [auroraMoving, setAuroraMoving] = useState(true);
   useEffect(() => { if (!fallback) setMount(document.getElementById("platform-settings")); }, [fallback]);
+  useEffect(() => {
+    try {
+      const moving = window.localStorage.getItem(AURORA_MOTION_KEY) !== "paused";
+      setAuroraMoving(moving);
+      document.documentElement.dataset.auroraMotion = moving ? "live" : "paused";
+    } catch {
+      document.documentElement.dataset.auroraMotion = "live";
+    }
+  }, []);
   useEffect(() => { setOpen(false); }, [pathname]);
   useEffect(() => {
     if (!fallback) return;
@@ -67,6 +79,23 @@ export function AppSettings({ children, fallback = false }: { children?: React.R
           <SettingsLink href="/faq" title="Help & answers" />
           <SettingsLink href="/examples" title="Worked examples" />
           <SettingsLink href="/privacy" title="Privacy" />
+          <button
+            type="button"
+            className="settings-row"
+            aria-pressed={auroraMoving}
+            onClick={() => {
+              const moving = !auroraMoving;
+              setAuroraMoving(moving);
+              document.documentElement.dataset.auroraMotion = moving ? "live" : "paused";
+              try { window.localStorage.setItem(AURORA_MOTION_KEY, moving ? "live" : "paused"); } catch { /* Keep the in-session setting when storage is blocked. */ }
+            }}
+          >
+            <span>
+              <strong>Aurora motion</strong>
+              <small>{auroraMoving ? "The night sky is moving." : "The night sky is still."}</small>
+            </span>
+            <span className="settings-choice">{auroraMoving ? "On" : "Paused"}</span>
+          </button>
           {/* The finder passes its own testing options in, so one sheet holds everything a person
               can change rather than two sheets that look identical and hold different things. */}
           {children}

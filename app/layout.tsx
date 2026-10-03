@@ -19,6 +19,7 @@ import "./styles/lives.css";
 import { SiteMotion } from "./site-motion";
 import "./styles/leo.css";
 import "./styles/theo.css";
+import "./styles/aurora.css";
 import { LiquidGlass } from "./glass/liquid-glass";
 import { GlassPointer } from "./glass/glass-pointer";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
@@ -34,7 +35,7 @@ import { SHARED_OPEN_GRAPH } from "@/seo/pages";
  * unfurl with the generated card in app/opengraph-image.tsx; metadataBase makes every relative
  * URL absolute from the one place the site's address is decided.
  */
-/** Browser chrome continues the yellow platform header. */
+/** Public and console browser chrome keep the shared yellow brand field. */
 export const viewport: Viewport = {
   themeColor: "#f1bc31",
   // O225 (STANDALONE-APP-PLAN.md Phase 1b): without `cover`, the installed app letterboxes below
@@ -93,14 +94,15 @@ const ORGANIZATION_JSONLD = {
  */
 const DESIGN_DIRECTION = {
   thesis:
-    "A calm, focused platform for finding care and understanding ADHD, with clear labelled navigation and approachable illustrated learning.",
+    "A voice-first care finder led by one luminous action, refusing the usual white directory grid without obscuring the task.",
   world:
-    "Warm white and stone, charcoal controls, a focused yellow brand field, Newsreader questions and Plus Jakarta Sans UI, with original illustrated learning.",
+    "Deep blue-black aurora fields, cyan, mint and peach light, dark translucent controls, Newsreader questions and Plus Jakarta Sans UI.",
   story:
-    "A visitor understands the GP finder, sees how their words affect the order, and can move from search to a booking handoff without losing context.",
+    "A visitor speaks or types what they need, sees how their words affect the order, and reaches a booking handoff without losing context.",
   firstViewport:
-    "A full-width desktop header opens into a generous search workspace, with a focused reading layout and illustrated module library on Learn.",
-  form: "Reference-led platform redesign; specifications in docs/design/2026-platform/PLAN.md.",
+    "A translucent header floats over a full-bleed night field; the question leads, an organic voice light fills AI mode, and the mode switch and navigation sit low.",
+  form:
+    "User-pinned Aurora Mindful AI reference; code-led translation; seed pinned-aurora-2026-10-03 (no concept roll because the user supplied the direction).",
   finish:
     "unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance",
 } as const;
