@@ -4,9 +4,10 @@ The 2026 redesign follows the six user-supplied references and the requirements 
 
 ## Shared visual language
 
-The October 2026 refinement makes the platform quieter. Warm white replaces the saturated
-header, flat charcoal controls carry the main action, and sage is reserved for selected content.
-The brand mark, serif questions and original learning characters retain the app's identity.
+The October 2026 refinement keeps the platform quiet while restoring its clearest identity cue.
+Warm white carries the workspace, the saturated yellow header anchors navigation, and flat
+charcoal controls carry the main action. The brand mark, serif questions and original learning
+characters retain the app's identity.
 
 References: [Things](https://culturedcode.com/things/features/) for focused tasks and secondary
 details that step back; [Linear](https://linear.app/features) for compact navigation and restrained
@@ -14,14 +15,15 @@ hierarchy. These inform the shared shell rather than introduce new workflows.
 
 | Token | Value | Use |
 | --- | --- | --- |
-| Paper | #FBFBF9 | Canvas, header and browser chrome |
-| Stone | #F4F4F0 | Quiet inset surfaces and active navigation |
-| Ink | #272925 | Content and primary controls |
-| Muted / faint | #62655F / #666A63 | Supporting copy and labels |
-| Accent | #53604E | Selected content, links and field focus |
-| Accent deep / soft / mid / tint | #3F4C3B / #F0F2EC / #A7B19E / #DCE2D5 | Sage selection ramp |
-| Line | #E6E7E0 | Structural dividers |
-| Signal | #B77762 | Small mark detail |
+| Paper | #FAFAF7 | Canvas and launch frame |
+| Stone | #F6F4EE | Quiet inset surfaces |
+| Ink | #1A1C1C | Content and primary controls |
+| Muted / faint | #55534D / #5F5E59 | Supporting copy and labels |
+| Brand | #F1BC31 | Header, browser chrome and selected mobile navigation |
+| Accent | #785A00 | Readable emphasis, links and field focus |
+| Accent deep / soft / mid / tint | #5B4300 / #FFF8E6 / #E5B026 / #FDE7A5 | Gold selection ramp |
+| Line | #E8E6DF | Structural dividers |
+| Signal | #FF4D2E | Small mark detail |
 
 Plus Jakarta Sans sets the interface; Newsreader sets patient questions and quoted voices.
 Page headings use a quieter 600 weight. Navigation retains icons, labels, a filled active icon
@@ -33,8 +35,9 @@ Learn uses a bounded 1080px workspace, underline tabs, an unboxed care-map link 
 Its browsing surface no longer opts into liquid glass. Game scenes, lesson palettes, chart
 semantics, route behavior and stored personal data keep their existing contracts.
 
-The public header and footer share the neutral surfaces. The marketing story and immersive games
-retain their scoped artwork and brand colors. Hover feedback is subtle; focus stays explicit;
+The patient and public headers use the yellow brand field. The footer is charcoal under a thin
+yellow rule; workspaces stay warm white. Marketing and immersive games retain their scoped artwork
+and brand colors. Hover feedback is subtle; focus stays explicit;
 reduced-motion preferences are respected. No product copy is added for this visual pass.
 
 ## Component ownership

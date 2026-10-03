@@ -87,19 +87,19 @@
    not pass it.
    =========================================================================== */
 
-/* Shared neutral palette; immersive scenes define their own colors. */
+/* Warm yellow brand palette; immersive scenes define their own colors. */
 :root {
   color-scheme: light;
 
-  /* Warm neutrals and restrained sage for the shared platform. */
-  --ink: #272925;
+  /* The quiet October geometry stays; the warm yellow identity returns. */
+  --ink: #1a1c1c;
   /* Supporting text remains readable on both paper and stone. */
-  --muted: #62655f;
+  --muted: #55534d;
   /* Small labels use the same neutral family. */
-  --faint: #666a63;
-  --paper: #fbfbf9;
-  --stone: #f4f4f0;
-  --line: #e6e7e0;
+  --faint: #5f5e59;
+  --paper: #fafaf7;
+  --stone: #f6f4ee;
+  --line: #e8e6df;
 
   /* AR27: the dashboard chart's palette, tokenised with values preserved — the pair was
      validated by the dataviz method when the chart was built (CVD ΔE 24.7, ≥3:1 on white;
@@ -113,20 +113,21 @@
   --chart-end-label: var(--muted);
   --chart-point-ring: #ffffff;
 
-  --accent: #53604e;
+  /* Deep gold carries readable emphasis; saturated yellow is reserved for brand surfaces. */
+  --accent: #785a00;
   --on-accent: #ffffff;
-  --accent-deep: #3f4c3b;
-  --accent-soft: #f0f2ec;
-  --accent-mid: #a7b19e;
-  --accent-tint: #dce2d5;
+  --accent-deep: #5b4300;
+  --accent-soft: #fff8e6;
+  --accent-mid: #e5b026;
+  --accent-tint: #fde7a5;
 
-  /* Legacy brand yellow is retained for scoped story and game artwork. */
+  /* The brand field: one memorable yellow, with charcoal actions around it. */
   --brand: #f1bc31;
   --brand-deep: #e5b026;
   --brand-edge: #e5b029;
   --brand-pill: #f7cf63;
   --on-brand: var(--ink);
-  --signal: #b77762;
+  --signal: #ff4d2e;
 
   /* THE MAP (founder, 2026-09-19, the Calm Clarity design system).
      Four roles nothing existing could fill. The coral is the polygon's and nothing else's: it is

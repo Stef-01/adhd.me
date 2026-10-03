@@ -1,30 +1,55 @@
-/* Shared platform identity. Game worlds keep their own scoped palettes. */
+/* Shared platform identity: calm geometry, unmistakable yellow. Game worlds keep their own
+   scoped palettes. */
 :root {
   --font-ui: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Newsreader Variable", Newsreader, Georgia, serif;
 }
 body { font-family: var(--font-ui); }
 .platform-header, .platform-public-nav.site-nav {
-  position: relative; background: var(--paper); color: var(--ink);
-  border-top: 0; border-bottom: 1px solid var(--line);
+  position: relative; background: var(--brand); color: var(--on-brand);
+  border-top: 0; border-bottom: 1px solid var(--brand-edge);
 }
-.platform-console .console-header { border-top: 0; }
+.platform-console .console-header { border-top: 3px solid var(--brand); }
 .platform-brand { position: relative; gap: 0; align-items: center; letter-spacing: 0; color: var(--ink); }
 .platform-public-nav .site-nav-wordmark { gap: 5px; align-items: baseline; }
 .platform-brand svg { color: var(--ink); }
-.platform-help { color: var(--muted); }
-.platform-shell .settings-trigger { background: transparent; border-color: transparent; color: var(--muted); }
+.platform-help { color: var(--ink); }
+.platform-urgent {
+  border-color: color-mix(in srgb, var(--ink) 14%, transparent);
+  background: var(--paper);
+  color: var(--ink);
+}
+.platform-shell .settings-trigger {
+  background: var(--paper);
+  border-color: color-mix(in srgb, var(--ink) 14%, transparent);
+  color: var(--ink);
+}
 @media (hover: hover) {
-  .platform-urgent:hover, .platform-shell .settings-trigger:hover { background: var(--stone); border-color: var(--line); color: var(--ink); }
+  .platform-urgent:hover, .platform-shell .settings-trigger:hover {
+    background: #fff;
+    border-color: color-mix(in srgb, var(--ink) 34%, transparent);
+    color: var(--ink);
+  }
+}
+.platform-shell .app-tab { color: var(--ink); }
+.platform-shell .app-tab-marker { background: var(--brand); }
+.platform-shell .app-tab.is-current { color: var(--ink); }
+@media (min-width: 768px) {
+  .platform-shell .app-tab-marker { background: var(--ink); }
+  .platform-shell .app-tab.is-current { color: var(--paper); }
+  .platform-shell .app-tab:not(.is-current):hover {
+    background: color-mix(in srgb, var(--brand-pill) 72%, transparent);
+    color: var(--ink);
+  }
 }
 .platform-shell main h1 { font-family: var(--font-ui); }
 .platform-shell main .t-question, .t-question, .t-voice { font-family: var(--font-display); font-weight: 460; letter-spacing: -.025em; }
 .platform-shell :is(h1, h2, h3) { text-wrap: balance; }
 .platform-shell main p { text-wrap: pretty; }
 .platform-shell :is(p, li, blockquote) { hanging-punctuation: first; }
-.platform-shell :is(input, textarea) { caret-color: var(--ink); }
+.platform-shell :is(input, textarea) { caret-color: var(--accent); }
 .platform-shell :is(input, textarea)::placeholder { color: var(--muted); opacity: 1; }
-::selection { background: var(--accent-tint); color: var(--ink); }
+::selection { background: var(--brand); color: var(--ink); }
 
 /* A single solid action, with quiet outlined and text alternatives. */
 .platform-shell :is(.learn-primary, .me-sticky a, .lives-play),
@@ -39,11 +64,15 @@ body { font-family: var(--font-ui); }
 .platform-shell :is(.learn-primary, .me-sticky a, .lives-play) svg,
 .platform-public-nav .site-nav-link svg,
 .patient-v2 .profile-footer .primary-button svg, .patient-v2 .bottom-action .primary-button svg,
-.cv2-action > button svg, .cv2-action > .cv2-start-cta svg, .notfound-primary svg, .me-show svg { color: currentColor; }
+.cv2-action > button svg, .cv2-action > .cv2-start-cta svg, .notfound-primary svg, .me-show svg { color: var(--brand); }
 .platform-shell .patient-v2 .voice-actions .dual-input-action,
-.platform-shell .patient-v2 .voice-screen .mic-button { background: var(--ink); color: var(--paper); box-shadow: none; }
+.platform-shell .patient-v2 .voice-screen .mic-button {
+  background: var(--ink);
+  color: var(--brand);
+  box-shadow: 0 8px 22px -10px color-mix(in srgb, var(--ink) 48%, transparent);
+}
 .platform-shell .patient-v2 .voice-actions .dual-input-action { border-radius: 10px; }
-.platform-shell .patient-v2 .voice-screen .mic-button svg { color: currentColor; }
+.platform-shell .patient-v2 .voice-screen .mic-button svg { color: var(--brand); }
 .platform-shell .patient-v2 .voice-actions .dual-input {
   border: 1px solid var(--line-strong); border-radius: 12px; background: var(--surface-raised); box-shadow: none;
 }
@@ -69,10 +98,10 @@ body { font-family: var(--font-ui); }
 .learning-care-ring[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--accent); }
 .platform-shell .learn-reveal { color: var(--ink); }
 body .aoc-band, body:has(.platform-shell) .aoc-band, .site-footer {
-  background: var(--stone); background-image: none; color: var(--muted); border-top: 1px solid var(--line);
+  background: var(--ink); background-image: none; color: var(--line); border-top: 3px solid var(--brand);
 }
-body .aoc-band p, body:has(.platform-shell) .aoc-band p, .site-footer-brand p { color: var(--muted); }
-.site-footer :is(a, .site-footer-wordmark) { color: var(--ink); }
+body .aoc-band p, body:has(.platform-shell) .aoc-band p, .site-footer-brand p { color: var(--line); }
+.site-footer :is(a, .site-footer-wordmark) { color: var(--paper); }
 body .aoc-band::before, .site-footer::before { display: none; }
 .story-portrait .coverage-names { color: var(--paper); }
 .story-primary-link { background: var(--brand); color: var(--ink); }
@@ -90,10 +119,11 @@ body .aoc-band::before, .site-footer::before { display: none; }
 }
 .platform-shell :is(button, a, input, textarea, select, summary):focus-visible,
 body:has(.platform-shell) :is(.consent-read, .consent-agree):focus-visible,
-.platform-public-nav :is(a, button):focus-visible,
 .platform-console :is(a, button, input, select):focus-visible,
-:is(.site-footer, .aoc-band) :is(a, button):focus-visible,
 .screen h1:focus-visible, .sheet-header h2:focus-visible { outline-color: var(--ink); }
+.platform-header :is(a, button):focus-visible,
+.platform-public-nav :is(a, button):focus-visible { outline-color: var(--ink); }
+:is(.site-footer, .aoc-band) :is(a, button):focus-visible { outline-color: var(--brand); }
 .console-input, .console-main input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), .console-main select, .console-main textarea { border-color: var(--line-strong); }
 .console-navigation { border-top-color: var(--line); }
 .platform-console .mc-section h2 { font-family: var(--font-ui); font-weight: 600; letter-spacing: -.02em; }
