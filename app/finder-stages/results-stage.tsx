@@ -515,10 +515,10 @@ export function ResultsStage({
           const itemMatch = personalized[index]!;
           const away = distanceTo(item, origin);
           const reasons = distinguishingSignals(itemMatch.signals, foldSignals);
-          // The row's one line: the kind of provider, when it is not a GP, and why this one, when
-          // something sets it apart. Nothing else: the list is names, and the profile holds the
-          // clinician's own focus one tap away.
-          const kind = professionOf(item) !== "gp" ? professionLabel(professionOf(item)) : null;
+          // The row's one line: always name the kind of provider, then why this one when something
+          // sets it apart. A GP-only result used to omit the kind and leave a sparse name/location
+          // row; naming it makes a mixed directory scannable without turning the row into a profile.
+          const kind = professionLabel(professionOf(item));
           const rowLine = [kind, fitFor?.(item) ?? reasons[0] ?? null].filter(Boolean).join(" · ");
           return (
             <motion.button

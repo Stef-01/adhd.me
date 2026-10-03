@@ -11,7 +11,7 @@ try {
   for (const width of [390, 1440]) {
     const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 960 }, reducedMotion: 'reduce' });
     await context.addInitScript(() => localStorage.setItem('adhdme-privacy-ack', '1'));
-    for (const [name, path] of [['support', '/'], ['learn', '/approach?pane=games'], ['modules', '/approach?pane=modules'], ['my-adhd', '/my-adhd'], ['today', '/today']]) {
+    for (const [name, path] of [['support', '/'], ['learn', '/approach?pane=games'], ['modules', '/approach?pane=modules'], ['my-adhd', '/my-adhd'], ['today', '/today'], ['gradient-game', '/lives/play/zoe-before-you-send']]) {
       const page = await context.newPage();
       await page.goto(base + path);
       await page.waitForFunction(() => Number(document.documentElement.getAttribute('data-hydrated')) >= 2);
